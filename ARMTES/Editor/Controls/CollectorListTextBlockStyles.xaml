@@ -1,0 +1,36 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Style x:Key="CollectorListTextBlockBaseStyle" TargetType="TextBlock">
+        <Setter Property="TextOptions.TextFormattingMode" Value="Ideal" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="FontSize" Value="13" />
+        <Setter Property="TextWrapping" Value="WrapWithOverflow" />
+        <Setter Property="TextAlignment" Value="Center" />
+    </Style>
+    <Style x:Key="TextBlockTextData"
+           BasedOn="{StaticResource CollectorListTextBlockBaseStyle}"
+           TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="Calibri" />
+        <Setter Property="TextAlignment" Value="Left" />
+    </Style>
+    <Style x:Key="TextBlockNumbersData"
+           BasedOn="{StaticResource CollectorListTextBlockBaseStyle}"
+           TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="Century Gothic" />
+    </Style>
+    <Style x:Key="TextBlockValuesData"
+           BasedOn="{StaticResource CollectorListTextBlockBaseStyle}"
+           TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="Century Gothic" />
+        <Setter Property="TextAlignment" Value="Right" />
+    </Style>
+    <Style x:Key="CollectorListHeaderTextBlockStyle"
+           BasedOn="{StaticResource CollectorListTextBlockBaseStyle}"
+           TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="Calibri" />
+        <Setter Property="FontSize" Value="13" />
+        <Setter Property="TextWrapping" Value="Wrap" />
+        <Setter Property="Margin" Value="0" />
+    </Style>
+
+</ResourceDictionary>

@@ -1,0 +1,798 @@
+﻿<TestApp:SampleData xmlns:TestApp="clr-namespace:TestApp" xmlns:System="clr-namespace:System;assembly=mscorlib">
+	<TestApp:SampleData.Albums>
+		<TestApp:Album AlbumArtUrl="Nullam arcu" ArtistId="73" AlbumId="79" GenreId="82" Title="Commodo venenatis inceptos vestibulum interdum">
+			<TestApp:Album.Artist>
+				<TestApp:Artist ArtistId="45" Name="Elit est sociosqu enim"/>
+			</TestApp:Album.Artist>
+			<TestApp:Album.Genre>
+				<TestApp:Genre Description="Lacus vulputate lobortis lorem" GenreId="93" Name="Felis ipsum vel justo">
+					<TestApp:Genre.Albums>
+						<TestApp:Album AlbumArtUrl="Conubia diam" ArtistId="64" AlbumId="22" GenreId="46" Title="Nascetur nam"/>
+						<TestApp:Album AlbumArtUrl="Euismod magna" ArtistId="45" AlbumId="66" GenreId="21" Title="Cubilia dapibus egestas vestibulum"/>
+						<TestApp:Album AlbumArtUrl="Eget feugiat" ArtistId="41" AlbumId="14" GenreId="75" Title="Pharetra aptent massa"/>
+						<TestApp:Album AlbumArtUrl="Sed gravida" ArtistId="55" AlbumId="87" GenreId="41" Title="Adipiscing placerat pulvinar"/>
+						<TestApp:Album AlbumArtUrl="Sagittis dis senectus curabitur" ArtistId="92" AlbumId="68" GenreId="90" Title="Metus parturient iaculis"/>
+					</TestApp:Genre.Albums>
+				</TestApp:Genre>
+			</TestApp:Album.Genre>
+			<TestApp:Album.Price>
+				<System:Decimal/>
+			</TestApp:Album.Price>
+		</TestApp:Album>
+		<TestApp:Album AlbumArtUrl="Suscipit vestibulum netus phasellus vestibulum" ArtistId="12" AlbumId="25" GenreId="74" Title="Hac auctor morbi neque lacinia">
+			<TestApp:Album.Artist>
+				<TestApp:Artist ArtistId="10" Name="Fringilla habitasse natoque adipiscing sed"/>
+			</TestApp:Album.Artist>
+			<TestApp:Album.Genre>
+				<TestApp:Genre Description="Torquent mus nec consequat non" GenreId="55" Name="Adipiscing leo">
+					<TestApp:Genre.Albums>
+						<TestApp:Album AlbumArtUrl="Volutpat maecenas sed parturient praesent" ArtistId="62" AlbumId="52" GenreId="14" Title="Ultrices per vehicula"/>
+						<TestApp:Album AlbumArtUrl="Elementum nulla vestibulum vestibulum" ArtistId="65" AlbumId="88" GenreId="43" Title="Laoreet convallis sem dignissim"/>
+						<TestApp:Album AlbumArtUrl="Adipiscing parturient vestibulum" ArtistId="83" AlbumId="75" GenreId="28" Title="Sit accumsan"/>
+						<TestApp:Album AlbumArtUrl="Facilisis porta purus" ArtistId="39" AlbumId="44" GenreId="79" Title="Vel erat"/>
+						<TestApp:Album AlbumArtUrl="Fermentum vestibulum dictumst nam" ArtistId="13" AlbumId="80" GenreId="52" Title="Bibendum congue"/>
+					</TestApp:Genre.Albums>
+				</TestApp:Genre>
+			</TestApp:Album.Genre>
+			<TestApp:Album.Price>
+				<System:Decimal/>
+			</TestApp:Album.Price>
+		</TestApp:Album>
+		<TestApp:Album AlbumArtUrl="Posuere dis parturient hendrerit" ArtistId="81" AlbumId="36" GenreId="57" Title="Cursus dictum lectus libero">
+			<TestApp:Album.Artist>
+				<TestApp:Artist ArtistId="17" Name="Class porttitor"/>
+			</TestApp:Album.Artist>
+			<TestApp:Album.Genre>
+				<TestApp:Genre Description="Hac eros pretium" GenreId="26" Name="Ligula est potenti">
+					<TestApp:Genre.Albums>
+						<TestApp:Album AlbumArtUrl="Nisi rhoncus himenaeos vestibulum" ArtistId="41" AlbumId="83" GenreId="34" Title="Litora nibh vestibulum"/>
+						<TestApp:Album AlbumArtUrl="Mattis sodales imperdiet viverra" ArtistId="85" AlbumId="47" GenreId="30" Title="Luctus magnis"/>
+						<TestApp:Album AlbumArtUrl="Mus nec malesuada adipiscing penatibus" ArtistId="39" AlbumId="24" GenreId="73" Title="Nisl leo"/>
+						<TestApp:Album AlbumArtUrl="Mauris aliquam risus parturient" ArtistId="14" AlbumId="65" GenreId="79" Title="Eleifend nunc"/>
+						<TestApp:Album AlbumArtUrl="Per vitae facilisi mollis" ArtistId="51" AlbumId="80" GenreId="28" Title="Velit non vestibulum odio"/>
+					</TestApp:Genre.Albums>
+				</TestApp:Genre>
+			</TestApp:Album.Genre>
+			<TestApp:Album.Price>
+				<System:Decimal/>
+			</TestApp:Album.Price>
+		</TestApp:Album>
+		<TestApp:Album AlbumArtUrl="Sed orci sem parturient sit" ArtistId="33" AlbumId="83" GenreId="75" Title="Vestibulum integer adipiscing">
+			<TestApp:Album.Artist>
+				<TestApp:Artist ArtistId="27" Name="Amet nulla"/>
+			</TestApp:Album.Artist>
+			<TestApp:Album.Genre>
+				<TestApp:Genre Description="Habitant montes vel ultricies" GenreId="55" Name="Tincidunt faucibus quisque tristique">
+					<TestApp:Genre.Albums>
+						<TestApp:Album AlbumArtUrl="Inceptos curae venenatis" ArtistId="91" AlbumId="69" GenreId="86" Title="Pede nostra vestibulum quam"/>
+						<TestApp:Album AlbumArtUrl="Donec etiam quis urna" ArtistId="12" AlbumId="97" GenreId="17" Title="Interdum vivamus vulputate ornare"/>
+						<TestApp:Album AlbumArtUrl="Phasellus consequat" ArtistId="86" AlbumId="74" GenreId="25" Title="Cras curabitur fusce nam platea"/>
+						<TestApp:Album AlbumArtUrl="Primis convallis aliquam" ArtistId="68" AlbumId="91" GenreId="18" Title="Lobortis nascetur lorem"/>
+						<TestApp:Album AlbumArtUrl="Duis nunc" ArtistId="72" AlbumId="92" GenreId="86" Title="Rutrum aliquet morbi blandit"/>
+					</TestApp:Genre.Albums>
+				</TestApp:Genre>
+			</TestApp:Album.Genre>
+			<TestApp:Album.Price>
+				<System:Decimal/>
+			</TestApp:Album.Price>
+		</TestApp:Album>
+		<TestApp:Album AlbumArtUrl="Proin commodo augue conubia" ArtistId="68" AlbumId="73" GenreId="25" Title="Sapien ante arcu pharetra dignissim">
+			<TestApp:Album.Artist>
+				<TestApp:Artist ArtistId="96" Name="Torquent erat mus"/>
+			</TestApp:Album.Artist>
+			<TestApp:Album.Genre>
+				<TestApp:Genre Description="Egestas dolor vestibulum" GenreId="57" Name="Cubilia placerat dapibus">
+					<TestApp:Genre.Albums>
+						<TestApp:Album AlbumArtUrl="Adipiscing felis sagittis ipsum" ArtistId="89" AlbumId="51" GenreId="11" Title="Semper fames pulvinar"/>
+						<TestApp:Album AlbumArtUrl="Elit sed" ArtistId="75" AlbumId="27" GenreId="64" Title="Elementum diam euismod eget"/>
+						<TestApp:Album AlbumArtUrl="Enim dis" ArtistId="11" AlbumId="59" GenreId="61" Title="Feugiat parturient"/>
+						<TestApp:Album AlbumArtUrl="Sociis gravida iaculis" ArtistId="61" AlbumId="95" GenreId="27" Title="Est vestibulum senectus sociosqu hac"/>
+						<TestApp:Album AlbumArtUrl="Leo suscipit" ArtistId="56" AlbumId="33" GenreId="36" Title="Justo lacus"/>
+					</TestApp:Genre.Albums>
+				</TestApp:Genre>
+			</TestApp:Album.Genre>
+			<TestApp:Album.Price>
+				<System:Decimal/>
+			</TestApp:Album.Price>
+		</TestApp:Album>
+		<TestApp:Album AlbumArtUrl="Nibh taciti nisi adipiscing laoreet" ArtistId="39" AlbumId="42" GenreId="44" Title="Eros lacinia vestibulum">
+			<TestApp:Album.Artist>
+				<TestApp:Artist ArtistId="67" Name="Parturient varius"/>
+			</TestApp:Album.Artist>
+			<TestApp:Album.Genre>
+				<TestApp:Genre Description="Parturient nunc natoque odio posuere" GenreId="27" Name="Nisl tellus">
+					<TestApp:Genre.Albums>
+						<TestApp:Album AlbumArtUrl="Tempor potenti pretium" ArtistId="86" AlbumId="20" GenreId="98" Title="Facilisis ultrices"/>
+						<TestApp:Album AlbumArtUrl="Vestibulum nec tempus non" ArtistId="21" AlbumId="47" GenreId="56" Title="Rhoncus sodales lorem magna"/>
+						<TestApp:Album AlbumArtUrl="Sed vestibulum aliquam integer" ArtistId="56" AlbumId="21" GenreId="94" Title="Tortor massa per viverra metus"/>
+						<TestApp:Album AlbumArtUrl="Adipiscing orci" ArtistId="68" AlbumId="34" GenreId="44" Title="Fermentum vehicula"/>
+						<TestApp:Album AlbumArtUrl="Sem morbi" ArtistId="14" AlbumId="16" GenreId="75" Title="Turpis quisque pede"/>
+					</TestApp:Genre.Albums>
+				</TestApp:Genre>
+			</TestApp:Album.Genre>
+			<TestApp:Album.Price>
+				<System:Decimal/>
+			</TestApp:Album.Price>
+		</TestApp:Album>
+		<TestApp:Album AlbumArtUrl="Netus sit maecenas aenean" ArtistId="42" AlbumId="97" GenreId="74" Title="Volutpat vivamus neque">
+			<TestApp:Album.Artist>
+				<TestApp:Artist ArtistId="52" Name="Conubia vestibulum facilisi congue cursus"/>
+			</TestApp:Album.Artist>
+			<TestApp:Album.Genre>
+				<TestApp:Genre Description="Nulla fringilla" GenreId="42" Name="Aliquam quam praesent quis">
+					<TestApp:Genre.Albums>
+						<TestApp:Album AlbumArtUrl="Hendrerit nullam urna nam" ArtistId="24" AlbumId="53" GenreId="23" Title="Habitasse vel vestibulum porta mauris"/>
+						<TestApp:Album AlbumArtUrl="Accumsan bibendum risus" ArtistId="57" AlbumId="91" GenreId="74" Title="Purus vestibulum"/>
+						<TestApp:Album AlbumArtUrl="Dis duis dictumst nunc" ArtistId="39" AlbumId="45" GenreId="66" Title="Cras sed"/>
+						<TestApp:Album AlbumArtUrl="Himenaeos aliquet eleifend blandit" ArtistId="38" AlbumId="75" GenreId="84" Title="Est velit adipiscing parturient"/>
+						<TestApp:Album AlbumArtUrl="Auctor hac class curae" ArtistId="47" AlbumId="85" GenreId="50" Title="Aptent vitae vestibulum commodo"/>
+					</TestApp:Genre.Albums>
+				</TestApp:Genre>
+			</TestApp:Album.Genre>
+			<TestApp:Album.Price>
+				<System:Decimal/>
+			</TestApp:Album.Price>
+		</TestApp:Album>
+		<TestApp:Album AlbumArtUrl="Ante dictum cubilia" ArtistId="70" AlbumId="24" GenreId="51" Title="Amet faucibus">
+			<TestApp:Album.Artist>
+				<TestApp:Artist ArtistId="96" Name="Eros fames tristique"/>
+			</TestApp:Album.Artist>
+			<TestApp:Album.Genre>
+				<TestApp:Genre Description="Leo libero ligula arcu" GenreId="53" Name="Donec etiam fusce lectus">
+					<TestApp:Genre.Albums>
+						<TestApp:Album AlbumArtUrl="Malesuada nec adipiscing" ArtistId="14" AlbumId="63" GenreId="64" Title="Imperdiet dapibus diam mus egestas"/>
+						<TestApp:Album AlbumArtUrl="Lorem morbi nulla inceptos parturient" ArtistId="59" AlbumId="77" GenreId="60" Title="Penatibus habitant"/>
+						<TestApp:Album AlbumArtUrl="Eget feugiat proin interdum" ArtistId="32" AlbumId="54" GenreId="58" Title="Porttitor euismod"/>
+						<TestApp:Album AlbumArtUrl="Iaculis elit" ArtistId="68" AlbumId="89" GenreId="99" Title="Tincidunt gravida lobortis"/>
+						<TestApp:Album AlbumArtUrl="Vestibulum erat lacinia non" ArtistId="74" AlbumId="12" GenreId="97" Title="Enim augue dolor"/>
+					</TestApp:Genre.Albums>
+				</TestApp:Genre>
+			</TestApp:Album.Genre>
+			<TestApp:Album.Price>
+				<System:Decimal/>
+			</TestApp:Album.Price>
+		</TestApp:Album>
+		<TestApp:Album AlbumArtUrl="Litora natoque luctus" ArtistId="73" AlbumId="84" GenreId="95" Title="Nibh laoreet felis ultricies">
+			<TestApp:Album.Artist>
+				<TestApp:Artist ArtistId="88" Name="Adipiscing integer parturient"/>
+			</TestApp:Album.Artist>
+			<TestApp:Album.Genre>
+				<TestApp:Genre Description="Sed nisi" GenreId="99" Name="Per venenatis">
+					<TestApp:Genre.Albums>
+						<TestApp:Album AlbumArtUrl="Adipiscing vulputate" ArtistId="64" AlbumId="76" GenreId="54" Title="Posuere magnis potenti vestibulum"/>
+						<TestApp:Album AlbumArtUrl="Mauris pretium" ArtistId="16" AlbumId="81" GenreId="49" Title="Nisl mattis parturient sem"/>
+						<TestApp:Album AlbumArtUrl="Nascetur sodales curabitur montes phasellus" ArtistId="38" AlbumId="82" GenreId="66" Title="Mollis rhoncus"/>
+						<TestApp:Album AlbumArtUrl="Nostra odio viverra vestibulum" ArtistId="56" AlbumId="61" GenreId="52" Title="Nunc sit"/>
+						<TestApp:Album AlbumArtUrl="Aliquam convallis platea" ArtistId="79" AlbumId="13" GenreId="89" Title="Vestibulum pharetra consequat orci ornare"/>
+					</TestApp:Genre.Albums>
+				</TestApp:Genre>
+			</TestApp:Album.Genre>
+			<TestApp:Album.Price>
+				<System:Decimal/>
+			</TestApp:Album.Price>
+		</TestApp:Album>
+		<TestApp:Album AlbumArtUrl="Vestibulum dignissim" ArtistId="40" AlbumId="18" GenreId="47" Title="Placerat vestibulum ipsum pulvinar">
+			<TestApp:Album.Artist>
+				<TestApp:Artist ArtistId="18" Name="Malesuada metus torquent penatibus"/>
+			</TestApp:Album.Artist>
+			<TestApp:Album.Genre>
+				<TestApp:Genre Description="Justo senectus parturient quisque vivamus" GenreId="24" Name="Primis elementum sagittis vel adipiscing">
+					<TestApp:Genre.Albums>
+						<TestApp:Album AlbumArtUrl="Quis vestibulum sed dis" ArtistId="44" AlbumId="13" GenreId="86" Title="Nam facilisis pede quam"/>
+						<TestApp:Album AlbumArtUrl="Rutrum aliquam sociosqu est sapien" ArtistId="26" AlbumId="50" GenreId="75" Title="Urna lacus lorem"/>
+						<TestApp:Album AlbumArtUrl="Fringilla habitasse cras duis magna" ArtistId="75" AlbumId="36" GenreId="88" Title="Hac fermentum"/>
+						<TestApp:Album AlbumArtUrl="Semper hendrerit himenaeos adipiscing sociis" ArtistId="29" AlbumId="50" GenreId="68" Title="Massa vestibulum"/>
+						<TestApp:Album AlbumArtUrl="Vestibulum imperdiet suscipit" ArtistId="77" AlbumId="77" GenreId="71" Title="Nunc amet parturient"/>
+					</TestApp:Genre.Albums>
+				</TestApp:Genre>
+			</TestApp:Album.Genre>
+			<TestApp:Album.Price>
+				<System:Decimal/>
+			</TestApp:Album.Price>
+		</TestApp:Album>
+	</TestApp:SampleData.Albums>
+	<TestApp:SampleData.Artists>
+		<TestApp:Artist ArtistId="99" Name="Eleifend aliquam vestibulum"/>
+		<TestApp:Artist ArtistId="73" Name="Cras dolor"/>
+		<TestApp:Artist ArtistId="34" Name="Duis facilisi"/>
+		<TestApp:Artist ArtistId="62" Name="Varius integer"/>
+		<TestApp:Artist ArtistId="40" Name="Nunc amet faucibus quisque"/>
+		<TestApp:Artist ArtistId="82" Name="Aenean vivamus vestibulum"/>
+		<TestApp:Artist ArtistId="64" Name="Per aliquam sed sem aliquet"/>
+		<TestApp:Artist ArtistId="31" Name="Adipiscing ante blandit parturient"/>
+		<TestApp:Artist ArtistId="11" Name="Habitant fames sit"/>
+		<TestApp:Artist ArtistId="95" Name="Ultricies mauris"/>
+	</TestApp:SampleData.Artists>
+	<TestApp:SampleData.Genres>
+		<TestApp:Genre Description="Vestibulum aenean sed" GenreId="55" Name="Nam class">
+			<TestApp:Genre.Albums>
+				<TestApp:Album AlbumArtUrl="Parturient curae cras" ArtistId="29" AlbumId="15" GenreId="27" Title="Aliquam maecenas adipiscing integer curabitur">
+					<TestApp:Album.Artist>
+						<TestApp:Artist ArtistId="71" Name="Mauris bibendum vestibulum nullam"/>
+					</TestApp:Album.Artist>
+					<TestApp:Album.Genre>
+						<TestApp:Genre Description="Accumsan vestibulum dis duis" GenreId="59" Name="Quisque praesent"/>
+					</TestApp:Album.Genre>
+					<TestApp:Album.Price>
+						<System:Decimal/>
+					</TestApp:Album.Price>
+				</TestApp:Album>
+				<TestApp:Album AlbumArtUrl="Donec adipiscing parturient convallis" ArtistId="54" AlbumId="36" GenreId="46" Title="Vivamus dictumst phasellus consequat aptent">
+					<TestApp:Album.Artist>
+						<TestApp:Artist ArtistId="30" Name="Elementum vestibulum adipiscing"/>
+					</TestApp:Album.Artist>
+					<TestApp:Album.Genre>
+						<TestApp:Genre Description="Aliquet nunc amet dignissim fusce" GenreId="51" Name="Vestibulum etiam est aliquam hac"/>
+					</TestApp:Album.Genre>
+					<TestApp:Album.Price>
+						<System:Decimal/>
+					</TestApp:Album.Price>
+				</TestApp:Album>
+				<TestApp:Album AlbumArtUrl="Auctor parturient facilisi faucibus" ArtistId="11" AlbumId="52" GenreId="53" Title="Eleifend blandit">
+					<TestApp:Album.Artist>
+						<TestApp:Artist ArtistId="10" Name="Ante habitant lorem inceptos interdum"/>
+					</TestApp:Album.Artist>
+					<TestApp:Album.Genre>
+						<TestApp:Genre Description="Mus fermentum congue fringilla" GenreId="96" Name="Leo commodo facilisis conubia"/>
+					</TestApp:Album.Genre>
+					<TestApp:Album.Price>
+						<System:Decimal/>
+					</TestApp:Album.Price>
+				</TestApp:Album>
+				<TestApp:Album AlbumArtUrl="Morbi hendrerit" ArtistId="19" AlbumId="52" GenreId="45" Title="Habitasse nec">
+					<TestApp:Album.Artist>
+						<TestApp:Artist ArtistId="59" Name="Proin non euismod feugiat per"/>
+					</TestApp:Album.Artist>
+					<TestApp:Album.Genre>
+						<TestApp:Genre Description="Nulla vestibulum vestibulum egestas" GenreId="11" Name="Cubilia arcu dapibus"/>
+					</TestApp:Album.Genre>
+					<TestApp:Album.Price>
+						<System:Decimal/>
+					</TestApp:Album.Price>
+				</TestApp:Album>
+				<TestApp:Album AlbumArtUrl="Iaculis eget adipiscing augue" ArtistId="24" AlbumId="72" GenreId="39" Title="Diam cursus gravida">
+					<TestApp:Album.Artist>
+						<TestApp:Artist ArtistId="22" Name="Placerat elit sem imperdiet dolor"/>
+					</TestApp:Album.Artist>
+					<TestApp:Album.Genre>
+						<TestApp:Genre Description="Nascetur pharetra vestibulum dictum lacinia" GenreId="60" Name="Sed himenaeos parturient lobortis"/>
+					</TestApp:Album.Genre>
+					<TestApp:Album.Price>
+						<System:Decimal/>
+					</TestApp:Album.Price>
+				</TestApp:Album>
+			</TestApp:Genre.Albums>
+		</TestApp:Genre>
+		<TestApp:Genre Description="Sit lectus enim" GenreId="10" Name="Pulvinar vestibulum malesuada">
+			<TestApp:Genre.Albums>
+				<TestApp:Album AlbumArtUrl="Penatibus porttitor vel eros senectus" ArtistId="22" AlbumId="87" GenreId="98" Title="Sagittis fames erat adipiscing felis">
+					<TestApp:Album.Artist>
+						<TestApp:Artist ArtistId="63" Name="Vestibulum ligula adipiscing"/>
+					</TestApp:Album.Artist>
+					<TestApp:Album.Genre>
+						<TestApp:Genre Description="Sed laoreet natoque vestibulum sociosqu" GenreId="65" Name="Nam libero parturient tincidunt ipsum"/>
+					</TestApp:Album.Genre>
+					<TestApp:Album.Price>
+						<System:Decimal/>
+					</TestApp:Album.Price>
+				</TestApp:Album>
+				<TestApp:Album AlbumArtUrl="Potenti suscipit torquent litora" ArtistId="70" AlbumId="55" GenreId="35" Title="Posuere parturient">
+					<TestApp:Album.Artist>
+						<TestApp:Artist ArtistId="27" Name="Venenatis sodales"/>
+					</TestApp:Album.Artist>
+					<TestApp:Album.Genre>
+						<TestApp:Genre Description="Luctus ultricies ultrices rhoncus" GenreId="51" Name="Pretium tristique"/>
+					</TestApp:Album.Genre>
+					<TestApp:Album.Price>
+						<System:Decimal/>
+					</TestApp:Album.Price>
+				</TestApp:Album>
+				<TestApp:Album AlbumArtUrl="Vulputate vestibulum curabitur nibh adipiscing" ArtistId="64" AlbumId="85" GenreId="96" Title="Vestibulum magnis">
+					<TestApp:Album.Artist>
+						<TestApp:Artist ArtistId="16" Name="Leo phasellus nisi nisl lorem"/>
+					</TestApp:Album.Artist>
+					<TestApp:Album.Genre>
+						<TestApp:Genre Description="Est hac maecenas justo lacus" GenreId="18" Name="Vehicula volutpat dis"/>
+					</TestApp:Album.Genre>
+					<TestApp:Album.Price>
+						<System:Decimal/>
+					</TestApp:Album.Price>
+				</TestApp:Album>
+				<TestApp:Album AlbumArtUrl="Aliquam accumsan vestibulum integer" ArtistId="48" AlbumId="31" GenreId="79" Title="Viverra parturient praesent nunc mus">
+					<TestApp:Album.Artist>
+						<TestApp:Artist ArtistId="33" Name="Quam eleifend nec quis non"/>
+					</TestApp:Album.Artist>
+					<TestApp:Album.Genre>
+						<TestApp:Genre Description="Quisque dictumst pede" GenreId="78" Name="Bibendum odio orci mattis"/>
+					</TestApp:Album.Genre>
+					<TestApp:Album.Price>
+						<System:Decimal/>
+					</TestApp:Album.Price>
+				</TestApp:Album>
+				<TestApp:Album AlbumArtUrl="Faucibus consequat massa vivamus" ArtistId="60" AlbumId="44" GenreId="84" Title="Vestibulum magna mauris facilisi">
+					<TestApp:Album.Artist>
+						<TestApp:Artist ArtistId="65" Name="Adipiscing habitant inceptos parturient metus"/>
+					</TestApp:Album.Artist>
+					<TestApp:Album.Genre>
+						<TestApp:Genre Description="Aliquam montes aliquet sed" GenreId="66" Name="Mollis per"/>
+					</TestApp:Album.Genre>
+					<TestApp:Album.Price>
+						<System:Decimal/>
+					</TestApp:Album.Price>
+				</TestApp:Album>
+			</TestApp:Genre.Albums>
+		</TestApp:Genre>
+		<TestApp:Genre Description="Adipiscing convallis" GenreId="88" Name="Blandit vestibulum sem vestibulum">
+			<TestApp:Genre.Albums>
+				<TestApp:Album AlbumArtUrl="Sit vel vestibulum" ArtistId="83" AlbumId="65" GenreId="39" Title="Commodo urna interdum cras parturient">
+					<TestApp:Album.Artist>
+						<TestApp:Artist ArtistId="12" Name="Ornare platea duis cubilia"/>
+					</TestApp:Album.Artist>
+					<TestApp:Album.Genre>
+						<TestApp:Genre Description="Netus dignissim" GenreId="76" Name="Morbi conubia lobortis neque nostra"/>
+					</TestApp:Album.Genre>
+					<TestApp:Album.Price>
+						<System:Decimal/>
+					</TestApp:Album.Price>
+				</TestApp:Album>
+				<TestApp:Album AlbumArtUrl="Primis pharetra rutrum sapien" ArtistId="71" AlbumId="69" GenreId="47" Title="Nascetur elementum vestibulum">
+					<TestApp:Album.Artist>
+						<TestApp:Artist ArtistId="47" Name="Sagittis dapibus"/>
+					</TestApp:Album.Artist>
+					<TestApp:Album.Genre>
+						<TestApp:Genre Description="Adipiscing nulla semper parturient sed" GenreId="49" Name="Placerat facilisis pulvinar nam"/>
+					</TestApp:Album.Genre>
+					<TestApp:Album.Price>
+						<System:Decimal/>
+					</TestApp:Album.Price>
+				</TestApp:Album>
+				<TestApp:Album AlbumArtUrl="Tellus egestas porta tempor purus" ArtistId="66" AlbumId="42" GenreId="85" Title="Sociis taciti vestibulum">
+					<TestApp:Album.Artist>
+						<TestApp:Artist ArtistId="28" Name="Vestibulum risus velit dis"/>
+					</TestApp:Album.Artist>
+					<TestApp:Album.Genre>
+						<TestApp:Genre Description="Amet feugiat" GenreId="97" Name="Tempus nunc euismod tortor"/>
+					</TestApp:Album.Genre>
+					<TestApp:Album.Price>
+						<System:Decimal/>
+					</TestApp:Album.Price>
+				</TestApp:Album>
+				<TestApp:Album AlbumArtUrl="Suscipit turpis varius ante arcu" ArtistId="83" AlbumId="40" GenreId="55" Title="Senectus sociosqu est">
+					<TestApp:Album.Artist>
+						<TestApp:Artist ArtistId="49" Name="Ultrices vehicula elit"/>
+					</TestApp:Album.Artist>
+					<TestApp:Album.Genre>
+						<TestApp:Genre Description="Class eget fringilla hac" GenreId="66" Name="Diam torquent vitae fermentum gravida"/>
+					</TestApp:Album.Genre>
+					<TestApp:Album.Price>
+						<System:Decimal/>
+					</TestApp:Album.Price>
+				</TestApp:Album>
+				<TestApp:Album AlbumArtUrl="Leo curae mus donec" ArtistId="52" AlbumId="55" GenreId="93" Title="Enim volutpat">
+					<TestApp:Album.Artist>
+						<TestApp:Artist ArtistId="59" Name="Erat vestibulum"/>
+					</TestApp:Album.Artist>
+					<TestApp:Album.Genre>
+						<TestApp:Genre Description="Adipiscing parturient" GenreId="50" Name="Nec aenean iaculis lacinia"/>
+					</TestApp:Album.Genre>
+					<TestApp:Album.Price>
+						<System:Decimal/>
+					</TestApp:Album.Price>
+				</TestApp:Album>
+			</TestApp:Genre.Albums>
+		</TestApp:Genre>
+		<TestApp:Genre Description="Maecenas non mauris eros" GenreId="75" Name="Etiam vestibulum laoreet">
+			<TestApp:Genre.Albums>
+				<TestApp:Album AlbumArtUrl="Accumsan bibendum" ArtistId="65" AlbumId="82" GenreId="88" Title="Fusce per praesent adipiscing">
+					<TestApp:Album.Artist>
+						<TestApp:Artist ArtistId="48" Name="Sem posuere"/>
+					</TestApp:Album.Artist>
+					<TestApp:Album.Genre>
+						<TestApp:Genre Description="Dictumst sed habitasse" GenreId="12" Name="Lorem morbi nulla natoque nibh"/>
+					</TestApp:Album.Genre>
+					<TestApp:Album.Price>
+						<System:Decimal/>
+					</TestApp:Album.Price>
+				</TestApp:Album>
+				<TestApp:Album AlbumArtUrl="Facilisi pretium faucibus proin rhoncus" ArtistId="75" AlbumId="55" GenreId="10" Title="Eleifend potenti nisi nullam hendrerit">
+					<TestApp:Album.Artist>
+						<TestApp:Artist ArtistId="95" Name="Vestibulum sodales aptent fames"/>
+					</TestApp:Album.Artist>
+					<TestApp:Album.Genre>
+						<TestApp:Genre Description="Dolor inceptos nunc sit" GenreId="90" Name="Habitant parturient nisl augue"/>
+					</TestApp:Album.Genre>
+					<TestApp:Album.Price>
+						<System:Decimal/>
+					</TestApp:Album.Price>
+				</TestApp:Album>
+				<TestApp:Album AlbumArtUrl="Vel himenaeos felis" ArtistId="24" AlbumId="87" GenreId="75" Title="Auctor viverra interdum odio orci">
+					<TestApp:Album.Artist>
+						<TestApp:Artist ArtistId="58" Name="Justo aliquam"/>
+					</TestApp:Album.Artist>
+					<TestApp:Album.Genre>
+						<TestApp:Genre Description="Vestibulum sed adipiscing dis" GenreId="26" Name="Pede nam ipsum congue"/>
+					</TestApp:Album.Genre>
+					<TestApp:Album.Price>
+						<System:Decimal/>
+					</TestApp:Album.Price>
+				</TestApp:Album>
+				<TestApp:Album AlbumArtUrl="Lobortis est hac cursus leo" ArtistId="69" AlbumId="93" GenreId="69" Title="Integer parturient">
+					<TestApp:Album.Artist>
+						<TestApp:Artist ArtistId="94" Name="Quam lorem quis aliquet nascetur"/>
+					</TestApp:Album.Artist>
+					<TestApp:Album.Genre>
+						<TestApp:Genre Description="Vivamus nec vestibulum aliquam" GenreId="89" Name="Mus lacus quisque"/>
+					</TestApp:Album.Genre>
+					<TestApp:Album.Price>
+						<System:Decimal/>
+					</TestApp:Album.Price>
+				</TestApp:Album>
+				<TestApp:Album AlbumArtUrl="Dictum conubia" ArtistId="15" AlbumId="81" GenreId="81" Title="Pharetra blandit commodo vestibulum non">
+					<TestApp:Album.Artist>
+						<TestApp:Artist ArtistId="39" Name="Per placerat massa sed"/>
+					</TestApp:Album.Artist>
+					<TestApp:Album.Genre>
+						<TestApp:Genre Description="Urna malesuada" GenreId="14" Name="Cubilia imperdiet magna"/>
+					</TestApp:Album.Genre>
+					<TestApp:Album.Price>
+						<System:Decimal/>
+					</TestApp:Album.Price>
+				</TestApp:Album>
+			</TestApp:Genre.Albums>
+		</TestApp:Genre>
+		<TestApp:Genre Description="Dapibus morbi" GenreId="76" Name="Lectus pulvinar metus">
+			<TestApp:Genre.Albums>
+				<TestApp:Album AlbumArtUrl="Vel nam penatibus" ArtistId="43" AlbumId="10" GenreId="26" Title="Sem sit sagittis cras senectus">
+					<TestApp:Album.Artist>
+						<TestApp:Artist ArtistId="86" Name="Torquent ligula"/>
+					</TestApp:Album.Artist>
+					<TestApp:Album.Genre>
+						<TestApp:Genre Description="Suscipit sed parturient vestibulum egestas" GenreId="71" Name="Duis sociosqu adipiscing neque libero"/>
+					</TestApp:Album.Genre>
+					<TestApp:Album.Price>
+						<System:Decimal/>
+					</TestApp:Album.Price>
+				</TestApp:Album>
+				<TestApp:Album AlbumArtUrl="Tincidunt dis tristique litora" ArtistId="37" AlbumId="43" GenreId="27" Title="Porttitor nunc">
+					<TestApp:Album.Artist>
+						<TestApp:Artist ArtistId="58" Name="Ultricies est magnis volutpat mattis"/>
+					</TestApp:Album.Artist>
+					<TestApp:Album.Genre>
+						<TestApp:Genre Description="Euismod vehicula feugiat" GenreId="86" Name="Luctus ultrices"/>
+					</TestApp:Album.Genre>
+					<TestApp:Album.Price>
+						<System:Decimal/>
+					</TestApp:Album.Price>
+				</TestApp:Album>
+				<TestApp:Album AlbumArtUrl="Curabitur iaculis maecenas" ArtistId="98" AlbumId="16" GenreId="46" Title="Venenatis vulputate netus nulla gravida">
+					<TestApp:Album.Artist>
+						<TestApp:Artist ArtistId="85" Name="Mollis mus accumsan nec"/>
+					</TestApp:Album.Artist>
+					<TestApp:Album.Genre>
+						<TestApp:Genre Description="Praesent hac amet leo" GenreId="87" Name="Porta mauris"/>
+					</TestApp:Album.Genre>
+					<TestApp:Album.Price>
+						<System:Decimal/>
+					</TestApp:Album.Price>
+				</TestApp:Album>
+				<TestApp:Album AlbumArtUrl="Ante dictumst ornare risus" ArtistId="32" AlbumId="91" GenreId="16" Title="Montes phasellus purus bibendum nostra">
+					<TestApp:Album.Artist>
+						<TestApp:Artist ArtistId="79" Name="Diam velit vitae parturient vestibulum"/>
+					</TestApp:Album.Artist>
+					<TestApp:Album.Genre>
+						<TestApp:Genre Description="Adipiscing lacinia sed" GenreId="53" Name="Platea non per arcu vestibulum"/>
+					</TestApp:Album.Genre>
+					<TestApp:Album.Price>
+						<System:Decimal/>
+					</TestApp:Album.Price>
+				</TestApp:Album>
+				<TestApp:Album AlbumArtUrl="Convallis primis rutrum sapien eget" ArtistId="90" AlbumId="69" GenreId="50" Title="Eleifend sem consequat class">
+					<TestApp:Album.Artist>
+						<TestApp:Artist ArtistId="34" Name="Nam facilisi sed laoreet"/>
+					</TestApp:Album.Artist>
+					<TestApp:Album.Genre>
+						<TestApp:Genre Description="Dignissim vel elit sociis" GenreId="61" Name="Semper sit vestibulum adipiscing"/>
+					</TestApp:Album.Genre>
+					<TestApp:Album.Price>
+						<System:Decimal/>
+					</TestApp:Album.Price>
+				</TestApp:Album>
+			</TestApp:Genre.Albums>
+		</TestApp:Genre>
+		<TestApp:Genre Description="Curae faucibus est habitant" GenreId="83" Name="Dis natoque enim">
+			<TestApp:Genre.Albums>
+				<TestApp:Album AlbumArtUrl="Posuere eros nibh" ArtistId="93" AlbumId="60" GenreId="65" Title="Hac donec elementum taciti erat">
+					<TestApp:Album.Artist>
+						<TestApp:Artist ArtistId="83" Name="Nisl mus nunc pretium"/>
+					</TestApp:Album.Artist>
+					<TestApp:Album.Genre>
+						<TestApp:Genre Description="Fermentum etiam potenti vestibulum" GenreId="10" Name="Facilisis leo tellus nisi parturient"/>
+					</TestApp:Album.Genre>
+					<TestApp:Album.Price>
+						<System:Decimal/>
+					</TestApp:Album.Price>
+				</TestApp:Album>
+				<TestApp:Album AlbumArtUrl="Tempor sodales viverra aliquam" ArtistId="72" AlbumId="61" GenreId="73" Title="Vestibulum fringilla odio rhoncus habitasse">
+					<TestApp:Album.Artist>
+						<TestApp:Artist ArtistId="83" Name="Himenaeos tortor integer imperdiet lorem"/>
+					</TestApp:Album.Artist>
+					<TestApp:Album.Genre>
+						<TestApp:Genre Description="Adipiscing inceptos interdum" GenreId="55" Name="Nec non fusce hendrerit tempus"/>
+					</TestApp:Album.Genre>
+					<TestApp:Album.Price>
+						<System:Decimal/>
+					</TestApp:Album.Price>
+				</TestApp:Album>
+				<TestApp:Album AlbumArtUrl="Malesuada parturient nulla sed pharetra" ArtistId="19" AlbumId="41" GenreId="29" Title="Morbi lobortis turpis per nascetur">
+					<TestApp:Album.Artist>
+						<TestApp:Artist ArtistId="57" Name="Vel pulvinar sagittis augue"/>
+					</TestApp:Album.Artist>
+					<TestApp:Album.Genre>
+						<TestApp:Genre Description="Sit quisque placerat vestibulum proin" GenreId="53" Name="Vestibulum sem"/>
+					</TestApp:Album.Genre>
+					<TestApp:Album.Price>
+						<System:Decimal/>
+					</TestApp:Album.Price>
+				</TestApp:Album>
+				<TestApp:Album AlbumArtUrl="Varius fames" ArtistId="10" AlbumId="86" GenreId="39" Title="Nam dolor adipiscing orci">
+					<TestApp:Album.Artist>
+						<TestApp:Artist ArtistId="32" Name="Aliquam senectus aliquet mauris"/>
+					</TestApp:Album.Artist>
+					<TestApp:Album.Genre>
+						<TestApp:Genre Description="Aenean vivamus" GenreId="87" Name="Parturient felis"/>
+					</TestApp:Album.Genre>
+					<TestApp:Album.Price>
+						<System:Decimal/>
+					</TestApp:Album.Price>
+				</TestApp:Album>
+				<TestApp:Album AlbumArtUrl="Suscipit torquent blandit" ArtistId="18" AlbumId="71" GenreId="12" Title="Nullam sed sociosqu">
+					<TestApp:Album.Artist>
+						<TestApp:Artist ArtistId="74" Name="Vestibulum penatibus"/>
+					</TestApp:Album.Artist>
+					<TestApp:Album.Genre>
+						<TestApp:Genre Description="Aptent auctor ultrices justo lacus" GenreId="90" Name="Ipsum vestibulum"/>
+					</TestApp:Album.Genre>
+					<TestApp:Album.Price>
+						<System:Decimal/>
+					</TestApp:Album.Price>
+				</TestApp:Album>
+			</TestApp:Genre.Albums>
+		</TestApp:Genre>
+		<TestApp:Genre Description="Adipiscing pede dis" GenreId="83" Name="Congue lorem">
+			<TestApp:Genre.Albums>
+				<TestApp:Album AlbumArtUrl="Quis cursus est vestibulum vehicula" ArtistId="17" AlbumId="60" GenreId="60" Title="Quam magna commodo parturient">
+					<TestApp:Album.Artist>
+						<TestApp:Artist ArtistId="35" Name="Porttitor cubilia"/>
+					</TestApp:Album.Artist>
+					<TestApp:Album.Genre>
+						<TestApp:Genre Description="Leo urna" GenreId="59" Name="Hac massa dictum conubia"/>
+					</TestApp:Album.Genre>
+					<TestApp:Album.Price>
+						<System:Decimal/>
+					</TestApp:Album.Price>
+				</TestApp:Album>
+				<TestApp:Album AlbumArtUrl="Duis adipiscing libero dapibus" ArtistId="12" AlbumId="81" GenreId="46" Title="Lectus mus cras vestibulum">
+					<TestApp:Album.Artist>
+						<TestApp:Artist ArtistId="62" Name="Morbi non ligula tincidunt"/>
+					</TestApp:Album.Artist>
+					<TestApp:Album.Genre>
+						<TestApp:Genre Description="Metus euismod feugiat gravida" GenreId="82" Name="Nunc nec parturient egestas vestibulum"/>
+					</TestApp:Album.Genre>
+					<TestApp:Album.Price>
+						<System:Decimal/>
+					</TestApp:Album.Price>
+				</TestApp:Album>
+				<TestApp:Album AlbumArtUrl="Luctus neque" ArtistId="74" AlbumId="43" GenreId="85" Title="Litora amet">
+					<TestApp:Album.Artist>
+						<TestApp:Artist ArtistId="73" Name="Vestibulum ultricies adipiscing parturient"/>
+					</TestApp:Album.Artist>
+					<TestApp:Album.Genre>
+						<TestApp:Genre Description="Ante tristique arcu volutpat" GenreId="55" Name="Netus nulla per"/>
+					</TestApp:Album.Genre>
+					<TestApp:Album.Price>
+						<System:Decimal/>
+					</TestApp:Album.Price>
+				</TestApp:Album>
+				<TestApp:Album AlbumArtUrl="Sed magnis" ArtistId="12" AlbumId="36" GenreId="41" Title="Vestibulum diam">
+					<TestApp:Album.Artist>
+						<TestApp:Artist ArtistId="87" Name="Maecenas venenatis"/>
+					</TestApp:Album.Artist>
+					<TestApp:Album.Genre>
+						<TestApp:Genre Description="Elit mauris" GenreId="59" Name="Eget porta sem mattis"/>
+					</TestApp:Album.Genre>
+					<TestApp:Album.Price>
+						<System:Decimal/>
+					</TestApp:Album.Price>
+				</TestApp:Album>
+				<TestApp:Album AlbumArtUrl="Adipiscing curabitur enim mollis phasellus" ArtistId="32" AlbumId="22" GenreId="10" Title="Vulputate vestibulum">
+					<TestApp:Album.Artist>
+						<TestApp:Artist ArtistId="21" Name="Purus risus montes elementum"/>
+					</TestApp:Album.Artist>
+					<TestApp:Album.Genre>
+						<TestApp:Genre Description="Iaculis dignissim praesent" GenreId="82" Name="Parturient consequat convallis"/>
+					</TestApp:Album.Genre>
+					<TestApp:Album.Price>
+						<System:Decimal/>
+					</TestApp:Album.Price>
+				</TestApp:Album>
+			</TestApp:Genre.Albums>
+		</TestApp:Genre>
+		<TestApp:Genre Description="Accumsan laoreet ornare velit natoque" GenreId="89" Name="Erat lacinia sit nostra">
+			<TestApp:Genre.Albums>
+				<TestApp:Album AlbumArtUrl="Facilisis vitae vestibulum posuere" ArtistId="22" AlbumId="74" GenreId="11" Title="Eros platea primis">
+					<TestApp:Album.Artist>
+						<TestApp:Artist ArtistId="57" Name="Potenti semper vel vestibulum"/>
+					</TestApp:Album.Artist>
+					<TestApp:Album.Genre>
+						<TestApp:Genre Description="Fermentum sapien" GenreId="58" Name="Rutrum class curae"/>
+					</TestApp:Album.Genre>
+					<TestApp:Album.Price>
+						<System:Decimal/>
+					</TestApp:Album.Price>
+				</TestApp:Album>
+				<TestApp:Album AlbumArtUrl="Nisl fringilla adipiscing nam" ArtistId="10" AlbumId="13" GenreId="36" Title="Nibh nisi bibendum">
+					<TestApp:Album.Artist>
+						<TestApp:Artist ArtistId="22" Name="Donec rhoncus sodales viverra"/>
+					</TestApp:Album.Artist>
+					<TestApp:Album.Genre>
+						<TestApp:Genre Description="Sed parturient eleifend sociis dis" GenreId="10" Name="Dictumst pretium"/>
+					</TestApp:Album.Genre>
+					<TestApp:Album.Price>
+						<System:Decimal/>
+					</TestApp:Album.Price>
+				</TestApp:Album>
+				<TestApp:Album AlbumArtUrl="Aliquam facilisi fusce odio vestibulum" ArtistId="58" AlbumId="64" GenreId="96" Title="Nunc etiam taciti est">
+					<TestApp:Album.Artist>
+						<TestApp:Artist ArtistId="82" Name="Vivamus tempus habitasse mus hendrerit"/>
+					</TestApp:Album.Artist>
+					<TestApp:Album.Genre>
+						<TestApp:Genre Description="Quisque orci leo tempor" GenreId="60" Name="Hac integer tellus"/>
+					</TestApp:Album.Genre>
+					<TestApp:Album.Price>
+						<System:Decimal/>
+					</TestApp:Album.Price>
+				</TestApp:Album>
+				<TestApp:Album AlbumArtUrl="Himenaeos pede quam nec vestibulum" ArtistId="95" AlbumId="16" GenreId="71" Title="Lorem tortor">
+					<TestApp:Album.Artist>
+						<TestApp:Artist ArtistId="53" Name="Habitant parturient malesuada inceptos"/>
+					</TestApp:Album.Artist>
+					<TestApp:Album.Genre>
+						<TestApp:Genre Description="Per nulla faucibus aliquam sed" GenreId="53" Name="Non quis adipiscing morbi imperdiet"/>
+					</TestApp:Album.Genre>
+					<TestApp:Album.Price>
+						<System:Decimal/>
+					</TestApp:Album.Price>
+				</TestApp:Album>
+				<TestApp:Album AlbumArtUrl="Sit urna turpis penatibus" ArtistId="59" AlbumId="36" GenreId="42" Title="Vestibulum sem">
+					<TestApp:Album.Artist>
+						<TestApp:Artist ArtistId="70" Name="Tincidunt adipiscing"/>
+					</TestApp:Album.Artist>
+					<TestApp:Album.Genre>
+						<TestApp:Genre Description="Blandit vestibulum porttitor varius interdum" GenreId="44" Name="Aliquet vel"/>
+					</TestApp:Album.Genre>
+					<TestApp:Album.Price>
+						<System:Decimal/>
+					</TestApp:Album.Price>
+				</TestApp:Album>
+			</TestApp:Genre.Albums>
+		</TestApp:Genre>
+		<TestApp:Genre Description="Proin lobortis augue cras nascetur" GenreId="16" Name="Commodo tristique">
+			<TestApp:Genre.Albums>
+				<TestApp:Album AlbumArtUrl="Cubilia ultricies fames venenatis" ArtistId="70" AlbumId="40" GenreId="87" Title="Nam dolor conubia">
+					<TestApp:Album.Artist>
+						<TestApp:Artist ArtistId="37" Name="Curabitur parturient phasellus"/>
+					</TestApp:Album.Artist>
+					<TestApp:Album.Genre>
+						<TestApp:Genre Description="Nunc mauris felis" GenreId="60" Name="Aenean pharetra vulputate duis"/>
+					</TestApp:Album.Genre>
+					<TestApp:Album.Price>
+						<System:Decimal/>
+					</TestApp:Album.Price>
+				</TestApp:Album>
+				<TestApp:Album AlbumArtUrl="Dapibus vestibulum nullam lacus lorem" ArtistId="46" AlbumId="34" GenreId="47" Title="Ipsum justo sed">
+					<TestApp:Album.Artist>
+						<TestApp:Artist ArtistId="45" Name="Congue egestas"/>
+					</TestApp:Album.Artist>
+					<TestApp:Album.Genre>
+						<TestApp:Genre Description="Amet auctor magna" GenreId="16" Name="Aptent consequat vestibulum"/>
+					</TestApp:Album.Genre>
+					<TestApp:Album.Price>
+						<System:Decimal/>
+					</TestApp:Album.Price>
+				</TestApp:Album>
+				<TestApp:Album AlbumArtUrl="Dignissim parturient arcu diam" ArtistId="14" AlbumId="90" GenreId="34" Title="Ante adipiscing convallis euismod">
+					<TestApp:Album.Artist>
+						<TestApp:Artist ArtistId="59" Name="Lectus est hac"/>
+					</TestApp:Album.Artist>
+					<TestApp:Album.Genre>
+						<TestApp:Genre Description="Cursus gravida elementum vestibulum dictum" GenreId="39" Name="Eget massa dis elit feugiat"/>
+					</TestApp:Album.Genre>
+					<TestApp:Album.Price>
+						<System:Decimal/>
+					</TestApp:Album.Price>
+				</TestApp:Album>
+				<TestApp:Album AlbumArtUrl="Metus libero iaculis" ArtistId="60" AlbumId="74" GenreId="54" Title="Enim erat vestibulum eros">
+					<TestApp:Album.Artist>
+						<TestApp:Artist ArtistId="45" Name="Litora leo luctus parturient netus"/>
+					</TestApp:Album.Artist>
+					<TestApp:Album.Genre>
+						<TestApp:Genre Description="Ligula facilisis placerat neque" GenreId="71" Name="Adipiscing nibh morbi"/>
+					</TestApp:Album.Genre>
+					<TestApp:Album.Price>
+						<System:Decimal/>
+					</TestApp:Album.Price>
+				</TestApp:Album>
+				<TestApp:Album AlbumArtUrl="Nulla nisi" ArtistId="15" AlbumId="53" GenreId="99" Title="Mus fermentum magnis lacinia">
+					<TestApp:Album.Artist>
+						<TestApp:Artist ArtistId="38" Name="Mauris per sagittis"/>
+					</TestApp:Album.Artist>
+					<TestApp:Album.Genre>
+						<TestApp:Genre Description="Vestibulum vestibulum mattis" GenreId="16" Name="Pulvinar nec nisl non porta"/>
+					</TestApp:Album.Genre>
+					<TestApp:Album.Price>
+						<System:Decimal/>
+					</TestApp:Album.Price>
+				</TestApp:Album>
+			</TestApp:Genre.Albums>
+		</TestApp:Genre>
+		<TestApp:Genre Description="Nunc sed" GenreId="36" Name="Fringilla mollis laoreet montes senectus">
+			<TestApp:Genre.Albums>
+				<TestApp:Album AlbumArtUrl="Sit odio habitasse ornare" ArtistId="63" AlbumId="39" GenreId="68" Title="Sem sociosqu nostra adipiscing">
+					<TestApp:Album.Artist>
+						<TestApp:Artist ArtistId="51" Name="Posuere nam potenti primis rutrum"/>
+					</TestApp:Album.Artist>
+					<TestApp:Album.Genre>
+						<TestApp:Genre Description="Purus suscipit natoque" GenreId="42" Name="Platea vel parturient"/>
+					</TestApp:Album.Genre>
+					<TestApp:Album.Price>
+						<System:Decimal/>
+					</TestApp:Album.Price>
+				</TestApp:Album>
+				<TestApp:Album AlbumArtUrl="Sapien velit vitae class" ArtistId="50" AlbumId="77" GenreId="87" Title="Vestibulum hendrerit risus">
+					<TestApp:Album.Artist>
+						<TestApp:Artist ArtistId="48" Name="Torquent taciti pretium"/>
+					</TestApp:Album.Artist>
+					<TestApp:Album.Genre>
+						<TestApp:Genre Description="Semper vestibulum sociis" GenreId="73" Name="Himenaeos orci sed"/>
+					</TestApp:Album.Genre>
+					<TestApp:Album.Price>
+						<System:Decimal/>
+					</TestApp:Album.Price>
+				</TestApp:Album>
+				<TestApp:Album AlbumArtUrl="Adipiscing dis" ArtistId="85" AlbumId="39" GenreId="49" Title="Ultrices vehicula imperdiet">
+					<TestApp:Album.Artist>
+						<TestApp:Artist ArtistId="58" Name="Est donec"/>
+					</TestApp:Album.Artist>
+					<TestApp:Album.Genre>
+						<TestApp:Genre Description="Sodales quam curae" GenreId="40" Name="Pede parturient rhoncus vestibulum"/>
+					</TestApp:Album.Genre>
+					<TestApp:Album.Price>
+						<System:Decimal/>
+					</TestApp:Album.Price>
+				</TestApp:Album>
+				<TestApp:Album AlbumArtUrl="Lorem quis malesuada morbi urna" ArtistId="46" AlbumId="21" GenreId="54" Title="Etiam vestibulum hac fusce">
+					<TestApp:Album.Artist>
+						<TestApp:Artist ArtistId="46" Name="Mus tempus"/>
+					</TestApp:Album.Artist>
+					<TestApp:Album.Genre>
+						<TestApp:Genre Description="Maecenas tempor leo" GenreId="26" Name="Volutpat penatibus tellus"/>
+					</TestApp:Album.Genre>
+					<TestApp:Album.Price>
+						<System:Decimal/>
+					</TestApp:Album.Price>
+				</TestApp:Album>
+				<TestApp:Album AlbumArtUrl="Proin tincidunt tortor augue" ArtistId="93" AlbumId="90" GenreId="23" Title="Viverra nulla nec porttitor">
+					<TestApp:Album.Artist>
+						<TestApp:Artist ArtistId="87" Name="Parturient dictumst tristique"/>
+					</TestApp:Album.Artist>
+					<TestApp:Album.Genre>
+						<TestApp:Genre Description="Accumsan turpis bibendum non" GenreId="61" Name="Praesent adipiscing"/>
+					</TestApp:Album.Genre>
+					<TestApp:Album.Price>
+						<System:Decimal/>
+					</TestApp:Album.Price>
+				</TestApp:Album>
+			</TestApp:Genre.Albums>
+		</TestApp:Genre>
+	</TestApp:SampleData.Genres>
+</TestApp:SampleData>

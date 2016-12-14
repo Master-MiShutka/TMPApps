@@ -1,0 +1,15 @@
+﻿<StackPanel x:Class="TMP.Work.Emcos.Controls.BalansItemTitle"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+            xmlns:controls="clr-namespace:TMP.Work.Emcos.Controls"
+                    xmlns:treeListView="clr-namespace:TMP.Wpf.Common.Controls.TreeListView;assembly=TMP.Wpf.Common"
+             mc:Ignorable="d"
+             d:DesignHeight="24" d:DesignWidth="100"
+            Orientation="Horizontal">
+    <treeListView:RowExpander />
+    <controls:BalansItemIcon Height="{Binding ElementName=text, Path=ActualHeight}" Effect="{DynamicResource dropShadowWhite}">
+    </controls:BalansItemIcon>
+    <TextBlock x:Name="text" Margin="5,0,0,0"  Style="{StaticResource TextCellStyle}" Text="{Binding Title}" />
+</StackPanel>

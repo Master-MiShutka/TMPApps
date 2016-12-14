@@ -1,0 +1,455 @@
+﻿<local:AvalonTextEditorEx
+    x:Class="TMP.Work.AmperM.TestApp.Controls._1CV8SyntaxHighlightTextBox"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero2"
+    xmlns:controls="clr-namespace:TMP.Wpf.CommonControls;assembly=TMP.Wpf.CommonControls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:iconpack="http://metro.mahapps.com/winfx/xaml/iconpacks"
+    xmlns:ics="http://icsharpcode.net/sharpdevelop/avalonedit"
+    xmlns:search="http://icsharpcode.net/sharpdevelop/avalonedit/search"
+    xmlns:local="clr-namespace:TMP.Work.AmperM.TestApp.Controls"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    x:Name="textEditor"
+    MinHeight="450"
+    HorizontalAlignment="Stretch"
+    VerticalAlignment="Stretch"
+    SyntaxHighlighting="1CV8"
+    mc:Ignorable="d">
+  <local:AvalonTextEditorEx.Resources>
+    <Style TargetType="ics:SearchPanel">
+      <Setter Property="Template">
+        <Setter.Value>
+          <ControlTemplate TargetType="{x:Type ics:SearchPanel}">
+            <Border
+              Background="{DynamicResource ControlBackgroundBrush}" BorderThickness="1" CornerRadius="5"
+              Effect="{DynamicResource DropShadowBrush}" BorderBrush="{DynamicResource AccentColorBrush}"
+              HorizontalAlignment="Right"
+              VerticalAlignment="Top" Cursor="Arrow">
+                  <Border.Resources>
+                    <Style x:Key="style" BasedOn="{StaticResource TMPFlatButton}" TargetType="{x:Type ButtonBase}" >
+                      <Setter Property="FontWeight" Value="Bold"/>
+                      <Setter Property="FontFamily" Value="Consolas,Courier New,Courier"/>
+                      <Setter Property="Margin" Value="2"/>
+                      <Setter Property="Cursor" Value="Hand"/>
+                      <Setter Property="Padding" Value="1"/>
+                      <Setter Property="Width" Value="{x:Static SystemParameters.CaptionHeight}"/>
+                      <Setter Property="Height" Value="{x:Static SystemParameters.CaptionHeight}"/>
+                  <Setter Property="VerticalAlignment" Value="Stretch"/>
+                  <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                      <Setter Property="VerticalContentAlignment" Value="Center"/>
+                </Style>
+                <Style BasedOn="{StaticResource style}" TargetType="{x:Type Button}"/>
+                <Style BasedOn="{StaticResource style}" TargetType="{x:Type ToggleButton}"/>
+              </Border.Resources>
+              <StackPanel Orientation="Horizontal">
+                <TextBox Name="PART_searchTextBox" Focusable="True" BorderBrush="{DynamicResource AccentColorBrush}" 
+                         Width="150" Height="Auto" Margin="2,2,0,2" Padding="0"
+                         controls:TextBoxHelper.ClearTextButton="True"
+                         controls:TextBoxHelper.Watermark="Найти ..."
+                         controls:TextBoxHelper.ButtonCommand="ics:SearchCommands.FindNext">
+                  <TextBox.Text>
+                    <Binding Path="SearchPattern" RelativeSource="{RelativeSource TemplatedParent}" UpdateSourceTrigger="PropertyChanged">
+                      <Binding.ValidationRules>
+                        <ExceptionValidationRule />
+                      </Binding.ValidationRules>
+                    </Binding>
+                  </TextBox.Text>
+                  <controls:TextBoxHelper.ButtonContent>
+                    <Path Height="{x:Static SystemParameters.CaptionHeight}" ToolTip="{Binding Localization.FindNextText, RelativeSource={RelativeSource TemplatedParent}}"
+                          Stretch="Uniform" Fill="{DynamicResource BlackBrush}" 
+                      Data="F1M-218.342,2910.79L-234.066,2926.52 -233.954,2926.63 -225.428,2926.63 -210.87,2912.07 -206.495,2907.7 -225.313,2888.88 -234.066,2888.88 -218.342,2904.6 -259.829,2904.6 -259.829,2910.79 -218.342,2910.79z" />
+                  </controls:TextBoxHelper.ButtonContent>
+                </TextBox>
+                <!-- FindPrevious (set visibility if required) button -->
+                <Button Command="ics:SearchCommands.FindPrevious" 
+                            ToolTip="{Binding Localization.FindPreviousText, RelativeSource={RelativeSource TemplatedParent}}" Visibility="Collapsed">
+                  <Path Data="F1M-185.925,-2026.96L-203.062,-2048.74C-197.485,-2056.51 -197.433,-2067.31 -203.64,-2075.2 -211.167,-2084.76 -225.019,-2086.42 -234.588,-2078.89 -244.154,-2071.36 -245.808,-2057.51 -238.282,-2047.94 -231.986,-2039.95 -221.274,-2037.5 -212.337,-2041.31L-195.262,-2019.61 -185.925,-2026.96z M-231.201,-2053.51C-235.653,-2059.17 -234.674,-2067.36 -229.02,-2071.81 -223.36,-2076.26 -215.169,-2075.29 -210.721,-2069.63 -206.269,-2063.97 -207.245,-2055.78 -212.902,-2051.33 -218.559,-2046.88 -226.752,-2047.86 -231.201,-2053.51z" 
+                                Stretch="Uniform" Fill="{DynamicResource BlackBrush}" 
+                                Width="{x:Static SystemParameters.CaptionHeight}" Height="{x:Static SystemParameters.CaptionHeight}" />
+                </Button>
+                <StackPanel Orientation="Horizontal">
+                  <ToggleButton ToolTip="{Binding Localization.MatchCaseText, RelativeSource={RelativeSource TemplatedParent}}"
+                                IsChecked="{Binding MatchCase, RelativeSource={RelativeSource TemplatedParent}}"
+                                Content="aA">
+                  </ToggleButton>
+                  <ToggleButton ToolTip="{Binding Localization.MatchWholeWordsText, RelativeSource={RelativeSource TemplatedParent}}"
+                                IsChecked="{Binding WholeWords, RelativeSource={RelativeSource TemplatedParent}}"
+                                Content="Ab">
+                  </ToggleButton>
+                  <ToggleButton ToolTip="{Binding Localization.UseRegexText, RelativeSource={RelativeSource TemplatedParent}}"
+                                IsChecked="{Binding UseRegex, RelativeSource={RelativeSource TemplatedParent}}"
+                                Content="a*">
+                  </ToggleButton>
+                </StackPanel>
+                <!-- Search Panel close button -->
+                <Button 
+                  Style="{DynamicResource TMPWindowCloseButtonStyle}"
+                  FontFamily="Marlett"
+                  Content="r"
+                  HorizontalAlignment="Right" Command="ics:SearchCommands.CloseSearchPanel"/>
+              </StackPanel>
+            </Border>
+          </ControlTemplate>
+        </Setter.Value>
+      </Setter>
+    </Style>
+  </local:AvalonTextEditorEx.Resources>
+    <local:AvalonTextEditorEx.Template>
+        <ControlTemplate TargetType="{x:Type local:AvalonTextEditorEx}">
+            <Border
+                Background="{DynamicResource ControlBackgroundBrush}"
+                BorderBrush="{DynamicResource ControlBorderBrush}"
+                BorderThickness="1">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <ToolBar>
+                        <ToolBar.Resources>
+                            <Style x:Key="image" TargetType="{x:Type Image}">
+                                <Setter Property="Height" Value="18" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsEnabled, RelativeSource={RelativeSource AncestorLevel=1, AncestorType={x:Type ButtonBase}}}" Value="False">
+                                        <Setter Property="Opacity" Value="0.30" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ToolBar.Resources>
+                        <Button Click="openFileClick" Padding="0">
+                            <Image Source="/Test;component/Resources/Open.png" Style="{StaticResource image}" />
+                        </Button>
+                        <Button Click="saveFileClick" Padding="0">
+                            <Image Source="/Test;component/Resources/Save.png" Style="{StaticResource image}"/>
+                        </Button>
+                        <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}"/>
+                        <Button Command="Cut" Padding="0">
+                            <Image Source="/Test;component/Resources/Cut.png" Style="{StaticResource image}"/>
+                        </Button>
+                        <Button Command="Copy" Padding="0">
+                            <Image Source="/Test;component/Resources/Copy.png" Style="{StaticResource image}"/>
+                        </Button>
+                        <Button Command="Paste" Padding="0">
+                            <Image Source="/Test;component/Resources/Paste.png" Style="{StaticResource image}"/>
+                        </Button>
+                        <Button Command="Delete" Padding="0">
+                            <Image Source="/Test;component/Resources/Delete.png" Style="{StaticResource image}"/>
+                        </Button>
+                        <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}"/>
+                        <Button Command="Undo" Padding="0">
+                            <Image Source="/Test;component/Resources/Undo.png" Style="{StaticResource image}"/>
+                        </Button>
+                        <Button Command="Redo" Padding="0">
+                            <Image Source="/Test;component/Resources/Redo.png" Style="{StaticResource image}"/>
+                        </Button>
+                        <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}"/>
+                        <CheckBox IsChecked="{Binding WordWrap, RelativeSource={RelativeSource TemplatedParent}}" ToolTip="Перенос текста"
+                                  Style="{StaticResource {x:Static ToolBar.CheckBoxStyleKey}}" Padding="0">
+                            <Image Height="16" Source="/Test;component/Resources/WordWrap.png" />
+                        </CheckBox>
+                        <Menu Background="Transparent" Padding="0">
+                            <Menu.Resources>
+                                <Style TargetType="{x:Type MenuItem}">
+                                    <Setter Property="OverridesDefaultStyle" Value="True"/>
+                                    <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                                    <Setter Property="HorizontalAlignment" Value="Left"/>
+                                    <Setter Property="VerticalContentAlignment" Value="Center"/>
+                                    <Setter Property="Background" Value="Transparent"/>
+                                    <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.MenuTextBrushKey}}"/>
+                                    <Setter Property="BorderThickness" Value="1"/>
+                                    <Setter Property="Margin" Value="0,1,0,0"/>
+                                    <Setter Property="Padding" Value="8,3"/>
+                                    <Setter Property="DockPanel.Dock" Value="Top"/>
+                                    <Setter Property="ScrollViewer.PanningMode" Value="Both"/>
+                                    <Setter Property="Stylus.IsFlicksEnabled" Value="False"/>
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="{x:Type MenuItem}">
+                                                <Grid Background="Transparent" SnapsToDevicePixels="True">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition MinWidth="24" SharedSizeGroup="MenuItemIconColumnGroup" Width="Auto"/>
+                                                        <ColumnDefinition Width="*"/>
+                                                        <ColumnDefinition SharedSizeGroup="MenuItemIGTColumnGroup" Width="Auto"/>
+                                                        <ColumnDefinition Width="14"/>
+                                                    </Grid.ColumnDefinitions>
+                                                    <Border x:Name="Border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Grid.ColumnSpan="4" Margin="1,0"/>
+                                                    <ContentPresenter x:Name="Icon" Content="{TemplateBinding Icon}" ContentSource="Icon" Margin="0" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="Center"/>
+                                                    <Border x:Name="GlyphPanel" BorderBrush="#80DADADA" BorderThickness="1" Background="Transparent" Height="20" Margin="0,1" Visibility="Hidden" Width="20">
+                                                        <Path Data="M0,2.5L2.5,5 7,0.5" FlowDirection="LeftToRight" HorizontalAlignment="Center" Stroke="{TemplateBinding Foreground}" StrokeThickness="1.2" VerticalAlignment="Center"/>
+                                                    </Border>
+                                                    <ContentPresenter ContentTemplate="{TemplateBinding HeaderTemplate}" Content="{TemplateBinding Header}" Grid.Column="1" ContentStringFormat="{TemplateBinding HeaderStringFormat}" ContentSource="Header" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                                                    <TextBlock Grid.Column="2" HorizontalAlignment="Right" Margin="4,3,2,3" Text="{TemplateBinding InputGestureText}"/>
+                                                </Grid>
+                                                <ControlTemplate.Triggers>
+                                                    <Trigger Property="Icon" Value="{x:Null}">
+                                                        <Setter Property="Visibility" TargetName="Icon" Value="Collapsed"/>
+                                                    </Trigger>
+                                                    <Trigger Property="IsChecked" Value="True">
+                                                        <Setter Property="Visibility" TargetName="GlyphPanel" Value="Visible"/>
+                                                        <Setter Property="Visibility" TargetName="Icon" Value="Collapsed"/>
+                                                    </Trigger>
+                                                    <Trigger Property="IsHighlighted" Value="True">
+                                                        <Setter Property="BorderBrush" TargetName="Border" Value="#80DADADA"/>
+                                                        <Setter Property="Background" TargetName="Border" Value="#210080FF"/>
+                                                        <Setter Property="BorderBrush" TargetName="GlyphPanel" Value="#90006CD9"/>
+                                                        <Setter Property="Background" TargetName="GlyphPanel" Value="#FFEEF5FD"/>
+                                                    </Trigger>
+                                                    <Trigger Property="IsEnabled" Value="False">
+                                                        <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+                                                    </Trigger>
+                                                </ControlTemplate.Triggers>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                    <Style.Triggers>
+                                        <Trigger Property="Role" Value="TopLevelHeader">
+                                            <Setter Property="Padding" Value="6,2,7,2"/>
+                                            <Setter Property="Grid.IsSharedSizeScope" Value="True"/>
+                                            <Setter Property="Template">
+                                                <Setter.Value>
+                                                    <ControlTemplate TargetType="{x:Type MenuItem}">
+                                                        <Border x:Name="Border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="1" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
+                                                            <DockPanel x:Name="Header">
+                                                                <ContentPresenter x:Name="Icon" Content="{TemplateBinding Icon}" ContentSource="Icon" Margin="4,0,6,0" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="Center"/>
+                                                                <Path x:Name="GlyphPanel" Data="M0,2.5L2.5,5 7,0.5" FlowDirection="LeftToRight" Margin="4,0,6,0" Stroke="{TemplateBinding Foreground}" StrokeThickness="1.2" Visibility="Collapsed" VerticalAlignment="Center"/>
+                                                                <ContentPresenter ContentTemplate="{TemplateBinding HeaderTemplate}" Content="{TemplateBinding Header}" ContentStringFormat="{TemplateBinding HeaderStringFormat}" ContentSource="Header" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                                                                <Popup x:Name="PART_Popup" AllowsTransparency="True" Focusable="False" HorizontalOffset="-1" IsOpen="{Binding IsSubmenuOpen, RelativeSource={RelativeSource TemplatedParent}}" PopupAnimation="{DynamicResource {x:Static SystemParameters.MenuPopupAnimationKey}}" Placement="Bottom">
+                                                                    <Themes:SystemDropShadowChrome x:Name="Shdw" Color="Transparent">
+                                                                        <Border x:Name="SubMenuBorder" BorderBrush="#FFB6BDC5" BorderThickness="1" Background="#FFEEF5FD">
+                                                                            <Grid>
+                                                                                <Rectangle Fill="#FFEEF5FD" HorizontalAlignment="Left" Height="1" Margin="0,-1,0,0" VerticalAlignment="Top" Width="{Binding ActualWidth, ElementName=Header}"/>
+                                                                                <ScrollViewer x:Name="SubMenuScrollViewer" Style="{DynamicResource {ComponentResourceKey ResourceId=MenuScrollViewer, TypeInTargetAssembly={x:Type FrameworkElement}}}">
+                                                                                    <Grid RenderOptions.ClearTypeHint="Enabled" Grid.IsSharedSizeScope="True">
+                                                                                        <Grid.ColumnDefinitions>
+                                                                                            <ColumnDefinition MinWidth="24" SharedSizeGroup="MenuItemIconColumnGroup" Width="Auto"/>
+                                                                                            <ColumnDefinition Width="*"/>
+                                                                                        </Grid.ColumnDefinitions>
+                                                                                        <Canvas HorizontalAlignment="Left" Height="0" VerticalAlignment="Top" Width="0">
+                                                                                            <Rectangle x:Name="OpaqueRect" Fill="{Binding Background, ElementName=SubMenuBorder}" Height="{Binding ActualHeight, ElementName=SubMenuBorder}" Width="{Binding ActualWidth, ElementName=SubMenuBorder}"/>
+                                                                                        </Canvas>
+                                                                                        <Rectangle Fill="#FFEEF5FD" Margin="0,1"/>
+                                                                                        <ItemsPresenter x:Name="ItemsPresenter" Grid.ColumnSpan="2" KeyboardNavigation.DirectionalNavigation="Cycle" Margin="0,0,0,1" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" KeyboardNavigation.TabNavigation="Cycle"/>
+                                                                                    </Grid>
+                                                                                </ScrollViewer>
+                                                                            </Grid>
+                                                                        </Border>
+                                                                    </Themes:SystemDropShadowChrome>
+                                                                </Popup>
+                                                            </DockPanel>
+                                                        </Border>
+                                                        <ControlTemplate.Triggers>
+                                                            <Trigger Property="IsSuspendingPopupAnimation" Value="True">
+                                                                <Setter Property="PopupAnimation" TargetName="PART_Popup" Value="None"/>
+                                                            </Trigger>
+                                                            <Trigger Property="Icon" Value="{x:Null}">
+                                                                <Setter Property="Visibility" TargetName="Icon" Value="Collapsed"/>
+                                                            </Trigger>
+                                                            <Trigger Property="IsChecked" Value="True">
+                                                                <Setter Property="Visibility" TargetName="GlyphPanel" Value="Visible"/>
+                                                                <Setter Property="Visibility" TargetName="Icon" Value="Collapsed"/>
+                                                            </Trigger>
+                                                            <Trigger Property="IsHighlighted" Value="True">
+                                                                <Setter Property="BorderBrush" TargetName="Border" Value="#80DADADA"/>
+                                                                <Setter Property="Background" TargetName="Border" Value="#210080FF"/>
+                                                            </Trigger>
+                                                            <Trigger Property="IsSubmenuOpen" Value="True">
+                                                                <Setter Property="BorderBrush" TargetName="Border" Value="#FFB6BDC5"/>
+                                                                <Setter Property="Background" TargetName="Border" Value="#FFEEF5FD"/>
+                                                            </Trigger>
+                                                            <Trigger Property="HasDropShadow" SourceName="PART_Popup" Value="True">
+                                                                <Setter Property="Margin" TargetName="Shdw" Value="0,0,5,5"/>
+                                                                <Setter Property="SnapsToDevicePixels" TargetName="Shdw" Value="True"/>
+                                                                <Setter Property="Color" TargetName="Shdw" Value="#71000000"/>
+                                                            </Trigger>
+                                                            <Trigger Property="IsEnabled" Value="False">
+                                                                <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+                                                            </Trigger>
+                                                            <Trigger Property="CanContentScroll" SourceName="SubMenuScrollViewer" Value="False">
+                                                                <Setter Property="Canvas.Top" TargetName="OpaqueRect" Value="{Binding VerticalOffset, ElementName=SubMenuScrollViewer}"/>
+                                                                <Setter Property="Canvas.Left" TargetName="OpaqueRect" Value="{Binding HorizontalOffset, ElementName=SubMenuScrollViewer}"/>
+                                                            </Trigger>
+                                                        </ControlTemplate.Triggers>
+                                                    </ControlTemplate>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </Trigger>
+                                        <Trigger Property="Role" Value="TopLevelItem">
+                                            <Setter Property="Margin" Value="0,1"/>
+                                            <Setter Property="Padding" Value="7,1,8,2"/>
+                                            <Setter Property="Template">
+                                                <Setter.Value>
+                                                    <ControlTemplate TargetType="{x:Type MenuItem}">
+                                                        <Border x:Name="Border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="1" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
+                                                            <DockPanel>
+                                                                <ContentPresenter x:Name="Icon" Content="{TemplateBinding Icon}" ContentSource="Icon" Margin="4,0,6,0" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="Center"/>
+                                                                <Path x:Name="GlyphPanel" Data="M0,2.5L2.5,5 7,0.5" FlowDirection="LeftToRight" Margin="4,0,6,0" Stroke="{TemplateBinding Foreground}" StrokeThickness="1.2" Visibility="Collapsed" VerticalAlignment="Center"/>
+                                                                <ContentPresenter ContentTemplate="{TemplateBinding HeaderTemplate}" Content="{TemplateBinding Header}" ContentStringFormat="{TemplateBinding HeaderStringFormat}" ContentSource="Header" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                                                            </DockPanel>
+                                                        </Border>
+                                                        <ControlTemplate.Triggers>
+                                                            <Trigger Property="Icon" Value="{x:Null}">
+                                                                <Setter Property="Visibility" TargetName="Icon" Value="Collapsed"/>
+                                                            </Trigger>
+                                                            <Trigger Property="IsChecked" Value="True">
+                                                                <Setter Property="Visibility" TargetName="GlyphPanel" Value="Visible"/>
+                                                                <Setter Property="Visibility" TargetName="Icon" Value="Collapsed"/>
+                                                            </Trigger>
+                                                            <Trigger Property="IsHighlighted" Value="True">
+                                                                <Setter Property="BorderBrush" TargetName="Border" Value="#80DADADA"/>
+                                                                <Setter Property="Background" TargetName="Border" Value="#210080FF"/>
+                                                            </Trigger>
+                                                            <Trigger Property="IsEnabled" Value="False">
+                                                                <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+                                                            </Trigger>
+                                                        </ControlTemplate.Triggers>
+                                                    </ControlTemplate>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </Trigger>
+                                        <Trigger Property="Role" Value="SubmenuHeader">
+                                            <Setter Property="DockPanel.Dock" Value="Top"/>
+                                            <Setter Property="Padding" Value="8,3"/>
+                                            <Setter Property="Grid.IsSharedSizeScope" Value="True"/>
+                                            <Setter Property="Template">
+                                                <Setter.Value>
+                                                    <ControlTemplate TargetType="{x:Type MenuItem}">
+                                                        <Grid Background="Transparent" SnapsToDevicePixels="True">
+                                                            <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition MinWidth="24" SharedSizeGroup="MenuItemIconColumnGroup" Width="Auto"/>
+                                                                <ColumnDefinition Width="*"/>
+                                                                <ColumnDefinition SharedSizeGroup="MenuItemIGTColumnGroup" Width="Auto"/>
+                                                                <ColumnDefinition Width="14"/>
+                                                            </Grid.ColumnDefinitions>
+                                                            <Border x:Name="Border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Grid.ColumnSpan="4" Margin="1,0"/>
+                                                            <ContentPresenter x:Name="Icon" Content="{TemplateBinding Icon}" ContentSource="Icon" Margin="3" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="Center"/>
+                                                            <Border x:Name="GlyphPanel" BorderBrush="#80DADADA" BorderThickness="1" Background="Transparent" Height="20" Margin="0,1" Visibility="Hidden" Width="20">
+                                                                <Path Data="M0,2.5L2.5,5 7,0.5" FlowDirection="LeftToRight" HorizontalAlignment="Center" Stroke="{TemplateBinding Foreground}" StrokeThickness="1.2" VerticalAlignment="Center"/>
+                                                            </Border>
+                                                            <ContentPresenter ContentTemplate="{TemplateBinding HeaderTemplate}" Content="{TemplateBinding Header}" Grid.Column="1" ContentStringFormat="{TemplateBinding HeaderStringFormat}" ContentSource="Header" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                                                            <Path Grid.Column="3" DockPanel.Dock="Right" Data="M0,0L4,3.5 0,7z" Fill="{TemplateBinding Foreground}" Margin="4,0,6,0" VerticalAlignment="Center"/>
+                                                            <Popup x:Name="PART_Popup" AllowsTransparency="True" Focusable="False" IsOpen="{Binding IsSubmenuOpen, RelativeSource={RelativeSource TemplatedParent}}" PopupAnimation="{DynamicResource {x:Static SystemParameters.MenuPopupAnimationKey}}" Placement="Right">
+                                                                <Themes:SystemDropShadowChrome x:Name="Shdw" Color="Transparent">
+                                                                    <Border x:Name="SubMenuBorder" BorderBrush="#FFB6BDC5" BorderThickness="1" Background="#FFEEF5FD" Grid.IsSharedSizeScope="True">
+                                                                        <ScrollViewer x:Name="SubMenuScrollViewer" Style="{DynamicResource {ComponentResourceKey ResourceId=MenuScrollViewer, TypeInTargetAssembly={x:Type FrameworkElement}}}">
+                                                                            <Grid RenderOptions.ClearTypeHint="Enabled">
+                                                                                <Grid.ColumnDefinitions>
+                                                                                    <ColumnDefinition MinWidth="24" SharedSizeGroup="MenuItemIconColumnGroup" Width="Auto"/>
+                                                                                    <ColumnDefinition Width="*"/>
+                                                                                </Grid.ColumnDefinitions>
+                                                                                <Canvas HorizontalAlignment="Left" Height="0" VerticalAlignment="Top" Width="0">
+                                                                                    <Rectangle x:Name="OpaqueRect" Fill="{Binding Background, ElementName=SubMenuBorder}" Height="{Binding ActualHeight, ElementName=SubMenuBorder}" Width="{Binding ActualWidth, ElementName=SubMenuBorder}"/>
+                                                                                </Canvas>
+                                                                                <Rectangle Fill="#FFEEF5FD" Margin="0,1"/>
+                                                                                <ItemsPresenter x:Name="ItemsPresenter" Grid.ColumnSpan="2" KeyboardNavigation.DirectionalNavigation="Cycle" Margin="0,0,0,1" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" KeyboardNavigation.TabNavigation="Cycle"/>
+                                                                            </Grid>
+                                                                        </ScrollViewer>
+                                                                    </Border>
+                                                                </Themes:SystemDropShadowChrome>
+                                                            </Popup>
+                                                        </Grid>
+                                                        <ControlTemplate.Triggers>
+                                                            <Trigger Property="IsSuspendingPopupAnimation" Value="True">
+                                                                <Setter Property="PopupAnimation" TargetName="PART_Popup" Value="None"/>
+                                                            </Trigger>
+                                                            <Trigger Property="Icon" Value="{x:Null}">
+                                                                <Setter Property="Visibility" TargetName="Icon" Value="Collapsed"/>
+                                                            </Trigger>
+                                                            <Trigger Property="IsChecked" Value="True">
+                                                                <Setter Property="Visibility" TargetName="GlyphPanel" Value="Visible"/>
+                                                                <Setter Property="Visibility" TargetName="Icon" Value="Collapsed"/>
+                                                            </Trigger>
+                                                            <Trigger Property="IsHighlighted" Value="True">
+                                                                <Setter Property="BorderBrush" TargetName="Border" Value="#80DADADA"/>
+                                                                <Setter Property="Background" TargetName="Border" Value="#210080FF"/>
+                                                                <Setter Property="BorderBrush" TargetName="GlyphPanel" Value="#90006CD9"/>
+                                                                <Setter Property="Background" TargetName="GlyphPanel" Value="#FFEEF5FD"/>
+                                                            </Trigger>
+                                                            <Trigger Property="HasDropShadow" SourceName="PART_Popup" Value="True">
+                                                                <Setter Property="Margin" TargetName="Shdw" Value="0,0,5,5"/>
+                                                                <Setter Property="SnapsToDevicePixels" TargetName="Shdw" Value="True"/>
+                                                                <Setter Property="Color" TargetName="Shdw" Value="#71000000"/>
+                                                            </Trigger>
+                                                            <Trigger Property="IsEnabled" Value="False">
+                                                                <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+                                                            </Trigger>
+                                                            <Trigger Property="CanContentScroll" SourceName="SubMenuScrollViewer" Value="False">
+                                                                <Setter Property="Canvas.Top" TargetName="OpaqueRect" Value="{Binding VerticalOffset, ElementName=SubMenuScrollViewer}"/>
+                                                                <Setter Property="Canvas.Left" TargetName="OpaqueRect" Value="{Binding HorizontalOffset, ElementName=SubMenuScrollViewer}"/>
+                                                            </Trigger>
+                                                        </ControlTemplate.Triggers>
+                                                    </ControlTemplate>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Menu.Resources>
+                            <MenuItem Header="Дополнительно">
+                                <MenuItem                                    
+                                    Header="Отображать номера строк"
+                                    IsCheckable="True"
+                                    IsChecked="{Binding ShowLineNumbers, RelativeSource={RelativeSource TemplatedParent}}" />
+                                <MenuItem                                    
+                                    Header="Отображать переносы строк"
+                                    IsCheckable="True"
+                                    IsChecked="{Binding TextArea.Options.ShowEndOfLine, RelativeSource={RelativeSource TemplatedParent}}" />
+                                <MenuItem                                    
+                                    Header="Отображать пробелы"
+                                    IsCheckable="True"
+                                    IsChecked="{Binding TextArea.Options.ShowSpaces, RelativeSource={RelativeSource TemplatedParent}}" />
+                                <MenuItem                                    
+                                    Header="Отображать символы табуляции"
+                                    IsCheckable="True"
+                                    IsChecked="{Binding TextArea.Options.ShowTabs, RelativeSource={RelativeSource TemplatedParent}}" />
+                            </MenuItem>
+                        </Menu>
+                        <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}"/>
+                        <Label Content="Размер шрифта: " VerticalContentAlignment="Center" Padding="2 1 0 0"/>
+                        <TextBlock Padding="0" Text="{Binding TextArea.FontSize, StringFormat=N1, RelativeSource={RelativeSource TemplatedParent}}" 
+                                   VerticalAlignment="Center"  Margin="2 0"/>
+                        <Slider Minimum="8" Maximum="24" TickPlacement="BottomRight"  Padding="0"
+                                Value="{Binding TextArea.FontSize, RelativeSource={RelativeSource TemplatedParent}}"
+                                MinWidth="150" AutoToolTipPlacement="TopLeft" LargeChange="0.5" SmallChange="0.5" 
+                                TickFrequency="2" IsSnapToTickEnabled="True"/>
+                    </ToolBar>
+                    <Border Grid.Row="1" Margin ="2 0 2 0" BorderBrush="{DynamicResource AccentColorBrush2}" BorderThickness="1">
+                        <ScrollViewer
+                        x:Name="PART_ScrollViewer"
+                        BorderThickness="1"
+                        BorderBrush="{DynamicResource ControlBorderBrush}"
+                        Padding="{TemplateBinding Padding}"
+                        HorizontalContentAlignment="Stretch"
+                        VerticalContentAlignment="Stretch"
+                        CanContentScroll="True"
+                        Content="{Binding TextArea, RelativeSource={RelativeSource TemplatedParent}}"
+                        Focusable="False"
+                        HorizontalScrollBarVisibility="{TemplateBinding HorizontalScrollBarVisibility}"
+                        VerticalScrollBarVisibility="{TemplateBinding VerticalScrollBarVisibility}" />
+                    </Border>
+                    <TextBlock
+                        Margin="2,0,2,2"
+                        Padding="2,0" TextAlignment="Left"
+                        Grid.Row="2">
+                        <TextBlock.Text>
+                            <MultiBinding StringFormat="Строка: {0,-5} Колонка: {1,-5} Смещение: {2,-5} Всего строк: {3,-5} Всего символов: {4,-5} Длина выделения: {5} символов">
+                                <Binding Path="TextArea.Caret.Position.Line" RelativeSource="{RelativeSource TemplatedParent}" />
+                                <Binding Path="TextArea.Caret.Position.VisualColumn" RelativeSource="{RelativeSource TemplatedParent}" />
+                                <Binding Path="CaretOffset" RelativeSource="{RelativeSource TemplatedParent}" />
+                                <Binding Path="Document.LineCount" RelativeSource="{RelativeSource TemplatedParent}" />
+                                <Binding Path="Length" RelativeSource="{RelativeSource TemplatedParent}" />
+                                <Binding Path="SelectionLength" RelativeSource="{RelativeSource TemplatedParent}" />
+                            </MultiBinding>
+                        </TextBlock.Text>
+                    </TextBlock>
+                </Grid>
+            </Border>
+            <ControlTemplate.Triggers>
+                <Trigger Property="WordWrap" Value="True">
+                    <Setter TargetName="PART_ScrollViewer" Property="HorizontalScrollBarVisibility" Value="Disabled" />
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+    </local:AvalonTextEditorEx.Template>
+</local:AvalonTextEditorEx>

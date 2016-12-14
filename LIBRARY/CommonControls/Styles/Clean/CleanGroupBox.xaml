@@ -1,0 +1,53 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:Controls="clr-namespace:TMP.Wpf.CommonControls"
+                    xmlns:Converters="clr-namespace:TMP.Wpf.CommonControls.Converters">
+    <Style x:Key="CleanGroupBoxStyleKey" TargetType="GroupBox">
+        <Setter Property="BorderThickness" Value="0.3" />
+        <Setter Property="Controls:ControlsHelper.HeaderFontSize" Value="16" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="GroupBox">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+
+                        <ContentPresenter Grid.Row="0"
+                                          Margin="{TemplateBinding Padding}"
+                                          ContentSource="Header"
+                                          ContentTemplate="{TemplateBinding HeaderTemplate}"
+                                          RecognizesAccessKey="True"
+                                          TextElement.FontSize="{TemplateBinding Controls:ControlsHelper.HeaderFontSize}"
+                                          TextElement.FontStretch="{TemplateBinding Controls:ControlsHelper.HeaderFontStretch}"
+                                          TextElement.FontWeight="{TemplateBinding Controls:ControlsHelper.HeaderFontWeight}" />
+
+                        <Grid Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.Resources>
+                                <Style x:Key="InternalBorderStyle" TargetType="Border">
+                                    <Setter Property="VerticalAlignment" Value="Stretch" />
+                                    <Setter Property="BorderBrush" Value="{DynamicResource GrayBrush7}" />
+                                    <Setter Property="Background" Value="{DynamicResource GrayBrush7}" />
+                                    <Setter Property="Panel.ZIndex" Value="1" />
+                                    <Setter Property="Width" Value="Auto" />
+                                </Style>
+                            </Grid.Resources>
+
+                            <Border Grid.Column="0" BorderThickness="{TemplateBinding BorderThickness}" Style="{StaticResource InternalBorderStyle}" />
+
+                            <ContentPresenter Grid.Column="1" />
+
+                            <Border Grid.Column="2" BorderThickness="{TemplateBinding BorderThickness}" Style="{StaticResource InternalBorderStyle}" />
+                        </Grid>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>

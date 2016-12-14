@@ -1,0 +1,513 @@
+﻿<UserControl x:Class="TMP.PrintEngine.Views.PrintControlView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:resources="clr-namespace:TMP.PrintEngine.Resources"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             MinWidth="700"
+             MinHeight="500"
+             HorizontalAlignment="Stretch"
+             VerticalAlignment="Stretch"
+             Background="#FFEBEBEB"
+             BorderThickness="0"
+             FontFamily="Verdana"
+             mc:Ignorable="d">
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+
+        <FontFamily x:Key="BaseFontFamily">Calibri</FontFamily>
+        <sys:Double x:Key="NormalFontSize">13</sys:Double>
+        <sys:Double x:Key="HeaderFontSize">16</sys:Double>
+        <sys:Double x:Key="SmallFontSize">11</sys:Double>
+
+        <Style x:Key="baseStyle" TargetType="{x:Type Control}">
+            <Setter Property="FontSize" Value="{StaticResource NormalFontSize}" />
+            <Setter Property="FontFamily" Value="{StaticResource BaseFontFamily}" />
+            <Setter Property="Padding" Value="5 2" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+        </Style>
+        <Style BasedOn="{StaticResource baseStyle}" TargetType="{x:Type Button}">
+            <Setter Property="Cursor" Value="Hand" />
+        </Style>
+        <Style BasedOn="{StaticResource baseStyle}" TargetType="{x:Type RadioButton}">
+            <Setter Property="Cursor" Value="Hand" />
+        </Style>
+        <Style BasedOn="{StaticResource baseStyle}" TargetType="{x:Type Label}">
+            <Setter Property="Padding" Value="0" />
+        </Style>
+        <Style BasedOn="{StaticResource baseStyle}" TargetType="{x:Type TextBox}" />
+        <Style BasedOn="{StaticResource baseStyle}" TargetType="{x:Type Menu}">
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Background" Value="{x:Null}" />
+        </Style>
+
+        <LinearGradientBrush x:Key="ToolBarHorizontalBackground" StartPoint="0,0" EndPoint="0,1">
+            <GradientStop Offset="0" Color="#E6E6E6" />
+            <GradientStop Offset="0.5" Color="#D2D2D2" />
+            <GradientStop Offset="1" Color="#808080" />
+        </LinearGradientBrush>
+
+        <Style TargetType="{x:Type Separator}">
+            <Setter Property="Margin" Value="0,10,0,5" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <StackPanel Orientation="Vertical">
+                            <Rectangle Height="1"
+                                       VerticalAlignment="Top"
+                                       Fill="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}"
+                                       StrokeThickness="0" />
+                            <Rectangle Height="1"
+                                       VerticalAlignment="Top"
+                                       Fill="#ffffff"
+                                       StrokeThickness="0" />
+                        </StackPanel>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+    </UserControl.Resources>
+    <Border Margin="5">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Grid x:Name="MainPane" Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Border x:Name="TopPane"
+                        Grid.Row="0"
+                        Grid.Column="0">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <Border x:Name="ToolBar"
+                                Background="{StaticResource ToolBarHorizontalBackground}"
+                                Padding="0 4">
+                            <DockPanel LastChildFill="False">
+                                <Button x:Name="ActualSizeButton"
+                                        Margin="0,0,2,0"
+                                        VerticalAlignment="Center"
+                                        Command="{Binding ActualPageSizeCommand}"
+                                        Content="{x:Static resources:Strings.ActualSize}"
+                                        DockPanel.Dock="Right"
+                                        IsTabStop="True"
+                                        Style="{DynamicResource DefaultButtonStyle}"
+                                        TabIndex="5"
+                                        ToolTip="100%"
+                                        ToolTipService.ShowOnDisabled="True" />
+                                <Button x:Name="AllPagesButton"
+                                        Margin="0,0,5,0"
+                                        HorizontalAlignment="Stretch"
+                                        VerticalAlignment="Center"
+                                        Command="{Binding AllPagesCommand}"
+                                        Content="{x:Static resources:Strings.AllPages}"
+                                        DockPanel.Dock="Right"
+                                        IsTabStop="True"
+                                        Style="{DynamicResource DefaultButtonStyle}"
+                                        TabIndex="8"
+                                        ToolTip="{x:Static resources:Strings.ShowAllPagesToolTip}"
+                                        ToolTipService.ShowOnDisabled="True" />
+                                <Menu Margin="0,0,5,0"
+                                      VerticalAlignment="Center"
+                                      Background="{x:Null}"
+                                      Cursor="Hand"
+                                      DockPanel.Dock="Right">
+                                    <MenuItem Header="{x:Static resources:Strings.PrintingOptions}">
+                                        <MenuItem Style="{DynamicResource MenuItemStyle}" Template="{DynamicResource {ComponentResourceKey ResourceId=SubmenuItemTemplateKey, TypeInTargetAssembly={x:Type MenuItem}}}">
+                                            <MenuItem.Header>
+                                                <Grid>
+                                                    <Border x:Name="PrintingOptionsWaitCurtain"
+                                                            Panel.ZIndex="1"
+                                                            Background="White"
+                                                            Opacity="0.9"
+                                                            Visibility="Collapsed">
+                                                        <Label HorizontalAlignment="Center"
+                                                               VerticalAlignment="Center"
+                                                               Content="{x:Static resources:Strings.WaitMessage}"
+                                                               FontSize="{StaticResource HeaderFontSize}"
+                                                               Foreground="Red" />
+                                                    </Border>
+                                                    <Border Margin="0,0,0,0"
+                                                            BorderBrush="#ffffff"
+                                                            BorderThickness="1,0,1,1">
+                                                        <Border.Background>
+                                                            <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
+                                                                <GradientStop Offset="1" Color="#FFE8E7E7" />
+                                                                <GradientStop Offset="0" Color="#FFFFFFFF" />
+                                                                <GradientStop Offset="0.5" Color="#FFFFFDFD" />
+                                                            </LinearGradientBrush>
+                                                        </Border.Background>
+                                                        <Border.BitmapEffect>
+                                                            <DropShadowBitmapEffect Noise="0.09"
+                                                                                    ShadowDepth="2"
+                                                                                    Color="#FF474242" />
+                                                        </Border.BitmapEffect>
+                                                        <StackPanel Margin="5" Orientation="Vertical">
+                                                            <StackPanel Width="Auto"
+                                                                        HorizontalAlignment="Stretch"
+                                                                        VerticalAlignment="Center"
+                                                                        Orientation="Vertical">
+                                                                <DockPanel LastChildFill="False">
+                                                                    <Label Margin="0,0,0,0"
+                                                                           HorizontalAlignment="Left"
+                                                                           Content="{x:Static resources:Strings.PaperSize}"
+                                                                           FontWeight="Bold"
+                                                                           Foreground="Black"
+                                                                           Padding="0,0,10,2" />
+                                                                    <Label x:Name="PaperType"
+                                                                           HorizontalAlignment="Left"
+                                                                           Content="{Binding Path=CurrentPaper.PaperName,
+                                                                                             Mode=TwoWay}"
+                                                                           Padding="0,5,0,2" />
+                                                                    <Button Command="{Binding ChangePaperCommand}"
+                                                                            Content="{x:Static resources:Strings.ChangeButtonCaption}"
+                                                                            Cursor="Hand"
+                                                                            DockPanel.Dock="Right"
+                                                                            Style="{DynamicResource DefaultButtonStyle}" />
+                                                                </DockPanel>
+                                                            </StackPanel>
+                                                            <Separator />
+                                                            <StackPanel VerticalAlignment="Stretch" Orientation="Vertical">
+                                                                <Label Margin="0,0,0,0"
+                                                                       HorizontalAlignment="Stretch"
+                                                                       Content="{x:Static resources:Strings.Orientation}"
+                                                                       FontSize="{StaticResource NormalFontSize}"
+                                                                       FontWeight="Bold"
+                                                                       Foreground="Black"
+                                                                       Padding="0,0,0,2" />
+                                                                <StackPanel Orientation="Horizontal">
+                                                                    <RadioButton x:Name="Portrait"
+                                                                                 Command="{Binding Path=PageOrientationCommand}"
+                                                                                 CommandParameter="Portrait"
+                                                                                 Content="{x:Static resources:Strings.PortraitOrientation}"
+                                                                                 Cursor="Hand"
+                                                                                 FontSize="{StaticResource NormalFontSize}"
+                                                                                 GroupName="PreviewPageOrientation"
+                                                                                 IsChecked="True" />
+                                                                    <RadioButton x:Name="Landscape"
+                                                                                 Margin="5 0"
+                                                                                 Command="{Binding Path=PageOrientationCommand}"
+                                                                                 CommandParameter="Landscape"
+                                                                                 Content="{x:Static resources:Strings.LandscapeOrientation}"
+                                                                                 Cursor="Hand"
+                                                                                 FontSize="{StaticResource NormalFontSize}"
+                                                                                 GroupName="PreviewPageOrientation" />
+                                                                </StackPanel>
+                                                            </StackPanel>
+                                                            <Separator />
+                                                            <Border Margin="0"
+                                                                    Background="#FFFDDB"
+                                                                    BorderBrush="#cccccc"
+                                                                    BorderThickness="1"
+                                                                    CornerRadius="0,5,5,5"
+                                                                    d:LayoutOverrides="Width">
+                                                                <StackPanel Margin="5" Orientation="Vertical">
+                                                                    <StackPanel Orientation="Vertical">
+                                                                        <StackPanel Orientation="Horizontal">
+                                                                            <Label HorizontalAlignment="Left"
+                                                                                   Content="{x:Static resources:Strings.SelectPrinter}"
+                                                                                   FontSize="{StaticResource NormalFontSize}"
+                                                                                   FontWeight="Bold" />
+                                                                        </StackPanel>
+                                                                        <StackPanel Orientation="Horizontal">
+                                                                            <ComboBox x:Name="PrinterList"
+                                                                                      MinWidth="250"
+                                                                                      HorizontalAlignment="Stretch"
+                                                                                      Cursor="Hand"
+                                                                                      DisplayMemberPath="FullName"
+                                                                                      ItemsSource="{Binding Printers}"
+                                                                                      SelectedItem="{Binding CurrentPrinter,
+                                                                                                             Mode=TwoWay}"
+                                                                                      SelectedValuePath="FullName" />
+                                                                            <ContentControl HorizontalAlignment="Left"
+                                                                                            Content="{x:Static resources:Strings.Error}"
+                                                                                            Cursor="Hand"
+                                                                                            Visibility="Hidden" />
+                                                                        </StackPanel>
+                                                                    </StackPanel>
+                                                                    <DockPanel LastChildFill="False">
+                                                                        <StackPanel DockPanel.Dock="Left" Orientation="Vertical">
+                                                                            <Label HorizontalAlignment="Left"
+                                                                                   VerticalAlignment="Center"
+                                                                                   Content="{x:Static resources:Strings.Copies}"
+                                                                                   FontSize="{StaticResource NormalFontSize}"
+                                                                                   FontWeight="Bold"
+                                                                                   Foreground="Black" />
+                                                                            <TextBox MinWidth="30"
+                                                                                     HorizontalAlignment="Left"
+                                                                                     VerticalAlignment="Center"
+                                                                                     Text="{Binding PrintCopyCount,
+                                                                                                    Mode=TwoWay,
+                                                                                                    UpdateSourceTrigger=PropertyChanged}" />
+                                                                        </StackPanel>
+                                                                        <StackPanel DockPanel.Dock="Right"
+                                                                                    Orientation="Vertical"
+                                                                                    Visibility="Collapsed">
+                                                                            <Label HorizontalAlignment="Left"
+                                                                                   Content="{x:Static resources:Strings.Range}"
+                                                                                   FontSize="{StaticResource NormalFontSize}"
+                                                                                   FontWeight="Bold" />
+                                                                            <StackPanel Orientation="Horizontal">
+                                                                                <TextBox MinWidth="30" Text="{Binding PageRangeStart, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                                                                <Label Margin="5 0"
+                                                                                       HorizontalAlignment="Left"
+                                                                                       VerticalAlignment="Center"
+                                                                                       Content="{x:Static resources:Strings.to}"
+                                                                                       Padding="0" />
+                                                                                <TextBox MinWidth="30"
+                                                                                         VerticalAlignment="Center"
+                                                                                         Text="{Binding PageRangeEnd,
+                                                                                                        Mode=TwoWay,
+                                                                                                        UpdateSourceTrigger=PropertyChanged}" />
+                                                                            </StackPanel>
+                                                                        </StackPanel>
+                                                                    </DockPanel>
+                                                                    <CheckBox x:Name="PageNumberMarker"
+                                                                              Cursor="Hand"
+                                                                              IsChecked="{Binding IsMarkPageNumbers,
+                                                                                                  Mode=TwoWay}"
+                                                                              Visibility="Visible">
+                                                                        <Label Content="{x:Static resources:Strings.MarkPagePositions}" FontWeight="Bold" />
+                                                                    </CheckBox>
+                                                                </StackPanel>
+                                                            </Border>
+                                                            <Separator />
+                                                            <DockPanel LastChildFill="False">
+                                                                <Button x:Name="CancelSetButton"
+                                                                        Command="{Binding Path=CancelPrintingOptionsCommand}"
+                                                                        Content="{x:Static resources:Strings.CancelButtonCaption}"
+                                                                        Cursor="Hand"
+                                                                        DockPanel.Dock="Left"
+                                                                        Style="{DynamicResource DefaultButtonStyle}" />
+
+                                                                <StackPanel x:Name="SetPanel" DockPanel.Dock="Right">
+                                                                    <Button x:Name="SetButton"
+                                                                            Command="{Binding Path=SetPrintingOptionsCommand}"
+                                                                            Content="{x:Static resources:Strings.SetButtonCaption}"
+                                                                            Cursor="Hand"
+                                                                            Style="{DynamicResource DefaultButtonStyle}" />
+                                                                </StackPanel>
+                                                            </DockPanel>
+                                                        </StackPanel>
+                                                    </Border>
+                                                </Grid>
+                                            </MenuItem.Header>
+                                        </MenuItem>
+                                    </MenuItem>
+                                </Menu>
+                                <Menu x:Name="ScaleMenu"
+                                      Margin="0,0,5,0"
+                                      VerticalAlignment="Center"
+                                      Background="{x:Null}"
+                                      Cursor="Hand"
+                                      DockPanel.Dock="Right"
+                                      Visibility="{Binding CanScale,
+                                                           Converter={StaticResource BooleanToVisibilityConverter}}">
+                                    <MenuItem Header="{x:Static resources:Strings.PrintSize}">
+                                        <MenuItem Style="{DynamicResource MenuItemStyle}" Template="{DynamicResource {ComponentResourceKey ResourceId=SubmenuItemTemplateKey, TypeInTargetAssembly={x:Type MenuItem}}}">
+                                            <MenuItem.Header>
+                                                <Border Width="Auto"
+                                                        Height="Auto"
+                                                        Margin="0,0,0,0"
+                                                        BorderBrush="#ffffff"
+                                                        BorderThickness="1,0,1,1">
+                                                    <Border.Background>
+                                                        <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
+                                                            <GradientStop Offset="1" Color="#FFE8E7E7" />
+                                                            <GradientStop Offset="0" Color="#FFFFFFFF" />
+                                                            <GradientStop Offset="0.5" Color="#FFFFFDFD" />
+                                                        </LinearGradientBrush>
+                                                    </Border.Background>
+                                                    <Border.BitmapEffect>
+                                                        <DropShadowBitmapEffect Noise="0.09"
+                                                                                ShadowDepth="2"
+                                                                                Color="#FF474242" />
+                                                    </Border.BitmapEffect>
+                                                    <StackPanel Margin="5"
+                                                                HorizontalAlignment="Center"
+                                                                VerticalAlignment="Center"
+                                                                Orientation="Vertical">
+                                                        <StackPanel MinWidth="300"
+                                                                    Margin="0,5,0,5"
+                                                                    Orientation="Vertical"
+                                                                    Visibility="{Binding Path=ScaleSliderVisibility}">
+                                                            <Grid>
+                                                                <Grid.ColumnDefinitions>
+                                                                    <ColumnDefinition Width="Auto" />
+                                                                    <ColumnDefinition Width="*" />
+                                                                    <ColumnDefinition Width="Auto" />
+                                                                </Grid.ColumnDefinitions>
+                                                                <Grid.RowDefinitions>
+                                                                    <RowDefinition Height="Auto" />
+                                                                    <RowDefinition Height="Auto" />
+                                                                    <RowDefinition Height="Auto" />
+                                                                </Grid.RowDefinitions>
+                                                                <StackPanel Grid.Row="0"
+                                                                            Grid.Column="0"
+                                                                            Orientation="Vertical">
+                                                                    <Label Margin="0,0,0,0"
+                                                                           HorizontalAlignment="Left"
+                                                                           Content="{x:Static resources:Strings.Small}"
+                                                                           FontWeight="Bold"
+                                                                           Foreground="Black"
+                                                                           Padding="0,0,0,0" />
+                                                                    <Label Margin="0,0,0,0"
+                                                                           HorizontalAlignment="Left"
+                                                                           Content="{x:Static resources:Strings.LessPages}"
+                                                                           FontSize="{StaticResource SmallFontSize}"
+                                                                           Foreground="Gray"
+                                                                           Padding="0" />
+                                                                </StackPanel>
+                                                                <StackPanel Grid.Row="0"
+                                                                            Grid.Column="2"
+                                                                            Orientation="Vertical">
+                                                                    <Label Margin="0,0,0,0"
+                                                                           HorizontalAlignment="Right"
+                                                                           Content="{x:Static resources:Strings.Big}"
+                                                                           FontWeight="Bold"
+                                                                           Foreground="Black"
+                                                                           Padding="0,0,0,0" />
+                                                                    <Label Margin="0,0,0,0"
+                                                                           HorizontalAlignment="Right"
+                                                                           Content="{x:Static resources:Strings.MorePages}"
+                                                                           FontSize="{StaticResource SmallFontSize}"
+                                                                           Foreground="Gray"
+                                                                           Padding="0,0,0,0" />
+                                                                </StackPanel>
+                                                            </Grid>
+                                                            <Slider x:Name="PageNumbersSlider"
+                                                                    Margin="0,5,0,0"
+                                                                    Cursor="Hand"
+                                                                    Maximum="1"
+                                                                    Minimum="0.1"
+                                                                    Value="{Binding Path=Scale,
+                                                                                    Mode=TwoWay}" />
+                                                        </StackPanel>
+                                                        <Grid x:Name="ScalePreviewBox"
+                                                              MinHeight="200"
+                                                              Margin="5"
+                                                              Background="White"
+                                                              Opacity="1">
+                                                            <Border BorderBrush="#cccccc" BorderThickness="1">
+                                                                <DockPanel>
+                                                                    <Grid x:Name="PreviewNode"
+                                                                          Width="190"
+                                                                          Height="250"
+                                                                          HorizontalAlignment="Center"
+                                                                          VerticalAlignment="Center">
+                                                                        <Grid>
+                                                                            <Rectangle Fill="{DynamicResource {x:Static SystemColors.AppWorkspaceBrushKey}}" Stroke="#cccccc" />
+                                                                            <Label HorizontalAlignment="Center"
+                                                                                   VerticalAlignment="Center"
+                                                                                   Content="{x:Static resources:Strings.Content}"
+                                                                                   FontSize="{StaticResource HeaderFontSize}"
+                                                                                   Foreground="Black" />
+                                                                        </Grid>
+                                                                    </Grid>
+                                                                </DockPanel>
+                                                            </Border>
+                                                        </Grid>
+                                                        <Separator />
+                                                        <DockPanel LastChildFill="False">
+                                                            <Button Command="{Binding Path=CancelScaleCommand}"
+                                                                    Content="{x:Static resources:Strings.CancelButtonCaption}"
+                                                                    Cursor="Hand"
+                                                                    DockPanel.Dock="Left"
+                                                                    IsEnabled="False"
+                                                                    Style="{DynamicResource DefaultButtonStyle}" />
+                                                            <Button Command="{Binding Path=ApplyScaleCommand}"
+                                                                    Content="{x:Static resources:Strings.ApplyButtonCaption}"
+                                                                    Cursor="Hand"
+                                                                    DockPanel.Dock="Right"
+                                                                    Style="{DynamicResource DefaultButtonStyle}" />
+                                                        </DockPanel>
+                                                    </StackPanel>
+                                                </Border>
+                                            </MenuItem.Header>
+                                        </MenuItem>
+                                    </MenuItem>
+                                </Menu>
+                            </DockPanel>
+                        </Border>
+                        <ScrollViewer x:Name="sv"
+                                      Grid.Row="1"
+                                      CanContentScroll="True"
+                                      HorizontalScrollBarVisibility="Auto"
+                                      IsDeferredScrollingEnabled="False"
+                                      VerticalScrollBarVisibility="Auto">
+                            <Border HorizontalAlignment="Stretch"
+                                    VerticalAlignment="Stretch"
+                                    Background="DarkGray">
+                                <StackPanel x:Name="PagePreviewContainer"
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"
+                                            Background="{DynamicResource {x:Static SystemColors.AppWorkspaceBrushKey}}"
+                                            Orientation="Vertical"
+                                            ScrollViewer.CanContentScroll="false" />
+                            </Border>
+                        </ScrollViewer>
+                    </Grid>
+                </Border>
+            </Grid>
+            <Grid x:Name="ButtonPane" Grid.Row="1">
+                <StackPanel HorizontalAlignment="Left"
+                            VerticalAlignment="Center"
+                            Orientation="Horizontal">
+                    <Label Content="{x:Static resources:Strings.Requires}" />
+                    <Label x:Name="PageNumber"
+                           Margin="5,0,5,0"
+                           Content="{Binding Path=ApproaxNumberOfPages}"
+                           FontWeight="Bold" />
+                    <Label x:Name="PageName"
+                           Margin="5,0,5,0"
+                           Content="{Binding Path=CurrentPaper.PaperName}"
+                           FontWeight="Bold" />
+                    <Label Content="{x:Static resources:Strings.Pages}" />
+                    <Label Content="{x:Static resources:Strings.AtPrinter}" />
+                    <TextBlock x:Name="PrinterName"
+                               MinWidth="50"
+                               MaxWidth="220"
+                               VerticalAlignment="Center"
+                               FontWeight="Bold"
+                               Text="{Binding Path=CurrentPrinterName,
+                                              Mode=OneWay}"
+                               TextTrimming="CharacterEllipsis"
+                               ToolTip="{Binding Path=CurrentPrinterName,
+                                                 Mode=OneWay}" />
+                </StackPanel>
+                <StackPanel Margin="5"
+                            HorizontalAlignment="Right"
+                            Orientation="Horizontal">
+                    <Button HorizontalAlignment="Right"
+                            Command="{Binding Path=CancelPrintCommand}"
+                            Content="{x:Static resources:Strings.CancelButtonCaption}"
+                            Padding="15 2"
+                            Style="{DynamicResource DefaultButtonStyle}" />
+                    <TextBlock Margin="10,0"
+                               VerticalAlignment="Center"
+                               Text="{x:Static resources:Strings.Or}" />
+                    <Button HorizontalAlignment="Right"
+                            Command="{Binding Path=PrintDocumentCommand}"
+                            Content="{x:Static resources:Strings.PrintButtonCaption}"
+                            IsDefault="True"
+                            Padding="15,2"
+                            Style="{DynamicResource DefaultButtonStyle}" />
+                </StackPanel>
+            </Grid>
+        </Grid>
+    </Border>
+</UserControl>

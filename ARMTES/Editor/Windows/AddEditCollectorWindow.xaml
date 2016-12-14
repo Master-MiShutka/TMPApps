@@ -1,0 +1,259 @@
+﻿<Controls:TMPWindow x:Class="TMP.ARMTES.Editor.AddEditCollectorWindow"
+                    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:Controls="clr-namespace:TMP.Wpf.CommonControls;assembly=TMP.Wpf.CommonControls"
+                    xmlns:commandBehaviors="clr-namespace:TMP.Wpf.CommonControls.Behaviors;assembly=TMP.Wpf.CommonControls"
+                    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                    xmlns:local="clr-namespace:TMP.ARMTES.Editor"
+                    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                    Title="AddEditCollectorWindow"
+                    Width="600"
+                    Height="600"
+                    DataContext="{x:Static local:AddEditCollectorModel.Instance}"
+                    FontSize="{DynamicResource NormalFontSize}"
+                    Icon="/Editor;component/Resources/MAINICON.ico"
+                    ResizeMode="CanResizeWithGrip"
+                    SnapsToDevicePixels="True"
+                    TextOptions.TextFormattingMode="Ideal"
+                    UseLayoutRounding="True"
+                    mc:Ignorable="d">
+    <Window.Resources>
+        <ImageBrush x:Key="backgroundTiledImage"
+                    ImageSource="/Editor;component/Resources/back_image.png"
+                    TileMode="Tile"
+                    Viewport="0,0,32,32"
+                    ViewportUnits="Absolute" />
+    </Window.Resources>
+    <Grid Background="{StaticResource backgroundTiledImage}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" MinHeight="40" />
+        </Grid.RowDefinitions>
+        <Border Grid.Row="0" Style="{StaticResource shadowBorder}" />
+        <Grid Grid.Row="1"
+              Margin="3"
+              Background="{DynamicResource AccentColorBrush}">
+            <Grid.Resources>
+                <Style TargetType="TextBlock">
+                    <Setter Property="HorizontalAlignment" Value="Stretch" />
+                    <Setter Property="Foreground" Value="{DynamicResource WhiteColorBrush}" />
+                    <Setter Property="FontSize" Value="{DynamicResource SubHeaderFontSize}" />
+                    <Setter Property="TextWrapping" Value="Wrap" />
+                    <Setter Property="Margin" Value="5 2" />
+                </Style>
+                <Style TargetType="TextBox">
+                    <Setter Property="HorizontalAlignment" Value="Stretch" />
+                    <Setter Property="Foreground" Value="{DynamicResource BlackColorBrush}" />
+                    <Setter Property="Background" Value="{DynamicResource WhiteColorBrush}" />
+                    <Setter Property="FontSize" Value="{DynamicResource SubHeaderFontSize}" />
+                    <Setter Property="TextWrapping" Value="Wrap" />
+                    <Setter Property="Margin" Value="5 2" />
+                </Style>
+                <Style TargetType="Separator">
+                    <Setter Property="Background" Value="{DynamicResource WhiteColorBrush}" />
+                    <Setter Property="Margin" Value="5 2" />
+                    <Setter Property="Height" Value="5" />
+                </Style>
+            </Grid.Resources>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" MinHeight="10" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" MinHeight="10" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" MinHeight="10" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="200" />
+                <ColumnDefinition Width="*" MinWidth="200" />
+            </Grid.ColumnDefinitions>
+            <!--    -->
+            <TextBlock Grid.Row="0"
+                       Grid.Column="0"
+                       Text="Принадлежность к РЭС" />
+            <TextBox x:Name="tbDepartament"
+                     Grid.Row="0"
+                     Grid.Column="1"
+                     Text="{Binding Collector.Departament}" />
+            <!--    -->
+            <TextBlock Grid.Row="1"
+                       Grid.Column="0"
+                       Text="Населённый пункт" />
+            <TextBox x:Name="tbCity"
+                     Grid.Row="1"
+                     Grid.Column="1"
+                     Text="{Binding Collector.City}" />
+            <!--    -->
+            <TextBlock Grid.Row="2"
+                       Grid.Column="0"
+                       Text="Фидер и ТП" />
+            <TextBox x:Name="tbHouse"
+                     Grid.Row="2"
+                     Grid.Column="1"
+                     Text="{Binding Collector.House}" />
+            <!--    -->
+            <TextBlock Grid.Row="3"
+                       Grid.Column="0"
+                       Text="Наименование абонента и место установки" />
+            <TextBox x:Name="tbStreet"
+                     Grid.Row="3"
+                     Grid.Column="1"
+                     Text="{Binding Collector.Street}"
+                     VerticalScrollBarVisibility="Visible" />
+            <!--    -->
+            <Separator Grid.Row="4" Grid.ColumnSpan="2" />
+            <!--    -->
+            <TextBlock Grid.Row="5"
+                       Grid.Column="0"
+                       Text="Тип модема" />
+            <TextBox x:Name="tbModemType"
+                     Grid.Row="5"
+                     Grid.Column="1"
+                     Text="{Binding Collector.ModemType}" />
+            <!--    -->
+            <TextBlock Grid.Row="6"
+                       Grid.Column="0"
+                       Text="Сетевой адрес модема" />
+            <TextBox x:Name="tbModemNetAddr"
+                     Grid.Row="6"
+                     Grid.Column="1"
+                     Text="{Binding Collector.ModemNetAddr}" />
+            <!--    -->
+            <TextBlock Grid.Row="7"
+                       Grid.Column="0"
+                       Text="GSM номер модема" />
+            <TextBox x:Name="tbGsmNumber"
+                     Grid.Row="7"
+                     Grid.Column="1"
+                     Text="{Binding Collector.GsmNumber}" />
+            <!--    -->
+            <Separator Grid.Row="8" Grid.ColumnSpan="2" />
+            <!--    -->
+            <TextBlock Grid.Row="9"
+                       Grid.Column="0"
+                       Text="Дата ввода (месяц/год)" />
+            <TextBox x:Name="tbCreationDate"
+                     Grid.Row="9"
+                     Grid.Column="1"
+                     Text="{Binding Collector.CreationDate}" />
+            <!--    -->
+            <TextBlock Grid.Row="10"
+                       Grid.Column="0"
+                       Text="Примечание" />
+            <TextBox x:Name="tbDescription"
+                     Grid.Row="10"
+                     Grid.Column="1"
+                     Text="{Binding Collector.Description}"
+                     VerticalScrollBarVisibility="Visible" />
+            <!--    -->
+            <Separator Grid.Row="11" Grid.ColumnSpan="2" />
+            <!--    -->
+            <DockPanel Grid.Row="12"
+                       Grid.ColumnSpan="2"
+                       Margin="2 2">
+                <StackPanel HorizontalAlignment="Right"
+                            DockPanel.Dock="Top"
+                            Orientation="Horizontal">
+                    <StackPanel.Resources>
+                        <Style TargetType="Button">
+                            <Setter Property="FontSize" Value="{DynamicResource MenuFontSize}" />
+                            <Setter Property="Margin" Value="5 2" />
+                        </Style>
+                    </StackPanel.Resources>
+                    <TextBlock Width="150"
+                               Background="Azure"
+                               Foreground="Red"
+                               Text="{Binding Collector.Meters.Count,
+                                              StringFormat={}Количество счётчиков: {0}}" />
+                    <Button MinWidth="100"
+                            Command="{Binding NewCommand}"
+                            Content="Добавить" />
+                    <Button MinWidth="100"
+                            Command="{Binding EditCommand}"
+                            CommandTarget="{Binding Collector}"
+                            Content="Изменить" />
+                    <Button MinWidth="100"
+                            Command="{Binding DeleteCommand}"
+                            CommandTarget="{Binding Collector}"
+                            Content="Удалить" />
+                </StackPanel>
+                <ListView ItemsSource="{Binding Collector.Meters}">
+                    <ListView.Resources>
+                        <Style TargetType="{x:Type ListViewItem}">
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                        </Style>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="TextAlignment" Value="Center" />
+                            <Setter Property="TextWrapping" Value="Wrap" />
+                        </Style>
+                    </ListView.Resources>
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="{x:Type ListViewItem}">
+                            <Setter Property="commandBehaviors:MouseDoubleClick.Command" Value="{Binding EditCommand}" />
+                            <Setter Property="commandBehaviors:MouseDoubleClick.CommandParameter" Value="{Binding}" />
+                        </Style>
+                    </ListView.ItemContainerStyle>
+                    <ListView.View>
+                        <GridView AllowsColumnReorder="true">
+                            <GridViewColumn Width="200" DisplayMemberBinding="{Binding Path=Name}">
+                                <GridViewColumn.Header>
+                                    <TextBlock />
+                                </GridViewColumn.Header>
+                            </GridViewColumn>
+                            <GridViewColumn Width="100"
+                                            DisplayMemberBinding="{Binding Path=NetworkAddress}"
+                                            Header="Сетевой адрес" />
+                            <GridViewColumn Width="80"
+                                            DisplayMemberBinding="{Binding Path=MeterType}"
+                                            Header="Тип" />
+                            <GridViewColumn Width="120"
+                                            DisplayMemberBinding="{Binding Path=Number}"
+                                            Header="Заводской номер" />
+                            <GridViewColumn Width="60"
+                                            DisplayMemberBinding="{Binding Path=TarifsCount}"
+                                            Header="Кол-во тарифов" />
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+            </DockPanel>
+        </Grid>
+        <Border Grid.Row="2"
+                Margin="2"
+                Background="{DynamicResource PanelBackgroundHorizontal}"
+                BorderBrush="Black"
+                BorderThickness="0.5"
+                CornerRadius="4,4,4,4"
+                Padding="5"
+                SnapsToDevicePixels="True">
+            <Border.BitmapEffect>
+                <DropShadowBitmapEffect Opacity="0.75"
+                                        ShadowDepth="3"
+                                        Color="Black" />
+            </Border.BitmapEffect>
+            <StackPanel HorizontalAlignment="Right"
+                        Orientation="Horizontal"
+                        TextBlock.FontSize="{DynamicResource DialogButtonFontSize}">
+                <Button Margin="0 2"
+                        Command="{Binding OkCommand}"
+                        CommandTarget="{Binding}"
+                        Content="Сохранить и закрыть"
+                        Padding="15 5"
+                        ToolTip="Сохранить данные и закрыть окно" />
+                <Button Margin="5 2 15 2"
+                        Content="Отменить"
+                        IsCancel="True"
+                        IsDefault="True"
+                        Padding="15 0"
+                        ToolTip="Отменить операцию и закрыть окно" />
+            </StackPanel>
+        </Border>
+    </Grid>
+</Controls:TMPWindow>

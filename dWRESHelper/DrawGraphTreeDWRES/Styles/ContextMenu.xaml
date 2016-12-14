@@ -1,0 +1,174 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:TMP.DWRES.GUI">
+
+    <Style x:Key="ItemcontainerStyle" TargetType="MenuItem">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type MenuItem}">
+                    <Border x:Name="templateRoot"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            SnapsToDevicePixels="True">
+                        <Grid Margin="-1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"
+                                                  MinWidth="22"
+                                                  SharedSizeGroup="MenuItemIconColumnGroup" />
+                                <ColumnDefinition Width="13" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="30" />
+                                <ColumnDefinition Width="Auto" SharedSizeGroup="MenuItemIGTColumnGroup" />
+                                <ColumnDefinition Width="20" />
+                            </Grid.ColumnDefinitions>
+                            <ContentPresenter x:Name="Icon"
+                                              Width="16"
+                                              Height="16"
+                                              Margin="3"
+                                              HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"
+                                              Content="{TemplateBinding Icon}"
+                                              ContentSource="Icon"
+                                              SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                            <Border x:Name="GlyphPanel"
+                                    Width="22"
+                                    Height="22"
+                                    Margin="-1,0,0,0"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Background="#3D26A0DA"
+                                    BorderBrush="#FF26A0DA"
+                                    BorderThickness="1"
+                                    ClipToBounds="False"
+                                    Visibility="Hidden">
+                                <RadioButton x:Name="Glyph"
+                                             HorizontalAlignment="Center"
+                                             VerticalAlignment="Center"
+                                             GroupName="a"
+                                             IsChecked="{TemplateBinding IsChecked}" />
+                            </Border>
+                            <ContentPresenter x:Name="menuHeaderContainer"
+                                              Grid.Column="2"
+                                              Margin="{TemplateBinding Padding}"
+                                              HorizontalAlignment="Left"
+                                              VerticalAlignment="Center"
+                                              Content="{TemplateBinding Header}"
+                                              ContentSource="Header"
+                                              ContentStringFormat="{TemplateBinding HeaderStringFormat}"
+                                              ContentTemplate="{TemplateBinding HeaderTemplate}"
+                                              RecognizesAccessKey="True"
+                                              SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                            <TextBlock x:Name="menuGestureText"
+                                       Grid.Column="4"
+                                       Margin="{TemplateBinding Padding}"
+                                       VerticalAlignment="Center"
+                                       Opacity="0.7"
+                                       Text="{TemplateBinding InputGestureText}" />
+                        </Grid>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="Icon" Value="{x:Null}">
+                            <Setter TargetName="Icon" Property="Visibility" Value="Collapsed" />
+                        </Trigger>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter TargetName="GlyphPanel" Property="Visibility" Value="Visible" />
+                            <Setter TargetName="Icon" Property="Visibility" Value="Collapsed" />
+                        </Trigger>
+                        <Trigger SourceName="Glyph" Property="IsChecked" Value="False">
+                            <Setter TargetName="GlyphPanel" Property="Visibility" Value="Hidden" />
+                            <Setter TargetName="Glyph" Property="Visibility" Value="Collapsed" />
+                        </Trigger>
+                        <Trigger Property="IsHighlighted" Value="True">
+                            <Setter TargetName="templateRoot" Property="Background" Value="#3D26A0DA" />
+                            <Setter TargetName="templateRoot" Property="BorderBrush" Value="#FF26A0DA" />
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="templateRoot" Property="TextElement.Foreground" Value="#FF707070" />
+                        </Trigger>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsHighlighted" Value="True" />
+                                <Condition Property="IsEnabled" Value="False" />
+                            </MultiTrigger.Conditions>
+                            <Setter TargetName="templateRoot" Property="Background" Value="#0A000000" />
+                            <Setter TargetName="templateRoot" Property="BorderBrush" Value="#21000000" />
+                        </MultiTrigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <ContextMenu x:Key="GraphContextMenu">
+        <MenuItem Command="{Binding CommandShowFiderSchemeTable}" Header="Показать таблицу участков" />
+        <Separator />
+        <MenuItem Command="{Binding CommandShowSubstationScheme}" Header="Построить схему подстанции" />
+        <Separator />
+        <MenuItem Command="{Binding CommandRefreshGraph}" Header="Обновить" />
+        <MenuItem Command="{Binding CommandRelayoutGraph}" Header="Перестроить схему" />
+        <MenuItem Header="Тип алгоритма для раскладки графа схемы фидера" ItemContainerStyle="{StaticResource ItemcontainerStyle}">
+            <MenuItem Command="{Binding CommandSelectLayoutAlgorithmType}"
+                      CommandParameter="{Binding Mode=OneWay,
+                                                 RelativeSource={RelativeSource Self}}"
+                      Header="Ограниченная версия алгоритма Фрюхтермана-Рейнгольда"
+                      IsCheckable="True"
+                      Tag="BoundedFR" />
+            <MenuItem Command="{Binding CommandSelectLayoutAlgorithmType}"
+                      CommandParameter="{Binding Mode=OneWay,
+                                                 RelativeSource={RelativeSource Self}}"
+                      Header="Радиальная укладка графа на окружности"
+                      IsCheckable="True"
+                      Tag="Circular" />
+            <MenuItem Command="{Binding CommandSelectLayoutAlgorithmType}"
+                      CommandParameter="{Binding Mode=OneWay,
+                                                 RelativeSource={RelativeSource Self}}"
+                      Header="CompoundFDP"
+                      IsCheckable="True"
+                      Tag="CompoundFDP" />
+            <MenuItem Command="{Binding CommandSelectLayoutAlgorithmType}"
+                      CommandParameter="{Binding Mode=OneWay,
+                                                 RelativeSource={RelativeSource Self}}"
+                      Header="Метод Сугиямы"
+                      IsCheckable="True"
+                      Tag="EfficientSugiyama" />
+            <MenuItem Command="{Binding CommandSelectLayoutAlgorithmType}"
+                      CommandParameter="{Binding Mode=OneWay,
+                                                 RelativeSource={RelativeSource Self}}"
+                      Header="Алгоритм Фрюхтермана-Рейнгольда"
+                      IsCheckable="True"
+                      IsChecked="True"
+                      Tag="FR" />
+            <MenuItem Command="{Binding CommandSelectLayoutAlgorithmType}"
+                      CommandParameter="{Binding Mode=OneWay,
+                                                 RelativeSource={RelativeSource Self}}"
+                      Header="ISOM"
+                      IsCheckable="True"
+                      Tag="ISOM" />
+            <MenuItem Command="{Binding CommandSelectLayoutAlgorithmType}"
+                      CommandParameter="{Binding Mode=OneWay,
+                                                 RelativeSource={RelativeSource Self}}"
+                      Header="Директивный метод укладки Kamada-Kawai"
+                      IsCheckable="True"
+                      Tag="KK" />
+            <MenuItem Command="{Binding CommandSelectLayoutAlgorithmType}"
+                      CommandParameter="{Binding Mode=OneWay,
+                                                 RelativeSource={RelativeSource Self}}"
+                      Header="Модель энергии LinLog"
+                      IsCheckable="True"
+                      Tag="LinLog" />
+            <MenuItem Command="{Binding CommandSelectLayoutAlgorithmType}"
+                      CommandParameter="{Binding Mode=OneWay,
+                                                 RelativeSource={RelativeSource Self}}"
+                      Header="Tree"
+                      IsCheckable="True"
+                      Tag="Tree" />
+        </MenuItem>
+        <Separator />
+        <MenuItem Command="{Binding CommandCopyGraph}" Header="Копировать" />
+        <Separator />
+        <MenuItem Command="{Binding CommandSaveGraph}" Header="Сохранить изображение как ..." />
+        <MenuItem Command="{Binding CommandPrintGraph}" Header="Печать ..." />
+    </ContextMenu>
+
+</ResourceDictionary>

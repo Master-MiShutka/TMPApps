@@ -1,0 +1,35 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local_controls="clr-namespace:TMP.Work.Emcos.Controls" xmlns:model="clr-namespace:TMP.Work.Emcos.Model.Balans">
+
+    <DataTemplate DataType="{x:Type model:Substation}">
+        <DockPanel LastChildFill="True">
+            <TextBlock Margin="2,0,2,0"
+                       Style="{StaticResource TextCellStyle}"
+                       DockPanel.Dock="Right"
+                       Text="{Binding Voltage}" />
+            <local_controls:BalansItemTitle />
+        </DockPanel>
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type model:SubstationSection}">
+        <local_controls:BalansItemTitle />
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type model:SubstationPowerTransformers}">
+        <local_controls:BalansItemTitle />
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type model:SubstationAuxiliary}">
+        <local_controls:BalansItemTitle />
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type model:Fider}">
+        <local_controls:BalansItemTitle />
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type model:PowerTransformer}">
+        <local_controls:BalansItemTitle />
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type model:UnitTransformer}">
+        <local_controls:BalansItemTitle />
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type model:UnitTransformerBus}">
+        <local_controls:BalansItemTitle />
+    </DataTemplate>
+
+</ResourceDictionary>

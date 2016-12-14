@@ -1,0 +1,30 @@
+﻿<Window
+    x:Class="TMP.Work.AmperM.TestApp.View.ContentWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:common="clr-namespace:TMP.Shared;assembly=Shared"
+    xmlns:control_converters="clr-namespace:TMP.Wpf.CommonControls.Converters;assembly=TMP.Wpf.CommonControls"
+    xmlns:controls="clr-namespace:TMP.Wpf.CommonControls;assembly=TMP.Wpf.CommonControls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:iconpack="http://metro.mahapps.com/winfx/xaml/iconpacks"
+    xmlns:local="clr-namespace:TMP.Work.AmperM.TestApp"
+    xmlns:local_controls="clr-namespace:TMP.Work.AmperM.TestApp.Controls"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Icon="/Test;component/MAINICON.ico"
+    TextOptions.TextFormattingMode="Ideal"
+    UseLayoutRounding="True"
+    WindowStartupLocation="CenterOwner"    
+    mc:Ignorable="d">
+    <Window.Resources>
+        <control_converters:FileSizeToHumanReadableConverter x:Key="FileSizeToHumanReadableConverter" />        
+    </Window.Resources>
+    <!-- Window.ContextMenu>
+        <ContextMenu>
+            <MenuItem Command="{Binding ViewContentAsTextCommand}" Header="{Binding ViewContentAsTextCommand.Header, FallbackValue=???}" />
+            <MenuItem Command="{Binding SaveContentCommand}" Header="Сохранить содержимое как ..." />
+        </ContextMenu>
+    </Window.ContextMenu -->
+    <Window.Title>
+        <Binding Path="Data.ResultAsString.Length" Converter="{StaticResource FileSizeToHumanReadableConverter}" StringFormat="Просмотр результата запроса - размер: {0}" />
+    </Window.Title>
+</Window>

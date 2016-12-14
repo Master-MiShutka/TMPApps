@@ -1,0 +1,77 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:Controls="clr-namespace:TMP.Wpf.CommonControls">
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="pack://application:,,,/TMP.Wpf.CommonControls;component/Styles/Sizes.xaml" />
+
+        <ResourceDictionary Source="pack://application:,,,/TMP.Wpf.CommonControls;component/Styles/ValidationErrorTemplate.xaml" />
+
+        <ResourceDictionary Source="pack://application:,,,/TMP.Wpf.CommonControls;component/Styles/Controls.Scrollbars.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/TMP.Wpf.CommonControls;component/Styles/Controls.ListView.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/TMP.Wpf.CommonControls;component/Styles/Controls.Buttons.xaml" />
+
+        <ResourceDictionary Source="pack://application:,,,/TMP.Wpf.CommonControls;component/Styles/Controls.Calendar.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/TMP.Wpf.CommonControls;component/Styles/Controls.CheckBox.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/TMP.Wpf.CommonControls;component/Styles/Controls.ComboBox.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/TMP.Wpf.CommonControls;component/Styles/Controls.ContextMenu.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/TMP.Wpf.CommonControls;component/Styles/Controls.DatePicker.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/TMP.Wpf.CommonControls;component/Styles/Controls.DataGrid.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/TMP.Wpf.CommonControls;component/Styles/Controls.Expander.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/TMP.Wpf.CommonControls;component/Styles/Controls.GroupBox.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/TMP.Wpf.CommonControls;component/Styles/Controls.ListBox.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/TMP.Wpf.CommonControls;component/Styles/Controls.PasswordBox.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/TMP.Wpf.CommonControls;component/Styles/Controls.ProgressBar.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/TMP.Wpf.CommonControls;component/Styles/Controls.RadioButton.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/TMP.Wpf.CommonControls;component/Styles/Controls.Slider.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/TMP.Wpf.CommonControls;component/Styles/Controls.TextBlock.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/TMP.Wpf.CommonControls;component/Styles/Controls.TextBox.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/TMP.Wpf.CommonControls;component/Styles/Controls.Label.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/TMP.Wpf.CommonControls;component/Styles/Controls.TabControl.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/TMP.Wpf.CommonControls;component/Styles/Controls.Tooltip.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/TMP.Wpf.CommonControls;component/Styles/Controls.ToolBar.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/TMP.Wpf.CommonControls;component/Styles/Controls.TreeView.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/TMP.Wpf.CommonControls;component/Styles/Controls.StatusBar.xaml" />
+
+        <ResourceDictionary Source="pack://application:,,,/TMP.Wpf.CommonControls;component/Styles/Controls.Wait.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+
+    <!--  note: default style for textblock is now in TMPWindow !!!  -->
+    <Style BasedOn="{StaticResource TMPTextBlock}" TargetType="TextBlock" />
+
+    <Style BasedOn="{StaticResource TMPToolTip}" TargetType="ToolTip" />
+    <Style BasedOn="{StaticResource TMPButton}" TargetType="Button" />
+    <Style BasedOn="{StaticResource TMPToggleButton}" TargetType="ToggleButton" />
+    <Style BasedOn="{StaticResource TMPTextBox}" TargetType="TextBox" />
+    <Style BasedOn="{StaticResource TMPRichTextBox}" TargetType="RichTextBox" />
+    <Style BasedOn="{StaticResource TMPSlider}" TargetType="Slider" />
+    <Style BasedOn="{StaticResource TMPLabel}" TargetType="Label" />
+    <Style BasedOn="{StaticResource TMPScrollBar}" TargetType="ScrollBar" />
+    <Style BasedOn="{StaticResource TMPRadioButton}" TargetType="RadioButton" />
+    <Style BasedOn="{StaticResource TMPProgressBar}" TargetType="ProgressBar" />
+    <Style BasedOn="{StaticResource TMPPasswordBox}" TargetType="PasswordBox" />
+    <Style BasedOn="{StaticResource TMPCheckBox}" TargetType="CheckBox" />
+    <Style BasedOn="{StaticResource TMPComboBox}" TargetType="ComboBox" />
+    <Style BasedOn="{StaticResource TMPComboBoxItem}" TargetType="ComboBoxItem" />
+    <Style BasedOn="{StaticResource TMPTabItem}" TargetType="TabItem" />
+    <Style BasedOn="{StaticResource TMPTabControl}" TargetType="TabControl" />
+
+    <!-- <Style TargetType="Separator" BasedOn="{StaticResource TMPSeparator}" /> -->
+    <Style BasedOn="{StaticResource TMPMenuItem}" TargetType="MenuItem" />
+    <Style BasedOn="{StaticResource TMPMenu}" TargetType="Menu" />
+    <Style BasedOn="{StaticResource TMPContextMenu}" TargetType="ContextMenu" />
+    <Style BasedOn="{StaticResource TMPExpander}" TargetType="Expander" />
+    <Style BasedOn="{StaticResource TMPGroupBox}" TargetType="GroupBox" />
+    <Style BasedOn="{StaticResource TMPListBox}" TargetType="ListBox" />
+    <Style BasedOn="{StaticResource TMPListBoxItem}" TargetType="ListBoxItem" />
+    <Style BasedOn="{StaticResource TMPListView}" TargetType="ListView" />
+    <Style BasedOn="{StaticResource TMPListViewItem}" TargetType="ListViewItem" />
+    <Style BasedOn="{StaticResource TMPDatePicker}" TargetType="DatePicker" />
+    <Style BasedOn="{StaticResource TMPDatePickerTextBox}" TargetType="DatePickerTextBox" />
+    <Style BasedOn="{StaticResource TMPCalendar}" TargetType="Calendar" />
+    <Style BasedOn="{StaticResource TMPDataGrid}" TargetType="DataGrid" />
+
+    <Style BasedOn="{StaticResource TMPStatusBar}" TargetType="StatusBar" />
+    <Style BasedOn="{StaticResource TMPStatusBarItem}" TargetType="StatusBarItem" />
+
+    <Style BasedOn="{StaticResource TMPScrollViewer}" TargetType="{x:Type ScrollViewer}" />
+</ResourceDictionary>

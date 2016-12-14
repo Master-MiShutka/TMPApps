@@ -1,0 +1,144 @@
+﻿<Controls:TMPWindow x:Class="TMP.ARMTES.Editor.MainWindow"
+                    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:Controls="clr-namespace:TMP.Wpf.CommonControls;assembly=TMP.Wpf.CommonControls"
+                    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                    xmlns:local="clr-namespace:TMP.ARMTES.Editor"
+                    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                    Title="MainWindow"
+                    Width="1400"
+                    Height="450"
+                    DataContext="{x:Static local:MainModel.Instance}"
+                    Icon="Resources/MAINICON.ico"
+                    Loaded="Window_Loaded"
+                    ResizeMode="CanResizeWithGrip"
+                    SnapsToDevicePixels="True"
+                    TextOptions.TextFormattingMode="Ideal"
+                    UseLayoutRounding="True"
+                    mc:Ignorable="d">
+    <Window.Resources>
+        <ImageBrush x:Key="backgroundTiledImage"
+                    ImageSource="Resources/back_image.png"
+                    TileMode="Tile"
+                    Viewport="0,0,32,32"
+                    ViewportUnits="Absolute" />
+    </Window.Resources>
+    <Grid Background="{StaticResource backgroundTiledImage}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <!--  ***  -->
+        <Controls:AppHeaderControl Grid.Row="0" AppDescription="Редактор реестра расчетных точек, оборудованных СДСП" />
+        <!--  ***  -->
+        <Border Grid.Row="1"
+                Margin="2"
+                Background="{DynamicResource PanelBackgroundHorizontal}"
+                BorderBrush="Black"
+                BorderThickness="0.5"
+                CornerRadius="4,4,4,4"
+                Padding="5"
+                SnapsToDevicePixels="True">
+            <Border.BitmapEffect>
+                <DropShadowBitmapEffect Opacity="0.75"
+                                        ShadowDepth="3"
+                                        Color="Black" />
+            </Border.BitmapEffect>
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0" Orientation="Horizontal">
+                    <Button Margin="5 0"
+                            Content="Обновить данные"
+                            FontWeight="SemiBold"
+                            Padding="5 0" />
+                    <Button Margin="5 0"
+                            Content="Завершить сеанс"
+                            FontWeight="SemiBold"
+                            Padding="5 0" />
+                    <Button Margin="5 0"
+                            Content="Запуск"
+                            FontWeight="SemiBold"
+                            Padding="5 0" />
+                    <Separator />
+                    <Button Margin="10 0"
+                            Click="SerializeButton_Click"
+                            Content="Сохранить"
+                            FontWeight="SemiBold"
+                            Padding="5 0" />
+                    <Button Margin="5 0"
+                            Click="DeSerializeButton_Click"
+                            Content="Загрузить"
+                            FontWeight="SemiBold"
+                            Padding="5 0" />
+                </StackPanel>
+                <StackPanel Grid.Column="2"
+                            HorizontalAlignment="Right"
+                            Orientation="Horizontal">
+                    <CheckBox IsChecked="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Controls:TMPWindow}}, Path=IgnoreTaskbarOnMaximize}" ToolTip="Игнорировать панель задач при максимизировании" />
+                    <CheckBox IsChecked="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Controls:TMPWindow}}, Path=ToggleFullScreen}" ToolTip="Во всеь экран (скрыть панель задач, стиль окна отсутствует)" />
+                </StackPanel>
+            </Grid>
+        </Border>
+        <!--  ***  -->
+        <DockPanel Grid.Row="2">
+            <Border Margin="2"
+                    Background="{DynamicResource PanelBackgroundHorizontal}"
+                    BorderBrush="Black"
+                    BorderThickness="0.5"
+                    CornerRadius="4,4,4,4"
+                    DockPanel.Dock="Top"
+                    Padding="5"
+                    SnapsToDevicePixels="True">
+                <Border.BitmapEffect>
+                    <DropShadowBitmapEffect Opacity="0.75"
+                                            ShadowDepth="3"
+                                            Color="Black" />
+                </Border.BitmapEffect>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Margin="10 0"
+                               VerticalAlignment="Center"
+                               Text="Подразделение:"
+                               TextAlignment="Right" />
+                    <ComboBox x:Name="departamentsList"
+                              Width="200"
+                              VerticalAlignment="Center"
+                              ItemsSource="{Binding SDSP.Departaments}"
+                              SelectionChanged="departamentsList_SelectionChanged"
+                              ToolTip="{Binding SDSP.DepartamentsCount}" />
+                    <TextBlock Margin="10 0"
+                               VerticalAlignment="Center"
+                               Text="{Binding SDSP.CollectorsCount,
+                                              StringFormat={}Количество систем: {0}}" />
+                    <TextBlock Margin="10 0"
+                               VerticalAlignment="Center"
+                               Text="{Binding SDSP.MetersCount,
+                                              StringFormat={}Количество счётчиков: {0}}" />
+                </StackPanel>
+            </Border>
+            <ListBox x:Name="collectorList"
+                     Margin="2"
+                     AlternationCount="2"
+                     DockPanel.Dock="Bottom"
+                     ItemsSource="{Binding SDSP.Collectors}"
+                     MouseDoubleClick="collectorList_MouseDoubleClick"
+                     SelectionChanged="collectorList_SelectionChanged"
+                     SelectionMode="Extended"
+                     Style="{StaticResource EditorCollectorList}" />
+
+        </DockPanel>
+        <!--  ***  -->
+        <StatusBar Grid.Row="3"
+                   VerticalAlignment="Bottom"
+                   VerticalContentAlignment="Bottom">
+            <StatusBarItem>DEMO приложение</StatusBarItem>
+            <Separator Style="{StaticResource TMPStatusBarSeparator}" />
+            <StatusBarItem />
+        </StatusBar>
+    </Grid>
+</Controls:TMPWindow>

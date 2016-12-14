@@ -1,0 +1,72 @@
+﻿<UserControl x:Class="TMP.Work.AmperM.TestApp.Controls.ViewFuncResultAsSelector"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:common="clr-namespace:TMP.Shared;assembly=Shared" xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:ezsbyt="clr-namespace:TMP.Work.AmperM.TestApp.EzSbyt" xmlns:iconpack="http://metro.mahapps.com/winfx/xaml/iconpacks"
+             xmlns:local="clr-namespace:TMP.Work.AmperM.TestApp" xmlns:local_converters="clr-namespace:TMP.Work.AmperM.TestApp.Converters"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d">
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        <local_converters:FormatTypeToTextConverter x:Key="FormatTypeToTextConverter" />
+    </UserControl.Resources>
+    <Border Margin="2"
+            Background="{DynamicResource ControlBackgroundBrush}"
+            BorderBrush="{DynamicResource ControlBorderBrush}"
+            BorderThickness="1"
+            CornerRadius="2">
+        <DockPanel LastChildFill="False">
+            <Label Content="Отобразить как:" />
+            <ListBox Margin="10,2"
+                     Style="{StaticResource HorizontalListBox}"
+                     ItemsSource="{Binding Source={common:EnumBindingSource {x:Type ezsbyt:FormatTypes}}}"
+                     SelectedValue="{Binding Формат, Converter={StaticResource FormatTypeToTextConverter}}">
+                <ListBox.ItemContainerStyle>
+                    <Style TargetType="{x:Type ListBoxItem}">
+                        <Setter Property="Background" Value="Transparent" />
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                                    <Border x:Name="Border"
+                                            BorderThickness="1"
+                                            CornerRadius="3">
+                                        <TextBlock Margin="10,0" VerticalAlignment="Center"
+                                                   LineHeight="18"
+                                                   LineStackingStrategy="BlockLineHeight"
+                                                   Text="{Binding}"
+                                                   TextAlignment="Center" TextWrapping="Wrap" />
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsSelected" Value="True">
+                                            <Setter Property="FontWeight" Value="Bold" />
+                                        </Trigger>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter TargetName="Border" Property="Background" Value="{DynamicResource AccentColorBrush4}" />
+                                        </Trigger>
+                                        <MultiTrigger>
+                                            <MultiTrigger.Conditions>
+                                                <Condition Property="IsSelected" Value="True" />
+                                            </MultiTrigger.Conditions>
+                                            <Setter TargetName="Border" Property="Background" Value="{DynamicResource HighlightBrush}" />
+                                            <Setter TargetName="Border" Property="BorderBrush" Value="{DynamicResource AccentBaseColorBrush}" />
+                                            <Setter Property="Foreground" Value="{DynamicResource WhiteColorBrush}" />
+                                        </MultiTrigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </ListBox.ItemContainerStyle>
+            </ListBox>
+            <Button Margin="0,1" Padding="5,0"
+                    Command="{Binding GetCommand}"
+                    CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}, AncestorLevel=2}, Path=DataContext}" DockPanel.Dock="Right"
+                    IsDefault="True">
+                <StackPanel Orientation="Horizontal">
+                    <iconpack:PackIconModern Margin="0,0,5,0" VerticalAlignment="Center"
+                                             Kind="ControlPlay" />
+                    <TextBlock Padding="10,0" Text="{Binding GetCommand.Header, FallbackValue=Получить}" />
+                </StackPanel>
+            </Button>
+        </DockPanel>
+    </Border>
+</UserControl>

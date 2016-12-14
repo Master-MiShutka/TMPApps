@@ -1,0 +1,23 @@
+﻿<UserControl
+    x:Class="TMP.Work.AmperM.TestApp.View.TabsViews.SearchView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="clr-namespace:TMP.Wpf.CommonControls;assembly=TMP.Wpf.CommonControls"
+    xmlns:controls_behaviors="clr-namespace:TMP.Wpf.CommonControls.Behaviors;assembly=TMP.Wpf.CommonControls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:iconpack="http://metro.mahapps.com/winfx/xaml/iconpacks"
+    xmlns:local="clr-namespace:TMP.Work.AmperM.TestApp.View.TabsViews"
+    xmlns:local_controls="clr-namespace:TMP.Work.AmperM.TestApp.Controls"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:tabs="clr-namespace:TMP.Work.AmperM.TestApp.View.TabsViews"
+    d:DesignWidth="300"
+    mc:Ignorable="d">
+    <DockPanel VerticalAlignment="Top">
+        <local_controls:ViewFuncResultAsSelector DockPanel.Dock="Top"/>
+        <DockPanel>
+            <Label Content="Текст для поиска:" DockPanel.Dock="Left" />
+            <TextBox Margin="0,2" Text="{Binding TextToSearch, UpdateSourceTrigger=PropertyChanged}" 
+                 controls:TextBoxHelper.ClearTextButton="True"/>
+        </DockPanel>
+    </DockPanel>
+</UserControl>

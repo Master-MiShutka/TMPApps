@@ -1,0 +1,201 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:behaviors="clr-namespace:TMP.Wpf.CommonControls.Behaviors;assembly=TMP.Wpf.CommonControls"
+    xmlns:common="clr-namespace:TMP.Shared;assembly=Shared"
+    xmlns:controls="clr-namespace:TMP.Wpf.CommonControls;assembly=TMP.Wpf.CommonControls"
+    xmlns:controls_converters="clr-namespace:TMP.Wpf.CommonControls.Converters;assembly=TMP.Wpf.CommonControls"
+    xmlns:ezsbyt="clr-namespace:TMP.Work.AmperM.TestApp.EzSbyt"
+    xmlns:iconpack="http://metro.mahapps.com/winfx/xaml/iconpacks"
+    xmlns:local_controls="clr-namespace:TMP.Work.AmperM.TestApp.Controls"
+    xmlns:local_converters="clr-namespace:TMP.Work.AmperM.TestApp.Converters"
+    xmlns:model="clr-namespace:TMP.Work.AmperM.TestApp.Model"
+    xmlns:repository="clr-namespace:TMP.Work.AmperM.TestApp.Controls.RepositoryControl"
+    xmlns:tabs="clr-namespace:TMP.Work.AmperM.TestApp.View.TabsViews"
+    xmlns:vm="clr-namespace:TMP.Work.AmperM.TestApp.ViewModel">
+
+    <controls_converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+    <local_converters:FormatTypeToTextConverter x:Key="FormatTypeToTextConverter" />
+
+    <ControlTemplate x:Key="toolTipTemplate" TargetType="{x:Type ToolTip}">
+        <Border
+            Margin="5"
+            Padding="1"
+            Background="{DynamicResource ControlBackgroundBrush}"
+            BorderBrush="{DynamicResource GrayBrush7}"
+            BorderThickness="1"
+            CornerRadius="5"
+            Effect="{DynamicResource DropShadowBrush}"
+            SnapsToDevicePixels="True">
+            <TextBlock
+                Margin="3"
+                Padding="0"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Top"
+                Foreground="{DynamicResource BlackBrush}"
+                FontFamily="{StaticResource ToolTipFontFamily}"
+                FontSize="{StaticResource ToolTipFontSize}"
+                Text="{TemplateBinding Content}"
+                TextWrapping="Wrap" />
+        </Border>
+    </ControlTemplate>
+
+    <Style TargetType="{x:Type ToolTip}">
+        <Setter Property="ToolTipService.ShowDuration" Value="5000" />
+        <Setter Property="ToolTipService.InitialShowDelay" Value="500" />
+        <Setter Property="Template" Value="{StaticResource toolTipTemplate}" />
+    </Style>
+
+    <Style x:Key="closableTabItemStyle" TargetType="{x:Type TabItem}">
+        <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
+    </Style>
+
+    <!--  This template explains how to render a tab item with a close button.  -->
+    <DataTemplate x:Key="ClosableTabItemTemplate">
+        <DockPanel>
+            <Button
+                Width="20"
+                Margin="4,0,0,0"
+                Padding="0"
+                Style="{DynamicResource TMPWindowCloseButtonStyle}"
+                FontFamily="Marlett"
+                Command="{Binding Path=CloseCommand}"
+                Content="r"
+                Cursor="Hand"
+                DockPanel.Dock="Right"
+                Focusable="False"
+                ToolTip="Закрыть вкладку"
+                Visibility="{Binding Path=CanClose, Converter={StaticResource BooleanToVisibilityConverter}}" />
+            <ContentPresenter VerticalAlignment="Center" Content="{Binding Path=DisplayName}" />
+        </DockPanel>
+    </DataTemplate>
+
+    <Style x:Key="TabControlStyle" TargetType="{x:Type TabControl}">
+        <Setter Property="Padding" Value="2" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="Foreground" Value="{DynamicResource BlackBrush}" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type TabControl}">
+                    <Grid
+                        x:Name="templateRoot"
+                        ClipToBounds="true"
+                        KeyboardNavigation.TabNavigation="Local"
+                        SnapsToDevicePixels="true">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition x:Name="ColumnDefinition0" />
+                            <ColumnDefinition x:Name="ColumnDefinition1" Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition x:Name="RowDefinition0" Height="Auto" />
+                            <RowDefinition x:Name="RowDefinition1" Height="*" />
+                        </Grid.RowDefinitions>
+                        <TabPanel
+                            x:Name="headerPanel"
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            Margin="2,2,2,0"
+                            Panel.ZIndex="1"
+                            Background="Transparent"
+                            IsItemsHost="true"
+                            KeyboardNavigation.TabIndex="1" />
+                        <Button
+                            Grid.Column="1"
+                            MinWidth="24"
+                            Margin="2"
+                            Padding="0"
+                            Style="{DynamicResource TMPFlatButton}"
+                            Command="{Binding Path=DataContext.CreateNewManualRequestTabCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
+                            ToolTip="Добавить вкладку с ручным запросом">
+                            <iconpack:PackIconModern
+                                Width="12"
+                                Height="12"
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Top"
+                                Kind="New" />
+                        </Button>
+                        <Border
+                            x:Name="contentPanel"
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            Grid.ColumnSpan="2"
+                            Background="{TemplateBinding Background}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            KeyboardNavigation.DirectionalNavigation="Contained"
+                            KeyboardNavigation.TabIndex="2"
+                            KeyboardNavigation.TabNavigation="Local">
+                            <ContentPresenter
+                                x:Name="PART_SelectedContentHost"
+                                Margin="{TemplateBinding Padding}"
+                                ContentSource="SelectedContent"
+                                SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                        </Border>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsEnabled" Value="false">
+                            <Setter TargetName="templateRoot" Property="TextElement.Foreground" Value="{DynamicResource IdealForegroundDisabledBrush}" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <DataTemplate DataType="{x:Type vm:SearchViewModel}">
+        <Grid>
+            <controls:Wait Visibility="Visible" />
+            <DockPanel>
+                <tabs:SearchView DockPanel.Dock="Top" />
+                <ContentControl Margin="2,5,2,2" Content="{Binding Path=Result}" />
+            </DockPanel>
+        </Grid>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vm:ShemaUchetViewModel}">
+        <Grid>
+            <controls:Wait Visibility="Visible" />
+            <DockPanel>
+                <tabs:ShemaUchetView DockPanel.Dock="Top" />
+                <ContentControl Margin="2,5,2,2" Content="{Binding Path=Result}" />
+            </DockPanel>
+        </Grid>
+    </DataTemplate>
+
+    <DataTemplate x:Shared="False" DataType="{x:Type vm:ManualRequestViewModel}">
+        <Grid>
+            <!--    -->
+            <controls:Wait Visibility="Visible" />
+            <!--  1  -->
+            <TabControl>
+                <TabItem Header="Запрос">
+                    <tabs:ManualRequestView />
+                </TabItem>
+                <TabItem Header="Результат" Visibility="{Binding Path=Result, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <ContentControl Margin="2,5,2,2" Content="{Binding Path=Result}" />
+                </TabItem>
+            </TabControl>
+        </Grid>
+    </DataTemplate>
+
+    <DataTemplate x:Key="TabsTemplate">
+        <TabControl
+            Margin="2,0,2,2"
+            Style="{StaticResource TabControlStyle}"
+            behaviors:TabContent.IsCached="True"
+            IsSynchronizedWithCurrentItem="True"
+            ItemTemplate="{StaticResource ClosableTabItemTemplate}"
+            ItemsSource="{Binding}"
+            SelectedItem="{Binding SelectedItem}" />
+    </DataTemplate>
+
+    <DataTemplate x:Key="Repository">
+        <repository:Repository />
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vm:ResultViewerViewModel}">
+        <local_controls:ResultViewer />
+    </DataTemplate>
+
+</ResourceDictionary>

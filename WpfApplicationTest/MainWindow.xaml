@@ -1,0 +1,27 @@
+﻿<local:WindowBase x:Class="WpfApplicationTest.MainWindow"
+                  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                  xmlns:local="clr-namespace:WpfApplicationTest"
+                  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                  Title="MainWindow"
+                  Width="525"
+                  Height="350"
+                  mc:Ignorable="d">
+    <Grid>
+        <StackPanel Orientation="Vertical">
+            <Button Width="100"
+                    Margin="10"
+                    Content="Кнопка" />
+            <Button Content="Error" Command="{Binding QWER}" Width="150" />
+            <TextBlock Text="{Binding wceu}" Width="100" Height="25" Background="WhiteSmoke"/>
+            <Label Content="{Binding Title.a}" Height="25" Width="100" Background="Yellow"/>
+            <CheckBox HorizontalAlignment="Center"
+                      Content="efe efe"
+                      IsChecked="True" />
+            <DatePicker HorizontalAlignment="Center" />
+            <Calendar HorizontalAlignment="Center" />
+            <TextBox Width="200" HorizontalAlignment="Center" />
+        </StackPanel>
+    </Grid>
+</local:WindowBase>

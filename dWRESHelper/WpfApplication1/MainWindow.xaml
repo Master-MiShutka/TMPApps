@@ -1,0 +1,71 @@
+﻿<Window x:Class="WpfApplication1.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:GraphSharp_Controls="clr-namespace:GraphSharp.Controls;assembly=GraphSharp.Controls"
+        xmlns:controls="clr-namespace:TMP.WPFControls.Controls;assembly=TMP.WPF.Controls"
+        xmlns:local="clr-namespace:WpfApplication1"
+        xmlns:wpfext="clr-namespace:WPFExtensions.Controls;assembly=WPFExtensions"
+        x:Name="root"
+        Title="MainWindow"
+        Width="800"
+        Height="450"
+        Loaded="root_Loaded">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/WpfApplication1;component/themes/Graph.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <controls:ZoomControl Grid.Row="0" Zoom="1">
+            <!--  wpfext:ZoomControl Grid.Row="0" Zoom="1"  -->
+            <local:TestGraphLayout x:Name="graphLayout"
+                Grid.Row="0"
+                AsyncCompute="True"
+                Graph="{Binding ElementName=root,
+                Path=GraphToVisualize}"
+                HighlightAlgorithmType="Simple"
+                LayoutAlgorithmType="FR"
+                OverlapRemovalAlgorithmType="FSA" />
+        </controls:ZoomControl>
+        <TextBlock Grid.Row="1">
+            Количество вершин:
+            <TextBlock Text="{Binding GraphToVisualize.VertexCount, ElementName=root, Mode=OneWay}" />
+            ,
+            количество рёбер:
+            <TextBlock Text="{Binding GraphToVisualize.EdgeCount, ElementName=root, Mode=OneWay}" />
+            .
+        </TextBlock>
+        <Grid Grid.Row="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <StackPanel Grid.Row="0"
+                        Margin="5"
+                        Orientation="Horizontal">
+                <Button Margin="10 2"
+                        Click="ButtonGenerate_Click"
+                        Content="Создать"
+                        FontSize="14"
+                        Padding="5" />
+                <Button Margin="10 2"
+                        Click="ButtonRelayout_Click"
+                        Content="Перестроить"
+                        FontSize="14"
+                        Padding="5" />
+            </StackPanel>
+            <StackPanel x:Name="themesListPanel"
+                        Grid.Row="1"
+                        Margin="5"
+                        Orientation="Horizontal" />
+        </Grid>
+    </Grid>
+</Window>

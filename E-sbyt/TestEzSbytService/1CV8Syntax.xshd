@@ -1,0 +1,161 @@
+﻿<?xml version="1.0"?>
+<SyntaxDefinition name="1CV8" extensions=".1c" xmlns="http://icsharpcode.net/sharpdevelop/syntaxdefinition/2008">
+  <!-- The named colors 'Comment' and 'String' are used in SharpDevelop to detect if a line is inside a multiline string/comment -->
+  <Color name="Comment" foreground="#FF008000" exampleText="// comment" />
+  <Color name="String" foreground="#FFa31515" exampleText="string text = &quot;Hello, World!&quot;"/>
+  <Color name="String2" foreground="#FFa30000" exampleText="string text = &quot;Hello, World!&quot;"/>
+  <Color name="Date" foreground="Brown" exampleText="'20010101'"/>
+  <Color name="Preprocessor" foreground="Brown" exampleText="#region Title" fontWeight="bold"/>
+  <Color name="Punctuation" foreground="#FF222222" exampleText="a(b.c);" fontWeight="bold"/>
+  <Color name="NumberLiteral" foreground="#FF4B0082" exampleText="3.1415f"/>
+  <Color name="Keywords" foreground="#FF00006D" exampleText="if (a) {} else {}" fontWeight="bold"/>
+
+  <Color name="Variable" foreground="#FFA52A2A"  exampleText="@Variable" fontStyle="italic"/>
+  
+  <Color name="ObjectReference" foreground="#FF2149C1" exampleText="Customer.Name" />
+  <Color name="ObjectReference1" foreground="#FF4169E1" exampleText="dbo.Customer.Name" />
+
+  <Color name="ObjectReferenceInBrackets" foreground="Teal" exampleText="[Customer].[Name]" />
+  <Color name="ObjectReferenceInBrackets1" foreground="Teal" exampleText="[dbo].[Customer].[Name]" />  
+
+  <!-- This is the main ruleset. -->
+  <RuleSet ignoreCase="true">
+     
+    <Span color="Preprocessor">
+      <Begin>\#</Begin>
+    </Span>
+
+    <Span color="Preprocessor">
+      <Begin>\&amp;</Begin>
+    </Span>
+
+    <Span color="Comment">
+      <Begin>//</Begin>
+    </Span>
+    <Span color="Comment"  multiline="true">
+        <Begin>/\*</Begin>
+        <End>\*/</End>
+    </Span>    
+
+    <Span color="Date">
+      <Begin>'</Begin>
+      <End>'</End>
+    </Span>
+
+    <Span color="String">
+      <Begin>"</Begin>
+      <End>"</End>
+      <RuleSet>
+        <Span begin='""' end=""/>
+      </RuleSet>
+    </Span>
+    <Span color="String">
+      <Begin>\|</Begin>
+      <End>"</End>
+      <RuleSet>
+        <Span begin='""' end=""/>
+      </RuleSet>
+    </Span>
+
+    <Keywords color="Keywords">
+      <Word>ВЫБРАТЬ</Word>
+      <Word>ВЫБОР</Word>
+      <Word>ВЫБОР КОГДА</Word>
+      <Word>КОГДА</Word>
+      <Word>ТОГДА</Word>
+      <Word>ИНАЧЕ</Word>
+      <Word>КОНЕЦ</Word>
+      <Word>КАК</Word>
+      <Word>ПО</Word>
+      <Word>ОБЪЕДИНИТЬ</Word>
+      <Word>ГДЕ</Word>
+      <Word>ЛЕВОЕ ВНЕШНЕЕ СОЕДИНЕНИЕ</Word>
+      <Word>ЛЕВОЕ СОЕДИНЕНИЕ</Word>
+      <Word>ПРАВОЕ ВНЕШНЕЕ СОЕДИНЕНИЕ</Word>
+      <Word>ПРАВОЕ СОЕДИНЕНИЕ</Word>
+      <Word>УПОРЯДОЧИТЬ</Word>
+      <Word>ПОМЕСТИТЬ</Word>
+      <Word>ЕСТЬ NULL</Word>
+      <Word>ИЗ</Word>
+      <Word>ИСТИНА</Word>
+      <Word>ЛОЖЬ</Word>
+      <Word>НЕОПРЕДЕЛЕНО</Word>
+      <Word>Null</Word>
+      <Word>И</Word>
+      <Word>ИЛИ</Word>
+      <Word>НЕ</Word>
+      <Word>МЕЖДУ</Word>
+      <Word>ВЫРАЗИТЬ</Word>
+      <Word>СГРУППИРОВАТЬ ПО</Word>
+      
+      <!-- English -->
+      <Word>Var</Word>
+      <Word>If</Word>
+      <Word>Then</Word>
+      <Word>Else</Word>
+      <Word>ElseIf</Word>
+      <Word>EndIf</Word>
+      <Word>For</Word>
+      <Word>Each</Word>
+      <Word>In</Word>
+      <Word>To</Word>
+      <Word>While</Word>
+      <Word>Do</Word>
+      <Word>EndDo</Word>
+      <Word>Return</Word>
+      <Word>Continue</Word>
+      <Word>Break</Word>
+      <Word>Try</Word>
+      <Word>Except</Word>
+      <Word>Raise</Word>
+      <Word>EndTry</Word>
+      <Word>Procedure</Word>
+      <Word>Function</Word>
+      <Word>EndProcedure</Word>
+      <Word>EndFunction</Word>
+      <Word>Val</Word>
+      <Word>New</Word>
+      <Word>Export</Word>
+      <Word>True</Word>
+      <Word>False</Word>
+      <Word>Undefıne</Word>
+      <Word>and</Word>
+      <Word>or</Word>
+      <Word>not</Word>
+
+    </Keywords>
+
+    <!-- Mark previous rule
+    <Rule color="MethodCall">
+      \b
+      [\d\w_]+  # an identifier
+      (?=\s*\() # followed by (
+    </Rule-->
+
+    <!-- Digits -->
+    <Rule color="NumberLiteral">
+      \b0[xX][0-9a-fA-F]+  # hex number
+      |
+      (	\b\d+(\.[0-9]+)?   #number with optional floating point
+      |	\.[0-9]+           #or just starting with floating point
+      )
+      ([eE][+-]?[0-9]+)? # optional exponent
+    </Rule>
+
+    <Rule color="Punctuation">
+      [?,.;()\[\]{}+\-/%*=&lt;&gt;^+~!|&amp;]+
+    </Rule>
+
+    <Rule color="ObjectReference1">([\d\w]+)\.([\d\w]+)\.([\d\w]+)</Rule>
+    <Rule color="ObjectReference">([\d\w]+)\.([\d\w]+)</Rule>
+
+    <Rule color="ObjectReferenceInBrackets1">([\d\w]+)\.([\d\w]+)\.([\d\w]+)</Rule>
+    <Rule color="ObjectReferenceInBrackets">\[([\d\w]+)\]\.\[([\d\w]+)\]\.\[([\d\w]+)\]</Rule>
+    <Rule color="ObjectReferenceInBrackets">\[([\d\w]+)\]\.\[([\d\w]+)\]</Rule>
+
+    <Rule color="Variable">@@([\w]+)</Rule>
+    <Rule color="Variable">@([\w]+)</Rule>
+    <Rule color="Variable">\$([\w]+)</Rule>
+    
+  </RuleSet>
+</SyntaxDefinition>

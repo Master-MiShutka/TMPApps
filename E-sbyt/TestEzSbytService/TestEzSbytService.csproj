@@ -1,0 +1,425 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{0CE80D32-7535-4C39-B983-C350A7E171F3}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>TMP.Work.AmperM.TestApp</RootNamespace>
+    <AssemblyName>Test</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\out\Debug\Amper-M\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\..\out\Release\Amper-M\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>MAINICON.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>TMP.Work.AmperM.TestApp.App</StartupObject>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EPPlus, Version=4.1.0.0, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\EPPlus.4.1.0\lib\net40\EPPlus.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EPPlusEnumerable, Version=1.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\EPPlusEnumerable.1.4.0.2\lib\EPPlusEnumerable.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="GongSolutions.Wpf.DragDrop, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\gong-wpf-dragdrop.1.0.0\lib\net45\GongSolutions.Wpf.DragDrop.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="ICSharpCode.AvalonEdit, Version=5.0.3.0, Culture=neutral, PublicKeyToken=9cc39be672370310, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\AvalonEdit.5.0.3\lib\Net40\ICSharpCode.AvalonEdit.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="MahApps.Metro.IconPacks.Modern, Version=1.6.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\MahApps.Metro.IconPacks.Modern.1.6.0\lib\net45\MahApps.Metro.IconPacks.Modern.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="PresentationFramework.Aero2" />
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Controls\CompositeTextBox.cs" />
+    <Compile Include="Controls\LayoutGroup\LabelledContent.xaml.cs">
+      <DependentUpon>LabelledContent.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ViewFuncResultAsSelector.xaml.cs">
+      <DependentUpon>ViewFuncResultAsSelector.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ZoomBorder.cs" />
+    <Compile Include="Converters\FormatTypeToTextConverter.cs" />
+    <Compile Include="Converters\RequestFuncTypeToTextConverter.cs" />
+    <Compile Include="Converters\FuncParameterToTextConverter.cs" />
+    <Compile Include="Converters\NewLineRemoveConverter.cs" />
+    <Compile Include="Converters\ServiceFunctionTypeToVisibiltyConverter.cs" />
+    <Compile Include="DataAccess\Export.cs" />
+    <Compile Include="ObservableCollectionAdv.cs" />
+    <Compile Include="PagingCollectionView.cs" />
+    <Compile Include="Utils.cs" />
+    <Compile Include="ViewModel\Funcs\BaseFuncViewModel.cs" />
+    <Compile Include="ViewModel\Funcs\FuncParameter.cs" />
+    <Compile Include="ViewModel\Funcs\IFuncViewModel.cs" />
+    <Compile Include="ViewModel\Funcs\FuncGetObjViewModel.cs" />
+    <Compile Include="ViewModel\Funcs\FuncGetPointViewModel.cs" />
+    <Compile Include="ViewModel\Funcs\FuncMetaViewModel.cs" />
+    <Compile Include="ViewModel\Funcs\FuncSchemaViewModel.cs" />
+    <Compile Include="ViewModel\Funcs\FuncSqlViewModel.cs" />
+    <Compile Include="ViewModel\IResultViewerViewModel.cs" />
+    <Compile Include="ViewModel\ViewModelBase.cs" />
+    <ApplicationDefinition Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+    <Compile Include="Controls\LayoutGroup\LabelledTextBox.xaml.cs">
+      <DependentUpon>LabelledTextBox.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\LayoutGroup\LayoutGroup.cs" />
+    <Compile Include="Controls\_1CV8SyntaxHighlightTextBox.xaml.cs">
+      <DependentUpon>_1CV8SyntaxHighlightTextBox.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\AvalonTextEditorEx.cs" />
+    <Compile Include="Controls\ErrorView.xaml.cs">
+      <DependentUpon>ErrorView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\RepositoryControl\BindableSelectedItemBehavior.cs" />
+    <Compile Include="Converters\SpaceToNewLineReplaceConverter.cs" />
+    <Compile Include="DataAccess\RepositoryItemAddedEventArgs.cs" />
+    <Compile Include="Model\EzSbytSqlRequest.cs" />
+    <Compile Include="Model\IRepositoryItem.cs" />
+    <Compile Include="Controls\RepositoryControl\ItemTypeConverter.cs" />
+    <Compile Include="Controls\RepositoryControl\Repository.xaml.cs">
+      <DependentUpon>Repository.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\RepositoryControl\RepositoryGroupView.xaml.cs">
+      <DependentUpon>RepositoryGroupView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\RepositoryControl\RepositoryItemView.xaml.cs">
+      <DependentUpon>RepositoryItemView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\RepositoryControl\TreeViewMarginConverter.cs" />
+    <Compile Include="Controls\ResultViewer.xaml.cs">
+      <DependentUpon>ResultViewer.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\SettingsPanel.xaml.cs">
+      <DependentUpon>SettingsPanel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="DataAccess\RequestsRepository.cs" />
+    <Compile Include="EzSbyt\EzSbytRequestFunctionType.cs" />
+    <Compile Include="EzSbyt\EzSbytService.cs" />
+    <Compile Include="EzSbyt\FormatTypes.cs" />
+    <Compile Include="Model\RepositoryGroup.cs" />
+    <Compile Include="Model\RepositoryItem.cs" />
+    <Compile Include="Model\RepositoryItemType.cs" />
+    <Compile Include="SettingBindingExtension.cs" />
+    <Compile Include="Settings.cs" />
+    <Compile Include="View\ContentWindow.xaml.cs">
+      <DependentUpon>ContentWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\TableWindow.xaml.cs">
+      <DependentUpon>TableWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\TabsViews\ShemaUchetTab.xaml.cs">
+      <DependentUpon>ShemaUchetTab.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\TabsViews\SearchTab.xaml.cs">
+      <DependentUpon>SearchTab.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\TabsViews\ManualRequestView.xaml.cs">
+      <DependentUpon>ManualRequestView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModel\MainWindowViewModel.cs" />
+    <Compile Include="ViewModel\ManualRequestViewModel.cs" />
+    <Compile Include="ViewModel\RepositoryViewModel.cs" />
+    <Compile Include="ViewModel\ResultViewerViewModel.cs" />
+    <Compile Include="ViewModel\SearchViewModel.cs" />
+    <Compile Include="ViewModel\ShemaUchetViewModel.cs" />
+    <Compile Include="ViewModel\AbstractViewModel.cs" />
+    <Compile Include="ViewModel\TabViewModel.cs" />
+    <Page Include="Controls\LayoutGroup\LabelledContent.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\LayoutGroup\LabelledTextBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ViewFuncResultAsSelector.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\_1CV8SyntaxHighlightTextBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ErrorView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\RepositoryControl\AddEditWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Compile Include="Controls\RepositoryControl\AddEditWindow.xaml.cs">
+      <DependentUpon>AddEditWindow.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Page Include="Controls\RepositoryControl\DataTemplates.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\RepositoryControl\Repository.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\RepositoryControl\RepositoryGroupView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\RepositoryControl\RepositoryItemView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\RepositoryControl\RepositoryStyles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ResultViewer.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\SettingsPanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MainWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BindableBase.cs" />
+    <Compile Include="MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Page Include="Styles\MainWindowResources.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Themes\Generic.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ContentWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\FunctionsDataTemplates.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\TableWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\TabsViews\ShemaUchetTab.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\TabsViews\SearchTab.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\TabsViews\ManualRequestView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\ListBoxStyle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\TreeStyle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <Resource Include="1CV8Syntax.xshd" />
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>PublicSettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <AppDesigner Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="background.png" />
+    <Resource Include="MAINICON.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.5.2">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.5.2 %28x86 и x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Library\CommonControls\CommonControls.csproj">
+      <Project>{8cf736c3-a421-4f44-8f9c-945a4391718b}</Project>
+      <Name>CommonControls</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Library\Extensions\TMP.Extensions.csproj">
+      <Project>{3f72fbe4-5f95-43fd-9029-3cc145c978b4}</Project>
+      <Name>TMP.Extensions</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LIBRARY\JsonUtils\JsonUtils.csproj">
+      <Project>{f5216bce-98fb-4b1f-a114-fed7a325ad18}</Project>
+      <Name>JsonUtils</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Library\RepositoryCommon\RepositoryCommon.csproj">
+      <Project>{7b66a20e-48ff-4fcd-955d-415ad5f1e4e2}</Project>
+      <Name>RepositoryCommon</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Library\Logger\Logger.csproj">
+      <Project>{b1736481-51ba-4b57-b0b1-a0ea76c1c6d2}</Project>
+      <Name>Logger</Name>
+      <Private>True</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Library\MsgBox\MsgBox.csproj">
+      <Project>{2f8ef004-1e7a-429d-863b-5a062a90705a}</Project>
+      <Name>MsgBox</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Library\NetHelper\NetHelper.csproj">
+      <Project>{e00c55d0-971a-4d59-8c91-e7a4d79d50e8}</Project>
+      <Name>NetHelper</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Library\Interactivity\Interactivity.csproj">
+      <Project>{588a47ee-dbc1-48c3-987b-bbd5163a8cce}</Project>
+      <Name>Interactivity</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Library\Shared\Shared.csproj">
+      <Project>{07d019f1-5192-4b8e-9bcf-b040d36935c6}</Project>
+      <Name>Shared</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LIBRARY\TMPApplication\TMPApplication.csproj">
+      <Project>{dfe89862-64ef-44f8-98a8-07b410ec180e}</Project>
+      <Name>TMPApplication</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Copy.png" />
+    <Content Include="Resources\css_table.css" />
+    <Resource Include="Resources\Cut.png" />
+    <Resource Include="Resources\Delete.png" />
+    <Resource Include="Resources\Open.png" />
+    <Resource Include="Resources\Paste.png" />
+    <Resource Include="Resources\Redo.png" />
+    <Resource Include="Resources\Save.png" />
+    <Resource Include="Resources\Undo.png" />
+    <Resource Include="Resources\WordWrap.png" />
+    <Resource Include="Resources\tree_item.png" />
+    <Resource Include="Resources\tree_group.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Data\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

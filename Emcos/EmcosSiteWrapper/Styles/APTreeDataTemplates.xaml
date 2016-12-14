@@ -1,0 +1,64 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:model="clr-namespace:TMP.Work.Emcos.Model"
+    xmlns:vtree="clr-namespace:TMP.Work.Emcos.Controls.VTreeView">
+
+    <HierarchicalDataTemplate
+        DataType="{x:Type model:GRTreeNode}"
+        ItemsSource="{Binding Children}">
+        <DockPanel LastChildFill="True">
+            <Image
+                x:Name="icon"
+                Source="pack://application:,,,/EmcosSiteWrapper;component/Resources/group.png" />
+            <StackPanel Orientation="Vertical">
+                <TextBlock
+                    x:Name="name"
+                    Margin="0"
+                    Padding="0"
+                    VerticalAlignment="Center"
+                    FontStyle="Italic"
+                    Text="{Binding NAME}"
+                    TextAlignment="Left" />
+            </StackPanel>
+        </DockPanel>
+        <HierarchicalDataTemplate.Triggers>
+            <DataTrigger
+                Binding="{Binding TYPE}"
+                Value="POINT">
+                <Setter
+                    Property="Source"
+                    TargetName="icon"
+                    Value="pack://application:,,,/EmcosSiteWrapper;component/Resources/element.png" />
+                <Setter
+                    Property="Text"
+                    TargetName="name"
+                    Value="{Binding CODE}" />
+            </DataTrigger>
+        </HierarchicalDataTemplate.Triggers>
+    </HierarchicalDataTemplate>
+
+    <HierarchicalDataTemplate
+        DataType="{x:Type vtree:TreeNode}"
+        ItemsSource="{Binding Children}">
+        <DockPanel LastChildFill="True">
+            <Image
+                x:Name="icon"
+                Source="pack://application:,,,/EmcosSiteWrapper;component/Resources/element.png" />
+            <TextBlock
+                Margin="0"
+                Padding="0"
+                VerticalAlignment="Center"
+                Text="{Binding Name}"
+                TextAlignment="Left" />
+        </DockPanel>
+        <!--
+            HierarchicalDataTemplate.Triggers>
+            <DataTrigger Binding="{Binding TYPE}" Value="POINT">
+            <Setter TargetName="icon" Property="Source" Value="pack://application:,,,/EmcosSiteWrapper;component/Resources/element.png" />
+            </DataTrigger>
+            </
+        -->
+    </HierarchicalDataTemplate>
+
+</ResourceDictionary>

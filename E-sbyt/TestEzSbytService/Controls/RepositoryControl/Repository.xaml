@@ -1,0 +1,114 @@
+﻿<UserControl
+    x:Class="TMP.Work.AmperM.TestApp.Controls.RepositoryControl.Repository"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="clr-namespace:TMP.Wpf.CommonControls;assembly=TMP.Wpf.CommonControls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:i="clr-namespace:Interactivity;assembly=Interactivity"
+    xmlns:local="clr-namespace:TMP.Work.AmperM.TestApp.Controls.RepositoryControl"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:iconpack="http://metro.mahapps.com/winfx/xaml/iconpacks"
+    xmlns:dd="urn:gong-wpf-dragdrop"
+    mc:Ignorable="d">
+    <UserControl.Resources>
+        <ResourceDictionary Source="DataTemplates.xaml" />
+    </UserControl.Resources>
+    <Border
+        Background="{DynamicResource ControlBackgroundBrush}"
+        BorderBrush="{DynamicResource ControlBorderBrush}"
+        BorderThickness="1"
+        CornerRadius="2">
+        <Grid KeyboardNavigation.DirectionalNavigation="Contained"
+                        KeyboardNavigation.TabNavigation="Local">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <WrapPanel Margin="0,0,0,2" Background="{DynamicResource PanelBackgroundHorizontal}">
+                <Button Command="{Binding AddCommand}" ToolTip="Добавить группу или запись" KeyboardNavigation.TabIndex="1" Padding="0">
+                    <iconpack:PackIconModern Kind="Add" Width="16" Height="16" VerticalAlignment="Center" />
+                </Button>
+                <Button Command="{Binding RemoveCommand}" ToolTip="Удалить" KeyboardNavigation.TabIndex="2">
+                    <iconpack:PackIconModern Kind="Delete" Width="16" Height="16" VerticalAlignment="Center" />
+                </Button>
+                <Button Command="{Binding EditCommand}" ToolTip="Редактировать" KeyboardNavigation.TabIndex="3">
+                    <iconpack:PackIconModern Kind="EditBox" Width="16" Height="16" VerticalAlignment="Center" />
+                </Button>
+                <Button Command="{Binding LoadCommand}" ToolTip="Загрузить выбранный запрос" KeyboardNavigation.TabIndex="4" HorizontalAlignment="Right">
+                    <iconpack:PackIconModern Kind="ArrowRight" Width="16" Height="16" VerticalAlignment="Center" />
+                </Button>
+            </WrapPanel>
+            <Separator
+                Height="3"
+                Margin="0,0,0,3"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Bottom" />
+            <TreeView
+                x:Name="tree"
+                Grid.Row="1"
+                Margin="2,2,2,5" 
+                BorderThickness="0" AllowDrop="True"
+                ItemTemplate="{StaticResource RepositoryItemTemplateInTree}"
+                ItemsSource="{Binding RepositoryItems}"
+                KeyboardNavigation.TabIndex="5"
+                dd:DragDrop.IsDragSource="True"
+                dd:DragDrop.IsDropTarget="True"
+                dd:DragDrop.UseDefaultDragAdorner="True"
+                dd:DragDrop.UseDefaultEffectDataTemplate="False">
+                <i:Interaction.Behaviors>
+                    <local:BindableSelectedItemBehavior SelectedItem="{Binding SelectedItem, Mode=TwoWay}" />
+                </i:Interaction.Behaviors>
+                <TreeView.InputBindings>
+                    <MouseBinding Command="{Binding EditCommand}" Gesture="LeftDoubleClick" />
+                    <KeyBinding Key="Return" Command="{Binding EditCommand}" />
+                    <KeyBinding Key="Delete" Command="{Binding RemoveCommand}" />
+                    <KeyBinding Key="Insert" Command="{Binding AddCommand}" />
+                    <KeyBinding Key="OemPlus" Command="{Binding AddCommand}" />
+                </TreeView.InputBindings>
+                <TreeView.Style>
+                    <Style BasedOn="{StaticResource treeViewStyle}" TargetType="{x:Type TreeView}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsEmptyList}" Value="true">
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate>
+                                            <controls:NoData Message="Список пуст" />
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TreeView.Style>
+            </TreeView>
+            <Separator
+                Grid.Row="1"
+                Height="3"
+                Margin="01"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Bottom" />
+            <DockPanel
+                Grid.Row="2"
+                Margin="2,0"
+                LastChildFill="False">
+                <Button
+                    Command="{Binding ImportCommand}"
+                    DockPanel.Dock="Right" KeyboardNavigation.TabIndex="6">
+                    <StackPanel Orientation="Horizontal">
+                    <iconpack:PackIconModern Kind="DiskUpload" VerticalAlignment="Center"/>
+                    <Label Content="Импорт ..." Padding="5 0"/>
+                </StackPanel>
+                </Button>
+                <Button
+                    Command="{Binding ExportCommand}"
+                    DockPanel.Dock="Right" KeyboardNavigation.TabIndex="7">
+                    <StackPanel Orientation="Horizontal">
+                    <iconpack:PackIconModern Kind="DiskDownload" VerticalAlignment="Center"/>
+                    <Label Content="Экспорт ..." Padding="5 0"/>
+                </StackPanel>
+                </Button>
+            </DockPanel>
+        </Grid>
+    </Border>
+</UserControl>

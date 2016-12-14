@@ -1,0 +1,45 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="TMP.Work.Emcos.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="ServerAddress" Type="System.String" Scope="User">
+      <Value Profile="(Default)">10.96.18.16</Value>
+    </Setting>
+    <Setting Name="UserName" Type="System.String" Scope="User">
+      <Value Profile="(Default)">sbyt</Value>
+    </Setting>
+    <Setting Name="Password" Type="System.String" Scope="User">
+      <Value Profile="(Default)">sbyt</Value>
+    </Setting>
+    <Setting Name="NetTimeOutInSeconds" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">1800</Value>
+    </Setting>
+    <Setting Name="BalansPointsFileName" Type="System.String" Scope="User">
+      <Value Profile="(Default)">DataModel.xml</Value>
+    </Setting>
+    <Setting Name="SessionFileName" Type="System.String" Scope="User">
+      <Value Profile="(Default)">session</Value>
+    </Setting>
+    <Setting Name="MainWindowTop" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="MainWindowLeft" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">50</Value>
+    </Setting>
+    <Setting Name="MainWindowHeight" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">600</Value>
+    </Setting>
+    <Setting Name="MainWindowWidth" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">1400</Value>
+    </Setting>
+    <Setting Name="MainWindowState" Type="System.Windows.WindowState" Scope="User">
+      <Value Profile="(Default)">Normal</Value>
+    </Setting>
+    <Setting Name="ReportBalansPSFolder" Type="System.String" Scope="User">
+      <Value Profile="(Default)">d:\Документы ОС\«БАЛАНСЫ, ПЕРЕТОКИ, ПОТЕРИ»\ОДС\Расчёт баланса 6-10кВ по ПС 35-110кВ</Value>
+    </Setting>
+    <Setting Name="ReportBalansPSFileNameTemplate" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Расчёт баланса 6-10 за {0:MM - yyyy}</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

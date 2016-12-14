@@ -1,0 +1,36 @@
+﻿<UserControl
+    x:Class="TMP.Work.AmperM.TestApp.Controls.RepositoryControl.RepositoryItemView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:common="clr-namespace:TMP.Shared;assembly=Shared"
+    xmlns:controls="clr-namespace:TMP.Wpf.CommonControls;assembly=TMP.Wpf.CommonControls"
+    xmlns:controls_behaviors="clr-namespace:TMP.Wpf.CommonControls.Behaviors;assembly=TMP.Wpf.CommonControls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:ezsbyt="clr-namespace:TMP.Work.AmperM.TestApp.EzSbyt"
+    xmlns:i="clr-namespace:Interactivity;assembly=Interactivity"
+    xmlns:ics="http://icsharpcode.net/sharpdevelop/avalonedit"
+    xmlns:local="clr-namespace:TMP.Work.AmperM.TestApp.Controls.RepositoryControl"
+    xmlns:local_controls="clr-namespace:TMP.Work.AmperM.TestApp.Controls"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="RepositoryStyles.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/Test;component/View/FunctionsDataTemplates.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <DockPanel>
+        <!--  0  -->
+        <local_controls:LayoutGroup DockPanel.Dock="Top" Margin="2">
+            <local_controls:LabelledTextBox Label="Название" Text="{Binding Title, Mode=TwoWay}"/>
+            <local_controls:LabelledTextBox Label="Описание" Text="{Binding Description, Mode=TwoWay}"
+                                            AcceptsReturn="True" AcceptsTab="True" MultiLine="True"/>
+        </local_controls:LayoutGroup>
+        <!--  1  -->
+        <HeaderedContentControl Header="Запрос">
+            <ContentPresenter Content="{Binding SqlViewModel, Mode=TwoWay}"/>
+        </HeaderedContentControl>
+    </DockPanel>
+</UserControl>

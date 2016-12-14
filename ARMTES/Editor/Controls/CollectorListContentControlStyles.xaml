@@ -1,0 +1,196 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="pack://application:,,,/Editor;component/Controls/CollectorListTextBlockStyles.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+
+    <SolidColorBrush x:Key="CollectorListGridLinesBrush" Color="{DynamicResource {x:Static SystemColors.ControlLightColorKey}}" />
+    <!--  SolidColorBrush x:Key="CollectorListBackground" Color="{DynamicResource {x:Static SystemColors.WindowColorKey}}" /  -->
+
+    <SolidColorBrush x:Key="CollectorListBackground" Color="Transparent" />
+
+    <LinearGradientBrush x:Key="CollectorListHeaderBackground" StartPoint="0,0" EndPoint="0,1">
+        <LinearGradientBrush.GradientStops>
+            <GradientStop Offset="0.15" Color="#F6F6F6" />
+            <GradientStop Offset="0.45" Color="#EAE8E8" />
+            <GradientStop Offset="0.7" Color="#DCD9D9" />
+        </LinearGradientBrush.GradientStops>
+    </LinearGradientBrush>
+
+    <sys:Double x:Key="imageWidthAndHeight">16</sys:Double>
+
+
+    <Style x:Key="ContentCtrl" TargetType="{x:Type ContentControl}">
+        <Setter Property="BorderBrush" Value="{StaticResource CollectorListGridLinesBrush}" />
+        <Setter Property="Background" Value="{StaticResource CollectorListHeaderBackground}" />
+        <Setter Property="Margin" Value="0 0 1 0" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="VerticalAlignment" Value="Stretch" />
+        <Setter Property="BorderThickness" Value="0 0 0 1" />
+        <Setter Property="UseLayoutRounding" Value="True" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ContentControl}">
+                    <Border HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
+                            VerticalAlignment="{TemplateBinding VerticalAlignment}"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            Padding="{TemplateBinding Padding}"
+                            UseLayoutRounding="{TemplateBinding UseLayoutRounding}">
+                        <ContentPresenter>
+                            <ContentPresenter.ContentTemplate>
+                                <DataTemplate>
+                                    <TextBlock Style="{StaticResource CollectorListHeaderTextBlockStyle}" Text="{Binding }" />
+                                </DataTemplate>
+                            </ContentPresenter.ContentTemplate>
+                        </ContentPresenter>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="ContentCtrlForNumberOfOrder" TargetType="{x:Type ContentControl}">
+        <Setter Property="BorderBrush" Value="{StaticResource CollectorListGridLinesBrush}" />
+        <Setter Property="Background" Value="{StaticResource CollectorListHeaderBackground}" />
+        <Setter Property="Margin" Value="0 0 1 0" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="VerticalAlignment" Value="Stretch" />
+        <Setter Property="BorderThickness" Value="0 0 0 1" />
+        <Setter Property="UseLayoutRounding" Value="True" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ContentControl}">
+                    <Border HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
+                            VerticalAlignment="{TemplateBinding VerticalAlignment}"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            Padding="{TemplateBinding Padding}"
+                            UseLayoutRounding="{TemplateBinding UseLayoutRounding}">
+                        <ContentPresenter>
+                            <ContentPresenter.ContentTemplate>
+                                <DataTemplate>
+                                    <TextBlock Style="{StaticResource CollectorListHeaderTextBlockStyle}">
+                                        №
+                                        <LineBreak />
+                                        п/п
+                                    </TextBlock>
+                                </DataTemplate>
+                            </ContentPresenter.ContentTemplate>
+                        </ContentPresenter>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="ContentCtrlText"
+           BasedOn="{StaticResource ContentCtrl}"
+           TargetType="{x:Type ContentControl}">
+        <Setter Property="BorderBrush" Value="{StaticResource CollectorListGridLinesBrush}" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="0 0 1 0" />
+        <Setter Property="Margin" Value="0 0 0 0" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="VerticalAlignment" Value="Stretch" />
+        <Setter Property="UseLayoutRounding" Value="True" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ContentControl}">
+                    <Border HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
+                            VerticalAlignment="{TemplateBinding VerticalAlignment}"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            Padding="{TemplateBinding Padding}"
+                            UseLayoutRounding="{TemplateBinding UseLayoutRounding}">
+                        <ContentPresenter Margin="1">
+                            <ContentPresenter.ContentTemplate>
+                                <DataTemplate>
+                                    <TextBlock Style="{StaticResource TextBlockTextData}" Text="{Binding }" />
+                                </DataTemplate>
+                            </ContentPresenter.ContentTemplate>
+                        </ContentPresenter>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="ContentCtrlNumbers"
+           BasedOn="{StaticResource ContentCtrl}"
+           TargetType="{x:Type ContentControl}">
+        <Setter Property="BorderBrush" Value="{StaticResource CollectorListGridLinesBrush}" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="0 0 1 0" />
+        <Setter Property="Margin" Value="0" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="VerticalAlignment" Value="Stretch" />
+        <Setter Property="UseLayoutRounding" Value="True" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ContentControl}">
+                    <Border HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
+                            VerticalAlignment="{TemplateBinding VerticalAlignment}"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            Padding="{TemplateBinding Padding}"
+                            UseLayoutRounding="{TemplateBinding UseLayoutRounding}">
+                        <ContentPresenter Margin="1">
+                            <ContentPresenter.ContentTemplate>
+                                <DataTemplate>
+                                    <TextBlock Style="{StaticResource TextBlockNumbersData}" Text="{Binding }" />
+                                </DataTemplate>
+                            </ContentPresenter.ContentTemplate>
+                        </ContentPresenter>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="ContentCtrlValues"
+           BasedOn="{StaticResource ContentCtrl}"
+           TargetType="{x:Type ContentControl}">
+        <Setter Property="BorderBrush" Value="{StaticResource CollectorListGridLinesBrush}" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="0 0 1 0" />
+        <Setter Property="Margin" Value="0" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="VerticalAlignment" Value="Stretch" />
+        <Setter Property="UseLayoutRounding" Value="True" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ContentControl}">
+                    <Border HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
+                            VerticalAlignment="{TemplateBinding VerticalAlignment}"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            Padding="{TemplateBinding Padding}"
+                            UseLayoutRounding="{TemplateBinding UseLayoutRounding}">
+                        <ContentPresenter Margin="1">
+                            <ContentPresenter.ContentTemplate>
+                                <DataTemplate>
+                                    <TextBlock Style="{StaticResource TextBlockValuesData}" Text="{Binding }" />
+                                </DataTemplate>
+                            </ContentPresenter.ContentTemplate>
+                        </ContentPresenter>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+</ResourceDictionary>

@@ -1,0 +1,74 @@
+﻿<Window x:Class="TMP.Work.AmperM.TestApp.Controls.RepositoryControl.AddEditWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:iconpack="http://metro.mahapps.com/winfx/xaml/iconpacks"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:model="clr-namespace:TMP.Work.AmperM.TestApp.Model"
+        xmlns:repository="clr-namespace:TMP.Work.AmperM.TestApp.Controls.RepositoryControl" xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        x:Name="addEditWindow"
+        Title="{Binding WindowTitle}"
+        MinWidth="350"
+        ResizeMode="CanResize" ShowInTaskbar="False"
+        SizeToContent="WidthAndHeight" TextOptions.TextFormattingMode="Ideal"
+        WindowStartupLocation="CenterOwner" WindowStyle="ToolWindow"
+        mc:Ignorable="d">
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+
+        <DataTemplate DataType="{x:Type model:RepositoryItem}">
+            <repository:RepositoryItemView />
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type model:RepositoryGroup}">
+            <repository:RepositoryGroupView />
+        </DataTemplate>
+    </Window.Resources>
+    <DockPanel x:Name="LayoutRoot"
+               Width="400" Height="100">
+        <StackPanel HorizontalAlignment="Center"
+                    DockPanel.Dock="Top" Orientation="Horizontal"
+                    Visibility="{Binding Path=AddMode, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <RadioButton Style="{StaticResource {x:Type ToggleButton}}"
+                         Command="{Binding ChangeItemTypeCommand}"
+                         CommandParameter="item" GroupName="first"
+                         IsChecked="True">
+                <StackPanel Orientation="Horizontal">
+                    <iconpack:PackIconModern Kind="Page" />
+                    <Label Padding="5,0" Content="Запись" />
+                </StackPanel>
+            </RadioButton>
+            <RadioButton Style="{StaticResource {x:Type ToggleButton}}"
+                         Command="{Binding ChangeItemTypeCommand}"
+                         CommandParameter="group" GroupName="first">
+                <StackPanel Orientation="Horizontal">
+                    <iconpack:PackIconModern Kind="PageCopy" />
+                    <Label Padding="5,0" Content="Группа" />
+                </StackPanel>
+            </RadioButton>
+        </StackPanel>
+        <DockPanel Background="{DynamicResource PanelBackgroundHorizontal}"
+                   DockPanel.Dock="Bottom" LastChildFill="False">
+            <Button Command="{Binding CancelCommand}"
+                    DockPanel.Dock="Right" IsCancel="True">
+                <StackPanel Orientation="Horizontal">
+                    <iconpack:PackIconModern Width="16" Height="16"
+                                             VerticalAlignment="Center"
+                                             Kind="Cancel" />
+                    <Label Padding="5,0" Content="{Binding CancelCommand.Header}" />
+                </StackPanel>
+            </Button>
+            <Button Command="{Binding OKCommand}"
+                    DockPanel.Dock="Right" IsDefault="True">
+                <StackPanel Orientation="Horizontal">
+                    <iconpack:PackIconModern Width="16" Height="16"
+                                             VerticalAlignment="Center"
+                                             Kind="Check" />
+                    <Label Padding="5,0" Content="{Binding OKCommand.Header}" />
+                </StackPanel>
+            </Button>
+        </DockPanel>
+        <Separator Grid.Row="1"
+                   Height="1"
+                   HorizontalAlignment="Stretch" VerticalAlignment="Bottom"
+                   DockPanel.Dock="Bottom" />
+        <ContentControl Margin="5,0,5,0" Content="{Binding Item, Mode=TwoWay}" />
+    </DockPanel>
+</Window>

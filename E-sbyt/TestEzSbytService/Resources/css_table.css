@@ -1,0 +1,161 @@
+.css-table 
+{
+    max-width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+    background-color: transparent;
+   
+   
+    width: 100%;
+    margin-bottom: 18px;
+
+    th,
+    td 
+    {
+        padding: 8px;
+        font-size: 14px;
+        line-height: 18px;
+                     
+        text-align: left;
+        vertical-align: top;
+    }
+    th 
+    {
+        font-weight: bold;
+    }
+    // Bottom align for column headings
+    thead th 
+    {
+        vertical-align: bottom;
+    }
+    // Remove top border from thead by default
+    thead:first-child tr:first-child td 
+    {
+        border-top: 0;
+    }
+
+    border: 1px solid #ff000000;
+    border-collapse: separate;   // Done so we can round those corners!
+    *border-collapse: collapsed; // IE7 can't round corners anyway
+
+    // Prevent a double border
+    tbody:first-child tr:first-child td 
+    {
+        border-top: 0;
+    }
+
+    thead th
+    {
+        .m-inset-shadow(rgba(255, 255, 255, 0.3), 0, 1px, 0);
+    }
+
+    .m-box-shadow(@shadow, 2px, 1px, 0px);
+
+    // Default zebra-stripe style
+    tbody 
+    {
+        tr:nth-child(even) td
+        {
+            background-color: #eeeeee;
+        }
+    }
+
+    color: #000000;
+
+    // Hover
+    tbody tr:hover td,
+    tbody tr:hover th 
+    {
+        background-color: #eeeeee - #202020;
+    }
+
+    thead th
+    {
+        .css-table-gradient(#444444, #222222);
+
+        border-top: 1px solid #222222;
+
+        color: #000000;
+        .m-text-shadow(#000000, 1px, 0px, 0px);
+    }
+
+    border: 1px solid #222222;
+    border-top: none;
+
+    border-left: 0;
+
+    th,
+    td 
+    {
+        border-top:  1px solid #222222;
+        border-left: 1px solid #222222;
+    }
+
+    tbody + tbody 
+    {
+        border-top: 2px solid #222222;
+    }
+
+    th
+    {
+        border-top:  1px solid #222222;
+    }
+
+}
+
+
+// Compact view
+.css-table-compact
+{
+    th,
+    td 
+    {
+        padding: 2px 4px !important;
+    }
+}
+
+.css-table-small
+{
+    margin-bottom: 15px;   
+    th,
+    td 
+    {
+        padding: 6px;
+        font-size: 11px;
+        line-height: 15px;
+    }
+}
+
+.css-table-middle
+{
+    margin-bottom: 16px;
+    th,
+    td 
+    {
+        padding: 7px;
+        font-size: 12px;
+        line-height: 16px;
+    }
+}
+
+.css-table-big
+{
+    margin-bottom: 21px;
+    th,
+    td 
+    {
+        padding: 10px;
+        font-size: 18px;
+        line-height: 21px;
+    }
+}
+
+.css-table-no-shadow
+{
+    box-shadow: none !important;
+    -moz-box-shadow: none !important;
+    -webkit-box-shadow: none !important;
+    -o-box-shadow:  none !important;
+    -ms-box-shadow: none !important;
+    -khtml-box-shadow: none !important;
+}

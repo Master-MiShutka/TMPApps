@@ -1,0 +1,147 @@
+﻿<UserControl x:Class="TMP.Work.Emcos.Controls.DateRange"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:icons="clr-namespace:TMP.Wpf.Common.Icons;assembly=TMP.Wpf.Common"
+             xmlns:local="clr-namespace:TMP.Work.Emcos.Controls"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             MinHeight="{StaticResource iconSize}"
+             d:DesignHeight="35"
+             d:DesignWidth="300"
+             mc:Ignorable="d">
+    <UserControl.Resources>
+        <Style TargetType="{x:Type TextBlock}">
+            <Setter Property="Padding" Value="5 2" />
+            <Setter Property="TextAlignment" Value="Left" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
+    </UserControl.Resources>
+    <DockPanel LastChildFill="True">
+        <DockPanel.ContextMenu>
+            <ContextMenu>
+                <MenuItem Click="ContextMenuItem_Click"
+                          Header="Сегодня"
+                          Tag="today" />
+                <MenuItem Click="ContextMenuItem_Click"
+                          Header="Вчера"
+                          Tag="yesterday" />
+                <MenuItem Click="ContextMenuItem_Click"
+                          Header="Текущая неделя"
+                          Tag="this week" />
+                <MenuItem Click="ContextMenuItem_Click"
+                          Header="Предыдущая неделя"
+                          Tag="prev week" />
+                <MenuItem Click="ContextMenuItem_Click"
+                          Header="Предыдущая и текущая неделя"
+                          Tag="prev and this week" />
+                <MenuItem Click="ContextMenuItem_Click"
+                          Header="Текущий месяц"
+                          Tag="this month" />
+                <MenuItem Click="ContextMenuItem_Click"
+                          Header="Предыдущий месяц"
+                          Tag="prev month" />
+                <MenuItem Click="ContextMenuItem_Click"
+                          Header="Предыдущий и текущий месяц"
+                          Tag="prev and this month" />
+            </ContextMenu>
+        </DockPanel.ContextMenu>
+        <ToggleButton Name="button"
+                      HorizontalAlignment="Right"
+                      DockPanel.Dock="Right">
+            <ToggleButton.Content>
+                <StackPanel Orientation="Horizontal">
+                    <icons:PackIconModern Width="{StaticResource iconSize}"
+                                          Height="{StaticResource iconSize}"
+                                          HorizontalAlignment="Center"
+                                          VerticalAlignment="Center"
+                                          Kind="CalendarRange" />
+                    <Label Margin="5 0 0 0"
+                           VerticalContentAlignment="Center"
+                           Content="..."
+                           Padding="0" />
+                </StackPanel>
+            </ToggleButton.Content>
+        </ToggleButton>
+        <Popup AllowsTransparency="True"
+               IsOpen="{Binding IsChecked,
+                                ElementName=button}"
+               PlacementTarget="{Binding ElementName=daterange}"
+               StaysOpen="False">
+            <Border Style="{DynamicResource MainBorderStyle}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Label Grid.Row="0"
+                           HorizontalAlignment="Left"
+                           VerticalAlignment="Center"
+                           Content="Начало периода"
+                           Padding="0" />
+
+                    <local:CustomDatePicker Grid.Row="0"
+                                            Grid.Column="1"
+                                            Margin="0 2"
+                                            SelectedDate="{Binding Path=StartDate,
+                                                                   Mode=TwoWay}" />
+                    <Label Grid.Row="1"
+                           HorizontalAlignment="Left"
+                           VerticalAlignment="Center"
+                           Content="Конец периода"
+                           Padding="0" />
+                    <local:CustomDatePicker Grid.Row="1"
+                                            Grid.Column="1"
+                                            Margin="0 2"
+                                            SelectedDate="{Binding Path=EndDate}" />
+                    <Button Grid.Row="2"
+                            Grid.ColumnSpan="2"
+                            Margin="2"
+                            HorizontalAlignment="Right"
+                            Padding="10 0">
+                        <Button.Content>
+                            <StackPanel Orientation="Horizontal">
+                                <Rectangle Width="16"
+                                           Height="16"
+                                           Margin="0">
+                                    <Rectangle.Fill>
+                                        <VisualBrush Visual="{StaticResource appbar_check}" />
+                                    </Rectangle.Fill>
+                                </Rectangle>
+                                <Label Content="Установить" />
+                            </StackPanel>
+                        </Button.Content>
+                        <Button.Triggers>
+                            <EventTrigger RoutedEvent="Button.Click">
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <BooleanAnimationUsingKeyFrames Storyboard.TargetName="button" Storyboard.TargetProperty="IsChecked">
+                                            <DiscreteBooleanKeyFrame KeyTime="0:0:0" Value="False" />
+                                        </BooleanAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger>
+                        </Button.Triggers>
+                    </Button>
+                </Grid>
+            </Border>
+        </Popup>
+        <StackPanel Margin="2 0"
+                    VerticalAlignment="Center"
+                    Orientation="Vertical">
+            <TextBlock FontWeight="Medium"
+                       Padding="0"
+                       Text="Период"
+                       TextAlignment="Center" />
+            <TextBlock Name="daterange"
+                       FontStyle="Italic"
+                       Padding="0"
+                       Text="{Binding Path=SelectedDateRange}"
+                       TextAlignment="Center" />
+        </StackPanel>
+    </DockPanel>
+</UserControl>

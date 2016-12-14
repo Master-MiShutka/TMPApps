@@ -1,0 +1,29 @@
+﻿<tmpapp:TMPApp x:Class="TMP.ARMTES.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:tmpapp="clr-namespace:TMPApplication;assembly=TMPApplication"
+             Exit="App_OnExit"
+             Startup="Application_Startup"
+               StartupUri="MainWindow.xaml">
+    <tmpapp:TMPApp.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/TMP.Wpf.CommonControls;component/Themes/Generic.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/TMP.Wpf.CommonControls;component/Styles/Accents/Blue.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/TMP.Wpf.CommonControls;component/Styles/Accents/BaseLight.xaml" />
+
+                <ResourceDictionary Source="/ARMTES;component/Themes/generic.xaml" />
+
+                <ResourceDictionary Source="/ARMTES;component/Themes/WindowsResources.xaml" />
+                <ResourceDictionary Source="/ARMTES;component/Resources/Icons.xaml" />
+
+                <ResourceDictionary Source="/ARMTES;component/Themes/TextBoxStyles.xaml" />
+                <ResourceDictionary Source="/ARMTES;component/Themes/ContentControlStyles.xaml" />
+                <ResourceDictionary Source="/ARMTES;component/Themes/CollectorList.xaml" />
+
+            </ResourceDictionary.MergedDictionaries>
+
+        </ResourceDictionary>
+
+    </tmpapp:TMPApp.Resources>
+</tmpapp:TMPApp>

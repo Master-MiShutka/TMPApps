@@ -1,0 +1,68 @@
+﻿<Dialogs:BaseTMPDialog x:Class="TMP.Wpf.CommonControls.Dialogs.InputDialog"
+                       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                       xmlns:Dialogs="clr-namespace:TMP.Wpf.CommonControls.Dialogs"
+                       xmlns:controls="clr-namespace:TMP.Wpf.CommonControls"
+                       Loaded="Dialog_Loaded">
+
+    <Grid Margin="5 10 5 0">
+        <Grid.Resources>
+            <ResourceDictionary>
+                <ResourceDictionary.MergedDictionaries>
+                    <ResourceDictionary Source="pack://application:,,,/TMP.Wpf.CommonControls;component/Themes/Dialogs/BaseTMPDialog.xaml" />
+                </ResourceDictionary.MergedDictionaries>
+            </ResourceDictionary>
+        </Grid.Resources>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" MinHeight="20" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <TextBlock Grid.Row="0"
+                   Margin="0 5 0 0"
+                   FontSize="{StaticResource DialogMessageFontSize}"
+                   Foreground="{Binding Foreground,
+                                        RelativeSource={RelativeSource AncestorType=Dialogs:InputDialog,
+                                                                       Mode=FindAncestor},
+                                        UpdateSourceTrigger=PropertyChanged}"
+                   Text="{Binding Message,
+                                  RelativeSource={RelativeSource AncestorType=Dialogs:InputDialog,
+                                                                 Mode=FindAncestor},
+                                  UpdateSourceTrigger=PropertyChanged}"
+                   TextWrapping="Wrap" />
+        <TextBox x:Name="PART_TextBox"
+                 Grid.Row="1"
+                 Margin="0 5 0 0"
+                 FontSize="{StaticResource DialogMessageFontSize}"
+                 Foreground="{Binding Foreground,
+                                      RelativeSource={RelativeSource AncestorType=Dialogs:InputDialog,
+                                                                     Mode=FindAncestor},
+                                      UpdateSourceTrigger=PropertyChanged}"
+                 Text="{Binding Input,
+                                RelativeSource={RelativeSource AncestorType=Dialogs:InputDialog,
+                                                               Mode=FindAncestor},
+                                UpdateSourceTrigger=PropertyChanged}"
+                 TextWrapping="Wrap"
+                 controls:ControlsHelper.FocusBorderBrush="{DynamicResource AccentColorBrush}" />
+
+        <StackPanel Grid.Row="2"
+                    Margin="0 10"
+                    HorizontalAlignment="Right"
+                    Orientation="Horizontal">
+            <Button x:Name="PART_AffirmativeButton"
+                    Margin="0 0 0 0"
+                    Content="{Binding AffirmativeButtonText,
+                                      RelativeSource={RelativeSource AncestorType=Dialogs:InputDialog,
+                                                                     Mode=FindAncestor},
+                                      UpdateSourceTrigger=PropertyChanged}"
+                    Style="{DynamicResource AccentedDialogButton}" />
+            <Button x:Name="PART_NegativeButton"
+                    Margin="10 0 0 0"
+                    Content="{Binding NegativeButtonText,
+                                      RelativeSource={RelativeSource AncestorType=Dialogs:InputDialog,
+                                                                     Mode=FindAncestor},
+                                      UpdateSourceTrigger=PropertyChanged}"
+                    Style="{DynamicResource DialogButton}" />
+        </StackPanel>
+    </Grid>
+</Dialogs:BaseTMPDialog>

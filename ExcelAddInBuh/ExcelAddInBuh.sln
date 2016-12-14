@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExcelAddInBuh-Office2010", "ExcelAddInBuh\ExcelAddInBuh-Office2010.csproj", "{43458463-75EB-4222-BBA9-AB62645E2887}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExcelAddInBuh-Office2013", "ExcelAddInBuh-Office2013\ExcelAddInBuh-Office2013.csproj", "{E1EF6A2F-4BED-4CEE-A32C-D677463ED3FA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Resources", "Resources", "{5773CD75-17AC-401B-9260-0872EDB6DE13}"
+	ProjectSection(SolutionItems) = preProject
+		Resources\div.png = Resources\div.png
+		Resources\mulp.png = Resources\mulp.png
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{43458463-75EB-4222-BBA9-AB62645E2887}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{43458463-75EB-4222-BBA9-AB62645E2887}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{43458463-75EB-4222-BBA9-AB62645E2887}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{43458463-75EB-4222-BBA9-AB62645E2887}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E1EF6A2F-4BED-4CEE-A32C-D677463ED3FA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E1EF6A2F-4BED-4CEE-A32C-D677463ED3FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E1EF6A2F-4BED-4CEE-A32C-D677463ED3FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E1EF6A2F-4BED-4CEE-A32C-D677463ED3FA}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

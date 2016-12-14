@@ -1,0 +1,45 @@
+﻿<UserControl x:Class="TMP.Work.Emcos.Controls.APTree"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:TMP.Work.Emcos.Controls"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vtreeview="clr-namespace:TMP.Work.Emcos.Controls.VTreeView"
+             Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"
+             d:DesignHeight="300"
+             d:DesignWidth="300"
+             mc:Ignorable="d">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <!--  ResourceDictionary Source="pack://application:,,,/EmcosSiteWrapper;component/Styles/APTreeStyles.xaml" /  -->
+                <ResourceDictionary Source="pack://application:,,,/EmcosSiteWrapper;component/Styles/APTreeDataTemplates.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid>
+        <DockPanel LastChildFill="True">
+            <DockPanel Margin="2"
+                       DockPanel.Dock="Top"
+                       LastChildFill="True">
+                <Label Content="Поиск" />
+                <TextBox VerticalContentAlignment="Center"
+                         IsEnabled="False"
+                         Text="sadsad" />
+            </DockPanel>
+            <StackPanel Margin="2"
+                        DockPanel.Dock="Bottom"
+                        Orientation="Vertical">
+                <Label Content="Параметр" Padding="2 0 2 2" />
+                <vtreeview:VTreeView x:Name="paramstree" Margin="2 0 2 2" />
+                <Label x:Name="selparams" />
+            </StackPanel>
+            <vtreeview:VTreeView x:Name="aptree"
+                                 Margin="2 0 2 2"
+                                 SelectionChanged="aptree_SelectionChanged" />
+        </DockPanel>
+        <local:Wait HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
+                    Message="Загрузка ..." />
+    </Grid>
+</UserControl>

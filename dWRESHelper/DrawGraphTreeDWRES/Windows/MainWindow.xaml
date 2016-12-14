@@ -1,0 +1,258 @@
+﻿<Window x:Class="TMP.DWRES.GUI.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="clr-namespace:TMP.WPFControls.Controls;assembly=TMP.WPF.Controls"
+        xmlns:converters="clr-namespace:TMP.DWRES.Helper.Converters;assembly=TMP.Helper"
+        xmlns:graph="clr-namespace:TMP.DWRES.Graph;assembly=TMP.DWRES.Graph"
+        xmlns:helper="clr-namespace:TMP.DWRES.Helper.Controls;assembly=TMP.Helper"
+        xmlns:local="clr-namespace:TMP.DWRES.GUI"
+        xmlns:local_converters="clr-namespace:TMP.DWRES.GUI.Converters"
+        xmlns:model="clr-namespace:TMP.DWRES.Objects;assembly=TMP.DWRES.Objects"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        xmlns:vm="clr-namespace:TMP.DWRES.ViewModel"
+        x:Name="main"
+        Width="1000"
+        MinWidth="800"
+        MinHeight="600"
+        Background="#6c7989"
+        Closed="Window_Closed"
+        DataContext="{x:Static vm:MainWindowViewModel.Instance}"
+        FontSize="14"
+        Icon="/DWRESGraphBuilder;component/Resources/MAINICON.ico"
+        SnapsToDevicePixels="True"
+        TextOptions.TextFormattingMode="Ideal"
+        TextOptions.TextHintingMode="Animated"
+        UseLayoutRounding="True"
+        WindowStartupLocation="CenterOwner">
+    <!--  Region | WINDOW RESOURCES |  -->
+    <Window.Resources>
+
+        <converters:SelectedIndexToVisibilityConverter x:Key="SelectedIndexToVisibilityConverter" />
+        <converters:ValueToVisibilityConverter x:Key="ValueToVisibilityConverter" />
+        <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+        <converters:InvertedBoolToVisibilityConverter x:Key="InvertedBoolToVisibilityConverter" />
+        <local_converters:StateTypeToBoolConverter x:Key="StateTypeToBoolConverter" />
+        <local_converters:StateTypeToVisibilitylConverter x:Key="StateTypeToVisibilitylConverter" />
+
+        <SolidColorBrush x:Key="ListBackgroud" Color="AliceBlue" />
+
+    </Window.Resources>
+    <Window.TaskbarItemInfo>
+        <TaskbarItemInfo ProgressState="None" />
+    </Window.TaskbarItemInfo>
+    <!--  EndRegion  -->
+    <Grid x:Name="rootGrid">
+        <Grid.LayoutTransform>
+            <ScaleTransform CenterX="0"
+                            CenterY="0"
+                            ScaleX="{Binding ElementName=uiScaleSlider,
+                                             Path=Value}"
+                            ScaleY="{Binding ElementName=uiScaleSlider,
+                                             Path=Value}" />
+        </Grid.LayoutTransform>
+        <Grid.Background>
+            <VisualBrush TileMode="Tile" Viewport="0,0,0.05,0.05">
+                <VisualBrush.Visual>
+                    <Image Source="/DWRESGraphBuilder;component/Resources/back_image.png" />
+                </VisualBrush.Visual>
+            </VisualBrush>
+        </Grid.Background>
+        <!--  Region | MAIN GRID DEFINITIONS  -->
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <!--  EndRegion  -->
+        <!--  EndRegion  -->
+        <!--  Region | Header |  -->
+        <Menu Grid.Row="0">
+            <Menu.Resources>
+                <Style TargetType="{x:Type MenuItem}">
+                    <Setter Property="FontSize" Value="{Binding FontSize, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:MainWindow}}}" />
+                </Style>
+            </Menu.Resources>
+            <MenuItem Header="База данных">
+                <MenuItem x:Name="miLoadUnload"
+                          Command="{Binding CommandLoadUnlodDB}"
+                          Style="{StaticResource MenuItemUnloadDb}"
+                          Visibility="{Binding RecentDBExists,
+                                               Converter={StaticResource BoolToVisibilityConverter}}" />
+                <Separator Visibility="{Binding RecentDBExists, Converter={StaticResource BoolToVisibilityConverter}}" />
+                <MenuItem x:Name="miServerConnect"
+                          Command="{Binding CommandConnectToServer}"
+                          Header="Подключиться к _серверу баз данных" />
+                <Separator />
+                <MenuItem Command="{Binding CommandLoadDBFromFile}" Header="Выбрать _базу данных из файла" />
+                <Separator Visibility="{Binding DBLoaded, Converter={StaticResource BoolToVisibilityConverter}}" />
+                <MenuItem IsEnabled="False">
+                    <MenuItem.Template>
+                        <ControlTemplate>
+                            <StackPanel Orientation="Horizontal" Visibility="{Binding DBLoaded, Converter={StaticResource BoolToVisibilityConverter}}">
+                                <Label Content="База данных:" Foreground="Gray" />
+                                <Label Content="{Binding Path=DBFileName}" FontStyle="Italic" />
+                                <Label Content="загружена." Foreground="Gray" />
+                            </StackPanel>
+                        </ControlTemplate>
+                    </MenuItem.Template>
+                </MenuItem>
+            </MenuItem>
+            <MenuItem Header="_Настройки">
+                <MenuItem Command="{Binding CommandIncreaseFontSize}"
+                          CommandParameter="{Binding ElementName=main}"
+                          Header="Увеличить размер шрифта" />
+                <MenuItem Command="{Binding CommandDecreaseFontSize}"
+                          CommandParameter="{Binding ElementName=main}"
+                          Header="Уменьшить размер шрифта" />
+            </MenuItem>
+            <MenuItem Header="_Схема" Visibility="{Binding State, Converter={StaticResource StateTypeToVisibilitylConverter}}">
+                <MenuItem Command="{Binding CommandCopyGraph}" Header="_Копировать" />
+                <MenuItem Command="{Binding CommandSaveGraph}" Header="Сохранить изображение как ..." />
+                <MenuItem Command="{Binding CommandPrintGraph}" Header="Печать ..." />
+            </MenuItem>
+            <MenuItem Command="{Binding CommandShowAbout,
+                                        Mode=OneWay}"
+                      CommandParameter="{Binding ElementName=main}"
+                      Header="О _программе" />
+        </Menu>
+        <StackPanel Grid.Row="0"
+                    Margin="0"
+                    HorizontalAlignment="Right"
+                    Orientation="Horizontal">
+            <Label Content="Масштаб" Padding="0" />
+            <Slider x:Name="uiScaleSlider"
+                    Width="150"
+                    Maximum="2.5"
+                    Minimum="0.5"
+                    ToolTip="Determines the UI scale factor."
+                    Value="1" />
+        </StackPanel>
+        <controls:AppHeaderControl Grid.Row="1"
+                                   AppDescription="{Binding Path=MainDescription}"
+                                   AppVersion="{Binding Path=AppVersion}" />
+        <Grid x:Name="headerGrid"
+              Grid.Row="2"
+              Background="{StaticResource PanelBackground}"
+              Visibility="{Binding DBLoaded,
+                                   Converter={StaticResource BoolToVisibilityConverter}}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.Resources>
+                <Style TargetType="ComboBox">
+                    <Setter Property="Margin" Value="2" />
+                    <Setter Property="ItemTemplate">
+                        <Setter.Value>
+                            <DataTemplate>
+                                <Border Margin="0,0,0,0"
+                                        BorderBrush="Aquamarine"
+                                        BorderThickness="0"
+                                        CornerRadius="2">
+                                    <TextBlock Text="{Binding Path=Name}" />
+                                </Border>
+                            </DataTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+                <Style TargetType="DockPanel">
+                    <Setter Property="Margin" Value="2" />
+                    <Setter Property="Background" Value="{StaticResource ListBackgroud}" />
+                </Style>
+                <Style TargetType="Label">
+                    <Setter Property="Margin" Value="0 -6" />
+                    <Setter Property="HorizontalContentAlignment" Value="Center" />
+                    <Setter Property="DockPanel.Dock" Value="Top" />
+                </Style>
+            </Grid.Resources>
+            <DockPanel Grid.Column="0" Margin="5 2 2 2">
+                <Label Content="Энергосистема" />
+                <ComboBox x:Name="cbDepartaments"
+                          ItemsSource="{Binding EnergoSystems}"
+                          SelectedItem="{Binding SelectedEnergoSystem}" />
+            </DockPanel>
+            <DockPanel Grid.Column="1" Visibility="{Binding SelectedIndex, ElementName=cbDepartaments, Converter={StaticResource SelectedIndexToVisibilityConverter}}">
+                <Label Content="Филиал" />
+                <ComboBox x:Name="cbFilial"
+                          ItemsSource="{Binding Filials}"
+                          SelectedItem="{Binding SelectedFilial,
+                                                 Mode=TwoWay}" />
+            </DockPanel>
+            <DockPanel Grid.Column="2" Visibility="{Binding SelectedIndex, ElementName=cbFilial, Converter={StaticResource SelectedIndexToVisibilityConverter}}">
+                <Label Content="РЭС" />
+                <ComboBox x:Name="cbRes"
+                          ItemsSource="{Binding Reses}"
+                          SelectedItem="{Binding SelectedRes,
+                                                 Mode=TwoWay}" />
+            </DockPanel>
+            <DockPanel Grid.Column="3" Visibility="{Binding SelectedIndex, ElementName=cbRes, Converter={StaticResource SelectedIndexToVisibilityConverter}}">
+                <Label Content="Подстанция" />
+                <ComboBox x:Name="cbSubstation"
+                          ItemsSource="{Binding Substations}"
+                          SelectedItem="{Binding SelectedSubstation,
+                                                 Mode=TwoWay}" />
+            </DockPanel>
+            <DockPanel Grid.Column="4"
+                       Margin="2 2 5 2"
+                       Visibility="{Binding SelectedIndex,
+                                            ElementName=cbSubstation,
+                                            Converter={StaticResource SelectedIndexToVisibilityConverter}}">
+                <Label Content="Фидер" />
+                <ComboBox x:Name="cbFider"
+                          ItemsSource="{Binding Fiders}"
+                          SelectedItem="{Binding SelectedFider,
+                                                 Mode=TwoWay}" />
+            </DockPanel>
+        </Grid>
+        <!--  EndRegion  -->
+        <!--  Region | Objects |  -->
+        <!--  EndRegion  -->
+        <!--  Region | Graph |  -->
+        <Grid Grid.Row="3">
+            <helper:AsyncBusyUserControl Visibility="Collapsed" />
+            <DockPanel LastChildFill="True">
+                <Border MinWidth="50"
+                        Margin="2"
+                        Background="White"
+                        DockPanel.Dock="Left"
+                        Padding="5"
+                        Visibility="{Binding State,
+                                             Converter={StaticResource StateTypeToVisibilitylConverter}}">
+                    <Border.Effect>
+                        <DropShadowEffect Color="DarkGray" />
+                    </Border.Effect>
+                    <ListBox BorderThickness="0" ItemsSource="{Binding TPs}">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate DataType="{x:Type model:Tp}">
+                                <TextBlock FontFamily="Consolas,Courier"
+                                           Text="{Binding Name}"
+                                           TextAlignment="Left" />
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </Border>
+                <Grid>
+                    <ContentControl Style="{StaticResource ViewerStyle}" />
+                    <Border Margin="2"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Stretch">
+                        <Border.Effect>
+                            <DropShadowEffect BlurRadius="2"
+                                              ShadowDepth="3"
+                                              Color="Black" />
+                        </Border.Effect>
+                        <graph:GraphLayout MinHeight="200"
+                                           ContextMenu="{StaticResource GraphContextMenu}"
+                                           Graph="{Binding ModelGraph}"
+                                           Visibility="{Binding State,
+                                                                Converter={StaticResource StateTypeToVisibilitylConverter}}" />
+                    </Border>
+                </Grid>
+            </DockPanel>
+        </Grid>
+    </Grid>
+</Window>

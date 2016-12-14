@@ -1,0 +1,107 @@
+﻿<Window
+    x:Class="TMP.Work.AmperM.TestApp.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:common="clr-namespace:TMP.Shared;assembly=Shared"
+        xmlns:behaviors="clr-namespace:TMP.Wpf.CommonControls.Behaviors;assembly=TMP.Wpf.CommonControls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:TMP.Work.AmperM.TestApp"
+    xmlns:local_controls="clr-namespace:TMP.Work.AmperM.TestApp.Controls"
+    xmlns:repository="clr-namespace:TMP.Work.AmperM.TestApp.Controls.RepositoryControl"
+    xmlns:controls="clr-namespace:TMP.Wpf.CommonControls;assembly=TMP.Wpf.CommonControls"
+    xmlns:controls_behaviors="clr-namespace:TMP.Wpf.CommonControls.Behaviors;assembly=TMP.Wpf.CommonControls"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:settings="clr-namespace:TMP.Work.AmperM.TestApp"
+    xmlns:tabsViews="clr-namespace:TMP.Work.AmperM.TestApp.View.TabsViews"
+    xmlns:system="clr-namespace:System;assembly=mscorlib"
+    xmlns:vm="clr-namespace:TMP.Work.AmperM.TestApp.ViewModel"
+    xmlns:iconpack="http://metro.mahapps.com/winfx/xaml/iconpacks"
+    xmlns:system_windows="clr-namespace:System.Windows;assembly=PresentationFramework"
+    
+    Title="{Binding Path=DisplayName}"
+    Width="{settings:SettingBinding MainWindowWidth,
+                                        1400.0}"
+        Height="{settings:SettingBinding MainWindowHeight,
+                                         600.0}"
+    Left="{settings:SettingBinding MainWindowLeft,
+                                       100.0}"
+    Top="{settings:SettingBinding MainWindowTop,
+                                      0.0}"
+    WindowState="{settings:SettingBinding MainWindowState,
+                                              {x:Static system_windows:WindowState.Normal}}"
+    SizeToContent="Manual"
+    Icon="/Test;component/MAINICON.ico"
+    WindowStartupLocation="CenterOwner"
+    TextOptions.TextFormattingMode="Ideal"
+    UseLayoutRounding="True"
+    mc:Ignorable="d">
+    <Window.Resources>
+        <ResourceDictionary Source="/Styles/MainWindowResources.xaml" />
+    </Window.Resources>
+    <Window.Background>
+        <ImageBrush
+            ImageSource="background.png"
+            Stretch="None"
+            TileMode="Tile"
+            Viewport="0,0,99,99"
+            ViewportUnits="Absolute" />
+    </Window.Background>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" MinWidth="80" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" MinHeight="50"/>
+            <RowDefinition Height="Auto" MinHeight="20"/>
+        </Grid.RowDefinitions>
+        <!--    -->
+        <controls:Wait
+            Grid.RowSpan="3"
+            Grid.ColumnSpan="2"
+            Margin="0" Visibility="Collapsed"/>
+        <!--  1  -->
+        <local_controls:SettingsPanel Grid.Row="0" Grid.Column="1"/>
+        <!--  2  -->
+        <TabControl
+            Grid.Row="1"
+            Grid.Column="1"
+            Margin="2,0,2,2"
+            Style="{StaticResource TabControlStyle}"
+            behaviors:TabContent.IsCached="True"
+            ItemTemplate="{StaticResource ClosableTabItemTemplate}"
+            ItemsSource="{Binding Tabs}"
+            
+            SelectedItem="{Binding SelectedItem}"/>
+        <!-- ContentControl
+            Grid.Row="1"
+            Grid.Column="1"
+            Content="{Binding Path=Tabs}"
+            ContentTemplate="{StaticResource TabsTemplate}"/ -->
+        <!-- 3 -->
+        <Border
+            Grid.Row="2" Grid.Column="1"
+            Margin="2"
+            Background="{DynamicResource ControlBackgroundBrush}"
+            BorderBrush="{DynamicResource ControlBorderBrush}"
+            BorderThickness="1"
+            CornerRadius="2">
+            <StackPanel Margin="2" Orientation="Horizontal">
+                <Label Padding="0" Content="{Binding Status, FallbackValue=Готов}"/>
+            </StackPanel>
+        </Border>
+        <!--  left column  -->
+        <ContentControl Grid.RowSpan="3" Margin="2 2 5 2"
+                        Content="{Binding Repository}"
+                        ContentTemplate="{StaticResource Repository}" />
+        <GridSplitter
+            Grid.RowSpan="3" Grid.Column="0"
+            Width="3"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Stretch"
+            Background="{DynamicResource HighlightBrush}"
+            ResizeBehavior="CurrentAndNext"
+            ResizeDirection="Columns" />
+    </Grid>
+</Window>

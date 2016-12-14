@@ -1,0 +1,19 @@
+﻿<tmpapp:TMPApp x:Class="TMP.ARMTES.Editor.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:tmpapp="clr-namespace:TMPApplication;assembly=TMPApplication"
+             DispatcherUnhandledException="Application_DispatcherUnhandledException"
+             Exit="App_Exit"
+             StartupUri="MainWindow.xaml">
+    <tmpapp:TMPApp.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/TMP.Wpf.CommonControls;component/Themes/Generic.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/TMP.Wpf.CommonControls;component/Styles/Accents/Blue.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/TMP.Wpf.CommonControls;component/Styles/Accents/BaseLight.xaml" />
+
+                <ResourceDictionary Source="/Editor;component/Controls/CollectorList.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </tmpapp:TMPApp.Resources>
+</tmpapp:TMPApp>

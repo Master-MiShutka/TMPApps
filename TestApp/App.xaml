@@ -1,0 +1,16 @@
+﻿<Application x:Class="App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             StartupUri="TestWindow1.xaml">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/TMP.Wpf.CommonControls;component/Styles/Controls.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/TMP.Wpf.CommonControls;component/Styles/Fonts.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/TMP.Wpf.CommonControls;component/Styles/Colors.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/TMP.Wpf.CommonControls;component/Styles/Accents/Blue.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/TMP.Wpf.CommonControls;component/Styles/Accents/BaseLight.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

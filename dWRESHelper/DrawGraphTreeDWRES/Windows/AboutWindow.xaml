@@ -1,0 +1,123 @@
+﻿<Window x:Class="TMP.DWRES.GUI.AboutWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:TMP.DWRES.GUI"
+        xmlns:vm="clr-namespace:TMP.DWRES.ViewModel"
+        Title="О программе"
+        Width="300"
+        MinHeight="360"
+        DataContext="{x:Static vm:MainWindowViewModel.Instance}"
+        Icon="/DWRESGraphBuilder;component/Resources/MAINICON.ico"
+        ResizeMode="NoResize"
+        ShowInTaskbar="False"
+        SizeToContent="Height"
+        SnapsToDevicePixels="True"
+        TextOptions.TextFormattingMode="Display"
+        TextOptions.TextHintingMode="Animated"
+        UseLayoutRounding="True"
+        WindowStartupLocation="CenterOwner">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <DockPanel Grid.Row="0"
+                   Grid.Column="0"
+                   Grid.ColumnSpan="2"
+                   Background="{StaticResource HeaderBackgroundBrush}">
+            <Image Width="64"
+                   Margin="5 5 15 5"
+                   Source="/DWRESGraphBuilder;component/Resources/MAINICON.ico">
+                <Image.Effect>
+                    <DropShadowEffect />
+                </Image.Effect>
+            </Image>
+            <TextBlock Margin="0 5"
+                       DockPanel.Dock="Right"
+                       FontFamily="Impact"
+                       FontSize="32"
+                       FontStyle="Oblique"
+                       FontWeight="Bold"
+                       Foreground="#FFE0E0E0"
+                       Text="DWRes помощник"
+                       TextWrapping="Wrap">
+                <TextBlock.BitmapEffect>
+                    <DropShadowBitmapEffect Direction="0"
+                                            Opacity="0.8"
+                                            ShadowDepth="4"
+                                            Softness="0.525"
+                                            Color="#FF767676" />
+                </TextBlock.BitmapEffect>
+            </TextBlock>
+        </DockPanel>
+        <StackPanel Grid.Row="1"
+                    Grid.Column="1"
+                    Background="{StaticResource DefaultControlBackgroundBrush}"
+                    Orientation="Vertical">
+            <TextBlock Margin="5">
+                <TextBlock.Resources>
+                    <Style TargetType="TextBlock">
+                        <Setter Property="Margin" Value="0 5" />
+                        <Setter Property="FontStyle" Value="Italic" />
+                        <Setter Property="TextWrapping" Value="Wrap" />
+                        <Setter Property="FontSize" Value="13" />
+                    </Style>
+                </TextBlock.Resources>
+                Описание:
+                <LineBreak />
+                <TextBlock Text="{Binding Path=MainTitle}" />
+                <LineBreak />
+                <TextBlock Margin="0 5" Text="Версия:" />
+                <TextBlock Text="{Binding Path=AppVersion}" />
+                <LineBreak />
+                Автор:
+                <LineBreak />
+                <TextBlock Text="{Binding Path=Copyright}" />
+            </TextBlock>
+            <Expander Header="Подробно о сборке ...">
+                <TextBlock Margin="5"
+                           DataContext="{x:Static local:AssemblyInfo.Instance}"
+                           Foreground="Navy">
+                    Название:
+                    <TextBlock Text="{Binding Path=AssemblyTitle}" />
+                    <LineBreak />
+                    Описание:
+                    <TextBlock Text="{Binding Path=AssemblyDescription}" />
+                    <LineBreak />
+                    Версия:
+                    <TextBlock Text="{Binding Path=AssemblyVersion}" />
+                    <LineBreak />
+                    Дата сборки:
+                    <TextBlock Text="{Binding Path=BuildDate, StringFormat={}{0:dd.MM.yyyy hh:mm}}" />
+                    <LineBreak />
+                    Продукт:
+                    <TextBlock Text="{Binding Path=AssemblyProduct}" />
+                    <LineBreak />
+                    Права:
+                    <TextBlock Text="{Binding Path=AssemblyCopyright}" />
+                    <LineBreak />
+                    Компания:
+                    <TextBlock Text="{Binding Path=AssemblyCompany}" />
+                    <LineBreak />
+                </TextBlock>
+            </Expander>
+        </StackPanel>
+        <Grid Grid.Row="2"
+              Grid.Column="0"
+              Grid.ColumnSpan="2"
+              Background="{StaticResource PanelBackground}">
+            <Button Width="100"
+                    Height="30"
+                    Margin="10 5"
+                    HorizontalAlignment="Right"
+                    Click="CloseButton_Click"
+                    Content="Закрыть"
+                    FontSize="16" />
+        </Grid>
+    </Grid>
+</Window>

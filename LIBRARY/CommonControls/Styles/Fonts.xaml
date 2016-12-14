@@ -1,0 +1,35 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:System="clr-namespace:System;assembly=mscorlib">
+
+    <FontFamily x:Key="DefaultFont">Segoe UI, Lucida Sans Unicode, Verdana</FontFamily>
+    <FontFamily x:Key="HeaderFontFamily">Segoe UI, Lucida Sans Unicode, Verdana</FontFamily>
+    <FontFamily x:Key="ContentFontFamily">Segoe UI, Lucida Sans Unicode, Verdana</FontFamily>
+
+    <FontFamily x:Key="ContentTextFontFamily">Segoe UI, Lucida Sans Unicode, Verdana</FontFamily>
+    <FontFamily x:Key="ContentNumbersFontFamily">Century Gothic, Segoe UI, Trebuchet MS</FontFamily>
+
+
+    <System:Double x:Key="HeaderFontSize">18</System:Double>
+    <System:Double x:Key="SubHeaderFontSize">16</System:Double>
+    <System:Double x:Key="WindowTitleFontSize">16</System:Double>
+    <System:Double x:Key="NormalFontSize">14</System:Double>
+    <System:Double x:Key="ContentFontSize">13</System:Double>
+    <System:Double x:Key="FlatButtonFontSize">14</System:Double>
+    <System:Double x:Key="TabItemFontSize">16</System:Double>
+    <System:Double x:Key="FloatingWatermarkFontSize">14</System:Double>
+    <System:Double x:Key="SmallFontSize">12</System:Double>
+    <System:Double x:Key="VerySmallFontSize">10</System:Double>
+    
+    <System:Double x:Key="LargeFontSize">22</System:Double>
+    <System:Double x:Key="VeryLargeFontSize">28</System:Double>
+
+    <System:Double x:Key="MenuFontSize">13</System:Double>
+    <System:Double x:Key="ContextMenuFontSize">13</System:Double>
+
+    <System:Double x:Key="StatusBarFontSize">13</System:Double>
+
+    <System:Double x:Key="DialogTitleFontSize">20</System:Double>
+    <System:Double x:Key="DialogMessageFontSize">18</System:Double>
+    <System:Double x:Key="DialogButtonFontSize">16</System:Double>
+</ResourceDictionary>

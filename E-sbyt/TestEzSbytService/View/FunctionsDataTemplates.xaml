@@ -1,0 +1,324 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:common="clr-namespace:TMP.Shared;assembly=Shared"
+    xmlns:controls="clr-namespace:TMP.Wpf.CommonControls;assembly=TMP.Wpf.CommonControls"
+    xmlns:controls_behaviors="clr-namespace:TMP.Wpf.CommonControls.Behaviors;assembly=TMP.Wpf.CommonControls"
+    xmlns:shared="clr-namespace:TMP.Shared;assembly=Shared"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:i="clr-namespace:Interactivity;assembly=Interactivity"
+    xmlns:iconpack="http://metro.mahapps.com/winfx/xaml/iconpacks"
+    xmlns:ics="http://icsharpcode.net/sharpdevelop/avalonedit"
+    xmlns:ezsbyt="clr-namespace:TMP.Work.AmperM.TestApp.EzSbyt"
+    xmlns:local_controls="clr-namespace:TMP.Work.AmperM.TestApp.Controls"
+    xmlns:local_converters="clr-namespace:TMP.Work.AmperM.TestApp.Converters"
+    xmlns:funcsvm="clr-namespace:TMP.Work.AmperM.TestApp.ViewModel.Funcs"
+    xmlns:vm="clr-namespace:TMP.Work.AmperM.TestApp.ViewModel" xmlns:TabsViews="clr-namespace:TMP.Work.AmperM.TestApp.View.TabsViews">
+
+    <local_converters:FuncParameterToTextConverter x:Key="FuncParameterToTextConverter" />
+    <local_converters:FormatTypeToTextConverter x:Key="FormatTypeToTextConverter"/>
+    <local_converters:NewLineRemoveConverter x:Key="NewLineRemoveConverter"/>
+   
+    <DataTemplate DataType="{x:Type funcsvm:FuncSqlViewModel}">
+        <DockPanel>
+            <Expander DockPanel.Dock="Bottom" Background="{DynamicResource ControlBackgroundBrush}"
+                BorderBrush="{DynamicResource ControlBorderBrush}" Margin="2"
+                BorderThickness="1" Header="параметры запроса">
+                <local_controls:LayoutGroup>
+                    <local_controls:LabelledTextBox
+                        Label="Параметры запроса"
+                        Text="{Binding ПараметрыЗапроса, Converter={StaticResource FuncParameterToTextConverter}}"
+                        ToolTip="Параметры запроса в формате JSON,&#xA;например: {&quot;прм_номер&quot;: 11}"
+                        Watermark="{Binding ToolTip, Converter={StaticResource NewLineRemoveConverter}, RelativeSource={RelativeSource Self}}"/>
+                    <local_controls:LabelledTextBox
+                        Label="Поля сортировки"
+                        Text="{Binding ПоляСортировки, Converter={StaticResource FuncParameterToTextConverter}}"
+                        ToolTip="Поля сортировки результата SQL запроса после объединения данных по филиалам,&#xA;например: ФИЛИАЛ ВОЗР,НОМЕР УБЫВ" 
+                        Watermark="{Binding ToolTip, Converter={StaticResource NewLineRemoveConverter}, RelativeSource={RelativeSource Self}}"/>
+                    <local_controls:LabelledTextBox
+                        Label="SQL запрос дополнительной обработки"
+                        Text="{Binding SQLзапросДополнительнойОбработки, Converter={StaticResource FuncParameterToTextConverter}}"
+                        ToolTip="SQL запрос дополнительной обработки после объединения данных по филиалам,&#xA;например: выбрать группа,филиал,найдено из т1 итоги сумма(найдено) по группа" 
+                        Watermark="{Binding ToolTip, Converter={StaticResource NewLineRemoveConverter}, RelativeSource={RelativeSource Self}}"/>
+                    <Separator />
+                    <local_controls:LabelledTextBox
+                        Label="Модификация формата"
+                        Text="{Binding МодификацияФормата, Converter={StaticResource FuncParameterToTextConverter}}"
+                        ToolTip="Вариант выбранного формата:&#xA;default (default), elements, attributes, array, metaarray" 
+                        Watermark="{Binding ToolTip, Converter={StaticResource NewLineRemoveConverter}, RelativeSource={RelativeSource Self}}"/>
+                    <local_controls:LabelledTextBox
+                        Label="Разделитель строк"
+                        Text="{Binding РазделительСтрок, Converter={StaticResource FuncParameterToTextConverter}}"
+                        ToolTip="Разделитель строк, если задан csv формат&#xA;(по умолчанию &quot;\n&quot;)" 
+                        Watermark="{Binding ToolTip, Converter={StaticResource NewLineRemoveConverter}, RelativeSource={RelativeSource Self}}"/>
+                    <local_controls:LabelledTextBox
+                        Label="Разделитель колонок"
+                        Text="{Binding РазделительКолонок, Converter={StaticResource FuncParameterToTextConverter}}"
+                        ToolTip="Разделитель колонок, если задан csv формат&#xA;(по умолчанию &quot;\t&quot;)" 
+                        Watermark="{Binding ToolTip, Converter={StaticResource NewLineRemoveConverter}, RelativeSource={RelativeSource Self}}"/>
+                    <local_controls:LabelledTextBox
+                        Label="Callback-Функция"
+                        Text="{Binding CallbackФункция, Converter={StaticResource FuncParameterToTextConverter}}"
+                        ToolTip="Дополнительный параметр, имеет смысл, если выбран json формат" 
+                        Watermark="{Binding ToolTip, Converter={StaticResource NewLineRemoveConverter}, RelativeSource={RelativeSource Self}}"/>
+                    <local_controls:LabelledTextBox
+                        Label="Отладка"
+                        Text="{Binding Отладка, Converter={StaticResource FuncParameterToTextConverter}}"
+                        ToolTip="Если задан, - результат выводится в &quot;читабельном&quot; виде" 
+                        Watermark="{Binding ToolTip, Converter={StaticResource NewLineRemoveConverter}, RelativeSource={RelativeSource Self}}"/>
+                </local_controls:LayoutGroup>
+            </Expander>
+            <local_controls:_1CV8SyntaxHighlightTextBox Grid.Row="1" Margin="2" ToolTip="Произвольный текст запроса, например: select * from Справочник.Договоры where номер=$прм_номер">
+                <i:Interaction.Behaviors>
+                    <controls_behaviors:AvalonEditBehavior 
+                            GiveMeTheText="{Binding ТекстЗапроса, Converter={StaticResource FuncParameterToTextConverter},
+                            UpdateSourceTrigger=PropertyChanged}" />
+                </i:Interaction.Behaviors>
+            </local_controls:_1CV8SyntaxHighlightTextBox>
+        </DockPanel>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type funcsvm:FuncGetObjViewModel}">
+        <DockPanel>
+            <Border
+                Margin="2"
+                Background="{DynamicResource ControlBackgroundBrush}"
+                BorderBrush="{DynamicResource ControlBorderBrush}"
+                BorderThickness="1"
+                CornerRadius="2"
+                DockPanel.Dock="Bottom">
+                <local_controls:LayoutGroup>
+                    <local_controls:LabelledTextBox
+                        Label="Имя таблицы"
+                        Text="{Binding Таблица, Converter={StaticResource FuncParameterToTextConverter}}"
+                        ToolTip="Имя таблицы, например: &quot;РасчетныеТочки&quot;"
+                        Watermark="{Binding ToolTip, Converter={StaticResource NewLineRemoveConverter}, RelativeSource={RelativeSource Self}}"
+                        IsWaitingForData="True"/>
+                    <local_controls:LabelledTextBox
+                        Label="Условие (фильтр) выбора записи"
+                        Text="{Binding Условие, Converter={StaticResource FuncParameterToTextConverter}}"
+                        ToolTip="Условие (фильтр) выбора записи,&#xA;например: &quot;ид=14310000001000002&quot;" 
+                        Watermark="{Binding ToolTip, Converter={StaticResource NewLineRemoveConverter}, RelativeSource={RelativeSource Self}}"/>
+                    <Separator />
+                    <local_controls:LabelledTextBox
+                        Label="Перечень полей таблицы для выборки"
+                        Text="{Binding ПереченьПолей, Converter={StaticResource FuncParameterToTextConverter}}"
+                        ToolTip="Перечень полей таблицы для выборки через запятую,&#xA;например: &quot;ид,наименование,абонент:владелец.абонент.наименование&quot;" 
+                        Watermark="{Binding ToolTip, Converter={StaticResource NewLineRemoveConverter}, RelativeSource={RelativeSource Self}}"/>
+                    <Separator />
+                    <local_controls:LabelledTextBox
+                        Label="Модификация формата"
+                        Text="{Binding МодификацияФормата, Converter={StaticResource FuncParameterToTextConverter}}"
+                        ToolTip="Вариант выбранного формата:&#xA;default (default), elements, attributes, array, metaarray" 
+                        Watermark="{Binding ToolTip, Converter={StaticResource NewLineRemoveConverter}, RelativeSource={RelativeSource Self}}"/>
+                    <local_controls:LabelledTextBox
+                        Label="Разделитель строк"
+                        Text="{Binding РазделительСтрок, Converter={StaticResource FuncParameterToTextConverter}}"
+                        ToolTip="Разделитель строк, если задан csv формат&#xA;(по умолчанию &quot;\n&quot;)" 
+                        Watermark="{Binding ToolTip, Converter={StaticResource NewLineRemoveConverter}, RelativeSource={RelativeSource Self}}"/>
+                    <local_controls:LabelledTextBox
+                        Label="Разделитель колонок"
+                        Text="{Binding РазделительКолонок, Converter={StaticResource FuncParameterToTextConverter}}"
+                        ToolTip="Разделитель колонок, если задан csv формат&#xA;(по умолчанию &quot;\t&quot;)" 
+                        Watermark="{Binding ToolTip, Converter={StaticResource NewLineRemoveConverter}, RelativeSource={RelativeSource Self}}"/>
+                    <local_controls:LabelledTextBox
+                        Label="Callback-Функция"
+                        Text="{Binding CallbackФункция, Converter={StaticResource FuncParameterToTextConverter}}"
+                        ToolTip="Дополнительный параметр, имеет смысл, если выбран json формат" 
+                        Watermark="{Binding ToolTip, Converter={StaticResource NewLineRemoveConverter}, RelativeSource={RelativeSource Self}}"/>
+                    <local_controls:LabelledTextBox
+                        Label="Отладка"
+                        Text="{Binding Отладка, Converter={StaticResource FuncParameterToTextConverter}}"
+                        ToolTip="Если задан, - результат выводится в &quot;читабельном&quot; виде" 
+                        Watermark="{Binding ToolTip, Converter={StaticResource NewLineRemoveConverter}, RelativeSource={RelativeSource Self}}"/>
+                </local_controls:LayoutGroup>
+            </Border>
+        </DockPanel>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type funcsvm:FuncGetPointViewModel}">
+        <DockPanel>
+            <Border
+                Margin="2"
+                Background="{DynamicResource ControlBackgroundBrush}"
+                BorderBrush="{DynamicResource ControlBorderBrush}"
+                BorderThickness="1"
+                CornerRadius="2"
+                DockPanel.Dock="Bottom">
+                <local_controls:LayoutGroup>
+                    <local_controls:LabelledTextBox
+                        Label="Идентификатор расчетной точки"
+                        Text="{Binding Идентификатор, Converter={StaticResource FuncParameterToTextConverter}}"
+                        ToolTip="Идентификатор расчетной точки,&#xA;например: 14310000001000002"
+                        Watermark="{Binding ToolTip, Converter={StaticResource NewLineRemoveConverter}, RelativeSource={RelativeSource Self}}"
+                        IsWaitingForData="True"/>
+                    <Separator />
+                    <local_controls:LabelledTextBox
+                        Label="Модификация формата"
+                        Text="{Binding МодификацияФормата, Converter={StaticResource FuncParameterToTextConverter}}"
+                        ToolTip="Вариант выбранного формата:&#xA;default (default), tree" />
+                    <local_controls:LabelledTextBox
+                        Label="Разделитель строк"
+                        Text="{Binding РазделительСтрок, Converter={StaticResource FuncParameterToTextConverter}}"
+                        ToolTip="Разделитель строк, если задан csv формат&#xA;(по умолчанию &quot;\n&quot;)" 
+                        Watermark="{Binding ToolTip, Converter={StaticResource NewLineRemoveConverter}, RelativeSource={RelativeSource Self}}"/>
+                    <local_controls:LabelledTextBox
+                        Label="Разделитель колонок"
+                        Text="{Binding РазделительКолонок, Converter={StaticResource FuncParameterToTextConverter}}"
+                        ToolTip="Разделитель колонок, если задан csv формат&#xA;(по умолчанию &quot;\t&quot;)" 
+                        Watermark="{Binding ToolTip, Converter={StaticResource NewLineRemoveConverter}, RelativeSource={RelativeSource Self}}"/>
+                    <local_controls:LabelledTextBox
+                        Label="Callback-Функция"
+                        Text="{Binding CallbackФункция, Converter={StaticResource FuncParameterToTextConverter}}"
+                        ToolTip="Дополнительный параметр, имеет смысл, если выбран json формат" 
+                        Watermark="{Binding ToolTip, Converter={StaticResource NewLineRemoveConverter}, RelativeSource={RelativeSource Self}}"/>
+                    <local_controls:LabelledTextBox
+                        Label="Отладка"
+                        Text="{Binding Отладка, Converter={StaticResource FuncParameterToTextConverter}}"
+                        ToolTip="Если задан, - результат выводится в &quot;читабельном&quot; виде" 
+                        Watermark="{Binding ToolTip, Converter={StaticResource NewLineRemoveConverter}, RelativeSource={RelativeSource Self}}"/>
+                </local_controls:LayoutGroup>
+            </Border>
+        </DockPanel>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type funcsvm:FuncMetaViewModel}">
+        <DockPanel>
+            <Border
+                Margin="2"
+                Background="{DynamicResource ControlBackgroundBrush}"
+                BorderBrush="{DynamicResource ControlBorderBrush}"
+                BorderThickness="1"
+                CornerRadius="2"
+                DockPanel.Dock="Bottom">
+                <local_controls:LayoutGroup>
+                    <local_controls:LabelledTextBox
+                        Label="Вид метаданных"
+                        Text="{Binding ВидМетаданных, Converter={StaticResource FuncParameterToTextConverter}}"
+                        ToolTip="Вид метаданных:&#xA;tables | fields | keyfields | db | all | текст произвольного запроса"
+                        Watermark="{Binding ToolTip, Converter={StaticResource NewLineRemoveConverter}, RelativeSource={RelativeSource Self}}"
+                        IsWaitingForData="True"/>
+                    <local_controls:LabelledTextBox
+                        Label="Имя таблицы"
+                        Text="{Binding ИмяТаблицы, Converter={StaticResource FuncParameterToTextConverter}}"
+                        ToolTip="Имя таблицы, задается если q=fields или keyfields,&#xA;например: РасчетныеТочки"
+                        Watermark="{Binding ToolTip, Converter={StaticResource NewLineRemoveConverter}, RelativeSource={RelativeSource Self}}"
+                        IsWaitingForData="True"/>
+                    <Separator />
+                    <local_controls:LabelledTextBox
+                        Label="Дополнительно"
+                        Text="{Binding ПараметрыЗапроса, Converter={StaticResource FuncParameterToTextConverter}}"
+                        ToolTip="Задается при необходимости если q=запрос, параметры запроса в формате JSON, &#xA;например: {&quot;прм_номер&quot;: 11}" 
+                        Watermark="{Binding ToolTip, Converter={StaticResource NewLineRemoveConverter}, RelativeSource={RelativeSource Self}}"/>
+                    <local_controls:LabelledTextBox
+                        Label="Перечень полей метаданных для выборки"
+                        Text="{Binding ПереченьПолей, Converter={StaticResource FuncParameterToTextConverter}}"
+                        ToolTip="Перечень полей метаданных для выборки через запятую,&#xA;доступные поля: &quot;метатип,индекс,ид,идродителя,имяродителя,имя,тип,рутип,длина,кдз&quot;" 
+                        Watermark="{Binding ToolTip, Converter={StaticResource NewLineRemoveConverter}, RelativeSource={RelativeSource Self}}"/>
+                    <local_controls:LabelledTextBox
+                        Label="Условие (фильтр) выборки метаданных"
+                        Text="{Binding Условие, Converter={StaticResource FuncParameterToTextConverter}}"
+                        ToolTip="Условие (фильтр) выборки метаданных, например: тип=&quot;Reference&quot;" 
+                        Watermark="{Binding ToolTip, Converter={StaticResource NewLineRemoveConverter}, RelativeSource={RelativeSource Self}}"/>
+                    <local_controls:LabelledTextBox
+                        Label="Поля сортировки результата"
+                        Text="{Binding ПоляСортировки, Converter={StaticResource FuncParameterToTextConverter}}"
+                        ToolTip="Поля сортировки результата, например: ТИП, ИМЯ" 
+                        Watermark="{Binding ToolTip, Converter={StaticResource NewLineRemoveConverter}, RelativeSource={RelativeSource Self}}"/>
+                    <Separator />
+                    <local_controls:LabelledTextBox
+                        Label="Модификация формата"
+                        Text="{Binding МодификацияФормата, Converter={StaticResource FuncParameterToTextConverter}}"
+                        ToolTip="Вариант выбранного формата:&#xA;default (default), elements, attributes, array, metaarray" 
+                        Watermark="{Binding ToolTip, Converter={StaticResource NewLineRemoveConverter}, RelativeSource={RelativeSource Self}}"/>
+                    <local_controls:LabelledTextBox
+                        Label="Разделитель строк"
+                        Text="{Binding РазделительСтрок, Converter={StaticResource FuncParameterToTextConverter}}"
+                        ToolTip="Разделитель строк, если задан csv формат&#xA;(по умолчанию &quot;\n&quot;)" 
+                        Watermark="{Binding ToolTip, Converter={StaticResource NewLineRemoveConverter}, RelativeSource={RelativeSource Self}}"/>
+                    <local_controls:LabelledTextBox
+                        Label="Разделитель колонок"
+                        Text="{Binding РазделительКолонок, Converter={StaticResource FuncParameterToTextConverter}}"
+                        ToolTip="Разделитель колонок, если задан csv формат&#xA;(по умолчанию &quot;\t&quot;)" 
+                        Watermark="{Binding ToolTip, Converter={StaticResource NewLineRemoveConverter}, RelativeSource={RelativeSource Self}}"/>
+                    <local_controls:LabelledTextBox
+                        Label="Callback-Функция"
+                        Text="{Binding CallbackФункция, Converter={StaticResource FuncParameterToTextConverter}}"
+                        ToolTip="Дополнительный параметр, имеет смысл, если выбран json формат" 
+                        Watermark="{Binding ToolTip, Converter={StaticResource NewLineRemoveConverter}, RelativeSource={RelativeSource Self}}"/>
+                    <local_controls:LabelledTextBox
+                        Label="Отладка"
+                        Text="{Binding Отладка, Converter={StaticResource FuncParameterToTextConverter}}"
+                        ToolTip="Если задан, - результат выводится в &quot;читабельном&quot; виде" 
+                        Watermark="{Binding ToolTip, Converter={StaticResource NewLineRemoveConverter}, RelativeSource={RelativeSource Self}}"/>
+                </local_controls:LayoutGroup>
+            </Border>
+        </DockPanel>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type funcsvm:FuncSchemaViewModel}">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Border
+                Margin="2"
+                Background="{DynamicResource ControlBackgroundBrush}"
+                BorderBrush="{DynamicResource ControlBorderBrush}"
+                BorderThickness="1"
+                CornerRadius="2"
+                Grid.Row="0">
+                <DockPanel LastChildFill="False">
+                    <TextBlock Text="№ договора абонента" Padding="2"/>
+                    <TextBox MinWidth="50" Padding="0" Margin="2" Text="{Binding НомерДоговора, Converter={StaticResource FuncParameterToTextConverter}, UpdateSourceTrigger=PropertyChanged}"
+                             controls:TextBoxHelper.IsWaitingForData="True"/>
+                    <Button DockPanel.Dock="Right"
+                            Margin="0,1"
+                            Padding="5,0"
+                            Command="{Binding GetCommand}"
+                            IsDefault="True" CommandParameter="{Binding DataContext, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}">
+                        <StackPanel Orientation="Horizontal">
+                            <iconpack:PackIconModern
+                                    Margin="0,0,5,0"
+                                    VerticalAlignment="Center"
+                                    Kind="ControlPlay" />
+                            <TextBlock Padding="10,0" Text="{Binding GetCommand.Header, FallbackValue=Получить}" />
+                        </StackPanel>
+                    </Button>
+                </DockPanel>
+            </Border>
+            <Border Grid.Row="1"
+                Margin="2"
+                Background="{DynamicResource ControlBackgroundBrush}"
+                BorderBrush="{DynamicResource ControlBorderBrush}"
+                BorderThickness="1"
+                CornerRadius="2">
+                <ContentControl>
+                    <ContentControl.Style>
+                        <Style TargetType="{x:Type ContentControl}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Схема}" Value="{x:Null}">
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate>
+                                                <controls:NoData Message="Нет данных&#xA;для отображения.&#xA;Укажите номер договора&#xA;и нажмите &quot;Получить&quot;" />
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ContentControl.Style>
+                    <ScrollViewer>
+                        <local_controls:ZoomBorder ClipToBounds="True">
+                            <Image Source="{Binding Схема}" Stretch="None" />
+                        </local_controls:ZoomBorder>
+                    </ScrollViewer>
+                </ContentControl>
+
+            </Border>
+        </Grid>
+    </DataTemplate>
+
+</ResourceDictionary>
