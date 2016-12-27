@@ -12,8 +12,8 @@
         <ResourceDictionary Source="pack://application:,,,/TMP.Wpf.CommonControls;component/Styles/Controls.Buttons.xaml" />     
     </ResourceDictionary.MergedDictionaries>
 
-    <local_converters:SpaceToNewLineReplaceConverter x:Key="SpaceToNewLineReplaceConverter"/>
-    
+    <local_converters:CharReplaceConverter x:Key="CharReplaceConverter"/>
+
     <FontFamily x:Key="DefaultFont">Segoe UI, Lucida Sans Unicode, Verdana</FontFamily>
     <FontFamily x:Key="HeaderFontFamily">Segoe UI, Lucida Sans Unicode, Verdana</FontFamily>
     <FontFamily x:Key="ContentFontFamily">Segoe UI, Lucida Sans Unicode, Verdana</FontFamily>
@@ -38,7 +38,7 @@
         <Setter Property="Margin" Value="0,2" />
         <Setter Property="MinWidth" Value="30" />
     </Style>
-    
+
     <Style BasedOn="{StaticResource TMPDataGridColumnHeader}" TargetType="{x:Type DataGridColumnHeader}">
         <Setter Property="MinHeight" Value="15" />
         <Setter Property="Padding" Value="1" />
@@ -50,7 +50,7 @@
                     <TextBlock TextWrapping="Wrap" 
                                HorizontalAlignment="Center" TextAlignment="Center" VerticalAlignment="Center"  
                                LineStackingStrategy="BlockLineHeight" LineHeight="15"
-                               Text="{Binding Converter={StaticResource SpaceToNewLineReplaceConverter}}"/>
+                               Text="{Binding Converter={StaticResource CharReplaceConverter}}"/>
                 </DataTemplate>
             </Setter.Value>
         </Setter>
@@ -66,7 +66,7 @@
                 <Setter Property="ContentControl.Template">
                     <Setter.Value>
                         <ControlTemplate>
-                            <controls:NoData />
+                            <controls:NoData Margin="5"/>
                         </ControlTemplate>
                     </Setter.Value>
                 </Setter>

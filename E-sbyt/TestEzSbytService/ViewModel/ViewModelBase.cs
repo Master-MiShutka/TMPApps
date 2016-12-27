@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
@@ -15,7 +15,7 @@ namespace TMP.Work.AmperM.TestApp.ViewModel
     /// <summary>
     /// Базовый класс для всех моделей представления в приложении
     /// </summary>
-    public class ViewModelBase : AbstractViewModel, IWaitableObject
+    public class ViewModelBase : AbstractViewModelWaitable
     {
         #region Fields
         RelayCommand _closeCommand;
@@ -76,85 +76,6 @@ namespace TMP.Work.AmperM.TestApp.ViewModel
 
         #region Public methods
 
-        #endregion
-
-        #region | implementation ICancelable |
-        public bool CanCanceled
-        {
-            get
-            {
-                return CancelCommand != null ? CancelCommand.CanExecute(null) : false;
-            }
-        }
-        private ICommand _cancelCommand;
-        public ICommand CancelCommand
-        {
-            get
-            {
-                return _cancelCommand;
-            }
-
-            set
-            {
-                SetProperty(ref _cancelCommand, value);
-            }
-        }
-
-        private bool _isCanceled = false;
-        public bool IsCanceled
-        {
-            get
-            {
-                return _isCanceled;
-            }
-
-            set
-            {
-                SetProperty(ref _isCanceled, value);
-            }
-        }
-        #endregion
-
-        #region | implementation IStateObject |
-        private State _state = State.Idle;
-        public State State
-        {
-            get
-            {
-                return _state;
-            }
-
-            set
-            {
-                SetProperty(ref _state, value);
-            }
-        }
-        private int _progress = 0;
-        public int Progress
-        {
-            get
-            {
-                return _progress;
-            }
-
-            set
-            {
-                SetProperty(ref _progress, value);
-            }
-        }
-        private string _log = string.Empty;
-        public string Log
-        {
-            get
-            {
-                return _log;
-            }
-
-            set
-            {
-                SetProperty(ref _log, value);
-            }
-        }
         #endregion
     }
 }

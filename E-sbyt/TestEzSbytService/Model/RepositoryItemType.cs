@@ -1,4 +1,4 @@
-﻿namespace TMP.Work.AmperM.TestApp.Model
+namespace TMP.Work.AmperM.TestApp.Model
 {
     public enum RepositoryItemType
     {

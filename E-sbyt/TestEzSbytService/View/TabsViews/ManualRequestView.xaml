@@ -1,4 +1,4 @@
-﻿<UserControl
+<UserControl
     x:Class="TMP.Work.AmperM.TestApp.View.TabsViews.ManualRequestView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -6,7 +6,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 
     xmlns:tabs="clr-namespace:TMP.Work.AmperM.TestApp.View.TabsViews"    
-    
+
     xmlns:common="clr-namespace:TMP.Shared;assembly=Shared"
     xmlns:controls="clr-namespace:TMP.Wpf.CommonControls;assembly=TMP.Wpf.CommonControls"
     xmlns:controls_behaviors="clr-namespace:TMP.Wpf.CommonControls.Behaviors;assembly=TMP.Wpf.CommonControls"
@@ -56,7 +56,7 @@
                                                 VerticalAlignment="Center"
                                                 LineHeight="18"
                                                 LineStackingStrategy="BlockLineHeight"
-                                                Text="{Binding Converter={StaticResource SpaceToNewLineReplaceConverter}}"
+                                                Text="{Binding Converter={StaticResource CharReplaceConverter}}"
                                                 TextAlignment="Center"
                                                 TextWrapping="Wrap" />
                                     </Border>

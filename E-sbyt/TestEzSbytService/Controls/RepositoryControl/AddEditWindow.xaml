@@ -1,4 +1,4 @@
-﻿<Window x:Class="TMP.Work.AmperM.TestApp.Controls.RepositoryControl.AddEditWindow"
+<Window x:Class="TMP.Work.AmperM.TestApp.Controls.RepositoryControl.AddEditWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:iconpack="http://metro.mahapps.com/winfx/xaml/iconpacks"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:model="clr-namespace:TMP.Work.AmperM.TestApp.Model"

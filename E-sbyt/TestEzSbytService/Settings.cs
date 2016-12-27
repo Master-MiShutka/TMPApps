@@ -1,4 +1,4 @@
-﻿namespace TMP.Work.AmperM.TestApp.Properties {
+namespace TMP.Work.AmperM.TestApp.Properties {
 
 
     // Этот класс позволяет обрабатывать определенные события в классе параметров:

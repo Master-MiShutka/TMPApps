@@ -1,4 +1,4 @@
-﻿namespace TMP.Work.AmperM.TestApp.ViewModel.Funcs
+namespace TMP.Work.AmperM.TestApp.ViewModel.Funcs
 {
     [System.Diagnostics.DebuggerDisplay("name={Name}, value={Value}")]
     public struct FuncParameter

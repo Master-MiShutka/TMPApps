@@ -425,19 +425,19 @@
           </Border>
           <ControlTemplate.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-              <Setter TargetName="Bd" Property="BorderBrush" Value="{DynamicResource {x:Static SystemColors.HighlightBrush}}" />
-              <Setter TargetName="Bd" Property="Background" Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" />
+              <Setter TargetName="Bd" Property="BorderBrush" Value="{DynamicResource HighlightBrush}" />
+              <Setter TargetName="Bd" Property="Background" Value="{DynamicResource AccentColorBrush4}" />
             </Trigger>
             <MultiTrigger>
               <MultiTrigger.Conditions>
                 <Condition Property="IsSelected" Value="true" />
                 <Condition Property="Selector.IsSelectionActive" Value="false" />
               </MultiTrigger.Conditions>
-              <Setter TargetName="Bd" Property="Background" Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" />
-              <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" />
+              <Setter TargetName="Bd" Property="Background" Value="{DynamicResource GrayBrush6}" />
+              <Setter Property="Foreground" Value="{DynamicResource GrayBrush2}" />
             </MultiTrigger>
             <Trigger Property="IsEnabled" Value="false">
-              <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" />
+              <Setter Property="Foreground" Value="{DynamicResource ControlsDisabledBrush}" />
             </Trigger>
           </ControlTemplate.Triggers>
         </ControlTemplate>
@@ -495,7 +495,8 @@
                                                RelativeSource={RelativeSource TemplatedParent}}"
                          SelectedValuePath="{x:Null}"
                          SelectionMode="Multiple"
-                         SnapsToDevicePixels="False"
+                         SnapsToDevicePixels="False"                         
+                         VirtualizingStackPanel.IsVirtualizing="True"
                          VirtualizingStackPanel.VirtualizationMode="Recycling" />
       </Grid>
     </Border>

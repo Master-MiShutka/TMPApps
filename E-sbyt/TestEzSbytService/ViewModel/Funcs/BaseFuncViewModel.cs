@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -200,9 +200,9 @@ namespace TMP.Work.AmperM.TestApp.ViewModel.Funcs
             Enum.TryParse<EzSbyt.FormatTypes>(_Формат.Value, out format);
 
             var result = EzSbyt.EzSbytService.Instance.FuncRequest(this.FuncName, this.GetUrlParams(), this.GetEscapedBody());
-            
+
             parent.Result = new ResultViewerViewModel(result, format);
-                            
+
         }
 
         #endregion

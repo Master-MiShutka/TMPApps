@@ -1,4 +1,4 @@
-﻿using ICSharpCode.AvalonEdit;
+using ICSharpCode.AvalonEdit;
 using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;

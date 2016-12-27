@@ -1,0 +1,230 @@
+<UserControl
+    x:Class="TMP.Work.AmperM.TestApp.Controls.CollectionViewNavigator"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:TMP.Work.AmperM.TestApp.Controls"
+    xmlns:local_converters="clr-namespace:TMP.Work.AmperM.TestApp.Converters"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:theme="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero"
+    xmlns:system="clr-namespace:System;assembly=mscorlib"
+    mc:Ignorable="d"
+    Background="{DynamicResource ControlBackgroundBrush}">
+  <UserControl.Resources>
+
+    <local_converters:MultibindingStringFormatConverter x:Key="MultibindingStringFormatConverter"/>
+
+    <Style x:Key="baseTextBlock" TargetType="{x:Type TextBlock}">
+      <Setter Property="VerticalAlignment" Value="Center"/>
+      <Setter Property="LineStackingStrategy" Value="BlockLineHeight"/>
+      <Setter Property="LineHeight" Value="12"/>
+      <Setter Property="Padding" Value="0"/>
+      <Setter Property="TextAlignment" Value="Center"/>
+    </Style>
+    <Style BasedOn="{StaticResource baseTextBlock}" TargetType="{x:Type TextBlock}">
+      <Setter Property="Margin" Value="5,2"/>
+      <Setter Property="MinWidth" Value="20"/>
+    </Style>
+  </UserControl.Resources>
+
+  <Border        
+        BorderBrush="{DynamicResource ControlBorderBrush}"
+        BorderThickness="1"
+        CornerRadius="3"
+        Background="{DynamicResource PanelBackgroundHorizontal}">
+    <Grid>
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="Auto"/>
+        <ColumnDefinition Width="Auto"/>
+        <ColumnDefinition Width="Auto"/>
+        <ColumnDefinition Width="*"/>
+        <ColumnDefinition Width="Auto"/>
+      </Grid.ColumnDefinitions>
+      <StackPanel Margin="5 0" Grid.Column="1" Orientation="Horizontal">
+        <TextBlock>
+          <Run Text="Отображены"/>
+          <Run Text="{x:Static system:Environment.NewLine}"/>
+          <Run Text="записи" />
+        </TextBlock>
+        <TextBlock TextAlignment="Center">
+          <TextBlock.Text>
+            <MultiBinding StringFormat="с {0:N0} по {1:N0}{3}из {2:N0}"
+                          FallbackValue="с ? по из ?">
+              <Binding Path="UIStartIndex" />
+              <Binding Path="UIEndIndex" />
+              <Binding Path="TotalItemsCountIncludingFilter" />
+              <Binding Source="{x:Static system:Environment.NewLine}"/>
+            </MultiBinding>
+          </TextBlock.Text>
+        </TextBlock>
+        <Separator HorizontalAlignment="Right" Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}"/>
+      </StackPanel>
+      <Border Margin="5 0 7 0" Grid.Column="2">
+        <StackPanel Orientation="Horizontal">
+          <Button
+                        Margin="1 2 1 2"
+                        Padding="0"
+                        ToolTip="Выбрать первую запись"
+                        Command="{Binding MoveToFirstCommand}">
+            <Path
+                            Fill="{DynamicResource BlackBrush}"
+                            StrokeThickness="2"
+                            Data="M6,0 v16 l-10,-8z M16,0 v16 l -10,-8z"  Stretch="Fill" />
+          </Button>
+          <Button
+                        Margin="1 2 1 2"
+                        Padding="0"
+                        ToolTip="Выбрать предыдущую запись"
+                        Command="{Binding MoveToPreviousCommand}">
+            <Path
+                            Fill="{DynamicResource BlackBrush}"
+                            StrokeThickness="2"
+                            Data="M10,0 v16 l-10,-8z" />
+          </Button>
+          <Border
+                        Margin="2"
+                        VerticalAlignment="Stretch"
+                        BorderBrush="{DynamicResource AccentColorBrush}"
+                        BorderThickness="1"
+                        CornerRadius="2">
+            <TextBlock Padding="2,0">
+              <TextBlock.Text>
+                <MultiBinding StringFormat="Запись {0:N0} из {1:N0}" FallbackValue="Запись ? из ?">
+                  <Binding Path="UICurrentItemPositionOnPage" />
+                  <Binding Path="UIItemsCountOnPage" />
+                </MultiBinding>
+              </TextBlock.Text>
+              <TextBlock.ToolTip>
+                <MultiBinding Converter="{StaticResource MultibindingStringFormatConverter}" 
+                                  ConverterParameter="Выбрана запись {0:N0} из {1:N0}">
+                  <Binding Path="UICurrentItemPositionOnPage"/>
+                  <Binding Path="UIItemsCountOnPage" />
+                </MultiBinding>
+              </TextBlock.ToolTip>
+            </TextBlock>
+          </Border>
+          <Button
+                        Margin="2" Padding="0"
+                        ToolTip="Выбрать следующую запись"
+                        Command="{Binding MoveToNextCommand}">
+            <Path
+                            Fill="{DynamicResource BlackBrush}"
+                            StrokeThickness="2"
+                            Data="M0,0 v16 l10,-8z" />
+          </Button>
+          <Button
+                        Margin="2" Padding="0"
+                        ToolTip="Выбрать последнюю запись"
+                        Command="{Binding MoveToLastCommand}">
+            <Path
+                            Fill="{DynamicResource BlackBrush}"
+                            StrokeThickness="2"
+                            Data="M0,0v16l10,-8z m10,0 v16 l10,-8z" />
+          </Button>
+        </StackPanel>
+      </Border>
+      <Separator Grid.Column="2" HorizontalAlignment="Right" Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}"/>
+      <Border Margin="5 0" Grid.Column="4" HorizontalAlignment="Center">
+        <StackPanel Orientation="Horizontal">
+          <Button
+                        Margin="2"
+                        Padding="0"
+                        ToolTip="Первая страница данных"
+                        Command="{Binding MoveToFirstPageCommand}">
+            <Path
+                            Fill="{DynamicResource BlackBrush}"
+                            StrokeThickness="2"
+                            Data="M6,0 v16 l-10,-8z M16,0 v16 l -10,-8z" />
+          </Button>
+          <Button
+                        Margin="2"
+                        Padding="0"
+                        ToolTip="Предыдущая страница данных"
+                        Command="{Binding MoveToPreviousPageCommand}">
+            <Path
+                            Fill="{DynamicResource BlackBrush}"
+                            StrokeThickness="2"
+                            Data="M10,0 v16 l-10,-8z" />
+          </Button>
+          <Border
+                        Margin="2"
+                        VerticalAlignment="Stretch"
+                        BorderBrush="{DynamicResource AccentColorBrush}"
+                        BorderThickness="1"
+                        CornerRadius="2">
+            <TextBlock Padding="2,0">
+              <TextBlock.Text>
+                <MultiBinding StringFormat="Страница {0:N0} из {1:N0}" FallbackValue="Страница ? из ?">
+                  <Binding Path="CurrentPage" />
+                  <Binding Path="PageCount" />
+                </MultiBinding>
+              </TextBlock.Text>
+              <TextBlock.ToolTip>
+                <MultiBinding 
+                      Converter="{StaticResource MultibindingStringFormatConverter}"
+                      ConverterParameter="Отображается страница {0:N0} из {1:N0}">
+                  <Binding Path="CurrentPage" />
+                  <Binding Path="PageCount" />
+                </MultiBinding>
+              </TextBlock.ToolTip>
+            </TextBlock>
+          </Border>
+          <Button
+                        Margin="2"
+                        Padding="0"
+                        ToolTip="Следующая страница данных"
+                        Command="{Binding MoveToNextPageCommand}">
+            <Path
+                            Fill="{DynamicResource BlackBrush}"
+                            StrokeThickness="2"
+                            Data="M0,0 v16 l10,-8z" />
+          </Button>
+          <Button
+                        Margin="2"
+                        Padding="0"
+                        ToolTip="Последняя страница данных"
+                        Command="{Binding MoveToLastPageCommand}">
+            <Path
+                            Fill="{DynamicResource BlackBrush}"
+                            StrokeThickness="2"
+                            Data="M0,0v16l10,-8z m10,0 v16 l10,-8z" />
+          </Button>
+          <Separator  Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}"/>
+          <TextBlock Margin="5 0" >
+              <Run Text="Количество записей"/>
+              <Run Text="{x:Static system:Environment.NewLine}"/>
+              <Run Text="на страницу"/>
+          </TextBlock>
+          <ComboBox Margin="2" Padding="0"
+                        IsEditable="True"
+                        ToolTip="Количество записей на страницу"
+                        Text="{Binding ItemsPerPage, Mode=TwoWay, FallbackValue=0, StringFormat={}{0:N0}}">
+            <ComboBoxItem Content="10" />
+            <ComboBoxItem Content="20" />
+            <ComboBoxItem Content="25" />
+            <ComboBoxItem Content="30" />
+            <ComboBoxItem Content="35" />
+            <ComboBoxItem Content="40" />
+            <ComboBoxItem Content="50" />
+            <ComboBoxItem Content="75" />
+            <ComboBoxItem Content="100" />
+            <ComboBoxItem Content="150" />
+            <ComboBoxItem Content="500" />
+            <ComboBoxItem Content="1000" />
+          </ComboBox>
+          <Button Command="{Binding ShowAllItems}" Padding="2 1 2 -2" Margin="2">
+            <TextBlock>
+              <Run Text="Все "/>
+              <Run FontWeight="Bold" Text="{Binding Mode=OneWay, Path=TotalItemsCountExcludingFilter, StringFormat=# ##0}"/>
+            </TextBlock>
+            <!-- TextBlock>
+              <Run Text="Все "/>
+              <Run FontWeight="Bold" DataContext="{Binding  Path=TotalItemsCountExcludingFilter, Mode=OneWay, FallbackValue=?}" 
+                   Text="{Binding StringFormat=' {0:G0}', Mode=OneWay}"/>
+            </TextBlock -->
+          </Button>
+        </StackPanel>
+      </Border>
+    </Grid>
+  </Border>
+</UserControl>

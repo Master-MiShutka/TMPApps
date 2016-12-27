@@ -51,6 +51,8 @@
   <ItemGroup>
     <Compile Include="AsyncObservableCollection.cs" />
     <Compile Include="Commands\AsynchronousDelegateCommand.cs" />
+    <Compile Include="ObjectsBuilder\Field.cs" />
+    <Compile Include="ObjectsBuilder\ObjectBuilder.cs" />
     <Compile Include="Util.cs" />
     <Compile Include="Clipboard\ClipBoardHelper.cs" />
     <Compile Include="EnumUtilities.cs" />

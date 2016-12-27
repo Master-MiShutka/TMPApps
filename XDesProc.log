@@ -1,8 +1,0 @@
-﻿23:41:04:497 14-12-2016	EXCEPTION	High	Could not find a part of the path 'C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\Libs'.
-Stack trace:
-System.IO.DirectoryNotFoundException: Could not find a part of the path 'C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\Libs'.
-   at System.IO.__Error.WinIOError(Int32 errorCode, String maybeFullPath)
-   at System.IO.FileSystemEnumerableIterator`1.CommonInit()
-   at System.IO.FileSystemEnumerableIterator`1..ctor(String path, String originalUserPath, String searchPattern, SearchOption searchOption, SearchResultHandler`1 resultHandler, Boolean checkHost)
-   at System.IO.Directory.EnumerateFiles(String path, String searchPattern)
-   at TMPApplication.TMPApp..cctor()

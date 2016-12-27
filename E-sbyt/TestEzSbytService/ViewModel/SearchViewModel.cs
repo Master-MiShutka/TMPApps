@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,6 +11,7 @@ namespace TMP.Work.AmperM.TestApp.ViewModel
     using TMP.Shared;
     using TMP.Shared.Commands;
     using EzSbyt;
+    using MsgBox;
     public class SearchViewModel : TabViewModel
     {
         #region Fields
@@ -77,7 +78,7 @@ namespace TMP.Work.AmperM.TestApp.ViewModel
         {
             if (String.IsNullOrWhiteSpace(this.TextToSearch))
             {
-                MessageBox.Show("Нечего искать!", App.WindowTitle, MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show("Нечего искать!", App.WindowTitle, MsgBoxButtons.OK, MsgBoxImage.Warning);
                 args.Cancel = true;
                 return;
             }

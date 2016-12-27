@@ -128,6 +128,7 @@
     <ProjectReference Include="..\LIBRARY\Interactivity\Interactivity.csproj">
       <Project>{588a47ee-dbc1-48c3-987b-bbd5163a8cce}</Project>
       <Name>Interactivity</Name>
+      <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

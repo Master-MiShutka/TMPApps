@@ -1,4 +1,4 @@
-﻿<local:AvalonTextEditorEx
+<local:AvalonTextEditorEx
     x:Class="TMP.Work.AmperM.TestApp.Controls._1CV8SyntaxHighlightTextBox"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -433,7 +433,7 @@
                         Padding="2,0" TextAlignment="Left"
                         Grid.Row="2">
                         <TextBlock.Text>
-                            <MultiBinding StringFormat="Строка: {0,-5} Колонка: {1,-5} Смещение: {2,-5} Всего строк: {3,-5} Всего символов: {4,-5} Длина выделения: {5} символов">
+                            <MultiBinding Mode="OneWay" StringFormat="Строка: {0,-5} Колонка: {1,-5} Смещение: {2,-5} Всего строк: {3,-5} Всего символов: {4,-5} Длина выделения: {5} символов">
                                 <Binding Path="TextArea.Caret.Position.Line" RelativeSource="{RelativeSource TemplatedParent}" />
                                 <Binding Path="TextArea.Caret.Position.VisualColumn" RelativeSource="{RelativeSource TemplatedParent}" />
                                 <Binding Path="CaretOffset" RelativeSource="{RelativeSource TemplatedParent}" />

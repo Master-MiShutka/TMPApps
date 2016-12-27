@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="TMP.Work.AmperM.TestApp.Controls.ViewFuncResultAsSelector"
+<UserControl x:Class="TMP.Work.AmperM.TestApp.Controls.ViewFuncResultAsSelector"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:common="clr-namespace:TMP.Shared;assembly=Shared" xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:ezsbyt="clr-namespace:TMP.Work.AmperM.TestApp.EzSbyt" xmlns:iconpack="http://metro.mahapps.com/winfx/xaml/iconpacks"

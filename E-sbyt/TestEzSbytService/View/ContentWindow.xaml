@@ -1,4 +1,4 @@
-﻿<Window
+<Window
     x:Class="TMP.Work.AmperM.TestApp.View.ContentWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -13,18 +13,26 @@
     Icon="/Test;component/MAINICON.ico"
     TextOptions.TextFormattingMode="Ideal"
     UseLayoutRounding="True"
-    WindowStartupLocation="CenterOwner"    
+    WindowStartupLocation="CenterOwner"
+  ShowInTaskbar="True"
+  ShowActivated="True"
+  WindowState="Maximized"
     mc:Ignorable="d">
-    <Window.Resources>
-        <control_converters:FileSizeToHumanReadableConverter x:Key="FileSizeToHumanReadableConverter" />        
-    </Window.Resources>
-    <!-- Window.ContextMenu>
-        <ContextMenu>
-            <MenuItem Command="{Binding ViewContentAsTextCommand}" Header="{Binding ViewContentAsTextCommand.Header, FallbackValue=???}" />
-            <MenuItem Command="{Binding SaveContentCommand}" Header="Сохранить содержимое как ..." />
-        </ContextMenu>
-    </Window.ContextMenu -->
-    <Window.Title>
-        <Binding Path="Data.ResultAsString.Length" Converter="{StaticResource FileSizeToHumanReadableConverter}" StringFormat="Просмотр результата запроса - размер: {0}" />
-    </Window.Title>
+  <Window.Template>
+    <ControlTemplate TargetType="{x:Type Window}">
+      <Border 
+        Background="{TemplateBinding Background}" 
+        BorderBrush="{TemplateBinding BorderBrush}" 
+        BorderThickness="{TemplateBinding BorderThickness}"
+        >
+        <Grid>
+          <controls:Wait Visibility="Visible" />
+          <ContentPresenter 
+                Content="{TemplateBinding Content}" 
+                ContentTemplate="{TemplateBinding ContentTemplate}"
+                />
+        </Grid>
+      </Border>
+    </ControlTemplate>
+  </Window.Template>
 </Window>

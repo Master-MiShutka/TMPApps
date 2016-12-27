@@ -215,7 +215,7 @@
             DockPanel.Dock="Bottom"
             IsTextSearchEnabled="True"
             VirtualizingPanel.IsVirtualizing="True"
-            VirtualizingPanel.IsContainerVirtualizable="True"
+            VirtualizingPanel.VirtualizationMode="Recycling"
             Style="{StaticResource TMPTreeView}"
             ItemTemplateSelector="{StaticResource JPropertyDataTemplateSelector}" ItemContainerStyle="{DynamicResource TreeViewItemStyle}"/>
     </DockPanel>

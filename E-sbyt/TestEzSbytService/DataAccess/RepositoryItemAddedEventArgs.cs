@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 namespace TMP.Work.AmperM.TestApp.DataAccess
 {
     using Model;

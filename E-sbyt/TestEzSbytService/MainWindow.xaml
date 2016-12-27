@@ -1,4 +1,4 @@
-﻿<Window
+<Window
     x:Class="TMP.Work.AmperM.TestApp.MainWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -17,7 +17,7 @@
     xmlns:vm="clr-namespace:TMP.Work.AmperM.TestApp.ViewModel"
     xmlns:iconpack="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:system_windows="clr-namespace:System.Windows;assembly=PresentationFramework"
-    
+
     Title="{Binding Path=DisplayName}"
     Width="{settings:SettingBinding MainWindowWidth,
                                         1400.0}"
@@ -72,7 +72,7 @@
             behaviors:TabContent.IsCached="True"
             ItemTemplate="{StaticResource ClosableTabItemTemplate}"
             ItemsSource="{Binding Tabs}"
-            
+
             SelectedItem="{Binding SelectedItem}"/>
         <!-- ContentControl
             Grid.Row="1"

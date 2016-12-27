@@ -1,4 +1,4 @@
-﻿namespace TMP.Work.AmperM.TestApp.ViewModel
+namespace TMP.Work.AmperM.TestApp.ViewModel
 {
     public interface IEzSbytServiceFunctionViewModel
     {

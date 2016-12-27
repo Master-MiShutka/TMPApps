@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.ComponentModel;
 
 namespace TMP.Work.AmperM.TestApp.EzSbyt

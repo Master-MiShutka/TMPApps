@@ -16,29 +16,11 @@
     WindowStartupLocation="CenterOwner"
     WindowState="Maximized"
     Topmost="False"
-    Title="Просмотр в виде таблицы"
     mc:Ignorable="d">
     <Window.Resources>
         <control_converters:FileSizeToHumanReadableConverter x:Key="FileSizeToHumanReadableConverter" />
     </Window.Resources>
-    <Window.ContextMenu>
-        <ContextMenu>
-            <MenuItem x:Name="menuitemExport" Header="Экспорт" />
-            <!-- MenuItem Command="{Binding SaveContentCommand}" Header="Сохранить содержимое как ..." / -->
-        </ContextMenu>
-    </Window.ContextMenu>
-  <Grid Margin="2">
-    <Grid.RowDefinitions>
-      <RowDefinition Height="*"/>
-      <RowDefinition Height="Auto"/>
-    </Grid.RowDefinitions>
-    <!-- 0 -->
-    <DataGrid x:Name="datagrid"  AutoGenerateColumns="True"/>
-    <!-- 1 -->
-    <StackPanel Orientation="Horizontal" Grid.Row="1">
-      <TextBlock Margin="0,1,0,0" Text="{Binding ElementName=datagrid, Path=Items.Count, StringFormat={}Строк в таблице: {0}, 
-        UpdateSourceTrigger=PropertyChanged}" FontSize="{StaticResource SmallFontSize}"/>
-
-    </StackPanel>
-  </Grid>
+    <Window.Title>
+        <Binding Path="Data.ResultAsString.Length" Converter="{StaticResource FileSizeToHumanReadableConverter}" StringFormat="Просмотр результата запроса в виде таблицы - размер: {0}" />
+    </Window.Title>
 </Window>

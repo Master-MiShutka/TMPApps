@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.ObjectModel;
 
 namespace TMP.Work.AmperM.TestApp.Model
