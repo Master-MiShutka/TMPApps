@@ -22,7 +22,7 @@ namespace TMP.Work.Emcos.Model.Balans
             {
                 Id = this.Id,
                 Code = this.Code,
-                Title = this.Title,
+                Name = this.Name,
                 Description = this.Description,
                 Type = this.Type,
                 Voltage = this.Voltage,

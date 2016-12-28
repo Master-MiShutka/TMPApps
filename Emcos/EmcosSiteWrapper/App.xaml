@@ -1,8 +1,8 @@
-﻿<Application x:Class="TMP.Work.Emcos.App"
+﻿<tmpapp:TMPApp x:Class="TMP.Work.Emcos.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             DispatcherUnhandledException="Dispatcher_UnhandledException">
-    <Application.Resources>
+             xmlns:tmpapp="clr-namespace:TMPApplication;assembly=TMPApplication">
+    <tmpapp:TMPApp.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
 
@@ -25,5 +25,5 @@
 
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
-    </Application.Resources>
-</Application>
+    </tmpapp:TMPApp.Resources>
+</tmpapp:TMPApp>

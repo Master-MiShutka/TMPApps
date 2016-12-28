@@ -11,9 +11,9 @@ namespace TMP.Work.Emcos.Model.Balans
     [DataContract(Name = "GroupItem")]
     public class GroupItem : PropertyChangedBase, IBalansGroup, IProgress, IDisposable
     {
-        private string _id;
+        private decimal _id;
         private string _code;
-        private string _title;
+        private string _name;
 
         private string _description;
         private double? _maximumAllowableUnbalance = null;
@@ -42,7 +42,7 @@ namespace TMP.Work.Emcos.Model.Balans
         }
 
         [DataMember()]
-        public string Id { get { return _id; } set { _id = value; RaisePropertyChanged("Id"); } }
+        public decimal Id { get { return _id; } set { _id = value; RaisePropertyChanged("Id"); } }
 
         [DataMember()]
         public string Code { get { return _code; } set { _code = value; RaisePropertyChanged("Code"); } }
@@ -56,7 +56,7 @@ namespace TMP.Work.Emcos.Model.Balans
                 {
                     if ((item.AddToEplus != null && item.AddToEplus.HasValue) || (item.AddToEminus != null && item.AddToEminus.HasValue))
                     {
-                        sb.AppendLine(item.Title);
+                        sb.AppendLine(item.Name);
                         sb.AppendLine(item.Correction);
                     }
                 }
@@ -67,7 +67,7 @@ namespace TMP.Work.Emcos.Model.Balans
             }
         }
         [DataMember()]
-        public string Title { get { return _title; } set { _title = value; RaisePropertyChanged("Title"); } }
+        public string Name { get { return _name; } set { _name = value; RaisePropertyChanged("Name"); } }
         [JsonIgnore]
         public virtual double? Eplus
         {
@@ -84,7 +84,7 @@ namespace TMP.Work.Emcos.Model.Balans
                 return result == 0 ? null : result;
             }
 
-            set { throw new InvalidOperationException("Свойство Eplus только для чтения. Тип: " + GetType() + ", элемент: " + Title + ", значение: " + value); }
+            set { throw new InvalidOperationException("Свойство Eplus только для чтения. Тип: " + GetType() + ", элемент: " + Name + ", значение: " + value); }
         }
         [JsonIgnore]
         public double? AddToEplus
@@ -120,7 +120,7 @@ namespace TMP.Work.Emcos.Model.Balans
                 return result == 0 ? null : result;
             }
 
-            set { throw new InvalidOperationException("Свойство Eminus только для чтения. Тип: " + GetType() + ", элемент: " + Title); }
+            set { throw new InvalidOperationException("Свойство Eminus только для чтения. Тип: " + GetType() + ", элемент: " + Name); }
         }
         [JsonIgnore]
         public double? AddToEminus

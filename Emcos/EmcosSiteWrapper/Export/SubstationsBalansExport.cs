@@ -78,28 +78,28 @@ namespace TMP.Work.Emcos.Export
                 int column = 1;
 
                 CreateCell(rowIndex, column++, index + 1);
-                CreateRange(rowIndex, column++, 1, 2, "ПС " + substation.Title);
+                CreateRange(rowIndex, column++, 1, 2, "ПС " + substation.Name);
                 column++;
                 CreateCell(rowIndex, column++, substation.EnergyIn);
-                if (createNames) book.Names.Add("Postuplenie_vvoda_i_fidera_" + substation.Title.ToUpper(), Range(rowIndex, column - 1));
+                if (createNames) book.Names.Add("Postuplenie_vvoda_i_fidera_" + substation.Name.ToUpper(), Range(rowIndex, column - 1));
                 CreateCell(rowIndex, column++, substation.VvodaIn);
-                if (createNames) book.Names.Add("Postuplenie_vvoda_" + substation.Title.ToUpper(), Range(rowIndex, column - 1));
+                if (createNames) book.Names.Add("Postuplenie_vvoda_" + substation.Name.ToUpper(), Range(rowIndex, column - 1));
                 CreateCell(rowIndex, column++, substation.FideraIn);
-                if (createNames) book.Names.Add("Postuplenie_fidera_" + substation.Title.ToUpper(), Range(rowIndex, column - 1));
+                if (createNames) book.Names.Add("Postuplenie_fidera_" + substation.Name.ToUpper(), Range(rowIndex, column - 1));
                 CreateCell(rowIndex, column++, substation.EnergyOut);
-                if (createNames) book.Names.Add("Otpusk_vvoda_i_fidera_" + substation.Title.ToUpper(), Range(rowIndex, column - 1));
+                if (createNames) book.Names.Add("Otpusk_vvoda_i_fidera_" + substation.Name.ToUpper(), Range(rowIndex, column - 1));
                 CreateCell(rowIndex, column++, substation.VvodaOut);
-                if (createNames) book.Names.Add("Otpusk_vvoda_" + substation.Title.ToUpper(), Range(rowIndex, column - 1));
+                if (createNames) book.Names.Add("Otpusk_vvoda_" + substation.Name.ToUpper(), Range(rowIndex, column - 1));
                 CreateCell(rowIndex, column++, substation.FideraOut);
-                if (createNames) book.Names.Add("Otpusk_fidera_" + substation.Title.ToUpper(), Range(rowIndex, column - 1));
+                if (createNames) book.Names.Add("Otpusk_fidera_" + substation.Name.ToUpper(), Range(rowIndex, column - 1));
                 CreateCell(rowIndex, column++, substation.Tsn);
-                if (createNames) book.Names.Add("Tsn_" + substation.Title.ToUpper(), Range(rowIndex, column - 1));
+                if (createNames) book.Names.Add("Tsn_" + substation.Name.ToUpper(), Range(rowIndex, column - 1));
                 CreateCell(rowIndex, column++, substation.Unbalance);
-                if (createNames) book.Names.Add("Nebalans_" + substation.Title.ToUpper(), Range(rowIndex, column - 1));
+                if (createNames) book.Names.Add("Nebalans_" + substation.Name.ToUpper(), Range(rowIndex, column - 1));
                 CreateCell(rowIndex, column++, substation.PercentageOfUnbalance);
-                if (createNames) book.Names.Add("Nebalans_procent_" + substation.Title.ToUpper(), Range(rowIndex, column - 1));
+                if (createNames) book.Names.Add("Nebalans_procent_" + substation.Name.ToUpper(), Range(rowIndex, column - 1));
                 CreateCell(rowIndex, column, substation.MaximumAllowableUnbalance);
-                if (createNames) book.Names.Add("MaxNebalans_procent_" + substation.Title.ToUpper(), Range(rowIndex, column));
+                if (createNames) book.Names.Add("MaxNebalans_procent_" + substation.Name.ToUpper(), Range(rowIndex, column));
 
                 _columnsCount = column;
 
@@ -187,7 +187,7 @@ namespace TMP.Work.Emcos.Export
                     var bss = section as SubstationSection;
                     if (bss == null)
                         System.Diagnostics.Debugger.Break();
-                    CreateRange(rowIndex, 2, 1, 2, bss.Title);
+                    CreateRange(rowIndex, 2, 1, 2, bss.Name);
                     CreateCell(rowIndex, 4, bss.EnergyIn);
                     CreateCell(rowIndex, 7, bss.EnergyOut);
                     CreateCell(rowIndex, 11, bss.Unbalance);
@@ -405,7 +405,7 @@ namespace TMP.Work.Emcos.Export
             CreateSheet("ВСЕ РЭСы", exportInfo.Substations
                 .OrderBy(x => x.Departament)
                 .OrderBy(x => x.Voltage)
-                .OrderBy(x => x.Title)
+                .OrderBy(x => x.Name)
                 .ToList<Substation>());
 
             foreach (var grouping in exportInfo.Substations.GroupBy(x => x.Departament))

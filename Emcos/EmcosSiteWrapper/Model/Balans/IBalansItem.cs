@@ -1,21 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Reflection;
-using System.Linq;
 using System.Runtime.Serialization;
 
 namespace TMP.Work.Emcos.Model.Balans
 {
-    public interface IBalansItem : System.ComponentModel.INotifyPropertyChanged, IDisposable
+    public interface IBalansItem : IEmcosPoint, System.ComponentModel.INotifyPropertyChanged, IDisposable
     {
-        [DataMember()]
-        string Id { get; set; }
-        [DataMember()]
-        string Code { get; set; }
         string Correction { get; }
-        [DataMember()]
-        string Title { get; set; }
         [DataMember()]
         double? Eplus { get; set; }
         double? EnergyIn { get; }

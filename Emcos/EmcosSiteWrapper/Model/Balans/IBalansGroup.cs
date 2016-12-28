@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Reflection;
-using System.Linq;
-using System.Runtime.Serialization;
+﻿using System.Collections.Generic;
 
 namespace TMP.Work.Emcos.Model.Balans
 {

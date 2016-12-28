@@ -158,7 +158,7 @@ namespace TMP.Work.Emcos.View
                     {
                         var sub = new AuxiliaryReportItem();
                         sub.Children = new List<AuxiliaryReportItem>();
-                        sub.Name = substation.Title;
+                        sub.Name = substation.Name;
                         sub.Type = "Substation";
 
                         summ = null;

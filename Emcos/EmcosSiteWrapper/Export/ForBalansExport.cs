@@ -135,12 +135,12 @@ namespace TMP.Work.Emcos.Export
         {
             book.Worksheets.Delete(sheet);
 
-            CreateBodyForDepartament("ВСЕ", exportInfo.Substations.OrderBy(s => s.Title).ToList());
+            CreateBodyForDepartament("ВСЕ", exportInfo.Substations.OrderBy(s => s.Name).ToList());
 
             foreach (var grouping in exportInfo.Substations.GroupBy(x => x.Departament))
             {
                 IList<Substation> list = grouping.Cast<Substation>()
-                    .OrderBy(x => x.Title)
+                    .OrderBy(x => x.Name)
                     .ToList<Substation>();
                 if (list == null)
                     continue;

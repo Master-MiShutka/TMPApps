@@ -594,11 +594,11 @@ namespace TMP.Work.Emcos.ViewModel
                 return new BindableCollection<Substation>((SelectedDepartament == null || SelectedDepartament.Children == null)
                     ? Session.Substations
                         .OrderBy(s => s.Departament)
-                        .ThenBy(s => s.Title)
+                        .ThenBy(s => s.Name)
                         .ToList()
                     : Session.Substations
                         .Where(s => s.Departament == SelectedDepartament.Name)
-                        .OrderBy(s => s.Title)
+                        .OrderBy(s => s.Name)
                         .ToList());
             }
             private set

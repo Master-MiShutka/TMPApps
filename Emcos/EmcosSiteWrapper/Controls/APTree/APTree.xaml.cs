@@ -436,7 +436,7 @@ namespace TMP.Work.Emcos.Controls
                         Dispatcher.BeginInvoke((Action)(() => node.State = VTreeView.TreeNodeState.ChildrenPrepared));
                         return true;
                     };
-                    U.GetData(this, EmcosSiteWrapper.Instance.GetAPointsAsync, node.Id, post);
+                    Utils.GetData(this, TMP.Work.Emcos.EmcosSiteWrapper.Instance.GetAPointsAsync, node.Id, post);
                 }
             }
         }
@@ -509,7 +509,7 @@ namespace TMP.Work.Emcos.Controls
                     {
                         if (String.IsNullOrWhiteSpace(data)) return false;
 
-                        var list = AnswerParser.Params(data);
+                        var list = Utils.Params(data);
 
                         if (node == null)
                             Dispatcher.BeginInvoke(new Action(() =>
@@ -531,7 +531,7 @@ namespace TMP.Work.Emcos.Controls
                         }
                         return true;
                     };
-                    U.GetData(this, EmcosSiteWrapper.Instance.GetParamsAsync, senddata, post);
+                    Utils.GetData(this, EmcosSiteWrapper.Instance.GetParamsAsync, senddata, post);
                 }
             }
         }
@@ -553,7 +553,7 @@ namespace TMP.Work.Emcos.Controls
             {
                 if (String.IsNullOrWhiteSpace(data)) return false;
 
-                var list = AnswerParser.Params(data);
+                var list = Utils.Params(data);
                 //ICollection<VTreeView.ITreeNode> list = AnswerParser.Params(data);
 
                 Dispatcher.BeginInvoke(new Action(() =>
@@ -563,7 +563,7 @@ namespace TMP.Work.Emcos.Controls
                     }));                
                 return true;
             };
-            U.GetData(this, EmcosSiteWrapper.Instance.GetParamsAsync, senddata, post);
+            Utils.GetData(this, EmcosSiteWrapper.Instance.GetParamsAsync, senddata, post);
         }
 
         private string[] GetSelectedGroupsAndPointsID(System.Collections.IList list)

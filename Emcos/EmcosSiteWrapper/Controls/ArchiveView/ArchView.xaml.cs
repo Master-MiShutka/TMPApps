@@ -69,7 +69,7 @@ namespace TMP.Work.Emcos.Controls
             {
                 if (String.IsNullOrWhiteSpace(data)) return false;
 
-                var list = AnswerParser.Params(data);
+                var list = Utils.Params(data);
 
                 Dispatcher.BeginInvoke(new Action(() =>
                 {
@@ -77,7 +77,7 @@ namespace TMP.Work.Emcos.Controls
                 }));
                 return true;
             };
-            U.GetData(this, EmcosSiteWrapper.Instance.GetViewAsync, sendData, post);
+            Utils.GetData(this, EmcosSiteWrapper.Instance.GetViewAsync, sendData, post);
         }
         //****************************************************************
         private void GetPoints()
@@ -87,7 +87,7 @@ namespace TMP.Work.Emcos.Controls
             {
                 if (String.IsNullOrWhiteSpace(data)) return false;
 
-                var list = AnswerParser.ArchAPs(data);
+                var list = Utils.ArchAPs(data);
 
                 Dispatcher.BeginInvoke(new Action(() =>
                 {
@@ -95,7 +95,7 @@ namespace TMP.Work.Emcos.Controls
                 }));
                 return true;
             };
-            U.GetData(this, EmcosSiteWrapper.Instance.GetViewAsync, sendData, post);
+            Utils.GetData(this, EmcosSiteWrapper.Instance.GetViewAsync, sendData, post);
         }
         //****************************************************************
         private void GetExtra()
@@ -105,10 +105,10 @@ namespace TMP.Work.Emcos.Controls
             {
                 if (String.IsNullOrWhiteSpace(data)) return false;
 
-                var nvc = AnswerParser.ParsePairs(data);
+                var nvc = Utils.ParsePairs(data);
                 if ((nvc != null) && (nvc.Get("result") == "0"))
                 {
-                    var list = AnswerParser.ParseRecords(data);
+                    var list = Utils.ParseRecords(data);
                     var records = list[0];
 
                     Dispatcher.BeginInvoke(new Action(() =>
@@ -120,7 +120,7 @@ namespace TMP.Work.Emcos.Controls
                 }
                 return true;
             };
-            U.GetData(this, EmcosSiteWrapper.Instance.GetViewAsync, sendData, post);
+            Utils.GetData(this, EmcosSiteWrapper.Instance.GetViewAsync, sendData, post);
         }
         //****************************************************************
         private void GetArchiveData()
@@ -180,7 +180,7 @@ namespace TMP.Work.Emcos.Controls
                 var data = t.Result;
                 if (String.IsNullOrWhiteSpace(data))
                     return;
-                var list = AnswerParser.ArchiveData(data);
+                var list = Utils.ArchiveData(data);
 
                 if (list == null)
                     MessageBox.Show("Нет данных!", "Просмотр архивов", MessageBoxButton.OK, MessageBoxImage.Exclamation);

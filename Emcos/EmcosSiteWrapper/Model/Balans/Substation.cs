@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Reflection;
 using System.Linq;
 using System.Runtime.Serialization;
-using Newtonsoft.Json;
 
 namespace TMP.Work.Emcos.Model.Balans
 {
@@ -26,7 +22,7 @@ namespace TMP.Work.Emcos.Model.Balans
             {
                 Id = this.Id,
                 Code = this.Code,
-                Title = this.Title,
+                Name = this.Name,
                 Description = this.Description,
                 Type = this.Type,
                 Departament = this.Departament,

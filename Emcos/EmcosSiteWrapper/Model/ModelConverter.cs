@@ -96,12 +96,12 @@ namespace TMP.Work.Emcos.Model
                         // выделяем название
                         var title = "";
                         for (int i = 2; i < nameParts.Length; i++) title += nameParts[i];
-                        substation.Title = title;
+                        substation.Name = title;
                         // выделяем напряжение
                         substation.Voltage = nameParts[1];
 
                         substation.Code = substationPoint.Code;
-                        substation.Id = substationPoint.Id.ToString();
+                        substation.Id = substationPoint.Id;
                         substation.Children = new List<IBalansItem>();
 
                         if (substationPoint.Children != null)
@@ -122,9 +122,9 @@ namespace TMP.Work.Emcos.Model
                                                     item = new UnitTransformer();
                                                 else
                                                     item = new UnitTransformerBus();
-                                                item.Title = subgroupPoint.Name;
+                                                item.Name = subgroupPoint.Name;
                                                 item.Code = subgroupPoint.Code;
-                                                item.Id = subgroupPoint.Id.ToString();
+                                                item.Id = subgroupPoint.Id;
                                                 item.Description = subgroupPoint.Description;
                                                 item.SetSubstation(substation);
                                                 group.Children.Add(item);
@@ -138,9 +138,9 @@ namespace TMP.Work.Emcos.Model
                                             foreach (var subgroupPoint in groupPoint.Children)
                                             {
                                                 item = new PowerTransformer();
-                                                item.Title = subgroupPoint.Name;
+                                                item.Name = subgroupPoint.Name;
                                                 item.Code = subgroupPoint.Code;
-                                                item.Id = subgroupPoint.Id.ToString();
+                                                item.Id = subgroupPoint.Id;
                                                 item.Description = subgroupPoint.Description;
                                                 item.SetSubstation(substation);
                                                 group.Children.Add(item);
@@ -163,9 +163,9 @@ namespace TMP.Work.Emcos.Model
                                                             var substationSection = new SubstationSection();
                                                             substationSection.Children = new List<IBalansItem>();
                                                             substationSection.Voltage = subgroupPoint.Name;
-                                                            substationSection.Title = sectionPoint.Name;
+                                                            substationSection.Name = sectionPoint.Name;
                                                             substationSection.Code = sectionPoint.Code;
-                                                            substationSection.Id = sectionPoint.Id.ToString();
+                                                            substationSection.Id = sectionPoint.Id;
                                                             substationSection.Description = sectionPoint.Description;
                                                             substationSection.SetSubstation(substation);
 
@@ -192,9 +192,9 @@ namespace TMP.Work.Emcos.Model
                                                                     if (childItem == null)
                                                                         System.Diagnostics.Debugger.Break();
 
-                                                                    childItem.Title = sectionChildPoint.Name;
+                                                                    childItem.Name = sectionChildPoint.Name;
                                                                     childItem.Code = sectionChildPoint.Code;
-                                                                    childItem.Id = sectionChildPoint.Id.ToString();
+                                                                    childItem.Id = sectionChildPoint.Id;
                                                                     childItem.Description = sectionChildPoint.Description;
                                                                     childItem.SetSubstation(substation);
 
@@ -213,9 +213,9 @@ namespace TMP.Work.Emcos.Model
                                                                 highSection = new SubstationSection();
                                                                 highSection.Children = new List<IBalansItem>();
                                                                 highSection.Voltage = subgroupPoint.Name;
-                                                                highSection.Title = subgroupPoint.Name;
+                                                                highSection.Name = subgroupPoint.Name;
                                                                 highSection.Code = subgroupPoint.Code;
-                                                                highSection.Id = subgroupPoint.Id.ToString();
+                                                                highSection.Id = subgroupPoint.Id;
                                                                 highSection.Description = subgroupPoint.Description;
                                                                 highSection.SetSubstation(substation);
                                                             }

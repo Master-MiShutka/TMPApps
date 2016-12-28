@@ -13,7 +13,7 @@ namespace TMP.Work.Emcos.Model.Balans
     {
         public SubstationAuxiliary()
         {
-            Title = "Собственные нужды";
+            Name = "Собственные нужды";
             Type = ElementTypes.Auxiliary;
             Children = new ObservableCollection<IBalansItem>();
         }
@@ -23,7 +23,7 @@ namespace TMP.Work.Emcos.Model.Balans
             {
                 Id = this.Id,
                 Code = this.Code,
-                Title = this.Title,
+                Name = this.Name,
                 Description = this.Description,
                 Type = this.Type,
                 Children = new ObservableCollection<IBalansItem>()

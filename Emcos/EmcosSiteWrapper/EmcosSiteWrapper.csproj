@@ -120,6 +120,7 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AnswerParser.cs" />
     <Compile Include="BindableCollection.cs" />
     <Compile Include="Controls\ArchiveDataVisualizer.xaml.cs">
       <DependentUpon>ArchiveDataVisualizer.xaml</DependentUpon>
@@ -158,8 +159,6 @@
     <Compile Include="Converters\StringToVisibilityConverter.cs" />
     <Compile Include="Converters\StateToVisibilityConverter.cs" />
     <Compile Include="CustomJsonDateTimeFormat.cs" />
-    <Compile Include="Emcos\EmcosSite.cs" />
-    <Compile Include="Emcos\EmcosSiteWrapperMethod.cs" />
     <Compile Include="Controls\GettingData.xaml.cs">
       <DependentUpon>GettingData.xaml</DependentUpon>
     </Compile>
@@ -170,58 +169,36 @@
     <Compile Include="Export\FiderAnalizExport.cs" />
     <Compile Include="GlobalCommands.cs" />
     <Compile Include="GlobalSuppressions.cs" />
-    <Compile Include="IStateObject.cs" />
     <Compile Include="MessageBox.xaml.cs">
       <DependentUpon>MessageBox.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Model\Archive\ArchAP.cs" />
-    <Compile Include="Model\Archive\ArchData.cs" />
-    <Compile Include="Model\Archive\ArchGroup.cs" />
-    <Compile Include="Model\Archive\ArchPoint.cs" />
-    <Compile Include="Model\Archive\IArchAP.cs" />
     <Compile Include="Model\AuxiliaryReportTreeModel.cs" />
     <Compile Include="Model\BalansGrop.cs" />
     <Compile Include="Model\BalansTreeModel.cs" />
-    <Compile Include="Model\Balans\DataValue.cs" />
-    <Compile Include="Model\Balans\GroupItem.cs" />
-    <Compile Include="Model\Balans\IBalansItem.cs" />
     <Compile Include="Model\Balans\BalansItem.cs" />
+    <Compile Include="Model\Balans\DataValue.cs" />
     <Compile Include="Model\Balans\Fider.cs" />
-    <Compile Include="Model\Balans\PowerTransformer.cs" />
-    <Compile Include="Model\Balans\SubstationSection.cs" />
-    <Compile Include="Model\Balans\UnitTransformerBus.cs" />
-    <Compile Include="Model\Balans\UnitTransformer.cs" />
+    <Compile Include="Model\Balans\GroupItem.cs" />
     <Compile Include="Model\Balans\IBalansGroup.cs" />
+    <Compile Include="Model\Balans\IBalansItem.cs" />
+    <Compile Include="Model\Balans\PowerTransformer.cs" />
+    <Compile Include="Model\Balans\Substation.cs" />
     <Compile Include="Model\Balans\SubstationAuxiliary.cs" />
     <Compile Include="Model\Balans\SubstationPowerTransformers.cs" />
-    <Compile Include="Model\Balans\Substation.cs" />
+    <Compile Include="Model\Balans\SubstationSection.cs" />
+    <Compile Include="Model\Balans\UnitTransformer.cs" />
+    <Compile Include="Model\Balans\UnitTransformerBus.cs" />
     <Compile Include="Model\DatePeriod.cs" />
-    <Compile Include="Model\EmcosAnswerResult.cs" />
-    <Compile Include="Model\EmcosModel.cs" />
     <Compile Include="Model\IBalansSession.cs" />
     <Compile Include="Model\ModelConverter.cs" />
-    <Compile Include="Model\Parameters\AGGF_Param.cs" />
-    <Compile Include="Model\Parameters\DIR_Param.cs" />
-    <Compile Include="Model\Parameters\EU_Param.cs" />
-    <Compile Include="Model\Parameters\IParam.cs" />
-    <Compile Include="Model\Parameters\MD_Param.cs" />
-    <Compile Include="Model\Parameters\MLPARAMS.cs" />
-    <Compile Include="Model\Parameters\ML_param.cs" />
-    <Compile Include="Model\Parameters\AGGS_Param.cs" />
-    <Compile Include="Model\Parameters\MSF_Param.cs" />
-    <Compile Include="Model\Parameters\MS_Param.cs" />
-    <Compile Include="Model\Parameters\TFF.cs" />
     <Compile Include="Model\BalansSession.cs" />
-    <Compile Include="Model\Status.cs" />
     <Compile Include="NullListToEmptyStringConverter.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="PropertyChangedBase.cs" />
     <Compile Include="Settings\SettingBindingExtension.cs" />
-    <Compile Include="State.cs" />
     <Compile Include="U.cs" />
     <Compile Include="ViewModel\BalansViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
@@ -247,7 +224,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Compile Include="AnswerParser.cs" />
     <Compile Include="Controls\APTree\APTree.xaml.cs">
       <DependentUpon>APTree.xaml</DependentUpon>
     </Compile>
@@ -264,7 +240,6 @@
       <DependentUpon>VTreeView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Converters\TreeViewMarginConverter.cs" />
-    <Compile Include="Emcos\EmcosSiteWrapper.cs" />
     <Page Include="Controls\ArchiveDataVisualizer.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -393,7 +368,6 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Model\Parameters\Param.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -423,12 +397,26 @@
     <ProjectReference Include="..\..\Library\Logger\Logger.csproj">
       <Project>{04ce65d3-1dbf-4a95-8b6e-44ec2c896d00}</Project>
       <Name>Logger</Name>
+      <Private>True</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LIBRARY\MsgBox\MsgBox.csproj">
+      <Project>{2f8ef004-1e7a-429d-863b-5a062a90705a}</Project>
+      <Name>MsgBox</Name>
       <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\..\Library\NetHelper\NetHelper.csproj">
       <Project>{e00c55d0-971a-4d59-8c91-e7a4d79d50e8}</Project>
       <Name>NetHelper</Name>
       <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LIBRARY\ServiceLocator\ServiceLocator.csproj">
+      <Project>{1d2b2142-67d7-48ea-91f9-5e77e29b5ab9}</Project>
+      <Name>ServiceLocator</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LIBRARY\TMPApplication\TMPApplication.csproj">
+      <Project>{dfe89862-64ef-44f8-98a8-07b410ec180e}</Project>
+      <Name>TMPApplication</Name>
     </ProjectReference>
     <ProjectReference Include="..\Common\Common.csproj">
       <Project>{e3d90d52-1392-44d5-a962-888e528c7edf}</Project>
@@ -439,6 +427,16 @@
     <ProjectReference Include="..\..\Library\RepositoryCommon\RepositoryCommon.csproj">
       <Project>{7b66a20e-48ff-4fcd-955d-415ad5f1e4e2}</Project>
       <Name>RepositoryCommon</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\EmcosModel\EmcosModel.csproj">
+      <Project>{4ea193ae-23a4-411c-aee6-0afbaac1c1ca}</Project>
+      <Name>EmcosModel</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\Emcos\EmcosService.csproj">
+      <Project>{8f7e64d5-6064-439f-9217-3f1dc0591d77}</Project>
+      <Name>EmcosService</Name>
       <Private>False</Private>
     </ProjectReference>
   </ItemGroup>

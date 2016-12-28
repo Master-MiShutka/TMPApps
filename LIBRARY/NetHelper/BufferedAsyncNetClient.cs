@@ -46,6 +46,7 @@ namespace TMP.Common.NetHelper
 
             // Create the state object.
             var requestState = new RequestState();
+            httpWebRequest.ContentType = "application/x-www-form-urlencoded";
 
             if (UpdateCallback != null)
                 UpdateCallback(requestState.Progress, "Подготовка запроса");
@@ -54,11 +55,10 @@ namespace TMP.Common.NetHelper
             if (Configure != null)
                 Configure(ref httpWebRequest);
 
-            httpWebRequest.Timeout = Timeout.Infinite;
-            httpWebRequest.ReadWriteTimeout = Timeout.Infinite;
+            /*httpWebRequest.Timeout = Timeout.Infinite;
+            httpWebRequest.ReadWriteTimeout = Timeout.Infinite;*/
 
             var buffer = Encoding.UTF8.GetBytes(sendParam);
-            httpWebRequest.ContentType = "application/x-www-form-urlencoded";
 
             using (var postStream = httpWebRequest.GetRequestStream())
             {

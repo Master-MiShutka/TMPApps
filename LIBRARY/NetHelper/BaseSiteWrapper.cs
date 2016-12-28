@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Net;
-using System.Net.Http;
 using System.Net.NetworkInformation;
 using System.Text;
 using System.Threading;
@@ -34,6 +33,8 @@ namespace TMP.Common.NetHelper
             var appWithLogger = System.Windows.Application.Current as IAppWithLogger;
             if (appWithLogger != null)
                 Log = appWithLogger.Log;
+            else
+                System.Diagnostics.Debug.WriteLine("Application as IAppWithLogger not found!");
         }
 
         #endregion Constructor
@@ -199,32 +200,16 @@ namespace TMP.Common.NetHelper
             {
                 System.Net.WebResponse response = we.Response;
                 string message = null;
+
                 if (response != null)
-                    message = ((System.Net.HttpWebResponse)response).StatusDescription;
-
-                result.SetError(we, (int)we.Status);
-                return result;
-            }
-            catch (HttpRequestException hre)
-            {
-                if (hre.InnerException != null && hre.InnerException is System.Net.WebException)
                 {
-                    System.Net.WebException we = hre.InnerException as System.Net.WebException;
-                    System.Net.WebResponse response = we.Response;
-
-                    string message = null;
-                    if (response != null)
+                    using (var stream = we.Response.GetResponseStream())
+                    using (var reader = new System.IO.StreamReader(stream))
                     {
-                        using (var stream = we.Response.GetResponseStream())
-                        using (var reader = new System.IO.StreamReader(stream))
-                        {
-                            message = reader.ReadToEnd();
-                        }
+                        message = reader.ReadToEnd();
                     }
-                    result.SetError(hre, (int)we.Status, message);
-                    return result;
                 }
-                result.SetError(hre, EMPTY_STATUS_CODE);
+                result.SetError(we, (int)we.Status, message);
                 return result;
             }
             catch (Exception ex)
@@ -247,10 +232,10 @@ namespace TMP.Common.NetHelper
 
                 // содержимое запроса
                 httpWebRequest.ContentLength = data.Length;
-                using (Stream stream = await httpWebRequest.GetRequestStreamAsync())
-                    await stream.WriteAsync(data, 0, data.Length);
+                using (Stream stream = httpWebRequest.GetRequestStream())
+                    stream.Write(data, 0, data.Length);
 
-                using (HttpWebResponse response = (HttpWebResponse)await httpWebRequest.GetResponseAsync())
+                using (HttpWebResponse response = (HttpWebResponse) await httpWebRequest.GetResponseAsync())
                 using (Stream responseStream = response.GetResponseStream())
                 {
                     Stream streamToRead = responseStream;
@@ -265,7 +250,7 @@ namespace TMP.Common.NetHelper
 
                     using (StreamReader streamReader = new StreamReader(streamToRead, Encoding.UTF8))
                     {
-                        string answer = await streamReader.ReadToEndAsync();
+                        string answer = streamReader.ReadToEnd();
                         result.SetData(answer, (int)response.StatusCode);
 
                     }
@@ -276,32 +261,16 @@ namespace TMP.Common.NetHelper
             {
                 System.Net.WebResponse response = we.Response;
                 string message = null;
+
                 if (response != null)
-                    message = ((System.Net.HttpWebResponse)response).StatusDescription;
-
-                result.SetError(we, (int)we.Status);
-                return result;
-            }
-            catch (HttpRequestException hre)
-            {
-                if (hre.InnerException != null && hre.InnerException is System.Net.WebException)
                 {
-                    System.Net.WebException we = hre.InnerException as System.Net.WebException;
-                    System.Net.WebResponse response = we.Response;
-
-                    string message = null;
-                    if (response != null)
+                    using (var stream = we.Response.GetResponseStream())
+                    using (var reader = new System.IO.StreamReader(stream))
                     {
-                        using (var stream = we.Response.GetResponseStream())
-                        using (var reader = new System.IO.StreamReader(stream))
-                        {
-                            message = reader.ReadToEnd();
-                        }
+                        message = reader.ReadToEnd();
                     }
-                    result.SetError(hre, (int)we.Status, message);
-                    return result;
                 }
-                result.SetError(hre, EMPTY_STATUS_CODE);
+                result.SetError(we, (int)we.Status, message);
                 return result;
             }
             catch (Exception ex)
@@ -357,32 +326,16 @@ namespace TMP.Common.NetHelper
             {
                 System.Net.WebResponse response = we.Response;
                 string message = null;
+
                 if (response != null)
-                    message = ((System.Net.HttpWebResponse)response).StatusDescription;
-
-                result.SetError(we, (int)we.Status);
-                return result;
-            }
-            catch (HttpRequestException hre)
-            {
-                if (hre.InnerException != null && hre.InnerException is System.Net.WebException)
                 {
-                    System.Net.WebException we = hre.InnerException as System.Net.WebException;
-                    System.Net.WebResponse response = we.Response;
-
-                    string message = null;
-                    if (response != null)
+                    using (var stream = we.Response.GetResponseStream())
+                    using (var reader = new System.IO.StreamReader(stream))
                     {
-                        using (var stream = we.Response.GetResponseStream())
-                        using (var reader = new System.IO.StreamReader(stream))
-                        {
-                            message = reader.ReadToEnd();
-                        }
+                        message = reader.ReadToEnd();
                     }
-                    result.SetError(hre, (int)we.Status, message);
-                    return result;
                 }
-                result.SetError(hre, EMPTY_STATUS_CODE);
+                result.SetError(we, (int)we.Status, message);
                 return result;
             }
             catch (Exception ex)
@@ -427,7 +380,7 @@ namespace TMP.Common.NetHelper
 
                     using (StreamReader streamReader = new StreamReader(streamToRead, Encoding.UTF8))
                     {
-                        string answer = await streamReader.ReadToEndAsync();
+                        string answer = streamReader.ReadToEnd();
                         result.SetData(answer, (int)response.StatusCode);
                     }
                 }
@@ -437,32 +390,16 @@ namespace TMP.Common.NetHelper
             {
                 System.Net.WebResponse response = we.Response;
                 string message = null;
+
                 if (response != null)
-                    message = ((System.Net.HttpWebResponse)response).StatusDescription;
-
-                result.SetError(we, (int)we.Status);
-                return result;
-            }
-            catch (HttpRequestException hre)
-            {
-                if (hre.InnerException != null && hre.InnerException is System.Net.WebException)
                 {
-                    System.Net.WebException we = hre.InnerException as System.Net.WebException;
-                    System.Net.WebResponse response = we.Response;
-
-                    string message = null;
-                    if (response != null)
+                    using (var stream = we.Response.GetResponseStream())
+                    using (var reader = new System.IO.StreamReader(stream))
                     {
-                        using (var stream = we.Response.GetResponseStream())
-                        using (var reader = new System.IO.StreamReader(stream))
-                        {
-                            message = reader.ReadToEnd();
-                        }
+                        message = reader.ReadToEnd();
                     }
-                    result.SetError(hre, (int)we.Status, message);
-                    return result;
                 }
-                result.SetError(hre, EMPTY_STATUS_CODE);
+                result.SetError(we, (int)we.Status, message);
                 return result;
             }
             catch (Exception ex)
@@ -502,70 +439,11 @@ namespace TMP.Common.NetHelper
                 }
             }
             #region EXCEPTIONS
-            catch (Exception ex)
+            catch
             {
                 return null;
             }
             #endregion
-        }
-
-        public async Task<ServiceResult> SendRequest_httpclient(string url)
-        {
-            ServiceResult result = new ServiceResult();
-            try
-            {
-                HttpClient httpClient = new HttpClient();
-                httpClient.Timeout = TimeSpan.FromSeconds(this.TimeOut);
-
-                HttpResponseMessage httpResponseMessage = await httpClient.GetAsync(
-                    new Uri(url),
-                    HttpCompletionOption.ResponseContentRead,
-                    Cts.Token);
-
-                HttpContent httpContent = httpResponseMessage.Content;
-                string answer = await httpContent.ReadAsStringAsync();
-                result.SetData(answer, (int)httpResponseMessage.StatusCode);
-            }
-            #region EXCEPTIONS
-            catch (System.Net.WebException we)
-            {
-                System.Net.WebResponse response = we.Response;
-                string message = null;
-                if (response != null)
-                    message = ((System.Net.HttpWebResponse)response).StatusDescription;
-
-                result.SetError(we, (int)we.Status);
-                return result;
-            }
-            catch (HttpRequestException hre)
-            {
-                if (hre.InnerException != null && hre.InnerException is System.Net.WebException)
-                {
-                    System.Net.WebException we = hre.InnerException as System.Net.WebException;
-                    System.Net.WebResponse response = we.Response;
-
-                    string message = null;
-                    if (response != null)
-                    {
-                        using (var stream = we.Response.GetResponseStream())
-                        using (var reader = new System.IO.StreamReader(stream))
-                        {
-                            message = reader.ReadToEnd();
-                        }
-                    }
-                    result.SetError(hre, (int)we.Status, message);
-                    return result;
-                }
-                result.SetError(hre, EMPTY_STATUS_CODE);
-                return result;
-            }
-            catch (Exception ex)
-            {
-                result.SetError(ex, EMPTY_STATUS_CODE);
-                return result;
-            }
-            #endregion
-            return result;
         }
 
         #endregion Public Methods
@@ -604,7 +482,7 @@ namespace TMP.Common.NetHelper
         public string Password { get; set; } = "sbyt";
 
         public string ServerAddress { get; set; }
-        public string ServiceName { get; set; } 
+        public string ServiceName { get; set; }
         public string WebServicePath { get; set; }
 
         public string SiteAddress { get { return "http://" + ServerAddress + "/" + ServiceName + "/" + WebServicePath; } }
