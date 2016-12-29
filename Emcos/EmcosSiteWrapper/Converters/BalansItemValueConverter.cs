@@ -19,19 +19,19 @@ namespace TMP.Work.Emcos.Converters
             bool isItem = false;
             switch (bi.Type)
             {
-                case Model.ElementTypes.PowerTransformer:
+                case Model.ElementTypes.POWERTRANSFORMER:
                     bi = value as PowerTransformer;
                     isItem = true;
                     break;
-                case Model.ElementTypes.Fider:
+                case Model.ElementTypes.FIDER:
                     bi = value as Fider;
                     isItem = true;
                     break;
-                case Model.ElementTypes.UnitTransformer:
+                case Model.ElementTypes.UNITTRANSFORMER:
                     bi = value as UnitTransformer;
                     isItem = true;
                     break;
-                case Model.ElementTypes.UnitTransformerBus:
+                case Model.ElementTypes.UNITTRANSFORMERBUS:
                     bi = value as UnitTransformerBus;
                     isItem = true;
                     break;

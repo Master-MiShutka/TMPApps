@@ -241,7 +241,7 @@
                 <Style x:Key="q" BasedOn="{StaticResource MetroMenuItem}" TargetType="{x:Type MenuItem}">
                                 <Setter Property="Visibility" Value="Collapsed" />
                                 <Style.Triggers>
-                                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu}, Path=PlacementTarget.DataContext.SelectedBalansItem.Type}" Value="{x:Static model:ElementTypes.Substation}">
+                                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu}, Path=PlacementTarget.DataContext.SelectedBalansItem.Type}" Value="{x:Static model:ElementTypes.SUBSTATION}">
                                         <Setter Property="Visibility" Value="Visible" />
                                     </DataTrigger>
                                 </Style.Triggers>

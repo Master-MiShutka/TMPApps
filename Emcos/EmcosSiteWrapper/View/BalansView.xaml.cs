@@ -164,7 +164,7 @@ namespace TMP.Work.Emcos.View
                         summ = null;
                         foreach (Model.Balans.IBalansItem balansItem in substation.Items)
                         {
-                            if (balansItem.Type == ElementTypes.UnitTransformer || balansItem.Type == ElementTypes.UnitTransformerBus)
+                            if (balansItem.Type == ElementTypes.UNITTRANSFORMER || balansItem.Type == ElementTypes.UNITTRANSFORMERBUS)
                                 sub.Children.Add(new AuxiliaryReportItem { Name = balansItem.Title, Value = balansItem.Eplus });
                         }
                         summ = sub.Children.Sum(i => i.Value.HasValue ? i.Value : 0d);
@@ -197,7 +197,7 @@ namespace TMP.Work.Emcos.View
             {
                 if (vm == null) return false;
                 if (vm.SelectedBalansItem == null) return false;
-                if (vm.SelectedBalansItem is Model.Balans.IBalansGroup && (vm.SelectedBalansItem as Model.Balans.IBalansGroup).Type == ElementTypes.Substation)
+                if (vm.SelectedBalansItem is Model.Balans.IBalansGroup && (vm.SelectedBalansItem as Model.Balans.IBalansGroup).Type == ElementTypes.SUBSTATION)
                     return true;
                 else
                     return false;
@@ -448,32 +448,32 @@ namespace TMP.Work.Emcos.View
         {
             switch (elementType)
             {
-                case Model.ElementTypes.Group:
+                case Model.ElementTypes.GROUP:
                     break;
-                case Model.ElementTypes.Substation:
+                case Model.ElementTypes.SUBSTATION:
                     ShowSubstationDetails();
                     break;
-                case Model.ElementTypes.Voltage:
+                case Model.ElementTypes.VOLTAGE:
                     break;
-                case Model.ElementTypes.Section:
+                case Model.ElementTypes.SECTION:
                     ShowSubstationDetails();
                     break;
-                case Model.ElementTypes.PowerTransformer:
+                case Model.ElementTypes.POWERTRANSFORMER:
                     ShowItemDetails();
                     break;
-                case Model.ElementTypes.UnitTransformer:
+                case Model.ElementTypes.UNITTRANSFORMER:
                     ShowItemDetails();
                     break;
-                case Model.ElementTypes.UnitTransformerBus:
+                case Model.ElementTypes.UNITTRANSFORMERBUS:
                     ShowItemDetails();
                     break;
-                case Model.ElementTypes.Fider:
+                case Model.ElementTypes.FIDER:
                     ShowItemDetails();
                     break;
-                case Model.ElementTypes.PowerTransformers:
+                case Model.ElementTypes.POWERTRANSFORMERS:
                     ShowItemDetails();
                     break;
-                case Model.ElementTypes.Auxiliary:
+                case Model.ElementTypes.AUXILIARY:
                     ShowItemDetails();
                     break;
                 default:

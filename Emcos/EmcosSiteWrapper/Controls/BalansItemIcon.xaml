@@ -14,25 +14,25 @@
                 <DataTrigger Binding="{Binding Path=Type}" Value="{x:Static model:ElementTypes.Departament}">
                     <Setter Property="Source" Value="{StaticResource Departament}" />
                 </DataTrigger>
-                <DataTrigger Binding="{Binding Path=Type}" Value="{x:Static model:ElementTypes.Substation}">
+                <DataTrigger Binding="{Binding Path=Type}" Value="{x:Static model:ElementTypes.SUBSTATION}">
                     <Setter Property="Source" Value="{StaticResource Substation}" />
                 </DataTrigger>
-                <DataTrigger Binding="{Binding Path=Type}" Value="{x:Static model:ElementTypes.Voltage}">
+                <DataTrigger Binding="{Binding Path=Type}" Value="{x:Static model:ElementTypes.VOLTAGE}">
                     <Setter Property="Source" Value="{StaticResource Section}" />
                 </DataTrigger>
-                <DataTrigger Binding="{Binding Path=Type}" Value="{x:Static model:ElementTypes.Section}">
+                <DataTrigger Binding="{Binding Path=Type}" Value="{x:Static model:ElementTypes.SECTION}">
                     <Setter Property="Source" Value="{StaticResource Section}" />
                 </DataTrigger>
-                <DataTrigger Binding="{Binding Path=Type}" Value="{x:Static model:ElementTypes.PowerTransformer}">
+                <DataTrigger Binding="{Binding Path=Type}" Value="{x:Static model:ElementTypes.POWERTRANSFORMER}">
                     <Setter Property="Source" Value="{StaticResource PowerTransformer}" />
                 </DataTrigger>
-                <DataTrigger Binding="{Binding Path=Type}" Value="{x:Static model:ElementTypes.UnitTransformer}">
+                <DataTrigger Binding="{Binding Path=Type}" Value="{x:Static model:ElementTypes.UNITTRANSFORMER}">
                     <Setter Property="Source" Value="{StaticResource UnitTransformer}" />
                 </DataTrigger>
-                <DataTrigger Binding="{Binding Path=Type}" Value="{x:Static model:ElementTypes.UnitTransformerBus}">
+                <DataTrigger Binding="{Binding Path=Type}" Value="{x:Static model:ElementTypes.UNITTRANSFORMERBUS}">
                     <Setter Property="Source" Value="{StaticResource UnitTransformerBus}" />
                 </DataTrigger>
-                <DataTrigger Binding="{Binding Path=Type}" Value="{x:Static model:ElementTypes.Fider}">
+                <DataTrigger Binding="{Binding Path=Type}" Value="{x:Static model:ElementTypes.FIDER}">
                     <Setter Property="Source" Value="{StaticResource Fider}" />
                 </DataTrigger>
             </Style.Triggers>

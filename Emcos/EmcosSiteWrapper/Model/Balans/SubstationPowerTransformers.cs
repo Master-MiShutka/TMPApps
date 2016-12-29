@@ -13,7 +13,7 @@ namespace TMP.Work.Emcos.Model.Balans
         public SubstationPowerTransformers()
         {
             Name = "Трансформаторы";
-            Type = ElementTypes.PowerTransformers;
+            Type = ElementTypes.POWERTRANSFORMERS;
             Children = new ObservableCollection<IBalansItem>();
         }
         public override IBalansItem Copy()

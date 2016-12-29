@@ -30,9 +30,9 @@ namespace TMP.Work.Emcos.Model
                 //if (group.DailyEminus.Count != daysCount)
                 //    throw new ArgumentOutOfRangeException("Количество дней между датой начала и датой окончания периода отличается от количества данных.");
 
-                IList<Balans.IBalansItem> fiders = group.Items.Where(i => i.Type == ElementTypes.Fider).ToList();
-                IList<Balans.IBalansItem> powerTransformers = group.Items.Where(i => i.Type == ElementTypes.PowerTransformer).ToList();
-                IList<Balans.IBalansItem> auxiliary = group.Items.Where(i => i.Type == ElementTypes.UnitTransformerBus).ToList();
+                IList<Balans.IBalansItem> fiders = group.Items.Where(i => i.Type == ElementTypes.FIDER).ToList();
+                IList<Balans.IBalansItem> powerTransformers = group.Items.Where(i => i.Type == ElementTypes.POWERTRANSFORMER).ToList();
+                IList<Balans.IBalansItem> auxiliary = group.Items.Where(i => i.Type == ElementTypes.UNITTRANSFORMERBUS).ToList();
 
                 FidersCount = fiders.Count;
                 TransformersCount = powerTransformers.Count;

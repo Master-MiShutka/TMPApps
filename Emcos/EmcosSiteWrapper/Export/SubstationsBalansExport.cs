@@ -124,12 +124,12 @@ namespace TMP.Work.Emcos.Export
                 rowIndex++;
                 #endregion                
                 #region * ТСН ввода *
-                IList<IBalansItem> auxilary = substation.Items.Where((c) => c.Type == Model.ElementTypes.UnitTransformer).ToList();
+                IList<IBalansItem> auxilary = substation.Items.Where((c) => c.Type == Model.ElementTypes.UNITTRANSFORMER).ToList();
                 if (auxilary != null)
                 {
                     foreach (UnitTransformer aux in auxilary)
                     {
-                        CreateCell(rowIndex, 3, aux.Title);
+                        CreateCell(rowIndex, 3, aux.Name);
                         CreateCell(rowIndex, 4, aux.EnergyIn);
                         CreateRange(rowIndex, 5, 1, 2, String.IsNullOrWhiteSpace(aux.DataPlusStatus) ? null : "нет данных: " + aux.DataPlusStatus);
                         CreateCell(rowIndex, 7, aux.EnergyOut);
@@ -177,7 +177,7 @@ namespace TMP.Work.Emcos.Export
                 #endregion
 
                 #region * Секции *
-                IList<IBalansItem> sections = substation.Children.Where((c) => c.Type == Model.ElementTypes.Section && (c as SubstationSection).IsLowVoltage).ToList();
+                IList<IBalansItem> sections = substation.Children.Where((c) => c.Type == Model.ElementTypes.SECTION && (c as SubstationSection).IsLowVoltage).ToList();
                 if (sections == null)
                     continue;
                 foreach (IBalansItem section in sections)
@@ -209,11 +209,11 @@ namespace TMP.Work.Emcos.Export
                     int topRowIndex = rowIndex;
 
                     #region * ТРАСНФОРМАТОРЫ *
-                    IList<IBalansItem> transformers = bss.Children.Where((c) => c.Type == Model.ElementTypes.PowerTransformer).ToList();
+                    IList<IBalansItem> transformers = bss.Children.Where((c) => c.Type == Model.ElementTypes.POWERTRANSFORMER).ToList();
                     if (transformers != null)
                         foreach (PowerTransformer transformer in transformers)
                         {
-                            CreateCell(rowIndex, 3, transformer.Title);
+                            CreateCell(rowIndex, 3, transformer.Name);
                             CreateCell(rowIndex, 4, transformer.EnergyIn);
                             CreateRange(rowIndex, 5, 1, 2, String.IsNullOrWhiteSpace(transformer.DataPlusStatus) ? null : "нет данных: " + transformer.DataPlusStatus);
                             CreateCell(rowIndex, 7, transformer.EnergyOut);                            
@@ -259,11 +259,11 @@ namespace TMP.Work.Emcos.Export
                         }
                     #endregion
                     #region * ТСН ш *
-                    IList<IBalansItem> auxilaryBus = bss.Children.Where((c) => c.Type == Model.ElementTypes.UnitTransformerBus).ToList();
+                    IList<IBalansItem> auxilaryBus = bss.Children.Where((c) => c.Type == Model.ElementTypes.UNITTRANSFORMERBUS).ToList();
                     if (auxilaryBus != null)
                         foreach (UnitTransformerBus aux in auxilaryBus)
                         {
-                            CreateCell(rowIndex, 3, aux.Title);
+                            CreateCell(rowIndex, 3, aux.Name);
                             CreateCell(rowIndex, 4, aux.EnergyIn);
                             CreateRange(rowIndex, 5, 1, 2, String.IsNullOrWhiteSpace(aux.DataPlusStatus) ? null : "нет данных: " + aux.DataPlusStatus);
                             CreateCell(rowIndex, 7, aux.EnergyOut);
@@ -309,11 +309,11 @@ namespace TMP.Work.Emcos.Export
                         }
                     #endregion
                     #region * ФИДЕРА *
-                    IList<IBalansItem> fiders = bss.Children.Where((c) => c.Type == Model.ElementTypes.Fider).ToList();
+                    IList<IBalansItem> fiders = bss.Children.Where((c) => c.Type == Model.ElementTypes.FIDER).ToList();
                     if (fiders != null)
                         foreach (Fider fider in fiders)
                         {
-                            CreateCell(rowIndex, 3, fider.Title);
+                            CreateCell(rowIndex, 3, fider.Name);
                             CreateCell(rowIndex, 4, fider.EnergyIn);
 
                             CreateRange(rowIndex, 5, 1, 2, String.IsNullOrWhiteSpace(fider.DataPlusStatus) ? null : "нет данных: " + fider.DataPlusStatus);

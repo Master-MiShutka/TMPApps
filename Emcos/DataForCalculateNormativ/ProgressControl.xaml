@@ -1,0 +1,25 @@
+﻿<UserControl x:Class="TMP.Work.Emcos.DataForCalculateNormativ.ProgressControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TMP.Work.Emcos.DataForCalculateNormativ"
+             mc:Ignorable="d" 
+             FontSize="{x:Static SystemFonts.MessageFontSize}"
+             Panel.ZIndex="1001"
+             Cursor="Wait"
+             TextOptions.TextFormattingMode="Ideal">
+    <Grid>
+        <local:Background />
+        <Border BorderBrush="{x:Static SystemColors.ActiveBorderBrush}" BorderThickness="1" Background="{x:Static SystemColors.WindowBrush}" Padding="10" HorizontalAlignment="Center" VerticalAlignment="Center" Cursor="AppStarting">
+            <StackPanel VerticalAlignment="Center">
+                <Label Content="Пожалуйста, подождите ..." HorizontalAlignment="Center" VerticalAlignment="Center" />
+                <Label HorizontalAlignment="Center" Name="progressLabel"/>
+                <ProgressBar Height="16" HorizontalAlignment="Center" Name="progressBar" VerticalAlignment="Top" Width="205" IsIndeterminate="True" />
+            </StackPanel>
+            <Border.Effect>
+                <DropShadowEffect BlurRadius="10" Color="White" Direction="0" RenderingBias="Performance" ShadowDepth="0"/>
+            </Border.Effect>
+        </Border>
+    </Grid>
+</UserControl>

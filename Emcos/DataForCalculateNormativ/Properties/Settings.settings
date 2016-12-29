@@ -14,5 +14,8 @@
     <Setting Name="NetTimeOutInSeconds" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">1800</Value>
     </Setting>
+    <Setting Name="ServiceName" Type="System.String" Scope="User">
+      <Value Profile="(Default)">emcos</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

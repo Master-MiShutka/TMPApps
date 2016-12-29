@@ -19,10 +19,10 @@ namespace TMP.Work.Emcos.Converters
                         return Visibility.Collapsed;
                     if (item == null)
                         return Visibility.Collapsed;
-                    if (item.Type == Model.ElementTypes.Fider ||
-                        item.Type == Model.ElementTypes.PowerTransformer ||
-                        item.Type == Model.ElementTypes.UnitTransformer ||
-                        item.Type == Model.ElementTypes.UnitTransformerBus)
+                    if (item.Type == Model.ElementTypes.FIDER ||
+                        item.Type == Model.ElementTypes.POWERTRANSFORMER ||
+                        item.Type == Model.ElementTypes.UNITTRANSFORMER ||
+                        item.Type == Model.ElementTypes.UNITTRANSFORMERBUS)
                     {
                         return Visibility.Visible;
                     }
@@ -33,10 +33,10 @@ namespace TMP.Work.Emcos.Converters
                         return false;
                     if (item == null)
                         return false;
-                    if (item.Type == Model.ElementTypes.Fider ||
-                        item.Type == Model.ElementTypes.PowerTransformer ||
-                        item.Type == Model.ElementTypes.UnitTransformer ||
-                        item.Type == Model.ElementTypes.UnitTransformerBus)
+                    if (item.Type == Model.ElementTypes.FIDER ||
+                        item.Type == Model.ElementTypes.POWERTRANSFORMER ||
+                        item.Type == Model.ElementTypes.UNITTRANSFORMER ||
+                        item.Type == Model.ElementTypes.UNITTRANSFORMERBUS)
                     {
                         return true;
                     }

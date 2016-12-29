@@ -456,7 +456,8 @@ namespace TMP.Common.NetHelper
             using (System.IO.StreamReader streamReader = new System.IO.StreamReader(responseStream, new UTF8Encoding()))
             {
                 var answer = streamReader.ReadToEnd();
-                return Uri.UnescapeDataString(answer);
+                return System.Web.HttpUtility.UrlDecode(answer);
+                //return Uri.UnescapeDataString(answer);
             }
         }
 
@@ -485,7 +486,14 @@ namespace TMP.Common.NetHelper
         public string ServiceName { get; set; }
         public string WebServicePath { get; set; }
 
-        public string SiteAddress { get { return "http://" + ServerAddress + "/" + ServiceName + "/" + WebServicePath; } }
+        public string SiteAddress {
+            get
+            {
+                return @"http://" + ServerAddress + @"/" 
+                    + (String.IsNullOrEmpty(ServiceName) ? String.Empty : (ServiceName + @"/"))
+                    + (String.IsNullOrEmpty(WebServicePath) ? String.Empty : (WebServicePath + @"/"));
+            }
+        }
 
         /// <summary>
         /// Таймаут в секундах

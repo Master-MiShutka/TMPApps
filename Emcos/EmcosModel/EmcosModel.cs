@@ -31,7 +31,7 @@ namespace TMP.Work.Emcos.Model
         [XmlAttribute]
         public string TypeCode { get; set; }
         [XmlAttribute]
-        public string EcpCode { get; set; }
+        public string EcpName { get; set; }
         [XmlAttribute]
         public ElementTypes Type { get; set; }
 
@@ -55,7 +55,7 @@ namespace TMP.Work.Emcos.Model
             this.Name = point.Name;
             this.Code = point.Code;
             this.TypeCode = point.TypeCode;
-            this.EcpCode = point.EcpCode;
+            this.EcpName = point.EcpName;
             this.Type = point.Type;
         }
 
@@ -98,7 +98,7 @@ namespace TMP.Work.Emcos.Model
             this.Name = point.Name;
             this.Code = point.Code;
             this.TypeCode = point.TypeCode;
-            this.EcpCode = point.EcpCode;
+            this.EcpName = point.EcpName;
         }
 
         [XmlArray]
@@ -132,6 +132,7 @@ namespace TMP.Work.Emcos.Model
         string Code { get; set; }
         string Name { get; set; }
         string TypeCode { get; set; }
+        ElementTypes Type { get; set; }
     }
 
     public class EmcosGrElement : IEmcosElement
@@ -140,6 +141,7 @@ namespace TMP.Work.Emcos.Model
         public string Code { get; set; }
         public string Name { get; set; }
         public string TypeCode { get; set; }
+        public ElementTypes Type { get; set; }
         public string ParentCode { get; set; }
         public List<EmcosPointElement> Points { get; set; }
     }
@@ -150,31 +152,32 @@ namespace TMP.Work.Emcos.Model
         public string Code { get; set; }
         public string Name { get; set; }
         public string TypeCode { get; set; }
-        public string EcpCode { get; set; }
+        public string EcpName { get; set; }
+        public ElementTypes Type { get; set; }
     }
 
     public enum ElementTypes
     {
-        Group,
+        GROUP,
         [Description("Подразделение")]
-        Departament,
+        DEPARTAMENT,
         [Description("Подстанция")]
-        Substation,
+        SUBSTATION,
         [Description("Ступень напряжения")]
-        Voltage,
+        VOLTAGE,
         [Description("Секция шин")]
-        Section,
+        SECTION,
         [Description("Трансформатор")]
-        PowerTransformer,
+        POWERTRANSFORMER,
         [Description("Трансформатор собственных нужд с секций")]
-        UnitTransformer,
+        UNITTRANSFORMER,
         [Description("Трансформатор собственных нужд с шин")]
-        UnitTransformerBus,
+        UNITTRANSFORMERBUS,
         [Description("Фидер")]
-        Fider,
+        FIDER,
         [Description("Трансформаторы")]
-        PowerTransformers,
+        POWERTRANSFORMERS,
         [Description("Собственные нужды")]
-        Auxiliary
+        AUXILIARY
     }
 }

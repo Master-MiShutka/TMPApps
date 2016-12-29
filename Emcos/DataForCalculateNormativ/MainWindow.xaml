@@ -4,48 +4,75 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TMP.Work.Emcos.DataForCalculateNormativ"
+        xmlns:model="clr-namespace:TMP.Work.Emcos.Model;assembly=EmcosModel"
         mc:Ignorable="d"
         FontFamily="Calibri,Verdana,Tahoma"
         UseLayoutRounding="True" WindowStartupLocation="CenterOwner"
         TextOptions.TextFormattingMode="Ideal"
-        Title="Получение режимных данных из Emcos Corporate для расчёта норматива потерь в ПО DWRES и Poteri_35_750" Height="350" Width="525">
+        FontSize="16"
+        Title="Получение режимных данных из Emcos Corporate для расчёта норматива потерь в ПО DWRES и Poteri_35_750" Height="350" Width="525"
+        Closing="Window_Closing"
+        Closed="Window_Closed">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="ListPointDataTemplate.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+
+            <Style BasedOn="{StaticResource {x:Type Button}}" TargetType="{x:Type Button}">
+                <Setter Property="ContentTemplate">
+                    <Setter.Value>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding}" HorizontalAlignment="Center" TextAlignment="Center" LineStackingStrategy="BlockLineHeight" LineHeight="12" Padding="10 5"/>
+                        </DataTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+        </ResourceDictionary>
+
+    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
+        <ContentControl x:Name="dialogHost" Grid.RowSpan="4" Panel.ZIndex="1001"/>
+        <!-- -->
+        <DockPanel Grid.Row="0">
+
+        </DockPanel>
+        <!-- -->
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition />
                 <ColumnDefinition />
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
-            <Grid.Resources>
-                <DataTemplate x:Key="itemWithCheckBox" DataType="{x:Type local:ListPoint}">
-                    <DockPanel>
-                        <CheckBox IsChecked="{Binding Checked}" DockPanel.Dock="Left"/>
-                        <TextBlock Text="{Binding Name}" VerticalAlignment="Center" Padding="0"/>
-                    </DockPanel>
-                </DataTemplate>
-            </Grid.Resources>
-            <ListBox x:Name="departamentsList" Grid.Column="0" Margin="2 2 5 2" ItemTemplate="{StaticResource itemWithCheckBox}" SelectionChanged="departamentsList_SelectionChanged">
+            <!-- 0 -->
+            <ListBox x:Name="departamentsList" Grid.Column="0" Margin="2 2 5 2" SelectionChanged="departamentsList_SelectionChanged">
                 <!-- -->
             </ListBox>
             <GridSplitter Grid.Column="0" Margin="0 2" HorizontalAlignment="Right" Width="3" ResizeBehavior="CurrentAndNext" ResizeDirection="Columns" Background="{x:Static SystemColors.HighlightBrush}" />
-            <ListBox x:Name="substationsList" Grid.Column="1" Margin="2 2 5 2" ItemTemplate="{StaticResource itemWithCheckBox}" SelectionChanged="substationsList_SelectionChanged">
+            <ListBox x:Name="substationsList" Grid.Column="1" Margin="2 2 5 2"  SelectionChanged="substationsList_SelectionChanged">
                 <!-- -->
             </ListBox>
             <GridSplitter Grid.Column="1" Margin="0 2" HorizontalAlignment="Right" Width="3" ResizeBehavior="CurrentAndNext" ResizeDirection="Columns" Background="{x:Static SystemColors.HighlightBrush}" />
-            <ListBox x:Name="voltagesList" Grid.Column="2" Margin="2" ItemTemplate="{StaticResource itemWithCheckBox}">
+            <ListBox x:Name="voltagesList" Grid.Column="2" Margin="2" >
                 <!-- -->
             </ListBox>
         </Grid>
         <!-- -->
-        <DockPanel Grid.Row="2" LastChildFill="False">
-            <Button DockPanel.Dock="Left" Margin="10 5" Padding="5 0" Content="Обновить" x:Name="btnUpdate" Click="btnUpdate_Click"/>
-            <Button DockPanel.Dock="Right" Margin="10 5" Padding="5 0" Content="Получить" x:Name="btnGet" Click="btnGet_Click"/>
-            <Button DockPanel.Dock="Right" Margin="10 5" Padding="5 0" Content="Сохранить" x:Name="btnSave" Click="btnSave_Click"/>
+        <TreeView Grid.Row="2" x:Name="tree">
+
+        </TreeView>
+        <!-- -->
+        <DockPanel Grid.Row="3" LastChildFill="False">
+            <Button DockPanel.Dock="Left"  Margin="10 5" Padding="5 0" Content="{x:Static local:Strings.Update}" x:Name="btnUpdate" Click="btnUpdate_Click" />
+            <Button DockPanel.Dock="Right" Margin="10 5" Padding="5 0" Content="{x:Static local:Strings.Get}" x:Name="btnGet" Click="btnGet_Click" IsEnabled="False"/>
+            <Button DockPanel.Dock="Right" Margin="10 5" Padding="5 0" Content="{x:Static local:Strings.Save}" x:Name="btnSave" Click="btnSave_Click" IsEnabled="False"/>
         </DockPanel>
     </Grid>
 </Window>

@@ -13,7 +13,7 @@ namespace TMP.Work.Emcos.Model.Balans
     {
         public SubstationSection()
         {
-            Type = ElementTypes.Section;
+            Type = ElementTypes.SECTION;
             Children = new ObservableCollection<IBalansItem>();
         }
         public override IBalansItem Copy()

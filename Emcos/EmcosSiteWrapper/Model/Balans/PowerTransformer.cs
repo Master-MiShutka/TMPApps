@@ -10,14 +10,14 @@ namespace TMP.Work.Emcos.Model.Balans
     [DataContract(Name = "PowerTransformer")]
     public class PowerTransformer : BalansItem, IBalansItem
     {
-        public override ElementTypes Type { get { return ElementTypes.PowerTransformer; } }
+        public override ElementTypes Type { get { return ElementTypes.POWERTRANSFORMER; } }
         public override IBalansItem Copy()
         {
             IBalansItem obj = new PowerTransformer
             {
                 Id = this.Id,
                 Code = this.Code,
-                Title = this.Title,
+                Name = this.Name,
                 Description = this.Description
             };
             obj.SetSubstation(this.Substation);

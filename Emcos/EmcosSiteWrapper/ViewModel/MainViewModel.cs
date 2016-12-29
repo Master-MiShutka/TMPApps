@@ -117,20 +117,20 @@ namespace TMP.Work.Emcos.ViewModel
                             var eltype = subgroup.Type;
                             switch (eltype)
                             {
-                                case ElementTypes.Voltage:
+                                case ElementTypes.VOLTAGE:
                                     break;
-                                case ElementTypes.Section:
+                                case ElementTypes.SECTION:
                                     break;
-                                case ElementTypes.PowerTransformer:
+                                case ElementTypes.POWERTRANSFORMER:
                                     result.AppendFormat("{0},", subgroup.Code);
                                     break;
-                                case ElementTypes.UnitTransformer:
+                                case ElementTypes.UNITTRANSFORMER:
                                     result.AppendFormat("{0},", subgroup.Code);
                                     break;
-                                case ElementTypes.UnitTransformerBus:
+                                case ElementTypes.UNITTRANSFORMERBUS:
                                     result.AppendFormat("{0},", subgroup.Code);
                                     break;
-                                case ElementTypes.Fider:
+                                case ElementTypes.FIDER:
                                     result.AppendFormat("{0},", subgroup.Code);
                                     break;
                                 default:

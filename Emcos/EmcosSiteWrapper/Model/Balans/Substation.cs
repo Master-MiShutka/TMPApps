@@ -11,7 +11,7 @@ namespace TMP.Work.Emcos.Model.Balans
         private double? _maximumAllowableUnbalance = null;
         public Substation()
         {
-            Type = ElementTypes.Substation;
+            Type = ElementTypes.SUBSTATION;
             Children = new ObservableCollection<IBalansItem>();
 
             Status = DataStatus.Wait;
@@ -188,13 +188,13 @@ namespace TMP.Work.Emcos.Model.Balans
                 double teta = 1.1 * Math.Sqrt(δсч* δсч + δтт * δтт + δтн * δтн);
 
                 var powertrans = Items
-                    .Where(i => i.Type == ElementTypes.PowerTransformer)
+                    .Where(i => i.Type == ElementTypes.POWERTRANSFORMER)
                     .Select(i => new { Name = i.Title, In = i.EnergyIn, Out = i.EnergyOut }).ToList();
                 var fiders = Items
-                    .Where(i => i.Type == ElementTypes.Fider)
+                    .Where(i => i.Type == ElementTypes.FIDER)
                     .Select(i => new { Name = i.Title, In = i.EnergyIn, Out = i.EnergyOut }).ToList();
                 var tsn = Items
-                    .Where(i => (i.Type == ElementTypes.UnitTransformer || i.Type == ElementTypes.UnitTransformerBus))
+                    .Where(i => (i.Type == ElementTypes.UNITTRANSFORMER || i.Type == ElementTypes.UNITTRANSFORMERBUS))
                     .Select(i => new { Name = i.Title, In = i.EnergyIn, Out = i.EnergyOut }).ToList();                
 
                 double energyInFiders = fiders

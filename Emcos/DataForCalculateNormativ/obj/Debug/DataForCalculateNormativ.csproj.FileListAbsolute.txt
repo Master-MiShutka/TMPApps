@@ -14,3 +14,7 @@ Y:\Developer\CURRENT\TMPApps\Emcos\DataForCalculateNormativ\obj\Debug\DataForCal
 Y:\Developer\CURRENT\TMPApps\out\Debug\Emcos\DataForCalculateNormativ.exe.config
 Y:\Developer\CURRENT\TMPApps\Emcos\DataForCalculateNormativ\obj\Debug\App.baml
 Y:\Developer\CURRENT\TMPApps\Emcos\DataForCalculateNormativ\obj\Debug\GeneratedInternalTypeHelper.g.cs
+Y:\Developer\CURRENT\TMPApps\Emcos\DataForCalculateNormativ\obj\Debug\ProgressControl.g.cs
+Y:\Developer\CURRENT\TMPApps\Emcos\DataForCalculateNormativ\obj\Debug\ProgressControl.baml
+Y:\Developer\CURRENT\TMPApps\Emcos\DataForCalculateNormativ\obj\Debug\ListPointDataTemplate.baml
+Y:\Developer\CURRENT\TMPApps\Emcos\DataForCalculateNormativ\obj\Debug\TMP.Work.Emcos.DataForCalculateNormativ.Strings.resources

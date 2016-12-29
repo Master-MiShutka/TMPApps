@@ -22,6 +22,7 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
                 UserName = TMP.Work.Emcos.DataForCalculateNormativ.Properties.Settings.Default.UserName,
                 Password = TMP.Work.Emcos.DataForCalculateNormativ.Properties.Settings.Default.Password,
                 ServerAddress = TMP.Work.Emcos.DataForCalculateNormativ.Properties.Settings.Default.ServerAddress,
+                ServiceName = TMP.Work.Emcos.DataForCalculateNormativ.Properties.Settings.Default.ServiceName,
                 NetTimeOutInSeconds = TMP.Work.Emcos.DataForCalculateNormativ.Properties.Settings.Default.NetTimeOutInSeconds
             };
             Emcos.EmcosSiteWrapper.SetSettings(settings);

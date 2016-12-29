@@ -47,6 +47,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -64,6 +65,29 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Background.xaml.cs">
+      <DependentUpon>Background.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="GetDataControl.xaml.cs">
+      <DependentUpon>GetDataControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Strings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Strings.resx</DependentUpon>
+    </Compile>
+    <Page Include="Background.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="GetDataControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ListPointDataTemplate.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -72,12 +96,20 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="ListPoint.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="ProgressControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ProgressControl.xaml.cs">
+      <DependentUpon>ProgressControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -92,8 +124,13 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Strings.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Strings.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <None Include="App.config" />
     <None Include="Properties\Settings.settings">
@@ -116,6 +153,11 @@
       <Name>NetHelper</Name>
       <Private>False</Private>
     </ProjectReference>
+    <ProjectReference Include="..\..\LIBRARY\RepositoryCommon\RepositoryCommon.csproj">
+      <Project>{7b66a20e-48ff-4fcd-955d-415ad5f1e4e2}</Project>
+      <Name>RepositoryCommon</Name>
+      <Private>False</Private>
+    </ProjectReference>
     <ProjectReference Include="..\..\LIBRARY\ServiceLocator\ServiceLocator.csproj">
       <Project>{1d2b2142-67d7-48ea-91f9-5e77e29b5ab9}</Project>
       <Name>ServiceLocator</Name>
@@ -131,6 +173,37 @@
       <Name>EmcosService</Name>
       <Private>False</Private>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\substation.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\section.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\fider35.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Voltage.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\area.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Transformer.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\fider10.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Auxiliary.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\prom.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Departament.png" />
+    <Resource Include="Resources\Group.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

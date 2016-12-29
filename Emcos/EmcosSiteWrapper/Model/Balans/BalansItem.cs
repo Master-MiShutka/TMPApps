@@ -21,9 +21,9 @@ namespace TMP.Work.Emcos.Model.Balans
 
         private double? _monthEPlus, _monthEMinus;
 
-        private string _id;
+        private decimal _id;
         private DataStatus _status = DataStatus.Wait;
-        private string _title;
+        private string _name;
         public BalansItem()
         {
             UseMonthValue = false;
@@ -211,7 +211,7 @@ namespace TMP.Work.Emcos.Model.Balans
         public double? FideraOut { get { return null; } }
 
         [DataMember(IsRequired = true)]
-        public string Id
+        public decimal Id
         {
             get
             {
@@ -291,9 +291,9 @@ namespace TMP.Work.Emcos.Model.Balans
         }
 
         [DataMember(IsRequired = true)]
-        public string Title { get { return _title; } set { _title = value; RaisePropertyChanged("Title"); } }
+        public string Name { get { return _name; } set { _name = value; RaisePropertyChanged("Name"); } }
         public double? Tsn { get { return null; } }
-        public virtual ElementTypes Type { get; }
+        public virtual ElementTypes Type { get; set ; }
         public string TypeName
         {
             get
@@ -541,6 +541,5 @@ namespace TMP.Work.Emcos.Model.Balans
             RaisePropertyChanged("EnergyIn");
             RaisePropertyChanged("EnergyOut");
         }
-
     }
 }

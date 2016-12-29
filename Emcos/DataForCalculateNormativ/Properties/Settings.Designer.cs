@@ -70,5 +70,17 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ.Properties {
                 this["NetTimeOutInSeconds"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("emcos")]
+        public string ServiceName {
+            get {
+                return ((string)(this["ServiceName"]));
+            }
+            set {
+                this["ServiceName"] = value;
+            }
+        }
     }
 }

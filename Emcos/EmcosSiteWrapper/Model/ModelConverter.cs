@@ -118,7 +118,7 @@ namespace TMP.Work.Emcos.Model
                                         if (groupPoint.Children != null)
                                             foreach (var subgroupPoint in groupPoint.Children)
                                             {
-                                                if (subgroupPoint.Type == ElementTypes.UnitTransformer)
+                                                if (subgroupPoint.Type == ElementTypes.UNITTRANSFORMER)
                                                     item = new UnitTransformer();
                                                 else
                                                     item = new UnitTransformerBus();
@@ -176,16 +176,16 @@ namespace TMP.Work.Emcos.Model
                                                                     IBalansItem childItem = null;
                                                                     switch (sectionChildPoint.Type)
                                                                     {
-                                                                        case ElementTypes.Fider:
+                                                                        case ElementTypes.FIDER:
                                                                             childItem = new Fider();
                                                                             break;
-                                                                        case ElementTypes.PowerTransformer:
+                                                                        case ElementTypes.POWERTRANSFORMER:
                                                                             childItem = new PowerTransformer();
                                                                             break;
-                                                                        case ElementTypes.UnitTransformerBus:
+                                                                        case ElementTypes.UNITTRANSFORMERBUS:
                                                                             childItem = new UnitTransformerBus();
                                                                             break;
-                                                                        case ElementTypes.UnitTransformer:
+                                                                        case ElementTypes.UNITTRANSFORMER:
                                                                             childItem = new UnitTransformer();
                                                                             break;
                                                                     }
@@ -219,14 +219,14 @@ namespace TMP.Work.Emcos.Model
                                                                 highSection.Description = subgroupPoint.Description;
                                                                 highSection.SetSubstation(substation);
                                                             }
-                                                            switch (sectionPoint.EcpCode)
+                                                            switch (sectionPoint.EcpName)
                                                             {
                                                                 case "TRANSFORMER":
                                                                     var pt = new PowerTransformer
                                                                     {
                                                                         Id = sectionPoint.Id.ToString(),
                                                                         Code = sectionPoint.Code,
-                                                                        Title = sectionPoint.Name,
+                                                                        Name = sectionPoint.Name,
                                                                         Description = sectionPoint.Description
                                                                     };
                                                                     pt.SetSubstation(substation);
@@ -238,7 +238,7 @@ namespace TMP.Work.Emcos.Model
                                                                     {
                                                                         Id = sectionPoint.Id.ToString(),
                                                                         Code = sectionPoint.Code,
-                                                                        Title = sectionPoint.Name,
+                                                                        Name = sectionPoint.Name,
                                                                         Description = sectionPoint.Description
                                                                     };
                                                                     f.SetSubstation(substation);

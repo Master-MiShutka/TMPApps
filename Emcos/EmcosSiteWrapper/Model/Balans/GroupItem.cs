@@ -226,10 +226,10 @@ namespace TMP.Work.Emcos.Model.Balans
                     var group = child as IBalansGroup;
                     if (group == null && (item is SubstationAuxiliary || (item is SubstationSection && (item as SubstationSection).IsLowVoltage)))
                     {
-                        if (child.Type == Model.ElementTypes.Fider ||
-                            child.Type == Model.ElementTypes.PowerTransformer ||
-                            child.Type == Model.ElementTypes.UnitTransformer ||
-                            child.Type == Model.ElementTypes.UnitTransformerBus)
+                        if (child.Type == Model.ElementTypes.FIDER ||
+                            child.Type == Model.ElementTypes.POWERTRANSFORMER ||
+                            child.Type == Model.ElementTypes.UNITTRANSFORMER ||
+                            child.Type == Model.ElementTypes.UNITTRANSFORMERBUS)
                         {
                             collection.Add(child);
                         }

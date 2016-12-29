@@ -10,7 +10,7 @@ namespace TMP.Work.Emcos
 {
     public class EmcosSettings : INotifyPropertyChanged
     {
-        private string _userName, _password, _serverAddress;
+        private string _userName, _password, _serverAddress, _serviceName;
         private int _netTimeOutInSeconds;
 
         public EmcosSettings()
@@ -57,6 +57,15 @@ namespace TMP.Work.Emcos
             {
                 _serverAddress = value;
                 SetProperty(ref _serverAddress, value, "ServerAddress");
+            }
+        }
+        public string ServiceName
+        {
+            get { return _serviceName; }
+            set
+            {
+                _serviceName = value;
+                SetProperty(ref _serviceName, value, "ServiceName");
             }
         }
         public int NetTimeOutInSeconds

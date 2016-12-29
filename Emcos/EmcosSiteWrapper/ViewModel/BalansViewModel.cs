@@ -135,7 +135,7 @@ namespace TMP.Work.Emcos.ViewModel
                     //! TODO: удалить существующие группы 'трансформаторы' и 'собственные нужды' и создать их на основе ссылок на элементы из секций шин
 
                     // собственные нужды
-                    IList<IBalansItem> sectionAux = s.Children.Where((c) => c.Type == Model.ElementTypes.Auxiliary && c.Title == "Собственные нужды").ToList();
+                    IList<IBalansItem> sectionAux = s.Children.Where((c) => c.Type == Model.ElementTypes.AUXILIARY && c.Title == "Собственные нужды").ToList();
                     if (sectionAux == null)
                         continue;
                     foreach (IBalansGroup aux in sectionAux)

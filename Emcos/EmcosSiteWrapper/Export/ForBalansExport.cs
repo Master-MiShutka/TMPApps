@@ -56,7 +56,7 @@ namespace TMP.Work.Emcos.Export
                 var substation = list[index];
                 if (substation == null || substation.Children == null)
                     continue;
-                IList<IBalansItem> sections = substation.Children.Where((c) => c.Type == Model.ElementTypes.Section && (c as SubstationSection).IsLowVoltage).ToList();
+                IList<IBalansItem> sections = substation.Children.Where((c) => c.Type == Model.ElementTypes.SECTION && (c as SubstationSection).IsLowVoltage).ToList();
                 if (sections == null)
                     continue;
                 foreach (IBalansItem section in sections)
@@ -86,7 +86,7 @@ namespace TMP.Work.Emcos.Export
                             }
                 }
                 // собственные нуды
-                IList<IBalansItem> sectionAux = substation.Children.Where((c) => c.Type == Model.ElementTypes.Auxiliary && c.Title == "Собственные нужды").ToList();
+                IList<IBalansItem> sectionAux = substation.Children.Where((c) => c.Type == Model.ElementTypes.AUXILIARY && c.Title == "Собственные нужды").ToList();
                 if (sectionAux == null)
                     continue;
                 foreach (IBalansGroup aux in sectionAux)

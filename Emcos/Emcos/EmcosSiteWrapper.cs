@@ -74,11 +74,13 @@ namespace TMP.Work.Emcos
 
             UserName = _settings.UserName;
             Password = _settings.Password;
-
             ServerAddress = _settings.ServerAddress;
+            ServiceName = _settings.ServiceName;
             //_serverAddress = "localhost:1000";
             // в секундах
             TimeOut = _settings.NetTimeOutInSeconds;
+
+            Status = State.Offline;
         }
         #endregion
 
@@ -164,7 +166,7 @@ namespace TMP.Work.Emcos
             /*if (isSiteOnline() == false)
                 return false;            */
 
-            var url = @"{0}/scripts/autentification.asp";
+            var url = @"{0}scripts/autentification.asp";
             url = string.Format(url, this.SiteAddress);
 
             var httpWebRequest = WebRequest.Create(url) as HttpWebRequest;
@@ -358,7 +360,7 @@ namespace TMP.Work.Emcos
         /// <returns></returns>
         public Task<string> GetAPointsAsync(string parentId)
         {
-            var url = @"{0}/scripts/point.asp";
+            var url = @"{0}scripts/point.asp";
             url = string.Format(url, this.SiteAddress);
 
             var httpWebRequest = (HttpWebRequest)WebRequest.Create(url);
@@ -398,7 +400,8 @@ namespace TMP.Work.Emcos
             return task.ContinueWith(t =>
             {
                 SetOKResult();
-                return ReadStreamFromResponse(t.Result);
+                var result = ReadStreamFromResponse(t.Result);
+                return result;
             });
         }
         /// <summary>
@@ -408,7 +411,7 @@ namespace TMP.Work.Emcos
         /// <returns></returns>
         public Task<string> GetParamsAsync(string senddata)
         {
-            var url = @"{0}/scripts/param.asp";
+            var url = @"{0}scripts/param.asp";
             url = string.Format(url, this.SiteAddress);
 
             var httpWebRequest = (HttpWebRequest)WebRequest.Create(url);
@@ -450,7 +453,7 @@ namespace TMP.Work.Emcos
         /// <returns></returns>
         public Task<string> GetViewAsync(string senddata)
         {
-            var url = @"{0}/scripts/view.asp";
+            var url = @"{0}scripts/view.asp";
             url = string.Format(url, this.SiteAddress);
 
             var httpWebRequest = (HttpWebRequest)WebRequest.Create(url);
@@ -604,7 +607,7 @@ namespace TMP.Work.Emcos
             sendData = System.Web.HttpUtility.UrlPathEncode(sendData).Replace("_", "%5F").Replace("+", "%2B").ToUpper();
 
 
-            var url = @"{0}/scripts/arch.asp";
+            var url = @"{0}scripts/arch.asp";
             url = string.Format(url, this.SiteAddress);
 
             var httpWebRequest = (HttpWebRequest)WebRequest.Create(url);
@@ -659,7 +662,7 @@ namespace TMP.Work.Emcos
             int index = 0;
             foreach (var point in points)
             {
-                bool isGroup = point.Type == Model.ElementTypes.Section;// && (point as Model.Balans.SubstationSection).IsLowVoltage == true;
+                bool isGroup = point.Type == Model.ElementTypes.SECTION;// && (point as Model.Balans.SubstationSection).IsLowVoltage == true;
 
                 sb.AppendFormat("T1_TYPE_{0}={1}&", index, isGroup ? "GROUP" : "POINT");
                 if (isGroup)
@@ -695,16 +698,16 @@ namespace TMP.Work.Emcos
                 }
                 switch (point.Type)
                 {
-                    case Model.ElementTypes.Fider:
+                    case Model.ElementTypes.FIDER:
                         sb.AppendFormat("T1_ECP_NAME_{0}={1}&", index, "Линии");
                         break;
-                    case Model.ElementTypes.PowerTransformer:
+                    case Model.ElementTypes.POWERTRANSFORMER:
                         sb.AppendFormat("T1_ECP_NAME_{0}={1}&", index, "Трансформаторы");
                         break;
-                    case Model.ElementTypes.UnitTransformer:
+                    case Model.ElementTypes.UNITTRANSFORMER:
                         sb.AppendFormat("T1_ECP_NAME_{0}={1}&", index, "Свои нужды");
                         break;
-                    case Model.ElementTypes.UnitTransformerBus:
+                    case Model.ElementTypes.UNITTRANSFORMERBUS:
                         sb.AppendFormat("T1_ECP_NAME_{0}={1}&", index, "Свои нужды");
                         break;
                 }
@@ -819,6 +822,36 @@ namespace TMP.Work.Emcos
                 _messageBoxService.Show("Произошла ошибка.\n" + ex.Message, "", MsgBoxButtons.OK, MsgBoxImage.Error);
                 return null;
             }
+        }
+
+
+        public async Task<string> ExecuteFunction(Func<string, Task<string>> function, string param)
+        {
+            LastException = null;
+            if (Status != State.Online)
+                Login(AuthorizationType.Login);
+
+            Task<string> result = function(param);
+            if (LastException != null)
+            {
+                switch (Status)
+                {
+                    case State.Offline:
+                        Login(AuthorizationType.Login);
+                        return await ExecuteFunction(function, param);
+                    case State.NotAuthorized:
+                        Login(AuthorizationType.Login);
+                        return await ExecuteFunction(function, param);
+                    case State.AccessDenied:
+                        return await Task.FromResult(string.Empty);
+                    case State.Error:
+                        return await Task.FromResult(string.Empty);
+                    default:
+                        return await Task.FromResult(string.Empty);
+                }
+            }
+            else
+                return result.Result;
         }
 
         #endregion
