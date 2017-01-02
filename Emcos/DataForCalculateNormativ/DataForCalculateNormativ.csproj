@@ -41,6 +41,10 @@
   <PropertyGroup>
     <ApplicationIcon>mainicon.ico</ApplicationIcon>
   </PropertyGroup>
+  <PropertyGroup />
+  <PropertyGroup>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="PresentationFramework.Aero">
       <Private>True</Private>
@@ -48,6 +52,8 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -68,14 +74,25 @@
     <Compile Include="Background.xaml.cs">
       <DependentUpon>Background.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Base64StringObjectConverter.cs" />
     <Compile Include="GetDataControl.xaml.cs">
       <DependentUpon>GetDataControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MainWindow-Buttons.cs" />
+    <Compile Include="MainWindow-Events.cs" />
+    <Compile Include="ResultWindow.xaml.cs">
+      <DependentUpon>ResultWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ServiceHelper.cs" />
+    <Compile Include="SettingsWindow.xaml.cs">
+      <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Strings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Strings.resx</DependentUpon>
     </Compile>
+    <Compile Include="Styles\WindowStyle.cs" />
     <Page Include="Background.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -102,6 +119,22 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="ProgressControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ResultWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SettingsWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\Generic.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\WindowStyle.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -133,6 +166,7 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <None Include="App.config" />
+    <None Include="app.manifest" />
     <None Include="Properties\Settings.settings">
       <Generator>PublicSettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -143,25 +177,9 @@
     <Resource Include="mainicon.ico" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\LIBRARY\MsgBox\MsgBox.csproj">
-      <Project>{2f8ef004-1e7a-429d-863b-5a062a90705a}</Project>
-      <Name>MsgBox</Name>
-      <Private>False</Private>
-    </ProjectReference>
-    <ProjectReference Include="..\..\LIBRARY\NetHelper\NetHelper.csproj">
-      <Project>{e00c55d0-971a-4d59-8c91-e7a4d79d50e8}</Project>
-      <Name>NetHelper</Name>
-      <Private>False</Private>
-    </ProjectReference>
     <ProjectReference Include="..\..\LIBRARY\RepositoryCommon\RepositoryCommon.csproj">
       <Project>{7b66a20e-48ff-4fcd-955d-415ad5f1e4e2}</Project>
       <Name>RepositoryCommon</Name>
-      <Private>False</Private>
-    </ProjectReference>
-    <ProjectReference Include="..\..\LIBRARY\ServiceLocator\ServiceLocator.csproj">
-      <Project>{1d2b2142-67d7-48ea-91f9-5e77e29b5ab9}</Project>
-      <Name>ServiceLocator</Name>
-      <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\EmcosModel\EmcosModel.csproj">
       <Project>{4ea193ae-23a4-411c-aee6-0afbaac1c1ca}</Project>

@@ -8,11 +8,11 @@ using System.Windows;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("DataForCalculateNormativ")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Получение режимных данных из Emcos Corporate для расчёта норматива потерь в ПО DWRES и Poteri_35_750")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("TMPDevLabs")]
 [assembly: AssemblyProduct("DataForCalculateNormativ")]
-[assembly: AssemblyCopyright("Copyright ©  2016")]
+[assembly: AssemblyCopyright("Copyright © Trus Mikhail Petrovich 2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

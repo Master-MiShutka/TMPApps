@@ -8,7 +8,8 @@
              d:DesignHeight="150" d:DesignWidth="500"
              TextOptions.TextRenderingMode="ClearType"
              TextOptions.TextFormattingMode="Ideal"
-             FontFamily="Calibri,Verdana,Tahoma">
+             FontFamily="Calibri,Verdana,Tahoma"
+             Loaded="UserControl_Loaded">
     <UserControl.Resources>
         <Style TargetType="{x:Type TextBlock}">
             <Setter Property="Foreground" Value="DarkGray"/>
@@ -16,14 +17,14 @@
             <Setter Property="Margin" Value="5"/>
             <Setter Property="Effect">
                 <Setter.Value>
-                    <DropShadowEffect Color="WhiteSmoke" BlurRadius="5" Direction="0" ShadowDepth="0"/>
+                    <DropShadowEffect Color="WhiteSmoke" BlurRadius="3" Direction="0" ShadowDepth="0"/>
                 </Setter.Value>
             </Setter>
         </Style>
     </UserControl.Resources>
     <Grid>
         <Rectangle Fill="Black" Opacity="0.6"/>
-        <TextBlock HorizontalAlignment="Right" VerticalAlignment="Top"
+        <TextBlock x:Name="tbCopyright" HorizontalAlignment="Right" VerticalAlignment="Top"
                    FontWeight="ExtraLight"
                    TextAlignment="Right"
                    ToolTip="Калі Вам гэта праграмма чымсьці дапамагла, аддзячыце чалавека!"

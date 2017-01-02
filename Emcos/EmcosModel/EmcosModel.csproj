@@ -47,6 +47,7 @@
     <Compile Include="Archive\IArchAP.cs" />
     <Compile Include="EmcosAnswerResult.cs" />
     <Compile Include="EmcosModel.cs" />
+    <Compile Include="EmcosReportsModel.cs" />
     <Compile Include="Parameters\AGGF_Param.cs" />
     <Compile Include="Parameters\AGGS_Param.cs" />
     <Compile Include="Parameters\DIR_Param.cs" />

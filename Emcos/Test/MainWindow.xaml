@@ -38,6 +38,11 @@
         </DataTemplate>
     </Window.Resources>
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Button Content="TEST" Click="Button_Click" Margin="10"/>
         <controls_TableView:TableView
             x:Name="table"
             Grid.Row="1"

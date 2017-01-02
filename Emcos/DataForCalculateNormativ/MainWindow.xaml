@@ -6,73 +6,154 @@
         xmlns:local="clr-namespace:TMP.Work.Emcos.DataForCalculateNormativ"
         xmlns:model="clr-namespace:TMP.Work.Emcos.Model;assembly=EmcosModel"
         mc:Ignorable="d"
-        FontFamily="Calibri,Verdana,Tahoma"
-        UseLayoutRounding="True" WindowStartupLocation="CenterOwner"
-        TextOptions.TextFormattingMode="Ideal"
-        FontSize="16"
-        Title="Получение режимных данных из Emcos Corporate для расчёта норматива потерь в ПО DWRES и Poteri_35_750" Height="350" Width="525"
+        Style="{StaticResource WindowStyle}"
+        Icon="mainicon.ico"
+        Title="" 
+        Height="380" Width="600"
         Closing="Window_Closing"
-        Closed="Window_Closed">
+        Closed="Window_Closed"
+        Loaded="Window_Loaded">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="ListPointDataTemplate.xaml"/>
             </ResourceDictionary.MergedDictionaries>
 
-            <Style BasedOn="{StaticResource {x:Type Button}}" TargetType="{x:Type Button}">
-                <Setter Property="ContentTemplate">
-                    <Setter.Value>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding}" HorizontalAlignment="Center" TextAlignment="Center" LineStackingStrategy="BlockLineHeight" LineHeight="12" Padding="10 5"/>
-                        </DataTemplate>
-                    </Setter.Value>
-                </Setter>
-            </Style>
-
         </ResourceDictionary>
 
     </Window.Resources>
-    <Grid>
+    <Grid Margin="5">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <ContentControl x:Name="dialogHost" Grid.RowSpan="4" Panel.ZIndex="1001"/>
+        <ContentControl x:Name="dialogHost" Grid.RowSpan="4" Margin="-5" Panel.ZIndex="1001"/>
         <!-- -->
         <DockPanel Grid.Row="0">
-
+            <Button DockPanel.Dock="Right"  Margin="5 5 0 5" Padding="5 0" Content="{x:Static local:Strings.Settings}" Click="btnSettings_Click"/>
+            <TextBlock TextWrapping="Wrap" FontSize="{DynamicResource HeaderFontSize}" TextAlignment="Center">
+                <Run>Получение режимных данных из</Run>
+                <Run FontWeight="Black" FontStyle="Italic">Emcos Corporate</Run>
+                <Run>для расчёта норматива потерь в ПО </Run>
+                <Run FontWeight="Black" FontStyle="Italic">DWRES</Run>
+                <Run>и </Run>
+                <Run FontWeight="Black" FontStyle="Italic">Poteri_35_750</Run>
+            </TextBlock>
         </DockPanel>
         <!-- -->
-        <Grid Grid.Row="1">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition />
-                <ColumnDefinition />
-                <ColumnDefinition />
-            </Grid.ColumnDefinitions>
-            <!-- 0 -->
-            <ListBox x:Name="departamentsList" Grid.Column="0" Margin="2 2 5 2" SelectionChanged="departamentsList_SelectionChanged">
-                <!-- -->
-            </ListBox>
-            <GridSplitter Grid.Column="0" Margin="0 2" HorizontalAlignment="Right" Width="3" ResizeBehavior="CurrentAndNext" ResizeDirection="Columns" Background="{x:Static SystemColors.HighlightBrush}" />
-            <ListBox x:Name="substationsList" Grid.Column="1" Margin="2 2 5 2"  SelectionChanged="substationsList_SelectionChanged">
-                <!-- -->
-            </ListBox>
-            <GridSplitter Grid.Column="1" Margin="0 2" HorizontalAlignment="Right" Width="3" ResizeBehavior="CurrentAndNext" ResizeDirection="Columns" Background="{x:Static SystemColors.HighlightBrush}" />
-            <ListBox x:Name="voltagesList" Grid.Column="2" Margin="2" >
-                <!-- -->
-            </ListBox>
-        </Grid>
-        <!-- -->
-        <TreeView Grid.Row="2" x:Name="tree">
-
+        <TreeView Grid.Row="1" x:Name="tree">
+            <TreeView.Style>
+                <Style BasedOn="{StaticResource {x:Type TreeView}}" TargetType="{x:Type TreeView}">
+                    <Style.Resources>
+                        <SolidColorBrush x:Key="fillNoDataControlBackGeometryBrush" Color="#FFF7F7F7" />
+                        <SolidColorBrush x:Key="fillNoDataControlGeometryBrush" Color="#CC119EDA" />
+                        <SolidColorBrush x:Key="fillNoDataControlGeometryPathBrush" Color="#FF086F9E" />
+                        <SolidColorBrush x:Key="strokeNoDataControlGeometryBrush" Color="#FF086F9E" />
+                    </Style.Resources>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding RelativeSource={x:Static RelativeSource.Self}, Path=Items.Count}" Value="0">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate>
+                                        <Border
+                Background="{TemplateBinding Background}"
+                BorderBrush="{TemplateBinding BorderBrush}"
+                BorderThickness="{TemplateBinding BorderThickness}"
+                CornerRadius="10">
+                                            <StackPanel Margin="20 10"
+                    Name="nodata"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Orientation="Vertical">
+                                                <Canvas
+                        Width="50"
+                        Height="50"
+                        Background="Transparent">
+                                                    <Canvas.Children>
+                                                        <Ellipse
+                                Canvas.Left="22.999"
+                                Width="6.167"
+                                Height="6.166"
+                                Fill="{StaticResource fillNoDataControlBackGeometryBrush}"
+                                Stroke="{StaticResource strokeNoDataControlGeometryBrush}" />
+                                                        <Ellipse
+                                Canvas.Top="42.333"
+                                Width="6.167"
+                                Height="6.166"
+                                Fill="{StaticResource fillNoDataControlBackGeometryBrush}"
+                                Stroke="{StaticResource strokeNoDataControlGeometryBrush}" />
+                                                        <Ellipse
+                                Canvas.Left="44.999"
+                                Canvas.Top="42.333"
+                                Width="6.167"
+                                Height="6.166"
+                                Fill="{StaticResource fillNoDataControlBackGeometryBrush}"
+                                Stroke="{StaticResource strokeNoDataControlGeometryBrush}" />
+                                                        <Path
+                                Canvas.Left="1"
+                                Canvas.Top="2.2"
+                                Width="49.028"
+                                Height="45.844"
+                                Fill="{StaticResource fillNoDataControlBackGeometryBrush}"
+                                Data="M231.81312,199.57089 L226.34383,199.60188 203.3884,240.01154 206.0133,244.59208 251.19006,244.5922 253.72181,239.8861"
+                                Stretch="Fill" />
+                                                        <Rectangle
+                                Canvas.Left="23.374"
+                                Canvas.Top="14.208"
+                                Width="4.75"
+                                Height="18"
+                                Fill="{StaticResource fillNoDataControlGeometryBrush}" />
+                                                        <Ellipse
+                                Canvas.Left="23.374"
+                                Canvas.Top="35.13"
+                                Width="4.75"
+                                Height="4.75"
+                                Fill="{StaticResource fillNoDataControlGeometryBrush}" />
+                                                        <Path
+                                Canvas.Left="0.249"
+                                Canvas.Top="1.395"
+                                Width="50.625"
+                                Height="47.101"
+                                Fill="{StaticResource fillNoDataControlGeometryPathBrush}"
+                                Stroke="{StaticResource strokeNoDataControlGeometryBrush}"
+                                Data="M0.5,42.907 L23.531,0.516 M28.125,0.50000001 L50.125001,42.86 M2.7029999,46.601 L48.008998,46.601"
+                                Stretch="Fill" />
+                                                    </Canvas.Children>
+                                                </Canvas>
+                                                <TextBlock
+                        TextAlignment="Center"
+                        TextOptions.TextFormattingMode="Ideal"
+                        TextWrapping="Wrap">
+                        Нет данных
+                        <LineBreak />
+                        для отображения
+                                                </TextBlock>
+                                            </StackPanel>
+                                        </Border>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TreeView.Style>
         </TreeView>
         <!-- -->
-        <DockPanel Grid.Row="3" LastChildFill="False">
-            <Button DockPanel.Dock="Left"  Margin="10 5" Padding="5 0" Content="{x:Static local:Strings.Update}" x:Name="btnUpdate" Click="btnUpdate_Click" />
-            <Button DockPanel.Dock="Right" Margin="10 5" Padding="5 0" Content="{x:Static local:Strings.Get}" x:Name="btnGet" Click="btnGet_Click" IsEnabled="False"/>
-            <Button DockPanel.Dock="Right" Margin="10 5" Padding="5 0" Content="{x:Static local:Strings.Save}" x:Name="btnSave" Click="btnSave_Click" IsEnabled="False"/>
+        <DockPanel Grid.Row="2" LastChildFill="False">
+            <Button DockPanel.Dock="Left"  Margin="0 5 5 0" Padding="5 0" Content="{x:Static local:Strings.Update}" x:Name="btnUpdate" Click="btnUpdate_Click" />
+            <Button DockPanel.Dock="Right" Margin="10 5 0 0" Padding="5 0" Content="{x:Static local:Strings.Get}" x:Name="btnGet" Click="btnGet_Click" IsEnabled="False"/>
+            <Button DockPanel.Dock="Right" Margin="5 5 5 0" Padding="5 0" Content="{x:Static local:Strings.Save}" x:Name="btnSave" Click="btnSave_Click" IsEnabled="False"/>
         </DockPanel>
+        <!-- -->
+        <StatusBar
+            Grid.Row="3" Margin="-5 5 -5 -5"
+            Height="24">
+            <TextBlock Margin="3,0,0,0" x:Name="status" Text="Готово"/>
+            <StatusBarItem HorizontalAlignment="Right">
+                <ResizeGrip Opacity="0.75" />
+            </StatusBarItem>
+        </StatusBar>
     </Grid>
 </Window>

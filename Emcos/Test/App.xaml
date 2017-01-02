@@ -6,6 +6,8 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary
+                Source="/PresentationFramework.Aero;component/themes/Aero.NormalColor.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/TMP.Wpf.Common;component/Styles/Controls.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/TMP.Wpf.Common;component/Styles/Fonts.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/TMP.Wpf.Common;component/Styles/Colors.xaml" />

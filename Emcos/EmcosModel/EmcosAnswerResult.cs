@@ -5,9 +5,9 @@ namespace TMP.Work.Emcos.Model
     [Serializable]
     public class STPLDataResult
     {
-        public decimal POINT_ID { get; set; }
+        public int POINT_ID { get; set; }
         public string POINT_CODE { get; set; }
-        public decimal ML_ID { get; set; }
+        public int ML_ID { get; set; }
         public DateTime PL_T { get; set; }
         public DateTime BT { get; set; }
         public DateTime ET { get; set; }
@@ -17,7 +17,7 @@ namespace TMP.Work.Emcos.Model
     [Serializable]
     public class PointInfo
     {
-        public decimal POINT_ID { get; set; }
+        public int POINT_ID { get; set; }
         public string POINT_CODE { get; set; }
         public string POINT_NAME { get; set; }
     }

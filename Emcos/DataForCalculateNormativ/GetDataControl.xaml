@@ -9,15 +9,10 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="400"
              Cursor="Wait"
-             TextOptions.TextFormattingMode="Ideal">
+             TextOptions.TextFormattingMode="Ideal"
+             Loaded="UserControl_LoadedAsync">
     <UserControl.Resources>
-        <CollectionViewSource x:Key="substations" Source="{Binding Substations}">
-            <CollectionViewSource.SortDescriptions>
-                <scm:SortDescription PropertyName="Name" />
-            </CollectionViewSource.SortDescriptions>
-        </CollectionViewSource>
     </UserControl.Resources>
-
     <Grid>
         <local:Background />
         <Border BorderBrush="{x:Static SystemColors.ActiveBorderBrush}" BorderThickness="1" Background="{x:Static SystemColors.WindowBrush}" Padding="10" 
@@ -25,15 +20,16 @@
             <DockPanel>
                 <Label DockPanel.Dock="Top" HorizontalAlignment="Center" Content="Получение режимных данных"/>
                 <StackPanel DockPanel.Dock="Bottom" Margin="5 2">
-                    <ProgressBar HorizontalAlignment="Stretch" MinHeight="15" Maximum="100" Value="{Binding Progress, Mode=OneWay}" />
+                    <ProgressBar HorizontalAlignment="Stretch" MinHeight="15" Maximum="100" x:Name="progress" />
                     <Button Margin="5"
                         HorizontalAlignment="Center"
-                        Command="{Binding CancelCommand}"
+                        x:Name="btnCancel"
+                        Click="btnCancel_Click"
                         Content="Отменить"
                         Padding="15,2" />
 
                 </StackPanel>
-                <ListView Background="Transparent" BorderThickness="0.5" Margin="5 2" MinHeight="100">
+                <ListView Background="Transparent" BorderThickness="0.5" Margin="5 2" MinHeight="100" x:Name="list">
                     <ListView.Resources>
                         <DataTemplate x:Key="statusColumnTemplate">
                             <Label x:Name="status" Padding="0"/>

@@ -61,7 +61,46 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Произошла ошибка.\nОписание ошибки:\n{0}.
+        ///   Looks up a localized string similar to Авторизация не удалась,
+        ///неверные имя пользователя или пароль..
+        /// </summary>
+        public static string AuthorizationFailed {
+            get {
+                return ResourceManager.GetString("AuthorizationFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Операция отменена..
+        /// </summary>
+        public static string Canceled {
+            get {
+                return ResourceManager.GetString("Canceled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Завершено..
+        /// </summary>
+        public static string Completed {
+            get {
+                return ResourceManager.GetString("Completed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Выберите одну или несколько групп..
+        /// </summary>
+        public static string EmptyList {
+            get {
+                return ResourceManager.GetString("EmptyList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Произошла ошибка.
+        ///Описание ошибки:
+        ///{0}.
         /// </summary>
         public static string Error {
             get {
@@ -70,7 +109,9 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Не найден файл конфигурации программы &apos;{0}&apos;.\nБудет произведено получение данных с сервиса Emcos Corporate.\nОперация займет некоторое время, пожалуйста, подождите..
+        ///   Looks up a localized string similar to Не найден файл конфигурации программы &apos;{0}&apos;.
+        ///Будет произведено получение данных с сервиса Emcos Corporate.
+        ///Операция займет некоторое время, пожалуйста, подождите..
         /// </summary>
         public static string ErrorNotFoundPointsList {
             get {
@@ -79,7 +120,9 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Произошла ошибка при загрузке конфигурации программы.\nОписание ошибки:\n{0}.
+        ///   Looks up a localized string similar to Произошла ошибка при загрузке конфигурации программы.
+        ///Описание ошибки:
+        ///{0}.
         /// </summary>
         public static string ErrorOnLoadPointsList {
             get {
@@ -88,7 +131,9 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Произошла ошибка при сохранении конфигурации программы.\nОписание ошибки:\n{0}.
+        ///   Looks up a localized string similar to Произошла ошибка при сохранении конфигурации программы.
+        ///Описание ошибки:
+        ///{0}.
         /// </summary>
         public static string ErrorOnSavePointsList {
             get {
@@ -103,6 +148,24 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ {
         public static string Get {
             get {
                 return ResourceManager.GetString("Get", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Получение данных с сервиса Emcos Corporate..
+        /// </summary>
+        public static string GettingDataStatus {
+            get {
+                return ResourceManager.GetString("GettingDataStatus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Нет ответа от сервиса, проверьте имя сервиса..
+        /// </summary>
+        public static string IncorrectService {
+            get {
+                return ResourceManager.GetString("IncorrectService", resourceCulture);
             }
         }
         
@@ -127,7 +190,27 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Будет произведено получение данных с сервиса Emcos Corporate.\nОперация займет продолжительное время, пожалуйста, подождите..
+        ///   Looks up a localized string similar to не.
+        /// </summary>
+        public static string No {
+            get {
+                return ResourceManager.GetString("No", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Нет доступа, проверьте имя пользователя и пароль..
+        /// </summary>
+        public static string NotHavePermission {
+            get {
+                return ResourceManager.GetString("NotHavePermission", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Будет произведено получение данных с сервиса Emcos Corporate.
+        ///Операция займет продолжительное время,
+        ///пожалуйста, подождите..
         /// </summary>
         public static string OnGettingData {
             get {
@@ -136,11 +219,31 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Будет произведено получение данных с сервиса Emcos Corporate.\nОперация займет некоторое время, пожалуйста, подождите..
+        ///   Looks up a localized string similar to Будет произведено получение данных с сервиса Emcos Corporate.
+        ///Операция займет некоторое время,
+        ///пожалуйста, подождите..
         /// </summary>
         public static string OnUpdatingPointsList {
             get {
                 return ResourceManager.GetString("OnUpdatingPointsList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Готово.
+        /// </summary>
+        public static string ReadyMessage {
+            get {
+                return ResourceManager.GetString("ReadyMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Не задан отчёт в настройках программы..
+        /// </summary>
+        public static string ReportNotSpecified {
+            get {
+                return ResourceManager.GetString("ReportNotSpecified", resourceCulture);
             }
         }
         
@@ -151,6 +254,43 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ {
         public static string Save {
             get {
                 return ResourceManager.GetString("Save", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Сохранение результатов.
+        /// </summary>
+        public static string SavingInProgress {
+            get {
+                return ResourceManager.GetString("SavingInProgress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Сервер {0} доступен.
+        /// </summary>
+        public static string ServerAvailability {
+            get {
+                return ResourceManager.GetString("ServerAvailability", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Сервис {0} доступен.
+        /// </summary>
+        public static string ServiceAvailability {
+            get {
+                return ResourceManager.GetString("ServiceAvailability", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Настройки
+        ///программы.
+        /// </summary>
+        public static string Settings {
+            get {
+                return ResourceManager.GetString("Settings", resourceCulture);
             }
         }
         
@@ -170,6 +310,15 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ {
         public static string Update {
             get {
                 return ResourceManager.GetString("Update", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Обновление списка точек.
+        /// </summary>
+        public static string UpdatingInProgress {
+            get {
+                return ResourceManager.GetString("UpdatingInProgress", resourceCulture);
             }
         }
     }

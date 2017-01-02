@@ -138,16 +138,16 @@
                                               buttonOption, image, btnDefault,
                                               helpLink, helpLinkTitle, helpLinkLabel, navigateHelplinkMethod,
                                               showCopyMessage);
-            if ((image & (MsgBoxImage.Alert | MsgBoxImage.Warning)) != 0)
+            if (image == MsgBoxImage.Alert || image == MsgBoxImage.Warning)
                 System.Media.SystemSounds.Asterisk.Play();
             else
-                if ((image & MsgBoxImage.Error) != 0)
+                if (image == MsgBoxImage.Error)
                 System.Media.SystemSounds.Exclamation.Play();
             else
-                if ((image & (MsgBoxImage.Information | MsgBoxImage.Information_Orange | MsgBoxImage.Information_Red)) != 0)
+                if (image == MsgBoxImage.Information || image == MsgBoxImage.Information_Orange || image == MsgBoxImage.Information_Red)
                 System.Media.SystemSounds.Hand.Play();
             else
-                if ((image & MsgBoxImage.Question) != 0)
+                if (image == MsgBoxImage.Question)
                 System.Media.SystemSounds.Question.Play();
             switch (this.Style)
             {
@@ -192,16 +192,16 @@
                                               buttonOption, image, btnDefault,
                                               helpLink, helpLinkTitle, helpLinkLabel, navigateHelplinkMethod,
                                               showCopyMessage);
-            if ((image & (MsgBoxImage.Alert | MsgBoxImage.Warning)) != 0)
+            if (image == MsgBoxImage.Alert || image == MsgBoxImage.Warning)
                 System.Media.SystemSounds.Asterisk.Play();
             else
-                if ((image & MsgBoxImage.Error) != 0)
+                if (image == MsgBoxImage.Error)
                 System.Media.SystemSounds.Exclamation.Play();
             else
-                if ((image & (MsgBoxImage.Information | MsgBoxImage.Information_Orange | MsgBoxImage.Information_Red)) != 0)
+                if (image == MsgBoxImage.Information || image == MsgBoxImage.Information_Orange || image == MsgBoxImage.Information_Red)
                 System.Media.SystemSounds.Hand.Play();
             else
-                if ((image & MsgBoxImage.Question) != 0)
+                if (image == MsgBoxImage.Question)
                 System.Media.SystemSounds.Question.Play();
             switch (this.Style)
             {
@@ -229,16 +229,16 @@
                                               buttonOption, image, btnDefault,
                                               helpLink, helpLinkTitle, helpLabel, navigateHelplinkMethod,
                                               showCopyMessage);
-            if ((image & (MsgBoxImage.Alert | MsgBoxImage.Warning)) != 0)
+            if (image == MsgBoxImage.Alert || image == MsgBoxImage.Warning)
                 System.Media.SystemSounds.Asterisk.Play();
             else
-                if ((image & MsgBoxImage.Error) != 0)
+                if (image == MsgBoxImage.Error)
                 System.Media.SystemSounds.Exclamation.Play();
             else
-                if ((image & (MsgBoxImage.Information | MsgBoxImage.Information_Orange | MsgBoxImage.Information_Red)) != 0)
+                if (image == MsgBoxImage.Information || image == MsgBoxImage.Information_Orange || image == MsgBoxImage.Information_Red)
                 System.Media.SystemSounds.Hand.Play();
             else
-                if ((image & MsgBoxImage.Question) != 0)
+                if (image == MsgBoxImage.Question)
                 System.Media.SystemSounds.Question.Play();
             switch (this.Style)
             {
@@ -266,16 +266,16 @@
                                               buttonOption, image, btnDefault,
                                               helpLink, helpLinkTitle, helpLinkLabel, navigateHelplinkMethod,
                                               showCopyMessage);
-            if ((image & (MsgBoxImage.Alert | MsgBoxImage.Warning)) != 0)
+            if (image == MsgBoxImage.Alert || image == MsgBoxImage.Warning)
                 System.Media.SystemSounds.Asterisk.Play();
             else
-                if ((image & MsgBoxImage.Error) != 0)
+                if (image == MsgBoxImage.Error)
                 System.Media.SystemSounds.Exclamation.Play();
             else
-                if ((image & (MsgBoxImage.Information | MsgBoxImage.Information_Orange | MsgBoxImage.Information_Red)) != 0)
+                if (image == MsgBoxImage.Information || image == MsgBoxImage.Information_Orange || image == MsgBoxImage.Information_Red)
                 System.Media.SystemSounds.Hand.Play();
             else
-                if ((image & MsgBoxImage.Question) != 0)
+                if (image == MsgBoxImage.Question)
                 System.Media.SystemSounds.Question.Play();
             switch (this.Style)
             {
@@ -320,16 +320,16 @@
                                               buttonOption, image, btnDefault,
                                               helpLink, helpLinkTitle, helpLinkLabel, navigateHelplinkMethod,
                                               showCopyMessage);
-            if ((image & (MsgBoxImage.Alert | MsgBoxImage.Warning)) != 0)
+            if (image == MsgBoxImage.Alert || image == MsgBoxImage.Warning)
                 System.Media.SystemSounds.Asterisk.Play();
             else
-                if ((image & MsgBoxImage.Error) != 0)
+                if (image == MsgBoxImage.Error)
                 System.Media.SystemSounds.Exclamation.Play();
             else
-                if ((image & (MsgBoxImage.Information | MsgBoxImage.Information_Orange | MsgBoxImage.Information_Red)) != 0)
+                if (image == MsgBoxImage.Information || image == MsgBoxImage.Information_Orange || image == MsgBoxImage.Information_Red)
                 System.Media.SystemSounds.Hand.Play();
             else
-                if ((image & MsgBoxImage.Question) != 0)
+                if (image == MsgBoxImage.Question)
                 System.Media.SystemSounds.Question.Play();
             switch (this.Style)
             {
@@ -362,16 +362,16 @@
                                               helpLink, helpLinkTitle, helpLinkLabel, navigateHelplinkMethod,
                                               showCopyMessage,
                                               defaultCloseResult, dialogCanCloseViaChrome);
-            if ((image & (MsgBoxImage.Alert | MsgBoxImage.Warning)) != 0)
+            if (image == MsgBoxImage.Alert || image == MsgBoxImage.Warning)
                 System.Media.SystemSounds.Asterisk.Play();
             else
-                if ((image & MsgBoxImage.Error) != 0)
+                if (image == MsgBoxImage.Error)
                 System.Media.SystemSounds.Exclamation.Play();
             else
-                if ((image & (MsgBoxImage.Information | MsgBoxImage.Information_Orange | MsgBoxImage.Information_Red)) != 0)
+                if (image == MsgBoxImage.Information || image == MsgBoxImage.Information_Orange || image == MsgBoxImage.Information_Red)
                 System.Media.SystemSounds.Hand.Play();
             else
-                if ((image & MsgBoxImage.Question) != 0)
+                if (image == MsgBoxImage.Question)
                 System.Media.SystemSounds.Question.Play();
             switch (this.Style)
             {
@@ -490,16 +490,16 @@
                                               helpLink, helpLinkTitle, helpLinkLabel, navigateHelplinkMethod,
                                               showCopyMessage,
                                               defaultCloseResult, dialogCanCloseViaChrome);
-            if ((image & (MsgBoxImage.Alert | MsgBoxImage.Warning)) != 0)
+            if (image == MsgBoxImage.Alert || image == MsgBoxImage.Warning)
                 System.Media.SystemSounds.Asterisk.Play();
             else
-                if ((image & MsgBoxImage.Error) != 0)
+                if (image == MsgBoxImage.Error)
                 System.Media.SystemSounds.Exclamation.Play();
             else
-                if ((image & (MsgBoxImage.Information | MsgBoxImage.Information_Orange | MsgBoxImage.Information_Red)) != 0)
+                if (image == MsgBoxImage.Information || image == MsgBoxImage.Information_Orange || image == MsgBoxImage.Information_Red)
                 System.Media.SystemSounds.Hand.Play();
             else
-                if ((image & MsgBoxImage.Question) != 0)
+                if (image == MsgBoxImage.Question)
                 System.Media.SystemSounds.Question.Play();
             switch (this.Style)
             {
@@ -531,16 +531,16 @@
                                               helpLink, helpLinkTitle, helpLinkLabel, navigateHelplinkMethod,
                                               showCopyMessage,
                                               defaultCloseResult, dialogCanCloseViaChrome);
-            if ((image & (MsgBoxImage.Alert | MsgBoxImage.Warning)) != 0)
+            if (image == MsgBoxImage.Alert || image == MsgBoxImage.Warning)
                 System.Media.SystemSounds.Asterisk.Play();
             else
-                if ((image & MsgBoxImage.Error) != 0)
+                if (image == MsgBoxImage.Error)
                 System.Media.SystemSounds.Exclamation.Play();
             else
-                if ((image & (MsgBoxImage.Information | MsgBoxImage.Information_Orange | MsgBoxImage.Information_Red)) != 0)
+                if (image == MsgBoxImage.Information || image == MsgBoxImage.Information_Orange || image == MsgBoxImage.Information_Red)
                 System.Media.SystemSounds.Hand.Play();
             else
-                if ((image & MsgBoxImage.Question) != 0)
+                if (image == MsgBoxImage.Question)
                 System.Media.SystemSounds.Question.Play();
             switch (this.Style)
             {

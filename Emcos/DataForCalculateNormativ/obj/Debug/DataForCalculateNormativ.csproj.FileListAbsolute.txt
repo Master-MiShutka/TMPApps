@@ -18,3 +18,14 @@ Y:\Developer\CURRENT\TMPApps\Emcos\DataForCalculateNormativ\obj\Debug\ProgressCo
 Y:\Developer\CURRENT\TMPApps\Emcos\DataForCalculateNormativ\obj\Debug\ProgressControl.baml
 Y:\Developer\CURRENT\TMPApps\Emcos\DataForCalculateNormativ\obj\Debug\ListPointDataTemplate.baml
 Y:\Developer\CURRENT\TMPApps\Emcos\DataForCalculateNormativ\obj\Debug\TMP.Work.Emcos.DataForCalculateNormativ.Strings.resources
+Y:\Developer\CURRENT\TMPApps\Emcos\DataForCalculateNormativ\obj\Debug\Background.g.cs
+Y:\Developer\CURRENT\TMPApps\Emcos\DataForCalculateNormativ\obj\Debug\GetDataControl.g.cs
+Y:\Developer\CURRENT\TMPApps\Emcos\DataForCalculateNormativ\obj\Debug\GetDataControl.baml
+Y:\Developer\CURRENT\TMPApps\Emcos\DataForCalculateNormativ\obj\Debug\Background.baml
+Y:\Developer\CURRENT\TMPApps\Emcos\DataForCalculateNormativ\obj\Debug\Styles\WindowStyle.g.cs
+Y:\Developer\CURRENT\TMPApps\Emcos\DataForCalculateNormativ\obj\Debug\Styles\WindowStyle.baml
+Y:\Developer\CURRENT\TMPApps\Emcos\DataForCalculateNormativ\obj\Debug\Styles\Generic.baml
+Y:\Developer\CURRENT\TMPApps\Emcos\DataForCalculateNormativ\obj\Debug\SettingsWindow.g.cs
+Y:\Developer\CURRENT\TMPApps\Emcos\DataForCalculateNormativ\obj\Debug\SettingsWindow.baml
+Y:\Developer\CURRENT\TMPApps\Emcos\DataForCalculateNormativ\obj\Debug\ResultWindow.g.cs
+Y:\Developer\CURRENT\TMPApps\Emcos\DataForCalculateNormativ\obj\Debug\ResultWindow.baml

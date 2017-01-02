@@ -5,12 +5,11 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TMP.Work.Emcos.DataForCalculateNormativ"
              mc:Ignorable="d" 
-             FontSize="{x:Static SystemFonts.MessageFontSize}"
              Panel.ZIndex="1001"
              Cursor="Wait"
              TextOptions.TextFormattingMode="Ideal">
     <Grid>
-        <local:Background />
+        <local:Background x:Name="background"/>
         <Border BorderBrush="{x:Static SystemColors.ActiveBorderBrush}" BorderThickness="1" Background="{x:Static SystemColors.WindowBrush}" Padding="10" HorizontalAlignment="Center" VerticalAlignment="Center" Cursor="AppStarting">
             <StackPanel VerticalAlignment="Center">
                 <Label Content="Пожалуйста, подождите ..." HorizontalAlignment="Center" VerticalAlignment="Center" />

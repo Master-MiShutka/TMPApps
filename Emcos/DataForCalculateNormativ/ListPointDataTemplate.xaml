@@ -15,7 +15,7 @@
     <BitmapImage x:Key="Transformer" UriSource="/DataForCalculateNormativ;component/Resources/Transformer.png" />
     <BitmapImage x:Key="Voltage" UriSource="/DataForCalculateNormativ;component/Resources/Voltage.png" />
 
-    <DataTemplate  DataType="{x:Type local:ListPoint}">
+    <HierarchicalDataTemplate  DataType="{x:Type local:ListPoint}" ItemsSource="{Binding Items}">
         <DockPanel>
             <Image DockPanel.Dock="Left" Height="20" Width="20" Margin="2 1">
                 <Image.Style>
@@ -53,7 +53,7 @@
                             <MultiDataTrigger>
                                 <MultiDataTrigger.Conditions>
                                     <Condition Binding="{Binding Path=TypeCode}" Value="ELECTRICITY"/>
-                                    <Condition Binding="{Binding Path=EspName}" Value="Линии"/>
+                                    <Condition Binding="{Binding Path=EсpName}" Value="Линии"/>
                                     <Condition Binding="{Binding Path=ParentTypeCode}" Value="VOLTAGE"/>
                                 </MultiDataTrigger.Conditions>
                                 <MultiDataTrigger.Setters>
@@ -64,7 +64,7 @@
                             <MultiDataTrigger>
                                 <MultiDataTrigger.Conditions>
                                     <Condition Binding="{Binding Path=TypeCode}" Value="ELECTRICITY"/>
-                                    <Condition Binding="{Binding Path=EspName}" Value="Трансформаторы"/>
+                                    <Condition Binding="{Binding Path=EсpName}" Value="Трансформаторы"/>
                                 </MultiDataTrigger.Conditions>
                                 <MultiDataTrigger.Setters>
                                     <Setter Property="Source" Value="{StaticResource Transformer}" />
@@ -74,7 +74,7 @@
                             <MultiDataTrigger>
                                 <MultiDataTrigger.Conditions>
                                     <Condition Binding="{Binding Path=TypeCode}" Value="ELECTRICITY"/>
-                                    <Condition Binding="{Binding Path=EspName}" Value="Свои нужды"/>
+                                    <Condition Binding="{Binding Path=EсpName}" Value="Свои нужды"/>
                                 </MultiDataTrigger.Conditions>
                                 <MultiDataTrigger.Setters>
                                     <Setter Property="Source" Value="{StaticResource Transformer}" />
@@ -84,7 +84,7 @@
                             <MultiDataTrigger>
                                 <MultiDataTrigger.Conditions>
                                     <Condition Binding="{Binding Path=TypeCode}" Value="ELECTRICITY"/>
-                                    <Condition Binding="{Binding Path=EspName}" Value="Линии"/>
+                                    <Condition Binding="{Binding Path=EсpName}" Value="Линии"/>
                                 </MultiDataTrigger.Conditions>
                                 <MultiDataTrigger.Setters>
                                     <Setter Property="Source" Value="{StaticResource Fider}" />
@@ -94,11 +94,23 @@
                     </Style>
                 </Image.Style>
             </Image>
-            <CheckBox IsChecked="{Binding Path=Checked}" DockPanel.Dock="Left" VerticalAlignment="Center"/>
-            <TextBlock Text="{Binding Path=TypeCode}" DockPanel.Dock="Right" VerticalAlignment="Center" Padding="0" Margin="5 2"/>
-            <TextBlock Text="{Binding Path=Type}" DockPanel.Dock="Right" VerticalAlignment="Center" Padding="0" Margin="5 2"/>
+            <CheckBox IsChecked="{Binding Path=Checked}" DockPanel.Dock="Left" VerticalAlignment="Center" Visibility="Collapsed" x:Name="check" />
             <TextBlock Text="{Binding Path=Name}" VerticalAlignment="Center" Padding="0" Margin="5 2"/>
         </DockPanel>
-    </DataTemplate>
+        <HierarchicalDataTemplate.Triggers>
+            <DataTrigger Binding="{Binding Path=TypeCode}" Value="FES">
+                <Setter TargetName="check" Property="Visibility" Value="Visible" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Path=TypeCode}" Value="RES">
+                <Setter TargetName="check" Property="Visibility" Value="Visible" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Path=TypeCode}" Value="SUBSTATION">
+                <Setter TargetName="check" Property="Visibility" Value="Visible" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Path=TypeCode}" Value="VOLTAGE">
+                <Setter TargetName="check" Property="Visibility" Value="Visible" />
+            </DataTrigger>
+        </HierarchicalDataTemplate.Triggers>
+    </HierarchicalDataTemplate>
 
 </ResourceDictionary>

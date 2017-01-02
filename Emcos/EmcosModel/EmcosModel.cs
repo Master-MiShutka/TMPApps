@@ -9,7 +9,7 @@ namespace TMP.Work.Emcos.Model
     public interface IEmcosPoint
     {
         [DataMember()]
-        decimal Id { get; set; }
+        int Id { get; set; }
         [DataMember()]
         string Name { get; set; }
         [DataMember()]
@@ -22,7 +22,7 @@ namespace TMP.Work.Emcos.Model
     public class EmcosPointBase : PropertyChangedBase, IEmcosPoint
     {
         [XmlAttribute]
-        public decimal Id { get; set; }
+        public int Id { get; set; }
 
         [XmlAttribute]
         public string Name { get; set; }
@@ -128,7 +128,7 @@ namespace TMP.Work.Emcos.Model
 
     public interface IEmcosElement
     {
-        decimal Id { get; set; }
+        int Id { get; set; }
         string Code { get; set; }
         string Name { get; set; }
         string TypeCode { get; set; }
@@ -137,7 +137,7 @@ namespace TMP.Work.Emcos.Model
 
     public class EmcosGrElement : IEmcosElement
     {
-        public decimal Id { get; set; }
+        public int Id { get; set; }
         public string Code { get; set; }
         public string Name { get; set; }
         public string TypeCode { get; set; }
@@ -148,7 +148,7 @@ namespace TMP.Work.Emcos.Model
 
     public class EmcosPointElement : IEmcosElement
     {
-        public decimal Id { get; set; }
+        public int Id { get; set; }
         public string Code { get; set; }
         public string Name { get; set; }
         public string TypeCode { get; set; }
@@ -159,6 +159,7 @@ namespace TMP.Work.Emcos.Model
     public enum ElementTypes
     {
         GROUP,
+        POINT,
         [Description("Подразделение")]
         DEPARTAMENT,
         [Description("Подстанция")]

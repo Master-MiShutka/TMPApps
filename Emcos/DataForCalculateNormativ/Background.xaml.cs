@@ -24,5 +24,25 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
         {
             InitializeComponent();
         }
+        public Background(bool hideCopyright = false) : this()
+        { 
+
+            HideCopyright(hideCopyright);
+        }
+
+        public void HideCopyright(bool value)
+        {
+            if (value)
+                tbCopyright.Visibility = Visibility.Hidden;
+            else
+                tbCopyright.Visibility = Visibility.Visible;
+        }
+
+        private void UserControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            Window parent = App.Current.MainWindow;
+            if (parent != null)
+                this.FontSize = parent.FontSize * 3 / 2;
+        }
     }
 }

@@ -385,24 +385,24 @@ namespace TMP.Work.Emcos
                 {
                     postStream.Write(buffer, 0, buffer.Length);
                 }
+
+                var task = Task.Factory.FromAsync(
+                    httpWebRequest.BeginGetResponse,
+                    asyncResult => httpWebRequest.EndGetResponse(asyncResult),
+                    (object)null);
+
+                return task.ContinueWith(t =>
+                {
+                    SetOKResult();
+                    var result = ReadStreamFromResponse(t.Result);
+                    return result;
+                });
             }
             catch (Exception ex)
             {
-                SetFailResult(ex, "[EmcosSiteWrapper] Функция GetAPoints - ошибка: " + ex.Message);
+                SetFailResult(ex, "[EmcosSiteWrapper] Функция GetAPointsAsync - ошибка: " + ex.Message);
                 return Task.FromResult(String.Empty);
             }
-
-            var task = Task.Factory.FromAsync(
-                httpWebRequest.BeginGetResponse,
-                asyncResult => httpWebRequest.EndGetResponse(asyncResult),
-                (object)null);
-
-            return task.ContinueWith(t =>
-            {
-                SetOKResult();
-                var result = ReadStreamFromResponse(t.Result);
-                return result;
-            });
         }
         /// <summary>
         /// Возвращает задачу со списком направлений для выбранного измерения
@@ -429,22 +429,29 @@ namespace TMP.Work.Emcos
 
             var buffer = Encoding.ASCII.GetBytes(senddata);
             httpWebRequest.ContentType = "application/x-www-form-urlencoded";
-
-            using (var postStream = httpWebRequest.GetRequestStream())
+            try
             {
-                postStream.Write(buffer, 0, buffer.Length);
+                using (var postStream = httpWebRequest.GetRequestStream())
+                {
+                    postStream.Write(buffer, 0, buffer.Length);
+                }
+
+                var task = Task.Factory.FromAsync(
+                    httpWebRequest.BeginGetResponse,
+                    asyncResult => httpWebRequest.EndGetResponse(asyncResult),
+                    (object)null);
+
+                return task.ContinueWith(t =>
+                {
+                    SetOKResult();
+                    return ReadStreamFromResponse(t.Result);
+                });
             }
-
-            var task = Task.Factory.FromAsync(
-                httpWebRequest.BeginGetResponse,
-                asyncResult => httpWebRequest.EndGetResponse(asyncResult),
-                (object)null);
-
-            return task.ContinueWith(t =>
+            catch (Exception ex)
             {
-                SetOKResult();
-                return ReadStreamFromResponse(t.Result);
-            });
+                SetFailResult(ex, "[EmcosSiteWrapper] Функция GetParamsAsync - ошибка: " + ex.Message);
+                return Task.FromResult(String.Empty);
+            }
         }
         /// <summary>
         /// Возвращает данные архива с заданным ИД
@@ -471,22 +478,29 @@ namespace TMP.Work.Emcos
 
             var buffer = Encoding.UTF8.GetBytes(senddata);
             httpWebRequest.ContentType = "application/x-www-form-urlencoded";
-
-            using (var postStream = httpWebRequest.GetRequestStream())
+            try
             {
-                postStream.Write(buffer, 0, buffer.Length);
+                using (var postStream = httpWebRequest.GetRequestStream())
+                {
+                    postStream.Write(buffer, 0, buffer.Length);
+                }
+
+                var task = Task.Factory.FromAsync(
+                    httpWebRequest.BeginGetResponse,
+                    asyncResult => httpWebRequest.EndGetResponse(asyncResult),
+                    (object)null);
+
+                return task.ContinueWith(t =>
+                {
+                    SetOKResult();
+                    return ReadStreamFromResponse(t.Result);
+                });
             }
-
-            var task = Task.Factory.FromAsync(
-                httpWebRequest.BeginGetResponse,
-                asyncResult => httpWebRequest.EndGetResponse(asyncResult),
-                (object)null);
-
-            return task.ContinueWith(t =>
+            catch (Exception ex)
             {
-                SetOKResult();
-                return ReadStreamFromResponse(t.Result);
-            });
+                SetFailResult(ex, "[EmcosSiteWrapper] Функция GetViewAsync - ошибка: " + ex.Message);
+                return Task.FromResult(String.Empty);
+            }
         }
         /// <summary>
         /// Возвращает ИД архива для указанных измерений, точек, периода
@@ -499,7 +513,7 @@ namespace TMP.Work.Emcos
         /// <param name="procent">процент группы</param>
         /// <param name="showGroup">это группа</param>
         /// <returns>ИД архива</returns>
-        public string[] GetArchiveWIds(string measurements, string points, 
+        public string[] GetArchiveWIds(string measurements, string points,
             DateTime startDate, DateTime endDate, CancellationToken ct, bool procent = false, bool showGroup = false)
         {
             if (Login(AuthorizationType.GetRights) == false)
@@ -569,7 +583,7 @@ namespace TMP.Work.Emcos
             int count = 0;
             Int32.TryParse(list.Get("wCount"), out count);
             if (count != wids.Count)
-               ToLogInfo("[EmcosSiteWrapper] Разное количество ИД архива: " + wids.Count + " и " + count);
+                ToLogInfo("[EmcosSiteWrapper] Разное количество ИД архива: " + wids.Count + " и " + count);
             ToLogInfo("[EmcosSiteWrapper] Получен ИД архива: " + String.Join(", ", wids));
 
             SetOKResult();
@@ -616,38 +630,45 @@ namespace TMP.Work.Emcos
             httpWebRequest.Accept = "*/*";
             httpWebRequest.Headers.Add("Accept-Encoding: gzip, deflate");
 
+            IEnumerable<Model.ArchData> empty = new List<Model.ArchData>();
             // передаём куки
             if (TryAddCookie(ref httpWebRequest) == false)
             {
-                SetFailResult(null, "[EmcosSiteWrapper] Функция GetArchiveData - ошибка: не удалось добавить куки");
-                IEnumerable<Model.ArchData> empty = new List<Model.ArchData>();
+                SetFailResult(null, "[EmcosSiteWrapper] Функция GetArchiveData - ошибка: не удалось добавить куки");                
                 return Task.FromResult(empty);
             }
             var buffer = Encoding.UTF8.GetBytes(sendData);
             httpWebRequest.ContentType = "application/x-www-form-urlencoded";
-
-            using (var postStream = httpWebRequest.GetRequestStream())
+            try
             {
-                postStream.Write(buffer, 0, buffer.Length);
-            }
-
-            var task = Task.Factory.FromAsync(
-                httpWebRequest.BeginGetResponse,
-                asyncResult => httpWebRequest.EndGetResponse(asyncResult),
-                (object)null);
-
-            return task.ContinueWith(t =>
-            {
-                var data = ReadStreamFromResponse(t.Result);
-                if (String.IsNullOrWhiteSpace(data))
+                using (var postStream = httpWebRequest.GetRequestStream())
                 {
-                    SetFailResult(null, "[EmcosSiteWrapper] Архивные данные отсутствуют. Точка: " + point.Name);
-                    return null;
+                    postStream.Write(buffer, 0, buffer.Length);
                 }
-                var list = Utils.ArchiveData(data);
-                SetOKResult();
-                return list;
-            });            
+
+                var task = Task.Factory.FromAsync(
+                    httpWebRequest.BeginGetResponse,
+                    asyncResult => httpWebRequest.EndGetResponse(asyncResult),
+                    (object)null);
+
+                return task.ContinueWith(t =>
+                {
+                    var data = ReadStreamFromResponse(t.Result);
+                    if (String.IsNullOrWhiteSpace(data))
+                    {
+                        SetFailResult(null, "[EmcosSiteWrapper] Архивные данные отсутствуют. Точка: " + point.Name);
+                        return null;
+                    }
+                    var list = Utils.ArchiveData(data);
+                    SetOKResult();
+                    return list;
+                });
+            }
+            catch (Exception ex)
+            {
+                SetFailResult(ex, "[EmcosSiteWrapper] Функция GetArchiveData - ошибка: " + ex.Message);
+                return Task.FromResult(empty);
+            }
         }
         /// <summary>
         /// Формирует строку параметров для указанного списка точек для получения ИД архива
@@ -828,10 +849,7 @@ namespace TMP.Work.Emcos
         public async Task<string> ExecuteFunction(Func<string, Task<string>> function, string param)
         {
             LastException = null;
-            if (Status != State.Online)
-                Login(AuthorizationType.Login);
-
-            Task<string> result = function(param);
+            string result = await function(param);
             if (LastException != null)
             {
                 switch (Status)
@@ -851,7 +869,15 @@ namespace TMP.Work.Emcos
                 }
             }
             else
-                return result.Result;
+            {
+                if (String.IsNullOrEmpty(result) == false && result.Contains("result=0"))
+                    return result;
+                else
+                {
+                    Login(AuthorizationType.Login);
+                    return await ExecuteFunction(function, param);
+                }
+            }
         }
 
         #endregion

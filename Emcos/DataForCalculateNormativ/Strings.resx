@@ -117,21 +117,48 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AuthorizationFailed" xml:space="preserve">
+    <value>Авторизация не удалась,
+неверные имя пользователя или пароль.</value>
+  </data>
+  <data name="Canceled" xml:space="preserve">
+    <value>Операция отменена.</value>
+  </data>
+  <data name="Completed" xml:space="preserve">
+    <value>Завершено.</value>
+  </data>
+  <data name="EmptyList" xml:space="preserve">
+    <value>Выберите одну или несколько групп.</value>
+  </data>
   <data name="Error" xml:space="preserve">
-    <value>Произошла ошибка.\nОписание ошибки:\n{0}</value>
+    <value>Произошла ошибка.
+Описание ошибки:
+{0}</value>
   </data>
   <data name="ErrorNotFoundPointsList" xml:space="preserve">
-    <value>Не найден файл конфигурации программы '{0}'.\nБудет произведено получение данных с сервиса Emcos Corporate.\nОперация займет некоторое время, пожалуйста, подождите.</value>
+    <value>Не найден файл конфигурации программы '{0}'.
+Будет произведено получение данных с сервиса Emcos Corporate.
+Операция займет некоторое время, пожалуйста, подождите.</value>
   </data>
   <data name="ErrorOnLoadPointsList" xml:space="preserve">
-    <value>Произошла ошибка при загрузке конфигурации программы.\nОписание ошибки:\n{0}</value>
+    <value>Произошла ошибка при загрузке конфигурации программы.
+Описание ошибки:
+{0}</value>
   </data>
   <data name="ErrorOnSavePointsList" xml:space="preserve">
-    <value>Произошла ошибка при сохранении конфигурации программы.\nОписание ошибки:\n{0}</value>
+    <value>Произошла ошибка при сохранении конфигурации программы.
+Описание ошибки:
+{0}</value>
   </data>
   <data name="Get" xml:space="preserve">
     <value>Получить
 данные</value>
+  </data>
+  <data name="GettingDataStatus" xml:space="preserve">
+    <value>Получение данных с сервиса Emcos Corporate.</value>
+  </data>
+  <data name="IncorrectService" xml:space="preserve">
+    <value>Нет ответа от сервиса, проверьте имя сервиса.</value>
   </data>
   <data name="InterruptGet" xml:space="preserve">
     <value>Прервать
@@ -141,15 +168,44 @@
     <value>Прервать
 обновление списка</value>
   </data>
+  <data name="No" xml:space="preserve">
+    <value>не</value>
+  </data>
+  <data name="NotHavePermission" xml:space="preserve">
+    <value>Нет доступа, проверьте имя пользователя и пароль.</value>
+  </data>
   <data name="OnGettingData" xml:space="preserve">
-    <value>Будет произведено получение данных с сервиса Emcos Corporate.\nОперация займет продолжительное время, пожалуйста, подождите.</value>
+    <value>Будет произведено получение данных с сервиса Emcos Corporate.
+Операция займет продолжительное время,
+пожалуйста, подождите.</value>
   </data>
   <data name="OnUpdatingPointsList" xml:space="preserve">
-    <value>Будет произведено получение данных с сервиса Emcos Corporate.\nОперация займет некоторое время, пожалуйста, подождите.</value>
+    <value>Будет произведено получение данных с сервиса Emcos Corporate.
+Операция займет некоторое время,
+пожалуйста, подождите.</value>
+  </data>
+  <data name="ReadyMessage" xml:space="preserve">
+    <value>Готово</value>
+  </data>
+  <data name="ReportNotSpecified" xml:space="preserve">
+    <value>Не задан отчёт в настройках программы.</value>
   </data>
   <data name="Save" xml:space="preserve">
     <value>Сохранить
 результат</value>
+  </data>
+  <data name="SavingInProgress" xml:space="preserve">
+    <value>Сохранение результатов</value>
+  </data>
+  <data name="ServerAvailability" xml:space="preserve">
+    <value>Сервер {0} доступен</value>
+  </data>
+  <data name="ServiceAvailability" xml:space="preserve">
+    <value>Сервис {0} доступен</value>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>Настройки
+программы</value>
   </data>
   <data name="TerminatingMessage" xml:space="preserve">
     <value>Завершение работы</value>
@@ -157,5 +213,8 @@
   <data name="Update" xml:space="preserve">
     <value>Обновить
 список</value>
+  </data>
+  <data name="UpdatingInProgress" xml:space="preserve">
+    <value>Обновление списка точек</value>
   </data>
 </root>

@@ -100,5 +100,10 @@ namespace Test
                 MessageBox.Show("Произошла ошибка.\n" + t.Exception.Message, this.Title, MessageBoxButton.OK, MessageBoxImage.Exclamation);
             }, TaskContinuationOptions.OnlyOnFaulted);
         }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("ggtfecgfe", Title, MessageBoxButton.YesNoCancel, MessageBoxImage.Asterisk);
+        }
     }
 }
