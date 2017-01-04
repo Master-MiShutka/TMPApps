@@ -55,15 +55,10 @@
   <PropertyGroup>
     <StartupObject>TMP.Work.AmperM.TestApp.App</StartupObject>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+  </PropertyGroup>
   <ItemGroup>
-    <Reference Include="EPPlus, Version=4.1.0.0, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\EPPlus.4.1.0\lib\net40\EPPlus.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="EPPlusEnumerable, Version=1.4.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\EPPlusEnumerable.1.4.0.2\lib\EPPlusEnumerable.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="GongSolutions.Wpf.DragDrop, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\gong-wpf-dragdrop.1.0.0\lib\net45\GongSolutions.Wpf.DragDrop.dll</HintPath>
       <Private>False</Private>
@@ -124,6 +119,7 @@
     <Compile Include="Converters\NewLineRemoveConverter.cs" />
     <Compile Include="Converters\ServiceFunctionTypeToVisibiltyConverter.cs" />
     <Compile Include="DataAccess\Export.cs" />
+    <Compile Include="EzSbyt\DataParser.cs" />
     <Compile Include="MessageBox.cs" />
     <Compile Include="ObservableCollectionAdv.cs" />
     <Compile Include="PagingCollectionView.cs" />
@@ -338,6 +334,7 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <Resource Include="1CV8Syntax.xshd" />
+    <None Include="app.manifest" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>PublicSettingsSingleFileGenerator</Generator>
@@ -360,49 +357,38 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Library\CommonControls\CommonControls.csproj">
+    <ProjectReference Include="..\..\LIBRARY\CommonControls\CommonControls.csproj">
       <Project>{8cf736c3-a421-4f44-8f9c-945a4391718b}</Project>
       <Name>CommonControls</Name>
       <Private>False</Private>
     </ProjectReference>
-    <ProjectReference Include="..\..\Library\Extensions\TMP.Extensions.csproj">
+    <ProjectReference Include="..\..\LIBRARY\EPPLUS\EPPlus.csproj">
+      <Project>{7b288026-5502-4a39-bf41-77e086f3e4a3}</Project>
+      <Name>EPPlus</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LIBRARY\Extensions\TMP.Extensions.csproj">
       <Project>{3f72fbe4-5f95-43fd-9029-3cc145c978b4}</Project>
       <Name>TMP.Extensions</Name>
       <Private>False</Private>
     </ProjectReference>
-    <ProjectReference Include="..\..\LIBRARY\JsonUtils\JsonUtils.csproj">
-      <Project>{f5216bce-98fb-4b1f-a114-fed7a325ad18}</Project>
-      <Name>JsonUtils</Name>
-      <Private>False</Private>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Library\RepositoryCommon\RepositoryCommon.csproj">
-      <Project>{7b66a20e-48ff-4fcd-955d-415ad5f1e4e2}</Project>
-      <Name>RepositoryCommon</Name>
-      <Private>False</Private>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Library\Logger\Logger.csproj">
-      <Project>{b1736481-51ba-4b57-b0b1-a0ea76c1c6d2}</Project>
-      <Name>Logger</Name>
-      <Private>True</Private>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Library\MsgBox\MsgBox.csproj">
-      <Project>{2f8ef004-1e7a-429d-863b-5a062a90705a}</Project>
-      <Name>MsgBox</Name>
-      <Private>False</Private>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Library\NetHelper\NetHelper.csproj">
-      <Project>{e00c55d0-971a-4d59-8c91-e7a4d79d50e8}</Project>
-      <Name>NetHelper</Name>
-      <Private>False</Private>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Library\Interactivity\Interactivity.csproj">
+    <ProjectReference Include="..\..\LIBRARY\Interactivity\Interactivity.csproj">
       <Project>{588a47ee-dbc1-48c3-987b-bbd5163a8cce}</Project>
       <Name>Interactivity</Name>
       <Private>False</Private>
     </ProjectReference>
-    <ProjectReference Include="..\..\LIBRARY\ServiceLocator\ServiceLocator.csproj">
-      <Project>{1d2b2142-67d7-48ea-91f9-5e77e29b5ab9}</Project>
-      <Name>ServiceLocator</Name>
+    <ProjectReference Include="..\..\LIBRARY\Logger\Logger.csproj">
+      <Project>{04ce65d3-1dbf-4a95-8b6e-44ec2c896d00}</Project>
+      <Name>Logger</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LIBRARY\NetHelper\NetHelper.csproj">
+      <Project>{e00c55d0-971a-4d59-8c91-e7a4d79d50e8}</Project>
+      <Name>NetHelper</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LIBRARY\RepositoryCommon\RepositoryCommon.csproj">
+      <Project>{7b66a20e-48ff-4fcd-955d-415ad5f1e4e2}</Project>
+      <Name>RepositoryCommon</Name>
       <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\..\Library\Shared\Shared.csproj">
@@ -413,6 +399,12 @@
     <ProjectReference Include="..\..\LIBRARY\TMPApplication\TMPApplication.csproj">
       <Project>{dfe89862-64ef-44f8-98a8-07b410ec180e}</Project>
       <Name>TMPApplication</Name>
+      <Private>True</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LIBRARY\WindowsShell\WindowsShell.csproj">
+      <Project>{6733a572-4d4f-4733-908d-e9db4765e245}</Project>
+      <Name>WindowsShell</Name>
+      <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

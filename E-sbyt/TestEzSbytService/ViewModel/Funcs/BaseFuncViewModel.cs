@@ -201,7 +201,7 @@ namespace TMP.Work.AmperM.TestApp.ViewModel.Funcs
 
             var result = EzSbyt.EzSbytService.Instance.FuncRequest(this.FuncName, this.GetUrlParams(), this.GetEscapedBody());
 
-            parent.Result = new ResultViewerViewModel(result, format);
+            parent.Result = new ResultViewerViewModel(parent, result, format);
 
         }
 

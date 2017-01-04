@@ -14,7 +14,7 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
         [DataMember]
         public string ParentTypeCode { get; set; }
         [DataMember]
-        public string ParentTypeName { get; set; }
+        public string ParentName { get; set; }
         [DataMember]
         public int Id { get; set; }
         [DataMember]

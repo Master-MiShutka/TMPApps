@@ -10,7 +10,7 @@ namespace TMP.Work.AmperM.TestApp.ViewModel
 {
     using Shared;
     using Shared.Commands;
-    using MsgBox;
+
     public class ShemaUchetViewModel : TabViewModel
     {
         #region Fields
@@ -121,7 +121,7 @@ namespace TMP.Work.AmperM.TestApp.ViewModel
         {
             if (String.IsNullOrWhiteSpace(this.Request))
             {
-                MessageBox.Show("Нечего искать!", App.WindowTitle, MsgBoxButtons.OK, MsgBoxImage.Warning);
+                App.ShowWarning("Нечего искать!");
                 args.Cancel = true;
                 return;
             }

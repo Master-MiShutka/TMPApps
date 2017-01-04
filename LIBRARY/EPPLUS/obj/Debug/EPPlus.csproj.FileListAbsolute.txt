@@ -1,0 +1,20 @@
+Y:\Developer\CURRENT\Emcos\bin\Debug\EPPlus.dll
+Y:\Developer\CURRENT\Emcos\bin\Debug\EPPlus.pdb
+\\vmware-host\Shared Folders\Emcos\EPPLUS\EPPlus\obj\Debug\ResolveAssemblyReference.cache
+\\vmware-host\Shared Folders\Emcos\EPPLUS\EPPlus\obj\Debug\EPPlus.dll
+\\vmware-host\Shared Folders\Emcos\EPPLUS\EPPlus\obj\Debug\EPPlus.pdb
+Y:\Developer\CURRENT\Emcos\bin\Debug\Libs\EPPlus.dll
+Y:\Developer\CURRENT\Emcos\bin\Debug\Libs\EPPlus.pdb
+Y:\Developer\CURRENT\Emcos\EPPLUS\EPPlus\obj\Debug\EPPlus.dll
+Y:\Developer\CURRENT\Emcos\EPPLUS\EPPlus\obj\Debug\EPPlus.pdb
+Y:\Developer\CURRENT\TMPApps\LIBRARY\bin\Debug\Libs\EPPlus.dll
+Y:\Developer\CURRENT\TMPApps\LIBRARY\bin\Debug\Libs\EPPlus.pdb
+Y:\Developer\CURRENT\TMPApps\out\Debug\Libs\EPPlus.dll
+Y:\Developer\CURRENT\TMPApps\out\Debug\Libs\EPPlus.pdb
+Y:\Developer\CURRENT\TMPApps\LIBRARY\EPPLUS\EPPlus\obj\Debug\EPPlus.dll
+Y:\Developer\CURRENT\TMPApps\LIBRARY\EPPLUS\EPPlus\obj\Debug\EPPlus.pdb
+Y:\Developer\CURRENT\TMPApps\out\Debug\Amper-M\EPPlus.dll
+Y:\Developer\CURRENT\TMPApps\out\Debug\Amper-M\EPPlus.pdb
+Y:\Developer\CURRENT\TMPApps\LIBRARY\EPPLUS\obj\Debug\EPPlus.csprojResolveAssemblyReference.cache
+Y:\Developer\CURRENT\TMPApps\LIBRARY\EPPLUS\obj\Debug\EPPlus.dll
+Y:\Developer\CURRENT\TMPApps\LIBRARY\EPPLUS\obj\Debug\EPPlus.pdb

@@ -1,51 +1,52 @@
-﻿using System;
+﻿using Microsoft.WindowsAPICodePack.Dialogs;
+using Microsoft.WindowsAPICodePack.Shell;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
+using System.Net;
+using System.Runtime.CompilerServices;
 using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.Windows.Threading;
-using System.Threading;
-using System.Text.RegularExpressions;
-using System.Net;
 
 namespace TMP.Work.Emcos.DataForCalculateNormativ
 {
     /// <summary>
     /// Interaction logic for GetDataControl.xaml
     /// </summary>
-    public partial class GetDataControl : UserControl
+    public partial class GetDataControl : UserControl, INotifyPropertyChanged
     {
-        private CancellationTokenSource cts = new CancellationTokenSource();
-        private Dispatcher _callingDispatcher;
-        private Action<string> _onCompleted;
-        private Action _onCanceled;
+        #region Fields
 
+        private bool _isCompleted = false;
+        private bool _isGettingData = false;
         private ObservableCollection<ListPointWithResult> _list;
+        private Action _onClosed, _onCanceled;
+        private double _progress = 0d;
+        private CancellationTokenSource cts = new CancellationTokenSource();
         private Model.EmcosReport selectedReport;
+        #endregion Fields
 
-        private class ListPointWithResult : ListPoint
+        #region Public Classes
+
+        public class ListPointWithResult : ListPoint, INotifyPropertyChanged
         {
-            /// <summary>
-            /// Processed | Wait
-            /// </summary>
-            public string Status { get; set; }
-            public object Result { get; set; }
+            private string _resultName;
+            private string _resultType;
+            private object _resultValue;
+            private string _status;
             public ListPointWithResult(ListPoint source)
             {
                 this.ParentId = source.ParentId;
                 this.ParentTypeCode = source.ParentTypeCode;
-                this.ParentTypeName = source.ParentTypeName;
+                this.ParentName = source.ParentName;
                 this.Id = source.Id;
                 this.Name = source.Name;
                 this.IsGroup = source.IsGroup;
@@ -56,88 +57,291 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
 
                 this.Status = "Wait";
             }
+
+            public bool Processed
+            {
+                get { return Status == "Processed"; }
+            }
+
+            public string ResultName
+            {
+                get { return _resultName; }
+                set { SetProperty(ref _resultName, value); }
+            }
+
+            public string ResultType
+            {
+                get { return _resultType; }
+                set { SetProperty(ref _resultType, value); }
+            }
+
+            public object ResultValue
+            {
+                get { return _resultValue; }
+                set { SetProperty(ref _resultValue, value); }
+            }
+
+            /// <summary>
+            /// Processed | Wait
+            /// </summary>
+            public string Status
+            {
+                get { return _status; }
+                set
+                {
+                    SetProperty(ref _status, value);
+                    OnPropertyChanged("Processed");
+                }
+            }
+            #region INotifyPropertyChanged Members
+
+            #region Debugging Aides
+
+            protected virtual bool ThrowOnInvalidPropertyName { get; private set; }
+
+            [Conditional("DEBUG")]
+            [DebuggerStepThrough]
+            public void VerifyPropertyName(string propertyName)
+            {
+                // Verify that the property name matches a real,
+                // public, instance property on this object.
+                if (TypeDescriptor.GetProperties(this)[propertyName] == null)
+                {
+                    string msg = "Invalid property name: " + propertyName;
+
+                    if (this.ThrowOnInvalidPropertyName)
+                        throw new Exception(msg);
+                    else
+                        Debug.Fail(msg);
+                }
+            }
+            #endregion Debugging Aides
+
+            public event PropertyChangedEventHandler PropertyChanged;
+
+            public bool SetProperty<T>(ref T storage, T value, [CallerMemberName] string propertyName = null)
+            {
+                if (Equals(storage, value))
+                {
+                    return false;
+                }
+
+                storage = value;
+                this.OnPropertyChanged(propertyName);
+                return true;
+            }
+
+            protected virtual void OnPropertyChanged(string propertyName)
+            {
+                this.VerifyPropertyName(propertyName);
+
+                PropertyChangedEventHandler handler = this.PropertyChanged;
+                if (handler != null)
+                {
+                    var e = new PropertyChangedEventArgs(propertyName);
+                    handler(this, e);
+                }
+            }
+
+            #endregion INotifyPropertyChanged Members
         }
 
-        private class RPQ
+        public class RPQ
         {
+            public string COLUMN_NAME { get { return "GR_ID"; } }
+            public string DATA_TYPE { get; set; }
+            public string FIELD_DESC { get; set; }
             public string RPQ_ID { get; set; }
             public string RPQ_NAME { get; set; }
-            public string TABLE_NAME { get; set; }
-            public string RPQF_ID { get; set; }
-            public string COLUMN_NAME { get { return "GR_ID"; } }
-            public string RPQO_ID { get; set; }
-            public string RPQO_CODE { get; set; }
-            public string RPQF_VALUE { get; set; }
-            public string FIELD_DESC { get; set; }
             public string RPQF_ALLOW_EMPTY_VALUES { get; set; }
-            public string DATA_TYPE { get; set; }
+            public string RPQF_ID { get; set; }
+            public string RPQF_VALUE { get; set; }
+            public string RPQO_CODE { get; set; }
+            public string RPQO_ID { get; set; }
+            public string TABLE_NAME { get; set; }
         }
 
-        public GetDataControl(IList<ListPoint> source, Action<string> completed, Action canceled = null)
+        #endregion Public Classes
+
+        #region Constructors
+
+        public GetDataControl()
         {
-            if (_list == null || completed == null || canceled == null)
-                throw new ArgumentNullException();
-            _list = new ObservableCollection<ListPointWithResult>(source.Select(i => new ListPointWithResult(i)).ToList());
-
-            _onCompleted = completed;
-            _onCanceled = canceled;
-
             InitializeComponent();
-            list.ItemsSource = _list;
-            _callingDispatcher = Dispatcher.CurrentDispatcher;
-        }
 
-        private async void UserControl_LoadedAsync(object sender, RoutedEventArgs e)
+            CancelCommand = new DelegateCommand(
+                o =>
+                {
+                    App.UIAction(() =>
+                    {
+                        if (App.ShowQuestion("Прервать операцию?") == MessageBoxResult.Yes)
+                        {
+                            cts.Cancel();
+                            App.Current.MainWindow.TaskbarItemInfo.ProgressState = System.Windows.Shell.TaskbarItemProgressState.Error;
+                        }
+                    });
+                },
+                o =>
+                {
+                    return cts != null && (cts.IsCancellationRequested == false);
+                });
+            CloseControlCommand = new DelegateCommand(o =>
+            {
+                if (_onClosed != null)
+                    _onClosed();
+            });
+            SaveAllCommand = new DelegateCommand(o =>
+            {
+                CommonOpenFileDialog cfd = new CommonOpenFileDialog();
+                cfd.Title = "Выберите папку, куда будут сохранены файлы";
+                cfd.IsFolderPicker = true;
+                cfd.AddToMostRecentlyUsedList = false;
+                cfd.EnsurePathExists = true;
+                cfd.Multiselect = false;
+                cfd.ShowPlacesList = true;
+                cfd.AllowNonFileSystemItems = true;
+                if (cfd.ShowDialog() == CommonFileDialogResult.Ok)
+                {
+                    var folder = cfd.FileName;
+                    foreach (var item in _list)
+                        if (item.ResultType != "xls")
+                        {
+                            System.IO.File.WriteAllText(
+                                System.IO.Path.Combine(folder, item.ResultName, ".csv"), (string)item.ResultValue, Encoding.UTF8);
+                        }
+                        else
+                        {
+                            byte[] bytes = (byte[])item.ResultValue;
+                            if (bytes != null)
+                                System.IO.File.WriteAllBytes(
+                                    System.IO.Path.Combine(folder, item.ResultName, ".xls"), bytes);
+                        }
+                }
+            });
+            SaveAllInSigleFileCommand = new DelegateCommand(o =>
         {
-            selectedReport = null;
-            try
+            bool isStringContent = _list.All(i => i.ResultType != "xls");
+            if (isStringContent)
             {
-                selectedReport = App.Base64StringToObject<Model.EmcosReport>(Properties.Settings.Default.SelectedReport);
+                StringBuilder sb = new StringBuilder();
+
+                List<string[]> rows = _list.Select(i => ((string)i.ResultValue).Split(';')).ToList();
+                var columnsCountList = rows.Select(i => i.Length).ToList();
+                if (columnsCountList.All(i => i == columnsCountList[0]) == false)
+                    System.Diagnostics.Debugger.Break();
+                int columnsCount = columnsCountList[0];
+
+                string header = string.Empty;
+                foreach (var item in Enumerable.Range(1, columnsCount))
+                    header += ";";
+                sb.Append(header);
+
+                foreach (var item in _list)
+                {
+                    sb.AppendLine((string)item.ResultValue);
+                }
+
+                Microsoft.Win32.SaveFileDialog sfd = new Microsoft.Win32.SaveFileDialog();
+
+                sfd.Filter = "CSV файл - значения, разделённые точкой с запятой  (*.csv)|*.csv";
+                sfd.DefaultExt = ".csv";
+                sfd.AddExtension = true;
+                sfd.FileName = DateTime.Now.AddMonths(-1).ToString("Режимные данные за MMMM yyyy");
+                Nullable<bool> result = sfd.ShowDialog(App.Current.MainWindow);
+                if (result == true)
+                {
+                    System.IO.File.WriteAllText(sfd.FileName, sb.ToString(), Encoding.UTF8);
+                }
             }
-            catch { }
-            if (selectedReport == null)
+        },
+        o => _list.All(i => i.ResultType != "xls"));
+            SaveCommand = new DelegateCommand(o =>
             {
-                App.ShowWarning(Strings.ReportNotSpecified);
-                _onCompleted(null);
-            }
-
-
-            await Task.Factory.StartNew(() => Go())
-                .ContinueWith((t) => _onCanceled(), cts.Token, TaskContinuationOptions.OnlyOnCanceled, TaskScheduler.Default);
+                ListPointWithResult point = o as ListPointWithResult;
+                if (point != null)
+                {
+                    Microsoft.Win32.SaveFileDialog sfd = new Microsoft.Win32.SaveFileDialog();
+                    sfd.FileName = String.Format("Режимные данные по '{0}' за {1:MMMM yyyy}", point.ResultName, DateTime.Now.AddMonths(-1));
+                    sfd.AddExtension = true;
+                    if (point.ResultType == "xls")
+                    {
+                        sfd.Filter = "Электронная таблица  (*.xls)|*.xls";
+                        sfd.DefaultExt = ".xls";
+                    }
+                    else
+                    {
+                        sfd.Filter = "CSV файл - значения, разделённые точкой с запятой  (*.csv)|*.csv";
+                        sfd.DefaultExt = ".csv";
+                    }
+                    Nullable<bool> result = sfd.ShowDialog(App.Current.MainWindow);
+                    if (result == true)
+                    {
+                        if (point.ResultType == "xls")
+                        {
+                            byte[] bytes = (byte[])point.ResultValue;
+                            if (bytes != null)
+                                System.IO.File.WriteAllBytes(sfd.FileName, bytes);
+                        }
+                        else
+                            System.IO.File.WriteAllText(sfd.FileName, (string)point.ResultValue, Encoding.UTF8);
+                    }
+                }
+            });
+            DataContext = this;
         }
 
-        private async void Go()
+        public GetDataControl(IList<ListPoint> source, Action closeed, Action canceled = null) : this()
+        {
+            if (source == null || closeed == null || canceled == null)
+                throw new ArgumentNullException();
+            List = new ObservableCollection<ListPointWithResult>(source.Select(i => new ListPointWithResult(i)).ToList());
+
+            _onClosed = closeed;
+            _onCanceled = canceled;
+        }
+
+        #endregion Constructors
+
+        #region Private Methods
+
+        private void Go()
         {
             int itemsCount = _list.Count;
-            Action<int> report = (pos) =>
+            Action<int> report = pos =>
                 {
-                    App.UIAction(() => progress.Value = 100d * pos / itemsCount);
+                    Progress = 100d * pos / itemsCount;
+                    App.UIAction(() => App.Current.MainWindow.TaskbarItemInfo.ProgressValue = ((double)pos) / itemsCount);
                 };
 
-            StringBuilder sb = new StringBuilder();
+            IsGettingData = true;
+            IsCompleted = false;
 
-            for (int i = 1; i <= itemsCount; i++)
+            int index = 0;
+            foreach (var item in _list)
             {
                 if (cts.IsCancellationRequested)
                 {
                     return;
                 }
 
-                _list[i].Result = await PrepareReportAsync(_list[i].Id);
-                _list[i].Status = "Processed";
-                sb.Append((string)_list[i].Result);
+                PrepareReport(item);
+                item.Status = "Processed";
 
-                report(i);
+                report(index++);
             }
-            _onCompleted(sb.ToString());
+            IsCompleted = true;
+            IsGettingData = false;
+            App.Current.MainWindow.TaskbarItemInfo.ProgressState = System.Windows.Shell.TaskbarItemProgressState.Normal;
+            System.Media.SystemSounds.Asterisk.Play();
         }
 
-        private async Task<object> PrepareReportAsync(int groupId)
+        private void PrepareReport(ListPointWithResult point)
         {
+            int groupId = point.Id;
             string param = String.Format("__invoker=undefined&RP_ID={0}&RP_NAME={1}&errorDispatch=false&dataBlock=PARAMETERS&action=GET",
                 selectedReport.RP_ID, selectedReport.RP_NAME);
             string url = @"{0}scripts/reports.asp";
-            string answer = await ServiceHelper.ExecuteFunction(ServiceHelper.MakeRequestAsync, url, param);
+            string answer = ServiceHelper.ExecuteFunctionAsync(ServiceHelper.MakeRequestAsync, url, param, true).Result;
             if (String.IsNullOrEmpty(answer) == false && answer.Contains("result=0"))
             {
                 var records = Utils.ParseRecords(answer);
@@ -150,53 +354,64 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
                     if (nvc.Get("COLUMN_NAME") != "GR_ID")
                     {
                         App.UIAction(() => App.ShowError("Выбран неверный отчёт! Ошибка при подготовке параметров."));
-                        return null;
+                        return;
                     }
                     RPQ rpq = new RPQ();
                     for (int i = 0; i < nvc.Count; i++)
                     {
                         #region Разбор полей
+
                         switch (nvc.GetKey(i))
                         {
                             case "RPQ_ID":
                                 rpq.RPQ_ID = nvc[i];
                                 break;
+
                             case "RPQ_NAME":
                                 rpq.RPQ_NAME = nvc[i];
                                 break;
+
                             case "TABLE_NAME":
                                 rpq.TABLE_NAME = nvc[i];
                                 break;
+
                             case "RPQF_ID":
                                 rpq.RPQF_ID = nvc[i];
                                 break;
+
                             case "RPQO_ID":
                                 rpq.RPQO_ID = nvc[i];
                                 break;
+
                             case "RPQO_CODE":
                                 rpq.RPQO_CODE = nvc[i];
                                 break;
+
                             case "RPQF_VALUE":
                                 rpq.RPQF_VALUE = nvc[i];
                                 break;
+
                             case "FIELD_DESC":
                                 rpq.FIELD_DESC = nvc[i];
                                 break;
+
                             case "RPQF_ALLOW_EMPTY_VALUES":
                                 rpq.RPQF_ALLOW_EMPTY_VALUES = nvc[i];
                                 break;
+
                             case "DATA_TYPE":
                                 rpq.DATA_TYPE = nvc[i];
                                 break;
                         }
-                        #endregion
+
+                        #endregion Разбор полей
                     }
                     rpqs.Add(rpq);
                 }
                 param = String.Format("__invoker=undefined&RP_ID={0}&RP_NAME={1}&errorDispatch=false&dataBlock=PREPARED_RP&action=GET",
                     selectedReport.RP_ID, selectedReport.RP_NAME);
                 url = @"{0}scripts/reports.asp";
-                answer = await ServiceHelper.ExecuteFunction(ServiceHelper.MakeRequestAsync, url, param);
+                answer = ServiceHelper.ExecuteFunctionAsync(ServiceHelper.MakeRequestAsync, url, param, true).Result;
                 if (String.IsNullOrEmpty(answer) == false && answer.Contains("result=0"))
                 {
                     StringBuilder sb = new StringBuilder();
@@ -219,7 +434,7 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
                         selectedReport.RP_ID);
 
                     url = @"{0}scripts/ReportGenerator.asp";
-                    answer = await ServiceHelper.ExecuteFunction(ServiceHelper.MakeRequestAsync, url, sb.ToString());
+                    answer = ServiceHelper.ExecuteFunctionAsync(ServiceHelper.MakeRequestAsync, url, sb.ToString(), true).Result;
                     if (ServiceHelper.StatusCode == System.Net.HttpStatusCode.OK)
                     {
                         // получение имени файла
@@ -235,30 +450,130 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
                         string file = metaKeywords.Substring(8).Replace("../", "").Replace("\\", "/");
 
                         var client = new WebClient();
+                        point.ResultValue = client.DownloadString(ServiceHelper.SiteAddress + file);
+                        string name = point.Name;
+                        if (point.ParentTypeCode == "SUBSTATION")
+                            name = point.ParentName + " - " + name;
+                        point.ResultName = name;
                         if (file.EndsWith(".txt"))
-                        {
-                            return client.DownloadString(ServiceHelper.SiteAddress + file);
-                        }
+                            point.ResultType = "txt";
                         else
-                        {
-                            return client.DownloadData(ServiceHelper.SiteAddress + file);
-                        }
+                        if (file.EndsWith(".xls"))
+                            point.ResultType = "xls";
+                        else
+                            point.ResultType = "unknown";
                     }
                 }
             }
-            return null;
         }
 
-        private void btnCancel_Click(object sender, RoutedEventArgs e)
+        private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
-            App.UIAction(() =>
+            selectedReport = null;
+            try
             {
-                if (App.ShowQuestion("Прервать операцию?") == MessageBoxResult.Yes)
-                {
-                    cts.Cancel();
-                }
-            });
+                selectedReport = App.Base64StringToObject<Model.EmcosReport>(Properties.Settings.Default.SelectedReport);
+            }
+            catch { }
+            if (selectedReport == null)
+            {
+                App.ShowWarning(Strings.ReportNotSpecified);
+                _onClosed();
+            }
+
+            App.Current.MainWindow.TaskbarItemInfo = new System.Windows.Shell.TaskbarItemInfo();
+            App.Current.MainWindow.TaskbarItemInfo.Description = "Получение данных";
+            App.Current.MainWindow.TaskbarItemInfo.ProgressState = System.Windows.Shell.TaskbarItemProgressState.Normal;
+
+            Task.Factory.StartNew(() => Go())
+                .ContinueWith((t) => _onCanceled(), cts.Token, TaskContinuationOptions.OnlyOnCanceled, TaskScheduler.Default);
         }
+        #endregion Private Methods
+
+        #region Command and Properties
+
+        public ICommand CancelCommand { get; private set; }
+        public ICommand CloseControlCommand { get; private set; }
+        public bool IsCompleted
+        {
+            get { return _isCompleted; }
+            private set { SetProperty(ref _isCompleted, value); }
+        }
+
+        public bool IsGettingData
+        {
+            get { return _isGettingData; }
+            private set { SetProperty(ref _isGettingData, value); }
+        }
+
+        public ObservableCollection<ListPointWithResult> List
+        {
+            get { return _list; }
+            private set { SetProperty(ref _list, value); }
+        }
+
+        public double Progress
+        {
+            get { return _progress; }
+            private set { SetProperty(ref _progress, value); }
+        }
+
+        public ICommand SaveAllCommand { get; private set; }
+        public ICommand SaveAllInSigleFileCommand { get; private set; }
+        public ICommand SaveCommand { get; private set; }
+        #endregion Command and Properties
+
+        #region INotifyPropertyChanged Members
+
+        #region Debugging Aides
+
+        protected virtual bool ThrowOnInvalidPropertyName { get; private set; }
+
+        [Conditional("DEBUG")]
+        [DebuggerStepThrough]
+        public void VerifyPropertyName(string propertyName)
+        {
+            // Verify that the property name matches a real,
+            // public, instance property on this object.
+            if (TypeDescriptor.GetProperties(this)[propertyName] == null)
+            {
+                string msg = "Invalid property name: " + propertyName;
+
+                if (this.ThrowOnInvalidPropertyName)
+                    throw new Exception(msg);
+                else
+                    Debug.Fail(msg);
+            }
+        }
+        #endregion Debugging Aides
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public bool SetProperty<T>(ref T storage, T value, [CallerMemberName] string propertyName = null)
+        {
+            if (Equals(storage, value))
+            {
+                return false;
+            }
+
+            storage = value;
+            this.OnPropertyChanged(propertyName);
+            return true;
+        }
+
+        protected virtual void OnPropertyChanged(string propertyName)
+        {
+            this.VerifyPropertyName(propertyName);
+
+            PropertyChangedEventHandler handler = this.PropertyChanged;
+            if (handler != null)
+            {
+                var e = new PropertyChangedEventArgs(propertyName);
+                handler(this, e);
+            }
+        }
+
+        #endregion INotifyPropertyChanged Members
     }
 }
 
@@ -276,20 +591,20 @@ RP_TYPE_ID_6=17	RP_TYPE_NAME_6=Перетоки	TYPE_6=RP_TYPE	RP_PUBLIC_6=1
 RP_TYPE_ID_7=67	RP_TYPE_NAME_7=Промышленные предприятия	TYPE_7=RP_TYPE	RP_PUBLIC_7=1
 RP_TYPE_ID_8=27	RP_TYPE_NAME_8=Структура дерева	TYPE_8=RP_TYPE	RP_PUBLIC_8=1
 RP_TYPE_ID_9=47	RP_TYPE_NAME_9=Тест	TYPE_9=RP_TYPE	RP_PUBLIC_9=1
-RP_TYPE_ID_10=37	RP_TYPE_NAME_10=Утвержденные	TYPE_10=RP_TYPE	RP_PUBLIC_10=1	
+RP_TYPE_ID_10=37	RP_TYPE_NAME_10=Утвержденные	TYPE_10=RP_TYPE	RP_PUBLIC_10=1
 result=0	recordCount=11
 -------------------------------------------------------
 callerUID=INIT_ID_1/RP_TYPE_ID_72	instance=_level1.scene.spContentHolder6.PANEL_RP_TREE.spContentHolder0.RP_TREE.spContentHolder	RP_PUBLIC=1	RP_TYPE_ID=72	__const=TYPE=RP	datablock=RP	action=GET
 
 RP_ID_0=679	RP_TYPE_ID_0=72	RP_NAME_0=Выборка точек по группе	RP_PUBLIC_0=1	RP_DESCRIPTION_0=	RPF_ID_0=1	RP_LOG_ENABLED_0=0	USER_NAME_0=System user EMCOS	TYPE_0=RP
 RP_ID_1=675	RP_TYPE_ID_1=72	RP_NAME_1=Для расчета балансов ПС до 35кВ	RP_PUBLIC_1=1	RP_DESCRIPTION_1=	RPF_ID_1=2	RP_LOG_ENABLED_1=0	USER_NAME_1=Щелухин Д.Д.	TYPE_1=RP
-RP_ID_2=698	RP_TYPE_ID_2=72	RP_NAME_2=Для расчета балансов ПС 35-770кВ	RP_PUBLIC_2=1	RP_DESCRIPTION_2=	RPF_ID_2=2	RP_LOG_ENABLED_2=1	USER_NAME_2=System user EMCOS	TYPE_2=RP	
+RP_ID_2=698	RP_TYPE_ID_2=72	RP_NAME_2=Для расчета балансов ПС 35-770кВ	RP_PUBLIC_2=1	RP_DESCRIPTION_2=	RPF_ID_2=2	RP_LOG_ENABLED_2=1	USER_NAME_2=System user EMCOS	TYPE_2=RP
 result=0	recordCount=3
 -------------------------------------------------------
 
 -------------------------------------------------------
 -------------------------------------------------------
-******* 
+*******
 __invoker=undefined RP_ID=679   RP_NAME=Выборка точек по группе errorDispatch=false dataBlock=PARAMETERS    action=GET
 
 RPQ_ID_0=1288   RPQ_NAME_0=Запрос 1	TABLE_NAME_0=	RPQF_ID_0=5404	COLUMN_NAME_0=GR_ID	RPQO_ID_0=1	RPQO_CODE_0==	RPQF_VALUE_0=	FIELD_DESC_0=	RPQF_ALLOW_EMPTY_VALUES_0=0	DATA_TYPE_0=VARCHAR2	result=0	recordCount=1
@@ -331,7 +646,7 @@ result=0	recordCount=4
 -------------------------------------------------------
 POST http://10.96.18.16/emcos/scripts/ReportGenerator.asp
 1807 - Клиденята (GR_ID_14=1807&GRC_NR_14=&GRC_DESC_14=&GR_CODE_14=143688.Клиденяты&GR_NAME_14=ПС 35кВ Клиденяты)
-RPQF_5404=1807	DATA_TYPE_0_0=VARCHAR2	RPQF_VALUE_0_0=1807	COLUMN_NAME_0_0=GR_ID	RPQO_ID_0_0=1	RPQF_ID_0_0=5404	RPQ_NAME_0=Запрос 1	RPQ_ID_0=1288	RPQF_COUNT_0=1	
+RPQF_5404=1807	DATA_TYPE_0_0=VARCHAR2	RPQF_VALUE_0_0=1807	COLUMN_NAME_0_0=GR_ID	RPQO_ID_0_0=1	RPQF_ID_0_0=5404	RPQ_NAME_0=Запрос 1	RPQ_ID_0=1288	RPQF_COUNT_0=1
 RPQ_COUNT=1	export_to_html=0	RP_ID=679	action=SHOW_REPORT
 
 <HTML>
@@ -341,7 +656,7 @@ RPQ_COUNT=1	export_to_html=0	RP_ID=679	action=SHOW_REPORT
 </HTML>
 
 *******
-POST http://10.96.18.16/emcos/scripts/ReportGenerator.asp 
+POST http://10.96.18.16/emcos/scripts/ReportGenerator.asp
 RPQF_5412=1807	DATA_TYPE_0_3=VARCHAR2	RPQF_VALUE_0_3=1807	COLUMN_NAME_0_3=GR_ID	RPQO_ID_0_3=1	RPQF_ID_0_3=5412	RPQF_5411=1807	DATA_TYPE_0_2=VARCHAR2	RPQF_VALUE_0_2=1807	COLUMN_NAME_0_2=GR_ID	RPQO_ID_0_2=1	RPQF_ID_0_2=5411	RPQF_5410=1807	DATA_TYPE_0_1=VARCHAR2	RPQF_VALUE_0_1=1807	COLUMN_NAME_0_1=GR_ID	RPQO_ID_0_1=1	RPQF_ID_0_1=5410	RPQF_5409=1807	DATA_TYPE_0_0=VARCHAR2	RPQF_VALUE_0_0=1807	COLUMN_NAME_0_0=GR_ID	RPQO_ID_0_0=1	RPQF_ID_0_0=5409	RPQ_NAME_0=Запрос 1	RPQ_ID_0=1283	RPQF_COUNT_0=4	RPQ_COUNT=1	export_to_html=0	RP_ID=675	action=SHOW_REPORT
 
 <HTML>
@@ -372,6 +687,6 @@ RPQF_5537=1807	DATA_TYPE_0_3=VARCHAR2	RPQF_VALUE_0_3=1807	COLUMN_NAME_0_3=GR_ID	
 
 Код АСКУЭ;Тнаг;Тген;Uср.э.;Wpн;Wqн;Wpг;Wqг;Pмакс;Pмин;Qмакс;Qмин
 
+&RP_TYPE_NAME_0=DWRES Отчеты&RPA_NAME_0=&REPORT_NAME_0=Reports\res\2016\12\30\Для расчета балансов ПС 35-770кВ_2016_12_30_122402_1.txt&DB_TIME_0=30.12.2016 12:25:42&GR_CODE_0=143126.Сморгонь&FROM_DA_0=&TO_DA_0=&RP_TYPE_NAME_1=DWRES Отчеты&RPA_NAME_1=&REPORT_NAME_1=Reports\res\2016\12\30\Для расчета балансов ПС 35-770кВ_2016_12_30_121702_1.txt&DB_TIME_1=30.12.2016 12:17:37&GR_CODE_1=143688.Клиденяты&FROM_DA_1=&TO_DA_1=&result=0&recordCount=2
 
-     
 */

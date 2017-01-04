@@ -34,7 +34,7 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
 
             var list = HierarchicalListToFlatList(_pointsList.ToList());
             var substations = list
-                .Where(i => i.Type == Model.ElementTypes.SUBSTATION && i.Checked)
+                .Where(i => (i.TypeCode == "SUBSTATION" || i.TypeCode == "VOLTAGE") && i.Checked)
                 .OrderBy(i => i.Name).ToList<ListPoint>();
             if (substations == null || substations.Count == 0)
             {
@@ -60,18 +60,10 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
 
                     HideProgress();
                 };
-                Action<string> completed = (result) =>
+                Action completed = () =>
                 {
                     updateUI();
-                    status.Text = Strings.ReadyMessage;
-                    if (result == null)
-                        btnSettings_Click(null, null);
-                    else
-                    {
-                        ResultWindow wnd = new ResultWindow(result);
-                        wnd.Owner = this;
-                        wnd.Show();
-                    }
+                    status.Text = Strings.ReadyMessage;                    
                 };
                 Action canceled = () =>
                 {
@@ -130,6 +122,35 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
                 status.Text = Strings.ReadyMessage;
                 App.ShowError(String.Format(Strings.Error, App.GetExceptionDetails(ex)));
             }
+        }
+
+        private void TreeSelectAll(object sender, RoutedEventArgs e)
+        {
+            if (_pointsList != null)
+            {
+                foreach (var item in _pointsList)
+                    ForEachPointInTree(item, p => p.TypeCode == "SUBSTATION" || p.TypeCode == "VOLTAGE", p => p.Checked = true);
+                tree.ItemsSource = _pointsList;
+            }
+        }
+
+        private void TreeUnselectAll(object sender, RoutedEventArgs e)
+        {
+            if (_pointsList != null)
+            {
+                foreach (var item in _pointsList)
+                    ForEachPointInTree(item, p => true, p => p.Checked = false);
+                tree.ItemsSource = _pointsList;
+            }
+        }
+
+        private void ForEachPointInTree(ListPoint point, Func<ListPoint, bool> condition, Action<ListPoint> action)
+        {
+            if (condition(point))
+                action(point);
+            if (point.Items != null && point.Items.Count > 0)
+                foreach (var item in point.Items)
+                    ForEachPointInTree(item, condition, action);
         }
     }
 }

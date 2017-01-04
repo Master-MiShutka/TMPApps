@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:TMP.Work.Emcos.DataForCalculateNormativ"
         xmlns:model="clr-namespace:TMP.Work.Emcos.Model;assembly=EmcosModel"
         mc:Ignorable="d"
-        Style="{StaticResource WindowStyle}"
+
         Icon="mainicon.ico"
         Title="" 
         Height="380" Width="600"
@@ -29,7 +29,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <ContentControl x:Name="dialogHost" Grid.RowSpan="4" Margin="-5" Panel.ZIndex="1001"/>
+        <ContentControl x:Name="dialogHost" Grid.RowSpan="4" Margin="-5" Panel.ZIndex="1001" />
         <!-- -->
         <DockPanel Grid.Row="0">
             <Button DockPanel.Dock="Right"  Margin="5 5 0 5" Padding="5 0" Content="{x:Static local:Strings.Settings}" Click="btnSettings_Click"/>
@@ -139,6 +139,12 @@
                     </Style.Triggers>
                 </Style>
             </TreeView.Style>
+            <TreeView.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="Отменить выбор групп" Click="TreeUnselectAll" />
+                    <MenuItem Header="Выбор групп, указанного&#xA; в настройках подразделения" Click="TreeSelectAll" />
+                </ContextMenu>
+            </TreeView.ContextMenu>
         </TreeView>
         <!-- -->
         <DockPanel Grid.Row="2" LastChildFill="False">
@@ -151,6 +157,8 @@
             Grid.Row="3" Margin="-5 5 -5 -5"
             Height="24">
             <TextBlock Margin="3,0,0,0" x:Name="status" Text="Готово"/>
+            <Button Padding="-3" Content="Standart dialog" Click="Button_Click"/>
+            <Button Padding="-3" Content="MS Api Codec Pack Dialog" Click="ButtonPlus_Click"/>
             <StatusBarItem HorizontalAlignment="Right">
                 <ResizeGrip Opacity="0.75" />
             </StatusBarItem>

@@ -1,4 +1,5 @@
 using System.Windows;
+using System.Windows.Threading;
 
 namespace TMP.Work.AmperM.TestApp
 {
@@ -10,6 +11,7 @@ namespace TMP.Work.AmperM.TestApp
         public MainWindow()
         {
             InitializeComponent();
+            App.UIDispatcher = Dispatcher.CurrentDispatcher;
         }
     }
 }

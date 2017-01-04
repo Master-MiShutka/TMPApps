@@ -163,7 +163,7 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
             ShowWaitingScreen();
             if (await CheckServiceAvailability())
                 await InitReportsGroupAsync();
-            groupReport.IsEnabled = true;
+            await InitDepartamentsAsync();
             HideWaitingScreen();
         }
 
@@ -174,7 +174,7 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
             try
             {
                 string url = @"{0}scripts/reports.asp";
-                string data = await ServiceHelper.ExecuteFunction(ServiceHelper.MakeRequestAsync, url, paramGetGroupsList);
+                string data = await ServiceHelper.ExecuteFunctionAsync(ServiceHelper.MakeRequestAsync, url, paramGetGroupsList, true);
                 //string data = "&RP_TYPE_ID_0=72&RP_TYPE_NAME_0=DWRES Отчеты&TYPE_0=RP_TYPE&RP_PUBLIC_0=1&RP_TYPE_ID_1=42&RP_TYPE_NAME_1=Балансы подстанций&TYPE_1=RP_TYPE&RP_PUBLIC_1=1&RP_TYPE_ID_2=2&RP_TYPE_NAME_2=Волковысские сети&TYPE_2=RP_TYPE&RP_PUBLIC_2=1&RP_TYPE_ID_3=22&RP_TYPE_NAME_3=Выработка&TYPE_3=RP_TYPE&RP_PUBLIC_3=1&RP_TYPE_ID_4=7&RP_TYPE_NAME_4=Отчеты ТЭЦ-2&TYPE_4=RP_TYPE&RP_PUBLIC_4=1&RP_TYPE_ID_5=32&RP_TYPE_NAME_5=Отчётные формы&TYPE_5=RP_TYPE&RP_PUBLIC_5=1&RP_TYPE_ID_6=17&RP_TYPE_NAME_6=Перетоки&TYPE_6=RP_TYPE&RP_PUBLIC_6=1&RP_TYPE_ID_7=67&RP_TYPE_NAME_7=Промышленные предприятия&TYPE_7=RP_TYPE&RP_PUBLIC_7=1&RP_TYPE_ID_8=27&RP_TYPE_NAME_8=Структура дерева&TYPE_8=RP_TYPE&RP_PUBLIC_8=1&RP_TYPE_ID_9=47&RP_TYPE_NAME_9=Тест&TYPE_9=RP_TYPE&RP_PUBLIC_9=1&RP_TYPE_ID_10=37&RP_TYPE_NAME_10=Утвержденные&TYPE_10=RP_TYPE&RP_PUBLIC_10=1&result=0&recordCount=11";
 
                 if (data.Contains("result=0") == false)
@@ -231,7 +231,7 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
                     groupID);
 
                 string url = @"{0}scripts/reports.asp";
-                string data = await ServiceHelper.ExecuteFunction(ServiceHelper.MakeRequestAsync, url, paramGetReports);
+                string data = await ServiceHelper.ExecuteFunctionAsync(ServiceHelper.MakeRequestAsync, url, paramGetReports, true);
                 //string data = "&RP_ID_0=679&RP_TYPE_ID_0=72&RP_NAME_0=Выборка точек по группе&RP_PUBLIC_0=1&RP_DESCRIPTION_0=&RPF_ID_0=1&RP_LOG_ENABLED_0=0&USER_NAME_0=System user EMCOS&TYPE_0=RP&RP_ID_1=675&RP_TYPE_ID_1=72&RP_NAME_1=Для расчета балансов ПС до 35кВ&RP_PUBLIC_1=1&RP_DESCRIPTION_1=&RPF_ID_1=2&RP_LOG_ENABLED_1=0&USER_NAME_1=Щелухин Д.Д.&TYPE_1=RP&RP_ID_2=698&RP_TYPE_ID_2=72&RP_NAME_2=Для расчета балансов ПС 35-770кВ&RP_PUBLIC_2=1&RP_DESCRIPTION_2=&RPF_ID_2=2&RP_LOG_ENABLED_2=1&USER_NAME_2=System user EMCOS&TYPE_2=RP&result=0&recordCount=3";
                 await Task.Delay(2000);
 
@@ -291,7 +291,8 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
             }
             cmbReports.ItemsSource = list;
             Model.EmcosReport r = cmbReports.SelectedValue as Model.EmcosReport;
-            cmbReports.SelectedItem = list.Where(i => i.RP_ID == r.RP_ID).FirstOrDefault();
+            if (r != null)
+                cmbReports.SelectedItem = list.Where(i => i.RP_ID == r.RP_ID).FirstOrDefault();
             return true;
         }
 
@@ -325,6 +326,9 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
             }
             catch { }
             cmbDepartaments.ItemsSource = result;
+            ListPoint dep = cmbDepartaments.SelectedValue as ListPoint;
+            if (dep != null)
+                cmbDepartaments.SelectedItem = result.Where(i => i.Id == dep.Id).FirstOrDefault();
             return true;
         }
     }

@@ -162,7 +162,19 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("dfefefe d' ed ", Title, MessageBoxButton.YesNoCancel, MessageBoxImage.Error);
+            Microsoft.Win32.SaveFileDialog sfd = new Microsoft.Win32.SaveFileDialog();
+            sfd.Filter = "CSV файл - значения, разделённые точкой с запятой (*.csv)|*.csv";
+            sfd.DefaultExt = ".csv";
+            sfd.AddExtension = true;
+            Nullable<bool> result = sfd.ShowDialog(App.Current.MainWindow);
+        }
+        private void ButtonPlus_Click(object sender, RoutedEventArgs e)
+        {
+            Microsoft.WindowsAPICodePack.Dialogs.CommonSaveFileDialog saveCFD = new Microsoft.WindowsAPICodePack.Dialogs.CommonSaveFileDialog();
+            saveCFD.AlwaysAppendDefaultExtension = true;
+            saveCFD.DefaultExtension = ".csv";
+            saveCFD.Filters.Add(new Microsoft.WindowsAPICodePack.Dialogs.CommonFileDialogFilter("CSV файл - значения, разделённые точкой с запятой", "*.csv"));
+            saveCFD.ShowDialog(App.Current.MainWindow);
         }
     }
 }

@@ -184,30 +184,38 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
             var url = @"{0}scripts/autentification.asp";
             url = string.Format(url, SiteAddress);
             string data;
+            string answer;
             if (getRights)
+            {
                 data = "action=getrights";
+                answer = await MakeRequestAsync(url, data, false);
+            }
             else
+            {
                 data = string.Format("user={0}&password={1}&action=login", Properties.Settings.Default.UserName, Properties.Settings.Default.Password);
+                answer = await MakeRequestAsync(url, data);
+            }
 
-            string answer = await MakeRequestAsync(url, data);
             if (string.IsNullOrEmpty(answer))
             {
                 ErrorMessage = StatusCodeAsString;
                 return false;
             }
-            if (answer.Contains("result=0"))
+            if (answer.Contains("result=0") && answer.Contains("user=" + Properties.Settings.Default.UserName))
             {
                 ErrorMessage = string.Empty;
                 return true;
             }
-            else
+            if (answer.Contains("result=1") && answer.Contains("errType=2"))
             {
-                ErrorMessage = answer;
-                return false;
+                ErrorMessage = "not registred";
+                return true;
             }
+            ErrorMessage = answer;
+            return false;
         }
 
-        public static Task<string> MakeRequestAsync(string url, string data)
+        public static Task<string> MakeRequestAsync(string url, string data, bool useCookie = true)
         {
             url = string.Format(url, SiteAddress);
 
@@ -223,11 +231,13 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
             httpWebRequest.Accept = "*/*";
             httpWebRequest.Headers.Add("Accept-Encoding: gzip, deflate");
 
-            // передаём куки
-            if (Cookie != null && TryAddCookie(ref httpWebRequest) == false)
-            {
-                return Task.FromResult(String.Empty);
-            }
+            if (useCookie)
+                // передаём куки
+                if (Cookie != null && TryAddCookie(ref httpWebRequest) == false)
+                {
+                    return Task.FromResult(String.Empty);
+                }
+            data = Uri.EscapeUriString(data).Replace("_", "%5F");
             var buffer = Encoding.ASCII.GetBytes(data);
             httpWebRequest.ContentType = "application/x-www-form-urlencoded";
             try
@@ -251,16 +261,15 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
                         return String.Empty;
                     }
 
-                    // получаем куки
-                    Cookie.Value = string.Empty;
-
-                    for (int i = 0; i < response.Headers.Count; i++)
+                    var cookiekeys = response.Headers.AllKeys.Where(h => h == "Set-Cookie");
+                    if (cookiekeys != null && cookiekeys.Count() > 0)
                     {
-                        var name = response.Headers.GetKey(i);
-                        if (name != "Set-Cookie")
-                            continue;
-                        var value = response.Headers.Get(i);
+                        Cookie = new Cookie("ASPSESSIONIDQSATBDCD", string.Empty);
+                        // получаем куки
+                        Cookie.Value = string.Empty;
+
                         // Set-Cookie: ASPSESSIONIDQSATBDCD=OMEJJIGBLEAOINHJMCOELNGH; path=/
+                        var value = response.Headers.GetValues("Set-Cookie").FirstOrDefault();
                         var parts = value.Split(new char[] { ';' });
                         if (parts.Length > 0)
                         {
@@ -295,7 +304,7 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
             string url = @"{0}scripts/point.asp";
             string data = String.Format("refresh=true&TYPE=GROUP&action=expand&ID={0}", parent.Id.ToString());
 
-            return await ServiceHelper.ExecuteFunction(ServiceHelper.MakeRequestAsync, url, data);
+            return await ServiceHelper.ExecuteFunctionAsync(ServiceHelper.MakeRequestAsync, url, data, true);
         }
         public static IList<ListPoint> GetPointsList(string data, ListPoint parent)
         {
@@ -357,7 +366,7 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
                 Checked = false,
                 ParentId = parent.Id,
                 ParentTypeCode = parent.TypeCode,
-                ParentTypeName = parent.Name
+                ParentName = parent.Name
             }).ToList();
             return points;
         }
@@ -381,16 +390,34 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
         }
 
         private static int _attemptCount = 0;
-        public static async Task<string> ExecuteFunction(Func<string, string, Task<string>> function, string param1, string param2)
+        public static async Task<string> ExecuteFunctionAsync(Func<string, string, bool, Task<string>> function, string param1, string param2, bool param3)
         {
-            string result = await function(param1, param2);
+            if (Cookie == null)
+            {
+                // проверка наличия доступа
+                bool hasRights = await Login(true);
+                string answer = ServiceHelper.ErrorMessage;
+                // если доступ не получен и не авторизованы
+                if (hasRights == false)// && answer.Contains("result=1") && answer.Contains("errType=2"))
+                {
+                    hasRights = await ServiceHelper.Login(false);
+                    // авторизация не успешна
+                    if (hasRights == false)
+                        return string.Empty;
+                }
+            }
+
+            string result = await function(param1, param2, param3);
+            // нет резульатата и нет описания ошибки - возврат пустого значения
             if (String.IsNullOrEmpty(result) && String.IsNullOrEmpty(ServiceHelper.ErrorMessage) == false)
                 return string.Empty;
-            if (String.IsNullOrEmpty(result) && _attemptCount < 4)
+            // Пользователь незарегистрирован. Необходима повторная регистрация ?
+            // &result=1&errDescription=Пользователь незарегистрирован. Необходима повторная регистрация.&errType=2
+            if (String.IsNullOrEmpty(result) == false && result.Contains("result=1") && result.Contains("errType=2") && _attemptCount < 4)
             {
                 _attemptCount++;
                 Login();
-                return await ExecuteFunction(function, param1, param2);
+                return await ExecuteFunctionAsync(function, param1, param2, param3);
             }
             else
             {

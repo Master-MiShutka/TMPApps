@@ -27,10 +27,14 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
+            if (value == null)
+                return DependencyProperty.UnsetValue;
             return GO<Model.EmcosReport>(value);
         }
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
+            if (value == null)
+                return DependencyProperty.UnsetValue;
             return GO<Model.EmcosReport> (value);
         }
     }
@@ -39,10 +43,14 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
+            if (value == null)
+                return DependencyProperty.UnsetValue;
             return GO<ListPoint> (value);
         }
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
+            if (value == null)
+                return DependencyProperty.UnsetValue;
             return GO<ListPoint>(value);
         }
     }

@@ -1,8 +1,8 @@
-Y:\Developer\CURRENT\TMPApps\Emcos\Emcos\obj\Debug\EmcosService.csprojResolveAssemblyReference.cache
 Y:\Developer\CURRENT\TMPApps\Debug\Emcos\Libs\EmcosService.dll.config
 Y:\Developer\CURRENT\TMPApps\Debug\Emcos\Libs\EmcosService.dll
 Y:\Developer\CURRENT\TMPApps\Debug\Emcos\Libs\EmcosService.pdb
-Y:\Developer\CURRENT\TMPApps\Emcos\Emcos\obj\Debug\EmcosService.dll
-Y:\Developer\CURRENT\TMPApps\Emcos\Emcos\obj\Debug\EmcosService.pdb
 Y:\Developer\CURRENT\TMPApps\out\Debug\Emcos\Libs\EmcosService.dll
 Y:\Developer\CURRENT\TMPApps\out\Debug\Emcos\Libs\EmcosService.pdb
+Y:\Developer\CURRENT\TMPApps\Emcos\Emcos\obj\Debug\EmcosService.csprojResolveAssemblyReference.cache
+Y:\Developer\CURRENT\TMPApps\Emcos\Emcos\obj\Debug\EmcosService.dll
+Y:\Developer\CURRENT\TMPApps\Emcos\Emcos\obj\Debug\EmcosService.pdb

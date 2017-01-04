@@ -1,0 +1,6 @@
+Y:\Developer\CURRENT\TMPApps\out\Release\EPPlusSamples.exe.config
+Y:\Developer\CURRENT\TMPApps\out\Release\EPPlusSamples.exe
+Y:\Developer\CURRENT\TMPApps\out\Release\EPPlusSamples.pdb
+Y:\Developer\CURRENT\TMPApps\EpplusSampleApp\obj\Release\EPPlusSamples.csprojResolveAssemblyReference.cache
+Y:\Developer\CURRENT\TMPApps\EpplusSampleApp\obj\Release\EPPlusSamples.exe
+Y:\Developer\CURRENT\TMPApps\EpplusSampleApp\obj\Release\EPPlusSamples.pdb

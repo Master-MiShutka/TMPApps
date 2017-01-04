@@ -1,0 +1,13 @@
+Y:\Developer\CURRENT\Emcos\bin\Release\Libs\EPPlus.dll
+Y:\Developer\CURRENT\Emcos\bin\Release\Libs\EPPlus.pdb
+Y:\Developer\CURRENT\Emcos\EPPLUS\EPPlus\obj\Release\EPPlus.csprojResolveAssemblyReference.cache
+Y:\Developer\CURRENT\Emcos\EPPLUS\EPPlus\obj\Release\EPPlus.dll
+Y:\Developer\CURRENT\Emcos\EPPLUS\EPPlus\obj\Release\EPPlus.pdb
+Y:\Developer\CURRENT\TMPApps\out\Release\Libs\EPPlus.dll
+Y:\Developer\CURRENT\TMPApps\out\Release\Libs\EPPlus.pdb
+Y:\Developer\CURRENT\TMPApps\LIBRARY\EPPLUS\EPPlus\obj\Release\EPPlus.csprojResolveAssemblyReference.cache
+Y:\Developer\CURRENT\TMPApps\LIBRARY\EPPLUS\EPPlus\obj\Release\EPPlus.dll
+Y:\Developer\CURRENT\TMPApps\LIBRARY\EPPLUS\EPPlus\obj\Release\EPPlus.pdb
+Y:\Developer\CURRENT\TMPApps\LIBRARY\EPPLUS\obj\Release\EPPlus.csprojResolveAssemblyReference.cache
+Y:\Developer\CURRENT\TMPApps\LIBRARY\EPPLUS\obj\Release\EPPlus.dll
+Y:\Developer\CURRENT\TMPApps\LIBRARY\EPPLUS\obj\Release\EPPlus.pdb
