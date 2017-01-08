@@ -1,0 +1,496 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{A22EF553-51AA-4EC1-99E9-F4C7248ADE25}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>TMP.Work.Emcos</RootNamespace>
+    <AssemblyName>EmcosSiteWrapper</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Unc</InstallFrom>
+    <UpdateEnabled>true</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <InstallUrl>\\oessbytsrv\prom_sbyt\users\Sbyt\Misha\«ПРОГРАММЫ»\Emcos\pub\</InstallUrl>
+    <TargetCulture>ru-RU</TargetCulture>
+    <ProductName>Настольное приложение-оболочка для сайта Emcos Corporate</ProductName>
+    <PublisherName>Трус Михаил Петрович</PublisherName>
+    <ApplicationRevision>1</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <CreateDesktopShortcut>true</CreateDesktopShortcut>
+    <PublishWizardCompleted>true</PublishWizardCompleted>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\out\Debug\Emcos\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\..\out\Release\Emcos\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>
+    </StartupObject>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>ImagesAndIcons\emcos.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignManifests>false</SignManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestCertificateThumbprint>8801FCEA846CA8B7E532084BB6C6ECFFFE0B34FD</ManifestCertificateThumbprint>
+  </PropertyGroup>
+  <PropertyGroup>
+    <GenerateManifests>false</GenerateManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <TargetZone>LocalIntranet</TargetZone>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>false</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Newtonsoft.Json.9.0.1\lib\net40\Newtonsoft.Json.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="PresentationFramework.Aero" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AnswerParser.cs" />
+    <Compile Include="BindableCollection.cs" />
+    <Compile Include="Controls\ArchiveDataVisualizer.xaml.cs">
+      <DependentUpon>ArchiveDataVisualizer.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\BalansItemTitle.xaml.cs">
+      <DependentUpon>BalansItemTitle.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ArchiveView\ArchView.xaml.cs">
+      <DependentUpon>ArchView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="AsyncObservableCollection.cs" />
+    <Compile Include="Controls\ArchiveView\GridViewRowPresenterWithGridLines.cs" />
+    <Compile Include="Controls\BalansItemIcon.xaml.cs">
+      <DependentUpon>BalansItemIcon.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ColorComboBox.xaml.cs">
+      <DependentUpon>ColorComboBox.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\CustomDatePicker.cs" />
+    <Compile Include="Controls\DateRange.xaml.cs" />
+    <Compile Include="Controls\NoData.xaml.cs">
+      <DependentUpon>NoData.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\SearchBox\SearchBox.xaml.cs">
+      <DependentUpon>SearchBox.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\VTreeView\ITreeNode.cs" />
+    <Compile Include="Converters\BalansItemDayPercentValueConverter.cs" />
+    <Compile Include="Converters\BalansItemValueConverter.cs" />
+    <Compile Include="Converters\BalansItemVisiblityConverter.cs" />
+    <Compile Include="Converters\DaysValuesListTooltipConverter.cs" />
+    <Compile Include="Converters\NullableToVisibilityConverter.cs" />
+    <Compile Include="Converters\SpaceToNewLineReplaceConverter.cs" />
+    <Compile Include="Converters\FileSizeToHumanReadableConverter.cs" />
+    <Compile Include="Converters\ColorToBrushConverter.cs" />
+    <Compile Include="Converters\StringToVisibilityConverter.cs" />
+    <Compile Include="Converters\StateToVisibilityConverter.cs" />
+    <Compile Include="CustomJsonDateTimeFormat.cs" />
+    <Compile Include="Controls\GettingData.xaml.cs">
+      <DependentUpon>GettingData.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Export\BaseExport.cs" />
+    <Compile Include="Export\ExportInfo.cs" />
+    <Compile Include="Export\SubstationExport.cs" />
+    <Compile Include="Export\ForBalansExport.cs" />
+    <Compile Include="Export\FiderAnalizExport.cs" />
+    <Compile Include="GlobalCommands.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="MessageBox.xaml.cs">
+      <DependentUpon>MessageBox.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Model\AuxiliaryReportTreeModel.cs" />
+    <Compile Include="Model\BalansGrop.cs" />
+    <Compile Include="Model\BalansTreeModel.cs" />
+    <Compile Include="Model\Balans\BalansItem.cs" />
+    <Compile Include="Model\Balans\DataValue.cs" />
+    <Compile Include="Model\Balans\Fider.cs" />
+    <Compile Include="Model\Balans\GroupItem.cs" />
+    <Compile Include="Model\Balans\IBalansGroup.cs" />
+    <Compile Include="Model\Balans\IBalansItem.cs" />
+    <Compile Include="Model\Balans\PowerTransformer.cs" />
+    <Compile Include="Model\Balans\Substation.cs" />
+    <Compile Include="Model\Balans\SubstationAuxiliary.cs" />
+    <Compile Include="Model\Balans\SubstationPowerTransformers.cs" />
+    <Compile Include="Model\Balans\SubstationSection.cs" />
+    <Compile Include="Model\Balans\UnitTransformer.cs" />
+    <Compile Include="Model\Balans\UnitTransformerBus.cs" />
+    <Compile Include="Model\DatePeriod.cs" />
+    <Compile Include="Model\IBalansSession.cs" />
+    <Compile Include="Model\ModelConverter.cs" />
+    <Compile Include="Model\BalansSession.cs" />
+    <Compile Include="NullListToEmptyStringConverter.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Settings\SettingBindingExtension.cs" />
+    <Compile Include="U.cs" />
+    <Compile Include="ViewModel\BalansViewModel.cs" />
+    <Compile Include="ViewModel\MainViewModel.cs" />
+    <Compile Include="View\BalansItemView.xaml.cs">
+      <DependentUpon>BalansItemView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\BalansSubstationView.xaml.cs">
+      <DependentUpon>BalansSubstationView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\BalansView.xaml.cs">
+      <DependentUpon>BalansView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Export\SubstationsBalansExport.cs" />
+    <Compile Include="View\MaximumAllowedUnbalanceColumnTemplateSelector.cs" />
+    <Compile Include="View\SessionManager.xaml.cs">
+      <DependentUpon>SessionManager.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WaitCursor.cs" />
+    <Compile Include="Windows\AuxiliaryReportWindow.xaml.cs">
+      <DependentUpon>AuxiliaryReportWindow.xaml</DependentUpon>
+    </Compile>
+    <Page Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Compile Include="Controls\APTree\APTree.xaml.cs">
+      <DependentUpon>APTree.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Wait.xaml.cs">
+      <DependentUpon>Wait.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Model\GRTreeNode.cs" />
+    <Compile Include="Controls\VTreeView\NodeExpandEventHandler.cs" />
+    <Compile Include="Controls\VTreeView\ConvertLevelToIndent.cs" />
+    <Compile Include="Controls\VTreeView\NodeExpandEventArgs.cs" />
+    <Compile Include="Controls\VTreeView\TreeData.cs" />
+    <Compile Include="Controls\VTreeView\TreeNode.cs" />
+    <Compile Include="Controls\VTreeView\VTreeView.xaml.cs">
+      <DependentUpon>VTreeView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Converters\TreeViewMarginConverter.cs" />
+    <Page Include="Controls\ArchiveDataVisualizer.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\BalansItemTitle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\APTree\APTree.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ArchiveView\ArchView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\BalansItemIcon.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ColorComboBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\NoData.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\SearchBox\SearchBox.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\VTreeView\VTreeView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\Wait.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\GettingData.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\SessionManager.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\AuxiliaryReportWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Resource Include="Settings\DataModel.xml.gz" />
+    <None Include="packages.config" />
+    <None Include="Settings\sample-session.data" />
+    <None Include="Windows\MainWindow.xaml">
+      <SubType>Designer</SubType>
+    </None>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <None Include="Windows\MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </None>
+    <Page Include="MessageBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\APTreeDataTemplates.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\APTreeStyles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\BalansDataTemplates.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\BalansResources.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\Common.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\DateRange.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\ExpanderStyle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\ListBoxStyles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\TableViewStyles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\TextBoxAndTextBlockStyles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\ToolTipStyles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\BalansItemView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\BalansSubstationView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\BalansView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <None Include="app.config" />
+    <None Include="app.manifest" />
+    <Resource Include="Properties\Resources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </Resource>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <AppDesigner Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ImagesAndIcons\area.png" />
+    <Resource Include="ImagesAndIcons\element.png" />
+    <Resource Include="ImagesAndIcons\group.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\LIBRARY\EPPLUS\EPPlus.csproj">
+      <Project>{7b288026-5502-4a39-bf41-77e086f3e4a3}</Project>
+      <Name>EPPlus</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Library\Logger\Logger.csproj">
+      <Project>{04ce65d3-1dbf-4a95-8b6e-44ec2c896d00}</Project>
+      <Name>Logger</Name>
+      <Private>True</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Library\NetHelper\NetHelper.csproj">
+      <Project>{e00c55d0-971a-4d59-8c91-e7a4d79d50e8}</Project>
+      <Name>NetHelper</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LIBRARY\TMPApplication\TMPApplication.csproj">
+      <Project>{dfe89862-64ef-44f8-98a8-07b410ec180e}</Project>
+      <Name>TMPApplication</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Common\Common.csproj">
+      <Project>{e3d90d52-1392-44d5-a962-888e528c7edf}</Project>
+      <Name>Common</Name>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Library\RepositoryCommon\RepositoryCommon.csproj">
+      <Project>{7b66a20e-48ff-4fcd-955d-415ad5f1e4e2}</Project>
+      <Name>RepositoryCommon</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\EmcosModel\EmcosModel.csproj">
+      <Project>{4ea193ae-23a4-411c-aee6-0afbaac1c1ca}</Project>
+      <Name>EmcosModel</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\Emcos\EmcosService.csproj">
+      <Project>{8f7e64d5-6064-439f-9217-3f1dc0591d77}</Project>
+      <Name>EmcosService</Name>
+      <Private>False</Private>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ImagesAndIcons\ControlLeft.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Controls\SearchBox\Search.png" />
+    <Resource Include="Controls\SearchBox\SearchClear Shine.png" />
+    <Resource Include="Controls\SearchBox\SearchClear.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Settings\DataModel.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ImagesAndIcons\emcos.ico" />
+    <Resource Include="ImagesAndIcons\fider35.png" />
+    <Resource Include="ImagesAndIcons\prom.png" />
+    <Resource Include="ImagesAndIcons\section.png" />
+    <Resource Include="ImagesAndIcons\substation.png" />
+    <Resource Include="ImagesAndIcons\UnitTransformer.png" />
+    <Resource Include="ImagesAndIcons\UnitTransformerBus.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Libs\" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.0">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.4.5">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 4.5</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <PublishFile Include="Logger">
+      <Visible>False</Visible>
+      <Group>
+      </Group>
+      <TargetPath>
+      </TargetPath>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
+      <FileType>Assembly</FileType>
+    </PublishFile>
+    <PublishFile Include="TMP.Wpf.Common">
+      <Visible>False</Visible>
+      <Group>
+      </Group>
+      <TargetPath>
+      </TargetPath>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
+      <FileType>Assembly</FileType>
+    </PublishFile>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

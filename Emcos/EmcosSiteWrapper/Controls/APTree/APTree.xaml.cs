@@ -433,7 +433,7 @@ namespace TMP.Work.Emcos.Controls
 
                         node.Children = list;
                         // сообщаем, что всё готово
-                        Dispatcher.BeginInvoke((Action)(() => node.State = VTreeView.TreeNodeState.ChildrenPrepared));
+                        App.UIAction(() => node.State = VTreeView.TreeNodeState.ChildrenPrepared);
                         return true;
                     };
                     Utils.GetData(this, TMP.Work.Emcos.EmcosSiteWrapper.Instance.GetAPointsAsync, node.Id, post);
@@ -512,11 +512,11 @@ namespace TMP.Work.Emcos.Controls
                         var list = Utils.Params(data);
 
                         if (node == null)
-                            Dispatcher.BeginInvoke(new Action(() =>
+                            App.UIAction(() =>
                             {
                                 paramstree.Data.ClearAll();
                                 //paramstree.Data.AddRootItems(list);
-                            }));
+                            });
                         else
                         {
                             // установка объекта-родителя
@@ -527,7 +527,7 @@ namespace TMP.Work.Emcos.Controls
 
                             //node.Children = list;
                             // сообщаем, что всё готово
-                            Dispatcher.BeginInvoke((Action)(() => node.State = VTreeView.TreeNodeState.ChildrenPrepared));                            
+                            App.UIAction(() => node.State = VTreeView.TreeNodeState.ChildrenPrepared);                            
                         }
                         return true;
                     };

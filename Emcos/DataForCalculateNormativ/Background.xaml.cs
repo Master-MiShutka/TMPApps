@@ -42,7 +42,7 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
         {
             Window parent = App.Current.MainWindow;
             if (parent != null)
-                this.FontSize = parent.FontSize * 3 / 2;
+                this.FontSize = parent.FontSize * 2.5;
         }
     }
 }

@@ -35,6 +35,10 @@ namespace Test
                     Date = DateTime.Now.AddDays(rnd.NextDouble()*10d),
                     VvodaIn = rnd.NextDouble()* rnd.NextDouble() + rnd.NextDouble()*100d
                 });
+
+            Test.EmcosServiceReference.ServiceSoapClient client = new EmcosServiceReference.ServiceSoapClient();
+            var table = client.GetSTPLData("PSDTU_SERVER", "PPOINT_CODE_ID", "PML_ID", "01.12.2016", "31.12.2016");
+
             DataContext = this;
         }
         private void Create_tableColumns()

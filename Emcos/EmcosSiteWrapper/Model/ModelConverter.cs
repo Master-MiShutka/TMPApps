@@ -224,7 +224,7 @@ namespace TMP.Work.Emcos.Model
                                                                 case "TRANSFORMER":
                                                                     var pt = new PowerTransformer
                                                                     {
-                                                                        Id = sectionPoint.Id.ToString(),
+                                                                        Id = sectionPoint.Id,
                                                                         Code = sectionPoint.Code,
                                                                         Name = sectionPoint.Name,
                                                                         Description = sectionPoint.Description
@@ -236,7 +236,7 @@ namespace TMP.Work.Emcos.Model
                                                                 case "LINE":
                                                                     var f = new Fider
                                                                     {
-                                                                        Id = sectionPoint.Id.ToString(),
+                                                                        Id = sectionPoint.Id,
                                                                         Code = sectionPoint.Code,
                                                                         Name = sectionPoint.Name,
                                                                         Description = sectionPoint.Description

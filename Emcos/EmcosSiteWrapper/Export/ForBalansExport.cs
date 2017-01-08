@@ -86,7 +86,7 @@ namespace TMP.Work.Emcos.Export
                             }
                 }
                 // собственные нуды
-                IList<IBalansItem> sectionAux = substation.Children.Where((c) => c.Type == Model.ElementTypes.AUXILIARY && c.Title == "Собственные нужды").ToList();
+                IList<IBalansItem> sectionAux = substation.Children.Where((c) => c.Type == Model.ElementTypes.AUXILIARY && c.Name == "Собственные нужды").ToList();
                 if (sectionAux == null)
                     continue;
                 foreach (IBalansGroup aux in sectionAux)

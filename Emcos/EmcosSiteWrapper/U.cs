@@ -175,7 +175,7 @@ namespace TMP.Work.Emcos
             {
                 if (substation.Items == null)
                 {
-                    App.Log.Log(String.Format("Подстанция <{0}> не имеет точек.", substation.Name), TMP.Common.Logger.Category.Warn, TMP.Common.Logger.Priority.None);
+                    App.ToLogInfo(String.Format("Подстанция <{0}> не имеет точек.", substation.Name));
                     error = true;
                 }
                 else
@@ -192,13 +192,12 @@ namespace TMP.Work.Emcos
                     }
                     catch (Exception e)
                     {
-                        App.Log.Log("GetSubstationsDaylyArchives - ошибка: " + e.Message, TMP.Common.Logger.Category.Exception, TMP.Common.Logger.Priority.High);
+                        App.ToLogInfo("GetSubstationsDaylyArchives - ошибка: " + e.Message);
                         error = true;
                     }
                     if (wids == null || wids.Length == 0)
                     {
-                        App.Log.Log("GetSubstationsDaylyArchives - ошибка получен неверный wid. Подстанция - " + substation.Name,
-                            TMP.Common.Logger.Category.Exception, TMP.Common.Logger.Priority.High);
+                        App.ToLogInfo("GetSubstationsDaylyArchives - ошибка получен неверный wid. Подстанция - " + substation.Name);
                         error = true;
                     }
                 }
@@ -223,24 +222,24 @@ namespace TMP.Work.Emcos
                     item.Status = Model.DataStatus.Processing;
                     try
                     {
-                        Func<Model.ML_Param, ICollection<Model.ArchData>> getPointArchive = (ml) =>
+                        Func<Model.ML_Param, IEnumerable<Model.ArchData>> getPointArchive = (ml) =>
                         {
                             var point = new Model.ArchAP { Id = item.Id, Type = "POINT", Name = item.Name };
-                            ICollection<Model.ArchData> list;
+                            IEnumerable<Model.ArchData> list;
                             try
                             {
-                                list = EmcosSiteWrapper.Instance.GetArchiveData(ml, point, startDate, endDate, cts.Token);
+                                list = EmcosSiteWrapper.Instance.GetArchiveData(ml, point, startDate, endDate).Result;
                             }
                             catch (Exception e)
                             {
-                                App.Log.Log(String.Format("GetSubstationsDaylyArchives-getPointArchive. Ошибка получения данных по точке {0}. Сообщение: {1}",
-                                    item.Id, e.Message), TMP.Common.Logger.Category.Exception, TMP.Common.Logger.Priority.High);
+                                App.ToLogInfo(String.Format("GetSubstationsDaylyArchives-getPointArchive. Ошибка получения данных по точке {0}. Сообщение: {1}",
+                                    item.Id, e.Message));
                                 return null;
                             }
                             return list;
                         };
 
-                        ICollection<Model.ArchData> data_days_minus, data_days_plus, data_month_minus = null, data_month_plus = null;
+                        IEnumerable<Model.ArchData> data_days_minus, data_days_plus, data_month_minus = null, data_month_plus = null;
                         // А+ энергия  за  сутки
                         data_days_plus = getPointArchive(Model.MLPARAMS.A_PLUS_ENERGY_DAYS);
                         // А- энергия  за  сутки
@@ -277,8 +276,8 @@ namespace TMP.Work.Emcos
                     }
                     catch (Exception e)
                     {
-                        App.Log.Log(String.Format("GetSubstationsDaylyArchives. Ошибка получения данных по точке: ID={0}, NAME={1}. Сообщение: {2}",
-                                    item.Id, item.Name, e.Message), TMP.Common.Logger.Category.Exception, TMP.Common.Logger.Priority.High);
+                        App.ToLogInfo(String.Format("GetSubstationsDaylyArchives. Ошибка получения данных по точке: ID={0}, NAME={1}. Сообщение: {2}",
+                                    item.Id, item.Name, e.Message));
                         continue;
                     }
                     item.Status = Model.DataStatus.Processed;
@@ -326,13 +325,12 @@ namespace TMP.Work.Emcos
             }
             catch (Exception e)
             {
-                App.Log.Log("GetDaylyArchiveDataForItem - GetArchiveWIds - ошибка: " + e.Message, TMP.Common.Logger.Category.Exception, TMP.Common.Logger.Priority.High);
+                App.ToLogInfo("GetDaylyArchiveDataForItem - GetArchiveWIds - ошибка: " + e.Message);
                 error = true;
             }
             if (wids == null || wids.Length == 0)
             {
-                App.Log.Log("GetDaylyArchiveDataForItem - ошибка получен неверный wid. Элемент - " + item.Name,
-                    TMP.Common.Logger.Category.Exception, TMP.Common.Logger.Priority.High);
+                App.ToLogInfo("GetDaylyArchiveDataForItem - ошибка получен неверный wid. Элемент - " + item.Name);
                 error = true;
             }
 
@@ -342,24 +340,24 @@ namespace TMP.Work.Emcos
 
                 try
                 {
-                    Func<Model.ML_Param, ICollection<Model.ArchData>> getPointArchive = (ml) =>
+                    Func<Model.ML_Param, IEnumerable<Model.ArchData>> getPointArchive = (ml) =>
                     {
                         var point = new Model.ArchAP { Id = item.Id, Type = "POINT", Name = item.Name };
-                        ICollection<Model.ArchData> list;
+                        IEnumerable<Model.ArchData> list;
                         try
                         {
-                            list = EmcosSiteWrapper.Instance.GetArchiveData(ml, point, startDate, endDate, cts.Token);
+                            list = EmcosSiteWrapper.Instance.GetArchiveData(ml, point, startDate, endDate).Result;
                         }
                         catch (Exception e)
                         {
-                            App.Log.Log(String.Format("GetDaylyArchiveDataForItem-getPointArchive. Ошибка получения данных по точке {0}. Сообщение: {1}",
-                                item.Id, e.Message), TMP.Common.Logger.Category.Exception, TMP.Common.Logger.Priority.High);
+                            App.ToLogInfo(String.Format("GetDaylyArchiveDataForItem-getPointArchive. Ошибка получения данных по точке {0}. Сообщение: {1}",
+                                item.Id, e.Message));
                             return null;
                         }
                         return list;
                     };
 
-                    ICollection<Model.ArchData> data_days_minus, data_days_plus, data_month_minus = null, data_month_plus = null;
+                    IEnumerable<Model.ArchData> data_days_minus, data_days_plus, data_month_minus = null, data_month_plus = null;
                     // А+ энергия  за  сутки
                     data_days_plus = getPointArchive(Model.MLPARAMS.A_PLUS_ENERGY_DAYS);
                     // А- энергия  за  сутки
@@ -396,8 +394,8 @@ namespace TMP.Work.Emcos
                 }
                 catch (Exception e)
                 {
-                    App.Log.Log(String.Format("GetDaylyArchiveDataForItem. Ошибка получения данных по точке: ID={0}, NAME={1}. Сообщение: {2}",
-                                item.Id, item.Name, e.Message), TMP.Common.Logger.Category.Exception, TMP.Common.Logger.Priority.High);
+                    App.ToLogInfo(String.Format("GetDaylyArchiveDataForItem. Ошибка получения данных по точке: ID={0}, NAME={1}. Сообщение: {2}",
+                                item.Id, item.Name, e.Message));
                 }
             }
 
@@ -412,7 +410,7 @@ namespace TMP.Work.Emcos
         /// <param name="summ">результат - сумма значений</param>
         /// <param name="values">архивные данные</param>
         /// <param name="name">имя точки</param>
-        private static void ParseData(out IList<double?> list, out double? summ, ref ICollection<Model.ArchData> values, string name)
+        private static void ParseData(out IList<double?> list, out double? summ, ref IEnumerable<Model.ArchData> values, string name)
         {
             list = new List<double?>();
             summ = new Nullable<double>();
@@ -437,7 +435,7 @@ namespace TMP.Work.Emcos
                     }
             }
             else
-                App.Log.Log(String.Format("ParseData данные за сутки. Ошибка в данных. Точка: {0}", name), TMP.Common.Logger.Category.Exception, TMP.Common.Logger.Priority.High);
+                App.ToLogInfo(String.Format("ParseData данные за сутки. Ошибка в данных. Точка: {0}", name));
         }
         /// <summary>
         /// Разбор архивных данных за месяц
@@ -445,10 +443,10 @@ namespace TMP.Work.Emcos
         /// <param name="result">результат</param>
         /// <param name="values">архивные данные</param>
         /// <param name="name">имя точки</param>
-        private static void ParseData(out double? result, ref ICollection<Model.ArchData> values, string name)
+        private static void ParseData(out double? result, ref IEnumerable<Model.ArchData> values, string name)
         {
             result = new Nullable<double>();
-            if (values != null && values.Count == 1)
+            if (values != null && values.Count() == 1)
             {
                 var d = values.FirstOrDefault();
                 if (d.SFS == "Нормальные данные" || d.SFS.Contains("Ручной ввод"))
@@ -459,7 +457,7 @@ namespace TMP.Work.Emcos
                 }
             }
             else
-                App.Log.Log(String.Format("ParseData данные за месяц. Ошибка в данных. Точка: {0}", name), TMP.Common.Logger.Category.Exception, TMP.Common.Logger.Priority.High);
+                App.ToLogInfo(String.Format("ParseData данные за месяц. Ошибка в данных. Точка: {0}", name));
         }
     }
 }

@@ -189,13 +189,13 @@ namespace TMP.Work.Emcos.Model.Balans
 
                 var powertrans = Items
                     .Where(i => i.Type == ElementTypes.POWERTRANSFORMER)
-                    .Select(i => new { Name = i.Title, In = i.EnergyIn, Out = i.EnergyOut }).ToList();
+                    .Select(i => new { Name = i.Name, In = i.EnergyIn, Out = i.EnergyOut }).ToList();
                 var fiders = Items
                     .Where(i => i.Type == ElementTypes.FIDER)
-                    .Select(i => new { Name = i.Title, In = i.EnergyIn, Out = i.EnergyOut }).ToList();
+                    .Select(i => new { Name = i.Name, In = i.EnergyIn, Out = i.EnergyOut }).ToList();
                 var tsn = Items
                     .Where(i => (i.Type == ElementTypes.UNITTRANSFORMER || i.Type == ElementTypes.UNITTRANSFORMERBUS))
-                    .Select(i => new { Name = i.Title, In = i.EnergyIn, Out = i.EnergyOut }).ToList();                
+                    .Select(i => new { Name = i.Name, In = i.EnergyIn, Out = i.EnergyOut }).ToList();                
 
                 double energyInFiders = fiders
                     .Sum(i => i.In.HasValue ? i.In.Value / 1000d: 0);

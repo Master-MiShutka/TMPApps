@@ -15,6 +15,7 @@ using System.Windows.Navigation;
 using System.Windows.Threading;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace TMP.Work.Emcos.DataForCalculateNormativ
 {
@@ -33,6 +34,7 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
                 return;
 
             var list = HierarchicalListToFlatList(_pointsList.ToList());
+
             var substations = list
                 .Where(i => (i.TypeCode == "SUBSTATION" || i.TypeCode == "VOLTAGE") && i.Checked)
                 .OrderBy(i => i.Name).ToList<ListPoint>();
@@ -42,10 +44,7 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
                 return;
             }
 
-            btnGet.Content = Strings.InterruptGet;
-            btnUpdate.IsEnabled = false;
-            btnSave.IsEnabled = false;
-            btnGet.IsEnabled = false;
+            btnPanel.IsEnabled = false;
             status.Text = Strings.GettingDataStatus;
             try
             {
@@ -53,11 +52,7 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
 
                 Action updateUI = () =>
                 {
-                    btnGet.Content = Strings.Get;
-                    btnUpdate.IsEnabled = true;
-                    btnSave.IsEnabled = true;
-                    btnGet.IsEnabled = true;
-
+                    btnPanel.IsEnabled = true;
                     HideProgress();
                 };
                 Action completed = () =>
@@ -77,31 +72,10 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
             }
             catch (Exception ex)
             {
-                btnUpdate.IsEnabled = true;
-                btnGet.IsEnabled = true;
+                btnPanel.IsEnabled = true;
                 HideProgress();
                 status.Text = Strings.ReadyMessage;
                 App.ShowError(String.Format(Strings.Error, App.GetExceptionDetails(ex)));
-            }
-        }
-
-        private void btnSave_Click(object sender, RoutedEventArgs e)
-        {
-            btnSave.IsEnabled = false;
-
-            ShowProgress(Strings.SavingInProgress);
-            try
-            {
-                ;
-            }
-            catch (Exception ex)
-            {
-                App.ShowError(String.Format(Strings.Error, App.GetExceptionDetails(ex)));
-            }
-            finally
-            {
-                HideProgress();
-                btnSave.IsEnabled = true;
             }
         }
 
@@ -124,13 +98,17 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
             }
         }
 
+        private void btnGetAuxiliaries_Click(object sender, RoutedEventArgs e)
+        {
+            ;
+        }
+
         private void TreeSelectAll(object sender, RoutedEventArgs e)
         {
             if (_pointsList != null)
             {
                 foreach (var item in _pointsList)
                     ForEachPointInTree(item, p => p.TypeCode == "SUBSTATION" || p.TypeCode == "VOLTAGE", p => p.Checked = true);
-                tree.ItemsSource = _pointsList;
             }
         }
 
@@ -140,9 +118,21 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
             {
                 foreach (var item in _pointsList)
                     ForEachPointInTree(item, p => true, p => p.Checked = false);
-                tree.ItemsSource = _pointsList;
             }
         }
+        private void TreeCheckItems(object sender, RoutedEventArgs e)
+        {
+            if (tree.SelectedItem != null)
+            {
+                ListPoint point = (ListPoint)tree.SelectedItem;
+                if (point != null && point.Items != null)
+                {
+                    foreach (var item in point.Items)
+                        if (item.TypeCode == "FES" || item.TypeCode == "RES" || item.TypeCode == "SUBSTATION" || item.TypeCode == "VOLTAGE")
+                            item.Checked = !item.Checked;
+                }
+            }
+        }        
 
         private void ForEachPointInTree(ListPoint point, Func<ListPoint, bool> condition, Action<ListPoint> action)
         {

@@ -51,18 +51,18 @@ namespace TMP.Work.Emcos.Model
                 Headers.Add(new HeaderElement { Title = "Небаланс, %", Code = null });
                 foreach (var t in powerTransformers)
                 {
-                    Headers.Add(new HeaderElement { Title = GetTitle(t.Title) + "\nE+", Code = t.Code });
-                    Headers.Add(new HeaderElement { Title = GetTitle(t.Title) + "\nE-", Code = t.Code });
+                    Headers.Add(new HeaderElement { Title = GetTitle(t.Name) + "\nE+", Code = t.Code });
+                    Headers.Add(new HeaderElement { Title = GetTitle(t.Name) + "\nE-", Code = t.Code });
                 }
                 if (AuxCount != 0)
                     foreach (var a in auxiliary)
                     {
-                        Headers.Add(new HeaderElement { Title = GetTitle(a.Title) + "\nE+", Code = a.Code });
+                        Headers.Add(new HeaderElement { Title = GetTitle(a.Name) + "\nE+", Code = a.Code });
                     }
                 foreach (var f in fiders)
                 {
-                    Headers.Add(new HeaderElement { Title = GetTitle(f.Title) + "\nE+", Code = f.Code });
-                    Headers.Add(new HeaderElement { Title = GetTitle(f.Title) + "\nE-", Code = f.Code });
+                    Headers.Add(new HeaderElement { Title = GetTitle(f.Name) + "\nE+", Code = f.Code });
+                    Headers.Add(new HeaderElement { Title = GetTitle(f.Name) + "\nE-", Code = f.Code });
                 }
                 #endregion
                 #region | Данные |
@@ -198,7 +198,7 @@ namespace TMP.Work.Emcos.Model
 
         public void UpdateSubstationData()
         {
-            SubstationTitle = _group.Title;
+            SubstationTitle = _group.Name;
             SubstationVvodaIn = _group.VvodaIn;
             SubstationVvodaOut = _group.VvodaOut;
             SubstationFideraIn = _group.FideraIn;

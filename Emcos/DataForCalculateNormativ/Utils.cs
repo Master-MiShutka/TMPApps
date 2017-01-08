@@ -94,7 +94,6 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
         public static KeyValuePair<string, string> ParseKeyValuePair(string data)
         {
             var parts = data.Split(new char[] { '=' });
-            if (parts.Length != 2) throw new ArgumentException();
 
             return new KeyValuePair<string, string>(parts[0], parts[1]);
         }

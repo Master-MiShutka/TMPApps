@@ -94,8 +94,13 @@
                     </Style>
                 </Image.Style>
             </Image>
-            <CheckBox IsChecked="{Binding Path=Checked}" DockPanel.Dock="Left" VerticalAlignment="Center" Visibility="Collapsed" x:Name="check" />
-            <TextBlock Text="{Binding Path=Name}" VerticalAlignment="Center" Padding="0" Margin="5 2"/>
+            <CheckBox IsChecked="{Binding Path=Checked}" x:Name="check" 
+                      DockPanel.Dock="Left" VerticalAlignment="Center" Visibility="Collapsed" />
+            <TextBlock Text="{Binding Path=Name}" VerticalAlignment="Center" Padding="0" Margin="5 2">
+                <TextBlock.ToolTip>
+                    <TextBlock Text="{Binding Id, StringFormat={}ИД точки в Emcos Corporate: {0}}" />
+                </TextBlock.ToolTip>
+            </TextBlock>
         </DockPanel>
         <HierarchicalDataTemplate.Triggers>
             <DataTrigger Binding="{Binding Path=TypeCode}" Value="FES">

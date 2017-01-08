@@ -7,7 +7,7 @@
     <ProjectGuid>{6733A572-4D4F-4733-908D-E9DB4765E245}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Microsoft.Windows.Shell</RootNamespace>
+    <RootNamespace>Microsoft</RootNamespace>
     <AssemblyName>WindowsShell</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -60,66 +60,70 @@
     <Compile Include="SystemParameters2.cs" />
     <Compile Include="WindowChrome.cs" />
     <Compile Include="WindowChromeWorker.cs" />
-    <Compile Include="WindowsAPICodePack\CommonControlException.cs" />
-    <Compile Include="WindowsAPICodePack\Core\Dialogs\Common\DialogControl.cs" />
-    <Compile Include="WindowsAPICodePack\Core\Dialogs\Common\DialogControlCollection.cs" />
-    <Compile Include="WindowsAPICodePack\Core\Dialogs\Common\DialogsDefaults.cs" />
-    <Compile Include="WindowsAPICodePack\Core\Dialogs\Common\IDialogControlHost.cs" />
-    <Compile Include="WindowsAPICodePack\Core\Dialogs\TaskDialogs\TaskDialog.cs" />
-    <Compile Include="WindowsAPICodePack\Core\Dialogs\TaskDialogs\TaskDialogBar.cs" />
-    <Compile Include="WindowsAPICodePack\Core\Dialogs\TaskDialogs\TaskDialogButton.cs" />
-    <Compile Include="WindowsAPICodePack\Core\Dialogs\TaskDialogs\TaskDialogButtonBase.cs" />
-    <Compile Include="WindowsAPICodePack\Core\Dialogs\TaskDialogs\TaskDialogClosingEventArgs.cs" />
-    <Compile Include="WindowsAPICodePack\Core\Dialogs\TaskDialogs\TaskDialogCommandLink.cs" />
-    <Compile Include="WindowsAPICodePack\Core\Dialogs\TaskDialogs\TaskDialogControl.cs" />
-    <Compile Include="WindowsAPICodePack\Core\Dialogs\TaskDialogs\TaskDialogDefaults.cs" />
-    <Compile Include="WindowsAPICodePack\Core\Dialogs\TaskDialogs\TaskDialogExpandedInfoMode.cs" />
-    <Compile Include="WindowsAPICodePack\Core\Dialogs\TaskDialogs\TaskDialogHyperlinkClickedEventArgs.cs" />
-    <Compile Include="WindowsAPICodePack\Core\Dialogs\TaskDialogs\TaskDialogProgressBar.cs" />
-    <Compile Include="WindowsAPICodePack\Core\Dialogs\TaskDialogs\TaskDialogProgressBarState.cs" />
-    <Compile Include="WindowsAPICodePack\Core\Dialogs\TaskDialogs\TaskDialogRadioButton.cs" />
-    <Compile Include="WindowsAPICodePack\Core\Dialogs\TaskDialogs\TaskDialogResult.cs" />
-    <Compile Include="WindowsAPICodePack\Core\Dialogs\TaskDialogs\TaskDialogStandardButton.cs" />
-    <Compile Include="WindowsAPICodePack\Core\Dialogs\TaskDialogs\TaskDialogStandardIcon.cs" />
-    <Compile Include="WindowsAPICodePack\Core\Dialogs\TaskDialogs\TaskDialogStartupLocation.cs" />
-    <Compile Include="WindowsAPICodePack\Core\Dialogs\TaskDialogs\TaskDialogTickEventArgs.cs" />
-    <Compile Include="WindowsAPICodePack\Core\Interop\CoreErrorHelper.cs" />
-    <Compile Include="WindowsAPICodePack\Core\Interop\CoreHelpers.cs" />
-    <Compile Include="WindowsAPICodePack\Core\Interop\CoreNativeMethods.cs" />
-    <Compile Include="WindowsAPICodePack\Core\Interop\Dialogs\DialogShowState.cs" />
-    <Compile Include="WindowsAPICodePack\Core\Interop\TaskDialogs\NativeTaskDialog.cs" />
-    <Compile Include="WindowsAPICodePack\Core\Interop\TaskDialogs\NativeTaskDialogSettings.cs" />
-    <Compile Include="WindowsAPICodePack\Core\Interop\TaskDialogs\TaskDialogNativeMethods.cs" />
-    <Compile Include="WindowsAPICodePack\Core\Interop\WindowMessage.cs" />
-    <Compile Include="WindowsAPICodePack\Core\PropertySystem\PropertyKey.cs" />
-    <Compile Include="WindowsAPICodePack\Core\PropertySystem\PropVariant.cs" />
-    <Compile Include="WindowsAPICodePack\Core\PropertySystem\PropVariantNativeMethods.cs" />
-    <Compile Include="WindowsAPICodePack\Core\Resources\LocalizedMessages.Designer.cs" />
-    <Compile Include="WindowsAPICodePack\Core\SafeHandles\SafeIconHandle.cs" />
-    <Compile Include="WindowsAPICodePack\Core\SafeHandles\SafeRegionHandle.cs" />
-    <Compile Include="WindowsAPICodePack\Core\SafeHandles\SafeWindowHandle.cs" />
-    <Compile Include="WindowsAPICodePack\Core\SafeHandles\ZeroInvalidHandle.cs" />
-    <Compile Include="WindowsAPICodePack\Shell\CommonFileDialogs\CommonFileDialog.cs" />
-    <Compile Include="WindowsAPICodePack\Shell\CommonFileDialogs\CommonFileDialogButton.cs" />
-    <Compile Include="WindowsAPICodePack\Shell\CommonFileDialogs\CommonFileDialogCheckBox.cs" />
-    <Compile Include="WindowsAPICodePack\Shell\CommonFileDialogs\CommonFileDialogComboBox.cs" />
-    <Compile Include="WindowsAPICodePack\Shell\CommonFileDialogs\CommonFileDialogControl.cs" />
-    <Compile Include="WindowsAPICodePack\Shell\CommonFileDialogs\CommonFileDialogControlCollection.cs" />
-    <Compile Include="WindowsAPICodePack\Shell\CommonFileDialogs\CommonFileDialogFilter.cs" />
-    <Compile Include="WindowsAPICodePack\Shell\CommonFileDialogs\CommonFileDialogFilterCollection.cs" />
-    <Compile Include="WindowsAPICodePack\Shell\CommonFileDialogs\CommonFileDialogFolderChangeEventArgs.cs" />
-    <Compile Include="WindowsAPICodePack\Shell\CommonFileDialogs\CommonFileDialogGroupBox.cs" />
-    <Compile Include="WindowsAPICodePack\Shell\CommonFileDialogs\CommonFileDialogLabel.cs" />
-    <Compile Include="WindowsAPICodePack\Shell\CommonFileDialogs\CommonFileDialogMenu.cs" />
-    <Compile Include="WindowsAPICodePack\Shell\CommonFileDialogs\CommonFileDialogProminentControl.cs" />
-    <Compile Include="WindowsAPICodePack\Shell\CommonFileDialogs\CommonFileDialogRadioButtonList.cs" />
-    <Compile Include="WindowsAPICodePack\Shell\CommonFileDialogs\CommonFileDialogResult.cs" />
-    <Compile Include="WindowsAPICodePack\Shell\CommonFileDialogs\CommonFileDialogSeperator.cs" />
-    <Compile Include="WindowsAPICodePack\Shell\CommonFileDialogs\CommonFileDialogStandardFilters.cs" />
-    <Compile Include="WindowsAPICodePack\Shell\CommonFileDialogs\CommonFileDialogTextBox.cs" />
-    <Compile Include="WindowsAPICodePack\Shell\CommonFileDialogs\CommonOpenFileDialog.cs" />
-    <Compile Include="WindowsAPICodePack\Shell\CommonFileDialogs\CommonSaveFileDialog.cs" />
-    <Compile Include="WindowsAPICodePack\Shell\CommonFileDialogs\ICommonFileDialogIndexedControls.cs" />
+    <Compile Include="WindowsAPICodePack\Controls\CommonControlException.cs" />
+    <Compile Include="WindowsAPICodePack\Dialogs\Common\DialogControl.cs" />
+    <Compile Include="WindowsAPICodePack\Dialogs\Common\DialogControlCollection.cs" />
+    <Compile Include="WindowsAPICodePack\Dialogs\Common\DialogsDefaults.cs" />
+    <Compile Include="WindowsAPICodePack\Dialogs\Common\IDialogControlHost.cs" />
+    <Compile Include="WindowsAPICodePack\Dialogs\TaskDialogs\TaskDialog.cs" />
+    <Compile Include="WindowsAPICodePack\Dialogs\TaskDialogs\TaskDialogBar.cs" />
+    <Compile Include="WindowsAPICodePack\Dialogs\TaskDialogs\TaskDialogButton.cs" />
+    <Compile Include="WindowsAPICodePack\Dialogs\TaskDialogs\TaskDialogButtonBase.cs" />
+    <Compile Include="WindowsAPICodePack\Dialogs\TaskDialogs\TaskDialogClosingEventArgs.cs" />
+    <Compile Include="WindowsAPICodePack\Dialogs\TaskDialogs\TaskDialogCommandLink.cs" />
+    <Compile Include="WindowsAPICodePack\Dialogs\TaskDialogs\TaskDialogControl.cs" />
+    <Compile Include="WindowsAPICodePack\Dialogs\TaskDialogs\TaskDialogDefaults.cs" />
+    <Compile Include="WindowsAPICodePack\Dialogs\TaskDialogs\TaskDialogExpandedInfoMode.cs" />
+    <Compile Include="WindowsAPICodePack\Dialogs\TaskDialogs\TaskDialogHyperlinkClickedEventArgs.cs" />
+    <Compile Include="WindowsAPICodePack\Dialogs\TaskDialogs\TaskDialogProgressBar.cs" />
+    <Compile Include="WindowsAPICodePack\Dialogs\TaskDialogs\TaskDialogProgressBarState.cs" />
+    <Compile Include="WindowsAPICodePack\Dialogs\TaskDialogs\TaskDialogRadioButton.cs" />
+    <Compile Include="WindowsAPICodePack\Dialogs\TaskDialogs\TaskDialogResult.cs" />
+    <Compile Include="WindowsAPICodePack\Dialogs\TaskDialogs\TaskDialogStandardButton.cs" />
+    <Compile Include="WindowsAPICodePack\Dialogs\TaskDialogs\TaskDialogStandardIcon.cs" />
+    <Compile Include="WindowsAPICodePack\Dialogs\TaskDialogs\TaskDialogStartupLocation.cs" />
+    <Compile Include="WindowsAPICodePack\Dialogs\TaskDialogs\TaskDialogTickEventArgs.cs" />
+    <Compile Include="WindowsAPICodePack\Internal\CoreErrorHelper.cs" />
+    <Compile Include="WindowsAPICodePack\Internal\CoreHelpers.cs" />
+    <Compile Include="WindowsAPICodePack\Internal\CoreNativeMethods.cs" />
+    <Compile Include="WindowsAPICodePack\Dialogs\Interop\DialogShowState.cs" />
+    <Compile Include="WindowsAPICodePack\Dialogs\TaskDialogs\Interop\NativeTaskDialog.cs" />
+    <Compile Include="WindowsAPICodePack\Dialogs\TaskDialogs\Interop\NativeTaskDialogSettings.cs" />
+    <Compile Include="WindowsAPICodePack\Dialogs\TaskDialogs\Interop\TaskDialogNativeMethods.cs" />
+    <Compile Include="WindowsAPICodePack\Internal\WindowMessage.cs" />
+    <Compile Include="WindowsAPICodePack\Internal\PropertySystem\PropertyKey.cs" />
+    <Compile Include="WindowsAPICodePack\Internal\PropertySystem\PropVariant.cs" />
+    <Compile Include="WindowsAPICodePack\Internal\PropertySystem\PropVariantNativeMethods.cs" />
+    <Compile Include="WindowsAPICodePack\Resources\LocalizedMessages.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>LocalizedMessages.resx</DependentUpon>
+    </Compile>
+    <Compile Include="WindowsAPICodePack\Internal\SafeHandles\SafeIconHandle.cs" />
+    <Compile Include="WindowsAPICodePack\Internal\SafeHandles\SafeRegionHandle.cs" />
+    <Compile Include="WindowsAPICodePack\Internal\SafeHandles\SafeWindowHandle.cs" />
+    <Compile Include="WindowsAPICodePack\Internal\SafeHandles\ZeroInvalidHandle.cs" />
+    <Compile Include="WindowsAPICodePack\Dialogs\CommonFileDialogs\CommonFileDialog.cs" />
+    <Compile Include="WindowsAPICodePack\Dialogs\CommonFileDialogs\CommonFileDialogButton.cs" />
+    <Compile Include="WindowsAPICodePack\Dialogs\CommonFileDialogs\CommonFileDialogCheckBox.cs" />
+    <Compile Include="WindowsAPICodePack\Dialogs\CommonFileDialogs\CommonFileDialogComboBox.cs" />
+    <Compile Include="WindowsAPICodePack\Dialogs\CommonFileDialogs\CommonFileDialogControl.cs" />
+    <Compile Include="WindowsAPICodePack\Dialogs\CommonFileDialogs\CommonFileDialogControlCollection.cs" />
+    <Compile Include="WindowsAPICodePack\Dialogs\CommonFileDialogs\CommonFileDialogFilter.cs" />
+    <Compile Include="WindowsAPICodePack\Dialogs\CommonFileDialogs\CommonFileDialogFilterCollection.cs" />
+    <Compile Include="WindowsAPICodePack\Dialogs\CommonFileDialogs\CommonFileDialogFolderChangeEventArgs.cs" />
+    <Compile Include="WindowsAPICodePack\Dialogs\CommonFileDialogs\CommonFileDialogGroupBox.cs" />
+    <Compile Include="WindowsAPICodePack\Dialogs\CommonFileDialogs\CommonFileDialogLabel.cs" />
+    <Compile Include="WindowsAPICodePack\Dialogs\CommonFileDialogs\CommonFileDialogMenu.cs" />
+    <Compile Include="WindowsAPICodePack\Dialogs\CommonFileDialogs\CommonFileDialogProminentControl.cs" />
+    <Compile Include="WindowsAPICodePack\Dialogs\CommonFileDialogs\CommonFileDialogRadioButtonList.cs" />
+    <Compile Include="WindowsAPICodePack\Dialogs\CommonFileDialogs\CommonFileDialogResult.cs" />
+    <Compile Include="WindowsAPICodePack\Dialogs\CommonFileDialogs\CommonFileDialogSeperator.cs" />
+    <Compile Include="WindowsAPICodePack\Dialogs\CommonFileDialogs\CommonFileDialogStandardFilters.cs" />
+    <Compile Include="WindowsAPICodePack\Dialogs\CommonFileDialogs\CommonFileDialogTextBox.cs" />
+    <Compile Include="WindowsAPICodePack\Dialogs\CommonFileDialogs\CommonOpenFileDialog.cs" />
+    <Compile Include="WindowsAPICodePack\Dialogs\CommonFileDialogs\CommonSaveFileDialog.cs" />
+    <Compile Include="WindowsAPICodePack\Dialogs\CommonFileDialogs\ICommonFileDialogIndexedControls.cs" />
     <Compile Include="WindowsAPICodePack\Shell\Common\DefaultShellImageSizes.cs" />
     <Compile Include="WindowsAPICodePack\Shell\Common\EnumUnknown.cs" />
     <Compile Include="WindowsAPICodePack\Shell\Common\EventHandlerExtensionMethods.cs" />
@@ -151,10 +155,10 @@
     <Compile Include="WindowsAPICodePack\Shell\Common\ShellThumbnail.cs" />
     <Compile Include="WindowsAPICodePack\Shell\Common\ShellThumbnailEnums.cs" />
     <Compile Include="WindowsAPICodePack\Shell\Common\SortColumn.cs" />
-    <Compile Include="WindowsAPICodePack\Shell\Controls\CommandLinkWPF.xaml.cs">
+    <Compile Include="WindowsAPICodePack\Controls\CommandLinkWPF.xaml.cs">
       <DependentUpon>CommandLinkWPF.xaml</DependentUpon>
     </Compile>
-    <Compile Include="WindowsAPICodePack\Shell\GlobalSuppressions.cs" />
+    <Compile Include="WindowsAPICodePack\GlobalSuppressions.cs" />
     <Compile Include="WindowsAPICodePack\Shell\Interop\Common\IntPtrExtensions.cs" />
     <Compile Include="WindowsAPICodePack\Shell\Interop\Common\ShellCOMClasses.cs" />
     <Compile Include="WindowsAPICodePack\Shell\Interop\Common\ShellCOMGuids.cs" />
@@ -204,7 +208,16 @@
     <Compile Include="WindowsAPICodePack\Shell\PropertySystem\StronglyTypedProperties.cs" />
     <Compile Include="WindowsAPICodePack\Shell\PropertySystem\SystemProperties.cs" />
     <Compile Include="WindowsAPICodePack\Shell\PropertySystem\WindowProperties.cs" />
-    <Compile Include="WindowsAPICodePack\Shell\Resources\LocalizedMessages.Designer.cs" />
+    <Compile Include="WindowsAPICodePack\Shell\Resources\LocalizedMessages.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>LocalizedMessages.resx</DependentUpon>
+    </Compile>
+    <Compile Include="WindowsAPICodePack\Shell\Resources\MyResource.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MyResource.resx</DependentUpon>
+    </Compile>
     <Compile Include="WindowsAPICodePack\Shell\ShellObjectWatcher\ChangeNotifyEventManager.cs" />
     <Compile Include="WindowsAPICodePack\Shell\ShellObjectWatcher\ChangeNotifyLock.cs" />
     <Compile Include="WindowsAPICodePack\Shell\ShellObjectWatcher\MessageListener.cs" />
@@ -212,20 +225,31 @@
     <Compile Include="WindowsAPICodePack\Shell\ShellObjectWatcher\ShellObjectNotificationEventArgs.cs" />
     <Compile Include="WindowsAPICodePack\Shell\ShellObjectWatcher\ShellObjectWatcher.cs" />
     <Compile Include="WindowsAPICodePack\Shell\ShellObjectWatcher\ShellObjectWatcherEnums.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="WindowsAPICodePack\Core\Resources\LocalizedMessages.resx" />
-    <EmbeddedResource Include="WindowsAPICodePack\Shell\Resources\LocalizedMessages.resx" />
-  </ItemGroup>
-  <ItemGroup>
-    <Page Include="WindowsAPICodePack\Shell\Controls\CommandLinkWPF.xaml">
+    <Page Include="WindowsAPICodePack\Controls\CommandLinkWPF.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <None Include="WindowsAPICodePack\Shell\Design\ShellObjects.cd" />
-    <None Include="WindowsAPICodePack\Shell\Design\ShellThumbnailClassDiagram.cd" />
+    <EmbeddedResource Include="WindowsAPICodePack\Resources\LocalizedMessages.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>LocalizedMessages.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WindowsAPICodePack\Shell\Resources\LocalizedMessages.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>LocalizedMessages.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WindowsAPICodePack\Shell\Resources\MyResource.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>MyResource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <None Include="WindowsAPICodePack\Design\ShellObjects.cd" />
+    <None Include="WindowsAPICodePack\Design\ShellThumbnailClassDiagram.cd" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

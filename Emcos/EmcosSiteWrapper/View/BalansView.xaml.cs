@@ -16,7 +16,6 @@ namespace TMP.Work.Emcos.View
     public partial class BalansView : Window, IStateObject, IDisposable
     {
         private System.Threading.CancellationTokenSource cts = new System.Threading.CancellationTokenSource();
-        private EmcosSite emcosSite = new EmcosSite();
         private ViewModel.BalansViewModel vm;
 
         #region | Реализация IStateObject |
@@ -36,13 +35,6 @@ namespace TMP.Work.Emcos.View
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
         protected void RaisePropertyChanged(string propertyName)
         {
-#if DEBUG
-            App.LOG.Log(String.Format(
-                "{0}\t{1}\t{2}",
-                "BalansView",
-                "RaisePropertyChanged",
-                propertyName), Common.Logger.Category.Info, Common.Logger.Priority.None);
-#endif
             var e = PropertyChanged;
             if (e != null)
                 e(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
@@ -73,7 +65,7 @@ namespace TMP.Work.Emcos.View
 
         public BalansView()
         {
-            App.Log.Log("Инициализация BalansView", Category.Info, Priority.None);
+            App.ToLogInfo("Инициализация BalansView");
 
             InitializeComponent();
 
@@ -108,7 +100,7 @@ namespace TMP.Work.Emcos.View
                     if (show.Value)
                     {
                         if (vm.LoadSessionData(sm.SelectedSession.FileName) == false)
-                            MessageBox.Show("Не удалось загрузить сессию. ", this.Title, MessageBoxButton.OK, MessageBoxImage.Warning);
+                            App.ShowWarning("Не удалось загрузить сессию. ");
                     }
                     else
                         if (vm.Session == null)
@@ -165,7 +157,7 @@ namespace TMP.Work.Emcos.View
                         foreach (Model.Balans.IBalansItem balansItem in substation.Items)
                         {
                             if (balansItem.Type == ElementTypes.UNITTRANSFORMER || balansItem.Type == ElementTypes.UNITTRANSFORMERBUS)
-                                sub.Children.Add(new AuxiliaryReportItem { Name = balansItem.Title, Value = balansItem.Eplus });
+                                sub.Children.Add(new AuxiliaryReportItem { Name = balansItem.Name, Value = balansItem.Eplus });
                         }
                         summ = sub.Children.Sum(i => i.Value.HasValue ? i.Value : 0d);
                         if (summ != null)
@@ -211,8 +203,7 @@ namespace TMP.Work.Emcos.View
 
                 Action oncompleted = () =>
                 {
-                    Dispatcher.BeginInvoke((Action)(() => this.TaskbarItemInfo.ProgressState = System.Windows.Shell.TaskbarItemProgressState.None),
-                        System.Windows.Threading.DispatcherPriority.Normal);
+                    App.UIAction(() => this.TaskbarItemInfo.ProgressState = System.Windows.Shell.TaskbarItemProgressState.None);
                     State = State.Idle;
                     //vm.IsGettingData = false;
                     vm.Raise();
@@ -229,26 +220,26 @@ namespace TMP.Work.Emcos.View
                     TaskbarItemInfo.ProgressState = System.Windows.Shell.TaskbarItemProgressState.Indeterminate;
 
                     var task = System.Threading.Tasks.Task.Factory.StartNew(() =>
-                        emcosSite.GetDaylyArchiveDataForSubstation(vm.Session.Period, substation, cts, UpdateCallBack), cts.Token);
+                        U.GetDaylyArchiveDataForSubstation(vm.Session.Period.StartDate, vm.Session.Period.EndDate, substation, cts, UpdateCallBack), cts.Token);
 
                     task.ContinueWith((s) =>
                     {
                         if (s.Result == true)
-                            Dispatcher.BeginInvoke((Action)(() => MessageBox.Show("Выполнено. ", this.Title, MessageBoxButton.OK, MessageBoxImage.Information)));
+                            App.UIAction(() => App.ShowInfo("Выполнено. "));
                         else
                             CheckOnError();
                         oncompleted();
                     }, System.Threading.Tasks.TaskContinuationOptions.OnlyOnRanToCompletion);
                     task.ContinueWith((s) =>
                         {
-                            Dispatcher.BeginInvoke((Action)(() => MessageBox.Show("Произошла ошибка.\n" + s.Exception, "", MessageBoxButton.OK, MessageBoxImage.Exclamation)));
+                        App.UIAction(() => App.ShowError("Произошла ошибка.\n" + s.Exception));
                             oncompleted();
                         }, System.Threading.Tasks.TaskContinuationOptions.OnlyOnFaulted);
                 }
                 catch (Exception e)
                 {
-                    App.Log.Log(String.Format("Обновление данных [{0}]. Ошибка - {1}", substation.Code, e.Message), Category.Exception, Priority.High);
-                    MessageBox.Show("Произошла ошибка.\n" + e.Message, "", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                    App.ToLogError(String.Format("Обновление данных [{0}]. Ошибка - {1}", substation.Code, e.Message));
+                    App.ShowError("Произошла ошибка.\n" + e.Message, "");
                     oncompleted();
                 }
             }, canExecuteUpdateSubstationDataCommand);
@@ -268,7 +259,7 @@ namespace TMP.Work.Emcos.View
             if (e.PropertyName == "SelectedPeriod")
             {
                 if (vm.SelectedPeriod == vm.Session.Period) return;
-                if (MessageBox.Show("Изменён период. Получить данные?", vm.Title, MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                if (App.ShowQuestion("Изменён период. Получить данные?") == MessageBoxResult.Yes)
                 {
                     vm.Session.Period = vm.SelectedPeriod;
                     vm.GetDataCommand.Execute(null);
@@ -280,36 +271,36 @@ namespace TMP.Work.Emcos.View
 
         private void CheckOnError()
         {
-            Dispatcher.BeginInvoke((Action)(() =>
+            App.UIAction(() =>
             {
-                switch (emcosSite.Status)
+                switch (EmcosSiteWrapper.Instance.Status)
                 {
-                    case EmcosSite.State.Online:
+                    case EmcosSiteWrapper.State.Online:
                         break;
-                    case EmcosSite.State.Offline:
-                        MessageBox.Show("Произошла ошибка.\n" + emcosSite.LastException.Message, "", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                    case EmcosSiteWrapper.State.Offline:
+                        App.ShowError("Произошла ошибка.\n" + EmcosSiteWrapper.Instance.LastException.Message);
                         break;
-                    case EmcosSite.State.NotAuthorized:
+                    case EmcosSiteWrapper.State.NotAuthorized:
                         break;
-                    case EmcosSite.State.Error:
+                    case EmcosSiteWrapper.State.Error:
                         break;
                     default:
                         break;
                 }
-            }));
+            });
         }
 
         private void ViewModel_Loaded(object sender, RoutedEventArgs e)
         {
-            Dispatcher.BeginInvoke((Action)(() =>
-                State = State.Idle));
+            App.UIAction(() =>
+                State = State.Idle);
         }
 
         private void GetEmcosArchivesForSubstations()
         {
-            App.Log.Log("Получение архивных данных", Category.Info, Priority.None);
+            App.ToLogInfo("Получение архивных данных");
 
-            App.Log.Log("Сохранение текущей сессии", Category.Info, Priority.None);
+            App.ToLogInfo("Сохранение текущей сессии");
             vm.SaveSessionData(System.IO.Path.Combine(vm.BALANS_SESSION_FILENAME + vm.SESSION_FILE_EXTENSION + ".bak"));
 
             cts = new System.Threading.CancellationTokenSource();
@@ -319,28 +310,28 @@ namespace TMP.Work.Emcos.View
             try
             {
 
-                var task = emcosSite.ExecuteAction(cts, GetSubstationsDaylyArchives);
+                var task = EmcosSiteWrapper.Instance.ExecuteAction(cts, GetSubstationsDaylyArchives);
 
                 task.ContinueWith((s) =>
                     {
-                        App.Log.Log("Выполнено получение архивных данных", Category.Info, Priority.None);
+                        App.ToLogInfo("Выполнено получение архивных данных");
                         try
                         {
-                            Dispatcher.BeginInvoke((Action)(() => MessageBox.Show("Выполнено. ", this.Title, MessageBoxButton.OK, MessageBoxImage.Information)));
+                            App.UIAction(() => App.ShowInfo("Выполнено. "));
                             vm.IsGettingData = false;
                             vm.Raise();
                         }
                         catch (Exception ex)
                         {
-                            App.Log.Log("Получение данных. Ошибка - " + ex.Message, Category.Exception, Priority.High);
+                            App.ToLogError("Получение данных. Ошибка - " + ex.Message);
                         }
                     }, System.Threading.Tasks.TaskContinuationOptions.OnlyOnRanToCompletion);
                 task.ContinueWith((s) =>
                     {
-                        App.Log.Log("Прервано получение архивных данных", Category.Info, Priority.None);
+                        App.ToLogInfo("Прервано получение архивных данных");
                         Dispatcher.BeginInvoke(new Action(() =>
                         {
-                            MessageBox.Show("Прервано. ", this.Title, MessageBoxButton.OK, MessageBoxImage.Warning);
+                            App.ShowWarning("Прервано. ");
                         }));
                         vm.IsGettingData = false;
                         vm.Raise();
@@ -348,17 +339,15 @@ namespace TMP.Work.Emcos.View
             }
             catch (Exception ex)
             {
-                App.Log.Log("Получение архивных данных. Ошибка - " + ex.Message, Category.Exception, Priority.High);
-                MessageBox.Show("Произошла ошибка.\n" + ex.Message, "", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                App.ToLogError("Получение архивных данных. Ошибка - " + ex.Message);
+                App.ShowError("Произошла ошибка.\n" + ex.Message);
             }
         }
 
         private void GetSubstationsDaylyArchives()
         {
-            Dispatcher.BeginInvoke((Action)(() => this.TaskbarItemInfo.ProgressState = System.Windows.Shell.TaskbarItemProgressState.Normal),
-                System.Windows.Threading.DispatcherPriority.Normal);
-            Dispatcher.BeginInvoke((Action)(() => this.TaskbarItemInfo.ProgressValue = 0.01),
-                System.Windows.Threading.DispatcherPriority.Normal);
+            App.UIAction(() => this.TaskbarItemInfo.ProgressState = System.Windows.Shell.TaskbarItemProgressState.Normal);
+           App.UIAction(() => this.TaskbarItemInfo.ProgressValue = 0.01);
 
             vm.ClearCurrentSubstations();
 
@@ -368,20 +357,18 @@ namespace TMP.Work.Emcos.View
             {
                 if (cts.IsCancellationRequested)
                     break;
-                Dispatcher.BeginInvoke((Action)(() => this.TaskbarItemInfo.ProgressValue = index == 0 ? 0.01 : index / (vm.Substations.Count * 1.0)),
-                System.Windows.Threading.DispatcherPriority.Normal);
+                App.UIAction(() => this.TaskbarItemInfo.ProgressValue = index == 0 ? 0.01 : index / (vm.Substations.Count * 1.0));
 
                 var substation = vm.Substations[index];
 
-                emcosSite.GetDaylyArchiveDataForSubstation(vm.Session.Period, substation, cts, UpdateCallBack);
+                U.GetDaylyArchiveDataForSubstation(vm.Session.Period.StartDate, vm.Session.Period.EndDate, substation, cts, UpdateCallBack);
             }
-            Dispatcher.BeginInvoke((Action)(() => this.TaskbarItemInfo.ProgressState = System.Windows.Shell.TaskbarItemProgressState.None),
-                System.Windows.Threading.DispatcherPriority.Normal);
+            App.UIAction(() => this.TaskbarItemInfo.ProgressState = System.Windows.Shell.TaskbarItemProgressState.None);
         }
         private void UpdateCallBack(int current, int total)
         {
             Progress = 100* current / total;
-            /*Dispatcher.BeginInvoke((Action)(() =>
+            /*App.UIAction(() =>
                   {
                       ;
                   }));*/
@@ -518,15 +505,15 @@ namespace TMP.Work.Emcos.View
         {
             if (vm.HasData == false)
             {
-                MessageBox.Show("Отсутствуют данные.", Title, MessageBoxButton.OK, MessageBoxImage.Warning);
+                App.ShowWarning("Отсутствуют данные.");
                 return;
             }
             this.TaskbarItemInfo.ProgressState = System.Windows.Shell.TaskbarItemProgressState.Indeterminate;
             State = State.Busy;
 
-            var r = MessageBox.Show(String.Format("Скопировать файл отчёта в папку '{0}'?",
+            var r = App.ShowQuestion(String.Format("Скопировать файл отчёта в папку '{0}'?",
                 Properties.Settings.Default.ReportBalansPSFolder),
-                "Подготовка отчёта ...", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                "Подготовка отчёта ...");
 
             var task = new System.Threading.Tasks.Task(() =>
             {
@@ -539,11 +526,11 @@ namespace TMP.Work.Emcos.View
                     EndDate = vm.Session.Period.EndDate,
                     Substations = vm.Substations
                 });
-                Application.Current.Dispatcher.Invoke(new Action(() =>
+                App.UIAction(() =>
                 {
                     if (sbe.Export(defaultFileName) == false)
                         return;
-                }));
+                });
 
                 if (r == MessageBoxResult.Yes)
                 {
@@ -555,8 +542,8 @@ namespace TMP.Work.Emcos.View
                         }
                         catch (System.IO.IOException ioe)
                         {
-                            Dispatcher.BeginInvoke((Action)(() => MessageBox.Show(String.Format("Папка {0} не найдена. При попытке её создать произошла ошибка: {1}.\nФайл отчёта не скопирован.", Properties.Settings.Default.ReportBalansPSFolder, ioe.Message),
-                                "Подготовка отчёта ...", MessageBoxButton.OK, MessageBoxImage.Error)));
+                            App.UIAction(() => App.ShowError(String.Format("Папка {0} не найдена. При попытке её создать произошла ошибка: {1}.\nФайл отчёта не скопирован.", Properties.Settings.Default.ReportBalansPSFolder, ioe.Message),
+                                "Подготовка отчёта ..."));
                         }
                     }
                     var filename = System.IO.Path.Combine(
@@ -572,22 +559,15 @@ namespace TMP.Work.Emcos.View
             task.ContinueWith((t) =>
             {
                 State = State.Idle;
-                Dispatcher.BeginInvoke((Action)(() => this.TaskbarItemInfo.ProgressState = System.Windows.Shell.TaskbarItemProgressState.None),
-                    System.Windows.Threading.DispatcherPriority.Normal);
+                App.UIAction(() => this.TaskbarItemInfo.ProgressState = System.Windows.Shell.TaskbarItemProgressState.None);
             }, System.Threading.Tasks.TaskContinuationOptions.None);
 
             task.ContinueWith((s) =>
             {
-                var sb = new System.Text.StringBuilder();
-                Exception e = s.Exception.Flatten();
-                while (e != null)
-                    if (e.InnerException != null)
-                    {
-                        sb.AppendLine(e.InnerException.Message);
-                        e = e.InnerException;
-                    }
-                App.Log.Log("Экспорт балансов подстанций - ошибка: " + sb.ToString(), Category.Exception, Priority.High);
-                Dispatcher.Invoke(new Action(delegate () { MessageBox.Show("Произошла ошибка при формировании отчёта.\nОбратитесь к разработчику.", this.Title, MessageBoxButton.OK, MessageBoxImage.Exclamation); }));
+                App.ToLogError("Экспорт балансов подстанций - ошибка");
+                App.ToLogException(s.Exception);
+
+                App.UIAction(() => App.ShowError("Произошла ошибка при формировании отчёта.\nОбратитесь к разработчику."));
             }, System.Threading.Tasks.TaskContinuationOptions.OnlyOnFaulted);
             task.Start(System.Threading.Tasks.TaskScheduler.Current);
         }
@@ -598,7 +578,7 @@ namespace TMP.Work.Emcos.View
         {
             if (vm.HasData == false)
             {
-                MessageBox.Show("Отсутствуют данные.", Title, MessageBoxButton.OK, MessageBoxImage.Warning);
+                App.ShowWarning("Отсутствуют данные.");
                 return;
             }
             this.TaskbarItemInfo.ProgressState = System.Windows.Shell.TaskbarItemProgressState.Indeterminate;
@@ -625,22 +605,14 @@ namespace TMP.Work.Emcos.View
             task.ContinueWith((t) =>
             {
                 State = State.Idle;
-                Dispatcher.BeginInvoke((Action)(() => this.TaskbarItemInfo.ProgressState = System.Windows.Shell.TaskbarItemProgressState.None),
-                    System.Windows.Threading.DispatcherPriority.Normal);
+                App.UIAction(() => this.TaskbarItemInfo.ProgressState = System.Windows.Shell.TaskbarItemProgressState.None);
             }, System.Threading.Tasks.TaskContinuationOptions.None);
 
             task.ContinueWith((s) =>
             {
-                var sb = new System.Text.StringBuilder();
-                Exception e = s.Exception.Flatten();
-                while (e != null)
-                    if (e.InnerException != null)
-                    {
-                        sb.AppendLine(e.InnerException.Message);
-                        e = e.InnerException;
-                    }
-                App.Log.Log("Экспорт для пофидерного анализа - ошибка: " + sb.ToString(), Category.Exception, Priority.High);
-                Dispatcher.Invoke(new Action(delegate () { MessageBox.Show("Произошла ошибка при формировании отчёта.\nОбратитесь к разработчику.", this.Title, MessageBoxButton.OK, MessageBoxImage.Exclamation); }));
+                App.ToLogError("Экспорт для пофидерного анализа - ошибка");
+                App.ToLogException(s.Exception);
+                App.UIAction(() => App.ShowError("Произошла ошибка при формировании отчёта.\nОбратитесь к разработчику."));
             }, System.Threading.Tasks.TaskContinuationOptions.OnlyOnFaulted);
 
             task.Start(System.Threading.Tasks.TaskScheduler.Current);
@@ -652,7 +624,7 @@ namespace TMP.Work.Emcos.View
         {
             if (vm.HasData == false)
             {
-                MessageBox.Show("Отсутствуют данные.", Title, MessageBoxButton.OK, MessageBoxImage.Warning);
+                App.ShowWarning("Отсутствуют данные.");
                 return;
             }
             this.TaskbarItemInfo.ProgressState = System.Windows.Shell.TaskbarItemProgressState.Indeterminate;
@@ -668,33 +640,25 @@ namespace TMP.Work.Emcos.View
                     EndDate = vm.Session.Period.EndDate,
                     Substations = vm.Substations
                 });
-                Application.Current.Dispatcher.Invoke(new Action(() =>
+                App.UIAction(() =>
                 {
                     if (be.Export(fileName) == false)
                         return;
-                }));
+                });
                 System.Diagnostics.Process.Start(fileName);
             });
 
             task.ContinueWith((t) =>
             {
                 State = State.Idle;
-                Dispatcher.BeginInvoke((Action)(() => this.TaskbarItemInfo.ProgressState = System.Windows.Shell.TaskbarItemProgressState.None),
-                    System.Windows.Threading.DispatcherPriority.Normal);
+                App.UIAction(() => this.TaskbarItemInfo.ProgressState = System.Windows.Shell.TaskbarItemProgressState.None);
             }, System.Threading.Tasks.TaskContinuationOptions.None);
 
             task.ContinueWith((s) =>
             {
-                var sb = new System.Text.StringBuilder();
-                Exception e = s.Exception.Flatten();
-                while (e != null)
-                    if (e.InnerException != null)
-                    {
-                        sb.AppendLine(e.InnerException.Message);
-                        e = e.InnerException;
-                    }
-                App.Log.Log("Экспорт для программы 'Balans' - ошибка: " + sb.ToString(), Category.Exception, Priority.High);
-                Dispatcher.Invoke(new Action(delegate () { MessageBox.Show("Произошла ошибка при формировании отчёта.\nОбратитесь к разработчику.", this.Title, MessageBoxButton.OK, MessageBoxImage.Exclamation); }));
+                App.ToLogError("Экспорт для программы 'Balans' - ошибка");
+                App.ToLogException(s.Exception);
+                App.UIAction(()=> App.ShowError("Произошла ошибка при формировании отчёта.\nОбратитесь к разработчику."));
             }, System.Threading.Tasks.TaskContinuationOptions.OnlyOnFaulted);
 
             task.Start(System.Threading.Tasks.TaskScheduler.Current);

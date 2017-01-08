@@ -599,7 +599,7 @@ namespace TMP.Work.Emcos
         /// <param name="ct">токен отмены</param>
         /// <returns></returns>
         public Task<IEnumerable<Model.ArchData>> GetArchiveData(Model.ML_Param param, Model.ArchAP point,
-            DateTime startDate, DateTime endDate, CancellationToken ct)
+            DateTime startDate, DateTime endDate)
         {
             var md = param.MD.Id;
             var aggs = param.AGGS.Id;

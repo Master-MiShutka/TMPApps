@@ -97,13 +97,13 @@ namespace TMP.Work.AmperM.TestApp.EzSbyt
 
         public ServiceResult FuncRequest(string funcName, string parameters, string body)
         {
-            ServiceResult result = new ServiceResult();
+            /*ServiceResult result = new ServiceResult();
             if (parameters.Contains("json"))
               result.SetData(System.IO.File.ReadAllText(@"..\..\сморгонь.json", Encoding.UTF8), 0);
             else
               result.SetData(System.IO.File.ReadAllText(@"..\..\остр.valuetable", Encoding.UTF8), 0);
             return result;
-
+            */
 
             if (Cts == null)
                 Cts = new CancellationTokenSource();

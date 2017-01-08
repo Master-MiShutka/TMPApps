@@ -21,8 +21,8 @@ namespace TMP.Work.Emcos.Controls
     public partial class ArchView : UserControl, IStateObject
     {
         private string _wid = string.Empty;
-        private string _timeBegin = string.Empty;
-        private string _timeEnd = string.Empty;
+        private DateTime _timeBegin;
+        private DateTime _timeEnd;
 
         private Model.ML_Param _ml;
         private Model.ArchAP _ap;
@@ -30,15 +30,8 @@ namespace TMP.Work.Emcos.Controls
         public ArchView()
         {
             InitializeComponent();
-
-            EmcosSiteWrapper.Instance.ArchiveData.UpdateCallback = (progress, text) =>
-            {
-                Progress = progress;
-                if (String.IsNullOrWhiteSpace(text) == false)
-                    Log += text;
-            };
         }
-        public void Init(string wID, string timeBegin, string timeEnd)
+        public void Init(string wID, DateTime timeBegin, DateTime timeEnd)
         {
             if (String.IsNullOrWhiteSpace(wID))
                 throw new ArgumentNullException("wID");
@@ -158,13 +151,7 @@ namespace TMP.Work.Emcos.Controls
                 id);
             sendData = System.Web.HttpUtility.UrlPathEncode(sendData).Replace("_", "%5F").Replace("+", "%2B").ToUpper();
 
-            var task = System.Threading.Tasks.Task.Factory.StartNew<String>(() =>
-            {
-                return EmcosSiteWrapper.Instance.ArchiveData.Get(sendData);
-            },
-                System.Threading.CancellationToken.None,
-                System.Threading.Tasks.TaskCreationOptions.LongRunning,
-                System.Threading.Tasks.TaskScheduler.Default);
+            var task = EmcosSiteWrapper.Instance.GetArchiveData(_ml, _ap, _timeBegin, _timeEnd);
             task.ContinueWith((s) =>
                 {
                     MessageBox.Show("Произошла!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Exclamation);
@@ -177,10 +164,7 @@ namespace TMP.Work.Emcos.Controls
 
             task.ContinueWith((t) =>
             {
-                var data = t.Result;
-                if (String.IsNullOrWhiteSpace(data))
-                    return;
-                var list = Utils.ArchiveData(data);
+                var list = t.Result;
 
                 if (list == null)
                     MessageBox.Show("Нет данных!", "Просмотр архивов", MessageBoxButton.OK, MessageBoxImage.Exclamation);

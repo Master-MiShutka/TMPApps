@@ -23,21 +23,25 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
 
         internal static MessageBoxResult ShowError(string message)
         {
+            System.Media.SystemSounds.Exclamation.Play();
             return MessageBox.Show(message, Title, MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
         internal static MessageBoxResult ShowWarning(string message)
         {
+            System.Media.SystemSounds.Hand.Play();
             return MessageBox.Show(message, Title, MessageBoxButton.OK, MessageBoxImage.Warning);
         }
 
         internal static MessageBoxResult ShowInfo(string message)
         {
+            System.Media.SystemSounds.Asterisk.Play();
             return MessageBox.Show(message, Title, MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
         internal static MessageBoxResult ShowQuestion(string message)
         {
+            System.Media.SystemSounds.Question.Play();
             return MessageBox.Show(message, Title, MessageBoxButton.OK, MessageBoxImage.Question);
         }
         internal static string GetExceptionDetails(Exception exp)

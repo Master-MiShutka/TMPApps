@@ -1,24 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Threading;
 using System.Windows;
-using System.Windows.Documents;
-using System.Windows.Navigation;
-using System.Windows.Threading;
-using System.Threading.Tasks;
-using System.Globalization;
 using System.Reflection;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
 
 namespace TMP.Work.Emcos
 {
-    using ServiceLocator;
-    using MsgBox;
-    using TMP.Common.Logger;
     /// <summary>
     /// Interaction logic for App.xaml
     /// </summary>
@@ -34,15 +19,14 @@ namespace TMP.Work.Emcos
                 System.Net.ServicePointManager.DefaultConnectionLimit = 100;
                 System.Net.ServicePointManager.Expect100Continue = false;
 
-                ServiceContainer.Instance.AddService<IMessageBoxService>(new MessageBoxService());
-                var main = new View.BalansView();
-                App.Log.Log("Отображение главного окна.", Category.Info, Priority.None);
+                View.BalansView mainWindow = new View.BalansView();
+                App.ToLogInfo("Отображение главного окна.");
                 CorrectMainWindowSizeAndPos();
-                main.Show();
+                mainWindow.Show();
             }
             catch (Exception ex)
             {
-                LogException(ex);
+                ToLogException(ex);
             }
         }
         protected override void OnExit(ExitEventArgs e)
@@ -86,10 +70,6 @@ namespace TMP.Work.Emcos
             }
 
         }
-        public static string Title { get; private set; }
-        public static string WindowTitle
-        {
-            get { return (Current.MainWindow == null) ? "APP" : Current.MainWindow.Title; }
-        }
+
     }
 }

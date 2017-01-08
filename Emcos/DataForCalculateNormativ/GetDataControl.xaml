@@ -8,13 +8,14 @@
              d:DesignHeight="300" d:DesignWidth="800"
              Cursor="Wait"
              TextOptions.TextFormattingMode="Ideal"
+             UseLayoutRounding="True"
              Loaded="UserControl_Loaded">
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     </UserControl.Resources>
     <Grid>
         <local:Background />
-        <Border BorderBrush="{x:Static SystemColors.ActiveBorderBrush}" BorderThickness="1" Background="{x:Static SystemColors.WindowBrush}" Padding="10" 
+        <Border BorderBrush="{x:Static SystemColors.ActiveBorderBrush}" BorderThickness="1" Background="{x:Static SystemColors.WindowBrush}" Padding="10" Margin="10"
                     HorizontalAlignment="Center" VerticalAlignment="Center" Cursor="AppStarting">
             <DockPanel>
                 <TextBlock DockPanel.Dock="Top" TextAlignment="Center" Text="Получение режимных данных.&#xA;Ожидайте завершения или отмените операцию."/>
@@ -35,17 +36,16 @@
                         Padding="5,2" />
                     </StackPanel>
                 </StackPanel>
-                <ListView Background="Transparent" BorderThickness="0.5" Margin="5 2" MinHeight="100" ItemsSource="{Binding List}"
-                          IsEnabled="{Binding IsCompleted}">
+                <ListView Background="Transparent" BorderThickness="0.5" Margin="5 2" MinHeight="100" ItemsSource="{Binding List}">
                     <ListView.Resources>
                         <DataTemplate x:Key="statusColumnTemplate">
-                            <Label x:Name="status" Padding="0"/>
+                            <TextBlock x:Name="status" Padding="0"/>
                             <DataTemplate.Resources>
                                 <Storyboard x:Key="statusStoryBoard">
                                     <ObjectAnimationUsingKeyFrames Duration="00:00:04"
                                                                    RepeatBehavior="Forever"
                                                                    Storyboard.TargetName="status"
-                                                                   Storyboard.TargetProperty="Content">
+                                                                   Storyboard.TargetProperty="Text">
                                         <DiscreteObjectKeyFrame KeyTime="00:00:00" Value="Ожидание" />
                                         <DiscreteObjectKeyFrame KeyTime="00:00:01" Value="Ожидание ." />
                                         <DiscreteObjectKeyFrame KeyTime="00:00:02" Value="Ожидание . ." />
@@ -54,8 +54,14 @@
                                 </Storyboard>
                             </DataTemplate.Resources>
                             <DataTemplate.Triggers>
+                                <DataTrigger Binding="{Binding Status}" Value="Processing">
+                                    <Setter TargetName="status" Property="Text" Value="Получение" />
+                                    <DataTrigger.EnterActions>
+                                        <RemoveStoryboard BeginStoryboardName="sb1" />
+                                    </DataTrigger.EnterActions>
+                                </DataTrigger>
                                 <DataTrigger Binding="{Binding Status}" Value="Processed">
-                                    <Setter TargetName="status" Property="Content" Value="Готово" />
+                                    <Setter TargetName="status" Property="Text" Value="Готово" />
                                 </DataTrigger>
                                 <DataTrigger Binding="{Binding Status}" Value="Wait">
                                     <DataTrigger.EnterActions>
@@ -72,35 +78,45 @@
                     </ListView.Resources>
                     <ListView.View>
                         <GridView ColumnHeaderTemplate="{StaticResource HeaderTemplate}">
-                            <GridViewColumn Header="Наименование" Width="200">
+                            <GridViewColumn Header="Наименование" Width="300">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal">
                                             <Image Source="/DataForCalculateNormativ;component/Resources/substation.png" Width="20" Height="20" Margin="0 0 2 0"/>
-                                            <TextBlock Padding="0" Text="{Binding Name}" />
+                                            <TextBlock Padding="0" Text="{Binding ResultName}" VerticalAlignment="Center"/>
                                         </StackPanel>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
-                            <GridViewColumn Width="80"
+                            <GridViewColumn Width="150"
                                             CellTemplate="{StaticResource statusColumnTemplate}"
                                             Header="Состояние" />
-                            <GridViewColumn Header="Тип&#xA;результата" Width="100" DisplayMemberBinding="{Binding ResultType}" />
-                            <GridViewColumn Width="100">
+                            <GridViewColumn Header="Тип&#xA;результата" >
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Button Padding="2 0" Content="Сохранить" Command="{Binding SaveCommand}" CommandParameter="{Binding}" HorizontalAlignment="Center"
-                                                Visibility="{Binding Processed, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                        <TextBlock Text="{Binding ResultType}" Padding="5 0" 
+                                                   HorizontalAlignment="Stretch" TextAlignment="Center" VerticalAlignment="Center"/>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
-
+                            <GridViewColumn Width="100">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button Padding="2 -3" Content="Сохранить"
+                                                IsEnabled="{Binding Processed}"
+                                                Command="{Binding SaveCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:GetDataControl}}}" CommandParameter="{Binding}" HorizontalAlignment="Center"
+                                                Visibility="{Binding Processed, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
                         </GridView>
                     </ListView.View>
+                    <!-- local:ListPointWithResult ResultName="Test 1" ResultType="txt" Status="Wait" />
+                    <local:ListPointWithResult ResultName="Test 2" ResultType="txt" Status="Processed" / -->
                 </ListView>
             </DockPanel>
             <Border.Effect>
-                <DropShadowEffect BlurRadius="10" Color="White" Direction="0" RenderingBias="Performance" ShadowDepth="0"/>
+                <DropShadowEffect BlurRadius="20" Color="White" Direction="0" RenderingBias="Performance" ShadowDepth="0" Opacity="0.6"/>
             </Border.Effect>
         </Border>
     </Grid>

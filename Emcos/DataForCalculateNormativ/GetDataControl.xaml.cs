@@ -1,5 +1,4 @@
 ﻿using Microsoft.WindowsAPICodePack.Dialogs;
-using Microsoft.WindowsAPICodePack.Shell;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -34,135 +33,6 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
         private Model.EmcosReport selectedReport;
         #endregion Fields
 
-        #region Public Classes
-
-        public class ListPointWithResult : ListPoint, INotifyPropertyChanged
-        {
-            private string _resultName;
-            private string _resultType;
-            private object _resultValue;
-            private string _status;
-            public ListPointWithResult(ListPoint source)
-            {
-                this.ParentId = source.ParentId;
-                this.ParentTypeCode = source.ParentTypeCode;
-                this.ParentName = source.ParentName;
-                this.Id = source.Id;
-                this.Name = source.Name;
-                this.IsGroup = source.IsGroup;
-                this.TypeCode = source.TypeCode;
-                this.EсpName = source.EсpName;
-                this.Type = source.Type;
-                this.Checked = source.Checked;
-
-                this.Status = "Wait";
-            }
-
-            public bool Processed
-            {
-                get { return Status == "Processed"; }
-            }
-
-            public string ResultName
-            {
-                get { return _resultName; }
-                set { SetProperty(ref _resultName, value); }
-            }
-
-            public string ResultType
-            {
-                get { return _resultType; }
-                set { SetProperty(ref _resultType, value); }
-            }
-
-            public object ResultValue
-            {
-                get { return _resultValue; }
-                set { SetProperty(ref _resultValue, value); }
-            }
-
-            /// <summary>
-            /// Processed | Wait
-            /// </summary>
-            public string Status
-            {
-                get { return _status; }
-                set
-                {
-                    SetProperty(ref _status, value);
-                    OnPropertyChanged("Processed");
-                }
-            }
-            #region INotifyPropertyChanged Members
-
-            #region Debugging Aides
-
-            protected virtual bool ThrowOnInvalidPropertyName { get; private set; }
-
-            [Conditional("DEBUG")]
-            [DebuggerStepThrough]
-            public void VerifyPropertyName(string propertyName)
-            {
-                // Verify that the property name matches a real,
-                // public, instance property on this object.
-                if (TypeDescriptor.GetProperties(this)[propertyName] == null)
-                {
-                    string msg = "Invalid property name: " + propertyName;
-
-                    if (this.ThrowOnInvalidPropertyName)
-                        throw new Exception(msg);
-                    else
-                        Debug.Fail(msg);
-                }
-            }
-            #endregion Debugging Aides
-
-            public event PropertyChangedEventHandler PropertyChanged;
-
-            public bool SetProperty<T>(ref T storage, T value, [CallerMemberName] string propertyName = null)
-            {
-                if (Equals(storage, value))
-                {
-                    return false;
-                }
-
-                storage = value;
-                this.OnPropertyChanged(propertyName);
-                return true;
-            }
-
-            protected virtual void OnPropertyChanged(string propertyName)
-            {
-                this.VerifyPropertyName(propertyName);
-
-                PropertyChangedEventHandler handler = this.PropertyChanged;
-                if (handler != null)
-                {
-                    var e = new PropertyChangedEventArgs(propertyName);
-                    handler(this, e);
-                }
-            }
-
-            #endregion INotifyPropertyChanged Members
-        }
-
-        public class RPQ
-        {
-            public string COLUMN_NAME { get { return "GR_ID"; } }
-            public string DATA_TYPE { get; set; }
-            public string FIELD_DESC { get; set; }
-            public string RPQ_ID { get; set; }
-            public string RPQ_NAME { get; set; }
-            public string RPQF_ALLOW_EMPTY_VALUES { get; set; }
-            public string RPQF_ID { get; set; }
-            public string RPQF_VALUE { get; set; }
-            public string RPQO_CODE { get; set; }
-            public string RPQO_ID { get; set; }
-            public string TABLE_NAME { get; set; }
-        }
-
-        #endregion Public Classes
-
         #region Constructors
 
         public GetDataControl()
@@ -178,115 +48,135 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
                         {
                             cts.Cancel();
                             App.Current.MainWindow.TaskbarItemInfo.ProgressState = System.Windows.Shell.TaskbarItemProgressState.Error;
+                            OnPropertyChanged("CanCancel");
                         }
                     });
                 },
-                o =>
-                {
-                    return cts != null && (cts.IsCancellationRequested == false);
-                });
+                o => cts != null && (cts.IsCancellationRequested == false));
             CloseControlCommand = new DelegateCommand(o =>
-            {
-                if (_onClosed != null)
-                    _onClosed();
-            });
+                {
+                    if (_onClosed != null)
+                        _onClosed();
+                });
             SaveAllCommand = new DelegateCommand(o =>
-            {
-                CommonOpenFileDialog cfd = new CommonOpenFileDialog();
-                cfd.Title = "Выберите папку, куда будут сохранены файлы";
-                cfd.IsFolderPicker = true;
-                cfd.AddToMostRecentlyUsedList = false;
-                cfd.EnsurePathExists = true;
-                cfd.Multiselect = false;
-                cfd.ShowPlacesList = true;
-                cfd.AllowNonFileSystemItems = true;
-                if (cfd.ShowDialog() == CommonFileDialogResult.Ok)
                 {
-                    var folder = cfd.FileName;
-                    foreach (var item in _list)
-                        if (item.ResultType != "xls")
+                    CommonOpenFileDialog cfd = new CommonOpenFileDialog();
+                    cfd.Title = "Выберите папку, куда будут сохранены файлы";
+                    cfd.IsFolderPicker = true;
+                    cfd.AddToMostRecentlyUsedList = false;
+                    cfd.EnsurePathExists = true;
+                    cfd.Multiselect = false;
+                    cfd.ShowPlacesList = true;
+                    cfd.AllowNonFileSystemItems = true;
+                    if (cfd.ShowDialog() == CommonFileDialogResult.Ok)
+                    {
+                        try
                         {
-                            System.IO.File.WriteAllText(
-                                System.IO.Path.Combine(folder, item.ResultName, ".csv"), (string)item.ResultValue, Encoding.UTF8);
+                            var folder = cfd.FileName;
+                            foreach (var item in _list)
+                                if (item.ResultType == "csv")
+                                {
+                                    System.IO.File.WriteAllText(
+                                        System.IO.Path.Combine(folder, item.ResultName + ".csv"), (string)item.ResultValue, Encoding.UTF8);
+                                }
+                                else 
+                                if (item.ResultType == "xls")
+                                {
+                                    byte[] bytes = (byte[])item.ResultValue;
+                                    if (bytes != null)
+                                        System.IO.File.WriteAllBytes(
+                                            System.IO.Path.Combine(folder, item.ResultName + ".xls"), bytes);
+                                }
+                                else
+                                {
+                                    System.IO.File.WriteAllText(
+                                        System.IO.Path.Combine(folder, item.ResultName + ".txt"), (string)item.ResultValue, Encoding.UTF8);
+                                }
                         }
-                        else
+                        catch (Exception ex)
                         {
-                            byte[] bytes = (byte[])item.ResultValue;
-                            if (bytes != null)
-                                System.IO.File.WriteAllBytes(
-                                    System.IO.Path.Combine(folder, item.ResultName, ".xls"), bytes);
+                            App.ShowError("При сохранении произошла ошибка:\n" + App.GetExceptionDetails(ex));
                         }
-                }
-            });
+                    }
+                },
+                o => _list != null && _list.All(i => i.ResultValue != null));
             SaveAllInSigleFileCommand = new DelegateCommand(o =>
-        {
-            bool isStringContent = _list.All(i => i.ResultType != "xls");
-            if (isStringContent)
-            {
-                StringBuilder sb = new StringBuilder();
-
-                List<string[]> rows = _list.Select(i => ((string)i.ResultValue).Split(';')).ToList();
-                var columnsCountList = rows.Select(i => i.Length).ToList();
-                if (columnsCountList.All(i => i == columnsCountList[0]) == false)
-                    System.Diagnostics.Debugger.Break();
-                int columnsCount = columnsCountList[0];
-
-                string header = string.Empty;
-                foreach (var item in Enumerable.Range(1, columnsCount))
-                    header += ";";
-                sb.Append(header);
-
-                foreach (var item in _list)
                 {
-                    sb.AppendLine((string)item.ResultValue);
-                }
-
-                Microsoft.Win32.SaveFileDialog sfd = new Microsoft.Win32.SaveFileDialog();
-
-                sfd.Filter = "CSV файл - значения, разделённые точкой с запятой  (*.csv)|*.csv";
-                sfd.DefaultExt = ".csv";
-                sfd.AddExtension = true;
-                sfd.FileName = DateTime.Now.AddMonths(-1).ToString("Режимные данные за MMMM yyyy");
-                Nullable<bool> result = sfd.ShowDialog(App.Current.MainWindow);
-                if (result == true)
-                {
-                    System.IO.File.WriteAllText(sfd.FileName, sb.ToString(), Encoding.UTF8);
-                }
-            }
-        },
-        o => _list.All(i => i.ResultType != "xls"));
-            SaveCommand = new DelegateCommand(o =>
-            {
-                ListPointWithResult point = o as ListPointWithResult;
-                if (point != null)
-                {
-                    Microsoft.Win32.SaveFileDialog sfd = new Microsoft.Win32.SaveFileDialog();
-                    sfd.FileName = String.Format("Режимные данные по '{0}' за {1:MMMM yyyy}", point.ResultName, DateTime.Now.AddMonths(-1));
-                    sfd.AddExtension = true;
-                    if (point.ResultType == "xls")
+                    bool isStringContent = _list.All(i => i.ResultType != "xls");
+                    if (isStringContent)
                     {
-                        sfd.Filter = "Электронная таблица  (*.xls)|*.xls";
-                        sfd.DefaultExt = ".xls";
-                    }
-                    else
-                    {
-                        sfd.Filter = "CSV файл - значения, разделённые точкой с запятой  (*.csv)|*.csv";
-                        sfd.DefaultExt = ".csv";
-                    }
-                    Nullable<bool> result = sfd.ShowDialog(App.Current.MainWindow);
-                    if (result == true)
-                    {
-                        if (point.ResultType == "xls")
+                        try
                         {
-                            byte[] bytes = (byte[])point.ResultValue;
-                            if (bytes != null)
-                                System.IO.File.WriteAllBytes(sfd.FileName, bytes);
+                            StringBuilder sb = new StringBuilder();
+                            foreach (var item in _list)
+                            {
+                                sb.AppendLine((string)item.ResultValue);
+                            }
+
+                            Microsoft.Win32.SaveFileDialog sfd = new Microsoft.Win32.SaveFileDialog();
+
+                            sfd.Filter = "CSV файл - значения, разделённые точкой с запятой  (*.csv)|*.csv";
+                            sfd.DefaultExt = ".csv";
+                            sfd.AddExtension = true;
+                            sfd.FileName = DateTime.Now.AddMonths(-1).ToString("Режимные данные за MM-yyyy");
+                            Nullable<bool> result = sfd.ShowDialog(App.Current.MainWindow);
+                            if (result == true)
+                            {
+                                System.IO.File.WriteAllText(sfd.FileName, sb.ToString(), Encoding.UTF8);
+                            }
                         }
-                        else
-                            System.IO.File.WriteAllText(sfd.FileName, (string)point.ResultValue, Encoding.UTF8);
+                        catch (Exception ex)
+                        {
+                            App.ShowError("При сохранении произошла ошибка:\n" + App.GetExceptionDetails(ex));
+                        }
                     }
-                }
-            });
+                },
+                o => _list != null && _list.All(i => i.ResultValue != null) && _list.All(i => i.ResultType != "xls"));
+            SaveCommand = new DelegateCommand(o =>
+                {
+                    try
+                    {
+                        ListPointWithResult point = o as ListPointWithResult;
+                        if (point != null)
+                        {
+                            Microsoft.Win32.SaveFileDialog sfd = new Microsoft.Win32.SaveFileDialog();
+                            sfd.FileName = String.Format("Режимные данные по '{0}' за {1:MM-yyyy}", point.ResultName, DateTime.Now.AddMonths(-1));
+                            sfd.AddExtension = true;
+                            if (point.ResultType == "xls")
+                            {
+                                sfd.Filter = "Электронная таблица  (*.xls)|*.xls";
+                                sfd.DefaultExt = ".xls";
+                            }
+                            else 
+                            if (point.ResultType == "csv")
+                            {
+                                sfd.Filter = "CSV файл - значения, разделённые точкой с запятой  (*.csv)|*.csv";
+                                sfd.DefaultExt = ".csv";
+                            }
+                            else
+                            {
+                                sfd.Filter = "Текстовый файл (*.txt)|*.txt";
+                                sfd.DefaultExt = ".txt";
+                            }
+                            Nullable<bool> result = sfd.ShowDialog(App.Current.MainWindow);
+                            if (result == true)
+                            {
+                                if (point.ResultType == "xls")
+                                {
+                                    byte[] bytes = (byte[])point.ResultValue;
+                                    if (bytes != null)
+                                        System.IO.File.WriteAllBytes(sfd.FileName, bytes);
+                                }
+                                else
+                                    System.IO.File.WriteAllText(sfd.FileName, (string)point.ResultValue, Encoding.UTF8);
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        App.ShowError("При сохранении произошла ошибка:\n" + App.GetExceptionDetails(ex));
+                    }
+                });
             DataContext = this;
         }
 
@@ -306,33 +196,48 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
 
         private void Go()
         {
-            int itemsCount = _list.Count;
-            Action<int> report = pos =>
-                {
-                    Progress = 100d * pos / itemsCount;
-                    App.UIAction(() => App.Current.MainWindow.TaskbarItemInfo.ProgressValue = ((double)pos) / itemsCount);
-                };
-
-            IsGettingData = true;
-            IsCompleted = false;
-
-            int index = 0;
-            foreach (var item in _list)
+            try
             {
-                if (cts.IsCancellationRequested)
+                int itemsCount = _list.Count;
+                Action<int> report = pos =>
+                    {
+                        Progress = 100d * pos / itemsCount;
+                        App.UIAction(() => App.Current.MainWindow.TaskbarItemInfo.ProgressValue = ((double)pos) / itemsCount);
+                    };
+
+                IsGettingData = true;
+                IsCompleted = false;
+
+                int index = 0;
+                foreach (var item in _list)
+                    item.Status = "Wait";
+                foreach (var item in _list)
                 {
-                    return;
+                    if (cts.IsCancellationRequested)
+                    {
+                        return;
+                    }
+                    item.Status = "Processing";
+                    PrepareReport(item);
+                    item.Status = "Processed";
+
+                    report(++index);
                 }
-
-                PrepareReport(item);
-                item.Status = "Processed";
-
-                report(index++);
+                IsCompleted = true;
+                IsGettingData = false;
+                App.UIAction(() => App.Current.MainWindow.TaskbarItemInfo.ProgressState = System.Windows.Shell.TaskbarItemProgressState.Normal);
+                System.Media.SystemSounds.Asterisk.Play();
             }
-            IsCompleted = true;
-            IsGettingData = false;
-            App.Current.MainWindow.TaskbarItemInfo.ProgressState = System.Windows.Shell.TaskbarItemProgressState.Normal;
-            System.Media.SystemSounds.Asterisk.Play();
+            catch (Exception ex)
+            {
+                App.UIAction(() =>
+                {
+                    App.Current.MainWindow.TaskbarItemInfo.ProgressState = System.Windows.Shell.TaskbarItemProgressState.Error;
+                    App.ShowError("Произошла ошибка:\n" + App.GetExceptionDetails(ex));
+                    IsCompleted = true;
+                    IsGettingData = false;
+                });
+            }
         }
 
         private void PrepareReport(ListPointWithResult point)
@@ -341,7 +246,8 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
             string param = String.Format("__invoker=undefined&RP_ID={0}&RP_NAME={1}&errorDispatch=false&dataBlock=PARAMETERS&action=GET",
                 selectedReport.RP_ID, selectedReport.RP_NAME);
             string url = @"{0}scripts/reports.asp";
-            string answer = ServiceHelper.ExecuteFunctionAsync(ServiceHelper.MakeRequestAsync, url, param, true).Result;
+            string answer = ServiceHelper.ExecuteFunctionAsync(ServiceHelper.MakeRequestAsync, url, param, true, (p) => ServiceHelper.DecodeAnswer(p)).Result;
+
             if (String.IsNullOrEmpty(answer) == false && answer.Contains("result=0"))
             {
                 var records = Utils.ParseRecords(answer);
@@ -411,7 +317,8 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
                 param = String.Format("__invoker=undefined&RP_ID={0}&RP_NAME={1}&errorDispatch=false&dataBlock=PREPARED_RP&action=GET",
                     selectedReport.RP_ID, selectedReport.RP_NAME);
                 url = @"{0}scripts/reports.asp";
-                answer = ServiceHelper.ExecuteFunctionAsync(ServiceHelper.MakeRequestAsync, url, param, true).Result;
+                answer = ServiceHelper.ExecuteFunctionAsync(ServiceHelper.MakeRequestAsync, url, param, true, (p) => ServiceHelper.DecodeAnswer(p)).Result;
+
                 if (String.IsNullOrEmpty(answer) == false && answer.Contains("result=0"))
                 {
                     StringBuilder sb = new StringBuilder();
@@ -434,7 +341,8 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
                         selectedReport.RP_ID);
 
                     url = @"{0}scripts/ReportGenerator.asp";
-                    answer = ServiceHelper.ExecuteFunctionAsync(ServiceHelper.MakeRequestAsync, url, sb.ToString(), true).Result;
+                    answer = ServiceHelper.MakeRequestAsync(url, sb.ToString()).Result;
+
                     if (ServiceHelper.StatusCode == System.Net.HttpStatusCode.OK)
                     {
                         // получение имени файла
@@ -450,18 +358,23 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
                         string file = metaKeywords.Substring(8).Replace("../", "").Replace("\\", "/");
 
                         var client = new WebClient();
-                        point.ResultValue = client.DownloadString(ServiceHelper.SiteAddress + file);
-                        string name = point.Name;
-                        if (point.ParentTypeCode == "SUBSTATION")
-                            name = point.ParentName + " - " + name;
-                        point.ResultName = name;
+
                         if (file.EndsWith(".txt"))
+                        {
+                            point.ResultValue = client.DownloadString(ServiceHelper.SiteAddress + file);
                             point.ResultType = "txt";
+                        }
                         else
                         if (file.EndsWith(".xls"))
+                        {
+                            point.ResultValue = client.DownloadData(ServiceHelper.SiteAddress + file);
                             point.ResultType = "xls";
+                        }
                         else
+                        {
+                            point.ResultValue = client.DownloadString(ServiceHelper.SiteAddress + file);
                             point.ResultType = "unknown";
+                        }
                     }
                 }
             }
@@ -575,6 +488,91 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
 
         #endregion INotifyPropertyChanged Members
     }
+
+    #region Public Classes
+
+    public class ListPointWithResult : ListPoint
+    {
+        private string _resultName;
+        private string _resultType;
+        private object _resultValue;
+        private string _status;
+
+        public ListPointWithResult() { }
+        public ListPointWithResult(ListPoint source)
+        {
+            this.ParentId = source.ParentId;
+            this.ParentTypeCode = source.ParentTypeCode;
+            this.ParentName = source.ParentName;
+            this.Id = source.Id;
+            this.Name = source.Name;
+            this.IsGroup = source.IsGroup;
+            this.TypeCode = source.TypeCode;
+            this.EсpName = source.EсpName;
+            this.Type = source.Type;
+            this.Checked = source.Checked;
+
+            string name = source.Name;
+            if (source.ParentTypeCode == "SUBSTATION")
+                if (String.IsNullOrEmpty(source.ParentName) == false)
+                    name = source.ParentName + " - " + name;
+            this.ResultName = name;
+        }
+
+        public bool Processed
+        {
+            get { return Status == "Processed" && ResultValue != null; }
+        }
+
+        public string ResultName
+        {
+            get { return _resultName; }
+            set { SetProperty(ref _resultName, value); }
+        }
+
+        public string ResultType
+        {
+            get { return _resultType; }
+            set { SetProperty(ref _resultType, value); }
+        }
+
+        public object ResultValue
+        {
+            get { return _resultValue; }
+            set { SetProperty(ref _resultValue, value); }
+        }
+
+        /// <summary>
+        /// Processed | Wait
+        /// </summary>
+        public string Status
+        {
+            get { return _status; }
+            set
+            {
+                SetProperty(ref _status, value);
+                OnPropertyChanged("Processed");
+            }
+        }
+    }
+
+    public class RPQ
+    {
+        public string COLUMN_NAME { get { return "GR_ID"; } }
+        public string DATA_TYPE { get; set; }
+        public string FIELD_DESC { get; set; }
+        public string RPQ_ID { get; set; }
+        public string RPQ_NAME { get; set; }
+        public string RPQF_ALLOW_EMPTY_VALUES { get; set; }
+        public string RPQF_ID { get; set; }
+        public string RPQF_VALUE { get; set; }
+        public string RPQO_CODE { get; set; }
+        public string RPQO_ID { get; set; }
+        public string TABLE_NAME { get; set; }
+    }
+
+    #endregion Public Classes
+
 }
 
 /*

@@ -3,7 +3,7 @@
        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-       xmlns:model="clr-namespace:TMP.Work.Emcos.Model"
+       xmlns:model="clr-namespace:TMP.Work.Emcos.Model;assembly=EmcosModel" 
        d:DesignHeight="32"
        d:DesignWidth="32"
        mc:Ignorable="d">
@@ -11,7 +11,7 @@
         <Style TargetType="Image">
             <Setter Property="Source" Value="{StaticResource Group}" />
             <Style.Triggers>
-                <DataTrigger Binding="{Binding Path=Type}" Value="{x:Static model:ElementTypes.Departament}">
+                <DataTrigger Binding="{Binding Path=Type}" Value="{x:Static model:ElementTypes.DEPARTAMENT}">
                     <Setter Property="Source" Value="{StaticResource Departament}" />
                 </DataTrigger>
                 <DataTrigger Binding="{Binding Path=Type}" Value="{x:Static model:ElementTypes.SUBSTATION}">

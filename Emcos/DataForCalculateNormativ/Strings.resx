@@ -151,8 +151,10 @@
 {0}</value>
   </data>
   <data name="Get" xml:space="preserve">
-    <value>Получить
-данные</value>
+    <value>Получить данные</value>
+  </data>
+  <data name="GetAuxiliaries" xml:space="preserve">
+    <value>Собственные нужды подстанций</value>
   </data>
   <data name="GettingDataStatus" xml:space="preserve">
     <value>Получение данных с сервиса Emcos Corporate.</value>
@@ -161,12 +163,10 @@
     <value>Нет ответа от сервиса, проверьте имя сервиса.</value>
   </data>
   <data name="InterruptGet" xml:space="preserve">
-    <value>Прервать
-получение данных</value>
+    <value>Прервать получение данных</value>
   </data>
   <data name="InterruptUpdate" xml:space="preserve">
-    <value>Прервать
-обновление списка</value>
+    <value>Прервать обновление списка</value>
   </data>
   <data name="No" xml:space="preserve">
     <value>не</value>
@@ -191,8 +191,7 @@
     <value>Не задан отчёт в настройках программы.</value>
   </data>
   <data name="Save" xml:space="preserve">
-    <value>Сохранить
-результат</value>
+    <value>Сохранить результат</value>
   </data>
   <data name="SavingInProgress" xml:space="preserve">
     <value>Сохранение результатов</value>
@@ -211,8 +210,7 @@
     <value>Завершение работы</value>
   </data>
   <data name="Update" xml:space="preserve">
-    <value>Обновить
-список</value>
+    <value>Обновить список</value>
   </data>
   <data name="UpdatingInProgress" xml:space="preserve">
     <value>Обновление списка точек</value>

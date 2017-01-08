@@ -77,8 +77,8 @@ namespace TMP.Work.Emcos.Export
                             foreach (IBalansItem item in bss.Children)
                                 if (item is Fider)
                                 {
-                                    var name = item.Title;
-                                    int commaPos = item.Title.IndexOf(',');
+                                    var name = item.Name;
+                                    int commaPos = item.Name.IndexOf(',');
                                     if (commaPos > 0)
                                         name = "яч." + name.Substring(commaPos + 1, name.Length - commaPos - 1);
                                     CreateCell(rowIndex, 1, name);

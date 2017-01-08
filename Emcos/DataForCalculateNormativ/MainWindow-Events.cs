@@ -27,7 +27,6 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
             {
                 _pointsList = new ObservableCollection<ListPoint>(list);
                 tree.ItemsSource = _pointsList;
-                btnGet.IsEnabled = true;
             }
             else
             {

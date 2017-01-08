@@ -21,7 +21,7 @@ namespace TMP.Work.Emcos.Model.Balans
 
         private double? _monthEPlus, _monthEMinus;
 
-        private decimal _id;
+        private int _id;
         private DataStatus _status = DataStatus.Wait;
         private string _name;
         public BalansItem()
@@ -211,7 +211,7 @@ namespace TMP.Work.Emcos.Model.Balans
         public double? FideraOut { get { return null; } }
 
         [DataMember(IsRequired = true)]
-        public decimal Id
+        public int Id
         {
             get
             {

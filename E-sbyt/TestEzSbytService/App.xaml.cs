@@ -1,27 +1,9 @@
 using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Threading;
-using System.Windows;
-using System.Windows.Documents;
-using System.Windows.Navigation;
-using System.Windows.Threading;
-using System.Windows.Markup;
-using System.Threading.Tasks;
-using System.Globalization;
 using System.Reflection;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-
+using System.Windows;
 
 namespace TMP.Work.AmperM.TestApp
 {
-    using TMP.Common.Logger;
-    //using ServiceLocator;
-    //using MsgBox;
-
     /// <summary>
     /// Логика взаимодействия для App.xaml
     /// </summary>

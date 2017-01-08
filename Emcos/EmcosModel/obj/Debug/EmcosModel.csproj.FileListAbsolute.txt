@@ -4,3 +4,4 @@ Y:\Developer\CURRENT\TMPApps\out\Debug\Emcos\Libs\EmcosModel.dll
 Y:\Developer\CURRENT\TMPApps\out\Debug\Emcos\Libs\EmcosModel.pdb
 Y:\Developer\CURRENT\TMPApps\Emcos\EmcosModel\obj\Debug\EmcosModel.dll
 Y:\Developer\CURRENT\TMPApps\Emcos\EmcosModel\obj\Debug\EmcosModel.pdb
+Y:\Developer\CURRENT\TMPApps\Emcos\EmcosModel\obj\Debug\EmcosModel.csprojResolveAssemblyReference.cache

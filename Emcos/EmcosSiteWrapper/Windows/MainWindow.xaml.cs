@@ -100,7 +100,7 @@ namespace TMP.Work.Emcos
             {
                 State = State.Busy;
 
-                System.Threading.Tasks.Task<string[]> response = emcosSite.GetArchiveWIds(
+                System.Threading.Tasks.Task<string[]> response = EmcosSiteWrapper.Instance.GetArchiveWIds(
                     aptree.GetListOfMeasurementsAsString,
                     aptree.GetListOfGroupsAndPointsAsString,
                     _start,
@@ -140,7 +140,7 @@ namespace TMP.Work.Emcos
         {
             State = State.Busy;
 
-            emcosSite.Login(new System.Threading.CancellationToken()).ContinueWith((s) => 
+            EmcosSiteWrapper.Instance.Login(new System.Threading.CancellationToken()).ContinueWith((s) => 
                 State = State.Idle,
                 System.Threading.CancellationToken.None,
                 System.Threading.Tasks.TaskContinuationOptions.None,
@@ -152,7 +152,7 @@ namespace TMP.Work.Emcos
             State = State.Busy;
             try
             {
-                emcosSite.CheckRights((answer) =>
+                EmcosSiteWrapper.Instance.CheckRights((answer) =>
                 {
                     lblRights.Content = System.Web.HttpUtility.UrlDecode(answer);
                     State = State.Idle;

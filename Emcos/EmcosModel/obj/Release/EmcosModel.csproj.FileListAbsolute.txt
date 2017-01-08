@@ -1,0 +1,4 @@
+Y:\Developer\CURRENT\TMPApps\out\Release\Emcos\Libs\EmcosModel.dll
+Y:\Developer\CURRENT\TMPApps\out\Release\Emcos\Libs\EmcosModel.pdb
+Y:\Developer\CURRENT\TMPApps\Emcos\EmcosModel\obj\Release\EmcosModel.dll
+Y:\Developer\CURRENT\TMPApps\Emcos\EmcosModel\obj\Release\EmcosModel.pdb

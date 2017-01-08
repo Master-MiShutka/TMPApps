@@ -12,8 +12,8 @@
         <local:Background x:Name="background"/>
         <Border BorderBrush="{x:Static SystemColors.ActiveBorderBrush}" BorderThickness="1" Background="{x:Static SystemColors.WindowBrush}" Padding="10" HorizontalAlignment="Center" VerticalAlignment="Center" Cursor="AppStarting">
             <StackPanel VerticalAlignment="Center">
-                <Label Content="Пожалуйста, подождите ..." HorizontalAlignment="Center" VerticalAlignment="Center" />
-                <Label HorizontalAlignment="Center" Name="progressLabel"/>
+                <TextBlock Text="Пожалуйста, подождите ..." HorizontalAlignment="Center" VerticalAlignment="Center" />
+                <TextBlock HorizontalAlignment="Center" Name="progressText"/>
                 <ProgressBar Height="16" HorizontalAlignment="Center" Name="progressBar" VerticalAlignment="Top" Width="205" IsIndeterminate="True" />
             </StackPanel>
             <Border.Effect>

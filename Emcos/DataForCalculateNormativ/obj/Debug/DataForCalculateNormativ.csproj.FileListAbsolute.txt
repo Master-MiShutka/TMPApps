@@ -27,7 +27,3 @@ Y:\Developer\CURRENT\TMPApps\Emcos\DataForCalculateNormativ\obj\Debug\TMP.Work.E
 Y:\Developer\CURRENT\TMPApps\Emcos\DataForCalculateNormativ\obj\Debug\DataForCalculateNormativ.csproj.GenerateResource.Cache
 Y:\Developer\CURRENT\TMPApps\Emcos\DataForCalculateNormativ\obj\Debug\DataForCalculateNormativ.exe
 Y:\Developer\CURRENT\TMPApps\Emcos\DataForCalculateNormativ\obj\Debug\DataForCalculateNormativ.pdb
-Y:\Developer\CURRENT\TMPApps\Emcos\DataForCalculateNormativ\obj\Debug\WindowsAPICodePack\Shell\Controls\CommandLinkWPF.baml
-Y:\Developer\CURRENT\TMPApps\Emcos\DataForCalculateNormativ\obj\Debug\WindowsAPICodePack\Shell\Controls\CommandLinkWPF.g.cs
-Y:\Developer\CURRENT\TMPApps\Emcos\DataForCalculateNormativ\obj\Debug\TMP.Work.Emcos.DataForCalculateNormativ.WindowsAPICodePack.Core.Resources.LocalizedMessages.resources
-Y:\Developer\CURRENT\TMPApps\Emcos\DataForCalculateNormativ\obj\Debug\TMP.Work.Emcos.DataForCalculateNormativ.WindowsAPICodePack.Shell.Resources.LocalizedMessages.resources

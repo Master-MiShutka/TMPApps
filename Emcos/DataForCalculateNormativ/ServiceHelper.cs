@@ -14,7 +14,7 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
         private static string _userAgent = "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36";
         private static Cookie Cookie;
 
-        public static HttpStatusCode StatusCode { get; private set; }
+        public static HttpStatusCode StatusCode { get; set; }
 
         public static string ErrorMessage { get; private set; }
 
@@ -168,15 +168,10 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
             return true;
         }
 
-        private static string ReadStreamFromResponse(HttpWebResponse response)
+        public static string DecodeAnswer(string input)
         {
-            var responseStream = response.GetResponseStream();
-            using (System.IO.StreamReader streamReader = new System.IO.StreamReader(responseStream, new UTF8Encoding()))
-            {
-                var answer = streamReader.ReadToEnd();
-                return System.Web.HttpUtility.UrlDecode(answer);
-                //return Uri.UnescapeDataString(answer);
-            }
+            return System.Web.HttpUtility.UrlDecode(input);
+            //return Uri.UnescapeDataString(answer);
         }
 
         public static async Task<bool> Login(bool getRights = false)
@@ -195,21 +190,27 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
                 data = string.Format("user={0}&password={1}&action=login", Properties.Settings.Default.UserName, Properties.Settings.Default.Password);
                 answer = await MakeRequestAsync(url, data);
             }
-
             if (string.IsNullOrEmpty(answer))
             {
                 ErrorMessage = StatusCodeAsString;
                 return false;
             }
-            if (answer.Contains("result=0") && answer.Contains("user=" + Properties.Settings.Default.UserName))
+            ErrorMessage = answer;
+            if (answer.Contains("result=0"))
             {
-                ErrorMessage = string.Empty;
-                return true;
+                if (answer.Contains("user=" + Properties.Settings.Default.UserName))
+                {
+                    ErrorMessage = string.Empty;
+                    return true;
+                }
+                if (getRights == false)
+                    return true;
+                else
+                    return false;
             }
             if (answer.Contains("result=1") && answer.Contains("errType=2"))
             {
-                ErrorMessage = "not registred";
-                return true;
+                return false;
             }
             ErrorMessage = answer;
             return false;
@@ -286,9 +287,13 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
                             }
                         }
                     }
-
-                    var result = ReadStreamFromResponse(response);
-                    return result;
+                    string answer = String.Empty;
+                    var responseStream = response.GetResponseStream();
+                    using (System.IO.StreamReader streamReader = new System.IO.StreamReader(responseStream, new UTF8Encoding()))
+                    {
+                        answer = streamReader.ReadToEnd();
+                    }
+                    return answer;
                 });
             }
             catch (Exception ex)
@@ -304,7 +309,7 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
             string url = @"{0}scripts/point.asp";
             string data = String.Format("refresh=true&TYPE=GROUP&action=expand&ID={0}", parent.Id.ToString());
 
-            return await ServiceHelper.ExecuteFunctionAsync(ServiceHelper.MakeRequestAsync, url, data, true);
+            return await ExecuteFunctionAsync(MakeRequestAsync, url, data, true, (answer) => DecodeAnswer(answer));
         }
         public static IList<ListPoint> GetPointsList(string data, ListPoint parent)
         {
@@ -390,47 +395,61 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
         }
 
         private static int _attemptCount = 0;
-        public static async Task<string> ExecuteFunctionAsync(Func<string, string, bool, Task<string>> function, string param1, string param2, bool param3)
+        public static async Task<string> ExecuteFunctionAsync(Func<string, string, bool, Task<string>> function, string param1, string param2, bool param3, Func<string, string> postAction = null)
         {
+            string answer;
             if (Cookie == null)
             {
-                // проверка наличия доступа
-                bool hasRights = await Login(true);
-                string answer = ServiceHelper.ErrorMessage;
+                // нет куков - логин
+                bool hasRights = await ServiceHelper.Login();
+                answer = ServiceHelper.ErrorMessage;
                 // если доступ не получен и не авторизованы
-                if (hasRights == false)// && answer.Contains("result=1") && answer.Contains("errType=2"))
+                if (hasRights == false)
                 {
-                    hasRights = await ServiceHelper.Login(false);
+                    // ещё раз
+                    hasRights = await ServiceHelper.Login();
                     // авторизация не успешна
                     if (hasRights == false)
                         return string.Empty;
                 }
             }
 
-            string result = await function(param1, param2, param3);
-            // нет резульатата и нет описания ошибки - возврат пустого значения
-            if (String.IsNullOrEmpty(result) && String.IsNullOrEmpty(ServiceHelper.ErrorMessage) == false)
+            answer = await function(param1, param2, param3);
+            // нет резульатата - что-то не так с сервером - возврат пустого значения
+            if (String.IsNullOrEmpty(answer))
                 return string.Empty;
             // Пользователь незарегистрирован. Необходима повторная регистрация ?
             // &result=1&errDescription=Пользователь незарегистрирован. Необходима повторная регистрация.&errType=2
-            if (String.IsNullOrEmpty(result) == false && result.Contains("result=1") && result.Contains("errType=2") && _attemptCount < 4)
+            if (answer.Contains("result=1") && answer.Contains("errType=2") && _attemptCount < 4)
             {
                 _attemptCount++;
                 Login();
-                return await ExecuteFunctionAsync(function, param1, param2, param3);
+                answer = await ExecuteFunctionAsync(function, param1, param2, param3, postAction);
+                if (postAction != null)
+                    answer = postAction(answer);
+                return answer;
+            }
+            // есть результат, но неверный ответ
+            if (answer == "result=0&user=")
+            {
+                _attemptCount++;
+                Login();
+                answer = await ExecuteFunctionAsync(function, param1, param2, param3, postAction);
+                if (postAction != null)
+                    answer = postAction(answer);
+                return answer;
+            }
+            // итак, ответ есть, проверка результата
+            if (answer.Contains("result=0"))
+            {
+                ErrorMessage = string.Empty;
+                if (postAction != null)
+                    answer = postAction(answer);
+                return answer;
             }
             else
             {
-                if (result.Contains("result=0"))
-                {
-                    _attemptCount = 0;
-                    return result;
-                }
-                else
-                {
-                    _attemptCount = 0;
-                    return string.Empty;
-                }
+                return string.Empty;
             }
         }
 

@@ -15,14 +15,18 @@ using System.Windows.Navigation;
 using System.Windows.Threading;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Runtime.CompilerServices;
+using System.Diagnostics;
 
 namespace TMP.Work.Emcos.DataForCalculateNormativ
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : Window, INotifyPropertyChanged
     {
+        private bool _isReadyToGetData = false;
+
         private Task _backgroudTask;
         private CancellationTokenSource cts = new CancellationTokenSource();
 
@@ -34,26 +38,35 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
         /// Id 60 Ошмянские ЭС Code 143
         /// </summary>
         private readonly ListPoint DEFAULT_ROOT_EMCOS_GROUP = new ListPoint { Id = 60, TypeCode = "FES", Name = "Ошмянские ЭС" };
-        private ListPoint _rootEmcosGroup;
-
-        
+        private ListPoint _rootEmcosGroup;       
 
         public MainWindow()
         {
             InitializeComponent();
-            btnGet.IsEnabled = false;
-            btnSave.IsEnabled = false;
+            DataContext = this;
 
             App.UIDispatcher = Dispatcher.CurrentDispatcher;
 
             cts = new CancellationTokenSource();
+
+            CheckCommand = new DelegateCommand(
+                o =>
+                {
+                    ListPoint point = (ListPoint)tree.SelectedItem;
+                    if (point != null && point.Items != null)
+                    {
+                        foreach (var item in point.Items)
+                            if (item.TypeCode == "FES" || item.TypeCode == "RES" || item.TypeCode == "SUBSTATION" || item.TypeCode == "VOLTAGE")
+                                item.Checked = true;
+                    }
+                });
         }
 
         private void ShowProgress(string message)
         {
             Cursor = Cursors.Wait;
             ProgressControl progress = new ProgressControl();
-            progress.progressLabel.Content = message;
+            progress.progressText.Text = message;
             dialogHost.Content = progress;
         }
         private void HideProgress()
@@ -105,7 +118,7 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
                 App.UIAction(() =>
                 {                    
                     tree.ItemsSource = _pointsList;
-                    btnGet.IsEnabled = true;
+                    IsReadyToGetData = true;
                     SaveList(_pointsList.ToList());
                     HideProgress();
                 });
@@ -160,21 +173,68 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
             }
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        #region Command and Properties
+
+        public ICommand CheckCommand { get; private set; }
+
+        public bool IsReadyToGetData
         {
-            Microsoft.Win32.SaveFileDialog sfd = new Microsoft.Win32.SaveFileDialog();
-            sfd.Filter = "CSV файл - значения, разделённые точкой с запятой (*.csv)|*.csv";
-            sfd.DefaultExt = ".csv";
-            sfd.AddExtension = true;
-            Nullable<bool> result = sfd.ShowDialog(App.Current.MainWindow);
+            get { return _isReadyToGetData; }
+            private set { SetProperty(ref _isReadyToGetData, value); }
         }
-        private void ButtonPlus_Click(object sender, RoutedEventArgs e)
+
+        #endregion
+
+        #region INotifyPropertyChanged Members
+
+        #region Debugging Aides
+
+        protected virtual bool ThrowOnInvalidPropertyName { get; private set; }
+
+        [Conditional("DEBUG")]
+        [DebuggerStepThrough]
+        public void VerifyPropertyName(string propertyName)
         {
-            Microsoft.WindowsAPICodePack.Dialogs.CommonSaveFileDialog saveCFD = new Microsoft.WindowsAPICodePack.Dialogs.CommonSaveFileDialog();
-            saveCFD.AlwaysAppendDefaultExtension = true;
-            saveCFD.DefaultExtension = ".csv";
-            saveCFD.Filters.Add(new Microsoft.WindowsAPICodePack.Dialogs.CommonFileDialogFilter("CSV файл - значения, разделённые точкой с запятой", "*.csv"));
-            saveCFD.ShowDialog(App.Current.MainWindow);
+            // Verify that the property name matches a real,
+            // public, instance property on this object.
+            if (TypeDescriptor.GetProperties(this)[propertyName] == null)
+            {
+                string msg = "Invalid property name: " + propertyName;
+
+                if (this.ThrowOnInvalidPropertyName)
+                    throw new Exception(msg);
+                else
+                    Debug.Fail(msg);
+            }
         }
+        #endregion Debugging Aides
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public bool SetProperty<T>(ref T storage, T value, [CallerMemberName] string propertyName = null)
+        {
+            if (Equals(storage, value))
+            {
+                return false;
+            }
+
+            storage = value;
+            this.OnPropertyChanged(propertyName);
+            return true;
+        }
+
+        protected virtual void OnPropertyChanged(string propertyName)
+        {
+            this.VerifyPropertyName(propertyName);
+
+            PropertyChangedEventHandler handler = this.PropertyChanged;
+            if (handler != null)
+            {
+                var e = new PropertyChangedEventArgs(propertyName);
+                handler(this, e);
+            }
+        }
+
+        #endregion INotifyPropertyChanged Members
     }
 }

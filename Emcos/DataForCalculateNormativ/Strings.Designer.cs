@@ -142,12 +142,20 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Получить
-        ///данные.
+        ///   Looks up a localized string similar to Получить данные.
         /// </summary>
         public static string Get {
             get {
                 return ResourceManager.GetString("Get", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Собственные нужды подстанций.
+        /// </summary>
+        public static string GetAuxiliaries {
+            get {
+                return ResourceManager.GetString("GetAuxiliaries", resourceCulture);
             }
         }
         
@@ -170,8 +178,7 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Прервать
-        ///получение данных.
+        ///   Looks up a localized string similar to Прервать получение данных.
         /// </summary>
         public static string InterruptGet {
             get {
@@ -180,8 +187,7 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Прервать
-        ///обновление списка.
+        ///   Looks up a localized string similar to Прервать обновление списка.
         /// </summary>
         public static string InterruptUpdate {
             get {
@@ -248,8 +254,7 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Сохранить
-        ///результат.
+        ///   Looks up a localized string similar to Сохранить результат.
         /// </summary>
         public static string Save {
             get {
@@ -304,8 +309,7 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Обновить
-        ///список.
+        ///   Looks up a localized string similar to Обновить список.
         /// </summary>
         public static string Update {
             get {

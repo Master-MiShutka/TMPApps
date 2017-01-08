@@ -46,14 +46,6 @@ namespace TMP.Work.Emcos.View
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
         protected void RaisePropertyChanged(string propertyName)
         {
-#if DEBUG
-            App.LOG.Log(String.Format(
-                "{0}\t{1}\t{2}",
-                "BalansSubstationView",
-                "RaisePropertyChanged",
-                propertyName), Common.Logger.Category.Info, Common.Logger.Priority.None);
-#endif
-
             var e = PropertyChanged;
             if (e != null)
                 e(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
@@ -83,8 +75,8 @@ namespace TMP.Work.Emcos.View
             _task.ContinueWith((t) =>
             {
                 State = State.Idle;
-                App.Log.Log("Просмотр баланса подстанции - ошибка: " + t.Exception.Message, Common.Logger.Category.Exception, Common.Logger.Priority.High);
-                MessageBox.Show("Произошла ошибка.\n" + t.Exception.Message, this.Title, MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                App.ToLogError("Просмотр баланса подстанции - ошибка: " + t.Exception.Message);
+                App.ShowError("Произошла ошибка.\n" + t.Exception.Message);
             }, TaskContinuationOptions.OnlyOnFaulted);
 
             _balansGroup = balansGroup;
@@ -113,15 +105,14 @@ namespace TMP.Work.Emcos.View
         {
             rootGrid.DataContext = null;
             // обновление данных согласно нового временного периода
-            var emcosSite = new EmcosSite();
             var cts = new System.Threading.CancellationTokenSource();
 
-            var task = emcosSite.ExecuteAction(cts, () =>
+            var task = EmcosSiteWrapper.Instance.ExecuteAction(cts, () =>
             {
                 State = State.Busy;
                 var substation = _balansGroup.Substation.Copy() as Model.Balans.Substation;
 
-                emcosSite.GetDaylyArchiveDataForSubstation(_balansGroup.Period, substation, cts, UpdateCallBack);
+            U.GetDaylyArchiveDataForSubstation(_balansGroup.Period.StartDate, _balansGroup.Period.EndDate, substation, cts, UpdateCallBack);
 
                 foreach (Model.Balans.IBalansItem i in substation.Items)
                 {
@@ -132,13 +123,13 @@ namespace TMP.Work.Emcos.View
                 _balansGroup = new Model.BalansGrop(substation, _balansGroup.Period);
                 _balansGroup.PropertyChanged += _balansGroup_PropertyChanged;
 
-                Dispatcher.BeginInvoke((Action)(() =>
+                App.UIAction(() =>
                   {
                       Create_tableColumns();
                       rootGrid.DataContext = _balansGroup;
                       table.ItemsSource = _balansGroup.Items;
                       Progress = 0;
-                  }));
+                  });
 
                 State = State.Idle;
             });
@@ -146,10 +137,10 @@ namespace TMP.Work.Emcos.View
 
         private void UpdateCallBack(int current, int total)
         {
-            Dispatcher.BeginInvoke((Action)(() =>
+            App.UIAction(() =>
                   {
                       Progress = 100 * current / total;
-                  }));
+                  });
         }
         private void ShowItemDetails(Model.Balans.IBalansItem item)
         {
@@ -361,7 +352,7 @@ namespace TMP.Work.Emcos.View
                         column.Tag = bi;
                         var menuItem = new MenuItem
                         {
-                            Header = String.Format("Подробно о {0} ...", bi.Title),
+                            Header = String.Format("Подробно о {0} ...", bi.Name),
                             Tag = bi,
                             Command = new Wpf.Common.DelegateCommand<Model.Balans.IBalansItem>(i =>
                             {
@@ -417,7 +408,7 @@ namespace TMP.Work.Emcos.View
 
                 System.Diagnostics.Process.Start(reportFileName);
                 State = State.Idle;
-                Dispatcher.BeginInvoke((Action)(() => wait.Message = "Пожалуйста, подождите..\nПодготовка данных."));
+                App.UIAction(() => wait.Message = "Пожалуйста, подождите..\nПодготовка данных.");
             }, System.Threading.Tasks.TaskCreationOptions.AttachedToParent);
 
 
@@ -431,8 +422,8 @@ namespace TMP.Work.Emcos.View
                         sb.AppendLine(ex.InnerException.Message);
                         ex = ex.InnerException;
                     }
-                App.Log.Log("Экспорт балансов подстанций - ошибка: " + sb.ToString(), Common.Logger.Category.Exception, Common.Logger.Priority.High);
-                Dispatcher.Invoke(new Action(delegate () { MessageBox.Show("Произошла ошибка при формировании отчёта.\nОбратитесь к разработчику.", this.Title, MessageBoxButton.OK, MessageBoxImage.Exclamation); }));
+                App.ToLogError("Экспорт балансов подстанций - ошибка: " + sb.ToString());
+                App.UIAction(() => App.ShowError("Произошла ошибка при формировании отчёта.\nОбратитесь к разработчику."));
             }, System.Threading.Tasks.TaskContinuationOptions.OnlyOnFaulted);
             task.Start(System.Threading.Tasks.TaskScheduler.Current);
         }
@@ -440,25 +431,24 @@ namespace TMP.Work.Emcos.View
         private void Reload_Click(object sender, RoutedEventArgs e)
         {
             wait.Message = "Пожалуйста, подождите ...\nОбновление данных.";
-            var emcosSite = new EmcosSite();
             var cts = new System.Threading.CancellationTokenSource();
 
-            var task = emcosSite.ExecuteAction(cts, () =>
+            var task = EmcosSiteWrapper.Instance.ExecuteAction(cts, () =>
             {
                 State = State.Busy;
 
-                emcosSite.GetDaylyArchiveDataForSubstation(_balansGroup.Period, _balansGroup.Substation, cts, UpdateCallBack);
+                U.GetDaylyArchiveDataForSubstation(_balansGroup.Period.StartDate, _balansGroup.Period.EndDate, _balansGroup.Substation, cts, UpdateCallBack);
 
                 _balansGroup.PropertyChanged -= _balansGroup_PropertyChanged;
                 _balansGroup = new Model.BalansGrop(_balansGroup.Substation, _balansGroup.Period);
                 _balansGroup.PropertyChanged += _balansGroup_PropertyChanged;
 
-                Dispatcher.BeginInvoke((Action)(() =>
+                App.UIAction(() =>
                   {
                       rootGrid.DataContext = _balansGroup;
                       Progress = 0;
                       wait.Message = "Пожалуйста, подождите ...\nПодготовка данных.";
-                  }));
+                  });
 
                 State = State.Idle;
             });

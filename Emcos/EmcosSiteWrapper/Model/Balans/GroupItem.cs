@@ -11,7 +11,7 @@ namespace TMP.Work.Emcos.Model.Balans
     [DataContract(Name = "GroupItem")]
     public class GroupItem : PropertyChangedBase, IBalansGroup, IProgress, IDisposable
     {
-        private decimal _id;
+        private int _id;
         private string _code;
         private string _name;
 
@@ -42,7 +42,7 @@ namespace TMP.Work.Emcos.Model.Balans
         }
 
         [DataMember()]
-        public decimal Id { get { return _id; } set { _id = value; RaisePropertyChanged("Id"); } }
+        public int Id { get { return _id; } set { _id = value; RaisePropertyChanged("Id"); } }
 
         [DataMember()]
         public string Code { get { return _code; } set { _code = value; RaisePropertyChanged("Code"); } }

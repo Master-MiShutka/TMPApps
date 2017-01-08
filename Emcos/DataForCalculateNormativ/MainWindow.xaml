@@ -6,10 +6,10 @@
         xmlns:local="clr-namespace:TMP.Work.Emcos.DataForCalculateNormativ"
         xmlns:model="clr-namespace:TMP.Work.Emcos.Model;assembly=EmcosModel"
         mc:Ignorable="d"
-
+        x:Name="root"
         Icon="mainicon.ico"
         Title="" 
-        Height="380" Width="600"
+        MinHeight="400" MinWidth="600" Width="800"
         Closing="Window_Closing"
         Closed="Window_Closed"
         Loaded="Window_Loaded">
@@ -35,11 +35,11 @@
             <Button DockPanel.Dock="Right"  Margin="5 5 0 5" Padding="5 0" Content="{x:Static local:Strings.Settings}" Click="btnSettings_Click"/>
             <TextBlock TextWrapping="Wrap" FontSize="{DynamicResource HeaderFontSize}" TextAlignment="Center">
                 <Run>Получение режимных данных из</Run>
-                <Run FontWeight="Black" FontStyle="Italic">Emcos Corporate</Run>
+                <Run FontWeight="SemiBold" FontStyle="Italic">Emcos Corporate</Run>
                 <Run>для расчёта норматива потерь в ПО </Run>
-                <Run FontWeight="Black" FontStyle="Italic">DWRES</Run>
+                <Run FontWeight="SemiBold" FontStyle="Italic">DWRES</Run>
                 <Run>и </Run>
-                <Run FontWeight="Black" FontStyle="Italic">Poteri_35_750</Run>
+                <Run FontWeight="SemiBold" FontStyle="Italic">Poteri_35_750</Run>
             </TextBlock>
         </DockPanel>
         <!-- -->
@@ -141,24 +141,24 @@
             </TreeView.Style>
             <TreeView.ContextMenu>
                 <ContextMenu>
-                    <MenuItem Header="Отменить выбор групп" Click="TreeUnselectAll" />
-                    <MenuItem Header="Выбор групп, указанного&#xA; в настройках подразделения" Click="TreeSelectAll" />
+                    <MenuItem Header="Установить или снять отметку дочерних элементов" Click="TreeCheckItems" />
+                    <Separator />
+                    <MenuItem Header="Снять отметку у всех групп" Click="TreeUnselectAll" />
+                    <MenuItem Header="Отметить дочерние элементы группы, указанной#xA; в настройках подразделения" Click="TreeSelectAll" />
                 </ContextMenu>
             </TreeView.ContextMenu>
         </TreeView>
         <!-- -->
-        <DockPanel Grid.Row="2" LastChildFill="False">
-            <Button DockPanel.Dock="Left"  Margin="0 5 5 0" Padding="5 0" Content="{x:Static local:Strings.Update}" x:Name="btnUpdate" Click="btnUpdate_Click" />
-            <Button DockPanel.Dock="Right" Margin="10 5 0 0" Padding="5 0" Content="{x:Static local:Strings.Get}" x:Name="btnGet" Click="btnGet_Click" IsEnabled="False"/>
-            <Button DockPanel.Dock="Right" Margin="5 5 5 0" Padding="5 0" Content="{x:Static local:Strings.Save}" x:Name="btnSave" Click="btnSave_Click" IsEnabled="False"/>
+        <DockPanel Grid.Row="2" LastChildFill="False" x:Name="btnPanel">
+            <Button DockPanel.Dock="Left"  Margin="0 5 5 0" Padding="5" FontSize="{StaticResource HeaderFontSize}" Content="{x:Static local:Strings.Update}" Click="btnUpdate_Click" />
+            <Button DockPanel.Dock="Right" Margin="5 5 0 0" Padding="5" FontSize="{StaticResource HeaderFontSize}" Content="{x:Static local:Strings.Get}" Click="btnGet_Click" IsEnabled="{Binding IsReadyToGetData}"/>
+            <Button DockPanel.Dock="Right" Margin="10 5 0 0" Padding="5" FontSize="{StaticResource HeaderFontSize}" Content="{x:Static local:Strings.GetAuxiliaries}" Click="btnGetAuxiliaries_Click" />
         </DockPanel>
         <!-- -->
         <StatusBar
             Grid.Row="3" Margin="-5 5 -5 -5"
             Height="24">
             <TextBlock Margin="3,0,0,0" x:Name="status" Text="Готово"/>
-            <Button Padding="-3" Content="Standart dialog" Click="Button_Click"/>
-            <Button Padding="-3" Content="MS Api Codec Pack Dialog" Click="ButtonPlus_Click"/>
             <StatusBarItem HorizontalAlignment="Right">
                 <ResizeGrip Opacity="0.75" />
             </StatusBarItem>

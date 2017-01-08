@@ -102,27 +102,26 @@ namespace TMP.Work.Emcos.View
             var item = rootGrid.DataContext as Model.Balans.IBalansItem;
 
             wait.Message = "Пожалуйста, подождите ...\nОбновление данных.";
-            var emcosSite = new EmcosSite();
             var cts = new System.Threading.CancellationTokenSource();
 
-            var task = emcosSite.ExecuteAction(cts, () =>
+            var task = EmcosSiteWrapper.Instance.ExecuteAction(cts, () =>
             {
                 State = State.Busy;
 
                 try
                 {
-                    emcosSite.GetDaylyArchiveDataForItem(_period, item, cts);
+                    U.GetDaylyArchiveDataForItem(_period.StartDate, _period.EndDate, item, cts);
                 }
                 catch (Exception ex)
                 {
-                    App.Log.Log(String.Format("Обновление данных по точке ({0}). Произошла ошибка: {1}", item.Title, ex.Message), Category.Exception, Priority.High);
+                    App.ToLogError(String.Format("Обновление данных по точке ({0}). Произошла ошибка: {1}", item.Name, ex.Message));
                     State = State.Idle;
                 }
 
-                Dispatcher.BeginInvoke((Action)(() =>
+                App.UIAction(() =>
                   {
                       Progress = 0;
-                  }));
+                  });
 
                 State = State.Idle;
             });

@@ -1,14 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Xml.Serialization;
-using System.Xml.XmlConfiguration;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 
 namespace TMP.Work.Emcos.DataForCalculateNormativ
 {
     [Serializable]
-    public class ListPoint
+    [DataContract]
+    public class ListPoint : INotifyPropertyChanged
     {
+        [IgnoreDataMember]
+        private bool _checked = false;
+
         [DataMember]
         public int ParentId { get; set; }
         [DataMember]
@@ -28,9 +33,13 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
         [DataMember]
         public Model.ElementTypes Type { get; set; }
         [DataMember]
-        public bool Checked { get; set; }
-        [DataMember]
         public IList<ListPoint> Items { get; set; }
+        [DataMember]
+        public bool Checked
+        {
+            get { return _checked; }
+            set { SetProperty(ref _checked, value); }
+        }
 
         public ListPoint()
         {
@@ -43,5 +52,56 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
                 Name,
                 TypeCode);
         }
+        #region INotifyPropertyChanged Members
+
+        #region Debugging Aides
+        [IgnoreDataMember]
+        protected virtual bool ThrowOnInvalidPropertyName { get; private set; }
+
+        [Conditional("DEBUG")]
+        [DebuggerStepThrough]
+        public void VerifyPropertyName(string propertyName)
+        {
+            // Verify that the property name matches a real,
+            // public, instance property on this object.
+            if (TypeDescriptor.GetProperties(this)[propertyName] == null)
+            {
+                string msg = "Invalid property name: " + propertyName;
+
+                if (this.ThrowOnInvalidPropertyName)
+                    throw new Exception(msg);
+                else
+                    Debug.Fail(msg);
+            }
+        }
+        #endregion Debugging Aides
+        [field: NonSerializedAttribute()]
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public bool SetProperty<T>(ref T storage, T value, [CallerMemberName] string propertyName = null)
+        {
+            if (Equals(storage, value))
+            {
+                return false;
+            }
+
+            storage = value;
+            this.OnPropertyChanged(propertyName);
+            return true;
+        }
+
+        protected virtual void OnPropertyChanged(string propertyName)
+        {
+            this.VerifyPropertyName(propertyName);
+
+            PropertyChangedEventHandler handler = this.PropertyChanged;
+            if (handler != null)
+            {
+                var e = new PropertyChangedEventArgs(propertyName);
+                handler(this, e);
+            }
+        }
+
+        #endregion INotifyPropertyChanged Members
     }
 }
