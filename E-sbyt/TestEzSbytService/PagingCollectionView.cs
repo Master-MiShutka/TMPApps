@@ -34,7 +34,7 @@ namespace TMP.Work.AmperM.TestApp
                 else
                     ItemsPerPage = base.InternalCount;
             },
-            (o) => base.InternalList != null && _itemsPerPage >= base.InternalCount);
+            (o) => base.InternalList != null && _itemsPerPage < base.InternalCount);
 
             _moveFirstCommand = new DelegateCommand(() =>
             {

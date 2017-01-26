@@ -24,9 +24,10 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
         {
             InitializeComponent();
         }
-        public ProgressControl(bool hideCopyright = false) : this()
+        public ProgressControl(string message = "", bool hideCopyright = false) : this()
         {
             InitializeComponent();
+            progressText.Text = message;
             background.HideCopyright(hideCopyright);
         }
     }

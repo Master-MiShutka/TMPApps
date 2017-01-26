@@ -51,6 +51,8 @@ namespace TMPApplication
         {
             try
             {
+                System.Text.StringBuilder notLoadedLibraries = new System.Text.StringBuilder();
+
                 AppDomain.CurrentDomain.AssemblyResolve += (s, args) =>
                 {
                     try
@@ -70,6 +72,7 @@ namespace TMPApplication
                     }
                     catch (Exception e)
                     {
+                        notLoadedLibraries.AppendFormat("{0}, ", args.Name);
                         ToLogException(e);
                     }
                     return null;
@@ -82,14 +85,28 @@ namespace TMPApplication
                 string parentDirectory = System.IO.Directory.GetParent(baseDirectory).FullName;
 
                 var referencedPaths = new List<string>();
-                referencedPaths.AddRange(System.IO.Directory.EnumerateFiles(baseDirectory, @"Libs\*.dll"));
-                referencedPaths.AddRange(System.IO.Directory.EnumerateFiles(parentDirectory, @"Libs\*.dll"));
+                referencedPaths.AddRange(System.IO.Directory.EnumerateFiles(baseDirectory, @"*.dll"));
+                if (System.IO.Directory.Exists(System.IO.Path.Combine(baseDirectory,"Libs")) == true)
+                    referencedPaths.AddRange(System.IO.Directory.EnumerateFiles(baseDirectory, @"Libs\*.dll"));
+                if (System.IO.Directory.Exists(System.IO.Path.Combine(parentDirectory, "Libs")) == true)
+                    referencedPaths.AddRange(System.IO.Directory.EnumerateFiles(parentDirectory, @"Libs\*.dll"));
 
                 var toLoad = referencedPaths.Where(r => !loadedPaths.Contains(r, StringComparer.InvariantCultureIgnoreCase)).ToList();
-                ToLogInfo(String.Format("Необходимо найти и загрузить {0} библиотек: [{1}]", 
-                    toLoad.Count,
-                    String.Join(", ", toLoad.Select(i => System.IO.Path.GetFileName(i)).ToArray())));
+                if (toLoad.Count > 0)
+                    TMPApp.ToLogInfo(String.Format("Необходимо найти и загрузить {0} библиотек: [{1}]", 
+                        toLoad.Count,
+                        String.Join(", ", toLoad.Select(i => System.IO.Path.GetFileName(i)).ToArray())));
                 toLoad.ForEach(path => loadedAssemblies.Add(AppDomain.CurrentDomain.Load(AssemblyName.GetAssemblyName(path))));
+
+                if (notLoadedLibraries.Length > 0)
+                {
+                    notLoadedLibraries.Remove(notLoadedLibraries.Length - 2, 2);
+                    System.Windows.MessageBox.Show(
+                        String.Format("Программе не удалось найти и загрузить следующие библиотеки:\n{0}\n\nРабота программы невозможна и она будет закрыта.", notLoadedLibraries.ToString()),
+                        "Критическая ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                    ToLogError("Аварийное завершение!");
+                    Application.Current.Shutdown(-1);
+                }
 
                 SetAppDomainCultures("ru-RU");// "be-BY");
             }
@@ -185,14 +202,16 @@ namespace TMPApplication
         }
         static void ShowErrorBox(object sender, UnhandledExceptionEventArgs e)
         {
-            Exception ex = e.ExceptionObject as Exception;
-            string message = TextLogger.GetExceptionDetails(ex);
+            Exception ex = e.ExceptionObject as Exception;            
             if (ex != null)
             {
                 ToLogException(ex);
+                string message = TextLogger.GetExceptionDetails(ex);
                 Debug.WriteLine(message);
                 System.Windows.MessageBox.Show(message, "Sorry, we crashed");
             }
+            ToLogError("Аварийное завершение!");
+            Application.Current.Shutdown(-1);
         }
         #endregion
 

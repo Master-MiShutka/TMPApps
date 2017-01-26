@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Threading;
+using System.Windows.Input;
+
 
 namespace TMP.Work.Emcos.DataForCalculateNormativ
 {
@@ -9,9 +11,23 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
     /// </summary>
     public partial class App : Application
     {
+        internal static EmcosTestWebService.ServiceSoapClient EmcosWebServiceClient { get; private set; }
+
+        internal static void InitServiceClient(string address)
+        {
+            System.ServiceModel.Channels.Binding binding = new System.ServiceModel.BasicHttpBinding()
+            {
+                MaxBufferSize = 10240000,
+                MaxReceivedMessageSize = 10240000,
+                Name = "ServiceSoap"
+            };
+            App.EmcosWebServiceClient = new EmcosTestWebService.ServiceSoapClient("ServiceSoap",
+                new System.ServiceModel.EndpointAddress(address));
+        }
+
         protected override void OnStartup(StartupEventArgs e)
         {
-            base.OnStartup(e);
+            base.OnStartup(e);            
         }
 
         private void Application_Exit(object sender, ExitEventArgs e)
@@ -24,25 +40,32 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
         internal static MessageBoxResult ShowError(string message)
         {
             System.Media.SystemSounds.Exclamation.Play();
-            return MessageBox.Show(message, Title, MessageBoxButton.OK, MessageBoxImage.Error);
+            return MessageBox.Show(App.Current.MainWindow, message, Title, MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+        internal static MessageBoxResult ShowError(Exception e, string format)
+        {
+            if (String.IsNullOrEmpty(format))
+                format = Strings.Error;
+            System.Media.SystemSounds.Exclamation.Play();
+            return MessageBox.Show(App.Current.MainWindow, String.Format(format, GetExceptionDetails(e)), Title, MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
         internal static MessageBoxResult ShowWarning(string message)
         {
             System.Media.SystemSounds.Hand.Play();
-            return MessageBox.Show(message, Title, MessageBoxButton.OK, MessageBoxImage.Warning);
+            return MessageBox.Show(App.Current.MainWindow, message, Title, MessageBoxButton.OK, MessageBoxImage.Warning);
         }
 
         internal static MessageBoxResult ShowInfo(string message)
         {
             System.Media.SystemSounds.Asterisk.Play();
-            return MessageBox.Show(message, Title, MessageBoxButton.OK, MessageBoxImage.Information);
+            return MessageBox.Show(App.Current.MainWindow, message, Title, MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
         internal static MessageBoxResult ShowQuestion(string message)
         {
             System.Media.SystemSounds.Question.Play();
-            return MessageBox.Show(message, Title, MessageBoxButton.OK, MessageBoxImage.Question);
+            return MessageBox.Show(App.Current.MainWindow, message, Title, MessageBoxButton.YesNo, MessageBoxImage.Question);
         }
         internal static string GetExceptionDetails(Exception exp)
         {

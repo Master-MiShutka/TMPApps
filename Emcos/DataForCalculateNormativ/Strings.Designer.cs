@@ -80,11 +80,56 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Отменить.
+        /// </summary>
+        public static string CancelHeader {
+            get {
+                return ResourceManager.GetString("CancelHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Закрыть.
+        /// </summary>
+        public static string CloseHeader {
+            get {
+                return ResourceManager.GetString("CloseHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Завершено..
         /// </summary>
         public static string Completed {
             get {
                 return ResourceManager.GetString("Completed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to CSV файл - значения, разделённые точкой с запятой (*.csv)|*.csv.
+        /// </summary>
+        public static string DialogCsvFilter {
+            get {
+                return ResourceManager.GetString("DialogCsvFilter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Текстовый файл (*.txt)|*.txt.
+        /// </summary>
+        public static string DialogTxtFilter {
+            get {
+                return ResourceManager.GetString("DialogTxtFilter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Электронная таблица (*.xls)|*.xls.
+        /// </summary>
+        public static string DialogXlsFilter {
+            get {
+                return ResourceManager.GetString("DialogXlsFilter", resourceCulture);
             }
         }
         
@@ -131,6 +176,15 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to При сохранении произошла ошибка:\n{0}.
+        /// </summary>
+        public static string ErrorOnSave {
+            get {
+                return ResourceManager.GetString("ErrorOnSave", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Произошла ошибка при сохранении конфигурации программы.
         ///Описание ошибки:
         ///{0}.
@@ -156,6 +210,26 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ {
         public static string GetAuxiliaries {
             get {
                 return ResourceManager.GetString("GetAuxiliaries", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Получение данных по собственным нуждам с сервиса Emcos Corporate.
+        ///Ожидайте завершения или отмените операцию..
+        /// </summary>
+        public static string GetAuxiliaryHeader {
+            get {
+                return ResourceManager.GetString("GetAuxiliaryHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Получение режимных данных.
+        ///Ожидайте завершения или отмените операцию..
+        /// </summary>
+        public static string GetDataHeader {
+            get {
+                return ResourceManager.GetString("GetDataHeader", resourceCulture);
             }
         }
         
@@ -187,11 +261,83 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Прервать операцию?.
+        /// </summary>
+        public static string InterruptQuestion {
+            get {
+                return ResourceManager.GetString("InterruptQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Прервать обновление списка.
         /// </summary>
         public static string InterruptUpdate {
             get {
                 return ResourceManager.GetString("InterruptUpdate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Выбран неверный отчёт! Ошибка при подготовке параметров..
+        /// </summary>
+        public static string InvalidReport {
+            get {
+                return ResourceManager.GetString("InvalidReport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Сервер доступен.
+        /// </summary>
+        public static string MessageServerAvailability {
+            get {
+                return ResourceManager.GetString("MessageServerAvailability", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Сервер не доступен.
+        /// </summary>
+        public static string MessageServerNotAvailability {
+            get {
+                return ResourceManager.GetString("MessageServerNotAvailability", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Сервис доступен.
+        /// </summary>
+        public static string MessageServiceAvailability {
+            get {
+                return ResourceManager.GetString("MessageServiceAvailability", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Сервис не доступен.
+        /// </summary>
+        public static string MessageServiceNotAvailability {
+            get {
+                return ResourceManager.GetString("MessageServiceNotAvailability", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Режимные данные за MM-yyyy.
+        /// </summary>
+        public static string MultipleFileNameTemplate {
+            get {
+                return ResourceManager.GetString("MultipleFileNameTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Наименование.
+        /// </summary>
+        public static string NameColumn {
+            get {
+                return ResourceManager.GetString("NameColumn", resourceCulture);
             }
         }
         
@@ -254,6 +400,16 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Тип
+        ///результата.
+        /// </summary>
+        public static string ResultTypeColumn {
+            get {
+                return ResourceManager.GetString("ResultTypeColumn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Сохранить результат.
         /// </summary>
         public static string Save {
@@ -263,11 +419,47 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Сохранить все в папку.
+        /// </summary>
+        public static string SaveAllInFolderHeader {
+            get {
+                return ResourceManager.GetString("SaveAllInFolderHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Сохранить все в один файл.
+        /// </summary>
+        public static string SaveAllInSingleFileHeader {
+            get {
+                return ResourceManager.GetString("SaveAllInSingleFileHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Сохранить.
+        /// </summary>
+        public static string SaveHeader {
+            get {
+                return ResourceManager.GetString("SaveHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Сохранение результатов.
         /// </summary>
         public static string SavingInProgress {
             get {
                 return ResourceManager.GetString("SavingInProgress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Выберите папку, куда будут сохранены файлы.
+        /// </summary>
+        public static string SelectFolderToSave {
+            get {
+                return ResourceManager.GetString("SelectFolderToSave", resourceCulture);
             }
         }
         
@@ -300,11 +492,48 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Произведите настройку программы,
+        ///указав необходимые параметры..
+        /// </summary>
+        public static string SettingsHeader {
+            get {
+                return ResourceManager.GetString("SettingsHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Режимные данные по &apos;{0}&apos; за {1:MM-yyyy}.
+        /// </summary>
+        public static string SingleFileNameTemplate {
+            get {
+                return ResourceManager.GetString("SingleFileNameTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Состояние.
+        /// </summary>
+        public static string StatusColumn {
+            get {
+                return ResourceManager.GetString("StatusColumn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Завершение работы.
         /// </summary>
         public static string TerminatingMessage {
             get {
                 return ResourceManager.GetString("TerminatingMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to По умолчанию.
+        /// </summary>
+        public static string ToDefaultHeader {
+            get {
+                return ResourceManager.GetString("ToDefaultHeader", resourceCulture);
             }
         }
         
@@ -323,6 +552,42 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ {
         public static string UpdatingInProgress {
             get {
                 return ResourceManager.GetString("UpdatingInProgress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ожидание.
+        /// </summary>
+        public static string WaitingMessage {
+            get {
+                return ResourceManager.GetString("WaitingMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ожидание ..
+        /// </summary>
+        public static string WaitingMessage1 {
+            get {
+                return ResourceManager.GetString("WaitingMessage1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ожидание . ..
+        /// </summary>
+        public static string WaitingMessage2 {
+            get {
+                return ResourceManager.GetString("WaitingMessage2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ожидание . . ..
+        /// </summary>
+        public static string WaitingMessage3 {
+            get {
+                return ResourceManager.GetString("WaitingMessage3", resourceCulture);
             }
         }
     }

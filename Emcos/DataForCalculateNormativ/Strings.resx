@@ -124,8 +124,23 @@
   <data name="Canceled" xml:space="preserve">
     <value>Операция отменена.</value>
   </data>
+  <data name="CancelHeader" xml:space="preserve">
+    <value>Отменить</value>
+  </data>
+  <data name="CloseHeader" xml:space="preserve">
+    <value>Закрыть</value>
+  </data>
   <data name="Completed" xml:space="preserve">
     <value>Завершено.</value>
+  </data>
+  <data name="DialogCsvFilter" xml:space="preserve">
+    <value>CSV файл - значения, разделённые точкой с запятой (*.csv)|*.csv</value>
+  </data>
+  <data name="DialogTxtFilter" xml:space="preserve">
+    <value>Текстовый файл (*.txt)|*.txt</value>
+  </data>
+  <data name="DialogXlsFilter" xml:space="preserve">
+    <value>Электронная таблица (*.xls)|*.xls</value>
   </data>
   <data name="EmptyList" xml:space="preserve">
     <value>Выберите одну или несколько групп.</value>
@@ -145,6 +160,9 @@
 Описание ошибки:
 {0}</value>
   </data>
+  <data name="ErrorOnSave" xml:space="preserve">
+    <value>При сохранении произошла ошибка:\n{0}</value>
+  </data>
   <data name="ErrorOnSavePointsList" xml:space="preserve">
     <value>Произошла ошибка при сохранении конфигурации программы.
 Описание ошибки:
@@ -156,6 +174,10 @@
   <data name="GetAuxiliaries" xml:space="preserve">
     <value>Собственные нужды подстанций</value>
   </data>
+  <data name="GetDataHeader" xml:space="preserve">
+    <value>Получение режимных данных.
+Ожидайте завершения или отмените операцию.</value>
+  </data>
   <data name="GettingDataStatus" xml:space="preserve">
     <value>Получение данных с сервиса Emcos Corporate.</value>
   </data>
@@ -165,8 +187,32 @@
   <data name="InterruptGet" xml:space="preserve">
     <value>Прервать получение данных</value>
   </data>
+  <data name="InterruptQuestion" xml:space="preserve">
+    <value>Прервать операцию?</value>
+  </data>
   <data name="InterruptUpdate" xml:space="preserve">
     <value>Прервать обновление списка</value>
+  </data>
+  <data name="InvalidReport" xml:space="preserve">
+    <value>Выбран неверный отчёт! Ошибка при подготовке параметров.</value>
+  </data>
+  <data name="MessageServerAvailability" xml:space="preserve">
+    <value>Сервер доступен</value>
+  </data>
+  <data name="MessageServerNotAvailability" xml:space="preserve">
+    <value>Сервер не доступен</value>
+  </data>
+  <data name="MessageServiceAvailability" xml:space="preserve">
+    <value>Сервис доступен</value>
+  </data>
+  <data name="MessageServiceNotAvailability" xml:space="preserve">
+    <value>Сервис не доступен</value>
+  </data>
+  <data name="MultipleFileNameTemplate" xml:space="preserve">
+    <value>Режимные данные за MM-yyyy</value>
+  </data>
+  <data name="NameColumn" xml:space="preserve">
+    <value>Наименование</value>
   </data>
   <data name="No" xml:space="preserve">
     <value>не</value>
@@ -190,11 +236,27 @@
   <data name="ReportNotSpecified" xml:space="preserve">
     <value>Не задан отчёт в настройках программы.</value>
   </data>
+  <data name="ResultTypeColumn" xml:space="preserve">
+    <value>Тип
+результата</value>
+  </data>
   <data name="Save" xml:space="preserve">
     <value>Сохранить результат</value>
   </data>
+  <data name="SaveAllInFolderHeader" xml:space="preserve">
+    <value>Сохранить все в папку</value>
+  </data>
+  <data name="SaveAllInSingleFileHeader" xml:space="preserve">
+    <value>Сохранить все в один файл</value>
+  </data>
+  <data name="SaveHeader" xml:space="preserve">
+    <value>Сохранить</value>
+  </data>
   <data name="SavingInProgress" xml:space="preserve">
     <value>Сохранение результатов</value>
+  </data>
+  <data name="SelectFolderToSave" xml:space="preserve">
+    <value>Выберите папку, куда будут сохранены файлы</value>
   </data>
   <data name="ServerAvailability" xml:space="preserve">
     <value>Сервер {0} доступен</value>
@@ -206,13 +268,42 @@
     <value>Настройки
 программы</value>
   </data>
+  <data name="SettingsHeader" xml:space="preserve">
+    <value>Произведите настройку программы,
+указав необходимые параметры.</value>
+  </data>
+  <data name="SingleFileNameTemplate" xml:space="preserve">
+    <value>Режимные данные по '{0}' за {1:MM-yyyy}</value>
+  </data>
+  <data name="StatusColumn" xml:space="preserve">
+    <value>Состояние</value>
+  </data>
   <data name="TerminatingMessage" xml:space="preserve">
     <value>Завершение работы</value>
+  </data>
+  <data name="ToDefaultHeader" xml:space="preserve">
+    <value>По умолчанию</value>
   </data>
   <data name="Update" xml:space="preserve">
     <value>Обновить список</value>
   </data>
   <data name="UpdatingInProgress" xml:space="preserve">
     <value>Обновление списка точек</value>
+  </data>
+  <data name="WaitingMessage" xml:space="preserve">
+    <value>Ожидание</value>
+  </data>
+  <data name="WaitingMessage1" xml:space="preserve">
+    <value>Ожидание .</value>
+  </data>
+  <data name="WaitingMessage2" xml:space="preserve">
+    <value>Ожидание . .</value>
+  </data>
+  <data name="WaitingMessage3" xml:space="preserve">
+    <value>Ожидание . . .</value>
+  </data>
+  <data name="GetAuxiliaryHeader" xml:space="preserve">
+    <value>Получение данных по собственным нуждам с сервиса Emcos Corporate.
+Ожидайте завершения или отмените операцию.</value>
   </data>
 </root>

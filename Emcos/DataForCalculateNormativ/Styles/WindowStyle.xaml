@@ -96,6 +96,7 @@
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="36"/>
                                             <ColumnDefinition />
+                                            <ColumnDefinition Width="Auto"/>
                                             <ColumnDefinition Width="34"/>
                                             <ColumnDefinition Width="34"/>
                                             <ColumnDefinition Width="34"/>
@@ -121,11 +122,13 @@
                                             TextOptions.TextFormattingMode="Display"
                                             TextOptions.TextRenderingMode="Grayscale"
                                             FontSize="{DynamicResource HeaderFontSize}"                                            
-                                            Text="{Binding Path=Title, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}"
-                                            />
-                                        <Button
+                                            Text="{Binding Path=Title, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}" />
+
+                                            <TextBlock Grid.Column="2" VerticalAlignment="Center" Margin="4,0,4,0" TextOptions.TextFormattingMode="Display"
+                                                      FontSize="{DynamicResource SmallFontSize}" Text="v. 1.0" />
+                                            <Button
                                             x:Name="MinButton"
-                                            Grid.Column="2"
+                                            Grid.Column="3"
                                             VerticalAlignment="Top"
                                             Width="34"
                                             Height="26"
@@ -144,7 +147,7 @@
                                             </Grid>
                                         </Button>
                                         <Button
-                                            Grid.Column="3"
+                                            Grid.Column="4"
                                             x:Name="MaxButton" 
                                             VerticalAlignment="Top"
                                             Width="34"
@@ -165,7 +168,7 @@
                                             </Grid>
                                         </Button>
                                         <Button
-                                            Grid.Column="4"
+                                            Grid.Column="5"
                                             x:Name="CloseButton" 
                                             VerticalAlignment="Top"
                                             Width="34"

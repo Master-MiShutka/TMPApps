@@ -4,7 +4,6 @@ Y:\Developer\CURRENT\TMPApps\Emcos\DataForCalculateNormativ\obj\Debug\Background
 Y:\Developer\CURRENT\TMPApps\Emcos\DataForCalculateNormativ\obj\Debug\GetDataControl.g.cs
 Y:\Developer\CURRENT\TMPApps\Emcos\DataForCalculateNormativ\obj\Debug\MainWindow.g.cs
 Y:\Developer\CURRENT\TMPApps\Emcos\DataForCalculateNormativ\obj\Debug\ProgressControl.g.cs
-Y:\Developer\CURRENT\TMPApps\Emcos\DataForCalculateNormativ\obj\Debug\SettingsWindow.g.cs
 Y:\Developer\CURRENT\TMPApps\Emcos\DataForCalculateNormativ\obj\Debug\Styles\WindowStyle.g.cs
 Y:\Developer\CURRENT\TMPApps\Emcos\DataForCalculateNormativ\obj\Debug\App.g.cs
 Y:\Developer\CURRENT\TMPApps\Emcos\DataForCalculateNormativ\obj\Debug\GeneratedInternalTypeHelper.g.cs
@@ -20,10 +19,13 @@ Y:\Developer\CURRENT\TMPApps\Emcos\DataForCalculateNormativ\obj\Debug\GetDataCon
 Y:\Developer\CURRENT\TMPApps\Emcos\DataForCalculateNormativ\obj\Debug\ListPointDataTemplate.baml
 Y:\Developer\CURRENT\TMPApps\Emcos\DataForCalculateNormativ\obj\Debug\MainWindow.baml
 Y:\Developer\CURRENT\TMPApps\Emcos\DataForCalculateNormativ\obj\Debug\ProgressControl.baml
-Y:\Developer\CURRENT\TMPApps\Emcos\DataForCalculateNormativ\obj\Debug\SettingsWindow.baml
 Y:\Developer\CURRENT\TMPApps\Emcos\DataForCalculateNormativ\obj\Debug\DataForCalculateNormativ.g.resources
 Y:\Developer\CURRENT\TMPApps\Emcos\DataForCalculateNormativ\obj\Debug\TMP.Work.Emcos.DataForCalculateNormativ.Properties.Resources.resources
 Y:\Developer\CURRENT\TMPApps\Emcos\DataForCalculateNormativ\obj\Debug\TMP.Work.Emcos.DataForCalculateNormativ.Strings.resources
 Y:\Developer\CURRENT\TMPApps\Emcos\DataForCalculateNormativ\obj\Debug\DataForCalculateNormativ.csproj.GenerateResource.Cache
 Y:\Developer\CURRENT\TMPApps\Emcos\DataForCalculateNormativ\obj\Debug\DataForCalculateNormativ.exe
 Y:\Developer\CURRENT\TMPApps\Emcos\DataForCalculateNormativ\obj\Debug\DataForCalculateNormativ.pdb
+Y:\Developer\CURRENT\TMPApps\Emcos\DataForCalculateNormativ\obj\Debug\SettingsControl.g.cs
+Y:\Developer\CURRENT\TMPApps\Emcos\DataForCalculateNormativ\obj\Debug\SettingsControl.baml
+Y:\Developer\CURRENT\TMPApps\Emcos\DataForCalculateNormativ\obj\Debug\GetAuxiliaryControl.g.cs
+Y:\Developer\CURRENT\TMPApps\Emcos\DataForCalculateNormativ\obj\Debug\GetAuxiliaryControl.baml

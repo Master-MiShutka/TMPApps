@@ -1,80 +1,144 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
-using System.Text;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace TMP.Work.Emcos.DataForCalculateNormativ
 {
     /// <summary>
-    /// Interaction logic for SettingsWindow.xaml
+    /// Interaction logic for SettingsControl.xaml
     /// </summary>
-    public partial class SettingsWindow : Window
-    {
-        private bool _waitingIsShowing = false;
+    public partial class SettingsControl : WaitableControl
+    {        
+        private bool _serverAvailability = false;
+        private bool _serviceAvailability = false;
+        private string _messageError = String.Empty;
+        private bool _isReportSettingsEnabled = false;
+        private IEnumerable<Model.EmcosReportType> _reportsGroupList;
+        private IEnumerable<Model.EmcosReport> _reportsList;
+        private IEnumerable<ListPoint> _departamentsList;
 
-        public SettingsWindow()
+        private Action _closeAction;
+
+        public SettingsControl(Action closeAction)
         {
+            if (closeAction == null)
+                throw new ArgumentNullException("Close action must be not null");
+            _closeAction = closeAction;
+
             InitializeComponent();
-            groupReport.IsEnabled = false;
-        }
 
-        private void ShowWaitingScreen()
-        {
-            Cursor = Cursors.Wait;
-            ProgressControl progress = new ProgressControl(true);
-            progress.progressText.Text = "Проверка корректности настроек ...";
-            dialogHost.Content = progress;
-            _waitingIsShowing = true;
-        }
-        private void HideWaitingScreen()
-        {
-            dialogHost.Content = null;
-            Cursor = Cursors.Arrow;
-            _waitingIsShowing = false;
-        }
+            IsReportSettingsEnabled = false;
+            ServerAvailability = false;
+            ServiceAvailability = false;
 
-        private void BtnSave_Click(object sender, RoutedEventArgs e)
-        {
-            Properties.Settings.Default.Save();
-            Close();
-        }
-        private async void CmbReportsGroup_SelectionChangedAsync(object sender, SelectionChangedEventArgs e)
-        {
-            if (_waitingIsShowing)
-                await InitReportsAsync();
-            else
+            base.WaitMessage = "Проверка корректности настроек ...";
+
+            CheckCommand = new DelegateCommand(async (o) =>
             {
-                ShowWaitingScreen();
-                await InitReportsAsync();
-                HideWaitingScreen();
+                ShowWaitingScreen(WaitMessage);
+                if (await CheckServiceAvailability())
+                    await InitReportsGroupAsync();
+
+                ClearDialogHost();
+            });
+            ToDefaultCommand = new DelegateCommand((o) =>
+            {
+                Properties.Settings.Default.ServerAddress = "10.96.18.16";
+                Properties.Settings.Default.SiteName = "emcos";
+                Properties.Settings.Default.ServiceName = "testWebService/Service.asmx";
+                Properties.Settings.Default.UserName = "sbyt";
+                Properties.Settings.Default.Password = "sbyt";
+                Properties.Settings.Default.NetTimeOutInSeconds = 1800;
+            });
+            SaveCommand = new DelegateCommand((o) =>
+            {
+                Properties.Settings.Default.Save();
+                _closeAction();
+            });
+
+            DataContext = this;
+
+            this.Loaded += UserControl_Loaded;
+        }
+
+        #region Command and Properties
+
+        public ICommand CheckCommand { get; private set; }
+        public ICommand ToDefaultCommand { get; private set; }
+        public ICommand SaveCommand { get; private set; }
+
+        public bool ServerAvailability
+        {
+            get { return _serverAvailability; }
+            private set { SetProperty(ref _serverAvailability, value); }
+        }
+        public bool ServiceAvailability
+        {
+            get { return _serviceAvailability; }
+            private set { SetProperty(ref _serviceAvailability, value); }
+        }
+        public string MessageError
+        {
+            get { return _messageError; }
+            private set { SetProperty(ref _messageError, value); }
+        }
+        public bool IsReportSettingsEnabled
+        {
+            get { return _isReportSettingsEnabled; }
+            private set { SetProperty(ref _isReportSettingsEnabled, value); }
+        }
+
+        public IEnumerable<Model.EmcosReportType> ReportsGroupList
+        {
+            get { return _reportsGroupList; }
+            private set
+            {
+                App.UIAction((async () =>
+                {
+                    if (DialogHost != null)
+                        await InitReportsAsync();
+                    else
+                    {
+                        ShowWaitingScreen(WaitMessage);
+                        await InitReportsAsync();
+                        ClearDialogHost();
+                    }
+                }));
+                SetProperty(ref _reportsGroupList, value);
             }
         }
-
-        private void BtnToDefault_Click(object sender, RoutedEventArgs e)
+        public IEnumerable<Model.EmcosReport> ReportsList
         {
-            txtServerAddress.Text = "10.96.18.16";
-            txtServiceName.Text = "emcos";
-            txtUserName.Text = "sbyt";
-            txtPassword.Text = "sbyt";
-            txtNetTimeOutInSeconds.Text = "1800";
+            get { return _reportsList; }
+            private set { SetProperty(ref _reportsList, value); }
         }
-
-        private async void BtnCheck_ClickAsync(object sender, RoutedEventArgs e)
+        public IEnumerable<ListPoint> DepartamentsList
         {
-            ShowWaitingScreen();
-            if (await CheckServiceAvailability())
-                await InitReportsGroupAsync();
+            get { return _departamentsList; }
+            private set { SetProperty(ref _departamentsList, value); }
+        }
+        #endregion
 
-            HideWaitingScreen();
+        private async void UserControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            ProgressControl progress = new ProgressControl(WaitMessage, true);
+            DialogHost = progress;
+
+            if (await CheckServiceAvailability())
+            {
+                await InitReportsGroupAsync();
+                await InitReportsAsync();
+                await InitDepartamentsAsync();
+            }
+            ClearDialogHost();
         }
 
         private async Task<bool> CheckServiceAvailability()
@@ -86,34 +150,24 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
                 if (ok)
                 {
                     result = true;
+                    ServiceAvailability = true;
 
-                    tbServiceAvailability.Text = String.Format(Strings.ServiceAvailability, String.Empty);
-                    tbServiceAvailability.Foreground = Brushes.Green;
-
-                    tbError.Text = String.Empty;
-                    tbError.Visibility = Visibility.Collapsed;
-
-                    groupReport.IsEnabled = true;
+                    MessageError = String.Empty;
+                    IsReportSettingsEnabled = true;
                 }
                 else
                 {
                     result = false;
-                    if (String.IsNullOrEmpty(tbError.Text) == false)
-                        tbError.Visibility = Visibility.Visible;
-                    else
-                        tbError.Visibility = Visibility.Collapsed;
-                    tbServiceAvailability.Text = String.Format(Strings.ServiceAvailability, Strings.No);
-                    tbServiceAvailability.Foreground = Brushes.Red;
+                    ServiceAvailability = false;
                 }
             };
 
             try
             {
-                bool serverAvailability = ServiceHelper.IsServerOnline();
+                bool serverAvailability = await ServiceHelper.IsServerOnline();
                 if (serverAvailability)
                 {
-                    tbServerAvailability.Text = String.Format(Strings.ServerAvailability, String.Empty);
-                    tbServerAvailability.Foreground = Brushes.Green;
+                    ServerAvailability = true;
 
                     // проверка наличия доступа
                     bool hasRights = await ServiceHelper.Login(true);
@@ -123,14 +177,14 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
                     {
                         if (String.IsNullOrEmpty(answer))
                         {
-                            tbError.Text = Strings.IncorrectService;
+                            MessageError = Strings.IncorrectService;
                             onFinally(false);
                         }
                         hasRights = await ServiceHelper.Login();
                         // авторизация не успешна
                         if (hasRights == false)
                         {
-                            tbError.Text = Strings.AuthorizationFailed;
+                            MessageError = Strings.AuthorizationFailed;
                             onFinally(false);
                         }
                         else
@@ -152,8 +206,7 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
                 }
                 else
                 {
-                    tbServerAvailability.Text = String.Format(Strings.ServerAvailability, Strings.No);
-                    tbServerAvailability.Foreground = Brushes.Red;
+                    ServerAvailability = false;
                     onFinally(false);
                 }
             }
@@ -161,28 +214,11 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
             {
                 string message = String.Format(Strings.Error, ex.Message);
                 App.ShowError(message);
-                tbError.Text = message;
+                MessageError = message;
                 onFinally(false);
                 return false;
             }
             return result;
-        }
-
-        private async void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-            ShowWaitingScreen();
-
-            if (ServiceHelper.IsServerOnline() == false)
-            {
-                tbServerAvailability.Text = String.Format(Strings.ServerAvailability, Strings.No);
-                tbServerAvailability.Foreground = Brushes.Red;
-                return;
-            }
-
-            if (await CheckServiceAvailability())
-                await InitReportsGroupAsync();
-            await InitDepartamentsAsync();
-            HideWaitingScreen();
         }
 
         private async Task<bool> InitReportsGroupAsync()
@@ -232,16 +268,14 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
             {
                 return false;
             }
-            cmbReportsGroup.ItemsSource = list;
+            ReportsGroupList = list;
             return true;
         }
 
         private async Task<bool> InitReportsAsync()
         {
-            string groupIdAsString = cmbReportsGroup.SelectedValue.ToString();
-            int groupID = 0;
-            if (int.TryParse(groupIdAsString, out groupID) == false)
-                return false;
+            int groupID = Properties.Settings.Default.SelectedReportsGroupId;
+
             var list = new List<Model.EmcosReport>();
             try
             {
@@ -251,8 +285,6 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
                 string url = @"{0}scripts/reports.asp";
                 string data = await ServiceHelper.ExecuteFunctionAsync(ServiceHelper.MakeRequestAsync, url, paramGetReports, true, (answer) => ServiceHelper.DecodeAnswer(answer));
                 //string data = "&RP_ID_0=679&RP_TYPE_ID_0=72&RP_NAME_0=Выборка точек по группе&RP_PUBLIC_0=1&RP_DESCRIPTION_0=&RPF_ID_0=1&RP_LOG_ENABLED_0=0&USER_NAME_0=System user EMCOS&TYPE_0=RP&RP_ID_1=675&RP_TYPE_ID_1=72&RP_NAME_1=Для расчета балансов ПС до 35кВ&RP_PUBLIC_1=1&RP_DESCRIPTION_1=&RPF_ID_1=2&RP_LOG_ENABLED_1=0&USER_NAME_1=Щелухин Д.Д.&TYPE_1=RP&RP_ID_2=698&RP_TYPE_ID_2=72&RP_NAME_2=Для расчета балансов ПС 35-770кВ&RP_PUBLIC_2=1&RP_DESCRIPTION_2=&RPF_ID_2=2&RP_LOG_ENABLED_2=1&USER_NAME_2=System user EMCOS&TYPE_2=RP&result=0&recordCount=3";
-                await Task.Delay(2000);
-
                 if (data.Contains("result=0") == false)
                     return false;
 
@@ -307,10 +339,11 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
             {
                 return false;
             }
-            cmbReports.ItemsSource = list;
-            Model.EmcosReport r = cmbReports.SelectedValue as Model.EmcosReport;
+            ReportsList = list;
+            /*var selected = Properties.Settings.Default.SelectedReport;
+            Model.EmcosReport r = App.Base64StringToObject<Model.EmcosReport>(selected);
             if (r != null)
-                cmbReports.SelectedItem = list.Where(i => i.RP_ID == r.RP_ID).FirstOrDefault();
+                cmbReports.SelectedItem = list.Where(i => i.RP_ID == r.RP_ID).FirstOrDefault();*/
             return true;
         }
 
@@ -342,11 +375,14 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
                     }
                 }
             }
-            catch { }
-            cmbDepartaments.ItemsSource = result;
-            ListPoint dep = cmbDepartaments.SelectedValue as ListPoint;
+            catch
+            {
+                return false;
+            }
+            DepartamentsList = result;
+            /*ListPoint dep = cmbDepartaments.SelectedValue as ListPoint;
             if (dep != null)
-                cmbDepartaments.SelectedItem = result.Where(i => i.Id == dep.Id).FirstOrDefault();
+                cmbDepartaments.SelectedItem = result.Where(i => i.Id == dep.Id).FirstOrDefault();*/
             return true;
         }
     }

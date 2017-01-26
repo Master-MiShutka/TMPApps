@@ -9,7 +9,7 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
     {
         public object GO<T>(object value)
         {
-            if (value is String)
+            if (value.GetType() == typeof(String))
             {
                 string data = value as String;
                 return App.Base64StringToObject<T>(data);

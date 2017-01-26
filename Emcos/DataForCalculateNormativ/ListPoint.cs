@@ -52,6 +52,17 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
                 Name,
                 TypeCode);
         }
+        public override bool Equals(object obj)
+        {
+            ListPoint o = obj as ListPoint;
+            if (o == null) return false;
+
+            return this.Id == o.Id && this.Name == o.Name;
+        }
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
         #region INotifyPropertyChanged Members
 
         #region Debugging Aides

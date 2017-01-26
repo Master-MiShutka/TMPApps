@@ -10,11 +10,11 @@ none
 false
 TRACE
 Y:\Developer\CURRENT\TMPApps\Emcos\DataForCalculateNormativ\App.xaml
-8-130190013
+9-282991520
 
-18-1044774223
-19625173951
-Background.xaml;GetDataControl.xaml;ListPointDataTemplate.xaml;MainWindow.xaml;ProgressControl.xaml;SettingsWindow.xaml;Styles\Generic.xaml;Styles\WindowStyle.xaml;
+191118760784
+20-1025949634
+Background.xaml;GetDataControl.xaml;ListPointDataTemplate.xaml;MainWindow.xaml;ProgressControl.xaml;SettingsControl.xaml;SettingsWindow.xaml;Styles\Generic.xaml;Styles\WindowStyle.xaml;
 
-True
+False
 

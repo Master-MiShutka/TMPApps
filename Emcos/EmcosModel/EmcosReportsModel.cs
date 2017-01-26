@@ -25,5 +25,20 @@ namespace TMP.Work.Emcos.Model
         public bool RP_LOG_ENABLED { get; set; }
         public string USER_NAME { get; set; }
         public static string TYPE { get; } = "RP";
+
+        public override string ToString()
+        {
+            return string.Format("Id:{0}, Name:{1}, TypeId:{2}",
+                RP_ID,
+                RP_NAME,
+                RP_TYPE_ID);
+        }
+        public override bool Equals(object obj)
+        {
+            EmcosReport o = obj as EmcosReport;
+            if (o == null) return false;
+
+            return this.RP_ID == o.RP_ID && this.RP_TYPE_ID == o.RP_TYPE_ID && this.RP_NAME == o.RP_NAME; 
+        }
     }
 }

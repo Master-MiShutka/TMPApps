@@ -41,8 +41,13 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <Button Content="TEST" Click="Button_Click" Margin="10"/>
+        <StackPanel Orientation="Horizontal">
+            <TextBox x:Name="txtPointIds" MinWidth="200" Margin="5" ToolTip="Коды точек, разделенные '|'" Text="3644|3646|3648|3650"/>
+            <Button Content="GET" Click="ButtonGet_Click" Margin="10"/>
+            <Button Content="TEST" Click="Button_Click" Margin="10"/>
+        </StackPanel>
         <controls_TableView:TableView
             x:Name="table"
             Grid.Row="1"
@@ -66,6 +71,7 @@
                     </Style.Triggers>
                 </Style>
             </controls_TableView:TableView.Style>
-        </controls_TableView:TableView>    
+        </controls_TableView:TableView>
+        <DataGrid Grid.Row="2" x:Name="dataGrid" AutoGenerateColumns="True" ItemsSource="{Binding Items2, IsAsync=True}"/>
     </Grid>
 </Window>

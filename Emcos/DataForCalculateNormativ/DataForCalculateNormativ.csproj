@@ -53,6 +53,7 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Web" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
@@ -76,15 +77,25 @@
       <DependentUpon>Background.xaml</DependentUpon>
     </Compile>
     <Compile Include="Base64StringObjectConverter.cs" />
+    <Compile Include="Connected Services\EmcosTestWebService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
     <Compile Include="DelegateCommand.cs" />
+    <Compile Include="BoolToVisibilityConverter.cs" />
+    <Compile Include="GetAuxiliaryControl.xaml.cs">
+      <DependentUpon>GetAuxiliaryControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="GetDataControl.xaml.cs">
       <DependentUpon>GetDataControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="MainWindow-Buttons.cs" />
-    <Compile Include="MainWindow-Events.cs" />
+    <Compile Include="ListPointStatus.cs" />
+    <Compile Include="ListPointWithResult.cs" />
+    <Compile Include="RPQ.cs" />
     <Compile Include="ServiceHelper.cs" />
-    <Compile Include="SettingsWindow.xaml.cs">
-      <DependentUpon>SettingsWindow.xaml</DependentUpon>
+    <Compile Include="SettingsControl.xaml.cs">
+      <DependentUpon>SettingsControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Strings.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -93,7 +104,12 @@
     </Compile>
     <Compile Include="Styles\WindowStyle.cs" />
     <Compile Include="Utils.cs" />
+    <Compile Include="WaitableControl.cs" />
     <Page Include="Background.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="GetAuxiliaryControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -122,7 +138,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="SettingsWindow.xaml">
+    <Page Include="SettingsControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -163,6 +179,8 @@
     </EmbeddedResource>
     <None Include="App.config" />
     <None Include="app.manifest" />
+    <None Include="Connected Services\EmcosTestWebService\Service.wsdl" />
+    <None Include="Properties\DataSources\System.Data.DataTable.datasource" />
     <None Include="Properties\Settings.settings">
       <Generator>PublicSettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -213,6 +231,27 @@
   <ItemGroup>
     <Resource Include="Resources\Departament.png" />
     <Resource Include="Resources\Group.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadataStorage Include="Connected Services\EmcosTestWebService\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\EmcosTestWebService\Service.disco" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\EmcosTestWebService\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\EmcosTestWebService\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\EmcosTestWebService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

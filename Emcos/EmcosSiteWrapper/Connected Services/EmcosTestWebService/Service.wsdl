@@ -1,0 +1,1044 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://ksmlab.ru/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://ksmlab.ru/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://ksmlab.ru/">
+      <s:element name="GetPointInfo">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="UserName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="PPOINT_CODE_ID" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetPointInfoResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetPointInfoResult">
+              <s:complexType>
+                <s:sequence>
+                  <s:any minOccurs="0" maxOccurs="unbounded" namespace="http://www.w3.org/2001/XMLSchema" processContents="lax" />
+                  <s:any minOccurs="1" namespace="urn:schemas-microsoft-com:xml-diffgram-v1" processContents="lax" />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetGRInfo">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="UserName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="PGR_ID" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetGRInfoResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetGRInfoResult">
+              <s:complexType>
+                <s:sequence>
+                  <s:any minOccurs="0" maxOccurs="unbounded" namespace="http://www.w3.org/2001/XMLSchema" processContents="lax" />
+                  <s:any minOccurs="1" namespace="urn:schemas-microsoft-com:xml-diffgram-v1" processContents="lax" />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetMLInfo">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="UserName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="PML_ID" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetMLInfoResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetMLInfoResult">
+              <s:complexType>
+                <s:sequence>
+                  <s:any minOccurs="0" maxOccurs="unbounded" namespace="http://www.w3.org/2001/XMLSchema" processContents="lax" />
+                  <s:any minOccurs="1" namespace="urn:schemas-microsoft-com:xml-diffgram-v1" processContents="lax" />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetSTPLData">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="UserName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="PPOINT_CODE_ID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="PML_ID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="PBT" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="PET" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetSTPLDataResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetSTPLDataResult">
+              <s:complexType>
+                <s:sequence>
+                  <s:any minOccurs="0" maxOccurs="unbounded" namespace="http://www.w3.org/2001/XMLSchema" processContents="lax" />
+                  <s:any minOccurs="1" namespace="urn:schemas-microsoft-com:xml-diffgram-v1" processContents="lax" />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetRPARGRCacheData">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="UserName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="PGR_ID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="PML_ID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="PBT" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="PET" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetRPARGRCacheDataResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetRPARGRCacheDataResult">
+              <s:complexType>
+                <s:sequence>
+                  <s:any minOccurs="0" maxOccurs="unbounded" namespace="http://www.w3.org/2001/XMLSchema" processContents="lax" />
+                  <s:any minOccurs="1" namespace="urn:schemas-microsoft-com:xml-diffgram-v1" processContents="lax" />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetDayEnergyFromGroup_3min">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="UserName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="PGR_ID" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetDayEnergyFromGroup_3minResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetDayEnergyFromGroup_3minResult">
+              <s:complexType>
+                <s:sequence>
+                  <s:any minOccurs="0" maxOccurs="unbounded" namespace="http://www.w3.org/2001/XMLSchema" processContents="lax" />
+                  <s:any minOccurs="1" namespace="urn:schemas-microsoft-com:xml-diffgram-v1" processContents="lax" />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetGroupValue">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="UserName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="PGR_ID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="PML_ID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Interval" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Offset" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetGroupValueResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetGroupValueResult">
+              <s:complexType>
+                <s:sequence>
+                  <s:any minOccurs="0" maxOccurs="unbounded" namespace="http://www.w3.org/2001/XMLSchema" processContents="lax" />
+                  <s:any minOccurs="1" namespace="urn:schemas-microsoft-com:xml-diffgram-v1" processContents="lax" />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetRPARGRData">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="UserName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="PGR_ID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="PML_ID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="PBT" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="PET" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetRPARGRDataResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetRPARGRDataResult">
+              <s:complexType>
+                <s:sequence>
+                  <s:any minOccurs="0" maxOccurs="unbounded" namespace="http://www.w3.org/2001/XMLSchema" processContents="lax" />
+                  <s:any minOccurs="1" namespace="urn:schemas-microsoft-com:xml-diffgram-v1" processContents="lax" />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetLPTYInfo">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="UserName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="LPTY_ID" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetLPTYInfoResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetLPTYInfoResult">
+              <s:complexType>
+                <s:sequence>
+                  <s:any minOccurs="0" maxOccurs="unbounded" namespace="http://www.w3.org/2001/XMLSchema" processContents="lax" />
+                  <s:any minOccurs="1" namespace="urn:schemas-microsoft-com:xml-diffgram-v1" processContents="lax" />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetSEParams">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="UserName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="SE_ID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="LPTY_ID" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetSEParamsResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetSEParamsResult">
+              <s:complexType>
+                <s:sequence>
+                  <s:any minOccurs="0" maxOccurs="unbounded" namespace="http://www.w3.org/2001/XMLSchema" processContents="lax" />
+                  <s:any minOccurs="1" namespace="urn:schemas-microsoft-com:xml-diffgram-v1" processContents="lax" />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetDPInfo">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="UserName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="DP_ID" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetDPInfoResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetDPInfoResult">
+              <s:complexType>
+                <s:sequence>
+                  <s:any minOccurs="0" maxOccurs="unbounded" namespace="http://www.w3.org/2001/XMLSchema" processContents="lax" />
+                  <s:any minOccurs="1" namespace="urn:schemas-microsoft-com:xml-diffgram-v1" processContents="lax" />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="Get_POINT_SRC_DP">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="UserName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="DP_ID" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="Get_POINT_SRC_DPResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="Get_POINT_SRC_DPResult">
+              <s:complexType>
+                <s:sequence>
+                  <s:any minOccurs="0" maxOccurs="unbounded" namespace="http://www.w3.org/2001/XMLSchema" processContents="lax" />
+                  <s:any minOccurs="1" namespace="urn:schemas-microsoft-com:xml-diffgram-v1" processContents="lax" />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetSEElements">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="UserName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="SRC_ID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="POINT_ID" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetSEElementsResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetSEElementsResult">
+              <s:complexType>
+                <s:sequence>
+                  <s:any minOccurs="0" maxOccurs="unbounded" namespace="http://www.w3.org/2001/XMLSchema" processContents="lax" />
+                  <s:any minOccurs="1" namespace="urn:schemas-microsoft-com:xml-diffgram-v1" processContents="lax" />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetSEElementsSEP">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="UserName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="SRC_ID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="POINT_ID" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetSEElementsSEPResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetSEElementsSEPResult">
+              <s:complexType>
+                <s:sequence>
+                  <s:any minOccurs="0" maxOccurs="unbounded" namespace="http://www.w3.org/2001/XMLSchema" processContents="lax" />
+                  <s:any minOccurs="1" namespace="urn:schemas-microsoft-com:xml-diffgram-v1" processContents="lax" />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SetSEParams">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="UserName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="SE_ID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="LPTY_ID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="LPTY_VALUE" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SetSEParamsResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="SetSEParamsResult">
+              <s:complexType>
+                <s:sequence>
+                  <s:any minOccurs="0" maxOccurs="unbounded" namespace="http://www.w3.org/2001/XMLSchema" processContents="lax" />
+                  <s:any minOccurs="1" namespace="urn:schemas-microsoft-com:xml-diffgram-v1" processContents="lax" />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SetDPEnabledParam">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="UserName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="DP_ID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="ENABLED_VALUE" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SetDPEnabledParamResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="SetDPEnabledParamResult">
+              <s:complexType>
+                <s:sequence>
+                  <s:any minOccurs="0" maxOccurs="unbounded" namespace="http://www.w3.org/2001/XMLSchema" processContents="lax" />
+                  <s:any minOccurs="1" namespace="urn:schemas-microsoft-com:xml-diffgram-v1" processContents="lax" />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetDPChannelsInfo">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="UserName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="DP_ID" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetDPChannelsInfoResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetDPChannelsInfoResult">
+              <s:complexType>
+                <s:sequence>
+                  <s:any minOccurs="0" maxOccurs="unbounded" namespace="http://www.w3.org/2001/XMLSchema" processContents="lax" />
+                  <s:any minOccurs="1" namespace="urn:schemas-microsoft-com:xml-diffgram-v1" processContents="lax" />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SetPHEnabledParam">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="UserName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="PH_ID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="ENABLED_VALUE" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SetPHEnabledParamResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="SetPHEnabledParamResult">
+              <s:complexType>
+                <s:sequence>
+                  <s:any minOccurs="0" maxOccurs="unbounded" namespace="http://www.w3.org/2001/XMLSchema" processContents="lax" />
+                  <s:any minOccurs="1" namespace="urn:schemas-microsoft-com:xml-diffgram-v1" processContents="lax" />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SetSEEnabledParam">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="UserName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="SE_ID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="ENABLED_VALUE" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SetSEEnabledParamResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="SetSEEnabledParamResult">
+              <s:complexType>
+                <s:sequence>
+                  <s:any minOccurs="0" maxOccurs="unbounded" namespace="http://www.w3.org/2001/XMLSchema" processContents="lax" />
+                  <s:any minOccurs="1" namespace="urn:schemas-microsoft-com:xml-diffgram-v1" processContents="lax" />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SetSEPEnabledParam">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="UserName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="SEP_ID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="ENABLED_VALUE" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SetSEPEnabledParamResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="SetSEPEnabledParamResult">
+              <s:complexType>
+                <s:sequence>
+                  <s:any minOccurs="0" maxOccurs="unbounded" namespace="http://www.w3.org/2001/XMLSchema" processContents="lax" />
+                  <s:any minOccurs="1" namespace="urn:schemas-microsoft-com:xml-diffgram-v1" processContents="lax" />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="GetPointInfoSoapIn">
+    <wsdl:part name="parameters" element="tns:GetPointInfo" />
+  </wsdl:message>
+  <wsdl:message name="GetPointInfoSoapOut">
+    <wsdl:part name="parameters" element="tns:GetPointInfoResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetGRInfoSoapIn">
+    <wsdl:part name="parameters" element="tns:GetGRInfo" />
+  </wsdl:message>
+  <wsdl:message name="GetGRInfoSoapOut">
+    <wsdl:part name="parameters" element="tns:GetGRInfoResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetMLInfoSoapIn">
+    <wsdl:part name="parameters" element="tns:GetMLInfo" />
+  </wsdl:message>
+  <wsdl:message name="GetMLInfoSoapOut">
+    <wsdl:part name="parameters" element="tns:GetMLInfoResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetSTPLDataSoapIn">
+    <wsdl:part name="parameters" element="tns:GetSTPLData" />
+  </wsdl:message>
+  <wsdl:message name="GetSTPLDataSoapOut">
+    <wsdl:part name="parameters" element="tns:GetSTPLDataResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetRPARGRCacheDataSoapIn">
+    <wsdl:part name="parameters" element="tns:GetRPARGRCacheData" />
+  </wsdl:message>
+  <wsdl:message name="GetRPARGRCacheDataSoapOut">
+    <wsdl:part name="parameters" element="tns:GetRPARGRCacheDataResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetDayEnergyFromGroup_3minSoapIn">
+    <wsdl:part name="parameters" element="tns:GetDayEnergyFromGroup_3min" />
+  </wsdl:message>
+  <wsdl:message name="GetDayEnergyFromGroup_3minSoapOut">
+    <wsdl:part name="parameters" element="tns:GetDayEnergyFromGroup_3minResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetGroupValueSoapIn">
+    <wsdl:part name="parameters" element="tns:GetGroupValue" />
+  </wsdl:message>
+  <wsdl:message name="GetGroupValueSoapOut">
+    <wsdl:part name="parameters" element="tns:GetGroupValueResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetRPARGRDataSoapIn">
+    <wsdl:part name="parameters" element="tns:GetRPARGRData" />
+  </wsdl:message>
+  <wsdl:message name="GetRPARGRDataSoapOut">
+    <wsdl:part name="parameters" element="tns:GetRPARGRDataResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetLPTYInfoSoapIn">
+    <wsdl:part name="parameters" element="tns:GetLPTYInfo" />
+  </wsdl:message>
+  <wsdl:message name="GetLPTYInfoSoapOut">
+    <wsdl:part name="parameters" element="tns:GetLPTYInfoResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetSEParamsSoapIn">
+    <wsdl:part name="parameters" element="tns:GetSEParams" />
+  </wsdl:message>
+  <wsdl:message name="GetSEParamsSoapOut">
+    <wsdl:part name="parameters" element="tns:GetSEParamsResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetDPInfoSoapIn">
+    <wsdl:part name="parameters" element="tns:GetDPInfo" />
+  </wsdl:message>
+  <wsdl:message name="GetDPInfoSoapOut">
+    <wsdl:part name="parameters" element="tns:GetDPInfoResponse" />
+  </wsdl:message>
+  <wsdl:message name="Get_POINT_SRC_DPSoapIn">
+    <wsdl:part name="parameters" element="tns:Get_POINT_SRC_DP" />
+  </wsdl:message>
+  <wsdl:message name="Get_POINT_SRC_DPSoapOut">
+    <wsdl:part name="parameters" element="tns:Get_POINT_SRC_DPResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetSEElementsSoapIn">
+    <wsdl:part name="parameters" element="tns:GetSEElements" />
+  </wsdl:message>
+  <wsdl:message name="GetSEElementsSoapOut">
+    <wsdl:part name="parameters" element="tns:GetSEElementsResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetSEElementsSEPSoapIn">
+    <wsdl:part name="parameters" element="tns:GetSEElementsSEP" />
+  </wsdl:message>
+  <wsdl:message name="GetSEElementsSEPSoapOut">
+    <wsdl:part name="parameters" element="tns:GetSEElementsSEPResponse" />
+  </wsdl:message>
+  <wsdl:message name="SetSEParamsSoapIn">
+    <wsdl:part name="parameters" element="tns:SetSEParams" />
+  </wsdl:message>
+  <wsdl:message name="SetSEParamsSoapOut">
+    <wsdl:part name="parameters" element="tns:SetSEParamsResponse" />
+  </wsdl:message>
+  <wsdl:message name="SetDPEnabledParamSoapIn">
+    <wsdl:part name="parameters" element="tns:SetDPEnabledParam" />
+  </wsdl:message>
+  <wsdl:message name="SetDPEnabledParamSoapOut">
+    <wsdl:part name="parameters" element="tns:SetDPEnabledParamResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetDPChannelsInfoSoapIn">
+    <wsdl:part name="parameters" element="tns:GetDPChannelsInfo" />
+  </wsdl:message>
+  <wsdl:message name="GetDPChannelsInfoSoapOut">
+    <wsdl:part name="parameters" element="tns:GetDPChannelsInfoResponse" />
+  </wsdl:message>
+  <wsdl:message name="SetPHEnabledParamSoapIn">
+    <wsdl:part name="parameters" element="tns:SetPHEnabledParam" />
+  </wsdl:message>
+  <wsdl:message name="SetPHEnabledParamSoapOut">
+    <wsdl:part name="parameters" element="tns:SetPHEnabledParamResponse" />
+  </wsdl:message>
+  <wsdl:message name="SetSEEnabledParamSoapIn">
+    <wsdl:part name="parameters" element="tns:SetSEEnabledParam" />
+  </wsdl:message>
+  <wsdl:message name="SetSEEnabledParamSoapOut">
+    <wsdl:part name="parameters" element="tns:SetSEEnabledParamResponse" />
+  </wsdl:message>
+  <wsdl:message name="SetSEPEnabledParamSoapIn">
+    <wsdl:part name="parameters" element="tns:SetSEPEnabledParam" />
+  </wsdl:message>
+  <wsdl:message name="SetSEPEnabledParamSoapOut">
+    <wsdl:part name="parameters" element="tns:SetSEPEnabledParamResponse" />
+  </wsdl:message>
+  <wsdl:portType name="ServiceSoap">
+    <wsdl:operation name="GetPointInfo">
+      <wsdl:input message="tns:GetPointInfoSoapIn" />
+      <wsdl:output message="tns:GetPointInfoSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetGRInfo">
+      <wsdl:input message="tns:GetGRInfoSoapIn" />
+      <wsdl:output message="tns:GetGRInfoSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetMLInfo">
+      <wsdl:input message="tns:GetMLInfoSoapIn" />
+      <wsdl:output message="tns:GetMLInfoSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetSTPLData">
+      <wsdl:input message="tns:GetSTPLDataSoapIn" />
+      <wsdl:output message="tns:GetSTPLDataSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetRPARGRCacheData">
+      <wsdl:input message="tns:GetRPARGRCacheDataSoapIn" />
+      <wsdl:output message="tns:GetRPARGRCacheDataSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetDayEnergyFromGroup_3min">
+      <wsdl:input message="tns:GetDayEnergyFromGroup_3minSoapIn" />
+      <wsdl:output message="tns:GetDayEnergyFromGroup_3minSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetGroupValue">
+      <wsdl:input message="tns:GetGroupValueSoapIn" />
+      <wsdl:output message="tns:GetGroupValueSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetRPARGRData">
+      <wsdl:input message="tns:GetRPARGRDataSoapIn" />
+      <wsdl:output message="tns:GetRPARGRDataSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetLPTYInfo">
+      <wsdl:input message="tns:GetLPTYInfoSoapIn" />
+      <wsdl:output message="tns:GetLPTYInfoSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetSEParams">
+      <wsdl:input message="tns:GetSEParamsSoapIn" />
+      <wsdl:output message="tns:GetSEParamsSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetDPInfo">
+      <wsdl:input message="tns:GetDPInfoSoapIn" />
+      <wsdl:output message="tns:GetDPInfoSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="Get_POINT_SRC_DP">
+      <wsdl:input message="tns:Get_POINT_SRC_DPSoapIn" />
+      <wsdl:output message="tns:Get_POINT_SRC_DPSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetSEElements">
+      <wsdl:input message="tns:GetSEElementsSoapIn" />
+      <wsdl:output message="tns:GetSEElementsSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetSEElementsSEP">
+      <wsdl:input message="tns:GetSEElementsSEPSoapIn" />
+      <wsdl:output message="tns:GetSEElementsSEPSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SetSEParams">
+      <wsdl:input message="tns:SetSEParamsSoapIn" />
+      <wsdl:output message="tns:SetSEParamsSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SetDPEnabledParam">
+      <wsdl:input message="tns:SetDPEnabledParamSoapIn" />
+      <wsdl:output message="tns:SetDPEnabledParamSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetDPChannelsInfo">
+      <wsdl:input message="tns:GetDPChannelsInfoSoapIn" />
+      <wsdl:output message="tns:GetDPChannelsInfoSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SetPHEnabledParam">
+      <wsdl:input message="tns:SetPHEnabledParamSoapIn" />
+      <wsdl:output message="tns:SetPHEnabledParamSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SetSEEnabledParam">
+      <wsdl:input message="tns:SetSEEnabledParamSoapIn" />
+      <wsdl:output message="tns:SetSEEnabledParamSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SetSEPEnabledParam">
+      <wsdl:input message="tns:SetSEPEnabledParamSoapIn" />
+      <wsdl:output message="tns:SetSEPEnabledParamSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="ServiceSoap" type="tns:ServiceSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="GetPointInfo">
+      <soap:operation soapAction="http://ksmlab.ru/GetPointInfo" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetGRInfo">
+      <soap:operation soapAction="http://ksmlab.ru/GetGRInfo" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetMLInfo">
+      <soap:operation soapAction="http://ksmlab.ru/GetMLInfo" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetSTPLData">
+      <soap:operation soapAction="http://ksmlab.ru/GetSTPLData" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetRPARGRCacheData">
+      <soap:operation soapAction="http://ksmlab.ru/GetRPARGRCacheData" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetDayEnergyFromGroup_3min">
+      <soap:operation soapAction="http://ksmlab.ru/GetDayEnergyFromGroup_3min" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetGroupValue">
+      <soap:operation soapAction="http://ksmlab.ru/GetGroupValue" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetRPARGRData">
+      <soap:operation soapAction="http://ksmlab.ru/GetRPARGRData" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetLPTYInfo">
+      <soap:operation soapAction="http://ksmlab.ru/GetLPTYInfo" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetSEParams">
+      <soap:operation soapAction="http://ksmlab.ru/GetSEParams" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetDPInfo">
+      <soap:operation soapAction="http://ksmlab.ru/GetDPInfo" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Get_POINT_SRC_DP">
+      <soap:operation soapAction="http://ksmlab.ru/Get_POINT_SRC_DP" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetSEElements">
+      <soap:operation soapAction="http://ksmlab.ru/GetSEElements" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetSEElementsSEP">
+      <soap:operation soapAction="http://ksmlab.ru/GetSEElementsSEP" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SetSEParams">
+      <soap:operation soapAction="http://ksmlab.ru/SetSEParams" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SetDPEnabledParam">
+      <soap:operation soapAction="http://ksmlab.ru/SetDPEnabledParam" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetDPChannelsInfo">
+      <soap:operation soapAction="http://ksmlab.ru/GetDPChannelsInfo" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SetPHEnabledParam">
+      <soap:operation soapAction="http://ksmlab.ru/SetPHEnabledParam" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SetSEEnabledParam">
+      <soap:operation soapAction="http://ksmlab.ru/SetSEEnabledParam" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SetSEPEnabledParam">
+      <soap:operation soapAction="http://ksmlab.ru/SetSEPEnabledParam" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="ServiceSoap12" type="tns:ServiceSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="GetPointInfo">
+      <soap12:operation soapAction="http://ksmlab.ru/GetPointInfo" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetGRInfo">
+      <soap12:operation soapAction="http://ksmlab.ru/GetGRInfo" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetMLInfo">
+      <soap12:operation soapAction="http://ksmlab.ru/GetMLInfo" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetSTPLData">
+      <soap12:operation soapAction="http://ksmlab.ru/GetSTPLData" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetRPARGRCacheData">
+      <soap12:operation soapAction="http://ksmlab.ru/GetRPARGRCacheData" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetDayEnergyFromGroup_3min">
+      <soap12:operation soapAction="http://ksmlab.ru/GetDayEnergyFromGroup_3min" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetGroupValue">
+      <soap12:operation soapAction="http://ksmlab.ru/GetGroupValue" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetRPARGRData">
+      <soap12:operation soapAction="http://ksmlab.ru/GetRPARGRData" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetLPTYInfo">
+      <soap12:operation soapAction="http://ksmlab.ru/GetLPTYInfo" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetSEParams">
+      <soap12:operation soapAction="http://ksmlab.ru/GetSEParams" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetDPInfo">
+      <soap12:operation soapAction="http://ksmlab.ru/GetDPInfo" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Get_POINT_SRC_DP">
+      <soap12:operation soapAction="http://ksmlab.ru/Get_POINT_SRC_DP" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetSEElements">
+      <soap12:operation soapAction="http://ksmlab.ru/GetSEElements" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetSEElementsSEP">
+      <soap12:operation soapAction="http://ksmlab.ru/GetSEElementsSEP" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SetSEParams">
+      <soap12:operation soapAction="http://ksmlab.ru/SetSEParams" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SetDPEnabledParam">
+      <soap12:operation soapAction="http://ksmlab.ru/SetDPEnabledParam" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetDPChannelsInfo">
+      <soap12:operation soapAction="http://ksmlab.ru/GetDPChannelsInfo" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SetPHEnabledParam">
+      <soap12:operation soapAction="http://ksmlab.ru/SetPHEnabledParam" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SetSEEnabledParam">
+      <soap12:operation soapAction="http://ksmlab.ru/SetSEEnabledParam" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SetSEPEnabledParam">
+      <soap12:operation soapAction="http://ksmlab.ru/SetSEPEnabledParam" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="Service">
+    <wsdl:port name="ServiceSoap" binding="tns:ServiceSoap">
+      <soap:address location="http://10.96.18.16/testWebService/Service.asmx" />
+    </wsdl:port>
+    <wsdl:port name="ServiceSoap12" binding="tns:ServiceSoap12">
+      <soap12:address location="http://10.96.18.16/testWebService/Service.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

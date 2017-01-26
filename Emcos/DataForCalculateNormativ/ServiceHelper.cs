@@ -23,7 +23,7 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
             get
             {
                 return @"http://" + Properties.Settings.Default.ServerAddress + @"/"
-                  + (String.IsNullOrEmpty(Properties.Settings.Default.ServiceName) ? String.Empty : (Properties.Settings.Default.ServiceName + @"/"));
+                  + (String.IsNullOrEmpty(Properties.Settings.Default.SiteName) ? String.Empty : (Properties.Settings.Default.SiteName + @"/"));
             }
         }
         private static string GetDomain()
@@ -76,7 +76,7 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
                     }
             }
         }
-        public static bool IsServerOnline()
+        public static async Task<bool> IsServerOnline()
         {
             if (String.IsNullOrEmpty(Properties.Settings.Default.ServerAddress))
                 throw new ArgumentNullException("ServerAddress");
@@ -87,9 +87,9 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
             try
             {
                 if (Properties.Settings.Default.ServerAddress.Contains(":"))
-                    reply = pingSender.Send(Properties.Settings.Default.ServerAddress.Substring(0, Properties.Settings.Default.ServerAddress.IndexOf(':')), 100);
+                    reply = await pingSender.SendPingAsync(Properties.Settings.Default.ServerAddress.Substring(0, Properties.Settings.Default.ServerAddress.IndexOf(':')), 100);
                 else
-                    reply = pingSender.Send(Properties.Settings.Default.ServerAddress, 100);
+                    reply = await pingSender.SendPingAsync(Properties.Settings.Default.ServerAddress, 100);
                 if (reply.Status == IPStatus.Success)
                 {
                     return true;
@@ -170,8 +170,16 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
 
         public static string DecodeAnswer(string input)
         {
-            return System.Web.HttpUtility.UrlDecode(input);
-            //return Uri.UnescapeDataString(answer);
+            try
+            {
+                return System.Web.HttpUtility.UrlDecode(input);
+                //return Uri.UnescapeDataString(answer);
+            }
+            catch (Exception e)
+            {
+                var s = e.Message;
+                return null;
+            }
         }
 
         public static async Task<bool> Login(bool getRights = false)
