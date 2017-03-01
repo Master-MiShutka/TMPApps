@@ -241,10 +241,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\LIBRARY\Logger\Logger.csproj">
-      <Project>{04ce65d3-1dbf-4a95-8b6e-44ec2c896d00}</Project>
-      <Name>Logger</Name>
-    </ProjectReference>
     <ProjectReference Include="..\LIBRARY\Shared\Shared.csproj">
       <Project>{07d019f1-5192-4b8e-9bcf-b040d36935c6}</Project>
       <Name>Shared</Name>

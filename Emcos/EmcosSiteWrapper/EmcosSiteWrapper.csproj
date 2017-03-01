@@ -391,10 +391,6 @@
       <Name>EPPlus</Name>
       <Private>False</Private>
     </ProjectReference>
-    <ProjectReference Include="..\..\Library\Logger\Logger.csproj">
-      <Project>{04ce65d3-1dbf-4a95-8b6e-44ec2c896d00}</Project>
-      <Name>Logger</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Library\NetHelper\NetHelper.csproj">
       <Project>{e00c55d0-971a-4d59-8c91-e7a4d79d50e8}</Project>
       <Name>NetHelper</Name>

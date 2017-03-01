@@ -2,16 +2,22 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:Test"
-             StartupUri="MainWindow.xaml">
+             StartupUri="EmcosWebServiceTestWindow.xaml">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary
-                Source="/PresentationFramework.Aero;component/themes/Aero.NormalColor.xaml" />
+                <ResourceDictionary Source="/PresentationFramework.Aero;component/themes/Aero.NormalColor.xaml" />
+
+                <!-- ResourceDictionary Source="/TMP.Wpf.Common;component/Controls/SharpTreeView/SharpTreeViewStyle.xaml" / -->
+
+                <!-- ResourceDictionary Source="/TMP.Wpf.Common;component/Controls/SharpTreeView/SharpTreeViewStyle.xaml" />
+
+                <ResourceDictionary Source="/PresentationFramework.Aero;component/themes/Aero.NormalColor.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/TMP.Wpf.Common;component/Styles/Controls.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/TMP.Wpf.Common;component/Styles/Fonts.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/TMP.Wpf.Common;component/Styles/Colors.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/TMP.Wpf.Common;component/Styles/Accents/Blue.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/TMP.Wpf.Common;component/Styles/Accents/Blue.xaml" / -->
+              
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

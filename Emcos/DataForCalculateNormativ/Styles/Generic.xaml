@@ -2,45 +2,58 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:sys="clr-namespace:System;assembly=mscorlib">
 
-            <sys:Double x:Key="SmallFontSize">12</sys:Double>
-            <sys:Double x:Key="NormalFontSize">14</sys:Double>
-            <sys:Double x:Key="HeaderFontSize">18</sys:Double>
+    <sys:Double x:Key="SmallFontSize">12</sys:Double>
+    <sys:Double x:Key="NormalFontSize">14</sys:Double>
+    <sys:Double x:Key="HeaderFontSize">18</sys:Double>
 
-            <Style BasedOn="{StaticResource {x:Type Button}}" TargetType="{x:Type Button}">
-                <Setter Property="FontSize" Value="{StaticResource NormalFontSize}" />
-                <Setter Property="ContentTemplate">
-                    <Setter.Value>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding}" HorizontalAlignment="Center" TextAlignment="Center" LineStackingStrategy="BlockLineHeight" LineHeight="12" Padding="10 5"/>
-                        </DataTemplate>
-                    </Setter.Value>
-                </Setter>
-            </Style>
-            <Style TargetType="{x:Type Label}" BasedOn="{StaticResource {x:Type Label}}">
-                <Setter Property="FontSize" Value="{StaticResource NormalFontSize}" />
-            </Style>
-            <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
-                <Setter Property="FontSize" Value="{StaticResource NormalFontSize}" />
-            </Style>
-            <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource {x:Type TextBlock}}">
-                <Setter Property="FontSize" Value="{StaticResource NormalFontSize}" />
-            </Style>
-            <Style TargetType="{x:Type ComboBox}" BasedOn="{StaticResource {x:Type ComboBox}}">
-                <Setter Property="FontSize" Value="{StaticResource NormalFontSize}" />
-            </Style>
-            <Style TargetType="{x:Type ListBox}" BasedOn="{StaticResource {x:Type ListBox}}">
-                <Setter Property="FontSize" Value="{StaticResource NormalFontSize}" />
-            </Style>
-            <Style TargetType="{x:Type TreeView}" BasedOn="{StaticResource {x:Type TreeView}}">
-                <Setter Property="FontSize" Value="{StaticResource NormalFontSize}" />
-            </Style>
-            <Style TargetType="{x:Type Menu}" BasedOn="{StaticResource {x:Type Menu}}">
-                <Setter Property="FontSize" Value="{StaticResource HeaderFontSize}" />
-            </Style>
-            <Style TargetType="{x:Type ContextMenu}" BasedOn="{StaticResource {x:Type ContextMenu}}">
-                <Setter Property="FontSize" Value="{StaticResource HeaderFontSize}" />
-            </Style>
-            <Style TargetType="{x:Type ToolTip}" BasedOn="{StaticResource {x:Type ToolTip}}">
-                <Setter Property="FontSize" Value="{StaticResource HeaderFontSize}" />
-            </Style>    
+    <Style BasedOn="{StaticResource {x:Type Button}}" TargetType="{x:Type Button}">
+        <Setter Property="FontSize" Value="{StaticResource NormalFontSize}" />
+        <Setter Property="ContentTemplate">
+            <Setter.Value>
+                <DataTemplate>
+                    <TextBlock Text="{Binding}" HorizontalAlignment="Center" TextAlignment="Center" LineStackingStrategy="BlockLineHeight" LineHeight="12" Padding="10 5"/>
+                </DataTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style TargetType="{x:Type Label}" BasedOn="{StaticResource {x:Type Label}}">
+        <Setter Property="FontSize" Value="{StaticResource NormalFontSize}" />
+    </Style>
+    <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
+        <Setter Property="FontSize" Value="{StaticResource NormalFontSize}" />
+    </Style>
+    <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource {x:Type TextBlock}}">
+        <Setter Property="FontSize" Value="{StaticResource NormalFontSize}" />
+    </Style>
+    <Style TargetType="{x:Type ComboBox}" BasedOn="{StaticResource {x:Type ComboBox}}">
+        <Setter Property="FontSize" Value="{StaticResource NormalFontSize}" />
+    </Style>
+    <Style TargetType="{x:Type ListBox}" BasedOn="{StaticResource {x:Type ListBox}}">
+        <Setter Property="FontSize" Value="{StaticResource NormalFontSize}" />
+    </Style>
+    <Style TargetType="{x:Type TreeView}" BasedOn="{StaticResource {x:Type TreeView}}">
+        <Setter Property="FontSize" Value="{StaticResource NormalFontSize}" />
+    </Style>
+    <Style TargetType="{x:Type Menu}" BasedOn="{StaticResource {x:Type Menu}}">
+        <Setter Property="FontSize" Value="{StaticResource HeaderFontSize}" />
+    </Style>
+    <Style TargetType="{x:Type ContextMenu}" BasedOn="{StaticResource {x:Type ContextMenu}}">
+        <Setter Property="FontSize" Value="{StaticResource HeaderFontSize}" />
+    </Style>
+    <Style TargetType="{x:Type ToolTip}" BasedOn="{StaticResource {x:Type ToolTip}}">
+        <Setter Property="FontSize" Value="{StaticResource HeaderFontSize}" />
+    </Style>
+
+    <BitmapImage x:Key="Area" UriSource="/DataForCalculateNormativ;component/Resources/area.png" />
+    <BitmapImage x:Key="Auxiliary" UriSource="/DataForCalculateNormativ;component/Resources/Auxiliary.png" />
+    <BitmapImage x:Key="Departament" UriSource="/DataForCalculateNormativ;component/Resources/Departament.png" />
+    <BitmapImage x:Key="Fider" UriSource="/DataForCalculateNormativ;component/Resources/fider10.png" />
+    <BitmapImage x:Key="FiderHighVoltage" UriSource="/DataForCalculateNormativ;component/Resources/fider35.png" />
+    <BitmapImage x:Key="Group" UriSource="/DataForCalculateNormativ;component/Resources/Group.png" />
+    <BitmapImage x:Key="Prom" UriSource="/DataForCalculateNormativ;component/Resources/Prom.png" />
+    <BitmapImage x:Key="Section" UriSource="/DataForCalculateNormativ;component/Resources/section.png" />
+    <BitmapImage x:Key="Substation" UriSource="/DataForCalculateNormativ;component/Resources/substation.png" />
+    <BitmapImage x:Key="Transformer" UriSource="/DataForCalculateNormativ;component/Resources/Transformer.png" />
+    <BitmapImage x:Key="Voltage" UriSource="/DataForCalculateNormativ;component/Resources/Voltage.png" />
+    
 </ResourceDictionary>

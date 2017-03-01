@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Linq;
 
 namespace TMP.Work.Emcos.DataForCalculateNormativ
 {
-    public class Utils
+    public static class Utils
     {
         public static NameValueCollection ParsePairs(string data)
         {
@@ -96,6 +97,37 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
             var parts = data.Split(new char[] { '=' });
 
             return new KeyValuePair<string, string>(parts[0], parts[1]);
+        }
+
+        public static IEnumerable<T> Flatten<T>(this IEnumerable<T> e, Func<T, IEnumerable<T>> f)
+        {
+            return e.SelectMany(c => f(c).Flatten(f)).Concat(e);
+        }
+
+        public static string ObjectToBase64String<T>(T value)
+        {
+            byte[] buffer;
+            using (System.IO.MemoryStream msCompressed = new System.IO.MemoryStream())
+            {
+                using (System.IO.Compression.GZipStream gz = new System.IO.Compression.GZipStream(msCompressed, System.IO.Compression.CompressionMode.Compress))
+                {
+                    System.Runtime.Serialization.Formatters.Binary.BinaryFormatter bf = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+                    bf.Serialize(gz, value);
+                }
+                buffer = msCompressed.ToArray();
+            }
+            return Convert.ToBase64String(buffer);
+        }
+        public static T Base64StringToObject<T>(string value)
+        {
+            T result;
+            byte[] buffer = Convert.FromBase64String(value);
+            using (System.IO.MemoryStream ms = new System.IO.MemoryStream(buffer))
+            using (System.IO.Compression.GZipStream gz = new System.IO.Compression.GZipStream(ms, System.IO.Compression.CompressionMode.Decompress))
+            {
+                result = (T)new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter().Deserialize(gz);
+            }
+            return result;
         }
     }
 }

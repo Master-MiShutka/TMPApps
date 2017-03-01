@@ -1,0 +1,14 @@
+Y:\Developer\CURRENT\TMPApps\out\Debug\WpfApp-ToastTest.exe.config
+Y:\Developer\CURRENT\TMPApps\out\Debug\WpfApp-ToastTest.exe
+Y:\Developer\CURRENT\TMPApps\out\Debug\WpfApp-ToastTest.pdb
+Y:\Developer\CURRENT\TMPApps\WpfApp-ToastTest\obj\Debug\WpfApp-ToastTest.csprojResolveAssemblyReference.cache
+Y:\Developer\CURRENT\TMPApps\WpfApp-ToastTest\obj\Debug\MainWindow.g.cs
+Y:\Developer\CURRENT\TMPApps\WpfApp-ToastTest\obj\Debug\App.g.cs
+Y:\Developer\CURRENT\TMPApps\WpfApp-ToastTest\obj\Debug\WpfApp-ToastTest_MarkupCompile.cache
+Y:\Developer\CURRENT\TMPApps\WpfApp-ToastTest\obj\Debug\WpfApp-ToastTest_MarkupCompile.lref
+Y:\Developer\CURRENT\TMPApps\WpfApp-ToastTest\obj\Debug\MainWindow.baml
+Y:\Developer\CURRENT\TMPApps\WpfApp-ToastTest\obj\Debug\WpfApp-ToastTest.g.resources
+Y:\Developer\CURRENT\TMPApps\WpfApp-ToastTest\obj\Debug\WpfApp_ToastTest.Properties.Resources.resources
+Y:\Developer\CURRENT\TMPApps\WpfApp-ToastTest\obj\Debug\WpfApp-ToastTest.csproj.GenerateResource.Cache
+Y:\Developer\CURRENT\TMPApps\WpfApp-ToastTest\obj\Debug\WpfApp-ToastTest.exe
+Y:\Developer\CURRENT\TMPApps\WpfApp-ToastTest\obj\Debug\WpfApp-ToastTest.pdb

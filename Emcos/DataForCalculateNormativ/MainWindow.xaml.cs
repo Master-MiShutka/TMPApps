@@ -1,29 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
-using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Threading;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Runtime.CompilerServices;
-using System.Diagnostics;
 
 namespace TMP.Work.Emcos.DataForCalculateNormativ
 {
+    using Dialogs = TMPApplication.WpfDialogs.Contracts;
+
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : WaitableWindow
+    public partial class MainWindow : Window, INotifyPropertyChanged, Dialogs.IDialogWindow
     {
         #region Fields
 
@@ -41,23 +37,25 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
         /// Id 60 Ошмянские ЭС Code 143
         /// </summary>
         private readonly ListPoint DEFAULT_ROOT_EMCOS_GROUP = new ListPoint { Id = 60, TypeCode = "FES", Name = "Ошмянские ЭС" };
-        private ListPoint _rootEmcosGroup;
+        private ListPoint _rootEmcosGroup;               
 
         #endregion
 
-        #region Constructor
+        #region Constructor and desstructor
 
         public MainWindow()
         {
+            App.Log("Создание главного окна");
+
+            InitializeComponent();
+            Title = App.Title;
+
+            DataContext = this;
+
             // настройка сервиса
             App.InitServiceClient(String.Format("http://{0}/{1}",
                     Properties.Settings.Default.ServerAddress,
                     Properties.Settings.Default.ServiceName));
-
-            InitializeComponent();
-            DataContext = this;
-
-            App.UIDispatcher = Dispatcher.CurrentDispatcher;
 
             cts = new CancellationTokenSource();
 
@@ -65,6 +63,7 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
 
             this.Loaded += (s, e) =>
             {
+                App.Log("Главное окно загружено");
                 var list = LoadList();
                 if (list != null)
                 {
@@ -84,8 +83,14 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
                     {
                         e.Cancel = true;
                         if (cts != null) cts.Cancel();
-                        ShowWaitingScreen(Strings.TerminatingMessage);
-                        await _backgroudTask;
+                        else
+                        {
+                            cts = new CancellationTokenSource();
+                            cts.Cancel();
+                        }
+                        App.WaitingScreen(Strings.TerminatingMessage);
+                        await _backgroudTask;                     
+
                         this.Close();
                     }
                 }
@@ -99,43 +104,61 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
 
         #endregion
 
+        #region Public Methods
+
+        #endregion
+
         #region Private Methods
 
         private void InitCommands()
         {
+            App.Log("Иницилизация команд главного окна");
             SettingsCommand = new DelegateCommand(o =>
             {
-                Action updateUI = () =>
-                {
-                    DialogHost = null;
-                };
-                SettingsControl settings = new SettingsControl(updateUI);
-                DialogHost = settings;
+                App.Log("Просмотр настроек");
+                Dialogs.IDialog dialog = null;
+                Action updateUI = () => 
+                    dialog.Close();
+                var control = new SettingsControl(updateUI);
+                dialog = App.Dialog(control);
+                dialog.Show();
             });
 
-            UpdateCommand = new DelegateCommand(async o =>
+            UpdateCommand = new DelegateCommand(o =>
             {
-                ShowWaitingScreen(Strings.UpdatingInProgress);
+                cts = new CancellationTokenSource();
 
-                if (await CheckAvailability() == false)
+                Dialogs.IDialog dialog = App.MessageDialog(Strings.UpdatingInProgress, null, MessageBoxImage.None, TMPApplication.WpfDialogs.DialogMode.Cancel);
+                dialog.CloseBehavior = TMPApplication.WpfDialogs.DialogCloseBehavior.ExplicitClose;
+                dialog.Cancel = () =>
                 {
-                    ClearDialogHost();
+                    cts.Cancel();
+                    dialog.CanCancel = false;
+                };
+                dialog.Show();
+
+                if (true)//CheckAvailability() == false
+                {
+                    var msg = App.MessageDialog(Strings.MessageServerNotAvailability, null, MessageBoxImage.Warning, TMPApplication.WpfDialogs.DialogMode.Ok);
+                    msg.Ok = () => dialog.Close();
+                    msg.Show();
                     return;
                 }
                 try
                 {
-                    if (App.ShowInfo(Strings.OnUpdatingPointsList) == MessageBoxResult.OK)
+                    var msg = App.MessageDialog(Strings.OnUpdatingPointsList, null, MessageBoxImage.Information);
+                    msg.Ok = () =>
                     {
+                        App.Log("Получение списка точек от сервиса");
                         _rootEmcosGroup = null;
                         try
                         {
-                            _rootEmcosGroup = App.Base64StringToObject<ListPoint>(Properties.Settings.Default.RootPoint);
+                            _rootEmcosGroup = Utils.Base64StringToObject<ListPoint>(Properties.Settings.Default.RootPoint);
                         }
                         catch
                         { }
                         if (_rootEmcosGroup == null)
                             _rootEmcosGroup = DEFAULT_ROOT_EMCOS_GROUP;
-
 
                         _backgroudTask = Task.Factory.StartNew(async () =>
                         {
@@ -144,176 +167,151 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
                             var source = await FillPointsTree(_rootEmcosGroup);
                             if (source.Count == 0 && String.IsNullOrEmpty(ServiceHelper.ErrorMessage) == false)
                             {
-                                App.UIAction(() =>
-                                {
-                                    App.ShowWarning(ServiceHelper.ErrorMessage);
-                                    ClearDialogHost();
-                                });
+                                App.ShowWarning(ServiceHelper.ErrorMessage);
+                                dialog.Close();
                                 return;
                             }
                             PointsList = new ObservableCollection<ListPoint>(source);
-                            App.UIAction(() =>
-                            {
-                                IsReadyToGetData = true;
-                                SaveList(_pointsList.ToList());
-                                ClearDialogHost();
-                            });
+                            IsReadyToGetData = true;
+                            SaveList(_pointsList.ToList());
+                            dialog.Close();
                         }, cts.Token, TaskCreationOptions.LongRunning, TaskScheduler.Default);
-                    }
-                    else
-                        ClearDialogHost();
+                    };
+                    msg.Show();
                 }
                 catch (Exception ex)
                 {
-                    ClearDialogHost();
-                    App.ShowError(String.Format(Strings.Error, App.GetExceptionDetails(ex)));
+                    App.Log("Получение списка точек от сервиса - ошибка");
+                    dialog.Close();
+                    App.ShowErrorDialog(String.Format(Strings.Error, App.GetExceptionDetails(ex)));
                 }
             });
-            GetReportCommand = new DelegateCommand(async o =>
+            GetReportCommand = new DelegateCommand(o =>
             {
-                App.ShowInfo(Strings.OnGettingData);
-
-                if (await CheckAvailability() == false)
+                App.ShowInfoDialog(Strings.OnGettingData, null, () => 
                 {
-                    ClearDialogHost();
-                    return;
-                }
+                    App.Log("Получение отчёта по точкам");
 
-                var list = HierarchicalListToFlatList(_pointsList.ToList());
+                    if (CheckAvailability() == false)
+                    {
+                        App.ShowWarningDialog(Strings.MessageServerNotAvailability);
+                        return;
+                    }
 
-                var substations = list
-                    .Where(i => (i.TypeCode == "SUBSTATION" || i.TypeCode == "VOLTAGE") && i.Checked)
-                    .OrderBy(i => i.Name).ToList<ListPoint>();
-                if (substations == null || substations.Count == 0)
-                {
-                    App.ShowWarning(Strings.EmptyList);
-                    return;
-                }
+                    var substations = _pointsList
+                        .Flatten(i => i.Items)
+                        .Where(i => (i.TypeCode == "SUBSTATION" || i.TypeCode == "VOLTAGE") && i.Checked)
+                        .OrderBy(i => i.ParentName)
+                        .ThenBy(i => i.Name)
+                        .ToList<ListPoint>();
+                    if (substations == null || substations.Count == 0)
+                    {
+                        App.ShowWarningDialog(Strings.EmptyList);
+                        return;
+                    }
 
-                btnPanel.IsEnabled = false;
-                try
-                {
-                    App.Current.MainWindow.TaskbarItemInfo = new System.Windows.Shell.TaskbarItemInfo()
+                    Dialogs.IDialog dialog = null;
+
+                    btnPanel.IsEnabled = false;
+                    try
                     {
-                        Description = Strings.GetDataHeader,
-                        ProgressState = System.Windows.Shell.TaskbarItemProgressState.Normal,
-                        ProgressValue = 0.01
-                    };
-                    Action updateUI = () =>
-                    {
-                        btnPanel.IsEnabled = true;
-                        ClearDialogHost();
-                    };
-                    Action completed = () =>
-                    {
-                        App.UIAction(() =>
+                        App.Current.MainWindow.TaskbarItemInfo = new System.Windows.Shell.TaskbarItemInfo()
+                        {
+                            Description = Strings.GetDataHeader,
+                            ProgressState = System.Windows.Shell.TaskbarItemProgressState.Normal,
+                            ProgressValue = 0.01
+                        };
+                        Action updateUI = () =>
+                        {
+                            btnPanel.IsEnabled = true;
+                            dialog.Close();
+                        };
+                        Action completed = () =>
                         {
                             App.Current.MainWindow.TaskbarItemInfo.ProgressState = System.Windows.Shell.TaskbarItemProgressState.None;
                             updateUI();
-                        });                        
-                    };
-                    Action canceled = () =>
-                    {
-                        App.UIAction(() =>
+                        };
+                        Action canceled = () =>
                         {
                             App.Current.MainWindow.TaskbarItemInfo.ProgressState = System.Windows.Shell.TaskbarItemProgressState.Paused;
-                            App.ShowInfo(Strings.Canceled);
+                            App.ShowInfoDialog(Strings.Canceled);
                             updateUI();
-                        });                        
-                    };
-                    Action<Exception> faulted = (Exception e) =>
-                    {
-                        App.UIAction(() =>
+                        };
+                        Action<Exception> faulted = (Exception e) =>
                         {
                             App.Current.MainWindow.TaskbarItemInfo.ProgressState = System.Windows.Shell.TaskbarItemProgressState.Error;
-                            App.ShowError(e, null);
+                            App.ShowErrorDialog(App.GetExceptionDetails(e));
                             updateUI();
-                        });                        
-                    };
+                        };
 
-                    GetDataControl get = new GetDataControl(substations, completed, canceled, faulted);
-                    DialogHost = get;
-                }
-                catch (Exception ex)
-                {
-                    App.ShowError(ex, null);
-                    btnPanel.IsEnabled = true;
-                    ClearDialogHost();
-                }
+                        dialog = App.Dialog(new GetDataControl(substations, completed, canceled, faulted));
+                        dialog.Show();
+                    }
+                    catch (Exception ex)
+                    {
+                        App.Log("Получение отчётов - ошибка");
+                        App.ShowErrorDialog(App.GetExceptionDetails(ex), null,
+                            () => btnPanel.IsEnabled = true);
+                        dialog.Close();
+                    }
+                });
             },
             o => IsReadyToGetData);
-            GetAuxiliariesCommand = new DelegateCommand(async o =>
+            GetEnergyCommand = new DelegateCommand(o =>
             {
-                App.ShowInfo(Strings.OnGettingData);
-
-                if (await CheckAvailability() == false)
+                App.ShowInfoDialog(Strings.OnGettingData, null, () =>
                 {
-                    ClearDialogHost();
-                    return;
-                }
-
-                var list = HierarchicalListToFlatList(_pointsList.ToList());
-
-                var auxiliary = list
-                    .Where(i => i.ParentTypeCode == "AUXILIARY" && i.TypeCode == "ELECTRICITY" && i.EсpName == "Свои нужды")
-                    .OrderBy(i => i.ParentName)
-                    .OrderBy(i => i.Name)
-                    .ToList<ListPoint>();
-                if (auxiliary == null || auxiliary.Count == 0)
-                {
-                    App.ShowWarning(Strings.EmptyList);
-                    return;
-                }
-
-                btnPanel.IsEnabled = false;
-                try
-                {
-                    App.Current.MainWindow.TaskbarItemInfo = new System.Windows.Shell.TaskbarItemInfo();
-                    App.Current.MainWindow.TaskbarItemInfo.Description = Strings.GetDataHeader;
-                    App.Current.MainWindow.TaskbarItemInfo.ProgressState = System.Windows.Shell.TaskbarItemProgressState.Normal;
-                    App.Current.MainWindow.TaskbarItemInfo.ProgressValue = 0.01;
-
-                    Action updateUI = () =>
+                    App.Log("Получение суточных значений");
+                    if (CheckAvailability() == false)
                     {
-                        btnPanel.IsEnabled = true;
-                        ClearDialogHost();
-                    };
-                    Action completed = () =>
+                        App.ShowWarningDialog(Strings.MessageServerNotAvailability);
+                        return;
+                    }
+
+                    Dialogs.IDialog dialog = null;
+
+                    btnPanel.IsEnabled = false;
+                    try
                     {
-                        App.UIAction(() =>
+                        App.Current.MainWindow.TaskbarItemInfo = new System.Windows.Shell.TaskbarItemInfo();
+                        App.Current.MainWindow.TaskbarItemInfo.Description = Strings.GetDataHeader;
+                        App.Current.MainWindow.TaskbarItemInfo.ProgressState = System.Windows.Shell.TaskbarItemProgressState.Normal;
+                        App.Current.MainWindow.TaskbarItemInfo.ProgressValue = 0.01;
+
+                        Action updateUI = () => App.UIAction(() =>
+                        {
+                            btnPanel.IsEnabled = true;
+                        });
+                        Action completed = () =>
                         {
                             App.Current.MainWindow.TaskbarItemInfo.ProgressState = System.Windows.Shell.TaskbarItemProgressState.None;
                             updateUI();
-                        });
-                    };
-                    Action canceled = () =>
-                    {
-                        App.UIAction(() =>
+                        };
+                        Action canceled = () =>
                         {
-                            App.Current.MainWindow.TaskbarItemInfo.ProgressState = System.Windows.Shell.TaskbarItemProgressState.Paused;
-                            App.ShowInfo(Strings.Canceled);
+                            App.UIAction(() => App.Current.MainWindow.TaskbarItemInfo.ProgressState = System.Windows.Shell.TaskbarItemProgressState.Paused);
+                            App.ShowInfoDialog(Strings.Canceled, Strings.Message);
                             updateUI();
-                        });
-                    };
-                    Action<Exception> faulted = (Exception e) =>
-                    {
-                        App.UIAction(() =>
+                        };
+                        Action<Exception> faulted = (Exception e) =>
                         {
-                            App.Current.MainWindow.TaskbarItemInfo.ProgressState = System.Windows.Shell.TaskbarItemProgressState.Error;
-                            App.ShowError(e, null);
-                            updateUI();
-                        });
-                    };
+                            App.UIAction(() => App.Current.MainWindow.TaskbarItemInfo.ProgressState = System.Windows.Shell.TaskbarItemProgressState.Error);
 
-                    GetAuxiliaryControl get = new GetAuxiliaryControl(auxiliary, completed, canceled, faulted);
-                    DialogHost = get;
-                }
-                catch (Exception ex)
-                {
-                    App.ShowError(ex, null);
-                    btnPanel.IsEnabled = true;
-                    ClearDialogHost();
-                }
+                            App.ShowErrorDialog(App.GetExceptionDetails(e));
+                            updateUI();
+                        };
+
+                        dialog = App.Dialog(new GetEnergyControl(_pointsList.ToList(), completed, canceled, faulted));
+                        dialog.Show();
+                    }
+                    catch (Exception ex)
+                    {
+                        App.Log("Получение суточных значений - ошибка");
+                        App.ShowErrorDialog(App.GetExceptionDetails(ex), null,
+                            () => btnPanel.IsEnabled = true);
+                        dialog.Close();
+                    }
+                });
             },
             o => IsReadyToGetData);
 
@@ -355,27 +353,27 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
                 o => PointsList != null && PointsList.Count > 0);
         }
 
-        private async Task<bool> CheckAvailability()
+        private bool CheckAvailability()
         {
-            if (await ServiceHelper.IsServerOnline())
+            if (ServiceHelper.IsServerOnline())
                 return true;
             else
-            {
-                App.ShowWarning(String.Format(Strings.ServerAvailability, Strings.No));
                 return false;
-            }
         }
 
         private readonly int maxItemsCount = 10000;
         private int _index = 0;
         private async Task<IList<ListPoint>> FillPointsTree(ListPoint point)
         {
+            if (cts.Token.IsCancellationRequested) return null;
+
             var table = App.EmcosWebServiceClient.GetPointInfo("PSDTU_SERVER", point.Id.ToString());
 
             IList<ListPoint> list = await ServiceHelper.CreatePointsListAsync(point);
             if (list != null && list.Count > 0)
                 for (int i = 0; i < list.Count; i++)
                 {
+                    if (cts.Token.IsCancellationRequested) return null;
                     if (list[i].IsGroup)
                     {
                         list[i].Items = new ObservableCollection<ListPoint>(await FillPointsTree(list[i]));
@@ -383,36 +381,27 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
                         if (_index > maxItemsCount) throw new OverflowException("Превышено максимальное количество элементов в дереве - " + maxItemsCount);
                     }
                 }
+            if (cts.Token.IsCancellationRequested) return null;
             return list;
-        }
-
-        private IList<ListPoint> HierarchicalListToFlatList(IList<ListPoint> source)
-        {
-            List<ListPoint> result = new List<ListPoint>();
-            foreach (var item in source)
-            {
-                result.Add(item);
-                if (item.Items != null && item.Items.Count > 0)
-                    result.AddRange(HierarchicalListToFlatList(item.Items));
-            }
-            return result;
         }
 
         private IList<ListPoint> LoadList()
         {
+            App.Log("Загрузка списка точек из параметров");
             //return Common.RepositoryCommon.BaseRepository<List<ListPoint>>.GzJsonDeSerialize("data.list");
-            return App.Base64StringToObject<IList<ListPoint>>(Properties.Settings.Default.PointsList);
+            return Utils.Base64StringToObject<IList<ListPoint>>(Properties.Settings.Default.PointsList);
         }
         private void SaveList(IList<ListPoint> source)
         {
+            App.Log("Сохранение списка точек");
             try
             {
-                Properties.Settings.Default.PointsList = App.ObjectToBase64String(source);
+                Properties.Settings.Default.PointsList = Utils.ObjectToBase64String(source);
                 Properties.Settings.Default.Save();
             }
             catch (Exception e)
             {
-                App.ShowError(String.Format(Strings.ErrorOnSavePointsList, App.GetExceptionDetails(e)));
+                App.ShowErrorDialog(String.Format(Strings.ErrorOnSavePointsList, App.GetExceptionDetails(e)));
             }
         }
 
@@ -433,7 +422,7 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
 
         public ICommand UpdateCommand { get; private set; }
         public ICommand GetReportCommand { get; private set; }
-        public ICommand GetAuxiliariesCommand { get; private set; }
+        public ICommand GetEnergyCommand { get; private set; }
 
         public ICommand TreeCheckOrUncheckItemsCommand { get; private set; }
         public ICommand TreeUnselectAllCommand { get; private set; }
@@ -460,6 +449,71 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
             private set { SetProperty(ref _view, value); }
         }
 
+        ContentControl Dialogs.IDialogWindow.DialogLayer
+        {
+            get
+            {
+                return this.DialogLayer;
+            }
+
+            set
+            {
+                this.DialogLayer = value;
+            }
+        }
+
         #endregion
+
+        #region INotifyPropertyChanged Members
+
+        #region Debugging Aides
+
+        protected virtual bool ThrowOnInvalidPropertyName { get; private set; }
+
+        [Conditional("DEBUG")]
+        [DebuggerStepThrough]
+        public void VerifyPropertyName(string propertyName)
+        {
+            // Verify that the property name matches a real,
+            // public, instance property on this object.
+            if (TypeDescriptor.GetProperties(this)[propertyName] == null)
+            {
+                string msg = "Invalid property name: " + propertyName;
+
+                if (this.ThrowOnInvalidPropertyName)
+                    throw new Exception(msg);
+                else
+                    Debug.Fail(msg);
+            }
+        }
+        #endregion Debugging Aides
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public bool SetProperty<T>(ref T storage, T value, [System.Runtime.CompilerServices.CallerMemberName] string propertyName = null)
+        {
+            if (Equals(storage, value))
+            {
+                return false;
+            }
+
+            storage = value;
+            this.OnPropertyChanged(propertyName);
+            return true;
+        }
+
+        protected virtual void OnPropertyChanged(string propertyName)
+        {
+            this.VerifyPropertyName(propertyName);
+
+            PropertyChangedEventHandler handler = this.PropertyChanged;
+            if (handler != null)
+            {
+                var e = new PropertyChangedEventArgs(propertyName);
+                handler(this, e);
+            }
+        }
+
+        #endregion INotifyPropertyChanged Members
     }
 }

@@ -46,20 +46,109 @@
   <ItemGroup>
     <Compile Include="BindingErrorListener.cs" />
     <Compile Include="BindingException.cs" />
+    <Compile Include="WpfDialogs\Background.xaml.cs">
+      <DependentUpon>Background.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WpfDialogs\Contracts\ICustomContentDialog.cs" />
+    <Compile Include="WpfDialogs\Contracts\IDialog.cs" />
+    <Compile Include="WpfDialogs\Contracts\IDialogConfig.cs" />
+    <Compile Include="WpfDialogs\Contracts\IDialogManager.cs" />
+    <Compile Include="WpfDialogs\Contracts\IDialogWindow.cs" />
+    <Compile Include="WpfDialogs\Contracts\IMessageDialog.cs" />
+    <Compile Include="WpfDialogs\Contracts\IProgressDialog.cs" />
+    <Compile Include="WpfDialogs\Contracts\IWaitDialog.cs" />
+    <Compile Include="WpfDialogs\CustomContentDialog.cs" />
+    <Compile Include="WpfDialogs\DialogBase.cs" />
+    <Compile Include="WpfDialogs\DialogBaseControl.xaml.cs">
+      <DependentUpon>DialogBaseControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WpfDialogs\DialogCloseBehavior.cs" />
+    <Compile Include="WpfDialogs\DialogLayeringHelper.cs" />
+    <Compile Include="WpfDialogs\DialogManager.cs" />
+    <Compile Include="WpfDialogs\DialogMode.cs" />
+    <Compile Include="WpfDialogs\DialogResultState.cs" />
+    <Compile Include="WpfDialogs\Icon.xaml.cs">
+      <DependentUpon>Icon.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WpfDialogs\IDialogHost.cs" />
+    <Compile Include="WpfDialogs\ImagingExtensions.cs" />
+    <Compile Include="WpfDialogs\MessageDialog.cs" />
+    <Compile Include="WpfDialogs\Strings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Strings.resx</DependentUpon>
+    </Compile>
+    <Compile Include="WpfDialogs\WaitAnimation.xaml.cs">
+      <DependentUpon>WaitAnimation.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WpfDialogs\WaitProgressDialog.cs" />
+    <Compile Include="WpfDialogs\WaitProgressDialogControl.xaml.cs">
+      <DependentUpon>WaitProgressDialogControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="DispatcherExtensions.cs" />
+    <Compile Include="HConsoleHelper.cs" />
+    <Compile Include="Logger\Category.cs" />
+    <Compile Include="Logger\ConsoleLogger.cs" />
+    <Compile Include="Logger\IAppWithLogger.cs" />
+    <Compile Include="Logger\ILoggerFacade.cs" />
+    <Compile Include="Logger\Priority.cs" />
+    <Compile Include="Logger\TextLogger.cs" />
+    <Compile Include="Logger\TraceLogger.cs" />
     <Compile Include="ObservableTraceListener.cs" />
     <Compile Include="TMPApp.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Logger\Logger.csproj">
-      <Project>{04ce65d3-1dbf-4a95-8b6e-44ec2c896d00}</Project>
-      <Name>Logger</Name>
-      <Private>True</Private>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
-    </ProjectReference>
+    <Compile Include="TMPApp.Dialogs.cs">
+      <DependentUpon>TMPApp.cs</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TMPApp.ErrorHandles.cs">
+      <DependentUpon>TMPApp.cs</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TMPApp.Log.cs">
+      <DependentUpon>TMPApp.cs</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="SplashScreen.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="WpfDialogs\Background.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfDialogs\DialogBaseControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfDialogs\Icon.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="WpfDialogs\Images.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfDialogs\WaitAnimation.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfDialogs\WaitProgressDialogControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\generic.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="WpfDialogs\Strings.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Strings.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

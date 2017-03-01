@@ -61,47 +61,12 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Получить\nданные.
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static string Get {
+        public static System.Drawing.Bitmap logo {
             get {
-                return ResourceManager.GetString("Get", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Прервать\nобновление списка.
-        /// </summary>
-        public static string InterrupdUpdate {
-            get {
-                return ResourceManager.GetString("InterrupdUpdate", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Прервать\nполучение данных.
-        /// </summary>
-        public static string InterruptGet {
-            get {
-                return ResourceManager.GetString("InterruptGet", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Сохранить\nрезультат.
-        /// </summary>
-        public static string Save {
-            get {
-                return ResourceManager.GetString("Save", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Обновить\nсписок.
-        /// </summary>
-        public static string Update {
-            get {
-                return ResourceManager.GetString("Update", resourceCulture);
+                object obj = ResourceManager.GetObject("logo", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
     }

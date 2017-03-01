@@ -171,8 +171,9 @@
   <data name="Get" xml:space="preserve">
     <value>Получить данные</value>
   </data>
-  <data name="GetAuxiliaries" xml:space="preserve">
-    <value>Собственные нужды подстанций</value>
+  <data name="GetEnergyAndAuxiliaries" xml:space="preserve">
+    <value>Отпуск активной и реактивной энергии 
+и собственные нужды подстанций</value>
   </data>
   <data name="GetDataHeader" xml:space="preserve">
     <value>Получение режимных данных.
@@ -302,8 +303,34 @@
   <data name="WaitingMessage3" xml:space="preserve">
     <value>Ожидание . . .</value>
   </data>
-  <data name="GetAuxiliaryHeader" xml:space="preserve">
-    <value>Получение данных по собственным нуждам с сервиса Emcos Corporate.
-Ожидайте завершения или отмените операцию.</value>
+  <data name="GetEnergyAndAuxiliaryHeader" xml:space="preserve">
+    <value>Получение отпуска активной и реактивной энергии и расхода на собственные нужды подстанций с сервиса Emcos Corporate.
+Будет использована сумма суточных значений за месяц.
+Ожидайте завершения или отмените операцию.
+Значения в таблице в тыс. кВт∙ч и тыс.кВар∙ч.</value>
+  </data>
+  <data name="AEnergyValueColumn" xml:space="preserve">
+    <value>Активная энергия,
+E+ / E-</value>
+  </data>
+  <data name="AuxiliaryValueColumn" xml:space="preserve">
+    <value>Собственные нужды,
+E+ / E-</value>
+  </data>
+  <data name="REnergyValueColumn" xml:space="preserve">
+    <value>Реактивная энергия,
+E+ / E-</value>
+  </data>
+  <data name="Message" xml:space="preserve">
+    <value>Сообщение</value>
+  </data>
+  <data name="ErrorMessage" xml:space="preserve">
+    <value>ОШИБКА</value>
+  </data>
+  <data name="InfoMessage" xml:space="preserve">
+    <value>Сообщение</value>
+  </data>
+  <data name="WarningMessage" xml:space="preserve">
+    <value>Внимание</value>
   </data>
 </root>

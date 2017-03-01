@@ -61,12 +61,32 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Активная энергия,
+        ///E+ / E-.
+        /// </summary>
+        public static string AEnergyValueColumn {
+            get {
+                return ResourceManager.GetString("AEnergyValueColumn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Авторизация не удалась,
         ///неверные имя пользователя или пароль..
         /// </summary>
         public static string AuthorizationFailed {
             get {
                 return ResourceManager.GetString("AuthorizationFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Собственные нужды,
+        ///E+ / E-.
+        /// </summary>
+        public static string AuxiliaryValueColumn {
+            get {
+                return ResourceManager.GetString("AuxiliaryValueColumn", resourceCulture);
             }
         }
         
@@ -154,6 +174,15 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to ОШИБКА.
+        /// </summary>
+        public static string ErrorMessage {
+            get {
+                return ResourceManager.GetString("ErrorMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Не найден файл конфигурации программы &apos;{0}&apos;.
         ///Будет произведено получение данных с сервиса Emcos Corporate.
         ///Операция займет некоторое время, пожалуйста, подождите..
@@ -205,31 +234,34 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Собственные нужды подстанций.
-        /// </summary>
-        public static string GetAuxiliaries {
-            get {
-                return ResourceManager.GetString("GetAuxiliaries", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Получение данных по собственным нуждам с сервиса Emcos Corporate.
-        ///Ожидайте завершения или отмените операцию..
-        /// </summary>
-        public static string GetAuxiliaryHeader {
-            get {
-                return ResourceManager.GetString("GetAuxiliaryHeader", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Получение режимных данных.
         ///Ожидайте завершения или отмените операцию..
         /// </summary>
         public static string GetDataHeader {
             get {
                 return ResourceManager.GetString("GetDataHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Отпуск активной и реактивной энергии 
+        ///и собственные нужды подстанций.
+        /// </summary>
+        public static string GetEnergyAndAuxiliaries {
+            get {
+                return ResourceManager.GetString("GetEnergyAndAuxiliaries", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Получение отпуска активной и реактивной энергии и расхода на собственные нужды подстанций с сервиса Emcos Corporate.
+        ///Будет использована сумма суточных значений за месяц.
+        ///Ожидайте завершения или отмените операцию.
+        ///Значения в таблице в тыс. кВт∙ч и тыс.кВар∙ч..
+        /// </summary>
+        public static string GetEnergyAndAuxiliaryHeader {
+            get {
+                return ResourceManager.GetString("GetEnergyAndAuxiliaryHeader", resourceCulture);
             }
         }
         
@@ -248,6 +280,15 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ {
         public static string IncorrectService {
             get {
                 return ResourceManager.GetString("IncorrectService", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Сообщение.
+        /// </summary>
+        public static string InfoMessage {
+            get {
+                return ResourceManager.GetString("InfoMessage", resourceCulture);
             }
         }
         
@@ -284,6 +325,15 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ {
         public static string InvalidReport {
             get {
                 return ResourceManager.GetString("InvalidReport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Сообщение.
+        /// </summary>
+        public static string Message {
+            get {
+                return ResourceManager.GetString("Message", resourceCulture);
             }
         }
         
@@ -387,6 +437,16 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ {
         public static string ReadyMessage {
             get {
                 return ResourceManager.GetString("ReadyMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Реактивная энергия,
+        ///E+ / E-.
+        /// </summary>
+        public static string REnergyValueColumn {
+            get {
+                return ResourceManager.GetString("REnergyValueColumn", resourceCulture);
             }
         }
         
@@ -588,6 +648,15 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ {
         public static string WaitingMessage3 {
             get {
                 return ResourceManager.GetString("WaitingMessage3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Внимание.
+        /// </summary>
+        public static string WarningMessage {
+            get {
+                return ResourceManager.GetString("WarningMessage", resourceCulture);
             }
         }
     }

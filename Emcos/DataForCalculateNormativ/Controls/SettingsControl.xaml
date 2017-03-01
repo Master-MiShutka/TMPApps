@@ -1,0 +1,268 @@
+﻿<UserControl
+    x:Class="TMP.Work.Emcos.DataForCalculateNormativ.SettingsControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:TMP.Work.Emcos.DataForCalculateNormativ"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:properties="clr-namespace:TMP.Work.Emcos.DataForCalculateNormativ.Properties"
+    mc:Ignorable="d">
+    <UserControl.Resources>
+        <local:Base64StringToEmcosReportConverter x:Key="Base64StringToEmcosReportConverter" />
+        <local:Base64StringToListPointConverter x:Key="Base64StringToListPointConverter" />
+        <local:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" Negative="False" />
+        <local:BoolToVisibilityConverter x:Key="BoolToVisibilityConverterNegative" Negative="True" />
+
+        <Style BasedOn="{StaticResource {x:Type TextBox}}" TargetType="{x:Type TextBox}">
+            <Setter Property="Margin" Value="0,2" />
+            <Setter Property="MinWidth" Value="150" />
+        </Style>
+        <Style BasedOn="{StaticResource {x:Type ComboBox}}" TargetType="{x:Type ComboBox}">
+            <Setter Property="Margin" Value="0,2" />
+        </Style>
+    </UserControl.Resources>
+    <DockPanel>
+        <TextBlock
+            DockPanel.Dock="Top"
+            Text="{x:Static local:Strings.SettingsHeader}"
+            TextAlignment="Center" />
+        <StackPanel Margin="5,2" DockPanel.Dock="Bottom">
+            <GroupBox
+                Margin="0,2"
+                BorderBrush="{x:Static SystemColors.HighlightBrush}"
+                BorderThickness="1"
+                Header="Параметры сервиса">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <!--    -->
+                    <Label
+                        Grid.Row="0"
+                        Grid.Column="0"
+                        Content="Адрес сервера" />
+                    <TextBox
+                        Grid.Row="0"
+                        Grid.Column="1"
+                        Text="{Binding Source={x:Static properties:Settings.Default}, Path=ServerAddress}" />
+                    <!--    -->
+                    <Label
+                        Grid.Row="1"
+                        Grid.Column="0"
+                        Content="Путь к сайту" />
+                    <TextBox
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        Text="{Binding Source={x:Static properties:Settings.Default}, Path=SiteName}" />
+                    <!--    -->
+                    <Label
+                        Grid.Row="2"
+                        Grid.Column="0"
+                        Content="Путь к сервису" />
+                    <TextBox
+                        Grid.Row="2"
+                        Grid.Column="1"
+                        Text="{Binding Source={x:Static properties:Settings.Default}, Path=ServiceName}" />
+                    <!--    -->
+                    <Label
+                        Grid.Row="3"
+                        Grid.Column="0"
+                        Content="Пользователь" />
+                    <TextBox
+                        Grid.Row="3"
+                        Grid.Column="1"
+                        Text="{Binding Source={x:Static properties:Settings.Default}, Path=UserName}" />
+                    <!--    -->
+                    <Label
+                        Grid.Row="4"
+                        Grid.Column="0"
+                        Content="Пароль" />
+                    <TextBox
+                        Grid.Row="4"
+                        Grid.Column="1"
+                        Text="{Binding Source={x:Static properties:Settings.Default}, Path=Password}" />
+                    <!--    -->
+                    <Label
+                        Grid.Row="5"
+                        Grid.Column="0"
+                        Content="Макс. время ожидания в секундах" />
+                    <TextBox
+                        Grid.Row="5"
+                        Grid.Column="1"
+                        Text="{Binding Source={x:Static properties:Settings.Default}, Path=NetTimeOutInSeconds}" />
+                    <!--    -->
+                    <StackPanel
+                        Grid.Row="6"
+                        Margin="5,0"
+                        Orientation="Vertical"
+                        TextBlock.LineHeight="15"
+                        TextBlock.LineStackingStrategy="BlockLineHeight">
+                        <TextBlock
+                            Padding="0"
+                            Foreground="Green"
+                            Text="{x:Static local:Strings.MessageServerAvailability}"
+                            Visibility="{Binding ServerAvailability, Converter={StaticResource BoolToVisibilityConverter}}" />
+                        <TextBlock
+                            Padding="0"
+                            Foreground="Red"
+                            Text="{x:Static local:Strings.MessageServerNotAvailability}"
+                            Visibility="{Binding ServerAvailability, Converter={StaticResource BoolToVisibilityConverterNegative}}" />
+                        <TextBlock
+                            Padding="0"
+                            Foreground="Green"
+                            Text="{x:Static local:Strings.MessageServiceAvailability}"
+                            Visibility="{Binding ServiceAvailability, Converter={StaticResource BoolToVisibilityConverter}}" />
+                        <TextBlock
+                            Padding="0"
+                            Foreground="Red"
+                            Text="{x:Static local:Strings.MessageServiceNotAvailability}"
+                            Visibility="{Binding ServiceAvailability, Converter={StaticResource BoolToVisibilityConverterNegative}}" />
+                    </StackPanel>
+                    <Button
+                        Grid.Row="6"
+                        Grid.Column="2"
+                        HorizontalAlignment="Center"
+                        Command="{Binding CheckCommand}"
+                        Content="Проверить" />
+                    <!--    -->
+                    <TextBlock
+                        Grid.Row="7"
+                        Grid.ColumnSpan="2"
+                        Padding="0"
+                        FontWeight="Bold"
+                        Foreground="Red"
+                        LineHeight="15"
+                        LineStackingStrategy="BlockLineHeight"
+                        Text="{Binding MessageError}"
+                        TextAlignment="Center"
+                        TextWrapping="Wrap"
+                        Visibility="{Binding ServiceAvailability, Converter={StaticResource BoolToVisibilityConverterNegative}}" />
+                </Grid>
+            </GroupBox>
+            <!--    -->
+            <GroupBox
+                Margin="0,2"
+                BorderBrush="{x:Static SystemColors.HighlightBrush}"
+                BorderThickness="1"
+                Header="Отчёт"
+                IsEnabled="{Binding IsReportSettingsEnabled}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <Label
+                        Grid.Row="0"
+                        Grid.Column="0"
+                        Content="Группа отчётов" />
+                    <ComboBox
+                        Grid.Row="0"
+                        Grid.Column="1"
+                        IsEnabled="true"
+                        IsSynchronizedWithCurrentItem="True"
+                        ItemsSource="{Binding ReportsGroupList}"
+                        SelectedValue="{Binding Source={x:Static properties:Settings.Default}, Path=SelectedReportsGroupId}"
+                        SelectedValuePath="RP_TYPE_ID">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock
+                                    Name="txt"
+                                    Margin="2"
+                                    Text="{Binding RP_TYPE_NAME}" />
+                                <DataTemplate.Triggers>
+                                    <DataTrigger Binding="{Binding RP_PUBLIC}" Value="false">
+                                        <Setter TargetName="txt" Property="Foreground" Value="Gray" />
+                                    </DataTrigger>
+                                </DataTemplate.Triggers>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                    <!--    -->
+                    <Label
+                        Grid.Row="1"
+                        Grid.Column="0"
+                        Content="Отчёт" />
+                    <ComboBox
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        IsSynchronizedWithCurrentItem="True"
+                        ItemsSource="{Binding ReportsList}"
+                        SelectedValue="{Binding Source={x:Static properties:Settings.Default}, Path=SelectedReport, Converter={StaticResource Base64StringToEmcosReportConverter}}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock
+                                    Name="txt"
+                                    Margin="2"
+                                    Text="{Binding RP_NAME}" />
+                                <DataTemplate.Triggers>
+                                    <DataTrigger Binding="{Binding RP_PUBLIC}" Value="false">
+                                        <Setter TargetName="txt" Property="Foreground" Value="Gray" />
+                                    </DataTrigger>
+                                </DataTemplate.Triggers>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                    <!--    -->
+                    <Label
+                        Grid.Row="2"
+                        Grid.Column="0"
+                        Content="Подразделение" />
+                    <ComboBox
+                        Grid.Row="2"
+                        Grid.Column="1"
+                        IsSynchronizedWithCurrentItem="True"
+                        ItemsSource="{Binding DepartamentsList}"
+                        SelectedValue="{Binding Source={x:Static properties:Settings.Default}, Path=RootPoint, Converter={StaticResource Base64StringToListPointConverter}}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock
+                                    Name="txt"
+                                    Margin="2"
+                                    Text="{Binding Name}" />
+                                <DataTemplate.Triggers>
+                                    <DataTrigger Binding="{Binding TypeCode}" Value="RES">
+                                        <Setter TargetName="txt" Property="Margin" Value="15,2" />
+                                    </DataTrigger>
+                                </DataTemplate.Triggers>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                </Grid>
+            </GroupBox>
+            <!--    -->
+            <UniformGrid
+                Margin="0,5"
+                HorizontalAlignment="Center"
+                Columns="2">
+                <Button
+                    Padding="10,2"
+                    Command="{Binding ToDefaultCommand}"
+                    Content="{x:Static local:Strings.ToDefaultHeader}" />
+                <Button
+                    Padding="10,2"
+                    Command="{Binding SaveCommand}"
+                    Content="{x:Static local:Strings.CloseHeader}"
+                    IsDefault="True"
+                    TabIndex="0" />
+            </UniformGrid>
+        </StackPanel>
+    </DockPanel>
+</UserControl>

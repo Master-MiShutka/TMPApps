@@ -14,213 +14,147 @@ using System.Threading;
 
 namespace TMPApplication
 {
+    using System.Windows.Navigation;
     using TMP.Common.Logger;
 
-    public class TMPApp : Application, IAppWithLogger
+    public partial class TMPApp : Application, IAppWithLogger
     {
         protected const int MINIMUM_SPLASH_TIME = 1500; // Miliseconds
         protected const int SPLASH_FADE_TIME = 500;     // Miliseconds
 
-        #region Logging
+        private bool _consoleMode = false;
 
-        public static readonly string LOG_FILE_NAME =
-            System.IO.Path.GetFileNameWithoutExtension(Application.ResourceAssembly.Location) + ".log";
-        ILoggerFacade IAppWithLogger.Log { get { return TMPApp.Log; } }
-
-        public static ILoggerFacade Log { get; } =
-            new TextLogger(new StreamWriter(LOG_FILE_NAME, false, System.Text.Encoding.UTF8)
-            { AutoFlush = true });
-
-        public static void ToLogException(Exception e)
-        {
-            string message = GetExceptionDetails(e);
-            Log.Log(message);
-        }
-        public static void ToLogInfo(string message)
-        {
-            Log.Log(message, Category.Info, Priority.Medium);
-        }
-        public static void ToLogError(string message)
-        {
-            Log.Log(message, Category.Exception, Priority.High);
-        }
-        #endregion
         #region Constructor
 
         static TMPApp()
         {
-            try
-            {
-                System.Text.StringBuilder notLoadedLibraries = new System.Text.StringBuilder();
+            Log("Запуск приложения");
 
-                AppDomain.CurrentDomain.AssemblyResolve += (s, args) =>
-                {
-                    try
-                    {
-                        string folderPath = System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-                        string assemblyPath = System.IO.Path.Combine(folderPath, "Libs", new AssemblyName(args.Name).Name + ".dll");
-                        string assemblyPath2 = System.IO.Path.Combine(folderPath, @"..\Libs", new AssemblyName(args.Name).Name + ".dll");
-                        if (System.IO.File.Exists(assemblyPath) == false)
-                        {
-                            if (System.IO.File.Exists(assemblyPath2) == false)
-                                return null;
-                            else
-                                assemblyPath = assemblyPath2;
-                        }
-                        Assembly assembly = Assembly.LoadFrom(assemblyPath);
-                        return assembly;
-                    }
-                    catch (Exception e)
-                    {
-                        notLoadedLibraries.AppendFormat("{0}, ", args.Name);
-                        ToLogException(e);
-                    }
-                    return null;
-                };
+            AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+            AppDomain.CurrentDomain.AssemblyResolve += OnResolveAssembly;
+            Dispatcher.CurrentDispatcher.UnhandledException += Dispatcher_UnhandledException;
 
-                var loadedAssemblies = AppDomain.CurrentDomain.GetAssemblies().ToList();
-                var loadedPaths = loadedAssemblies.Select(a => a.Location).ToArray();
-
-                string baseDirectory = System.IO.Path.GetDirectoryName(AppDomain.CurrentDomain.BaseDirectory);
-                string parentDirectory = System.IO.Directory.GetParent(baseDirectory).FullName;
-
-                var referencedPaths = new List<string>();
-                referencedPaths.AddRange(System.IO.Directory.EnumerateFiles(baseDirectory, @"*.dll"));
-                if (System.IO.Directory.Exists(System.IO.Path.Combine(baseDirectory,"Libs")) == true)
-                    referencedPaths.AddRange(System.IO.Directory.EnumerateFiles(baseDirectory, @"Libs\*.dll"));
-                if (System.IO.Directory.Exists(System.IO.Path.Combine(parentDirectory, "Libs")) == true)
-                    referencedPaths.AddRange(System.IO.Directory.EnumerateFiles(parentDirectory, @"Libs\*.dll"));
-
-                var toLoad = referencedPaths.Where(r => !loadedPaths.Contains(r, StringComparer.InvariantCultureIgnoreCase)).ToList();
-                if (toLoad.Count > 0)
-                    TMPApp.ToLogInfo(String.Format("Необходимо найти и загрузить {0} библиотек: [{1}]", 
-                        toLoad.Count,
-                        String.Join(", ", toLoad.Select(i => System.IO.Path.GetFileName(i)).ToArray())));
-                toLoad.ForEach(path => loadedAssemblies.Add(AppDomain.CurrentDomain.Load(AssemblyName.GetAssemblyName(path))));
-
-                if (notLoadedLibraries.Length > 0)
-                {
-                    notLoadedLibraries.Remove(notLoadedLibraries.Length - 2, 2);
-                    System.Windows.MessageBox.Show(
-                        String.Format("Программе не удалось найти и загрузить следующие библиотеки:\n{0}\n\nРабота программы невозможна и она будет закрыта.", notLoadedLibraries.ToString()),
-                        "Критическая ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
-                    ToLogError("Аварийное завершение!");
-                    Application.Current.Shutdown(-1);
-                }
-
-                SetAppDomainCultures("ru-RU");// "be-BY");
-            }
-            catch (Exception e)
-            {
-                ToLogError("Не удалось найти и загрузить библиотеку");
-                ToLogException(e);
-            }
+            LoadReferencedAssemblies();
         }
 
         public TMPApp()
         {
-            TMPApp.Log.Log("Запуск приложения", Category.Info, Priority.None);
+            Log("Инициализация приложения");
 
-            AppDomain.CurrentDomain.UnhandledException += ShowErrorBox;
-            Dispatcher.CurrentDispatcher.UnhandledException += Dispatcher_UnhandledException;
+            SetAppDomainCultures("ru-RU");// "be-BY");
+
+            Navigating += TMPApp_Navigating;
         }
 
         #endregion
 
-        protected override void OnStartup(StartupEventArgs e)
+        private void RunConsole(string[] args)
         {
-            TMPApp.Log.Log("Отображение заставки", Category.Info, Priority.None);
-            SplashScreen splash = new SplashScreen(Assembly.GetAssembly(typeof(TMPApp)), "SplashScreen.png");
-            splash.Show(false, false);
+            Log("Отображение консоли");
+            try
+            {
+                HConsoleHelper.InitConsoleHandles();
+                int n = Title.Length;
+                Console.WriteLine(String.Format("┌{0}┐", new String('─', 80 - 2)));
+                Console.WriteLine(String.Format("│{0}{1}{0}│", new String(' ', (80 - 2 - n) / 2), Title));
+                Console.WriteLine(String.Format("└{0}┘", new String('─', 80 - 2)));
+                Console.WriteLine();
+                Console.WriteLine("Console mode not implemented.\nPress <Enter>.");
+                Console.ReadLine();
+                Log("Закрытие консоли");
+                HConsoleHelper.ReleaseConsoleHandles();
+            }
+            catch (Exception e)
+            {
+                LogException(e);
 
-            Stopwatch timer = new Stopwatch();
-            timer.Start();
+                Console.WriteLine();
+                Console.WriteLine(new String('─', 80));
+                Console.BackgroundColor = ConsoleColor.DarkRed;
+                Console.ForegroundColor = ConsoleColor.White;
 
-            // подключение обработки ошибок привязки
+                Console.WriteLine(GetExceptionDetails(e));
+                Console.WriteLine();
+                Console.WriteLine("Press <Enter>.");
+                Console.ReadLine();
+
+                Application.Current.Shutdown(-1);
+            }
+            Application.Current.Shutdown(0);
+        }
+        private void RunApp()
+        {
+            Log("Создание приложения WPF");
+            try
+            {
+                Log("Отображение заставки");
+                SplashScreen splash = new SplashScreen(Assembly.GetAssembly(typeof(TMPApp)), "SplashScreen.png");
+                splash.Show(false, false);
+
+                Stopwatch timer = new Stopwatch();
+                timer.Start();
+
+                // подключение обработки ошибок привязки
 #if DEBUG
-            AttachBindingErrorListener();
+                AttachBindingErrorListener();
 #endif
 
-            base.OnStartup(e);
+                timer.Stop();
+                int remainingTimeToShowSplash = MINIMUM_SPLASH_TIME - (int)timer.ElapsedMilliseconds;
+                if (remainingTimeToShowSplash > 0)
+                    Thread.Sleep(remainingTimeToShowSplash);
 
-            timer.Stop();
-            int remainingTimeToShowSplash = MINIMUM_SPLASH_TIME - (int)timer.ElapsedMilliseconds;
-            if (remainingTimeToShowSplash > 0)
-                Thread.Sleep(remainingTimeToShowSplash);
+                Log("Скрытие заставки");
+                splash.Close(TimeSpan.FromMilliseconds(SPLASH_FADE_TIME));
 
-            TMPApp.Log.Log("Скрытие заставки", Category.Info, Priority.None);
-            splash.Close(TimeSpan.FromMilliseconds(SPLASH_FADE_TIME));
-            ;
+                /*var app = new TMPApp();
+                app.Run();*/
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "", MessageBoxButton.OK, MessageBoxImage.Error);
+                LogException(ex);
+                LogError("Аварийное завершение!");
+                Application.Current.Shutdown(-1);
+            }
+        }
+        private void TMPApp_Navigating(object sender, NavigatingCancelEventArgs e)
+        {
+            if (_consoleMode)
+                e.Cancel = true;
+        }
+        protected override void OnStartup(StartupEventArgs e)
+        {
+            if (e.Args.Length > 0)
+            {
+                _consoleMode = true;
+                Log(String.Format("Приложению передано {0} аргументов", e.Args.Length));
+                RunConsole(e.Args);
+            }
+            else
+            {
+                base.OnStartup(e);
+                if (StartupUri == null)
+                {
+                    LogError("Не задано главное окно!\nАварийное завершение!");
+                    Application.Current.Shutdown(-1);
+                }
+                RunApp();
+            }
         }
         protected override void OnExit(ExitEventArgs e)
         {
-            TMPApp.Log.Log("Завершение работы", Category.Info, Priority.None);
             base.OnExit(e);
 #if DEBUG
             DetachBindingErrorListener();
 #endif
+            Log("Завершение работы");
         }
-
-        #region Exceptions
-        BindingErrorListener errorListener;
-        /// <summary>
-        /// Запуск отслеживания ошибок привязки
-        /// </summary>
-        public void AttachBindingErrorListener()
-        {
-            errorListener = new BindingErrorListener();
-            errorListener.ErrorCatched += OnBindingErrorCatched;
-        }
-        /// <summary>
-        /// Прекращение отслеживания ошибок привязки
-        /// </summary>
-        public void DetachBindingErrorListener()
-        {
-            errorListener.ErrorCatched -= OnBindingErrorCatched;
-            errorListener.Dispose();
-            errorListener = null;
-        }
-        [DebuggerStepThrough]
-        void OnBindingErrorCatched(string message)
-        {
-            ToLogError(message);
-            //throw new BindingException(message);
-        }
-        /// <summary>
-        /// Включено ли отслеживание ошибок привязки
-        /// </summary>
-        public bool IsAttached
-        {
-            get { return errorListener != null; }
-        }
-
-        private void Dispatcher_UnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
-        {
-            Debug.WriteLine(TextLogger.GetExceptionDetails(e.Exception));
-            ToLogException(e.Exception);
-            e.Handled = true;
-        }
-        static void ShowErrorBox(object sender, UnhandledExceptionEventArgs e)
-        {
-            Exception ex = e.ExceptionObject as Exception;            
-            if (ex != null)
-            {
-                ToLogException(ex);
-                string message = TextLogger.GetExceptionDetails(ex);
-                Debug.WriteLine(message);
-                System.Windows.MessageBox.Show(message, "Sorry, we crashed");
-            }
-            ToLogError("Аварийное завершение!");
-            Application.Current.Shutdown(-1);
-        }
-        #endregion
 
         #region Properties
 
-        public static string Title { get; private set; }
-        public static string WindowTitle => (Current.MainWindow == null) ? "APP" : Current.MainWindow.Title;
-
-        public static Dispatcher UIDispatcher { get; set; }
+        public static string Title { get; set; }
+        public static string WindowTitle => (Current.MainWindow == null) ? "APP" : Current.MainWindow.Title;        
 
         #endregion
 
@@ -282,69 +216,8 @@ namespace TMPApplication
                 );
             return path;
         }
-        public static void UIAction(Action action)
-        {
-            if (UIDispatcher == null)
-                UIDispatcher = Dispatcher.CurrentDispatcher;
-            if (UIDispatcher.CheckAccess())
-                action();
-            else
-                UIDispatcher.BeginInvoke(((Action)(() => { action(); })));
-        }
-        public static MessageBoxResult ShowError(string message, string title = null)
-        {
-            return MessageBox.Show(message, title ?? Title, MessageBoxButton.OK, MessageBoxImage.Error);
-        }
 
-        public static MessageBoxResult ShowWarning(string message, string title = null)
-        {
-            return MessageBox.Show(message, title ?? Title, MessageBoxButton.OK, MessageBoxImage.Warning);
-        }
-
-        public static MessageBoxResult ShowInfo(string message, string title = null)
-        {
-            return MessageBox.Show(message, title ?? Title, MessageBoxButton.OK, MessageBoxImage.Information);
-        }
-
-        public static MessageBoxResult ShowQuestion(string message, string title = null)
-        {
-            return MessageBox.Show(message, title ?? Title, MessageBoxButton.YesNo, MessageBoxImage.Question);
-        }
-
-        public static string GetExceptionDetails(Exception exp)
-        {
-            string message = string.Empty;
-            try
-            {
-                // Write Message tree of inner exception into textual representation
-                message = exp.Message;
-
-                Exception innerEx = exp.InnerException;
-
-                for (int i = 0; innerEx != null; i++, innerEx = innerEx.InnerException)
-                {
-                    string spaces = string.Empty;
-
-                    for (int j = 0; j < i; j++)
-                        spaces += "  ";
-
-                    message += "\n" + spaces + "└─>" + innerEx.Message;
-                }
-
-                // Write complete stack trace info into details section
-                //message += "\nStack trace:\n" + exp.ToString();
-            }
-            catch
-            {
-            }
-
-            return message;
-
-        }
-        #endregion
-
-        #region Private Methods
-        protected static void SetAppDomainCultures(string name)
+        public static void SetAppDomainCultures(string name)
         {
             try
             {
@@ -356,15 +229,261 @@ namespace TMPApplication
                     System.Windows.Markup.XmlLanguage.GetLanguage(CultureInfo.CurrentCulture.IetfLanguageTag)));
             }
             // If an exception occurs, we'll just fall back to the system default.
-            catch (CultureNotFoundException)
+            catch (CultureNotFoundException e)
             {
+                Log(e);
                 return;
             }
-            catch (ArgumentException)
+            catch (ArgumentException e)
             {
+                Log(e);
                 return;
             }
         }
+
+        #endregion
+
+        #region Private Methods
+
+        private static void CheckEnviroment()
+        {
+            OperatingSystem OS = Environment.OSVersion;
+            if (OS.Platform == PlatformID.Win32NT && OS.Version.Major == 5 && OS.Version.Minor <= 1)
+            {
+                MessageBox.Show("Вы используете устаревшую операционную систему Windows XP.", "", MessageBoxButton.OK, MessageBoxImage.Error);
+                LogWarning("Запуск на устаревшей системе!");
+                //Application.Current.Shutdown();
+                return;
+            }
+
+            // Проверка наличия установленного дотнет фреймворка версии 4
+            Microsoft.Win32.RegistryKey installed_versions = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\NET Framework Setup\NDP");
+            string[] version_names = installed_versions.GetSubKeyNames();
+            //version names start with 'v', eg, 'v3.5' which needs to be trimmed off before conversion
+            double Framework = Convert.ToDouble(version_names[version_names.Length - 1].Remove(0, 1), CultureInfo.InvariantCulture);
+            int SP = Convert.ToInt32(installed_versions.OpenSubKey(version_names[version_names.Length - 1]).GetValue("SP", 0));
+            if (Framework != 4.0)
+            {
+                MessageBox.Show("Не установлен .NET Framework версии 4.0.\nРабота программы невозможна и она будет закрыта.", "", MessageBoxButton.OK, MessageBoxImage.Error);
+                LogError("Аварийное завершение!");
+                Application.Current.Shutdown(-1);
+            }
+        }
+        #region Check .Net Framework version
+        // Checking the version using >= will enable forward compatibility, 
+        // however you should always compile your code on newer versions of
+        // the framework to ensure your app works the same.
+        private static string CheckFor45DotVersion(int releaseKey)
+        {
+            if (releaseKey >= 393295)
+            {
+                return "4.6 or later";
+            }
+            if ((releaseKey >= 379893))
+            {
+                return "4.5.2 or later";
+            }
+            if ((releaseKey >= 378675))
+            {
+                return "4.5.1 or later";
+            }
+            if ((releaseKey >= 378389))
+            {
+                return "4.5 or later";
+            }
+            // This line should never execute. A non-null release key should mean
+            // that 4.5 or later is installed.
+            return "No 4.5 or later version detected";
+        }
+
+        private static void Get45or451FromRegistry()
+        {
+            using (Microsoft.Win32.RegistryKey ndpKey = Microsoft.Win32.RegistryKey.OpenBaseKey(Microsoft.Win32.RegistryHive.LocalMachine, Microsoft.Win32.RegistryView.Registry32).OpenSubKey("SOFTWARE\\Microsoft\\NET Framework Setup\\NDP\\v4\\Full\\"))
+            {
+                if (ndpKey != null && ndpKey.GetValue("Release") != null)
+                {
+                    Console.WriteLine("Version: " + CheckFor45DotVersion((int)ndpKey.GetValue("Release")));
+                }
+                else
+                {
+                    Console.WriteLine("Version 4.5 or later is not detected.");
+                }
+            }
+        }
+        #endregion
+
+        private static readonly Dictionary<string, Assembly> LoadedAsmsCache = new Dictionary<string, Assembly>(StringComparer.InvariantCultureIgnoreCase);
+        private static Assembly OnResolveAssembly(object sender, ResolveEventArgs args)
+        {
+            Assembly cachedAsm;
+            if (LoadedAsmsCache.TryGetValue(args.Name, out cachedAsm))
+                return cachedAsm;
+
+            Assembly executingAssembly = Assembly.GetExecutingAssembly();
+            AssemblyName assemblyName = new AssemblyName(args.Name);
+
+            string path = assemblyName.Name + ".dll";
+            if (assemblyName.CultureInfo != null && assemblyName.CultureInfo.Equals(CultureInfo.InvariantCulture) == false)
+            {
+                path = String.Format(@"{0}\{1}", assemblyName.CultureInfo, path);
+            }
+
+            using (Stream stream = executingAssembly.GetManifestResourceStream(path))
+            {
+                Assembly loadedAsm = null;
+                if (stream == null)
+                {
+                    loadedAsm = FindAssembly(args.Name);
+                }
+                else
+                {
+                    byte[] assemblyRawBytes = new byte[stream.Length];
+                    stream.Read(assemblyRawBytes, 0, assemblyRawBytes.Length);
+                    loadedAsm = Assembly.Load(assemblyRawBytes);
+                }
+                if (loadedAsm == null)
+                {
+                    LogWarning("Не найдена сборка '" + args.Name + "'");
+                    return null;
+                }
+
+                LoadedAsmsCache.Add(args.Name, loadedAsm);
+                return loadedAsm;
+            }
+        }
+        private static Assembly FindAssembly(string name)
+        {
+            try
+            {
+                string folderPath = System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+                string assemblyPath = System.IO.Path.Combine(folderPath, "Libs", new AssemblyName(name).Name + ".dll");
+                string assemblyPath2 = System.IO.Path.Combine(folderPath, @"..\Libs", new AssemblyName(name).Name + ".dll");
+                if (System.IO.File.Exists(assemblyPath) == false)
+                {
+                    if (System.IO.File.Exists(assemblyPath2) == false)
+                        return null;
+                    else
+                        assemblyPath = assemblyPath2;
+                }
+                Assembly assembly = Assembly.LoadFrom(assemblyPath);
+                return assembly;
+            }
+            catch (Exception e)
+            {
+                Log(e, "Ошибка загрузки библиотеки: {0}");
+                LogError("Аварийное завершение!");
+                Application.Current.Shutdown(-1);
+            }
+            return null;
+        }
+        private static void LoadReferencedAssemblies()
+        {
+            try
+            {
+                // список загруженных сборок
+                var loadedAssemblies = AppDomain.CurrentDomain.GetAssemblies().ToList();
+                var loadedPaths = loadedAssemblies.Select(a => a.Location).ToArray();
+                var loadedNames = loadedAssemblies.Select(a => a.FullName.Substring(0, a.FullName.IndexOf(","))).ToArray();
+                // список зависимых сборок
+                var referencedAssemblies = Assembly.GetExecutingAssembly().GetReferencedAssemblies().ToList();
+                var referencedPaths = referencedAssemblies.Select(a => a.Name).ToArray();
+                // список сборок для загрузки, за вычетом уже загруженных
+                var toLoadReferenced = referencedPaths.Where(r => !loadedNames.Contains(r, StringComparer.InvariantCultureIgnoreCase)).ToList();
+
+                string baseDirectory = System.IO.Path.GetDirectoryName(AppDomain.CurrentDomain.BaseDirectory);
+                string parentDirectory = System.IO.Directory.GetParent(baseDirectory).FullName;
+                // поиск сборок в заданных папках
+                var toFindPaths = new List<string>();
+                HashSet<string> librariesSet = new HashSet<string>();
+                toFindPaths.AddRange(System.IO.Directory.EnumerateFiles(baseDirectory, @"*.dll"));
+                toFindPaths.ForEach(i => librariesSet.Add(System.IO.Path.GetFileNameWithoutExtension(i)));
+                if (System.IO.Directory.Exists(System.IO.Path.Combine(baseDirectory, "Libs")) == true)
+                    foreach (var dll in System.IO.Directory.EnumerateFiles(baseDirectory, @"Libs\*.dll"))
+                    {
+                        var name = System.IO.Path.GetFileNameWithoutExtension(dll);
+                        if (librariesSet.Contains(name) == false)
+                        {
+                            librariesSet.Add(name);
+                            toFindPaths.Add(dll);
+                        }
+                    }
+                if (System.IO.Directory.Exists(System.IO.Path.Combine(parentDirectory, "Libs")) == true)
+                    foreach (var dll in System.IO.Directory.EnumerateFiles(parentDirectory, @"Libs\*.dll"))
+                    {
+                        var name = System.IO.Path.GetFileNameWithoutExtension(dll);
+                        if (librariesSet.Contains(name) == false)
+                        {
+                            librariesSet.Add(name);
+                            toFindPaths.Add(dll);
+                        }
+                    }
+                // список сборок для загрузки
+                // исключение системных
+                toLoadReferenced = toLoadReferenced.Where(r => r.StartsWith("System.") == false && r.StartsWith("Windows.") == false).ToList();
+                var toLoad = toFindPaths.Where(i => toLoadReferenced.Contains(System.IO.Path.GetFileNameWithoutExtension(i), StringComparer.InvariantCultureIgnoreCase)).ToList();
+                // список не найденых сборок
+                List<string> notFounded = new List<string>();
+                var names = toLoad.Select(f => System.IO.Path.GetFileNameWithoutExtension(f)).ToList();
+                foreach (var a in toLoadReferenced)
+                    if (names.Contains(a, StringComparer.InvariantCultureIgnoreCase) == false)
+                        notFounded.Add(a);
+                if (notFounded.Count > 0)
+                {
+                    string message = String.Format("Программе не удалось найти и загрузить следующие библиотеки:\n{0}\nРабота программы невозможна и она будет закрыта.",
+                        String.Join(", ", notFounded));
+                    LogError("Аварийное завершение! " + message);
+                    Application.Current.Shutdown(-1);
+                }
+                if (toLoad.Count > 0)
+                    Log(String.Format("Загрузка {0} библиотек: [{1}]",
+                        toLoad.Count,
+                        String.Join(", ", toLoad.Select(i => System.IO.Path.GetFileName(i)).ToArray())));
+                toLoad.ForEach(path =>
+                {
+                    try
+                    {
+                        AssemblyName assemblyName = AssemblyName.GetAssemblyName(path);
+                        Assembly assembly = AppDomain.CurrentDomain.Load(assemblyName);
+                        loadedAssemblies.Add(assembly);
+                    }
+                    catch (FileNotFoundException fnfe)
+                    {
+                        ShowError(String.Format("Не удалось найти библиотеку '{0}'.\nРабота программы невозможна и она будет закрыта.", fnfe.FileName));
+                        LogError(fnfe.FusionLog);
+                        LogError("Аварийное завершение!");
+                        Application.Current.Shutdown(-1);
+                    }
+                    catch (System.Security.SecurityException se)
+                    {
+                        ShowError(String.Format("Нет разрешения на загрузку библиотеки '{0}'.\nРабота программы невозможна и она будет закрыта.", se.FailedAssemblyInfo.FullName));
+                        LogException(se);
+                        LogError("Аварийное завершение!");
+                        Application.Current.Shutdown(-1);
+                    }
+                    catch (BadImageFormatException bife)
+                    {
+                        ShowError(String.Format("Библиотека '{0}' повреждена. Переустановите программу.\nРабота программы невозможна и она будет закрыта.", bife.FileName));
+                        LogError(bife.FusionLog);
+                        LogError("Аварийное завершение!");
+                        Application.Current.Shutdown(-1);
+                    }
+                    catch (FileLoadException fle)
+                    {
+                        ShowError(String.Format("Не удалось загрузить библиотеку '{0}'.\nОписание ошибки: {1}\nРабота программы невозможна и она будет закрыта.", fle.FileName, fle.Message));
+                        LogError(fle.FusionLog);
+                        LogError("Аварийное завершение!");
+                        Application.Current.Shutdown(-1);
+                    }
+                });
+            }
+            catch (Exception e)
+            {
+                ShowError(String.Format("При загрузке модулей произошла ошибка.\nОписание: {1}\nРабота программы невозможна и она будет закрыта.", e.Message));
+                LogError("Аварийное завершение!");
+                Application.Current.Shutdown(-1);
+            }
+        }
+
         #endregion
     }
 }
