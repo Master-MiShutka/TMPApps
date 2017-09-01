@@ -1,0 +1,165 @@
+﻿<UserControl
+    x:Class="TMP.Work.Emcos.DataForCalculateNormativ.GetDataControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:TMP.Work.Emcos.DataForCalculateNormativ"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:DesignHeight="300"
+    d:DesignWidth="800"
+    FontSize="{DynamicResource HeaderFontSize}"
+    Loaded="UserControl_Loaded"
+    mc:Ignorable="d">
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+    </UserControl.Resources>
+    <DockPanel>
+        <TextBlock
+            DockPanel.Dock="Top"
+            Text="{x:Static local:Strings.GetDataHeader}"
+            TextAlignment="Center" />
+        <StackPanel Margin="5,2,5,0" DockPanel.Dock="Bottom">
+            <ProgressBar
+                MinHeight="20"
+                HorizontalAlignment="Stretch"
+                Maximum="100"
+                Visibility="{Binding IsGettingData, Converter={StaticResource BooleanToVisibilityConverter}}"
+                Value="{Binding Progress, Mode=OneWay}" />
+            <WrapPanel Margin="0,2,0,-5" HorizontalAlignment="Center">
+                <Button
+                    Margin="5"
+                    Padding="15,2"
+                    Command="{Binding CancelCommand}"
+                    Content="{x:Static local:Strings.CancelHeader}"
+                    Visibility="{Binding IsGettingData, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                <Button
+                    Margin="5"
+                    Padding="5,2"
+                    Command="{Binding SaveAllCommand}"
+                    Content="{x:Static local:Strings.SaveAllInFolderHeader}"
+                    Visibility="{Binding IsCompleted, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                <Button
+                    Margin="5"
+                    Padding="5,2"
+                    Command="{Binding SaveAllInSigleFileCommand}"
+                    Content="{x:Static local:Strings.SaveAllInSingleFileHeader}"
+                    Visibility="{Binding IsCompleted, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                <Button
+                    Margin="5"
+                    Padding="5,2"
+                    Command="{Binding CloseControlCommand}"
+                    Content="{x:Static local:Strings.CloseHeader}"
+                    Visibility="{Binding IsCompleted, Converter={StaticResource BooleanToVisibilityConverter}}" />
+            </WrapPanel>
+        </StackPanel>
+        <ListView
+            MinHeight="100"
+            Margin="5,2"
+            Background="Transparent"
+            BorderThickness="0.5"
+            ItemsSource="{Binding List}">
+            <ListView.Resources>
+                <DataTemplate x:Key="statusColumnTemplate">
+                    <TextBlock
+                        x:Name="status"
+                        Padding="0"
+                        Text="{Binding Status}" />
+                    <DataTemplate.Resources>
+                        <Storyboard x:Key="statusStoryBoard">
+                            <ObjectAnimationUsingKeyFrames
+                                RepeatBehavior="Forever"
+                                Storyboard.TargetName="status"
+                                Storyboard.TargetProperty="Text"
+                                Duration="00:00:04">
+                                <DiscreteObjectKeyFrame KeyTime="00:00:00" Value="{x:Static local:Strings.WaitingMessage}" />
+                                <DiscreteObjectKeyFrame KeyTime="00:00:01" Value="{x:Static local:Strings.WaitingMessage1}" />
+                                <DiscreteObjectKeyFrame KeyTime="00:00:02" Value="{x:Static local:Strings.WaitingMessage2}" />
+                                <DiscreteObjectKeyFrame KeyTime="00:00:03" Value="{x:Static local:Strings.WaitingMessage3}" />
+                            </ObjectAnimationUsingKeyFrames>
+                        </Storyboard>
+                    </DataTemplate.Resources>
+                    <DataTemplate.Triggers>
+                        <DataTrigger Binding="{Binding Status}" Value="{x:Static local:ListPointStatus.Ожидание}">
+                            <DataTrigger.EnterActions>
+                                <BeginStoryboard Name="sb1" Storyboard="{StaticResource statusStoryBoard}" />
+                            </DataTrigger.EnterActions>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Status}" Value="{x:Static local:ListPointStatus.Получение}">
+                            <DataTrigger.EnterActions>
+                                <RemoveStoryboard BeginStoryboardName="sb1" />
+                            </DataTrigger.EnterActions>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Status}" Value="{x:Static local:ListPointStatus.Ошибка}">
+                            <Setter TargetName="status" Property="Background" Value="Brown" />
+                            <Setter TargetName="status" Property="Foreground" Value="White" />
+                        </DataTrigger>
+                    </DataTemplate.Triggers>
+                </DataTemplate>
+
+                <DataTemplate x:Key="HeaderTemplate">
+                    <TextBlock
+                        Padding="2"
+                        HorizontalAlignment="Center"
+                        LineHeight="12"
+                        LineStackingStrategy="BlockLineHeight"
+                        Text="{Binding}"
+                        TextAlignment="Center" />
+                </DataTemplate>
+
+            </ListView.Resources>
+            <ListView.View>
+                <GridView ColumnHeaderTemplate="{StaticResource HeaderTemplate}">
+                    <GridViewColumn Width="300" Header="{x:Static local:Strings.NameColumn}">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <Image
+                                        Width="20"
+                                        Height="20"
+                                        Margin="0,0,2,0"
+                                        Source="/DataForCalculateNormativ;component/Resources/substation.png" />
+                                    <TextBlock
+                                        Padding="0"
+                                        VerticalAlignment="Center"
+                                        Text="{Binding ResultName}" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn
+                        Width="150"
+                        CellTemplate="{StaticResource statusColumnTemplate}"
+                        Header="{x:Static local:Strings.StatusColumn}" />
+                    <GridViewColumn Width="120" Header="{x:Static local:Strings.ResultTypeColumn}">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock
+                                    Padding="5,0"
+                                    HorizontalAlignment="Stretch"
+                                    VerticalAlignment="Center"
+                                    Text="{Binding ResultType}"
+                                    TextAlignment="Center" />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Width="100">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button
+                                    Padding="2,-3"
+                                    HorizontalAlignment="Center"
+                                    Command="{Binding SaveCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:GetDataControl}}}"
+                                    CommandParameter="{Binding}"
+                                    Content="{x:Static local:Strings.SaveHeader}"
+                                    IsEnabled="{Binding Processed}"
+                                    Visibility="{Binding Processed, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                </GridView>
+            </ListView.View>
+            <!-- local:ListPointWithResult ResultName="Test 1" ResultType="txt" Status="Wait" />
+                    <local:ListPointWithResult ResultName="Test 2" ResultType="txt" Status="Processed" /-->
+        </ListView>
+    </DockPanel>
+</UserControl>

@@ -1,0 +1,45 @@
+﻿<UserControl
+    x:Class="TMPApplication.WpfDialogs.Icon"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:TMPApplication.WpfDialogs"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:windows="clr-namespace:System.Windows;assembly=PresentationFramework"
+    x:Name="root"
+    mc:Ignorable="d">
+    <UserControl.Resources>
+        <ResourceDictionary Source="/TMPApplication;component/WpfDialogs/Images.xaml" />
+    </UserControl.Resources>
+    <UserControl.Style>
+        <Style TargetType="UserControl">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Path=Image}" Value="{x:Static windows:MessageBoxImage.None}">
+                    <Setter Property="Visibility" Value="Collapsed" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Style>
+    <Border Width="64" Height="64">
+        <Image Stretch="Uniform">
+            <Image.Style>
+                <Style TargetType="Image">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Path=Image}" Value="{x:Static windows:MessageBoxImage.Information}">
+                            <Setter Property="Source" Value="{StaticResource appbar_information}" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Path=Image}" Value="{x:Static windows:MessageBoxImage.Question}">
+                            <Setter Property="Source" Value="{StaticResource appbar_question}" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Path=Image}" Value="{x:Static windows:MessageBoxImage.Error}">
+                            <Setter Property="Source" Value="{StaticResource appbar_stop}" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Path=Image}" Value="{x:Static windows:MessageBoxImage.Warning}">
+                            <Setter Property="Source" Value="{StaticResource appbar_warning}" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Image.Style>
+        </Image>
+    </Border>
+</UserControl>

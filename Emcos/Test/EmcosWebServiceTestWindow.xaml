@@ -1,0 +1,111 @@
+﻿<wpfDialogs:WindowWithDialogs
+    x:Class="Test.EmcosWebServiceTestWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:Test"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:sharptreeview="clr-namespace:ICSharpCode.TreeView;assembly=ICSharpCode.TreeView"
+    xmlns:shell="clr-namespace:MS.Windows.Shell;assembly=WindowsShell"
+    xmlns:wpfDialogs="clr-namespace:TMPApplication.CustomWpfWindow;assembly=TMPApplication"
+    Title="EmcosWebServiceTestWindow"
+    Width="300"
+    Height="300"
+    Background="{Binding Source={x:Static shell:SystemParameters2.Current}, Path=WindowGlassBrush}"
+    Icon="SampleIcon.ico"
+    Loaded="WindowWithDialogs_Loaded"
+    SnapsToDevicePixels="True"
+    TextOptions.TextFormattingMode="Display"
+    UseLayoutRounding="True"
+    mc:Ignorable="d">
+    <Window.Resources>
+        <HierarchicalDataTemplate DataType="{x:Type local:GRInfoElement}" ItemsSource="{Binding Children}">
+            <TextBlock Text="{Binding Name}" />
+        </HierarchicalDataTemplate>
+    </Window.Resources>
+    <Grid Margin="10">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <!--    -->
+        <Slider
+            Grid.ColumnSpan="3"
+            Margin="2"
+            AutoToolTipPlacement="TopLeft"
+            LargeChange="1"
+            Maximum="24"
+            Minimum="8"
+            SmallChange="0.5"
+            TickFrequency="1"
+            TickPlacement="Both"
+            Value="{Binding FontSize, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" />
+        <!--    -->
+        <sharptreeview:SharpTreeView
+            Grid.Row="1"
+            Grid.Column="0"
+            Margin="0,0,3,0"
+            AlternationCount="2"
+            Root="{Binding TypeNames}"
+            ShowAlternation="True" />
+        <GridSplitter
+            Grid.Row="1"
+            Grid.Column="0"
+            Width="3"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Stretch"
+            ResizeBehavior="CurrentAndNext"
+            ResizeDirection="Columns" />
+        <!--    -->
+        <sharptreeview:SharpTreeView
+            Grid.Row="1"
+            Grid.Column="1"
+            Margin="0,0,3,0"
+            AlternationCount="2"
+            Root="{Binding Codes}"
+            ShowAlternation="True"
+            ShowRoot="False" />
+        <GridSplitter
+            Grid.Row="1"
+            Grid.Column="1"
+            Width="3"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Stretch"
+            ResizeBehavior="CurrentAndNext"
+            ResizeDirection="Columns" />
+        <!--    -->
+        <GroupBox
+            Grid.Row="1"
+            Grid.Column="2"
+            Margin="2"
+            Header="Dialogs Test">
+            <StackPanel>
+                <CheckBox Content="ShowDialogsOverTitleBar" IsChecked="{Binding Path=ShowDialogsOverTitleBar, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type wpfDialogs:WindowWithDialogs}}}" />
+                <Button Click="BtnDialogTest_Info_Click" Content="Info" />
+                <Button Click="BtnDialogTest_InfoYesNo_Click" Content="Info Yes No" />
+                <Button Click="BtnDialogTest_Warning_Click" Content="Warning" />
+                <Button Click="BtnDialogTest_Question_Click" Content="Question" />
+                <Button Click="BtnDialogTest_Error_Click" Content="Error" />
+                <Button Click="BtnDialogTest_Exception_Click" Content="Exception" />
+                <Button Click="BtnDialogTest_WaitScreen_Click" Content="WaitScreen" />
+                <Button Click="BtnDialogTest_Progress_Click" Content="Progress" />
+                <Button Click="BtnDialogTest_ProgressIntermediate_Click" Content="ProgressIntermediate" />
+                <Button Click="BtnDialogTest_Custom_Click" Content="Custom" />
+            </StackPanel>
+        </GroupBox>
+        <!--    -->
+        <UniformGrid
+            Grid.Row="2"
+            Grid.ColumnSpan="3"
+            Margin="0,2,0,0"
+            Columns="3">
+            <Button Click="Button1_Click" Content="1" />
+        </UniformGrid>
+    </Grid>
+</wpfDialogs:WindowWithDialogs>

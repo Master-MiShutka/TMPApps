@@ -1,0 +1,67 @@
+﻿<UserControl
+    x:Class="TMPApplication.WpfDialogs.DialogBaseControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:TMPApplication.WpfDialogs"
+    x:Name="root"
+    x:ClassModifier="internal"
+    TextOptions.TextFormattingMode="Ideal"
+    UseLayoutRounding="True">
+    <Grid>
+        <ContentControl x:Name="BackgroundImageHolder">
+            <local:Background />
+        </ContentControl>
+        <Border
+            Margin="20,10"
+            HorizontalAlignment="{Binding HorizontalDialogAlignment}"
+            VerticalAlignment="{Binding VerticalDialogAlignment}"
+            Background="{x:Static SystemColors.WindowBrush}"
+            BorderBrush="{x:Static SystemColors.ActiveBorderBrush}"
+            BorderThickness="1"
+            CornerRadius="5"
+            DataContext="{Binding ElementName=root}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Border
+                    Margin="0,0,0,5"
+                    Background="{DynamicResource {x:Static SystemColors.ActiveCaptionBrushKey}}"
+                    CornerRadius="5 5 0 0"
+                    DockPanel.Dock="Top"
+                    Visibility="{Binding CaptionVisibility}">
+                    <TextBlock
+                        Padding="10,5"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Foreground="{DynamicResource {x:Static SystemColors.ActiveCaptionTextBrushKey}}"
+                        Text="{Binding Caption, FallbackValue=THIS_IS_CAPTION}"
+                        TextTrimming="CharacterEllipsis"
+                        TextWrapping="Wrap" />
+                </Border>
+                <DockPanel Grid.Row="1">
+                    <local:Icon DockPanel.Dock="Left" />
+                    <ContentControl x:Name="CustomContent" Margin="10" />
+                </DockPanel>
+                <Border
+                    Grid.Row="2"
+                    Background="{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}"
+                    CornerRadius="0,0,5,5"
+                    Visibility="{Binding ButtonsVisibility}">
+                    <UniformGrid x:Name="ButtonsGrid" MinHeight="30" />
+                </Border>
+            </Grid>
+            <Border.Effect>
+                <DropShadowEffect
+                    BlurRadius="20"
+                    Direction="0"
+                    Opacity="0.6"
+                    RenderingBias="Performance"
+                    ShadowDepth="0"
+                    Color="White" />
+            </Border.Effect>
+        </Border>
+    </Grid>
+</UserControl>
