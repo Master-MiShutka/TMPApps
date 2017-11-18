@@ -1,0 +1,52 @@
+Y:\! Aramis\ItemsFilter\bin\Debug\ItemsFilter.dll
+Y:\! Aramis\ItemsFilter\bin\Debug\ItemsFilter.pdb
+Y:\! Aramis\ItemsFilter\obj\Debug\GeneratedInternalTypeHelper.g.cs
+Y:\! Aramis\ItemsFilter\obj\Debug\ItemsFilter_MarkupCompile.cache
+Y:\! Aramis\ItemsFilter\obj\Debug\ItemsFilter_MarkupCompile.lref
+Y:\! Aramis\ItemsFilter\obj\Debug\Themes\Generic.baml
+Y:\! Aramis\ItemsFilter\obj\Debug\ItemsFilter.g.resources
+Y:\! Aramis\ItemsFilter\obj\Debug\ItemsFilter.Resources.Strings.resources
+Y:\! Aramis\ItemsFilter\obj\Debug\ItemsFilter.csproj.GenerateResource.Cache
+Y:\! Aramis\ItemsFilter\obj\Debug\ItemsFilter.csproj.CoreCompileInputs.cache
+Y:\! Aramis\ItemsFilter\obj\Debug\ItemsFilter.dll
+Y:\! Aramis\ItemsFilter\obj\Debug\ItemsFilter.pdb
+Y:\! Aramis\ItemsFilter\obj\Debug\ItemsFilter.csprojResolveAssemblyReference.cache
+Y:\! Aramis\TM.WORK.Aramis\ItemsFilter\bin\Debug\ItemsFilter.dll
+Y:\! Aramis\TM.WORK.Aramis\ItemsFilter\obj\Debug\ItemsFilter.csprojResolveAssemblyReference.cache
+Y:\! Aramis\TM.WORK.Aramis\ItemsFilter\obj\Debug\GeneratedInternalTypeHelper.g.cs
+Y:\! Aramis\TM.WORK.Aramis\ItemsFilter\obj\Debug\ItemsFilter_MarkupCompile.cache
+Y:\! Aramis\TM.WORK.Aramis\ItemsFilter\obj\Debug\ItemsFilter_MarkupCompile.lref
+Y:\! Aramis\TM.WORK.Aramis\ItemsFilter\obj\Debug\Themes\Generic.baml
+Y:\! Aramis\TM.WORK.Aramis\ItemsFilter\obj\Debug\ItemsFilter.g.resources
+Y:\! Aramis\TM.WORK.Aramis\ItemsFilter\obj\Debug\ItemsFilter.Resources.Strings.resources
+Y:\! Aramis\TM.WORK.Aramis\ItemsFilter\obj\Debug\ItemsFilter.csproj.GenerateResource.Cache
+Y:\! Aramis\TM.WORK.Aramis\ItemsFilter\obj\Debug\ItemsFilter.csproj.CoreCompileInputs.cache
+Y:\! Aramis\TM.WORK.Aramis\ItemsFilter\obj\Debug\ItemsFilter.dll
+Y:\! Aramis\TM.WORK.Aramis\ItemsFilter\obj\Debug\ItemsFilter.pdb
+Y:\! Aramis\TM.WORK.Aramis\ItemsFilter\bin\Debug\ItemsFilter.pdb
+T:\! Aramis\TM.WORK.Aramis\ItemsFilter\bin\Debug\ItemsFilter.dll
+T:\! Aramis\TM.WORK.Aramis\ItemsFilter\bin\Debug\ItemsFilter.pdb
+T:\! Aramis\TM.WORK.Aramis\ItemsFilter\obj\Debug\ItemsFilter.csprojResolveAssemblyReference.cache
+T:\! Aramis\TM.WORK.Aramis\ItemsFilter\obj\Debug\GeneratedInternalTypeHelper.g.cs
+T:\! Aramis\TM.WORK.Aramis\ItemsFilter\obj\Debug\ItemsFilter_MarkupCompile.cache
+T:\! Aramis\TM.WORK.Aramis\ItemsFilter\obj\Debug\ItemsFilter_MarkupCompile.lref
+T:\! Aramis\TM.WORK.Aramis\ItemsFilter\obj\Debug\Themes\Generic.baml
+T:\! Aramis\TM.WORK.Aramis\ItemsFilter\obj\Debug\ItemsFilter.g.resources
+T:\! Aramis\TM.WORK.Aramis\ItemsFilter\obj\Debug\ItemsFilter.Resources.Strings.resources
+T:\! Aramis\TM.WORK.Aramis\ItemsFilter\obj\Debug\ItemsFilter.csproj.GenerateResource.Cache
+T:\! Aramis\TM.WORK.Aramis\ItemsFilter\obj\Debug\ItemsFilter.csproj.CoreCompileInputs.cache
+T:\! Aramis\TM.WORK.Aramis\ItemsFilter\obj\Debug\ItemsFilter.dll
+T:\! Aramis\TM.WORK.Aramis\ItemsFilter\obj\Debug\ItemsFilter.pdb
+Y:\Developer\CURRENT\TMPApps\out\Debug\Libs\ItemsFilter.dll
+Y:\Developer\CURRENT\TMPApps\out\Debug\Libs\ItemsFilter.pdb
+Y:\Developer\CURRENT\TMPApps\LIBRARY\ItemsFilter\obj\Debug\ItemsFilter.csprojResolveAssemblyReference.cache
+Y:\Developer\CURRENT\TMPApps\LIBRARY\ItemsFilter\obj\Debug\GeneratedInternalTypeHelper.g.cs
+Y:\Developer\CURRENT\TMPApps\LIBRARY\ItemsFilter\obj\Debug\ItemsFilter_MarkupCompile.cache
+Y:\Developer\CURRENT\TMPApps\LIBRARY\ItemsFilter\obj\Debug\ItemsFilter_MarkupCompile.lref
+Y:\Developer\CURRENT\TMPApps\LIBRARY\ItemsFilter\obj\Debug\Themes\Generic.baml
+Y:\Developer\CURRENT\TMPApps\LIBRARY\ItemsFilter\obj\Debug\ItemsFilter.g.resources
+Y:\Developer\CURRENT\TMPApps\LIBRARY\ItemsFilter\obj\Debug\ItemsFilter.Resources.Strings.resources
+Y:\Developer\CURRENT\TMPApps\LIBRARY\ItemsFilter\obj\Debug\ItemsFilter.csproj.GenerateResource.Cache
+Y:\Developer\CURRENT\TMPApps\LIBRARY\ItemsFilter\obj\Debug\ItemsFilter.csproj.CoreCompileInputs.cache
+Y:\Developer\CURRENT\TMPApps\LIBRARY\ItemsFilter\obj\Debug\ItemsFilter.dll
+Y:\Developer\CURRENT\TMPApps\LIBRARY\ItemsFilter\obj\Debug\ItemsFilter.pdb

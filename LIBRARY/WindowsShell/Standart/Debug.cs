@@ -14,7 +14,7 @@ namespace Standard
     using System.Threading;
 
     /// <summary>A static class for verifying assumptions.</summary>
-    internal static class Assert
+    public static class Assert
     {
         // Blend and VS don't like Debugger.Break being called on their design surfaces.  Badness will happen.
         //private static readonly bool _isNotAtRuntime = (bool)System.ComponentModel.DesignerProperties.IsInDesignModeProperty.GetMetadata(typeof(System.Windows.DependencyObject)).DefaultValue;

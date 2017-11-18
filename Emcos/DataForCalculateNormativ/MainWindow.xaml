@@ -1,4 +1,4 @@
-﻿<Window
+﻿<wpfDialogs:WindowWithDialogs
     x:Class="TMP.Work.Emcos.DataForCalculateNormativ.MainWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -6,6 +6,8 @@
     xmlns:local="clr-namespace:TMP.Work.Emcos.DataForCalculateNormativ"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:model="clr-namespace:TMP.Work.Emcos.Model;assembly=EmcosModel"
+    xmlns:sharptreeview="clr-namespace:ICSharpCode.TreeView;assembly=ICSharpCode.TreeView"
+    xmlns:wpfDialogs="clr-namespace:TMPApplication.CustomWpfWindow;assembly=TMPApplication"
     x:Name="root"
     Title=""
     Width="1000"
@@ -14,6 +16,94 @@
     mc:Ignorable="d">
     <Window.Resources>
         <ResourceDictionary>
+
+            <ControlTemplate x:Key="NoDataTemplate">
+                <ControlTemplate.Resources>
+                    <SolidColorBrush x:Key="fillNoDataControlBackGeometryBrush" Color="#FFF7F7F7" />
+                    <SolidColorBrush x:Key="fillNoDataControlGeometryBrush" Color="#CC119EDA" />
+                    <SolidColorBrush x:Key="fillNoDataControlGeometryPathBrush" Color="#FF086F9E" />
+                    <SolidColorBrush x:Key="strokeNoDataControlGeometryBrush" Color="#FF086F9E" />
+                </ControlTemplate.Resources>
+                <Border
+                    Background="{TemplateBinding Background}"
+                    BorderBrush="{TemplateBinding BorderBrush}"
+                    BorderThickness="{TemplateBinding BorderThickness}"
+                    CornerRadius="10">
+                    <StackPanel
+                        Name="nodata"
+                        Margin="20,10"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Orientation="Vertical">
+                        <Canvas
+                            Width="50"
+                            Height="50"
+                            Background="Transparent">
+                            <Canvas.Children>
+                                <Ellipse
+                                    Canvas.Left="22.999"
+                                    Width="6.167"
+                                    Height="6.166"
+                                    Fill="{StaticResource fillNoDataControlBackGeometryBrush}"
+                                    Stroke="{StaticResource strokeNoDataControlGeometryBrush}" />
+                                <Ellipse
+                                    Canvas.Top="42.333"
+                                    Width="6.167"
+                                    Height="6.166"
+                                    Fill="{StaticResource fillNoDataControlBackGeometryBrush}"
+                                    Stroke="{StaticResource strokeNoDataControlGeometryBrush}" />
+                                <Ellipse
+                                    Canvas.Left="44.999"
+                                    Canvas.Top="42.333"
+                                    Width="6.167"
+                                    Height="6.166"
+                                    Fill="{StaticResource fillNoDataControlBackGeometryBrush}"
+                                    Stroke="{StaticResource strokeNoDataControlGeometryBrush}" />
+                                <Path
+                                    Canvas.Left="1"
+                                    Canvas.Top="2.2"
+                                    Width="49.028"
+                                    Height="45.844"
+                                    Data="M231.81312,199.57089 L226.34383,199.60188 203.3884,240.01154 206.0133,244.59208 251.19006,244.5922 253.72181,239.8861"
+                                    Fill="{StaticResource fillNoDataControlBackGeometryBrush}"
+                                    Stretch="Fill" />
+                                <Rectangle
+                                    Canvas.Left="23.374"
+                                    Canvas.Top="14.208"
+                                    Width="4.75"
+                                    Height="18"
+                                    Fill="{StaticResource fillNoDataControlGeometryBrush}" />
+                                <Ellipse
+                                    Canvas.Left="23.374"
+                                    Canvas.Top="35.13"
+                                    Width="4.75"
+                                    Height="4.75"
+                                    Fill="{StaticResource fillNoDataControlGeometryBrush}" />
+                                <Path
+                                    Canvas.Left="0.249"
+                                    Canvas.Top="1.395"
+                                    Width="50.625"
+                                    Height="47.101"
+                                    Data="M0.5,42.907 L23.531,0.516 M28.125,0.50000001 L50.125001,42.86 M2.7029999,46.601 L48.008998,46.601"
+                                    Fill="{StaticResource fillNoDataControlGeometryPathBrush}"
+                                    Stretch="Fill"
+                                    Stroke="{StaticResource strokeNoDataControlGeometryBrush}" />
+                            </Canvas.Children>
+                        </Canvas>
+                        <TextBlock
+                            TextAlignment="Center"
+                            TextOptions.TextFormattingMode="Ideal"
+                            TextWrapping="Wrap">
+                            Нет данных
+                            <LineBreak />
+                            для отображения
+                            <LineBreak />
+                            <Run FontWeight="Bold">Обновите список объектов</Run>
+                        </TextBlock>
+                    </StackPanel>
+                </Border>
+            </ControlTemplate>
+
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Styles/ListPointDataTemplate.xaml" />
             </ResourceDictionary.MergedDictionaries>
@@ -27,26 +117,21 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <!--    -->
-        <ContentControl
-            x:Name="DialogLayer"
-            Grid.RowSpan="4"
-            Margin="-5"
-            Panel.ZIndex="1000"
-            x:FieldModifier="public" />
-        <!--    -->
         <DockPanel Grid.Row="0">
             <Button
                 Margin="5,5,0,5"
                 Padding="5,0"
                 Command="{Binding SettingsCommand}"
                 Content="{x:Static local:Strings.Settings}"
-                DockPanel.Dock="Right" />
+                DockPanel.Dock="Right"
+                ToolTip="Настройка доступа к серверу Emcos Corporate, &#xA;выбор необходимого отчёта и подразделения" />
             <TextBlock
                 Margin="5,5,0,5"
                 Padding="5,0"
                 VerticalAlignment="Center"
                 DockPanel.Dock="Right"
-                Text="v. 1.2" />
+                Text="v. 1.2"
+                ToolTip="Номер версии программы" />
             <TextBlock
                 FontSize="{DynamicResource HeaderFontSize}"
                 TextAlignment="Center"
@@ -60,104 +145,24 @@
             </TextBlock>
         </DockPanel>
         <!--    -->
-        <TreeView Grid.Row="1" ItemsSource="{Binding View}">
-            <TreeView.Style>
-                <Style BasedOn="{StaticResource {x:Type TreeView}}" TargetType="{x:Type TreeView}">
-                    <Style.Resources>
-                        <SolidColorBrush x:Key="fillNoDataControlBackGeometryBrush" Color="#FFF7F7F7" />
-                        <SolidColorBrush x:Key="fillNoDataControlGeometryBrush" Color="#CC119EDA" />
-                        <SolidColorBrush x:Key="fillNoDataControlGeometryPathBrush" Color="#FF086F9E" />
-                        <SolidColorBrush x:Key="strokeNoDataControlGeometryBrush" Color="#FF086F9E" />
-                    </Style.Resources>
+        <sharptreeview:SharpTreeView
+            Grid.Row="1"
+            Margin="0,0,3,0"
+            AlternationCount="2"
+            Root="{Binding TreeModel}"
+            ShowAlternation="True"
+            ShowLines="True"
+            ShowRoot="False">
+            <sharptreeview:SharpTreeView.Style>
+                <Style BasedOn="{StaticResource {x:Type sharptreeview:SharpTreeView}}" TargetType="{x:Type sharptreeview:SharpTreeView}">
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding RelativeSource={x:Static RelativeSource.Self}, Path=Items.Count}" Value="0">
-                            <Setter Property="Template">
-                                <Setter.Value>
-                                    <ControlTemplate>
-                                        <Border
-                                            Background="{TemplateBinding Background}"
-                                            BorderBrush="{TemplateBinding BorderBrush}"
-                                            BorderThickness="{TemplateBinding BorderThickness}"
-                                            CornerRadius="10">
-                                            <StackPanel
-                                                Name="nodata"
-                                                Margin="20,10"
-                                                HorizontalAlignment="Center"
-                                                VerticalAlignment="Center"
-                                                Orientation="Vertical">
-                                                <Canvas
-                                                    Width="50"
-                                                    Height="50"
-                                                    Background="Transparent">
-                                                    <Canvas.Children>
-                                                        <Ellipse
-                                                            Canvas.Left="22.999"
-                                                            Width="6.167"
-                                                            Height="6.166"
-                                                            Fill="{StaticResource fillNoDataControlBackGeometryBrush}"
-                                                            Stroke="{StaticResource strokeNoDataControlGeometryBrush}" />
-                                                        <Ellipse
-                                                            Canvas.Top="42.333"
-                                                            Width="6.167"
-                                                            Height="6.166"
-                                                            Fill="{StaticResource fillNoDataControlBackGeometryBrush}"
-                                                            Stroke="{StaticResource strokeNoDataControlGeometryBrush}" />
-                                                        <Ellipse
-                                                            Canvas.Left="44.999"
-                                                            Canvas.Top="42.333"
-                                                            Width="6.167"
-                                                            Height="6.166"
-                                                            Fill="{StaticResource fillNoDataControlBackGeometryBrush}"
-                                                            Stroke="{StaticResource strokeNoDataControlGeometryBrush}" />
-                                                        <Path
-                                                            Canvas.Left="1"
-                                                            Canvas.Top="2.2"
-                                                            Width="49.028"
-                                                            Height="45.844"
-                                                            Data="M231.81312,199.57089 L226.34383,199.60188 203.3884,240.01154 206.0133,244.59208 251.19006,244.5922 253.72181,239.8861"
-                                                            Fill="{StaticResource fillNoDataControlBackGeometryBrush}"
-                                                            Stretch="Fill" />
-                                                        <Rectangle
-                                                            Canvas.Left="23.374"
-                                                            Canvas.Top="14.208"
-                                                            Width="4.75"
-                                                            Height="18"
-                                                            Fill="{StaticResource fillNoDataControlGeometryBrush}" />
-                                                        <Ellipse
-                                                            Canvas.Left="23.374"
-                                                            Canvas.Top="35.13"
-                                                            Width="4.75"
-                                                            Height="4.75"
-                                                            Fill="{StaticResource fillNoDataControlGeometryBrush}" />
-                                                        <Path
-                                                            Canvas.Left="0.249"
-                                                            Canvas.Top="1.395"
-                                                            Width="50.625"
-                                                            Height="47.101"
-                                                            Data="M0.5,42.907 L23.531,0.516 M28.125,0.50000001 L50.125001,42.86 M2.7029999,46.601 L48.008998,46.601"
-                                                            Fill="{StaticResource fillNoDataControlGeometryPathBrush}"
-                                                            Stretch="Fill"
-                                                            Stroke="{StaticResource strokeNoDataControlGeometryBrush}" />
-                                                    </Canvas.Children>
-                                                </Canvas>
-                                                <TextBlock
-                                                    TextAlignment="Center"
-                                                    TextOptions.TextFormattingMode="Ideal"
-                                                    TextWrapping="Wrap">
-                                                    Нет данных
-                                                    <LineBreak />
-                                                    для отображения
-                                                </TextBlock>
-                                            </StackPanel>
-                                        </Border>
-                                    </ControlTemplate>
-                                </Setter.Value>
-                            </Setter>
+                            <Setter Property="Template" Value="{StaticResource NoDataTemplate}" />
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>
-            </TreeView.Style>
-            <TreeView.ContextMenu>
+            </sharptreeview:SharpTreeView.Style>
+            <sharptreeview:SharpTreeView.ContextMenu>
                 <ContextMenu>
                     <ContextMenu.ItemsPanel>
                         <ItemsPanelTemplate>
@@ -172,8 +177,8 @@
                     <MenuItem Command="{Binding TreeUnselectAllCommand}" Header="Снять отметку у всех групп" />
                     <MenuItem Command="{Binding TreeSelectAllCommand}" Header="Отметить дочерние элементы группы, указанной&#xA; в настройках подразделения" />
                 </ContextMenu>
-            </TreeView.ContextMenu>
-        </TreeView>
+            </sharptreeview:SharpTreeView.ContextMenu>
+        </sharptreeview:SharpTreeView>
         <!--    -->
         <DockPanel
             x:Name="btnPanel"
@@ -185,7 +190,8 @@
                 Command="{Binding UpdateCommand}"
                 Content="{x:Static local:Strings.Update}"
                 DockPanel.Dock="Left"
-                FontSize="{StaticResource HeaderFontSize}" />
+                FontSize="{StaticResource HeaderFontSize}"
+                ToolTip="Обновление списка объектов&#xA;из Emcos Corporate" />
             <ResizeGrip Margin="10,0,0,0" DockPanel.Dock="Right" />
             <Button
                 Margin="5,5,0,0"
@@ -204,4 +210,4 @@
                 FontSize="{StaticResource HeaderFontSize}" />
         </DockPanel>
     </Grid>
-</Window>
+</wpfDialogs:WindowWithDialogs>

@@ -16,7 +16,8 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
     /// Interaction logic for SettingsControl.xaml
     /// </summary>
     public partial class SettingsControl : UserControl, INotifyPropertyChanged
-    {        
+    {
+        #region Fields
         private bool _serverAvailability = false;
         private bool _serviceAvailability = false;
         private string _messageError = String.Empty;
@@ -27,6 +28,10 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
 
         private Action _closeAction;
 
+        private TMPApplication.WpfDialogs.Contracts.IWindowWithDialogs _window;
+        #endregion
+
+        #region Constructors
         public SettingsControl(Action closeAction)
         {
             if (closeAction == null)
@@ -35,17 +40,20 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
 
             InitializeComponent();
 
+            _window = TMPApplication.ServiceInjector.Instance.GetService<TMPApplication.WpfDialogs.Contracts.IWindowWithDialogs>();
+            if (_window == null)
+                throw new ArgumentNullException("Not found Window that implementing IWindowWithDialogs");
+
             IsReportSettingsEnabled = false;
             ServerAvailability = false;
             ServiceAvailability = false;
 
             CheckCommand = new DelegateCommand(async (o) =>
             {
-                var dialog = App.WaitingScreen("Проверка корректности настроек ...");
+                var dialog = _window.DialogWaitingScreen("Проверка корректности настроек ...");
                 dialog.Show();
                 if (await CheckServiceAvailability())
                     await InitReportsGroupAsync();
-
                 dialog.Close();
             });
             ToDefaultCommand = new DelegateCommand((o) =>
@@ -65,7 +73,7 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
 
             DataContext = this;
 
-            var dialog2 = App.WaitingScreen("Проверка корректности настроек ...");
+            var dialog2 = _window.DialogWaitingScreen("Проверка корректности настроек ...");
             dialog2.Show();
             System.Threading.ThreadPool.QueueUserWorkItem(async o =>
                 {
@@ -79,6 +87,7 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
                     dialog2.Close();
                 });
         }
+        #endregion
 
         #region Command and Properties
 
@@ -96,11 +105,6 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
             get { return _serviceAvailability; }
             private set { SetProperty(ref _serviceAvailability, value); }
         }
-        public string MessageError
-        {
-            get { return _messageError; }
-            private set { SetProperty(ref _messageError, value); }
-        }
         public bool IsReportSettingsEnabled
         {
             get { return _isReportSettingsEnabled; }
@@ -112,7 +116,7 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
             get { return _reportsGroupList; }
             private set
             {
-                var dialog = App.WaitingScreen("Загрузка списка отчётов ...");
+                var dialog = _window.DialogWaitingScreen("Загрузка списка отчётов ...");
                 dialog.Show();
                 System.Threading.ThreadPool.QueueUserWorkItem(async o =>
                 {
@@ -136,6 +140,7 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
 
         private async Task<bool> CheckServiceAvailability()
         {
+            string error = string.Empty;
             bool result = false;
 
             Action<bool> onFinally = (ok) =>
@@ -144,12 +149,11 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
                 {
                     result = true;
                     ServiceAvailability = true;
-
-                    MessageError = String.Empty;
                     IsReportSettingsEnabled = true;
                 }
                 else
                 {
+                    _window.ShowDialogError(error);
                     result = false;
                     ServiceAvailability = false;
                 }
@@ -157,8 +161,6 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
 
             try
             {
-                throw new Exception();
-
                 bool serverAvailability = ServiceHelper.IsServerOnline();
                 if (serverAvailability)
                 {
@@ -172,14 +174,14 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
                     {
                         if (String.IsNullOrEmpty(answer))
                         {
-                            MessageError = Strings.IncorrectService;
+                            error = Strings.IncorrectService;
                             onFinally(false);
                         }
                         hasRights = await ServiceHelper.LoginAsync();
                         // авторизация не успешна
                         if (hasRights == false)
                         {
-                            MessageError = Strings.AuthorizationFailed;
+                            error = Strings.AuthorizationFailed;
                             onFinally(false);
                         }
                         else
@@ -208,8 +210,7 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
             catch (Exception ex)
             {
                 string message = String.Format(Strings.Error, ex.Message);
-                App.ShowErrorDialog(message);
-                MessageError = message;
+                error = message;
                 onFinally(false);
                 return false;
             }

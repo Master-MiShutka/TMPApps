@@ -399,7 +399,7 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
                 TypeCode = i.TypeCode,
                 EсpName = i is Model.EmcosPointElement ? (i as Model.EmcosPointElement).EcpName : String.Empty,
                 Type = i.Type,
-                Checked = false,
+                IsChecked = false,
                 ParentId = parent.Id,
                 ParentTypeCode = parent.TypeCode,
                 ParentName = parent.Name

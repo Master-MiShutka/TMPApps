@@ -9,7 +9,7 @@ namespace TMPApplication.WpfDialogs
 	public class DialogManager : IDialogManager
 	{
 		public DialogManager(
-			ContentControl parent,
+            Grid parent,
 			Dispatcher dispatcher)
 		{
 			_dispatcher = dispatcher;

@@ -6,6 +6,7 @@
     xmlns:local="clr-namespace:TMP.Work.Emcos.DataForCalculateNormativ"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:properties="clr-namespace:TMP.Work.Emcos.DataForCalculateNormativ.Properties"
+    FontSize="{DynamicResource HeaderFontSize}"
     mc:Ignorable="d">
     <UserControl.Resources>
         <local:Base64StringToEmcosReportConverter x:Key="Base64StringToEmcosReportConverter" />
@@ -135,19 +136,6 @@
                         HorizontalAlignment="Center"
                         Command="{Binding CheckCommand}"
                         Content="Проверить" />
-                    <!--    -->
-                    <TextBlock
-                        Grid.Row="7"
-                        Grid.ColumnSpan="2"
-                        Padding="0"
-                        FontWeight="Bold"
-                        Foreground="Red"
-                        LineHeight="15"
-                        LineStackingStrategy="BlockLineHeight"
-                        Text="{Binding MessageError}"
-                        TextAlignment="Center"
-                        TextWrapping="Wrap"
-                        Visibility="{Binding ServiceAvailability, Converter={StaticResource BoolToVisibilityConverterNegative}}" />
                 </Grid>
             </GroupBox>
             <!--    -->

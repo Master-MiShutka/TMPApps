@@ -247,7 +247,9 @@ namespace MS.Windows.Shell
             "IgnoreTaskbarOnMaximize",
             typeof(bool),
             typeof(WindowChrome),
-            new FrameworkPropertyMetadata(false, (d, e) => ((WindowChrome)d)._OnPropertyChangedThatRequiresRepaint()));
+            new FrameworkPropertyMetadata(false, 
+                (d, e) => 
+                ((WindowChrome)d)._OnPropertyChangedThatRequiresRepaint()));
 
         public bool IgnoreTaskbarOnMaximize
         {

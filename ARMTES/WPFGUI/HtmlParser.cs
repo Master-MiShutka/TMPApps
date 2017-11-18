@@ -12,7 +12,7 @@ namespace TMP.ARMTES
 {
     using TMP.ARMTES.Model;
     public class HtmlParser
-    {  
+    {
         #region View Element
 
         public static SelectElementModel ViewElement(string data, string parentId, ProgressDialogController progressController)
@@ -126,14 +126,14 @@ namespace TMP.ARMTES
                             int processedRows = 0;
                             while (processedRows < toProcessRows)
                             {
-                                
+
                                 row = nodes[globalRowIndex];
                                 fields = row.SelectNodes("td");
                                 startIndex = nextIsObject ? 4 : 0;
 
                                 int countersCount = 1;
                                 if (fields[startIndex].HasAttributes && fields[startIndex].Attributes["rowspan"] != null)
-                                    Int32.TryParse(fields[startIndex].Attributes["rowspan"].Value, out countersCount);                                    
+                                    Int32.TryParse(fields[startIndex].Attributes["rowspan"].Value, out countersCount);
                                 AccountingObject accountingObject = new AccountingObject();
                                 try
                                 {
@@ -192,7 +192,7 @@ namespace TMP.ARMTES
                                 nextIsCounter = true;
                                 for (int k = 0; k < countersCount; k++)
                                 {
-                                    
+
                                     row = nodes[globalRowIndex];
                                     fields = row.SelectNodes("td");
                                     startIndex = nextIsObject ? 9 : (nextIsCounter ? 5 : 0);
@@ -297,7 +297,7 @@ namespace TMP.ARMTES
 
                                         accountingObject.Counters.Add(counter);
                                     }
-                                    catch(Exception e)
+                                    catch (Exception e)
                                     {
                                         throw e;
                                     }
@@ -316,7 +316,7 @@ namespace TMP.ARMTES
                     catch (Exception e)
                     {
                         throw new ArgumentOutOfRangeException("Ошибка разбора данных: структура данных информации об объекте изменилась.\r\nОбратитесь к разработчику.", e);
-                    }                    
+                    }
                 }
                 // статистика
                 nodes = doc.DocumentNode.SelectNodes("/div/div/div/table/tbody/tr");
@@ -395,167 +395,172 @@ namespace TMP.ARMTES
 
         public static ViewDeviceModel ViewDevice(string data, ProgressDialogController progressController)
         {
-            HtmlNode td;
-            string text;
-
             ViewDeviceModel result = new ViewDeviceModel();
 
-            //data = System.IO.File.ReadAllText("data");
-
-            HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
-            if (doc == null) return null;
-            doc.LoadHtml(data);
-            if (doc.DocumentNode == null && doc.DocumentNode.ChildNodes == null) return null;
-
-            if (doc.DocumentNode.ChildNodes.Count > 1)
+            try
             {
-                #region Разбор секции с информацией о канале связи
 
-                HtmlAgilityPack.HtmlNode jqTabsDevices = doc.DocumentNode.SelectNodes("//div[@id='jqTabsDevices']").Single();
-                if (jqTabsDevices == null) return null;
-                HtmlNodeCollection sessionInformation = jqTabsDevices.SelectNodes("div[2]/div/table/tbody/tr");
-                if (sessionInformation == null) return null;
+                HtmlNode td;
+                string text;
 
-                result.Session = new SessionInformation();
+                //data = System.IO.File.ReadAllText("data");
 
-                // производитель модема
-                td = sessionInformation[2].SelectNodes("td[2]").Single();
-                text = td.InnerText;
-                result.Session.ModemManufacturer = text;
+                HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
+                if (doc == null) return null;
+                doc.LoadHtml(data);
+                if (doc.DocumentNode == null && doc.DocumentNode.ChildNodes == null) return null;
 
-                // Модель устройства
-                td = sessionInformation[3].SelectNodes("td[2]").Single();
-                text = td.InnerText;
-                result.Session.Model = text;
-
-                // описание
-                td = sessionInformation[4].SelectNodes("td[2]").Single();
-                text = td.InnerText;
-                result.Session.Description = text;
-
-                // статус
-                td = sessionInformation[6].SelectNodes("td[2]").Single();
-                text = td.InnerText;
-                result.Session.CurrentStatus = text;
-
-                // сеанс
-                td = sessionInformation[7].SelectNodes("td[2]").Single();
-                text = td.InnerText;
-                DateTime date = new DateTime();
-                result.Session.LastSessionDate = DateTime.TryParse(text, out date) ? date : date;
-
-                #endregion
-
-                #region Разбор секции с показаниями
-
-                HtmlAgilityPack.HtmlNode jqTabsBalances = doc.DocumentNode.SelectNodes("//div[@id='jqTabsBalances']").Single();
-                if (jqTabsBalances == null) return null;
-                HtmlNodeCollection counters = jqTabsBalances.SelectNodes("table/tbody/tr");
-                if (counters == null) return null;
-
-                result.CountersIndications = new List<IndicationViewItem>();
-
-                byte startIndex = 0;
-                for (int i = 0; i < counters.Count; i++)
+                if (doc.DocumentNode.ChildNodes.Count > 1)
                 {
-                    HtmlNodeCollection hnc = counters[i].SelectNodes("td");
-                    startIndex = 0;
+                    #region Разбор секции с информацией о канале связи
 
-                    IndicationViewItem ivi = new IndicationViewItem();
-                    ivi.PreviousIndications = new Indications();
-                    ivi.NextIndications = new Indications();
+                    HtmlAgilityPack.HtmlNode jqTabsDevices = doc.DocumentNode.SelectNodes("//div[@id='jqTabsDevices']").Single();
+                    if (jqTabsDevices == null) return null;
+                    HtmlNodeCollection sessionInformation = jqTabsDevices.SelectNodes("div[2]/div/table/tbody/tr");
+                    if (sessionInformation == null) return null;
 
-                    #region Парсинг
-                    // точка
-                    td = hnc[startIndex++];
+                    result.Session = new SessionInformation();
+
+                    // производитель модема
+                    td = sessionInformation[2].SelectNodes("td[2]").Single();
                     text = td.InnerText;
-                    ivi.AccountingPoint = text;
+                    result.Session.ModemManufacturer = text;
 
-                    // тип
-                    td = hnc[startIndex++];
+                    // Модель устройства
+                    td = sessionInformation[3].SelectNodes("td[2]").Single();
                     text = td.InnerText;
-                    ivi.CounterType = text;
+                    result.Session.Model = text;
 
-                    // предыдущие показания T0
-                    td = hnc[startIndex++];
-                    ivi.PreviousIndications.Tarriff0 = GetIndication(td.InnerText);
-                    // предыдущие показания T1
-                    td = hnc[startIndex++];
-                    ivi.PreviousIndications.Tarriff1 = GetIndication(td.InnerText);
-                    // предыдущие показания T2
-                    td = hnc[startIndex++];
-                    ivi.PreviousIndications.Tarriff2 = GetIndication(td.InnerText);
-                    // предыдущие показания T3
-                    td = hnc[startIndex++];
-                    ivi.PreviousIndications.Tarriff3 = GetIndication(td.InnerText);
-                    // предыдущие показания T4
-                    td = hnc[startIndex++];
-                    ivi.PreviousIndications.Tarriff4 = GetIndication(td.InnerText);
-                    // предыдущие показания достоверность
-                    td = hnc[startIndex++];
+                    // описание
+                    td = sessionInformation[4].SelectNodes("td[2]").Single();
                     text = td.InnerText;
-                    ivi.PreviousIndications.DataReliability = text;
+                    result.Session.Description = text;
 
-                    // текущие показания T0
-                    td = hnc[startIndex++];
-                    ivi.NextIndications.Tarriff0 = GetIndication(td.InnerText);
-                    // текущие показания T1
-                    td = hnc[startIndex++];
-                    ivi.NextIndications.Tarriff1 = GetIndication(td.InnerText);
-                    // текущие показания T2
-                    td = hnc[startIndex++];
-                    ivi.NextIndications.Tarriff2 = GetIndication(td.InnerText);
-                    // текущие показания T3
-                    td = hnc[startIndex++];
-                    ivi.NextIndications.Tarriff3 = GetIndication(td.InnerText);
-                    // текущие показания T4
-                    td = hnc[startIndex++];
-                    ivi.NextIndications.Tarriff4 = GetIndication(td.InnerText);
-                    // предыдущие показания достоверность
-                    td = hnc[startIndex++];
+                    // статус
+                    td = sessionInformation[6].SelectNodes("td[2]").Single();
                     text = td.InnerText;
-                    ivi.NextIndications.DataReliability = text;
+                    result.Session.CurrentStatus = text;
 
-                    // разница
-                    td = hnc[startIndex++];
-                    ivi.Difference = GetIndication(td.InnerText);
+                    // сеанс
+                    td = sessionInformation[7].SelectNodes("td[2]").Single();
+                    text = td.InnerText;
+                    DateTime date = new DateTime();
+                    result.Session.LastSessionDate = DateTime.TryParse(text, out date) ? date : date;
 
                     #endregion
 
-                    result.CountersIndications.Add(ivi);
-                }
-                #endregion
+                    #region Разбор секции с показаниями
 
-                #region Качество показаний
+                    HtmlAgilityPack.HtmlNode jqTabsBalances = doc.DocumentNode.SelectNodes("//div[@id='jqTabsBalances']").Single();
+                    if (jqTabsBalances == null) return null;
+                    HtmlNodeCollection counters = jqTabsBalances.SelectNodes("table/tbody/tr");
+                    if (counters == null) return null;
 
-                if (result.QualityIndications == null)
-                    result.QualityIndications = new List<QualityIndications>();
+                    result.CountersIndications = new List<IndicationViewItem>();
 
-                try
-                {
+                    byte startIndex = 0;
+                    for (int i = 0; i < counters.Count; i++)
+                    {
+                        HtmlNodeCollection hnc = counters[i].SelectNodes("td");
+                        startIndex = 0;
+
+                        IndicationViewItem ivi = new IndicationViewItem();
+                        ivi.PreviousIndications = new Indications();
+                        ivi.NextIndications = new Indications();
+
+                        #region Парсинг
+                        // точка
+                        td = hnc[startIndex++];
+                        text = td.InnerText;
+                        ivi.AccountingPoint = text;
+
+                        // тип
+                        td = hnc[startIndex++];
+                        text = td.InnerText;
+                        ivi.CounterType = text;
+
+                        // предыдущие показания T0
+                        td = hnc[startIndex++];
+                        ivi.PreviousIndications.Tarriff0 = GetIndication(td.InnerText);
+                        // предыдущие показания T1
+                        td = hnc[startIndex++];
+                        ivi.PreviousIndications.Tarriff1 = GetIndication(td.InnerText);
+                        // предыдущие показания T2
+                        td = hnc[startIndex++];
+                        ivi.PreviousIndications.Tarriff2 = GetIndication(td.InnerText);
+                        // предыдущие показания T3
+                        td = hnc[startIndex++];
+                        ivi.PreviousIndications.Tarriff3 = GetIndication(td.InnerText);
+                        // предыдущие показания T4
+                        td = hnc[startIndex++];
+                        ivi.PreviousIndications.Tarriff4 = GetIndication(td.InnerText);
+                        // предыдущие показания достоверность
+                        td = hnc[startIndex++];
+                        text = td.InnerText;
+                        ivi.PreviousIndications.DataReliability = text;
+
+                        // текущие показания T0
+                        td = hnc[startIndex++];
+                        ivi.NextIndications.Tarriff0 = GetIndication(td.InnerText);
+                        // текущие показания T1
+                        td = hnc[startIndex++];
+                        ivi.NextIndications.Tarriff1 = GetIndication(td.InnerText);
+                        // текущие показания T2
+                        td = hnc[startIndex++];
+                        ivi.NextIndications.Tarriff2 = GetIndication(td.InnerText);
+                        // текущие показания T3
+                        td = hnc[startIndex++];
+                        ivi.NextIndications.Tarriff3 = GetIndication(td.InnerText);
+                        // текущие показания T4
+                        td = hnc[startIndex++];
+                        ivi.NextIndications.Tarriff4 = GetIndication(td.InnerText);
+                        // предыдущие показания достоверность
+                        td = hnc[startIndex++];
+                        text = td.InnerText;
+                        ivi.NextIndications.DataReliability = text;
+
+                        // разница
+                        td = hnc[startIndex++];
+                        ivi.Difference = GetIndication(td.InnerText);
+
+                        #endregion
+
+                        result.CountersIndications.Add(ivi);
+                    }
+                    #endregion
+
+                    #region Качество показаний
+
+                    if (result.QualityIndications == null)
+                        result.QualityIndications = new List<QualityIndications>();
+
                     HtmlNodeCollection indicationsQualityMonths = doc.DocumentNode.SelectNodes("//table[contains(@class,'tableQualityIndications')]");
 
                     if (indicationsQualityMonths != null)
                     {
                         int monthsCount = indicationsQualityMonths.Count;
-                        for (int monthIndex = 0; monthIndex<monthsCount; monthIndex++)
+                        for (int monthIndex = 0; monthIndex < monthsCount; monthIndex++)
                         {
                             QualityIndications qi = new QualityIndications();
                             HtmlNode m = indicationsQualityMonths[monthIndex].SelectNodes("thead/tr[1]/th[2]").Single();
-                            qi.Month = m == null ? "???" : m.InnerText;
+                            qi.Period = m == null ? "???" : m.InnerText;
                             qi.PointsData = ParseMonthQualityIndications(indicationsQualityMonths[monthIndex].SelectNodes("tbody/tr"));
 
                             result.QualityIndications.Add(qi);
                         }
                     }
-                }
-                catch (Exception ex)
-                {
-                    //TODO: Добавить логирование
+
+                    #endregion
                 }
 
-                #endregion
             }
+            catch (Exception ex)
+            {
+                //TODO: Добавить логирование
+                App.LogException(ex);
+                return null;
+            }
+
             return result;
         }
 
@@ -668,7 +673,7 @@ namespace TMP.ARMTES
                 td = info[17].SelectNodes("td[2]").Single();
                 text = td.InnerText;
                 result.AbonentAddress = text;
-                
+
                 // Фидер
                 td = info[18].SelectNodes("td[2]").Single();
                 text = td.InnerText;
@@ -709,9 +714,9 @@ namespace TMP.ARMTES
                 text = td.InnerText.Trim();
                 DateTime date = new DateTime();
                 result.LastSessionDate = DateTime.TryParse(
-                    text, 
-                    System.Globalization.CultureInfo.CreateSpecificCulture("en-US"), 
-                    System.Globalization.DateTimeStyles.None, 
+                    text,
+                    System.Globalization.CultureInfo.CreateSpecificCulture("en-US"),
+                    System.Globalization.DateTimeStyles.None,
                     out date) ? date : date;
 
                 #endregion
@@ -788,7 +793,7 @@ namespace TMP.ARMTES
                 #endregion
 
                 result.IndicationViewItem = ivi;
-                
+
                 #endregion
             }
             return result;
@@ -822,7 +827,7 @@ namespace TMP.ARMTES
                 for (int day = 1; day <= daysCount; day++)
                 {
                     PointQualityIndicationsLegend qil = new PointQualityIndicationsLegend();
-                    qil.Day = Byte.Parse(row[day].InnerText);
+                    qil.Interval = row[day].InnerText;
                     string quality = row[day].Attributes["class"].Value;
                     if (quality.Contains("greenQuality"))
                         qil.Type = PointQualityIndicationsType.Reliable;
@@ -848,7 +853,7 @@ namespace TMP.ARMTES
             else
             {
                 if (double.TryParse(data, System.Globalization.NumberStyles.Any, System.Globalization.NumberFormatInfo.InvariantInfo, out value))
-                return value;
+                    return value;
 
                 return new Nullable<double>();
             }

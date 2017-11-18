@@ -25,6 +25,11 @@ namespace TMPApplication.Logger
                 WriteToConsole(e.Message, Category.Exception, Priority.High);
         }
 
+        public void LogException(Exception exp)
+        {
+            Log(exp);
+        }
+
         public void LogError(string message)
         {
             WriteToConsole(message, Category.Exception, Priority.High);

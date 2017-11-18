@@ -102,6 +102,9 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Controls\ListPointIcon.xaml.cs">
+      <DependentUpon>ListPointIcon.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Converters\Base64StringObjectConverter.cs" />
     <Compile Include="Connected Services\EmcosTestWebService\Reference.cs">
       <AutoGen>True</AutoGen>
@@ -120,6 +123,7 @@
     <Compile Include="Model\ListPointStatus.cs" />
     <Compile Include="Model\ListPointWithResult.cs" />
     <Compile Include="Model\RPQ.cs" />
+    <Compile Include="Model\TreeModel.cs" />
     <Compile Include="ServiceHelper.cs" />
     <Compile Include="Controls\SettingsControl.xaml.cs">
       <DependentUpon>SettingsControl.xaml</DependentUpon>
@@ -130,7 +134,6 @@
       <DependentUpon>Strings.resx</DependentUpon>
     </Compile>
     <Compile Include="Utils.cs" />
-    <Compile Include="WindowHelper.cs" />
     <Page Include="Controls\GetDataControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -138,6 +141,10 @@
     <Page Include="Controls\GetEnergyControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\ListPointIcon.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Styles\ListPointDataTemplate.xaml">
       <SubType>Designer</SubType>
@@ -199,6 +206,10 @@
     <Resource Include="mainicon.ico" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\LIBRARY\SharpTreeView\ICSharpCode.TreeView.csproj">
+      <Project>{dde2a481-8271-4eac-a330-8fa6a38d13d1}</Project>
+      <Name>ICSharpCode.TreeView</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\LIBRARY\TMPApplication\TMPApplication.csproj">
       <Project>{dfe89862-64ef-44f8-98a8-07b410ec180e}</Project>
       <Name>TMPApplication</Name>

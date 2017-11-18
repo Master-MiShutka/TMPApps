@@ -25,8 +25,8 @@ namespace TMP.ARMTES
 
         private bool _notAuthorized = true;
         private bool _hostAvailable = false;
-        private SectorType _sectorType = SectorType.SmallEngineSector;
-        private ProfileType _profileType = ProfileType.BeginningOfTheDay;
+        private SectorType _sectorType = SectorType.SES;
+        private ProfileType _profileType = ProfileType.Days;
 
         private DateTime _startDate;
         private DateTime _endDate;
@@ -131,7 +131,7 @@ namespace TMP.ARMTES
             {
                 if (value.Equals(_notAuthorized)) return;
                 _notAuthorized = value;
-                RaisePropertyChanged("Authorized");
+                OnPropertyChanged("Authorized");
             }
         }
 
@@ -143,7 +143,7 @@ namespace TMP.ARMTES
             set
             {
                 _hostAvailable = value;
-                RaisePropertyChanged("HostAvailable");
+                OnPropertyChanged("HostAvailable");
             }
         }
 
@@ -153,7 +153,7 @@ namespace TMP.ARMTES
             set
             {
                 _rootElementId = value;
-                RaisePropertyChanged("RootElementId");
+                OnPropertyChanged("RootElementId");
             }
         }
 
@@ -163,7 +163,7 @@ namespace TMP.ARMTES
             set
             {
                 _sectorType = value;
-                RaisePropertyChanged("SectorType");
+                OnPropertyChanged("SectorType");
             }
         }
 
@@ -173,7 +173,7 @@ namespace TMP.ARMTES
             set
             {
                 _profileType = value;
-                RaisePropertyChanged("ProfileType");
+                OnPropertyChanged("ProfileType");
             }
         }
 
@@ -183,7 +183,7 @@ namespace TMP.ARMTES
             set
             {
                 _startDate = value;
-                RaisePropertyChanged("StartDate");
+                OnPropertyChanged("StartDate");
             }
         }
 
@@ -193,7 +193,7 @@ namespace TMP.ARMTES
             set
             {
                 _endDate = value;
-                RaisePropertyChanged("EndDate");
+                OnPropertyChanged("EndDate");
             }
         }
         
@@ -203,7 +203,7 @@ namespace TMP.ARMTES
             set
             {
                 _exportList = value;
-                RaisePropertyChanged("ExportList");
+                OnPropertyChanged("ExportList");
             }
         }
 
@@ -212,14 +212,14 @@ namespace TMP.ARMTES
             get { return _collectors; }
             set
             {
-                SetProp<ObservableCollection<Collector>>(ref _collectors, value, "Collectors");
-                RaisePropertyChanged("HasData");
-                RaisePropertyChanged("FilteredCollectors");
+                SetProperty<ObservableCollection<Collector>>(ref _collectors, value, "Collectors");
+                OnPropertyChanged("HasData");
+                OnPropertyChanged("FilteredCollectors");
 
                 if (value == null)
                 {
                     _selectedCollector = null;
-                    RaisePropertyChanged("SelectedCollector");
+                    OnPropertyChanged("SelectedCollector");
                 }
             }
         }
@@ -230,7 +230,7 @@ namespace TMP.ARMTES
             {
                 if (value == null)
                     return;
-                SetProp<Collector>(ref _selectedCollector, value, "SelectedCollector");
+                SetProperty<Collector>(ref _selectedCollector, value, "SelectedCollector");
             }
         }
 
@@ -239,8 +239,8 @@ namespace TMP.ARMTES
             get { return _filter; }
             set
             {
-                SetProp<FilterType>(ref _filter, value, "Filter");
-                RaisePropertyChanged("FilteredCollectors");
+                SetProperty<FilterType>(ref _filter, value, "Filter");
+                OnPropertyChanged("FilteredCollectors");
             }
         }
 
@@ -284,7 +284,7 @@ namespace TMP.ARMTES
         public Statistics Statistics
         {
             get { return _statistics; }
-            set { SetProp<Statistics>(ref _statistics, value, "Statistics"); }
+            set { SetProperty<Statistics>(ref _statistics, value, "Statistics"); }
         }
 
         public ArmtesElement SelectedElement
@@ -292,9 +292,9 @@ namespace TMP.ARMTES
             get { return _selectedElement; }
             set 
             { 
-                SetProp<ArmtesElement>(ref _selectedElement, value, "SelectedElement");
-                RaisePropertyChanged("SelectedDepartament");
-                RaisePropertyChanged("CurrentPath");
+                SetProperty<ArmtesElement>(ref _selectedElement, value, "SelectedElement");
+                OnPropertyChanged("SelectedDepartament");
+                OnPropertyChanged("CurrentPath");
             }
         }
 
@@ -343,7 +343,7 @@ namespace TMP.ARMTES
         public bool QuitConfirmationEnabled
         {
             get { return _quitConfirmationEnabled; }
-            set { SetProp<bool>(ref _quitConfirmationEnabled, value, "QuitConfirmationEnabled"); }
+            set { SetProperty<bool>(ref _quitConfirmationEnabled, value, "QuitConfirmationEnabled"); }
         }
 
         public bool HasData
@@ -354,12 +354,12 @@ namespace TMP.ARMTES
         public bool IsFullDataLoaded
         {
             get { return _isFullDataLoaded; }
-            set { SetProp<bool>(ref _isFullDataLoaded, value, "IsFullDataLoaded"); }
+            set { SetProperty<bool>(ref _isFullDataLoaded, value, "IsFullDataLoaded"); }
         }
         public bool UpdatingProcessStarted
         {
             get { return _updatingProcessStarted; }
-            set { SetProp<bool>(ref _updatingProcessStarted, value, "UpdatingProcessStarted"); }
+            set { SetProperty<bool>(ref _updatingProcessStarted, value, "UpdatingProcessStarted"); }
         }
 
 
@@ -368,12 +368,12 @@ namespace TMP.ARMTES
         public List<AccentColorMenuData> AccentColors
         {
             get { return _accentColors; }
-            set { SetProp<List<AccentColorMenuData>>(ref _accentColors, value, "AccentColors"); }
+            set { SetProperty<List<AccentColorMenuData>>(ref _accentColors, value, "AccentColors"); }
         }
         public List<AppThemeMenuData> AppThemes
         {
             get { return _appThemes; }
-            set { SetProp<List<AppThemeMenuData>>(ref _appThemes, value, "AppThemes"); }
+            set { SetProperty<List<AppThemeMenuData>>(ref _appThemes, value, "AppThemes"); }
         }
 
         #endregion

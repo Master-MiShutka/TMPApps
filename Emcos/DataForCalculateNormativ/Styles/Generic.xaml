@@ -42,6 +42,9 @@
     </Style>
     <Style TargetType="{x:Type ToolTip}" BasedOn="{StaticResource {x:Type ToolTip}}">
         <Setter Property="FontSize" Value="{StaticResource HeaderFontSize}" />
+        <Setter Property="ToolTipService.ShowDuration" Value="5000" />
+        <Setter Property="ToolTipService.InitialShowDelay" Value="500" />
+        <Setter Property="TextBlock.TextAlignment" Value="Center"/>
     </Style>
 
     <BitmapImage x:Key="Area" UriSource="/DataForCalculateNormativ;component/Resources/area.png" />

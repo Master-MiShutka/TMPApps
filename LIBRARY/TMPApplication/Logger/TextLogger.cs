@@ -82,6 +82,11 @@ namespace TMP.Common.Logger
             Log(message, Category.Warn, Priority.Medium);
         }
 
+        public void LogException(Exception exp)
+        {
+            Log(exp);
+        }
+
         public void LogError(string message)
         {
             Log(message, Category.Exception, Priority.High);

@@ -26,9 +26,9 @@ namespace TMP.ARMTES.Converters
                 {
                     case ProfileType.Current:
                         return now;
-                    case ProfileType.BeginningOfTheDay:
+                    case ProfileType.Days:
                         return new DateTime(now.Year, now.Month, 1);
-                    case ProfileType.BeginningOfTheMonth:
+                    case ProfileType.Months:
                         {
                             if (now.Month == 1)
                                 return new DateTime(now.Year-1, 12, 1);
@@ -70,7 +70,7 @@ namespace TMP.ARMTES.Converters
                 {
                     case ProfileType.Current:
                         return now;
-                    case ProfileType.BeginningOfTheDay:
+                    case ProfileType.Days:
                         return now;
                 }
                 return new DateTime(now.Year, now.Month, 1);

@@ -37,6 +37,7 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
         private double _progress = 0d;
         private CancellationTokenSource _cts = new CancellationTokenSource();
 
+        private TMPApplication.WpfDialogs.Contracts.IWindowWithDialogs _window;
         #endregion
 
         #region Constructors
@@ -44,6 +45,10 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
         public GetEnergyControl()
         {
             InitializeComponent();
+
+            _window = TMPApplication.ServiceInjector.Instance.GetService<TMPApplication.WpfDialogs.Contracts.IWindowWithDialogs>();
+            if (_window == null)
+                throw new ArgumentNullException("Not found Window that implementing IWindowWithDialogs");
 
             CancelCommand = new DelegateCommand(
                 o =>
@@ -93,7 +98,7 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
                     }
                     catch (Exception ex)
                     {
-                        App.ShowErrorDialog(ex, Strings.ErrorOnSave);
+                        _window.ShowDialogError(ex, Strings.ErrorOnSave);
                     }
                 },
                 o => _list != null && _list.Count > 0);
@@ -111,7 +116,7 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
 
             List<ListPointWithResult> list = null;
 
-            Dialogs.IDialog dialog = App.WaitingScreen("Подготовка ...");
+            Dialogs.IDialog dialog = _window.DialogWaitingScreen("Подготовка ...");
             dialog.Show();
             System.Threading.ThreadPool.QueueUserWorkItem(o =>
             {               
@@ -144,7 +149,7 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
 
                 if (list == null || list.Count == 0)
                 {
-                    App.ShowWarningDialog(Strings.EmptyList);
+                    _window.ShowDialogWarning(Strings.EmptyList);
                     dialog.Close();
                     _onClosed();
                 }
@@ -180,7 +185,7 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
                 IsGettingData = false;
                 System.Media.SystemSounds.Asterisk.Play();
                 App.Log("Завершено");
-                App.UIAction(() => App.Current.MainWindow.Flash());
+                TMPApplication.DispatcherExtensions.InUi(() => App.Current.MainWindow.Flash());
             }, TaskContinuationOptions.OnlyOnRanToCompletion);
         }
 
@@ -191,7 +196,7 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
             Action<int> report = pos =>
                 {
                     Progress = 100d * pos / itemsCount;
-                    App.UIAction(() => App.Current.MainWindow.TaskbarItemInfo.ProgressValue = ((double)pos) / itemsCount);
+                    TMPApplication.DispatcherExtensions.InUi(() => App.Current.MainWindow.TaskbarItemInfo.ProgressValue = ((double)pos) / itemsCount);
                 };
 
             int index = 0;

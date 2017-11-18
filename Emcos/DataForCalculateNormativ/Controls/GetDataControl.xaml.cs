@@ -33,6 +33,8 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
         private double _progress = 0d;
         private CancellationTokenSource _cts = new CancellationTokenSource();
         private Model.EmcosReport _selectedReport;
+
+        private TMPApplication.WpfDialogs.Contracts.IWindowWithDialogs _window;
         #endregion Fields
 
         #region Constructors
@@ -41,15 +43,20 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
         {
             InitializeComponent();
 
+            _window = TMPApplication.ServiceInjector.Instance.GetService<TMPApplication.WpfDialogs.Contracts.IWindowWithDialogs>();
+            if (_window == null)
+                throw new ArgumentNullException("Not found Window that implementing IWindowWithDialogs");
+
             CancelCommand = new DelegateCommand(
                 o =>
                 {
-                    var r = App.ShowQuestion(Strings.InterruptQuestion);
-                    if (r == MessageBoxResult.Yes)
+                    var q = _window.DialogQuestion(Strings.InterruptQuestion);
+                    q.Yes = () =>
                     {
                         _cts.Cancel();
                         App.Current.MainWindow.TaskbarItemInfo.ProgressState = System.Windows.Shell.TaskbarItemProgressState.Error;
-                    }
+                    };
+                    q.Show();
                 },
                 o => _cts != null && (_cts.IsCancellationRequested == false));
             CloseControlCommand = new DelegateCommand(o =>
@@ -96,7 +103,7 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
                         }
                         catch (Exception ex)
                         {
-                            App.ShowErrorDialog(ex, Strings.ErrorOnSave);
+                            _window.ShowDialogError(ex, Strings.ErrorOnSave);
                         }
                     }
                 },
@@ -130,7 +137,7 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
                         }
                         catch (Exception ex)
                         {
-                            App.ShowErrorDialog(ex, Strings.ErrorOnSave);
+                            _window.ShowDialogError(ex, Strings.ErrorOnSave);
                         }
                     }
                 },
@@ -178,7 +185,7 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
                     }
                     catch (Exception ex)
                     {
-                        App.ShowErrorDialog(ex, Strings.ErrorOnSave);
+                        _window.ShowDialogError(ex, Strings.ErrorOnSave);
                     }
                 });
             DataContext = this;
@@ -211,11 +218,8 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
             Action<int> report = pos =>
                 {
                     Progress = 100d * pos / itemsCount;
-                    App.Current.MainWindow.TaskbarItemInfo.ProgressValue = ((double)pos) / itemsCount;
+                    TMPApplication.DispatcherExtensions.InUi(() => App.Current.MainWindow.TaskbarItemInfo.ProgressValue = ((double)pos) / itemsCount);
                 };
-
-            IsGettingData = true;
-            IsCompleted = false;
 
             int index = 0;
             foreach (var item in _list)
@@ -241,11 +245,6 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
 
                 report(++index);
             }
-            IsCompleted = true;
-            IsGettingData = false;
-            System.Media.SystemSounds.Asterisk.Play();
-            App.Log("Завершено");
-            App.UIAction(() => App.Current.MainWindow.Flash());
         }
 
         private void PrepareReport(ListPointWithResult point)
@@ -267,7 +266,7 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
                 {
                     if (nvc.Get("COLUMN_NAME") != "GR_ID")
                     {
-                        App.ShowError(Strings.InvalidReport);
+                        _window.ShowDialogError(Strings.InvalidReport);
                         return;
                     }
                     RPQ rpq = new RPQ();
@@ -405,6 +404,9 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
             _cts = new CancellationTokenSource();
             var token = _cts.Token;
 
+            IsGettingData = true;
+            IsCompleted = false;
+
             var task = Task.Factory.StartNew(() => Go(), token);
             task.ContinueWith((t) =>
                 {
@@ -414,6 +416,14 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
                 {
                     _onFaulted(t.Exception);
                 }, TaskContinuationOptions.OnlyOnFaulted);
+            task.ContinueWith((t) =>
+            {
+                IsCompleted = true;
+                IsGettingData = false;
+                System.Media.SystemSounds.Asterisk.Play();
+                App.Log("Завершено");
+                TMPApplication.DispatcherExtensions.InUi(() => App.Current.MainWindow.Flash());
+            }, TaskContinuationOptions.OnlyOnRanToCompletion);
         }
         #endregion Private Methods
 

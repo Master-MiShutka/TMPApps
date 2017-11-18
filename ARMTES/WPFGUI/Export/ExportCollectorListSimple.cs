@@ -10,6 +10,8 @@ namespace TMP.ARMTES
     using Model;
     public class ExportCollectorListSimple : ExportCollectorListAsIs
     {
+        private int _columnsCount = 10;
+
         public ExportCollectorListSimple(ExportInfo exportInfo, IEnumerable<Collector> collectors)
             : base(exportInfo, collectors)
         {
@@ -29,10 +31,10 @@ namespace TMP.ARMTES
                 case ProfileType.Current:
                     paramName = "параметр: текущие показания";
                     break;
-                case ProfileType.BeginningOfTheDay:
+                case ProfileType.Days:
                     paramName = "параметр: показания на начало суток";
                     break;
-                case ProfileType.BeginningOfTheMonth:
+                case ProfileType.Months:
                     paramName = "параметр: показания на начало месяца";
                     break;
             }
@@ -66,11 +68,21 @@ namespace TMP.ARMTES
             CreateRange(6, 10, 1, 1, "разность");
 
             ChangeRangeStyle(4, 1, 6, 10, tableHeaderStyle);
+            XmlStyle externalBordersStyle = new XmlStyle();
+            externalBordersStyle.Border.LineStyle = Borderline.Continuous;
+            externalBordersStyle.Border.Sides = BorderSides.All;
+            externalBordersStyle.Border.Weight = 1;
+            ChangeRangeStyle(4, 1, 6, 10, externalBordersStyle);
         }
 
         public override void CreateBody()
         {
             // создание стилей ячеек
+            XmlStyle objectStyle = new XmlStyle();
+            objectStyle.Border.LineStyle = Borderline.Continuous;
+            objectStyle.Border.Sides = BorderSides.Bottom;
+            objectStyle.Border.Weight = 2;
+
             XmlStyle textStyle = new XmlStyle();
             textStyle.Alignment = new AlignmentOptions() { Horizontal = HorizontalAlignment.Left, Vertical = VerticalAlignment.Center, WrapText = true };
             textStyle.Border.LineStyle = Borderline.Continuous;
@@ -107,6 +119,7 @@ namespace TMP.ARMTES
 
 
                 CreateRange(rowIndex, columnIndex++, collectorRowSpan, 1, collectorIndex + 1, numbersStyle);
+                ChangeRangeStyle(rowIndex, columnIndex - 1, collectorRowSpan, _columnsCount, objectStyle);
 
                 int oldObjectColumnIndex = columnIndex;
                 for (int objectIndex = 0; objectIndex < collector.Objects.Count; objectIndex++)
@@ -188,6 +201,7 @@ namespace TMP.ARMTES
             sheet.Columns(9).Width = 85;
             // установка параметров страницы
             sheet.PrintOptions.Orientation = PageOrientation.Landscape;
+            sheet.PrintOptions.Layout = PageLayout.CenterHorizontal;
             sheet.PrintOptions.SetMargins(0.7, 0.5, 0.5, 0.5);
             sheet.PrintOptions.SetFitToPage(1, 0);
         }

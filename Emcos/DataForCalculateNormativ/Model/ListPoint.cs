@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
+using TMP.Work.Emcos.Model;
 
 namespace TMP.Work.Emcos.DataForCalculateNormativ
 {
@@ -12,7 +13,7 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
     public class ListPoint : INotifyPropertyChanged
     {
         [IgnoreDataMember]
-        private bool _checked = false;
+        private bool _isChecked = false;
 
         [DataMember]
         public int ParentId { get; set; }
@@ -31,14 +32,14 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
         [DataMember]
         public string EсpName { get; set; }
         [DataMember]
-        public Model.ElementTypes Type { get; set; }
+        public ElementTypes Type { get; set; }
         [DataMember]
         public IList<ListPoint> Items { get; set; }
         [DataMember]
-        public bool Checked
+        public bool IsChecked
         {
-            get { return _checked; }
-            set { SetProperty(ref _checked, value); }
+            get { return _isChecked; }
+            set { SetProperty(ref _isChecked, value); }
         }
 
         public ListPoint()

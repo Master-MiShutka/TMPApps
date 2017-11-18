@@ -1,0 +1,13 @@
+﻿01:30:06:248 08-04-2017	INFO	None	Запуск приложения
+01:30:06:326 08-04-2017	WARN	Medium	Не найдена сборка 'Microsoft.VisualStudio.DesignTools.Designer.resources, Version=15.0.0.0, Culture=en-US, PublicKeyToken=b03f5f7f11d50a3a'
+01:30:06:327 08-04-2017	WARN	Medium	Не найдена сборка 'Microsoft.VisualStudio.DesignTools.Designer.resources, Version=15.0.0.0, Culture=en-US, PublicKeyToken=b03f5f7f11d50a3a'
+01:30:07:418 08-04-2017	WARN	Medium	Не найдена сборка 'Microsoft.VisualStudio.DesignTools.Utility.resources, Version=15.0.0.0, Culture=en-US, PublicKeyToken=b03f5f7f11d50a3a'
+01:30:07:419 08-04-2017	WARN	Medium	Не найдена сборка 'Microsoft.VisualStudio.DesignTools.Utility.resources, Version=15.0.0.0, Culture=en-US, PublicKeyToken=b03f5f7f11d50a3a'
+01:30:07:935 08-04-2017	WARN	Medium	Не найдена сборка 'DataForCalculateNormativ.resources, Version=1.0.0.0, Culture=en-US, PublicKeyToken=null'
+01:30:07:936 08-04-2017	WARN	Medium	Не найдена сборка 'DataForCalculateNormativ.resources, Version=1.0.0.0, Culture=en-US, PublicKeyToken=null'
+01:30:07:938 08-04-2017	WARN	Medium	Не найдена сборка 'DataForCalculateNormativ.resources, Version=1.0.0.0, Culture=en, PublicKeyToken=null'
+01:30:07:939 08-04-2017	WARN	Medium	Не найдена сборка 'DataForCalculateNormativ.resources, Version=1.0.0.0, Culture=en, PublicKeyToken=null'
+01:31:21:422 08-04-2017	WARN	Medium	Не найдена сборка 'Microsoft.VisualStudio.DesignTools.Designer.resources, Version=15.0.0.0, Culture=en-US, PublicKeyToken=b03f5f7f11d50a3a'
+01:31:21:425 08-04-2017	WARN	Medium	Не найдена сборка 'Microsoft.VisualStudio.DesignTools.Designer.resources, Version=15.0.0.0, Culture=en-US, PublicKeyToken=b03f5f7f11d50a3a'
+01:31:23:953 08-04-2017	WARN	Medium	Не найдена сборка 'Microsoft.VisualStudio.DesignTools.Markup.resources, Version=15.0.0.0, Culture=en-US, PublicKeyToken=b03f5f7f11d50a3a'
+01:31:23:954 08-04-2017	WARN	Medium	Не найдена сборка 'Microsoft.VisualStudio.DesignTools.Markup.resources, Version=15.0.0.0, Culture=en-US, PublicKeyToken=b03f5f7f11d50a3a'

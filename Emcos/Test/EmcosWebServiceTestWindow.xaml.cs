@@ -15,7 +15,8 @@ using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 using System.Xml.Linq;
- 
+
+using TMPApplication.WpfDialogs.Contracts;
 
 namespace Test
 {    
@@ -23,7 +24,7 @@ namespace Test
     /// <summary>
     /// Interaction logic for EmcosWebServiceTestWindow.xaml
     /// </summary>
-    public partial class EmcosWebServiceTestWindow : Window, INotifyPropertyChanged
+    public partial class EmcosWebServiceTestWindow : TMPApplication.CustomWpfWindow.WindowWithDialogs, INotifyPropertyChanged
     {
         private GRInfoElement _typeNames;
         private GRInfoElement _codes;
@@ -207,6 +208,76 @@ namespace Test
         }
 
         #endregion INotifyPropertyChanged Members
+
+        private void WindowWithDialogs_Loaded(object sender, RoutedEventArgs e)
+        {
+            var s = this.Style;
+        }
+
+        private void BtnDialogTest_Info_Click(object sender, RoutedEventArgs e)
+        {
+            var msg = this.DialogInfo("efefef", "This is caption", MessageBoxImage.Information);            
+            msg.Show();
+        }
+
+        private void BtnDialogTest_InfoYesNo_Click(object sender, RoutedEventArgs e)
+        {
+            var msg = this.DialogInfo("efefef", "This is caption", MessageBoxImage.Information, TMPApplication.WpfDialogs.DialogMode.YesNo);
+            msg.Show();
+        }
+
+        private void BtnDialogTest_Warning_Click(object sender, RoutedEventArgs e)
+        {
+            var msg = this.DialogWarning("efefef", "This is caption");
+            msg.Show();
+        }
+
+        private void BtnDialogTest_Question_Click(object sender, RoutedEventArgs e)
+        {
+            var msg = this.DialogQuestion("efefef", "This is caption", TMPApplication.WpfDialogs.DialogMode.OkCancel);
+            msg.Show();
+        }
+
+        private void BtnDialogTest_Error_Click(object sender, RoutedEventArgs e)
+        {
+            var msg = this.DialogError("efefef", "This is caption");
+            msg.Show();
+        }
+
+        private void BtnDialogTest_Exception_Click(object sender, RoutedEventArgs e)
+        {
+            var msg = this.DialogError(new ArgumentException("First msg", new ArgumentNullException("Nulllll ....")));
+            msg.Show();
+        }
+
+        private void BtnDialogTest_WaitScreen_Click(object sender, RoutedEventArgs e)
+        {
+            var msg = this.DialogWaitingScreen("This is wait message", true, TMPApplication.WpfDialogs.DialogMode.Ok);
+            msg.Show();
+        }
+
+        private void BtnDialogTest_Progress_Click(object sender, RoutedEventArgs e)
+        {
+            var msg = this.DialogProgress("efefef", null, TMPApplication.WpfDialogs.DialogMode.Ok, false);
+            msg.Show();
+        }
+
+        private void BtnDialogTest_ProgressIntermediate_Click(object sender, RoutedEventArgs e)
+        {
+            var msg = this.DialogProgress("efefef", null, TMPApplication.WpfDialogs.DialogMode.Ok, true);
+            msg.Show();
+        }
+
+        private void BtnDialogTest_Custom_Click(object sender, RoutedEventArgs e)
+        {
+            UserControl c = new UserControl();
+            StackPanel sp = new StackPanel();
+            sp.Children.Add(new DatePicker());
+            sp.Children.Add(new Slider());
+            c.Content = sp;
+            var msg = this.DialogCustom(c, TMPApplication.WpfDialogs.DialogMode.Ok);
+            msg.Show();
+        }
     }
 
     public class GRInfoElement : ICSharpCode.TreeView.SharpTreeNode

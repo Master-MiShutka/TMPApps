@@ -7,39 +7,27 @@ namespace TMPApplication.WpfDialogs
 {
 	class DialogLayeringHelper : IDialogHost
 	{
-		public DialogLayeringHelper(ContentControl parent)
+        public DialogLayeringHelper(Grid parent)
 		{
-			_parent = parent;
+			_dialogContainer = parent;
 		}
-
-		private readonly ContentControl _parent;
-		private readonly List<object> _layerStack = new List<object>();
-
-		public bool HasDialogLayers { get { return _layerStack.Any(); } }
+        private Grid _dialogContainer;
 
 		#region Implementation of IDialogHost
 
 		public void ShowDialog(DialogBaseControl dialog)
 		{
-			_layerStack.Add(_parent.Content);
-			_parent.Content = dialog;
-		}
+            _dialogContainer.Children.Add(dialog);
+        }
 
 		public void HideDialog(DialogBaseControl dialog)
 		{
-			if (_parent.Content == dialog)
-			{
-				var oldContent = _layerStack.Last();
-				_layerStack.Remove(oldContent);
-				_parent.Content = oldContent;
-			}
-			else
-				_layerStack.Remove(dialog);
-		}
+            _dialogContainer.Children.Remove(dialog);
+        }
 
 		public FrameworkElement GetCurrentContent()
 		{
-			return _parent;
+			return _dialogContainer;
 		}
 
 		#endregion

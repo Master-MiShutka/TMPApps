@@ -25,7 +25,7 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
             this.TypeCode = source.TypeCode;
             this.EсpName = source.EсpName;
             this.Type = source.Type;
-            this.Checked = source.Checked;
+            this.IsChecked = source.IsChecked;
             if (source.Items != null)
                 this.Items = source.Items.Select(i => new ListPointWithResult(i)).ToList<ListPointWithResult>();
 

@@ -4,17 +4,17 @@
 winexe
 C#
 .cs
-Y:\Developer\CURRENT\TMPApps\Emcos\DataForCalculateNormativ\obj\Debug\
+y:\Developer\CURRENT\TMPApps\Emcos\DataForCalculateNormativ\obj\Debug\
 TMP.Work.Emcos.DataForCalculateNormativ
 none
 false
 DEBUG;TRACE
-Y:\Developer\CURRENT\TMPApps\Emcos\DataForCalculateNormativ\App.xaml
-6-1752244690
+y:\Developer\CURRENT\TMPApps\Emcos\DataForCalculateNormativ\App.xaml
+71987040238
 
-22470915401
-281535060185
-Controls\GetDataControl.xaml;Controls\GetEnergyControl.xaml;Styles\ListPointDataTemplate.xaml;MainWindow.xaml;Controls\SettingsControl.xaml;Styles\Generic.xaml;
+23-510287000
+29-947416931
+Controls\GetDataControl.xaml;Controls\GetEnergyControl.xaml;Controls\ListPointIcon.xaml;Styles\ListPointDataTemplate.xaml;MainWindow.xaml;Controls\SettingsControl.xaml;Styles\Generic.xaml;
 
-True
+False
 

@@ -10,7 +10,7 @@
     #region Enums and Static Property Classes
 
     /// <summary>ASSOCIATIONLEVEL, AL_*</summary>
-    internal enum AL
+    public enum AL
     {
         MACHINE,
         EFFECTIVE,
@@ -18,7 +18,7 @@
     }
 
     /// <summary>ASSOCIATIONTYPE, AT_*</summary>
-    internal enum AT
+    public enum AT
     {
         FILEEXTENSION,
         URLPROTOCOL,
@@ -27,7 +27,7 @@
     }
 
     /// <summary>FileDialog AddPlace options.  FDAP_*</summary>
-    internal enum FDAP : uint
+    public enum FDAP : uint
     {
         BOTTOM = 0x00000000,
         TOP = 0x00000001,
@@ -35,7 +35,7 @@
 
     /// <summary>IFileDialog options.  FOS_*</summary>
     [Flags]
-    internal enum FOS : uint
+    public enum FOS : uint
     {
         OVERWRITEPROMPT = 0x00000002,
         STRICTFILETYPES = 0x00000004,
@@ -61,7 +61,7 @@
     }
 
     /// <summary>FDE_OVERWRITE_RESPONSE.  FDEOR_*</summary>
-    internal enum FDEOR
+    public enum FDEOR
     {
         DEFAULT = 0x00000000,
         ACCEPT = 0x00000001,
@@ -69,7 +69,7 @@
     }
 
     /// <summary>FDE_SHAREVIOLATION_RESPONSE.  FDESVR_*</summary>
-    internal enum FDESVR
+    public enum FDESVR
     {
         DEFAULT = 0x00000000,
         ACCEPT = 0x00000001,
@@ -77,14 +77,14 @@
     }
 
     /// <summary>ShellItem attribute flags.  SIATTRIBFLAGS_*</summary>
-    internal enum SIATTRIBFLAGS
+    public enum SIATTRIBFLAGS
     {
         AND = 0x00000001,
         OR = 0x00000002,
         APPCOMPAT = 0x00000003,
     }
 
-    internal enum APPDOCLISTTYPE
+    public enum APPDOCLISTTYPE
     {
         ADLT_RECENT = 0,   // The recently used documents list
         ADLT_FREQUENT,     // The frequently used documents list
@@ -95,7 +95,7 @@
     /// </summary>
     /// <remarks>The native enum was called STPFLAG.</remarks>
     [Flags]
-    internal enum STPF
+    public enum STPF
     {
         NONE = 0x00000000,
         USEAPPTHUMBNAILALWAYS = 0x00000001,
@@ -110,7 +110,7 @@
     /// <remarks>
     /// The native enum was called TBPFLAG.
     /// </remarks>
-    internal enum TBPF
+    public enum TBPF
     {
         NOPROGRESS = 0x00000000,
         INDETERMINATE = 0x00000001,
@@ -123,7 +123,7 @@
     /// THUMBBUTTON mask.  THB_*
     /// </summary>
     [Flags]
-    internal enum THB : uint
+    public enum THB : uint
     {
         BITMAP = 0x0001,
         ICON = 0x0002,
@@ -135,7 +135,7 @@
     /// THUMBBUTTON flags.  THBF_*
     /// </summary>
     [Flags]
-    internal enum THBF : uint
+    public enum THBF : uint
     {
         ENABLED = 0x0000,
         DISABLED = 0x0001,
@@ -153,7 +153,7 @@
     /// <remarks>
     /// These are new for Vista, but are used in downlevel components
     /// </remarks>
-    internal enum GPS
+    public enum GPS
     {
         // If no flags are specified (GPS_DEFAULT), a read-only property store is returned that includes properties for the file or item.
         // In the case that the shell item is a file, the property store contains:
@@ -182,7 +182,7 @@
     /// <summary>
     /// KNOWNDESTCATEGORY.  KDC_*
     /// </summary>
-    internal enum KDC
+    public enum KDC
     {
         FREQUENT = 1,
         RECENT,
@@ -190,7 +190,7 @@
 
     // IShellFolder::GetAttributesOf flags
     [Flags]
-    internal enum SFGAO : uint
+    public enum SFGAO : uint
     {
         /// <summary>Objects can be copied</summary>
         /// <remarks>DROPEFFECT_COPY</remarks>
@@ -319,7 +319,7 @@
     /// <summary>
     /// IShellFolder::EnumObjects grfFlags bits.  Also called SHCONT
     /// </summary>
-    internal enum SHCONTF
+    public enum SHCONTF
     {
         CHECKING_FOR_CHILDREN = 0x0010,   // hint that client is checking if (what) child items the folder contains - not all details (e.g. short file name) are needed
         FOLDERS = 0x0020,   // only want folders enumerated (SFGAO_FOLDER)
@@ -342,7 +342,7 @@
     /// For compatibility with SIGDN, these bits must all sit in the LOW word.
     /// </remarks>
     [Flags]
-    internal enum SHGDN
+    public enum SHGDN
     {
         SHGDN_NORMAL = 0x0000,  // default (display purpose)
         SHGDN_INFOLDER = 0x0001,  // displayed under a folder (relative)
@@ -354,7 +354,7 @@
     /// <summary>
     /// SHELLITEMCOMPAREHINTF.  SICHINT_*.
     /// </summary>
-    internal enum SICHINT : uint
+    public enum SICHINT : uint
     {
         /// <summary>iOrder based on display in a folder view</summary>
         DISPLAY = 0x00000000,
@@ -371,7 +371,7 @@
     /// <summary>
     /// ShellItem enum.  SIGDN_*.
     /// </summary>
-    internal enum SIGDN : uint
+    public enum SIGDN : uint
     {                                             // lower word (& with 0xFFFF)
         NORMALDISPLAY = 0x00000000, // SHGDN_NORMAL
         PARENTRELATIVEPARSING = 0x80018001, // SHGDN_INFOLDER | SHGDN_FORPARSING
@@ -402,7 +402,7 @@
     /// There is no STR_ equivalent for GPS_TEMPORARY because temporary property stores
     /// are provided by IShellItem2 only -- not by the underlying IShellFolder.
     /// </remarks>
-    internal static class STR_GPS
+    public static class STR_GPS
     {
         public const string HANDLERPROPERTIESONLY = "GPS_HANDLERPROPERTIESONLY";
         public const string FASTPROPERTIESONLY = "GPS_FASTPROPERTIESONLY";
@@ -417,7 +417,7 @@
     #region Structs
 
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
-    internal struct COMDLG_FILTERSPEC
+    public struct COMDLG_FILTERSPEC
     {
         [MarshalAs(UnmanagedType.LPWStr)]
         public string pszName;
@@ -427,7 +427,7 @@
     }
 
     [StructLayout(LayoutKind.Sequential, Pack = 8, CharSet = CharSet.Unicode)]
-    internal struct THUMBBUTTON
+    public struct THUMBBUTTON
     {
         /// <summary>
         /// WPARAM value for a THUMBBUTTON being clicked.
@@ -446,7 +446,7 @@
     }
 
     [StructLayout(LayoutKind.Sequential, Pack = 4)]
-    internal struct PKEY
+    public struct PKEY
     {
         /// <summary>fmtid</summary>
         private readonly Guid _fmtid;
@@ -489,7 +489,7 @@
         InterfaceType(ComInterfaceType.InterfaceIsIUnknown),
         Guid(IID.ApplicationAssociationRegistration),
     ]
-    internal interface IApplicationAssociationRegistration
+    public interface IApplicationAssociationRegistration
     {
         [return: MarshalAs(UnmanagedType.LPWStr)]
         string QueryCurrentDefault(
@@ -524,7 +524,7 @@
         InterfaceType(ComInterfaceType.InterfaceIsIUnknown),
         Guid(IID.EnumIdList),
     ]
-    internal interface IEnumIDList
+    public interface IEnumIDList
     {
         [PreserveSig()]
         HRESULT Next(uint celt, out IntPtr rgelt, out int pceltFetched);
@@ -542,7 +542,7 @@
         InterfaceType(ComInterfaceType.InterfaceIsIUnknown),
         Guid(IID.EnumObjects),
     ]
-    internal interface IEnumObjects
+    public interface IEnumObjects
     {
         //[local]
         // This signature might not work... Hopefully don't need this interface though.
@@ -569,7 +569,7 @@
         InterfaceType(ComInterfaceType.InterfaceIsIUnknown),
         Guid(IID.ObjectArray),
     ]
-    internal interface IObjectArray
+    public interface IObjectArray
     {
         uint GetCount();
 
@@ -582,7 +582,7 @@
         InterfaceType(ComInterfaceType.InterfaceIsIUnknown),
         Guid(IID.ObjectArray),
     ]
-    internal interface IObjectCollection : IObjectArray
+    public interface IObjectCollection : IObjectArray
     {
         #region IObjectArray redeclarations
 
@@ -607,7 +607,7 @@
         InterfaceType(ComInterfaceType.InterfaceIsIUnknown),
         Guid(IID.PropertyStore)
     ]
-    internal interface IPropertyStore
+    public interface IPropertyStore
     {
         uint GetCount();
 
@@ -625,7 +625,7 @@
         InterfaceType(ComInterfaceType.InterfaceIsIUnknown),
         Guid(IID.ShellFolder),
     ]
-    internal interface IShellFolder
+    public interface IShellFolder
     {
         void ParseDisplayName(
             [In] IntPtr hwnd,
@@ -722,7 +722,7 @@
         InterfaceType(ComInterfaceType.InterfaceIsIUnknown),
         Guid(IID.ShellItem),
     ]
-    internal interface IShellItem
+    public interface IShellItem
     {
         [return: MarshalAs(UnmanagedType.Interface)]
         object BindToHandler(IBindCtx pbc, [In] ref Guid bhid, [In] ref Guid riid);
@@ -742,7 +742,7 @@
         InterfaceType(ComInterfaceType.InterfaceIsIUnknown),
         Guid(IID.ShellItemArray),
     ]
-    internal interface IShellItemArray
+    public interface IShellItemArray
     {
         [return: MarshalAs(UnmanagedType.Interface)]
         object BindToHandler(IBindCtx pbc, [In] ref Guid rbhid, [In] ref Guid riid);
@@ -771,7 +771,7 @@
         InterfaceType(ComInterfaceType.InterfaceIsIUnknown),
         Guid(IID.ShellItem2),
     ]
-    internal interface IShellItem2 : IShellItem
+    public interface IShellItem2 : IShellItem
     {
         #region IShellItem redeclarations
 
@@ -839,7 +839,7 @@
         InterfaceTypeAttribute(ComInterfaceType.InterfaceIsIUnknown),
         Guid(IID.ShellLink),
     ]
-    internal interface IShellLinkW
+    public interface IShellLinkW
     {
         void GetPath([Out, MarshalAs(UnmanagedType.LPWStr)] StringBuilder pszFile, int cchMaxPath, [In, Out] WIN32_FIND_DATAW pfd, SLGP fFlags);
 
@@ -883,7 +883,7 @@
         InterfaceType(ComInterfaceType.InterfaceIsIUnknown),
         Guid(IID.TaskbarList),
     ]
-    internal interface ITaskbarList
+    public interface ITaskbarList
     {
         /// <summary>
         /// This function must be called first to validate use of other members.
@@ -920,7 +920,7 @@
         InterfaceType(ComInterfaceType.InterfaceIsIUnknown),
         Guid(IID.TaskbarList2),
     ]
-    internal interface ITaskbarList2 : ITaskbarList
+    public interface ITaskbarList2 : ITaskbarList
     {
         #region ITaskbarList redeclaration
 
@@ -957,7 +957,7 @@
         InterfaceType(ComInterfaceType.InterfaceIsIUnknown),
         Guid(IID.ApplicationDestinations)
     ]
-    internal interface IApplicationDestinations
+    public interface IApplicationDestinations
     {
         // Set the App User Model ID for the application removing destinations from its list.  If an AppID is not provided
         // via this method, the system will use a heuristically determined ID.  This method must be called before
@@ -979,7 +979,7 @@
         InterfaceType(ComInterfaceType.InterfaceIsIUnknown),
         Guid(IID.ApplicationDocumentLists)
     ]
-    internal interface IApplicationDocumentLists
+    public interface IApplicationDocumentLists
     {
         /// <summary>
         /// Set the App User Model ID for the application retrieving this list.  If an AppID is not provided via this method,
@@ -1003,7 +1003,7 @@
         InterfaceType(ComInterfaceType.InterfaceIsIUnknown),
         Guid(IID.CustomDestinationList)
     ]
-    internal interface ICustomDestinationList
+    public interface ICustomDestinationList
     {
         void SetAppID([In, MarshalAs(UnmanagedType.LPWStr)] string pszAppID);
 
@@ -1040,7 +1040,7 @@
         InterfaceType(ComInterfaceType.InterfaceIsIUnknown),
         Guid(IID.ObjectWithAppUserModelId)
     ]
-    internal interface IObjectWithAppUserModelId
+    public interface IObjectWithAppUserModelId
     {
         void SetAppID([MarshalAs(UnmanagedType.LPWStr)] string pszAppID);
 
@@ -1056,7 +1056,7 @@
         InterfaceType(ComInterfaceType.InterfaceIsIUnknown),
         Guid(IID.ObjectWithProgId)
     ]
-    internal interface IObjectWithProgId
+    public interface IObjectWithProgId
     {
         void SetProgID([MarshalAs(UnmanagedType.LPWStr)] string pszProgID);
 
@@ -1069,7 +1069,7 @@
         InterfaceType(ComInterfaceType.InterfaceIsIUnknown),
         Guid(IID.TaskbarList3),
     ]
-    internal interface ITaskbarList3 : ITaskbarList2
+    public interface ITaskbarList3 : ITaskbarList2
     {
         #region ITaskbarList2 redeclaration
 
@@ -1134,7 +1134,7 @@
         InterfaceType(ComInterfaceType.InterfaceIsIUnknown),
         Guid(IID.TaskbarList3),
     ]
-    internal interface ITaskbarList4 : ITaskbarList3
+    public interface ITaskbarList4 : ITaskbarList3
     {
         #region ITaskbarList3 redeclaration
 
@@ -1205,7 +1205,7 @@
     InterfaceType(ComInterfaceType.InterfaceIsIUnknown),
     Guid(IID.FileDialogEvents),
 ]
-    internal interface IFileDialogEvents
+    public interface IFileDialogEvents
     {
         [PreserveSig]
         HRESULT OnFileOk(IFileDialog pfd);
@@ -1234,7 +1234,7 @@
         InterfaceType(ComInterfaceType.InterfaceIsIUnknown),
         Guid(IID.ModalWindow),
     ]
-    internal interface IModalWindow
+    public interface IModalWindow
     {
         [PreserveSig]
         HRESULT Show(IntPtr parent);
@@ -1245,7 +1245,7 @@
         InterfaceType(ComInterfaceType.InterfaceIsIUnknown),
         Guid(IID.FileDialog),
     ]
-    internal interface IFileDialog : IModalWindow
+    public interface IFileDialog : IModalWindow
     {
         #region IModalWindow redeclarations
 
@@ -1307,7 +1307,7 @@
         InterfaceType(ComInterfaceType.InterfaceIsIUnknown),
         Guid(IID.FileOpenDialog),
     ]
-    internal interface IFileOpenDialog : IFileDialog
+    public interface IFileOpenDialog : IFileDialog
     {
         #region IFileDialog redeclarations
 
@@ -1377,7 +1377,7 @@
         InterfaceType(ComInterfaceType.InterfaceIsIUnknown),
         Guid(IID.FileSaveDialog),
     ]
-    internal interface IFileSaveDialog : IFileDialog
+    public interface IFileSaveDialog : IFileDialog
     {
         #region IFileDialog redeclarations
 
@@ -1449,7 +1449,7 @@
         void ApplyProperties(IShellItem psi, [MarshalAs(UnmanagedType.Interface)] object pStore, [In] ref IntPtr hwnd, [MarshalAs(UnmanagedType.Interface)] object pSink);
     }
 
-    internal static class ShellUtil
+    public static class ShellUtil
     {
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         public static string GetPathFromShellItem(IShellItem item)
@@ -1462,7 +1462,7 @@
         {
             if (string.IsNullOrEmpty(path))
             {
-                // Internal function.  Should have verified this before calling if we cared.
+                // public function.  Should have verified this before calling if we cared.
                 return null;
             }
 

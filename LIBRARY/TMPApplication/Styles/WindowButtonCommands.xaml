@@ -1,0 +1,149 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:Converters="clr-namespace:TMPApplication.Converters"
+    xmlns:local="clr-namespace:TMPApplication.CustomWpfWindow"
+    xmlns:reskeys="clr-namespace:TMPApplication.Themes"
+    xmlns:shell="clr-namespace:MS.Windows.Shell;assembly=WindowsShell">
+
+    <Style TargetType="{x:Type local:WindowButtonCommands}">
+        <Style.Resources>
+            <BooleanToVisibilityConverter x:Key="booleanToVisibilityConverter " />
+        </Style.Resources>
+        <Setter Property="Foreground" Value="{DynamicResource {x:Static reskeys:ResourceKeys.BlackBrushKey}}" />
+        <Setter Property="TextBlock.FontFamily" Value="Marlett" />
+        <Setter Property="TextBlock.FontSize" Value="{DynamicResource {x:Static reskeys:ResourceKeys.SystemButtonFontSizeKey}}" />
+        <Setter Property="IsTabStop" Value="False" />
+        <Setter Property="Margin" Value="0,0,0,1" />
+        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="local:WindowButtonCommands">
+                    <StackPanel Margin="{TemplateBinding Margin}" Orientation="Horizontal">
+                        <StackPanel Orientation="Horizontal">
+                            <Button
+                                Command="{Binding AboutCommand, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:WindowWithDialogs}}}"
+                                IsEnabled="{Binding IsAboutButtonEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:WindowWithDialogs}}}"
+                                Style="{Binding WindowButtonStyle, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:WindowWithDialogs}}}"
+                                ToolTip="{Binding About, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:WindowButtonCommands}}}"
+                                Visibility="{Binding IsAboutButtonVisible, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:WindowWithDialogs}}, Converter={StaticResource booleanToVisibilityConverter}}">
+                                <Button.Content>
+                                    <Grid>
+                                        <TextBlock FontFamily="Webdings" Text="@" />
+                                    </Grid>
+                                </Button.Content>
+                            </Button>
+                            <Button
+                                Command="{Binding SettingsCommand, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:WindowWithDialogs}}}"
+                                IsEnabled="{Binding IsSettingsButtonEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:WindowWithDialogs}}}"
+                                Style="{Binding WindowButtonStyle, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:WindowWithDialogs}}}"
+                                ToolTip="{Binding Settings, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:WindowButtonCommands}}}"
+                                Visibility="{Binding IsSettingsButtonVisible, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:WindowWithDialogs}}, Converter={StaticResource booleanToVisibilityConverter}}">
+                                <Button.Content>
+                                    <Grid>
+                                        <TextBlock FontFamily="Webdings" Text="s" />
+                                    </Grid>
+                                </Button.Content>
+                            </Button>
+                        </StackPanel>
+
+                        <Button
+                            x:Name="PART_Min"
+                            Command="{Binding Source={x:Static shell:SystemCommands.MinimizeWindowCommand}}"
+                            Content="0"
+                            IsEnabled="{Binding IsMinButtonEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:WindowWithDialogs}}}"
+                            Style="{Binding MinButtonStyle, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:WindowWithDialogs}}}"
+                            ToolTip="{Binding Minimize, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:WindowButtonCommands}}}">
+                            <Button.Visibility>
+                                <MultiBinding Converter="{x:Static Converters:ResizeModeMinMaxButtonVisibilityConverter.Instance}" ConverterParameter="MIN">
+                                    <Binding
+                                        Mode="OneWay"
+                                        Path="ShowMinButton"
+                                        RelativeSource="{RelativeSource FindAncestor,
+                                                                        AncestorType={x:Type local:WindowWithDialogs}}" />
+                                    <Binding
+                                        Mode="OneWay"
+                                        Path="UseNoneWindowStyle"
+                                        RelativeSource="{RelativeSource FindAncestor,
+                                                                        AncestorType={x:Type local:WindowWithDialogs}}" />
+                                    <Binding
+                                        Mode="OneWay"
+                                        Path="ResizeMode"
+                                        RelativeSource="{RelativeSource FindAncestor,
+                                                                        AncestorType={x:Type local:WindowWithDialogs}}" />
+                                </MultiBinding>
+                            </Button.Visibility>
+                        </Button>
+
+                        <Button
+                            x:Name="PART_Max"
+                            Command="{Binding Source={x:Static shell:SystemCommands.MaximizeWindowCommand}}"
+                            Content="1"
+                            IsEnabled="{Binding IsMaxRestoreButtonEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:WindowWithDialogs}}}"
+                            Style="{Binding MaxRestoreButtonStyle, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:WindowWithDialogs}}}"
+                            ToolTip="{Binding Maximize, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:WindowButtonCommands}}}">
+                            <Button.Visibility>
+                                <MultiBinding Converter="{x:Static Converters:ResizeModeMinMaxButtonVisibilityConverter.Instance}" ConverterParameter="MAX">
+                                    <Binding
+                                        Mode="OneWay"
+                                        Path="ShowMaxRestoreButton"
+                                        RelativeSource="{RelativeSource FindAncestor,
+                                                                        AncestorType={x:Type local:WindowWithDialogs}}" />
+                                    <Binding
+                                        Mode="OneWay"
+                                        Path="UseNoneWindowStyle"
+                                        RelativeSource="{RelativeSource FindAncestor,
+                                                                        AncestorType={x:Type local:WindowWithDialogs}}" />
+                                    <Binding
+                                        Mode="OneWay"
+                                        Path="ResizeMode"
+                                        RelativeSource="{RelativeSource FindAncestor,
+                                                                        AncestorType={x:Type local:WindowWithDialogs}}" />
+                                </MultiBinding>
+                            </Button.Visibility>
+                        </Button>
+
+                        <Button
+                            x:Name="PART_Close"
+                            Command="{Binding Source={x:Static shell:SystemCommands.CloseWindowCommand}}"
+                            Content="r"
+                            IsEnabled="{Binding IsCloseButtonEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:WindowWithDialogs}}}"
+                            Style="{Binding CloseButtonStyle, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:WindowWithDialogs}}}"
+                            ToolTip="{Binding Close, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:WindowButtonCommands}}}">
+                            <Button.Visibility>
+                                <MultiBinding Converter="{x:Static Converters:ResizeModeMinMaxButtonVisibilityConverter.Instance}" ConverterParameter="CLOSE">
+                                    <Binding
+                                        Mode="OneWay"
+                                        Path="ShowCloseButton"
+                                        RelativeSource="{RelativeSource FindAncestor,
+                                                                        AncestorType={x:Type local:WindowWithDialogs}}" />
+                                    <Binding
+                                        Mode="OneWay"
+                                        Path="UseNoneWindowStyle"
+                                        RelativeSource="{RelativeSource FindAncestor,
+                                                                        AncestorType={x:Type local:WindowWithDialogs}}" />
+                                </MultiBinding>
+                            </Button.Visibility>
+                        </Button>
+                    </StackPanel>
+                    <ControlTemplate.Triggers>
+                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:WindowWithDialogs}}, Path=WindowState}" Value="Maximized">
+                            <Setter TargetName="PART_Max" Property="Content" Value="2" />
+                            <Setter TargetName="PART_Max" Property="ToolTip" Value="{Binding Restore, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:WindowButtonCommands}}}" />
+                            <Setter TargetName="PART_Max" Property="Command" Value="{Binding Source={x:Static shell:SystemCommands.RestoreWindowCommand}}" />
+                        </DataTrigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding ParentWindow.ShowTitleBar, RelativeSource={RelativeSource Self}}" Value="True">
+                <Setter Property="Foreground" Value="{DynamicResource {x:Static reskeys:ResourceKeys.ControlTextBrushKey}}" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding ParentWindow.ShowTitleBar, RelativeSource={RelativeSource Self}}" Value="False">
+                <Setter Property="Background" Value="Transparent" />
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+
+</ResourceDictionary>

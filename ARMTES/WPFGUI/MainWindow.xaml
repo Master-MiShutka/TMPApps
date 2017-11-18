@@ -1,37 +1,38 @@
-﻿<Controls:TMPWindow x:Class="TMP.ARMTES.MainWindow"
-                    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:Controls="clr-namespace:TMP.Wpf.CommonControls;assembly=TMP.Wpf.CommonControls"
-                    xmlns:Converters="clr-namespace:TMP.Wpf.CommonControls.Converters;assembly=TMP.Wpf.CommonControls"
-                    xmlns:System="clr-namespace:System;assembly=mscorlib"
-                    xmlns:SystemWindowsControls="clr-namespace:System.Windows.Controls;assembly=presentationframework"
-                    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-                    xmlns:local="clr-namespace:TMP.ARMTES"
-                    xmlns:local_controls="clr-namespace:TMP.ARMTES.Controls"
-                    xmlns:local_converters="clr-namespace:TMP.ARMTES.Converters"
-                    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-                    xmlns:model="clr-namespace:TMP.ARMTES.Model;assembly=Model"
-                    Title="{Binding Title}"
-                    Width="{local:SettingBinding Width,
-                                                 1800d}"
-                    Height="{local:SettingBinding Height,
-                                                  600d}"
-                    Closed="MainWindow_Closed"
-                    Closing="TMPWindow_Closing"
-                    DataContext="{x:Static local:MainViewModel.Instance}"
-                    Icon="Resources/MAINICON.ico"
-                    KeyDown="Window_KeyDown"
-                    Left="{local:SettingBinding Left,
-                                                10d}"
-                    Loaded="Window_Loaded"
-                    ResizeMode="CanResizeWithGrip"
-                    SnapsToDevicePixels="True"
-                    TextOptions.TextFormattingMode="Ideal"
-                    Top="{local:SettingBinding Top,
-                                               10d}"
-                    WindowState="Maximized"
-                    UseLayoutRounding="True"
-                    mc:Ignorable="d">
+﻿<Controls:TMPWindow
+    x:Class="TMP.ARMTES.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:Controls="clr-namespace:TMP.Wpf.CommonControls;assembly=TMP.Wpf.CommonControls"
+    xmlns:Converters="clr-namespace:TMP.Wpf.CommonControls.Converters;assembly=TMP.Wpf.CommonControls"
+    xmlns:System="clr-namespace:System;assembly=mscorlib"
+    xmlns:SystemWindowsControls="clr-namespace:System.Windows.Controls;assembly=presentationframework"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:TMP.ARMTES"
+    xmlns:local_controls="clr-namespace:TMP.ARMTES.Controls"
+    xmlns:local_converters="clr-namespace:TMP.ARMTES.Converters"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:model="clr-namespace:TMP.ARMTES.Model;assembly=Model"
+    Title="{Binding Title}"
+    Width="{local:SettingBinding Width,
+                                 1800d}"
+    Height="{local:SettingBinding Height,
+                                  600d}"
+    Closed="MainWindow_Closed"
+    Closing="TMPWindow_Closing"
+    DataContext="{x:Static local:MainViewModel.Instance}"
+    Icon="Resources/MAINICON.ico"
+    KeyDown="Window_KeyDown"
+    Left="{local:SettingBinding Left,
+                                10d}"
+    Loaded="Window_Loaded"
+    ResizeMode="CanResizeWithGrip"
+    SnapsToDevicePixels="True"
+    TextOptions.TextFormattingMode="Ideal"
+    Top="{local:SettingBinding Top,
+                               10d}"
+    UseLayoutRounding="True"
+    WindowState="Maximized"
+    mc:Ignorable="d">
     <Window.Resources>
 
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
@@ -50,14 +51,14 @@
             <MenuItem Click="ExportObjectsList_MenuItemClick" Header="Список объектов" />
             <MenuItem Click="ExportNotAnswered_MenuItemClick" Header="Не отвечающие" />
             <MenuItem />
-            <MenuItem Click="ExportSmallEngineFullReport_MenuItemClick"
-                      Header="Вся таблица"
-                      IsEnabled="{Binding Path=IsFullDataLoaded,
-                                          Mode=TwoWay}" />
-            <MenuItem Click="ExportSmallEngineSimpleReport_MenuItemClick"
-                      Header="В расчётную группу"
-                      IsEnabled="{Binding Path=IsFullDataLoaded,
-                                          Mode=TwoWay}" />
+            <MenuItem
+                Click="ExportSmallEngineFullReport_MenuItemClick"
+                Header="Вся таблица"
+                IsEnabled="{Binding Path=IsFullDataLoaded, Mode=TwoWay}" />
+            <MenuItem
+                Click="ExportSmallEngineSimpleReport_MenuItemClick"
+                Header="В расчётную группу"
+                IsEnabled="{Binding Path=IsFullDataLoaded, Mode=TwoWay}" />
         </x:Array>
 
     </Window.Resources>
@@ -71,18 +72,20 @@
         <!--  ***  -->
         <Controls:AppHeaderControl Grid.Row="0" AppDescription="Просмотр данных по мелкомоторному сектору с сайта АРМТЕС" />
         <!--  ***  -->
-        <Border Grid.Row="1"
-                Margin="2"
-                Background="{StaticResource PanelBackgroundHorizontal}"
-                BorderBrush="Black"
-                BorderThickness="0.5"
-                CornerRadius="4,4,4,4"
-                Padding="5"
-                SnapsToDevicePixels="True">
+        <Border
+            Grid.Row="1"
+            Margin="2"
+            Padding="5"
+            Background="{StaticResource PanelBackgroundHorizontal}"
+            BorderBrush="Black"
+            BorderThickness="0.5"
+            CornerRadius="4,4,4,4"
+            SnapsToDevicePixels="True">
             <Border.BitmapEffect>
-                <DropShadowBitmapEffect Opacity="0.75"
-                                        ShadowDepth="3"
-                                        Color="Black" />
+                <DropShadowBitmapEffect
+                    Opacity="0.75"
+                    ShadowDepth="3"
+                    Color="Black" />
             </Border.BitmapEffect>
             <Grid Grid.Row="1">
                 <Grid.ColumnDefinitions>
@@ -93,85 +96,96 @@
                 <StackPanel Grid.Column="0" Orientation="Horizontal">
                     <StackPanel.ContextMenu>
                         <ContextMenu>
-                            <MenuItem Command="{Binding ChangeAccentCommand}"
-                                      Header="Theme"
-                                      ItemContainerStyle="{StaticResource AppThemeMenuItemStyle}"
-                                      ItemsSource="{Binding AppThemes}" />
-                            <MenuItem Command="{Binding ChangeAccentCommand}"
-                                      Header="Accent"
-                                      ItemContainerStyle="{StaticResource AccentColorMenuItemStyle}"
-                                      ItemsSource="{Binding AccentColors}" />
+                            <MenuItem
+                                Command="{Binding ChangeAccentCommand}"
+                                Header="Theme"
+                                ItemContainerStyle="{StaticResource AppThemeMenuItemStyle}"
+                                ItemsSource="{Binding AppThemes}" />
+                            <MenuItem
+                                Command="{Binding ChangeAccentCommand}"
+                                Header="Accent"
+                                ItemContainerStyle="{StaticResource AccentColorMenuItemStyle}"
+                                ItemsSource="{Binding AccentColors}" />
                         </ContextMenu>
                     </StackPanel.ContextMenu>
-                    <Button Margin="5 0"
-                            Click="RefreshData_MenuItemClick"
-                            Content="Обновить данные"
-                            FontWeight="SemiBold"
-                            IsEnabled="{Binding Path=HasData}"
-                            Padding="5 0" />
-                    <Button Margin="5 0"
-                            Click="Logout_MenuItemClick"
-                            Content="Завершить сеанс"
-                            FontWeight="SemiBold"
-                            Padding="5 0" />
+                    <Button
+                        Margin="5,0"
+                        Padding="5,0"
+                        Click="RefreshData_MenuItemClick"
+                        Content="Обновить данные"
+                        FontWeight="SemiBold" Style="{StaticResource {x:Type Button}}"
+                        IsEnabled="{Binding Path=HasData}" />
+                    <Button
+                        Margin="5,0"
+                        Padding="5,0"
+                        Click="Logout_MenuItemClick"
+                        Content="Завершить сеанс"
+                        FontWeight="SemiBold" />
                 </StackPanel>
-                <StackPanel Grid.Column="1"
-                            HorizontalAlignment="Center"
-                            Orientation="Horizontal">
-                    <StackPanel Margin="2"
-                                IsEnabled="False"
-                                Orientation="Horizontal">
-                        <TextBlock Margin="5 0"
-                                   VerticalAlignment="Center"
-                                   Text="Сектор"
-                                   TextAlignment="Left" />
-                        <ComboBox Name="cmbSector"
-                                  Width="200"
-                                  ItemTemplate="{StaticResource ComboBoxWithItemDescriptionTemplate}"
-                                  ItemsSource="{Binding Source={local:Enumeration {x:Type local:SectorType}}}"
-                                  SelectedValue="{Binding SectorType}"
-                                  SelectedValuePath="Value" />
+                <StackPanel
+                    Grid.Column="1"
+                    HorizontalAlignment="Center"
+                    Orientation="Horizontal">
+                    <StackPanel
+                        Margin="2"
+                        IsEnabled="False"
+                        Orientation="Horizontal">
+                        <TextBlock
+                            Margin="5,0"
+                            VerticalAlignment="Center"
+                            Text="Сектор"
+                            TextAlignment="Left" />
+                        <ComboBox
+                            Name="cmbSector"
+                            Width="200"
+                            ItemTemplate="{StaticResource ComboBoxWithItemDescriptionTemplate}"
+                            ItemsSource="{Binding Source={local:Enumeration {x:Type local:SectorType}}}"
+                            SelectedValue="{Binding SectorType}"
+                            SelectedValuePath="Value" />
                     </StackPanel>
                     <StackPanel Margin="2" Orientation="Horizontal">
-                        <TextBlock Margin="5 0"
-                                   VerticalAlignment="Center"
-                                   Text="Параметр"
-                                   TextAlignment="Left" />
-                        <ComboBox Name="cmbProfile"
-                                  Width="220"
-                                  ItemTemplate="{StaticResource ComboBoxWithItemDescriptionTemplate}"
-                                  ItemsSource="{Binding Source={local:Enumeration {x:Type local:ProfileType}}}"
-                                  SelectedValue="{Binding ProfileType}"
-                                  SelectedValuePath="Value"
-                                  SelectionChanged="DateSelectedDateChanged" />
+                        <TextBlock
+                            Margin="5,0"
+                            VerticalAlignment="Center"
+                            Text="Параметр"
+                            TextAlignment="Left" />
+                        <ComboBox
+                            Name="cmbProfile"
+                            Width="220"
+                            ItemTemplate="{StaticResource ComboBoxWithItemDescriptionTemplate}"
+                            ItemsSource="{Binding Source={local:Enumeration {x:Type local:ProfileType}}}"
+                            SelectedValue="{Binding ProfileType}"
+                            SelectedValuePath="Value"
+                            SelectionChanged="DateSelectedDateChanged" />
                     </StackPanel>
                     <StackPanel Margin="2" Orientation="Horizontal">
-                        <TextBlock Margin="5 0 2 0"
-                                   VerticalAlignment="Center"
-                                   Text="Начальная дата"
-                                   TextAlignment="Left" />
-                        <DatePicker Name="startDate"
-                                    SelectedDate="{Binding Converter={StaticResource ProfileToSelectedStartDateConverter},
-                                                           Path=ProfileType,
-                                                           Mode=OneWay}"
-                                    SelectedDateChanged="DateSelectedDateChanged"
-                                    Tag="start" />
-                        <TextBlock Margin="5 0 2 0"
-                                   VerticalAlignment="Center"
-                                   Text="Конечная дата"
-                                   TextAlignment="Left" />
-                        <DatePicker Name="endDate"
-                                    SelectedDate="{Binding Converter={StaticResource ProfileToSelectedEndDateConverter},
-                                                           Path=ProfileType,
-                                                           Mode=OneWay}"
-                                    SelectedDateChanged="DateSelectedDateChanged"
-                                    Tag="end" />
+                        <TextBlock
+                            Margin="5,0,2,0"
+                            VerticalAlignment="Center"
+                            Text="Начальная дата"
+                            TextAlignment="Left" />
+                        <DatePicker
+                            Name="startDate"
+                            SelectedDate="{Binding Converter={StaticResource ProfileToSelectedStartDateConverter}, Path=ProfileType, Mode=OneWay}"
+                            SelectedDateChanged="DateSelectedDateChanged"
+                            Tag="start" />
+                        <TextBlock
+                            Margin="5,0,2,0"
+                            VerticalAlignment="Center"
+                            Text="Конечная дата"
+                            TextAlignment="Left" />
+                        <DatePicker
+                            Name="endDate"
+                            SelectedDate="{Binding Converter={StaticResource ProfileToSelectedEndDateConverter}, Path=ProfileType, Mode=OneWay}"
+                            SelectedDateChanged="DateSelectedDateChanged"
+                            Tag="end" />
                     </StackPanel>
                 </StackPanel>
-                <StackPanel Grid.Column="2"
-                            HorizontalAlignment="Right"
-                            Orientation="Horizontal">
-                    <Controls:DropDownButton Margin="5 0" FontWeight="SemiBold">
+                <StackPanel
+                    Grid.Column="2"
+                    HorizontalAlignment="Right"
+                    Orientation="Horizontal">
+                    <Controls:DropDownButton Margin="5,0" FontWeight="SemiBold">
                         <Controls:DropDownButton.ItemsSource>
                             <CompositeCollection>
                                 <CollectionContainer Collection="{StaticResource ExportItemsList}" />
@@ -179,9 +193,10 @@
                         </Controls:DropDownButton.ItemsSource>
                         <Controls:DropDownButton.Content>
                             <StackPanel Orientation="Horizontal">
-                                <Rectangle Width="16"
-                                           Height="16"
-                                           Margin="2 0 5 0">
+                                <Rectangle
+                                    Width="16"
+                                    Height="16"
+                                    Margin="2,0,5,0">
                                     <Rectangle.Fill>
                                         <VisualBrush Stretch="Uniform" Visual="{StaticResource appbar_office_excel}" />
                                     </Rectangle.Fill>
@@ -218,158 +233,171 @@
                     </Style.Triggers>
                 </Style>
             </Grid.Resources>
-            <GridSplitter Width="3"
-                          HorizontalAlignment="Right"
-                          VerticalAlignment="Stretch"
-                          ResizeDirection="Columns"
-                          Style="{DynamicResource GridSplitterStyle}" />
+            <GridSplitter
+                Width="3"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Stretch"
+                ResizeDirection="Columns"
+                Style="{DynamicResource GridSplitterStyle}" />
 
-            <Border Margin="0 0 4 2"
-                    Background="{StaticResource PanelBackgroundVertical}"
-                    BorderBrush="Black"
-                    BorderThickness="0.5"
-                    CornerRadius="0,4,4,0"
-                    SnapsToDevicePixels="True">
+            <Border
+                Margin="0,0,4,2"
+                Background="{StaticResource PanelBackgroundVertical}"
+                BorderBrush="Black"
+                BorderThickness="0.5"
+                CornerRadius="0,4,4,0"
+                SnapsToDevicePixels="True">
                 <Border.BitmapEffect>
-                    <DropShadowBitmapEffect Opacity="0.75"
-                                            ShadowDepth="3"
-                                            Color="Black" />
+                    <DropShadowBitmapEffect
+                        Opacity="0.75"
+                        ShadowDepth="3"
+                        Color="Black" />
                 </Border.BitmapEffect>
-                <TreeView x:Name="tree"
-                          Margin="2"
-                          VerticalContentAlignment="Stretch"
-                          BorderThickness="0"
-                          SelectedItemChanged="treeSelectedItemChanged"
-                          Style="{StaticResource tree}"
-                          TreeViewItem.Expanded="TreeViewItem_Expanded">
+                <TreeView
+                    x:Name="tree"
+                    Margin="2"
+                    VerticalContentAlignment="Stretch"
+                    BorderThickness="0"
+                    SelectedItemChanged="treeSelectedItemChanged"
+                    Style="{StaticResource tree}"
+                    TreeViewItem.Expanded="TreeViewItem_Expanded">
                     <TreeView.ItemTemplate>
                         <HierarchicalDataTemplate ItemsSource="{Binding Items}">
-                            <TextBlock Background="Transparent"
-                                       Padding="5 2"
-                                       Text="{Binding Label}" />
+                            <TextBlock
+                                Padding="5,2"
+                                Background="Transparent"
+                                Text="{Binding Label}" />
                         </HierarchicalDataTemplate>
                     </TreeView.ItemTemplate>
                     <TreeView.ContextMenu>
                         <ContextMenu>
-                            <MenuItem Click="LoadTree_Click"
-                                      Header="Обновить список"
-                                      IsEnabled="{Binding Path=Authorized}" />
+                            <MenuItem
+                                Click="LoadTree_Click"
+                                Header="Обновить список"
+                                IsEnabled="{Binding Path=Authorized}" />
                         </ContextMenu>
                     </TreeView.ContextMenu>
                 </TreeView>
             </Border>
-            <Grid Grid.Column="1"
-                  Grid.ColumnSpan="2"
-                  Margin="1 0 0 3">
+            <Grid
+                Grid.Column="1"
+                Grid.ColumnSpan="2"
+                Margin="1,0,0,3">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
-                <Grid Background="{DynamicResource HighlightBrush}"
-                      TextBlock.FontWeight="Bold"
-                      TextBlock.Foreground="{DynamicResource WhiteColorBrush}">
+                <Grid
+                    Background="{DynamicResource HighlightBrush}"
+                    TextBlock.FontWeight="Bold"
+                    TextBlock.Foreground="{DynamicResource WhiteColorBrush}">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="3*" />
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
-                    <TextBlock Margin="2"
-                               VerticalAlignment="Center"
-                               Text="{Binding CurrentPath,
-                                              NotifyOnTargetUpdated=True}" />
-                    <StackPanel Grid.Column="1"
-                                Margin="0,1"
-                                Button.Click="FilterButtons_Click"
-                                Orientation="Horizontal">
+                    <TextBlock
+                        Margin="2"
+                        VerticalAlignment="Center"
+                        Text="{Binding CurrentPath, NotifyOnTargetUpdated=True}" />
+                    <StackPanel
+                        Grid.Column="1"
+                        Margin="0,1"
+                        Button.Click="FilterButtons_Click"
+                        Orientation="Horizontal">
                         <Label Content="Фильтр:" Foreground="{DynamicResource WhiteColorBrush}" />
-                        <RadioButton GroupName="groupFoo"
-                                     IsChecked="True"
-                                     Style="{StaticResource {x:Type ToggleButton}}"
-                                     Tag="All">
+                        <RadioButton
+                            GroupName="groupFoo"
+                            IsChecked="True"
+                            Style="{StaticResource {x:Type ToggleButton}}"
+                            Tag="All">
                             Все
                         </RadioButton>
-                        <RadioButton GroupName="groupFoo"
-                                     Style="{StaticResource {x:Type ToggleButton}}"
-                                     Tag="Answered">
+                        <RadioButton
+                            GroupName="groupFoo"
+                            Style="{StaticResource {x:Type ToggleButton}}"
+                            Tag="Answered">
                             Отвечающие
                         </RadioButton>
-                        <RadioButton GroupName="groupFoo"
-                                     Style="{StaticResource {x:Type ToggleButton}}"
-                                     Tag="NotAnswered">
+                        <RadioButton
+                            GroupName="groupFoo"
+                            Style="{StaticResource {x:Type ToggleButton}}"
+                            Tag="NotAnswered">
                             Не отвечающие
                         </RadioButton>
-                        <RadioButton GroupName="groupFoo"
-                                     Style="{StaticResource {x:Type ToggleButton}}"
-                                     Tag="Missing">
+                        <RadioButton
+                            GroupName="groupFoo"
+                            Style="{StaticResource {x:Type ToggleButton}}"
+                            Tag="Missing">
                             С недостающими данными
                         </RadioButton>
-                        <RadioButton GroupName="groupFoo"
-                                     Style="{StaticResource {x:Type ToggleButton}}"
-                                     Tag="WrongSettings">
+                        <RadioButton
+                            GroupName="groupFoo"
+                            Style="{StaticResource {x:Type ToggleButton}}"
+                            Tag="WrongSettings">
                             Неверная конфигурация
                         </RadioButton>
-                        <RadioButton GroupName="groupFoo"
-                                     Style="{StaticResource {x:Type ToggleButton}}"
-                                     Tag="MissingPersonalAccount">
+                        <RadioButton
+                            GroupName="groupFoo"
+                            Style="{StaticResource {x:Type ToggleButton}}"
+                            Tag="MissingPersonalAccount">
                             Без лицевого счёта
                         </RadioButton>
-                        <TextBlock Margin="5,0"
-                                   VerticalAlignment="Center"
-                                   Text="{Binding Path=Items.Count,
-                                                  ElementName=collectorList,
-                                                  StringFormat={}Количество элементов в списке: {0} шт.}" />
+                        <TextBlock
+                            Margin="5,0"
+                            VerticalAlignment="Center"
+                            Text="{Binding Path=Items.Count, ElementName=collectorList, StringFormat={}Количество элементов в списке: {0} шт.}" />
                     </StackPanel>
-                    <TextBlock Grid.Column="2"
-                               Margin="5,0"
-                               HorizontalAlignment="Right"
-                               VerticalAlignment="Center"
-                               Text="{Binding Statistics.PercentageOfTheSurvey,
-                                              StringFormat={}Процент опроса: {0}%}"
-                               Visibility="{Binding HasItems,
-                                                    ElementName=collectorList,
-                                                    Mode=OneWay,
-                                                    Converter={StaticResource BooleanToVisibilityConverter}}" />
+                    <TextBlock
+                        Grid.Column="2"
+                        Margin="5,0"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Center"
+                        Text="{Binding Statistics.PercentageOfTheSurvey, StringFormat={}Процент опроса: {0}%}"
+                        Visibility="{Binding HasItems, ElementName=collectorList, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" />
                 </Grid>
-                <ListBox x:Name="collectorList"
-                         Grid.Row="1"
-                         Margin="2"
-                         ItemsSource="{Binding FilteredCollectors}"
-                         SelectedItem="{Binding SelectedCollector}"
-                         Style="{StaticResource CollectorList}" />
+                <ListBox
+                    x:Name="collectorList"
+                    Grid.Row="1"
+                    Margin="2"
+                    ItemsSource="{Binding FilteredCollectors}"
+                    SelectedItem="{Binding SelectedCollector}"
+                    Style="{StaticResource CollectorList}" />
 
-                <Border Grid.Row="2"
-                        Margin="4"
-                        Background="{DynamicResource WhiteBrush}"
-                        BorderBrush="{StaticResource ListGridLinesBrush}"
-                        BorderThickness="1"
-                        Visibility="{Binding SelectedCollector,
-                                             Converter={StaticResource ObjectToVisibilityConverter}}">
+                <Border
+                    Grid.Row="2"
+                    Margin="4"
+                    Background="{DynamicResource WhiteBrush}"
+                    BorderBrush="{StaticResource ListGridLinesBrush}"
+                    BorderThickness="1"
+                    Visibility="{Binding SelectedCollector, Converter={StaticResource ObjectToVisibilityConverter}}">
                     <local_controls:QualityIndicationsVisualizer DataContext="{Binding SelectedCollector}" ItemsSource="{Binding Objects}" />
                 </Border>
             </Grid>
 
         </Grid>
-        <StatusBar x:Name="statusBar"
-                   Grid.Row="4"
-                   VerticalAlignment="Bottom"
-                   VerticalContentAlignment="Bottom"
-                   Background="{DynamicResource HighlightBrush}">
+        <StatusBar
+            x:Name="statusBar"
+            Grid.Row="4"
+            VerticalAlignment="Bottom"
+            VerticalContentAlignment="Bottom"
+            Background="{DynamicResource HighlightBrush}">
             <StatusBarItem x:Name="statusBarAppStatus">АРМТЕС</StatusBarItem>
             <StatusBarItem x:Name="statusBarCancelUpdating">
-                <Button Margin="5 0 0 0"
-                        Click="StopUpdatingButton_Click"
-                        Content="Остановить"
-                        Padding="5 0"
-                        Visibility="{Binding UpdatingProcessStarted,
-                                             Converter={StaticResource BooleanToVisibilityConverter}}" />
+                <Button
+                    Margin="5,0,0,0"
+                    Padding="5,0"
+                    Click="StopUpdatingButton_Click"
+                    Content="Остановить"
+                    Visibility="{Binding UpdatingProcessStarted, Converter={StaticResource BooleanToVisibilityConverter}}" />
             </StatusBarItem>
             <Separator Style="{StaticResource TMPStatusBarSeparator}" />
             <StatusBarItem x:Name="statusBarCollectorListInfo" Visibility="{Binding HasItems, ElementName=collectorList, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <StackPanel Orientation="Horizontal">
                     <StackPanel.Resources>
                         <Style TargetType="{x:Type TextBlock}">
-                            <Setter Property="Margin" Value="0 0 5 0" />
+                            <Setter Property="Margin" Value="0,0,5,0" />
                             <Setter Property="FontStyle" Value="Italic" />
                             <Setter Property="FontSize" Value="{DynamicResource ContentFontSize}" />
                         </Style>

@@ -38,10 +38,10 @@ namespace TMP.ARMTES
 		        case ProfileType.Current:
                     paramName = "параметр: текущие показания";
                 break;
-                case ProfileType.BeginningOfTheDay:
+                case ProfileType.Days:
                     paramName = "параметр: показания на начало суток";
                 break;
-                case ProfileType.BeginningOfTheMonth:
+                case ProfileType.Months:
                     paramName = "параметр: показания на начало месяца";
                 break;
 	        }

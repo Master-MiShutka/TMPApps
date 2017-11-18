@@ -1,0 +1,26 @@
+d:\документы\mishutka\visual studio 2013\Projects\TM.WORK.Aramis\bin\Debug\DBF.dll
+d:\документы\mishutka\visual studio 2013\Projects\TM.WORK.Aramis\bin\Debug\DBF.pdb
+d:\документы\mishutka\visual studio 2013\Projects\TM.WORK.Aramis\DBF\obj\Debug\DBF.dll
+d:\документы\mishutka\visual studio 2013\Projects\TM.WORK.Aramis\DBF\obj\Debug\DBF.pdb
+d:\Developer\MY\PROJECTS\TM.WORK.Aramis\bin\Debug\DBF.dll
+d:\Developer\MY\PROJECTS\TM.WORK.Aramis\bin\Debug\DBF.pdb
+d:\Developer\MY\PROJECTS\TM.WORK.Aramis\DBF\obj\Debug\DBF.dll
+d:\Developer\MY\PROJECTS\TM.WORK.Aramis\DBF\obj\Debug\DBF.pdb
+d:\Developer\MY\PROJECTS\TM.WORK.Aramis\DBF\obj\Debug\DBF.csprojResolveAssemblyReference.cache
+Y:\! Aramis\TM.WORK.Aramis\bin\Debug\DBF.dll
+Y:\! Aramis\TM.WORK.Aramis\bin\Debug\DBF.pdb
+Y:\! Aramis\TM.WORK.Aramis\DBF\obj\Debug\DBF.csproj.CoreCompileInputs.cache
+Y:\! Aramis\TM.WORK.Aramis\DBF\obj\Debug\DBF.dll
+Y:\! Aramis\TM.WORK.Aramis\DBF\obj\Debug\DBF.pdb
+T:\! Aramis\TM.WORK.Aramis\bin\Debug\DBF.dll
+T:\! Aramis\TM.WORK.Aramis\bin\Debug\DBF.pdb
+T:\! Aramis\TM.WORK.Aramis\DBF\obj\Debug\DBF.csprojResolveAssemblyReference.cache
+T:\! Aramis\TM.WORK.Aramis\DBF\obj\Debug\DBF.csproj.CoreCompileInputs.cache
+T:\! Aramis\TM.WORK.Aramis\DBF\obj\Debug\DBF.dll
+T:\! Aramis\TM.WORK.Aramis\DBF\obj\Debug\DBF.pdb
+Y:\Developer\CURRENT\TMPApps\out\Debug\Libs\DBF.dll
+Y:\Developer\CURRENT\TMPApps\out\Debug\Libs\DBF.pdb
+Y:\Developer\CURRENT\TMPApps\LIBRARY\DBF\obj\Debug\DBF.csprojResolveAssemblyReference.cache
+Y:\Developer\CURRENT\TMPApps\LIBRARY\DBF\obj\Debug\DBF.csproj.CoreCompileInputs.cache
+Y:\Developer\CURRENT\TMPApps\LIBRARY\DBF\obj\Debug\DBF.dll
+Y:\Developer\CURRENT\TMPApps\LIBRARY\DBF\obj\Debug\DBF.pdb

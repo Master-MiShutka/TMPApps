@@ -28,6 +28,8 @@ namespace TMPApplication
 
         static TMPApp()
         {
+            ServiceInjector.Instance.AddService<TMP.Common.Logger.ILoggerFacade>(Logger);
+
             Log("Запуск приложения");
 
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
@@ -154,7 +156,63 @@ namespace TMPApplication
         #region Properties
 
         public static string Title { get; set; }
-        public static string WindowTitle => (Current.MainWindow == null) ? "APP" : Current.MainWindow.Title;        
+        public static string WindowTitle => (Current.MainWindow == null) ? "APP" : Current.MainWindow.Title;
+        public static string AssemblyTitle
+        {
+            get
+            {
+                return Assembly.GetEntryAssembly().GetName().Name;
+            }
+        }
+
+        public static string AssemblyEntryLocation
+        {
+            get
+            {
+                return System.IO.Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
+            }
+        }
+        public static string AppDataFolder
+        {
+            get
+            {
+                return Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) +
+                                                 System.IO.Path.DirectorySeparatorChar +
+                                                 TMPApp.Company;
+            }
+        }
+        public static string AppDataSettingFileName
+        {
+            get
+            {
+                return System.IO.Path.Combine(TMPApp.AppDataFolder,
+                                              string.Format(CultureInfo.InvariantCulture, "{0}.App.settings", TMPApp.AssemblyTitle));
+            }
+        }
+        public static string AppSessionFileName
+        {
+            get
+            {
+                return System.IO.Path.Combine(TMPApp.AppDataFolder,
+                                              string.Format(CultureInfo.InvariantCulture, "{0}.App.session", TMPApp.AssemblyTitle));
+            }
+        }
+        public static string MyDocumentsFolder
+        {
+            get
+            {
+                return Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            }
+        }
+
+
+        public static string Company
+        {
+            get
+            {
+                return "TMPApps";
+            }
+        }
 
         #endregion
 
@@ -215,6 +273,22 @@ namespace TMPApplication
                 assm.GetName().Version.ToString()
                 );
             return path;
+        }
+        public static bool CreateAppDataFolder()
+        {
+            try
+            {
+                if (System.IO.Directory.Exists(TMPApp.AppDataFolder) == false)
+                    System.IO.Directory.CreateDirectory(TMPApp.AppDataFolder);
+            }
+            catch (Exception exp)
+            {
+                if (Logger != null)
+                    Logger.LogException(exp);
+                return false;
+            }
+
+            return true;
         }
 
         public static void SetAppDomainCultures(string name)

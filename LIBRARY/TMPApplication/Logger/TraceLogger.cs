@@ -43,6 +43,11 @@ namespace TMP.Common.Logger
             Trace.TraceError(TMPApplication.TMPApp.GetExceptionDetails(e));
         }
 
+        public void LogException(Exception exp)
+        {
+            Log(exp);
+        }
+
         public void LogError(string message)
         {
             Trace.TraceError(message);

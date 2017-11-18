@@ -1,0 +1,258 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:options="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
+    xmlns:reskeys="clr-namespace:TMPApplication.Themes"
+    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+
+    <Color x:Key="WhiteColor">#FF2D2D30</Color>
+    <Color x:Key="BlackColor">#FFF4F4F5</Color>
+    <Color x:Key="AccentColor">#FF1D3241</Color>
+
+
+    <!--
+        Accent Color Brush Definition
+        - Look for references on ControlAccentBrushKey to find where this is being set in code
+    -->
+    <DynamicResource x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys}, ResourceId=ControlAccentColorKey}" ResourceKey="AccentColor" />
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys}, ResourceId=ControlAccentBrushKey}" Color="{DynamicResource AccentColor}" />
+
+    <!--  Normal Control Foreground and Background Colors  -->
+    <DynamicResource x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys}, ResourceId=ControlNormalForegroundKey}" ResourceKey="BlackColor" />
+    <DynamicResource x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys}, ResourceId=ControlNormalBackgroundKey}" ResourceKey="WhiteColor" />
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys}, ResourceId=ControlNormalForegroundBrushKey}" Color="{DynamicResource {x:Static reskeys:ResourceKeys.ControlNormalForegroundKey}}" />
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys}, ResourceId=ControlNormalBackgroundBrushKey}" Color="{DynamicResource {x:Static reskeys:ResourceKeys.ControlNormalBackgroundKey}}" />
+
+    <!--  MouseOver Keys  -->
+    <Color x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys}, ResourceId=ControlMouseOverBackgroundKey}">#FF3F3F41</Color>
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys}, ResourceId=ControlMouseOverBackgroundBrushKey}" Color="{DynamicResource {x:Static reskeys:ResourceKeys.ControlMouseOverBackgroundKey}}" />
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys}, ResourceId=ControlTextBrushKey}" Color="{DynamicResource BlackColor}" />
+
+    <!-- LinearGradientBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys},
+                                ResourceId=ControlNormalBorderKey}"
+                         EndPoint="0,20" MappingMode="Absolute" StartPoint="0,0"
+                         options:Freeze="true">
+        <GradientStop Color="#ABADB3" Offset="0.05" />
+        <GradientStop Color="#E2E3EA" Offset="0.07" />
+        <GradientStop Color="#E3E9EF" Offset="1" />
+    </LinearGradientBrush-->
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys}, ResourceId=ControlButtonTextKey}" Color="#d1d1d1" />
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys}, ResourceId=ControlSystemButtonBackgroundOnMoseOverKey}" Color="#3e3e42" />
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys}, ResourceId=ControlSystemButtonForegroundOnMoseOverKey}" Color="#d1d1d1" />
+
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys}, ResourceId=ControlButtonBackgroundKey}" Color="#333333" />
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys}, ResourceId=ControlButtonBorderKey}" Color="#333333" />
+
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys}, ResourceId=ControlSystemButtonBackgroundIsPressedKey}" Color="{DynamicResource {x:Static reskeys:ResourceKeys.ControlAccentColorKey}}" />
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys}, ResourceId=ControlSystemButtonForegroundIsPressedKey}" Color="#d1d1d1" />
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys}, ResourceId=ControlButtonTextDisabledKey}" Color="#000000" />
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys}, ResourceId=ControlDisabledBackgroundKey}" Color="#20FFFFFF" />
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys}, ResourceId=ControlDisabledBorderKey}" Color="#20FFFFFF" />
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys}, ResourceId=ControlButtonBackgroundHoverKey}" Color="#3e3e42" />
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys}, ResourceId=ControlButtonBackgroundPressedKey}" Color="{DynamicResource {x:Static reskeys:ResourceKeys.ControlAccentColorKey}}" />
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys}, ResourceId=ControlButtonBorderHoverKey}" Color="#3e3e42" />
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys}, ResourceId=ControlButtonTextHoverKey}" Color="#d1d1d1" />
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys}, ResourceId=ControlButtonTextPressedKey}" Color="#d1d1d1" />
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys}, ResourceId=ControlButtonBorderPressedKey}" Color="{DynamicResource {x:Static reskeys:ResourceKeys.ControlAccentColorKey}}" />
+    <SolidColorBrush
+        x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys},
+                                     ResourceId=ControlButtonIsDefaultBorderBrushKey}"
+        Opacity=".55"
+        Color="{DynamicResource {x:Static reskeys:ResourceKeys.ControlAccentColorKey}}" />
+
+
+    <!--  Color definitions for ItemsControl based controls (Listview, Combobox, listbox etc...)  -->
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys}, ResourceId=ControlItemTextKey}" Color="#d1d1d1" />
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys}, ResourceId=ControlInputTextDisabledKey}" Color="#717171" />
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys}, ResourceId=ControlItemBackgroundHoverKey}" Color="#3e3e42" />
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys}, ResourceId=ControlItemTextHoverKey}" Color="#d1d1d1" />
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys}, ResourceId=ControlItemTextSelectedKey}" Color="#d1d1d1" />
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys}, ResourceId=ControlItemTextDisabledKey}" Color="#717171" />
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys}, ResourceId=ControlItemBackgroundSelectedKey}" Color="{DynamicResource {x:Static reskeys:ResourceKeys.ControlAccentColorKey}}" />
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys}, ResourceId=ControlItemBorderSelectedKey}" Color="{DynamicResource {x:Static reskeys:ResourceKeys.ControlAccentColorKey}}" />
+
+    <!--  Color definitions for ScrollBar specific items  -->
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys}, ResourceId=ControlScrollBarThumbBackgroundKey}" Color="Transparent" />
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys}, ResourceId=ControlScrollBarThumbBorderKey}" Color="#333333" />
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys}, ResourceId=ControlScrollBarThumbForegroundKey}" Color="#717171" />
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys}, ResourceId=ControlScrollBarThumbBackgroundHoverKey}" Color="Transparent" />
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys}, ResourceId=ControlScrollBarThumbForegroundHoverKey}" Color="#919191" />
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys}, ResourceId=ControlScrollBarThumbBackgroundDraggingKey}" Color="Transparent" />
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys}, ResourceId=ControlScrollBarThumbForegroundDraggingKey}" Color="#d1d1d1" />
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys}, ResourceId=ControlScrollBarBackgroundKey}" Color="#333333" />
+
+
+    <!--  Tool Tip Values  -->
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys}, ResourceId=ControlWindowBorderActiveKey}" Color="{DynamicResource {x:Static reskeys:ResourceKeys.ControlAccentColorKey}}" />
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys}, ResourceId=ControlWindowBackgroundKey}" Color="{DynamicResource {x:Static reskeys:ResourceKeys.ControlNormalBackgroundKey}}" />
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys}, ResourceId=ControlWindowTextKey}" Color="#c1c1c1" />
+
+    <!--  font settings  -->
+    <FontFamily x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys}, ResourceId=ControlDefaultFontFamilyKey}">Segoe UI, Lucida Sans Unicode, Verdana</FontFamily>
+    <FontFamily x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys}, ResourceId=HeaderFontFamilyKey}">Segoe UI, Lucida Sans Unicode, Verdana</FontFamily>
+    <FontFamily x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys}, ResourceId=ContentFontFamilyKey}">Segoe UI, Lucida Sans Unicode, Verdana</FontFamily>
+    <FontFamily x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys}, ResourceId=TextFontFamilyKey}">Segoe UI, Lucida Sans Unicode, Verdana</FontFamily>
+    <FontFamily x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys}, ResourceId=NumbersFontFamilyKey}">Century Gothic, Segoe UI, Trebuchet MS</FontFamily>
+
+    <sys:Double x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys}, ResourceId=ControlDefaultFontSizeKey}">13</sys:Double>
+    <sys:Double x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys}, ResourceId=HeaderFontSizeKey}">18</sys:Double>
+    <sys:Double x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys}, ResourceId=SubHeaderFontSizeKey}">16</sys:Double>
+    <sys:Double x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys}, ResourceId=WindowTitleFontSizeKey}">16</sys:Double>
+    <sys:Double x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys}, ResourceId=SystemButtonFontSizeKey}">14</sys:Double>
+    <sys:Double x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys}, ResourceId=SmallFontSizeKey}">12</sys:Double>
+    <sys:Double x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys}, ResourceId=VerySmallFontSizeKey}">10</sys:Double>
+    <sys:Double x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys}, ResourceId=LargeFontSizeKey}">22</sys:Double>
+    <sys:Double x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys}, ResourceId=VeryLargeFontSizeKey}">28</sys:Double>
+    <sys:Double x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys}, ResourceId=MenuFontSizeKey}">13</sys:Double>
+    <sys:Double x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys}, ResourceId=DialogTitleFontSizeKey}">20</sys:Double>
+    <sys:Double x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys}, ResourceId=DialogMessageFontSizeKey}">16</sys:Double>
+    <sys:Double x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys}, ResourceId=DialogButtonFontSizeKey}">18</sys:Double>
+
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys}, ResourceId=ControlInputBackgroundHoverKey}" Color="#3e3e42" />
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys}, ResourceId=ControlInputBorderHoverKey}" Color="#3e3e42" />
+
+    <Color x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys}, ResourceId=ControlPopupBackgroundKey}">#252526</Color>
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys}, ResourceId=ControlPopupBackgroundBrushKey}" Color="{DynamicResource {x:Static reskeys:ResourceKeys.ControlPopupBackgroundKey}}" />
+
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys}, ResourceId=ControlInputTextKey}" Color="#d1d1d1" />
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys}, ResourceId=ControlInputBackgroundKey}" Color="#333333" />
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys}, ResourceId=ControlInputBorderKey}" Color="#333333" />
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys}, ResourceId=ProgressBackgroundBrushKey}" Color="Transparent" />
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys}, ResourceId=ControlsValidationBrushKey}" Color="Yellow" />
+
+
+    <!--  Black Color Definition  -->
+    <DynamicResource x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys}, ResourceId=BlackColorKey}" ResourceKey="BlackColor" />
+    <SolidColorBrush
+        x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys},
+                                     ResourceId=BlackBrushKey}"
+        options:Freeze="True"
+        Color="{DynamicResource {x:Static reskeys:ResourceKeys.BlackColorKey}}" />
+    <!--  White Color Definition  -->
+    <DynamicResource x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys}, ResourceId=WhiteColorKey}" ResourceKey="WhiteColor" />
+    <SolidColorBrush
+        x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys},
+                                     ResourceId=WhiteBrushKey}"
+        options:Freeze="True"
+        Color="{DynamicResource {x:Static reskeys:ResourceKeys.WhiteColorKey}}" />
+
+    <!--  Gray Brush/Color Defintions  -->
+    <Color x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys}, ResourceId=GrayNormalKey}">#FF7D7D7D</Color>
+
+    <Color x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys}, ResourceId=GrayHoverKey}">#FFAAAAAA</Color>
+
+    <SolidColorBrush
+        x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys},
+                                     ResourceId=GrayNormalBrushKey}"
+        options:Freeze="True"
+        Color="{DynamicResource {x:Static reskeys:ResourceKeys.GrayNormalKey}}" />
+
+    <SolidColorBrush
+        x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys},
+                                     ResourceId=GrayHoverBrushKey}"
+        options:Freeze="True"
+        Color="{DynamicResource {x:Static reskeys:ResourceKeys.GrayHoverKey}}" />
+
+    <Color x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys}, ResourceId=Gray1ColorKey}">#FFF9F9F9</Color>
+    <Color x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys}, ResourceId=Gray2ColorKey}">#FF7F7F7F</Color>
+    <Color x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys}, ResourceId=Gray5ColorKey}">#FFB9B9B9</Color>
+    <Color x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys}, ResourceId=Gray7ColorKey}">#FF7E7E7E</Color>
+    <Color x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys}, ResourceId=Gray8ColorKey}">#FF454545</Color>
+    <Color x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys}, ResourceId=Gray10ColorKey}">#FF2F2F2F</Color>
+
+    <SolidColorBrush
+        x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys},
+                                     ResourceId=Gray1BrushKey}"
+        options:Freeze="True"
+        Color="{DynamicResource {x:Static reskeys:ResourceKeys.Gray1ColorKey}}" />
+    <SolidColorBrush
+        x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys},
+                                     ResourceId=Gray2BrushKey}"
+        options:Freeze="True"
+        Color="{DynamicResource {x:Static reskeys:ResourceKeys.Gray2ColorKey}}" />
+    <SolidColorBrush
+        x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys},
+                                     ResourceId=Gray5BrushKey}"
+        options:Freeze="True"
+        Color="{DynamicResource {x:Static reskeys:ResourceKeys.Gray5ColorKey}}" />
+    <SolidColorBrush
+        x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys},
+                                     ResourceId=Gray7BrushKey}"
+        options:Freeze="True"
+        Color="{DynamicResource {x:Static reskeys:ResourceKeys.Gray7ColorKey}}" />
+    <SolidColorBrush
+        x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys},
+                                     ResourceId=Gray8BrushKey}"
+        options:Freeze="True"
+        Color="{DynamicResource {x:Static reskeys:ResourceKeys.Gray8ColorKey}}" />
+    <SolidColorBrush
+        x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys},
+                                     ResourceId=Gray10BrushKey}"
+        options:Freeze="True"
+        Color="{DynamicResource {x:Static reskeys:ResourceKeys.Gray10ColorKey}}" />
+
+    <!--  Highlight Brush Color Defintion  -->
+    <SolidColorBrush
+        x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys},
+                                     ResourceId=HighlightBrushKey}"
+        Opacity="0.6"
+        Color="{DynamicResource {x:Static reskeys:ResourceKeys.ControlAccentColorKey}}" />
+
+    <!--  Alternate Row Background Colors/Brushs  -->
+    <Color x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys}, ResourceId=AlternateRow1BackgroundColorKey}">Transparent</Color>
+    <Color x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys}, ResourceId=AlternateRow2BackgroundColorKey}">Transparent</Color>
+
+    <SolidColorBrush
+        x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys},
+                                     ResourceId=AlternateRow1BackgroundBrushKey}"
+        options:Freeze="True"
+        Color="{DynamicResource {x:Static reskeys:ResourceKeys.AlternateRow1BackgroundColorKey}}" />
+    <SolidColorBrush
+        x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys},
+                                     ResourceId=AlternateRow2BackgroundBrushKey}"
+        options:Freeze="True"
+        Color="{DynamicResource {x:Static reskeys:ResourceKeys.AlternateRow2BackgroundColorKey}}" />
+
+    <!--  Checkbox Colors  -->
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys}, ResourceId=CheckBoxBrushKey}" Color="#80CCCCCC" />
+
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys}, ResourceId=TransparentWhiteBrushKey}" Color="#00FFFFFF" />
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys}, ResourceId=SemiTransparentWhiteBrushKey}" Color="#55FFFFFF" />
+
+    <SolidColorBrush
+        x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type reskeys:ResourceKeys},
+                                     ResourceId=GlyphBrushKey}"
+        options:Freeze="True"
+        Color="White" />
+
+</ResourceDictionary>

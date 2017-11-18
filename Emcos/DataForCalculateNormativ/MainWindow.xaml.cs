@@ -19,13 +19,12 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window, INotifyPropertyChanged, Dialogs.IDialogWindow
+    public partial class MainWindow : TMPApplication.CustomWpfWindow.WindowWithDialogs, INotifyPropertyChanged
     {
         #region Fields
 
         private bool _isReadyToGetData = false;
-        private ObservableCollection<ListPoint> _pointsList;
-        private ICollectionView _view;
+        private TreeModel _treeModel;
 
         private Task _backgroudTask;
         private CancellationTokenSource cts = new CancellationTokenSource();
@@ -64,16 +63,16 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
             this.Loaded += (s, e) =>
             {
                 App.Log("Главное окно загружено");
-                var list = LoadList();
-                if (list != null)
+                var points = LoadList();
+                if (points != null)
                 {
-                    PointsList = new ObservableCollection<ListPoint>(list);
+                    InitModel(points);
                     IsReadyToGetData = true;
                 }
                 else
                 {
                     UpdateCommand.Execute(null);
-                }
+                }                
             };
             this.Closing += async (s, e) =>
             {
@@ -88,7 +87,7 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
                             cts = new CancellationTokenSource();
                             cts.Cancel();
                         }
-                        App.WaitingScreen(Strings.TerminatingMessage);
+                        this.ShowDialogWaitingScreen(Strings.TerminatingMessage);
                         await _backgroudTask;                     
 
                         this.Close();
@@ -97,9 +96,11 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
             };
             this.Closed += (s, e) =>
             {
-                if (_pointsList != null)
-                    SaveList(_pointsList.ToList());
+                if (_treeModel != null)
+                    SaveList(_treeModel.Point.Items);
             };
+
+            TMPApplication.ServiceInjector.Instance.AddService<TMPApplication.WpfDialogs.Contracts.IWindowWithDialogs>(this);
         }
 
         #endregion
@@ -109,6 +110,36 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
         #endregion
 
         #region Private Methods
+
+        private void InitModel(IList<ListPoint> points)
+        {
+            var model = new TreeModel(new ListPoint() { Name = "ROOT", Items = points });
+            UpdateCheackableList(model);
+            TreeModel = model;
+        }
+
+        private void UpdateCheackableList(ICSharpCode.TreeView.SharpTreeNode node)
+        {
+            if (node.Children != null && node.Children.Count > 0)
+                foreach (ICSharpCode.TreeView.SharpTreeNode child in node.Children)
+                    UpdateCheackableList(child);
+            if (node.IsCheckable)
+            {
+                int childCount = node.Children.Count((c) => c.IsCheckable);
+                if (childCount == 0)
+                    return;
+                int checkedChildCount = node.Children.Count((c) => c.IsCheckable && c.IsChecked != null && c.IsChecked.Value);
+
+                if (checkedChildCount == 0)
+                    node.IsChecked = false;
+                else
+                    if (checkedChildCount == childCount)
+                        node.IsChecked = true;
+                    else
+                        node.IsChecked = null;
+            }
+
+        }
 
         private void InitCommands()
         {
@@ -120,7 +151,7 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
                 Action updateUI = () => 
                     dialog.Close();
                 var control = new SettingsControl(updateUI);
-                dialog = App.Dialog(control);
+                dialog = this.DialogCustom(control);
                 dialog.Show();
             });
 
@@ -128,7 +159,7 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
             {
                 cts = new CancellationTokenSource();
 
-                Dialogs.IDialog dialog = App.MessageDialog(Strings.UpdatingInProgress, null, MessageBoxImage.None, TMPApplication.WpfDialogs.DialogMode.Cancel);
+                Dialogs.IDialog dialog = this.DialogInfo(Strings.UpdatingInProgress, null, MessageBoxImage.None, TMPApplication.WpfDialogs.DialogMode.Cancel);
                 dialog.CloseBehavior = TMPApplication.WpfDialogs.DialogCloseBehavior.ExplicitClose;
                 dialog.Cancel = () =>
                 {
@@ -137,17 +168,14 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
                 };
                 dialog.Show();
 
-                if (true)//CheckAvailability() == false
+                if (CheckAvailability() == false)
                 {
-                    var msg = App.MessageDialog(Strings.MessageServerNotAvailability, null, MessageBoxImage.Warning, TMPApplication.WpfDialogs.DialogMode.Ok);
-                    msg.Ok = () => dialog.Close();
-                    msg.Show();
+                    this.ShowDialogWarning(Strings.MessageServerNotAvailability, null, () => dialog.Close());
                     return;
                 }
                 try
                 {
-                    var msg = App.MessageDialog(Strings.OnUpdatingPointsList, null, MessageBoxImage.Information);
-                    msg.Ok = () =>
+                    this.ShowDialogInfo(Strings.OnUpdatingPointsList, null, () =>
                     {
                         App.Log("Получение списка точек от сервиса");
                         _rootEmcosGroup = null;
@@ -167,46 +195,45 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
                             var source = await FillPointsTree(_rootEmcosGroup);
                             if (source.Count == 0 && String.IsNullOrEmpty(ServiceHelper.ErrorMessage) == false)
                             {
-                                App.ShowWarning(ServiceHelper.ErrorMessage);
+                                this.ShowDialogWarning(ServiceHelper.ErrorMessage);
                                 dialog.Close();
                                 return;
                             }
-                            PointsList = new ObservableCollection<ListPoint>(source);
+                            InitModel(source);
                             IsReadyToGetData = true;
-                            SaveList(_pointsList.ToList());
+                            SaveList(source);
                             dialog.Close();
                         }, cts.Token, TaskCreationOptions.LongRunning, TaskScheduler.Default);
-                    };
-                    msg.Show();
+                    });
                 }
                 catch (Exception ex)
                 {
                     App.Log("Получение списка точек от сервиса - ошибка");
                     dialog.Close();
-                    App.ShowErrorDialog(String.Format(Strings.Error, App.GetExceptionDetails(ex)));
+                    this.ShowDialogError(String.Format(Strings.Error, App.GetExceptionDetails(ex)));
                 }
             });
             GetReportCommand = new DelegateCommand(o =>
             {
-                App.ShowInfoDialog(Strings.OnGettingData, null, () => 
+                this.ShowDialogInfo(Strings.OnGettingData, null, () => 
                 {
                     App.Log("Получение отчёта по точкам");
 
                     if (CheckAvailability() == false)
                     {
-                        App.ShowWarningDialog(Strings.MessageServerNotAvailability);
+                        this.ShowDialogWarning(Strings.MessageServerNotAvailability);
                         return;
                     }
 
-                    var substations = _pointsList
+                    var substations = _treeModel.Point.Items
                         .Flatten(i => i.Items)
-                        .Where(i => (i.TypeCode == "SUBSTATION" || i.TypeCode == "VOLTAGE") && i.Checked)
+                        .Where(i => (i.TypeCode == "SUBSTATION" || i.TypeCode == "VOLTAGE") && i.IsChecked)
                         .OrderBy(i => i.ParentName)
                         .ThenBy(i => i.Name)
                         .ToList<ListPoint>();
                     if (substations == null || substations.Count == 0)
                     {
-                        App.ShowWarningDialog(Strings.EmptyList);
+                        this.ShowDialogWarning(Strings.EmptyList);
                         return;
                     }
 
@@ -234,24 +261,24 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
                         Action canceled = () =>
                         {
                             App.Current.MainWindow.TaskbarItemInfo.ProgressState = System.Windows.Shell.TaskbarItemProgressState.Paused;
-                            App.ShowInfoDialog(Strings.Canceled);
+                            this.ShowDialogInfo(Strings.Canceled);
                             updateUI();
                         };
                         Action<Exception> faulted = (Exception e) =>
                         {
                             App.Current.MainWindow.TaskbarItemInfo.ProgressState = System.Windows.Shell.TaskbarItemProgressState.Error;
-                            App.ShowErrorDialog(App.GetExceptionDetails(e));
+                            this.ShowDialogError(App.GetExceptionDetails(e));
                             updateUI();
                         };
 
-                        dialog = App.Dialog(new GetDataControl(substations, completed, canceled, faulted));
+                        dialog = this.DialogCustom(new GetDataControl(substations, completed, canceled, faulted));
                         dialog.Show();
                     }
                     catch (Exception ex)
                     {
                         App.Log("Получение отчётов - ошибка");
-                        App.ShowErrorDialog(App.GetExceptionDetails(ex), null,
-                            () => btnPanel.IsEnabled = true);
+                        this.ShowDialogError(App.GetExceptionDetails(ex), null,
+                            () => TMPApplication.DispatcherExtensions.InUi(() => btnPanel.IsEnabled = true));
                         dialog.Close();
                     }
                 });
@@ -259,12 +286,12 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
             o => IsReadyToGetData);
             GetEnergyCommand = new DelegateCommand(o =>
             {
-                App.ShowInfoDialog(Strings.OnGettingData, null, () =>
+                this.ShowDialogInfo(Strings.OnGettingData, null, () =>
                 {
                     App.Log("Получение суточных значений");
                     if (CheckAvailability() == false)
                     {
-                        App.ShowWarningDialog(Strings.MessageServerNotAvailability);
+                        this.ShowDialogWarning(Strings.MessageServerNotAvailability);
                         return;
                     }
 
@@ -278,10 +305,11 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
                         App.Current.MainWindow.TaskbarItemInfo.ProgressState = System.Windows.Shell.TaskbarItemProgressState.Normal;
                         App.Current.MainWindow.TaskbarItemInfo.ProgressValue = 0.01;
 
-                        Action updateUI = () => App.UIAction(() =>
+                        Action updateUI = () =>
                         {
-                            btnPanel.IsEnabled = true;
-                        });
+                            TMPApplication.DispatcherExtensions.InUi(() => btnPanel.IsEnabled = true);
+                            dialog.Close();
+                        };
                         Action completed = () =>
                         {
                             App.Current.MainWindow.TaskbarItemInfo.ProgressState = System.Windows.Shell.TaskbarItemProgressState.None;
@@ -289,26 +317,26 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
                         };
                         Action canceled = () =>
                         {
-                            App.UIAction(() => App.Current.MainWindow.TaskbarItemInfo.ProgressState = System.Windows.Shell.TaskbarItemProgressState.Paused);
-                            App.ShowInfoDialog(Strings.Canceled, Strings.Message);
+                            App.Current.MainWindow.TaskbarItemInfo.ProgressState = System.Windows.Shell.TaskbarItemProgressState.Paused;
+                            this.ShowDialogInfo(Strings.Canceled, Strings.Message, null);
                             updateUI();
                         };
                         Action<Exception> faulted = (Exception e) =>
                         {
-                            App.UIAction(() => App.Current.MainWindow.TaskbarItemInfo.ProgressState = System.Windows.Shell.TaskbarItemProgressState.Error);
+                            App.Current.MainWindow.TaskbarItemInfo.ProgressState = System.Windows.Shell.TaskbarItemProgressState.Error;
 
-                            App.ShowErrorDialog(App.GetExceptionDetails(e));
+                            this.ShowDialogError(App.GetExceptionDetails(e));
                             updateUI();
                         };
 
-                        dialog = App.Dialog(new GetEnergyControl(_pointsList.ToList(), completed, canceled, faulted));
+                        dialog = this.DialogCustom(new GetEnergyControl(_treeModel.Point.Items, completed, canceled, faulted));
                         dialog.Show();
                     }
                     catch (Exception ex)
                     {
                         App.Log("Получение суточных значений - ошибка");
-                        App.ShowErrorDialog(App.GetExceptionDetails(ex), null,
-                            () => btnPanel.IsEnabled = true);
+                        this.ShowDialogError(App.GetExceptionDetails(ex), null,
+                            () => TMPApplication.DispatcherExtensions.InUi(() => btnPanel.IsEnabled = true));
                         dialog.Close();
                     }
                 });
@@ -318,7 +346,7 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
             TreeCheckOrUncheckItemsCommand = new DelegateCommand(
                 o =>
                 {
-                    TreeView tree = o as TreeView;
+                    ICSharpCode.TreeView.SharpTreeView tree = o as ICSharpCode.TreeView.SharpTreeView;
                     if (tree != null)
                     {
                         ListPoint point = (ListPoint)tree.SelectedItem;
@@ -326,31 +354,31 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
                         {
                             foreach (var child in point.Items)
                                 if (child.TypeCode == "FES" || child.TypeCode == "RES" || child.TypeCode == "SUBSTATION" || child.TypeCode == "VOLTAGE")
-                                    child.Checked = !child.Checked;
+                                    child.IsChecked = !child.IsChecked;
                         }
                     }
                 },
-                o => PointsList != null && PointsList.Count > 0);
+                o => _treeModel != null && _treeModel.Children != null && _treeModel.Children.Count > 0);
             TreeUnselectAllCommand = new DelegateCommand(
                 o =>
                 {
-                    if (PointsList != null)
+                    if (_treeModel != null)
                     {
-                        foreach (var item in PointsList)
-                            ForEachPointInTree(item, p => true, p => p.Checked = false);
+                        foreach (var item in _treeModel.Point.Items)
+                            ForEachPointInTree(item, p => true, p => p.IsChecked = false);
                     }
                 },
-                o => PointsList != null && PointsList.Count > 0);
+                o => _treeModel != null && _treeModel.Children != null && _treeModel.Children.Count > 0);
             TreeSelectAllCommand = new DelegateCommand(
                 o =>
                 {
-                    if (PointsList != null)
+                    if (_treeModel != null)
                     {
-                        foreach (var item in PointsList)
-                            ForEachPointInTree(item, p => p.TypeCode == "SUBSTATION" || p.TypeCode == "VOLTAGE", p => p.Checked = true);
+                        foreach (var item in _treeModel.Point.Items)
+                            ForEachPointInTree(item, p => p.TypeCode == "SUBSTATION" || p.TypeCode == "VOLTAGE", p => p.IsChecked = true);
                     }
                 },
-                o => PointsList != null && PointsList.Count > 0);
+                o => _treeModel != null && _treeModel.Children != null && _treeModel.Children.Count > 0);
         }
 
         private bool CheckAvailability()
@@ -401,7 +429,7 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
             }
             catch (Exception e)
             {
-                App.ShowErrorDialog(String.Format(Strings.ErrorOnSavePointsList, App.GetExceptionDetails(e)));
+                this.ShowDialogError(String.Format(Strings.ErrorOnSavePointsList, App.GetExceptionDetails(e)));
             }
         }
 
@@ -418,8 +446,6 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
 
         #region Command and Properties
 
-        public ICommand SettingsCommand { get; private set; }
-
         public ICommand UpdateCommand { get; private set; }
         public ICommand GetReportCommand { get; private set; }
         public ICommand GetEnergyCommand { get; private set; }
@@ -433,32 +459,14 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
             get { return _isReadyToGetData; }
             private set { SetProperty(ref _isReadyToGetData, value); }
         }
-        public ObservableCollection<ListPoint> PointsList
+
+
+        public TreeModel TreeModel
         {
-            get { return _pointsList; }
+            get { return _treeModel; }
             private set
             {
-                SetProperty(ref _pointsList, value);
-                View = CollectionViewSource.GetDefaultView(_pointsList);
-            }
-        }
-
-        public ICollectionView View
-        {
-            get { return _view; }
-            private set { SetProperty(ref _view, value); }
-        }
-
-        ContentControl Dialogs.IDialogWindow.DialogLayer
-        {
-            get
-            {
-                return this.DialogLayer;
-            }
-
-            set
-            {
-                this.DialogLayer = value;
+                SetProperty(ref _treeModel, value);
             }
         }
 

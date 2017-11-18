@@ -86,12 +86,19 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="NewFolder1\NewFolder1222\Window1333.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="NoData.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="NewFolder1\NewFolder1222\Window1333.xaml.cs">
+      <DependentUpon>Window1333.xaml</DependentUpon>
+    </Compile>
     <Compile Include="NoData.xaml.cs">
       <DependentUpon>NoData.xaml</DependentUpon>
     </Compile>
@@ -127,6 +134,14 @@
       <Project>{dde2a481-8271-4eac-a330-8fa6a38d13d1}</Project>
       <Name>ICSharpCode.TreeView</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\LIBRARY\TMPApplication\TMPApplication.csproj">
+      <Project>{dfe89862-64ef-44f8-98a8-07b410ec180e}</Project>
+      <Name>TMPApplication</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LIBRARY\WindowsShell\WindowsShell.csproj">
+      <Project>{6733a572-4d4f-4733-908d-e9db4765e245}</Project>
+      <Name>WindowsShell</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Common\Common.csproj">
       <Project>{5b1710d2-5dc8-4754-91b2-19165de49b3d}</Project>
       <Name>Common</Name>
@@ -157,6 +172,9 @@
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="SampleIcon.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

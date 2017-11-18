@@ -24,3 +24,5 @@ Y:\Developer\CURRENT\TMPApps\Emcos\DataForCalculateNormativ\obj\Debug\Controls\G
 Y:\Developer\CURRENT\TMPApps\Emcos\DataForCalculateNormativ\obj\Debug\Styles\ListPointDataTemplate.baml
 Y:\Developer\CURRENT\TMPApps\Emcos\DataForCalculateNormativ\obj\Debug\Controls\SettingsControl.baml
 Y:\Developer\CURRENT\TMPApps\Emcos\DataForCalculateNormativ\obj\Debug\DataForCalculateNormativ.csproj.App.config
+Y:\Developer\CURRENT\TMPApps\Emcos\DataForCalculateNormativ\obj\Debug\Controls\ListPointIcon.baml
+Y:\Developer\CURRENT\TMPApps\Emcos\DataForCalculateNormativ\obj\Debug\Controls\ListPointIcon.g.cs

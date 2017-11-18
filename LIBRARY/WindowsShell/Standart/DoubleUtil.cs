@@ -8,7 +8,7 @@
     /// methods is not a complete solution, but rather the way to reduce
     /// the probability of repeating unnecessary work.
     /// </summary>
-    internal static class DoubleUtilities
+    public static class DoubleUtilities
     {
         /// <summary>
         /// Epsilon - more or less random, more or less small number.

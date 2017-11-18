@@ -1,0 +1,7 @@
+d:\документы\mishutka\visual studio 2013\Projects\TM.WORK.Aramis\DBF\bin\x86\Debug\DBF.dll
+d:\документы\mishutka\visual studio 2013\Projects\TM.WORK.Aramis\DBF\bin\x86\Debug\DBF.pdb
+d:\документы\mishutka\visual studio 2013\Projects\TM.WORK.Aramis\bin\x86\Debug\DBF.dll
+d:\документы\mishutka\visual studio 2013\Projects\TM.WORK.Aramis\bin\x86\Debug\DBF.pdb
+d:\документы\mishutka\visual studio 2013\Projects\TM.WORK.Aramis\DBF\obj\x86\Debug\DBF.csprojResolveAssemblyReference.cache
+d:\документы\mishutka\visual studio 2013\Projects\TM.WORK.Aramis\DBF\obj\x86\Debug\DBF.dll
+d:\документы\mishutka\visual studio 2013\Projects\TM.WORK.Aramis\DBF\obj\x86\Debug\DBF.pdb

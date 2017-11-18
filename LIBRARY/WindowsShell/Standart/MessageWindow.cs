@@ -7,7 +7,7 @@
     using System.Windows;
     using System.Windows.Threading;
 
-    internal sealed class MessageWindow : DispatcherObject, IDisposable
+    public sealed class MessageWindow : DispatcherObject, IDisposable
     {
         // Alias this to a static so the wrapper doesn't get GC'd
         private static readonly WndProc s_WndProc = new WndProc(_WndProc);

@@ -164,9 +164,9 @@
       <Project>{dfe89862-64ef-44f8-98a8-07b410ec180e}</Project>
       <Name>TMPApplication</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Model\Model.csproj">
+    <ProjectReference Include="..\Model\ArmtesModel.csproj">
       <Project>{30b75d4c-3615-4d6a-8f45-ee114efe3b3c}</Project>
-      <Name>Model</Name>
+      <Name>ArmtesModel</Name>
       <Private>False</Private>
     </ProjectReference>
   </ItemGroup>

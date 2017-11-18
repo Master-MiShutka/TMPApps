@@ -223,28 +223,26 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Library\CommonControls\CommonControls.csproj">
+    <ProjectReference Include="..\..\LIBRARY\CommonControls\CommonControls.csproj">
       <Project>{8cf736c3-a421-4f44-8f9c-945a4391718b}</Project>
       <Name>CommonControls</Name>
-      <Private>False</Private>
     </ProjectReference>
-    <ProjectReference Include="..\..\Library\ExcelXML\TMP.ExcelXML.csproj">
+    <ProjectReference Include="..\..\LIBRARY\ExcelXML\TMP.ExcelXML.csproj">
       <Project>{e849ebc2-aac8-4b33-bc4d-626cded46c0d}</Project>
       <Name>TMP.ExcelXML</Name>
-      <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\..\Library\Shared\Shared.csproj">
       <Project>{07d019f1-5192-4b8e-9bcf-b040d36935c6}</Project>
       <Name>Shared</Name>
       <Private>False</Private>
     </ProjectReference>
-    <ProjectReference Include="..\..\Library\TMPApplication\TMPApplication.csproj">
+    <ProjectReference Include="..\..\LIBRARY\TMPApplication\TMPApplication.csproj">
       <Project>{dfe89862-64ef-44f8-98a8-07b410ec180e}</Project>
       <Name>TMPApplication</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Model\Model.csproj">
+    <ProjectReference Include="..\Model\ArmtesModel.csproj">
       <Project>{30b75d4c-3615-4d6a-8f45-ee114efe3b3c}</Project>
-      <Name>Model</Name>
+      <Name>ArmtesModel</Name>
       <Private>False</Private>
     </ProjectReference>
   </ItemGroup>

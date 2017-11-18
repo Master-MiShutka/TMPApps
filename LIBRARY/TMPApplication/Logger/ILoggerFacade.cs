@@ -26,6 +26,8 @@ namespace TMP.Common.Logger
         void LogWarning(string message);
         void LogError(string message);
 
+        void LogException(Exception exp);
+
         void Debug(string message);
     }
 }
