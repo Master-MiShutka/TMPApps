@@ -216,7 +216,7 @@ namespace Test
 
         private void BtnDialogTest_Info_Click(object sender, RoutedEventArgs e)
         {
-            var msg = this.DialogInfo("efefef", "This is caption", MessageBoxImage.Information);            
+            var msg = this.DialogInfo("efefef", "This is caption", MessageBoxImage.Information);
             msg.Show();
         }
 

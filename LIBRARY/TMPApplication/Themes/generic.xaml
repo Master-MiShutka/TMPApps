@@ -12,4 +12,7 @@
         <ResourceDictionary Source="pack://application:,,,/TMPApplication;component/CustomWpfWindow/WindowWithDialogs.xaml" />
 
     </ResourceDictionary.MergedDictionaries>
+
+    <BooleanToVisibilityConverter x:Key="booleanToVisibilityConverter" />
+
 </ResourceDictionary>

@@ -72,6 +72,17 @@ namespace TMP.WORK.AramisChetchiki.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public global::System.Collections.ObjectModel.ObservableCollection<Xceed.Wpf.DataGrid.TableField> ChangesOfMetersFields {
+            get {
+                return ((global::System.Collections.ObjectModel.ObservableCollection<Xceed.Wpf.DataGrid.TableField>)(this["ChangesOfMetersFields"]));
+            }
+            set {
+                this["ChangesOfMetersFields"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("ViewAsList")]
         public global::TMP.WORK.AramisChetchiki.Model.InfoViewType SelectedSummaryView {
             get {
@@ -84,39 +95,23 @@ namespace TMP.WORK.AramisChetchiki.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        public global::System.Collections.Generic.ICollection<TMP.WORK.AramisChetchiki.Properties.TableField> ChangesOfMetersFields {
+        public global::System.Collections.ObjectModel.ObservableCollection<TMP.WORK.AramisChetchiki.Model.Departament> Departaments {
             get {
-                return ((global::System.Collections.Generic.ICollection<TMP.WORK.AramisChetchiki.Properties.TableField>)(this["ChangesOfMetersFields"]));
+                return ((global::System.Collections.ObjectModel.ObservableCollection<TMP.WORK.AramisChetchiki.Model.Departament>)(this["Departaments"]));
             }
             set {
-                this["ChangesOfMetersFields"] = value;
+                this["Departaments"] = value;
             }
         }
-        
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        public global::System.Collections.Generic.ICollection<TMP.WORK.AramisChetchiki.Properties.TableField> SummaryInfoFields {
+        public global::System.Collections.ObjectModel.ObservableCollection<Xceed.Wpf.DataGrid.TableField> SummaryInfoFields {
             get {
-                return ((global::System.Collections.Generic.ICollection<TMP.WORK.AramisChetchiki.Properties.TableField>)(this["SummaryInfoFields"]));
+                return ((global::System.Collections.ObjectModel.ObservableCollection<Xceed.Wpf.DataGrid.TableField>)(this["SummaryInfoFields"]));
             }
             set {
                 this["SummaryInfoFields"] = value;
-            }
-        }
-
-        [System.Configuration.UserScopedSettingAttribute()]
-        [System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [System.Configuration.SettingsSerializeAs(System.Configuration.SettingsSerializeAs.Binary)]
-        public System.Collections.Generic.ICollection<TMP.WORK.AramisChetchiki.Model.Departament> Departaments
-        {
-            get
-            {
-                return ((System.Collections.Generic.ICollection<TMP.WORK.AramisChetchiki.Model.Departament>)(this["Departaments"]));
-            }
-            set
-            {
-                this["Departaments"] = value;
             }
         }
     }

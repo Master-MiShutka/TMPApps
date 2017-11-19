@@ -4,6 +4,8 @@ using System.Globalization;
 using System.Windows.Controls;
 using System.Windows.Data;
 
+using Xceed.Wpf.DataGrid;
+
 namespace TMP.WORK.AramisChetchiki.Converters
 {
     public class ConverterForUpdateTableFieldDisplayOrder : IValueConverter
@@ -22,7 +24,7 @@ namespace TMP.WORK.AramisChetchiki.Converters
 
             itemsControl.InvalidateVisual();
 
-            Properties.TableField field = (item?.DataContext) as Properties.TableField;
+            TableField field = (item?.DataContext) as TableField;
             if (field != null)
                 field.DisplayOrder = index - 1;
 

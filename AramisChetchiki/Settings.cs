@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
 using TMP.WORK.AramisChetchiki.Model;
+using Xceed.Wpf.DataGrid;
 
 namespace TMP.WORK.AramisChetchiki.Properties {
 
@@ -57,7 +58,7 @@ namespace TMP.WORK.AramisChetchiki.Properties {
         private IEnumerable<TableField> GetFields(ICollection<PlusPropertyDescriptor> props)
         {
             return from i in props
-                   select new Properties.TableField()
+                   select new TableField()
                    {
                        Type = i.PropertyType,
                        DisplayOrder = i.Order,
@@ -73,9 +74,9 @@ namespace TMP.WORK.AramisChetchiki.Properties {
             return new List<TableField>(GetFields(props).Where(i => i.IsVisible).OrderBy(i => i.DisplayOrder));
         }
 
-        public IEnumerable<Properties.TableField> GetChangesOfMetersColumnsNames()
+        public IEnumerable<TableField> GetChangesOfMetersColumnsNames()
         {
-            IEnumerable<Properties.TableField> fields = ChangesOfMetersFields;
+            IEnumerable<TableField> fields = ChangesOfMetersFields;
             int index = 0;
             foreach (var item in fields)
                 item.DisplayOrder = index++;

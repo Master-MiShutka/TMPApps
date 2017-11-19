@@ -62,7 +62,7 @@ namespace TMP.WORK.AramisChetchiki.ViewModel
         {
             _mainViewModel = mainViewModel;
             Data = infos;
-            (Properties.Settings.Default.SummaryInfoFields as ObservableCollection<Properties.TableField>).CollectionChanged += SummaryInfoViewViewModel_CollectionChanged;
+            (Properties.Settings.Default.SummaryInfoFields as ObservableCollection<Xceed.Wpf.DataGrid.TableField>).CollectionChanged += SummaryInfoViewViewModel_CollectionChanged;
         }
 
         private void SummaryInfoViewViewModel_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
@@ -73,7 +73,7 @@ namespace TMP.WORK.AramisChetchiki.ViewModel
 
         public void Dispose()
         {
-            (Properties.Settings.Default.SummaryInfoFields as ObservableCollection<Properties.TableField>).CollectionChanged -= SummaryInfoViewViewModel_CollectionChanged;
+            (Properties.Settings.Default.SummaryInfoFields as ObservableCollection<Xceed.Wpf.DataGrid.TableField>).CollectionChanged -= SummaryInfoViewViewModel_CollectionChanged;
         }
 
         #region Properties

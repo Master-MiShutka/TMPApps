@@ -96,10 +96,9 @@
                         Visibility="{Binding GroupingFields, Mode=OneWay, Converter={StaticResource NullOrEmptyToVisibilityConverter}}" />
                     <controls:TableView
                         Grid.Row="2"
-                        AutoGenerateColumns="False"
                         BindableColumns="{Binding TableColumns}"
                         ContextMenu="{StaticResource TableContextMenu}"
-                        ItemsSource="{Binding CollectionOfMeters, IsAsync=True}" />
+                        ItemsSource="{Binding CollectionOfMeters}" />
                 </Grid>
             </TabItem>
             <TabItem Header="Свод">

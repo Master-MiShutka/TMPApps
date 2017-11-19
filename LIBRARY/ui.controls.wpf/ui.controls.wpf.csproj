@@ -77,6 +77,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Themes\NoDataTemplate.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Themes\TreeMap.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -91,8 +95,10 @@
     <Compile Include="Conveters\EnumBindingConverter.cs" />
     <Compile Include="Conveters\ExpandCollapseToggleMargin.cs" />
     <Compile Include="Conveters\IndexConverter.cs" />
+    <Compile Include="Conveters\InverseBoolToVisibilityConverter.cs" />
     <Compile Include="Conveters\ItemsControlItemIndexConverter.cs" />
     <Compile Include="Conveters\MarkupConverter.cs" />
+    <Compile Include="Conveters\ItemsControlItemsToVisibilityConverter.cs" />
     <Compile Include="Conveters\NullOrEmptyToVisibilityConverter.cs" />
     <Compile Include="Conveters\NullToUnsetValueConverter.cs" />
     <Compile Include="Conveters\ParametersToOneConverter.cs" />
@@ -146,6 +152,12 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\ExtendedWPFToolkitSolution\Src\Xceed.Wpf.DataGrid\Xceed.Wpf.DataGrid.csproj">
+      <Project>{63648392-6ce9-4a60-96d4-f9fd718d29b0}</Project>
+      <Name>Xceed.Wpf.DataGrid</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

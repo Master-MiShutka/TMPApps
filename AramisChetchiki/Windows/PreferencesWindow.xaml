@@ -14,6 +14,7 @@
     xmlns:properties="clr-namespace:TMP.WORK.AramisChetchiki.Properties"
     xmlns:sys="clr-namespace:System;assembly=mscorlib"
     xmlns:view="clr-namespace:TMP.WORK.AramisChetchiki.Views"
+    xmlns:xcdg="http://schemas.xceed.com/wpf/xaml/datagrid"
     Title="Параметры"
     MinHeight="200"
     Padding="10"
@@ -226,7 +227,7 @@
                         ItemContainerStyle="{StaticResource ListBoxItemWithTableField}"
                         ItemsSource="{local_extensions:SettingBinding SummaryInfoFields}">
                         <ListBox.ItemTemplate>
-                            <DataTemplate DataType="{x:Type properties:TableField}">
+                            <DataTemplate DataType="{x:Type xcdg:TableField}">
                                 <DockPanel>
                                     <CheckBox
                                         Margin="2,0"
@@ -262,7 +263,7 @@
                         ItemContainerStyle="{StaticResource ListBoxItemWithTableField}"
                         ItemsSource="{local_extensions:SettingBinding ChangesOfMetersFields}">
                         <ListBox.ItemTemplate>
-                            <DataTemplate DataType="{x:Type properties:TableField}">
+                            <DataTemplate DataType="{x:Type xcdg:TableField}">
                                 <DockPanel>
                                     <CheckBox
                                         Margin="2,0"

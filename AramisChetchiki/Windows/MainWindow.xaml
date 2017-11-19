@@ -169,13 +169,15 @@
                                                    Property=Control.Background}"
             TextBlock.FontSize="{DynamicResource SmallFontSize}"
             ToolTip="Уважайте и цените чужой труд!">
-            <controls:LabelledTextBlock
-                Margin="5,0"
-                Label="Версия данных от:"
-                Text="{Binding Data.Date, StringFormat=dd.MM.yyyy}" />
-            <Separator />
-            <controls:LabelledTextBlock Label="Размер данных:" Text="{Binding DataSize}" />
-            <Separator />
+            <StackPanel Orientation="Horizontal" Visibility="{Binding Data, Converter={StaticResource NullOrEmptyToVisibilityConverter}}">
+                <controls:LabelledTextBlock
+                    Margin="5,0"
+                    Label="Версия данных от:"
+                    Text="{Binding Data.Date, StringFormat=dd.MM.yyyy}" />
+                <Separator />
+                <controls:LabelledTextBlock Label="Размер данных:" Text="{Binding DataSize}" />
+                <Separator />
+            </StackPanel>
             <controls:LabelledContent
                 Margin="5,0"
                 VerticalContentAlignment="Center"
@@ -185,7 +187,32 @@
                     DisplayMemberPath="Name"
                     ItemsSource="{local_extensions:SettingBinding Departaments,
                                                                   Mode=TwoWay}"
-                    SelectedValue="{Binding SelectedDepartament, Mode=TwoWay}" />
+                    SelectedValue="{Binding SelectedDepartament, Mode=TwoWay}">
+                    <ComboBox.Style>
+                        <Style BasedOn="{StaticResource {x:Type ComboBox}}" TargetType="ComboBox">
+                            <Style.Triggers>
+                                <Trigger Property="ItemsSource" Value="{x:Null}">
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate>
+                                                <Label VerticalAlignment="Center" Content="не заданы" />
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Trigger>
+                                <Trigger Property="HasItems" Value="false">
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate>
+                                                <Label VerticalAlignment="Center" Content="не заданы" />
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ComboBox.Style>
+                </ComboBox>
             </controls:LabelledContent>
             <ResizeGrip DockPanel.Dock="Right" />
             <TextBlock

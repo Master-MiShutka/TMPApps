@@ -1,4 +1,14 @@
-﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:system="clr-namespace:System;assembly=mscorlib">
+
+    <system:String x:Key="StringWaitIsAnalizing">
+        Подождите,&#x0a;идёт анализ данных
+    </system:String>
+    <system:String x:Key="StringNoData">
+        Нет данных&#x0a;для отображения
+    </system:String>
 
     <Border x:Key="PrepareDataTemplate" Background="{DynamicResource {x:Static SystemColors.ControlLightLightBrushKey}}">
         <Border
@@ -15,7 +25,7 @@
                 FontSize="{DynamicResource {x:Static SystemFonts.MessageFontSizeKey}}"
                 FontWeight="SemiBold"
                 Foreground="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"
-                Text="{Binding Status, FallbackValue='Подождите,&#x0a;идёт анализ данных'}"
+                Text="{Binding Status, FallbackValue={StaticResource StringWaitIsAnalizing}}"
                 TextAlignment="Center"
                 TextOptions.TextFormattingMode="Ideal"
                 TextWrapping="Wrap">
@@ -47,7 +57,10 @@
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
                 Orientation="Vertical">
-                <Canvas Width="50" Height="50" Background="Transparent">
+                <Canvas
+                    Width="50"
+                    Height="50"
+                    Background="Transparent">
                     <Canvas.Children>
                         <Path
                             Width="50"
@@ -76,13 +89,10 @@
                 <TextBlock
                     Margin="0,10,0,0"
                     FontSize="{DynamicResource {x:Static SystemFonts.CaptionFontSizeKey}}"
+                    Text="{Binding Source={StaticResource StringNoData}}"
                     TextAlignment="Center"
                     TextOptions.TextFormattingMode="Ideal"
-                    TextWrapping="Wrap">
-                    Нет данных
-                    <LineBreak />
-                    для отображения
-                </TextBlock>
+                    TextWrapping="Wrap" />
             </StackPanel>
             <Border.LayoutTransform>
                 <ScaleTransform ScaleX="1.5" ScaleY="1.5" />

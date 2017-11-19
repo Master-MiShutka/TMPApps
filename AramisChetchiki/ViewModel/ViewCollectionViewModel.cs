@@ -303,9 +303,9 @@ namespace TMP.WORK.AramisChetchiki.ViewModel
 
         private void ChangeView()
         {
-            Func<IList<string>, IEnumerable<Properties.TableField>> getFields = (names) =>
+            Func<IList<string>, IEnumerable<Xceed.Wpf.DataGrid.TableField>> getFields = (names) =>
             {
-                return names.Select(name => new Properties.TableField()
+                return names.Select(name => new Xceed.Wpf.DataGrid.TableField()
                 {
                     Type = ModelHelper.MeterPropertiesCollection[name].PropertyType,
                     DisplayOrder = ModelHelper.MeterPropertiesCollection[name].Order,
@@ -316,7 +316,7 @@ namespace TMP.WORK.AramisChetchiki.ViewModel
                 });
             };
 
-            IEnumerable<Properties.TableField> fields = null;
+            IEnumerable < Xceed.Wpf.DataGrid.TableField> fields = null;
             switch (SelectedView)
             {
                 case TableView.BaseView:
@@ -337,7 +337,7 @@ namespace TMP.WORK.AramisChetchiki.ViewModel
                 default:
                     throw new NotImplementedException("Unknown TableView");
             }
-            _tableColumns = new ObservableCollection<DataGridColumn>(DataGridExtensions.BuildColumns(fields));
+            _tableColumns = new ObservableCollection<Xceed.Wpf.DataGrid.ColumnBase>(Xceed.Wpf.DataGrid.Extensions.DataGridControlExtensions.BuildColumns(fields));
         }
 
         private void Export(DataGrid dataGrid)

@@ -10,18 +10,19 @@ using System.Windows.Input;
 using System.Windows;
 using System.Threading.Tasks;
 using System.Windows.Documents;
+using System.Windows.Media;
+using System.Data;
+using System.Threading;
+using System.Windows.Threading;
 
 using TMP.UI.Controls.WPF;
-using DataGridColumn=Xceed.Wpf.DataGrid.ColumnBase;
+using Xceed.Wpf.DataGrid;
+using Xceed.Wpf.DataGrid.Extensions;
 
 namespace TMP.WORK.AramisChetchiki.ViewModel
 {
     using Model;
     using Extensions;
-    using System.Windows.Media;
-    using System.Data;
-    using System.Threading;
-    using System.Windows.Threading;
 
     public class ChangesOfMetersViewModel : BaseDataViewModel<ChangesOfMeters>
     {
@@ -161,13 +162,13 @@ namespace TMP.WORK.AramisChetchiki.ViewModel
             set { _view = value; RaisePropertyChanged("View"); }
         }
 
-        private ObservableCollection<DataGridColumn> _tableColumns;
-        public ObservableCollection<DataGridColumn> TableColumns
+        private ObservableCollection<ColumnBase> _tableColumns;
+        public ObservableCollection<ColumnBase> TableColumns
         {
             get
             {
                 return _tableColumns ??
-                    (_tableColumns = new ObservableCollection<DataGridColumn>(DataGridExtensions.BuildColumns(
+                    (_tableColumns = new ObservableCollection<ColumnBase>(DataGridControlExtensions.BuildColumns(
                         Properties.Settings.Default.GetChangesOfMetersColumnsNames())));
             }
             private set { _tableColumns = value; RaisePropertyChanged("TableColumns"); }
@@ -275,7 +276,7 @@ namespace TMP.WORK.AramisChetchiki.ViewModel
             foreach (var c in dataTable.Columns)
                 table.Columns.Add(new TableColumn());
             int columnsCount = dataTable.Columns.Count;
-            foreach (DataRow dataRow in dataTable.Rows)
+            foreach (System.Data.DataRow dataRow in dataTable.Rows)
             {
                App.DoEvents();
                 TableRowGroup rg = new TableRowGroup();

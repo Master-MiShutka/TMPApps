@@ -1,12 +1,8 @@
 Y:\Developer\CURRENT\TMPApps\AramisChetchiki\obj\Debug\AramisChetchiki.csprojResolveAssemblyReference.cache
-Y:\Developer\CURRENT\TMPApps\AramisChetchiki\obj\Debug\Controls\BusyControl.baml
-Y:\Developer\CURRENT\TMPApps\AramisChetchiki\obj\Debug\Themes\DataGridColumns.baml
-Y:\Developer\CURRENT\TMPApps\AramisChetchiki\obj\Debug\Themes\NoDataTemplate.baml
 Y:\Developer\CURRENT\TMPApps\AramisChetchiki\obj\Debug\Windows\Window1.baml
 Y:\Developer\CURRENT\TMPApps\AramisChetchiki\obj\Debug\Charts\Legend.g.cs
 Y:\Developer\CURRENT\TMPApps\AramisChetchiki\obj\Debug\Charts\PieChartLayout.g.cs
 Y:\Developer\CURRENT\TMPApps\AramisChetchiki\obj\Debug\Charts\PieChart.g.cs
-Y:\Developer\CURRENT\TMPApps\AramisChetchiki\obj\Debug\Controls\BusyControl.g.cs
 Y:\Developer\CURRENT\TMPApps\AramisChetchiki\obj\Debug\Views\ChangesOfMetersView.g.cs
 Y:\Developer\CURRENT\TMPApps\AramisChetchiki\obj\Debug\Windows\FiltersWindow.g.cs
 Y:\Developer\CURRENT\TMPApps\AramisChetchiki\obj\Debug\Windows\MainWindow.g.cs

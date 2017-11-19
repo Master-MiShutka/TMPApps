@@ -116,7 +116,6 @@ namespace TMP.WORK.AramisChetchiki.ViewModel
             //
             CurrentMode = Mode.MetersList;
 
-            Init();
             if (System.ComponentModel.DesignerProperties.GetIsInDesignMode(new DependencyObject()))
             {
                 Data = new Data()
@@ -131,6 +130,8 @@ namespace TMP.WORK.AramisChetchiki.ViewModel
                 Init();
                 return;
             }
+
+            Init();
 
             _mainWindow = App.Current.MainWindow;
             if (_mainWindow != null)
@@ -922,7 +923,7 @@ namespace TMP.WORK.AramisChetchiki.ViewModel
 
             List<SummaryInfoItem> infos = new List<SummaryInfoItem>();
             // по всем свойствам
-            foreach (Properties.TableField field in Settings.Default.SummaryInfoFields.OrderBy(f => f.DisplayOrder))
+            foreach (Xceed.Wpf.DataGrid.TableField field in Settings.Default.SummaryInfoFields.OrderBy(f => f.DisplayOrder))
             {
                 infos.Add(BuildSummaryInfoItem(meters, field.Name));
                 _updateUI(++processedRows);
@@ -952,10 +953,10 @@ namespace TMP.WORK.AramisChetchiki.ViewModel
                     _currentView = new Views.ChangesOfMetersView() { DataContext = new ChangesOfMetersViewModel(Data?.ChangesOfMeters) };
                     break;
                 case Mode.AbonentsBinding:
-                    _currentView = new Views.ChangesOfMetersView() { DataContext = new ChangesOfMetersViewModel(Data?.ChangesOfMeters) };
+                    _currentView = new Views.AbonentsBindingView() { DataContext = new AbonentsBindingViewViewModel(Data.Meters) };
                     break;
                 case Mode.Metrology:
-                    _currentView = new Views.ChangesOfMetersView() { DataContext = new ChangesOfMetersViewModel(Data?.ChangesOfMeters) };
+                    _currentView = new Views.MetrologyView() { DataContext = new MetrologyViewViewModel() };
                     break;
 
                 default:
@@ -982,7 +983,7 @@ namespace TMP.WORK.AramisChetchiki.ViewModel
                 msg = "Данные не загружены.\nОбновите данные из базы.";
             content.DataContext = new { Status = msg };
             _currentView = content;
-            //RaisePropertyChanged("CurrentView");
+            RaisePropertyChanged("CurrentView");
         }
         /// <summary>
         /// Обновление статуса поверки счётчиков
@@ -1160,7 +1161,7 @@ namespace TMP.WORK.AramisChetchiki.ViewModel
         {
             get
             {
-                string[] sizes = { "байт", "килобайт", "мегабайт", "гигабайт" };
+                string[] sizes = { "байт", "Кб", "Мб", "Гб" };
                 int order = 0;
                 long size = Serializer.DataSize;
                 while (size >= 1024 && order + 1 < sizes.Length)

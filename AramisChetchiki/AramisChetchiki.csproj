@@ -128,22 +128,19 @@
       <DependentUpon>PieChart.xaml</DependentUpon>
     </Compile>
     <Compile Include="CloseThisWindowCommand.cs" />
-    <Compile Include="Controls\BusyControl.xaml.cs">
-      <DependentUpon>BusyControl.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Controls\WaitableControl.cs" />
+    <Compile Include="Converters\AbonentBindingInfoConverter.cs" />
     <Compile Include="Converters\ConverterForUpdateTableFieldDisplayOrder.cs" />
-    <Compile Include="Extensions\DataGridExtension.cs" />
     <Compile Include="Extensions\ICollectionViewExtension.cs" />
     <Compile Include="Extensions\SettingBindingExtension.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="ModelHelper.cs" />
+    <Compile Include="Model\AbonentBindingNode.cs" />
     <Compile Include="Model\ChangesOfMeters.cs" />
     <Compile Include="Model\Departament.cs" />
     <Compile Include="Model\Enums.cs" />
     <Compile Include="Model\IModel.cs" />
     <Compile Include="Model\SummaryInfoGroupItem.cs" />
-    <Compile Include="Properties\TableField.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="ThemeHelper.cs" />
     <Compile Include="Charts\LegendConverter.cs" />
@@ -206,10 +203,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\BusyControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Themes\Common.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -254,15 +247,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Themes\DataGridColumns.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Themes\generic.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Themes\NoDataTemplate.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -311,6 +296,7 @@
     <None Include="Properties\Settings.settings">
       <Generator>PublicSettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -333,12 +319,33 @@
       <Project>{7ed20c3a-c707-43ac-b085-f353869b061b}</Project>
       <Name>ItemsFilter</Name>
     </ProjectReference>
+    <ProjectReference Include="..\LIBRARY\SharpTreeView\ICSharpCode.TreeView.csproj">
+      <Project>{dde2a481-8271-4eac-a330-8fa6a38d13d1}</Project>
+      <Name>ICSharpCode.TreeView</Name>
+    </ProjectReference>
     <ProjectReference Include="..\LIBRARY\ui.controls.wpf\ui.controls.wpf.csproj">
       <Project>{5c7f0d6e-3247-4e12-bfe7-5fb05842f6f3}</Project>
       <Name>ui.controls.wpf</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Resources\fider10.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\fider04.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\substation.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\tp.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\group.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Departament.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>

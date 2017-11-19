@@ -55,8 +55,7 @@
         </StackPanel>
         <controls:TableView
             x:Name="table"
-            Grid.Row="1"
-            AutoGenerateColumns="False"
+            Grid.Row="1"            
             BindableColumns="{Binding TableColumns}"
             ItemsSource="{Binding View}" />
     </Grid>

@@ -101,8 +101,12 @@ namespace ICSharpCode.TreeView
 		{
 			get { return null; }
 		}
-		
-		public virtual Brush Foreground {
+        public virtual int ChildrenCount
+        {
+            get { return Children.Count; }
+        }
+
+        public virtual Brush Foreground {
 			get { return SystemColors.WindowTextBrush; }
 		}
 		

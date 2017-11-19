@@ -10,6 +10,7 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/itemsfilter;component/themes/generic.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/ui.controls.wpf;component/themes/generic.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/ui.controls.wpf;component/themes/TreeMap.xaml" />
 
                 <!--  ResourceDictionary Source="/PresentationFramework.Aero;component/themes/aero.normalcolor.xaml" /  -->
                 <ResourceDictionary Source="/PresentationFramework.Luna;component/themes/luna.normalcolor.xaml" />
@@ -17,12 +18,18 @@
                 <!--  ResourceDictionary Source="/PresentationFramework.Classic;component/themes/classic.xaml" /  -->
                 <ResourceDictionary Source="pack://application:,,,/Themes/generic.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/Themes/Common.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/Themes/NoDataTemplate.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/Themes/Styles.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/Themes/DataGridColumns.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/Themes/SummaryInfoDataTemplate.xaml" />
 
             </ResourceDictionary.MergedDictionaries>
+
+            <BitmapImage x:Key="IconFider10" UriSource="/Resources/fider10.png" />
+            <BitmapImage x:Key="IconFider04" UriSource="/Resources/fider04.png" />
+            <BitmapImage x:Key="IconSubstation" UriSource="/Resources/substation.png" />
+            <BitmapImage x:Key="IconTp" UriSource="/Resources/tp.png" />
+            <BitmapImage x:Key="IconGroup" UriSource="/Resources/group.png" />
+            <BitmapImage x:Key="IconDepartament" UriSource="/Resources/Departament.png" />
+
         </ResourceDictionary>
     </Application.Resources>
 </Application>

@@ -14,7 +14,7 @@
     <Setting Name="Theme" Type="TMP.WORK.AramisChetchiki.ViewModel.Theme" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="ChangesOfMetersFields" Type="System.Collections.ObjectModel.ObservableCollection&lt;TMP.WORK.AramisChetchiki.Properties.TableField&gt;" Scope="User">
+    <Setting Name="ChangesOfMetersFields" Type="System.Collections.ObjectModel.ObservableCollection&lt;Xceed.Wpf.DataGrid.TableField&gt;" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="SelectedSummaryView" Type="TMP.WORK.AramisChetchiki.Model.InfoViewType" Scope="User">
@@ -23,7 +23,7 @@
     <Setting Name="Departaments" Type="System.Collections.ObjectModel.ObservableCollection&lt;TMP.WORK.AramisChetchiki.Model.Departament&gt;" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="SummaryInfoFields" Type="System.Collections.ObjectModel.ObservableCollection&lt;TMP.WORK.AramisChetchiki.Properties.TableField&gt;" Scope="User">
+    <Setting Name="SummaryInfoFields" Type="System.Collections.ObjectModel.ObservableCollection&lt;Xceed.Wpf.DataGrid.TableField&gt;" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
   </Settings>

@@ -41,7 +41,10 @@
     <SolidColorBrush x:Key="BlackBrush" Color="{x:Static SystemColors.ControlTextColor}" />
     <SolidColorBrush x:Key="ControlsDisabledBrush" Color="{x:Static SystemColors.ControlLightColor}" />
     <SolidColorBrush x:Key="AccentColorBrush" Color="{x:Static SystemColors.HighlightColor}" />
-    <SolidColorBrush x:Key="AccentColorBrush4" Color="{x:Static SystemColors.HighlightTextColor}" />
+    <SolidColorBrush
+        x:Key="AccentColorBrush4"
+        Opacity="0.6"
+        Color="{x:Static SystemColors.HighlightTextColor}" />
     <SolidColorBrush x:Key="HighlightBrush" Color="{x:Static SystemColors.HighlightTextColor}" />
     <SolidColorBrush x:Key="ControlBorderBrush" Color="{x:Static SystemColors.ActiveBorderColor}" />
     <SolidColorBrush x:Key="ControlBackgroundBrush" Color="{x:Static SystemColors.ControlColor}" />
@@ -427,7 +430,10 @@
                         Style="{StaticResource borderStyle}">
                         <StackPanel Orientation="Vertical">
                             <DockPanel LastChildFill="False">
-                                <TextBlock x:Name="PART_Name" Style="{StaticResource FilterNameStyle}" Text="{Binding Model.Name, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}" />
+                                <TextBlock
+                                    x:Name="PART_Name"
+                                    Style="{StaticResource FilterNameStyle}"
+                                    Text="{Binding Model.Name, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}" />
                                 <Button DockPanel.Dock="Right" Style="{StaticResource FilterClearButtonStyle}">
                                     <Image Source="{StaticResource ClearImage}" />
                                 </Button>
@@ -459,7 +465,10 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ListBoxItem}">
-                    <Border x:Name="Bd" BorderBrush="{x:Null}" BorderThickness="1">
+                    <Border
+                        x:Name="Bd"
+                        BorderBrush="{x:Null}"
+                        BorderThickness="1">
                         <CheckBox VerticalContentAlignment="Center" IsChecked="{Binding IsSelected, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}">
                             <ContentPresenter
                                 Margin="{TemplateBinding Padding}"
@@ -577,13 +586,20 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type local:ColumnFilter}">
-                    <Grid Width="Auto" Height="{TemplateBinding Height}" Visibility="{TemplateBinding Model, Converter={StaticResource FilterControlVmToVisibilityConverter}}">
+                    <Grid
+                        Width="Auto"
+                        Height="{TemplateBinding Height}"
+                        Visibility="{TemplateBinding Model,
+                                                     Converter={StaticResource FilterControlVmToVisibilityConverter}}">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
 
-                        <Button x:Name="button" Padding="2" Style="{StaticResource ColumnHeaderButtonStyle}">
+                        <Button
+                            x:Name="button"
+                            Padding="2"
+                            Style="{StaticResource ColumnHeaderButtonStyle}">
                             <Rectangle
                                 x:Name="Icon"
                                 Width="10"

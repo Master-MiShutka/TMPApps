@@ -74,3 +74,4 @@ T:\Developer\CURRENT\TMPApps\LIBRARY\ui.controls.wpf\obj\Debug\ui.controls.wpf.p
 T:\Developer\CURRENT\TMPApps\LIBRARY\ui.controls.wpf\obj\Debug\ui.controls.wpf.csprojResolveAssemblyReference.cache
 T:\Developer\CURRENT\TMPApps\LIBRARY\ui.controls.wpf\obj\Debug\TreeMap\Theme.baml
 y:\Developer\CURRENT\TMPApps\LIBRARY\ui.controls.wpf\obj\Debug\Themes\TreeMap.baml
+Y:\Developer\CURRENT\TMPApps\LIBRARY\ui.controls.wpf\obj\Debug\Themes\NoDataTemplate.baml

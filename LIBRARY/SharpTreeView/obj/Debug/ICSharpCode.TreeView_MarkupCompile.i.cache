@@ -4,7 +4,7 @@
 library
 C#
 .cs
-y:\Developer\CURRENT\TMPApps\LIBRARY\SharpTreeView\obj\Debug\
+Y:\Developer\CURRENT\TMPApps\LIBRARY\SharpTreeView\obj\Debug\
 ICSharpCode.TreeView
 none
 false
@@ -16,5 +16,5 @@ DEBUG;TRACE
 131924304037
 Themes\Generic.xaml;
 
-True
+False
 

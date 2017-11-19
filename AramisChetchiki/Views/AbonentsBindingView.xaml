@@ -7,22 +7,154 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:TMP.WORK.AramisChetchiki.Views"
     xmlns:local_controls="clr-namespace:TMP.WORK.AramisChetchiki.Controls"
+    xmlns:local_converters="clr-namespace:TMP.WORK.AramisChetchiki.Converters"
     xmlns:local_extensions="clr-namespace:TMP.WORK.AramisChetchiki.Extensions"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:model="clr-namespace:TMP.WORK.AramisChetchiki.Model"
+    xmlns:sharptreeview="clr-namespace:ICSharpCode.TreeView;assembly=ICSharpCode.TreeView"
+    xmlns:treemap="clr-namespace:TMP.UI.Controls.WPF.TreeMap;assembly=ui.controls.wpf"
     xmlns:vm="clr-namespace:TMP.WORK.AramisChetchiki.ViewModel"
+    xmlns:xcdg="clr-namespace:Xceed.Wpf.DataGrid;assembly=Xceed.Wpf.DataGrid"
+    xmlns:xcdgext="clr-namespace:Xceed.Wpf.DataGrid.Extensions;assembly=Xceed.Wpf.DataGrid"
     d:DataContext="{d:DesignInstance {x:Type vm:AbonentsBindingViewViewModel},
                                      IsDesignTimeCreatable=True}"
     d:DesignHeight="250"
     d:DesignWidth="800"
+    Background="White"
     FontSize="{local_extensions:SettingBinding FontSize,
                                                13.0}"
     TextOptions.TextFormattingMode="Display"
     mc:Ignorable="d">
+    <UserControl.Resources>
+        <local_converters:AbonentBindingInfoConverter x:Key="AbonentBindingInfoConverter" />
+
+        <Style TargetType="{x:Type treemap:TreeMapItem}">
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="BorderBrush" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Background">
+                <Setter.Value>
+                    <RadialGradientBrush Center="0.2,0.2" GradientOrigin="0.2,0.2" RadiusX="1" RadiusY="1">
+                        <RadialGradientBrush.GradientStops>
+                            <GradientStop Offset="0" Color="White" />
+                            <GradientStop Offset="0.1" Color="LightGray" />
+                            <GradientStop Offset="1" Color="Black" />
+                        </RadialGradientBrush.GradientStops>
+                    </RadialGradientBrush>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Opacity" Value=".75" />
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="true">
+                    <Setter Property="BorderBrush" Value="Red" />
+                    <Setter Property="BorderThickness" Value="1" />
+                    <Setter Property="Background">
+                        <Setter.Value>
+                            <RadialGradientBrush Center="0.2,0.2" GradientOrigin="0.2,0.2" RadiusX="1" RadiusY="1">
+                                <RadialGradientBrush.GradientStops>
+                                    <GradientStop Offset="0" Color="DarkGray" />
+                                    <GradientStop Offset="0.1" Color="LightGray" />
+                                    <GradientStop Offset="1" Color="White" />
+                                </RadialGradientBrush.GradientStops>
+                            </RadialGradientBrush>
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <HierarchicalDataTemplate x:Key="bindingDataTemplate" ItemsSource="{Binding Path=Children}">
+            <Border Background="Transparent" BorderThickness="1" BorderBrush="Gray">
+                <Border.ToolTip>
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock Margin="0,0,0,2" Text="{Binding Path=Header}" />
+                        <TextBlock Text="{Binding Path=MetersCount}" />
+                    </StackPanel>
+                </Border.ToolTip>
+            </Border>
+        </HierarchicalDataTemplate>
+    </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <controls:BusyControl Grid.RowSpan="2" Visibility="{Binding IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}" />
+        <DockPanel Grid.Row="1" Margin="2">
+            <ToggleButton
+                Padding="5,0"
+                Content="Визуализация"
+                DockPanel.Dock="Right"
+                IsChecked="{Binding IsVisualizing}" />
+            <ContentPresenter HorizontalAlignment="Center" Content="{Binding SelectedAbonentBindingNode, Converter={StaticResource AbonentBindingInfoConverter}}" />
+        </DockPanel>
+        <Grid
+            Grid.Row="2"
+            Margin="2"
+            IsSharedSizeScope="True">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" MinWidth="50" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <sharptreeview:SharpTreeView
+                AlternationCount="2"
+                Root="{Binding AbonentBindingNodes}"
+                SelectedItem="{Binding SelectedAbonentBindingNode}"
+                ShowAlternation="True"
+                ShowRootExpander="False">
+                <sharptreeview:SharpTreeView.NodeTextTemplate>
+                    <DataTemplate DataType="{x:Type model:AbonentBindingNode}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" SharedSizeGroup="notBindingMetersColumn" />
+                                <ColumnDefinition Width="Auto" SharedSizeGroup="totalMetersColumn" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="{Binding Header}" />
+                            <TextBlock
+                                Name="notBindingCount"
+                                Grid.Column="1"
+                                Margin="2,0,0,0"
+                                Foreground="Red"
+                                Text="{Binding NotBindingMetersCount, StringFormat=N0}"
+                                TextAlignment="Right" />
+                            <TextBlock
+                                Name="allCount"
+                                Grid.Column="2"
+                                Margin="2,0,0,0"
+                                Text="{Binding MetersCount, StringFormat=N0}"
+                                TextAlignment="Right" />
+                        </Grid>
+                        <DataTemplate.Triggers>
+                            <DataTrigger Binding="{Binding NotBindingMetersCount}" Value="0">
+                                <Setter TargetName="notBindingCount" Property="Visibility" Value="Collapsed" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding MetersCount}" Value="0">
+                                <Setter TargetName="allCount" Property="Visibility" Value="Collapsed" />
+                            </DataTrigger>
+                        </DataTemplate.Triggers>
+                    </DataTemplate>
+                </sharptreeview:SharpTreeView.NodeTextTemplate>
+            </sharptreeview:SharpTreeView>
+            <GridSplitter Grid.Column="1" Style="{StaticResource VerticalGridSplitterStyle}" />
+            <controls:TableView
+                Grid.Column="2"
+                xcdgext:DataGridControlExtensions.ColumnsSource="{Binding TableColumns}"
+                xcdgext:DataGridControlExtensions.DisplayMemberMember="Name"
+                xcdgext:DataGridControlExtensions.HeaderTextMember="DisplayName"
+                ItemsSource="{Binding ListOfMeters}"
+                Visibility="{Binding IsVisualizing, Converter={StaticResource InverseBoolToVisibilityConverter}}" />
+            <treemap:TreeMaps
+                Grid.Column="2"
+                ItemTemplate="{StaticResource bindingDataTemplate}"
+                ItemsSource="{Binding AbonentBindingNodes}"
+                MaxDepth="4"
+                TreeMapMode="Squarified"
+                ValuePropertyName="MetersCount"
+                Visibility="{Binding IsVisualizing, Converter={StaticResource BooleanToVisibilityConverter}}" />
+
+        </Grid>
     </Grid>
 </UserControl>

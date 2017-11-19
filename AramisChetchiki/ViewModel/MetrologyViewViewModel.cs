@@ -12,6 +12,8 @@ using System.Windows.Controls;
 using System.Collections.ObjectModel;
 
 using TMP.UI.Controls.WPF;
+using TMP.WORK.AramisChetchiki.Model;
+using TMP.Extensions;
 
 namespace TMP.WORK.AramisChetchiki.ViewModel
 {
@@ -20,6 +22,20 @@ namespace TMP.WORK.AramisChetchiki.ViewModel
         public MetrologyViewViewModel()
         {
 
+        }
+        public MetrologyViewViewModel(IList<Meter> meters)
+        {
+            if (meters == null)
+                throw new ArgumentNullException("Meters collection");
+
+            ListOfMeters = meters;
+        }
+
+        private IList<Meter> _listOfMeters = null;
+        public IList<Meter> ListOfMeters
+        {
+            get { return _listOfMeters; }
+            set { _listOfMeters = value; RaisePropertyChanged("ListOfMeters"); }
         }
     }
 }
