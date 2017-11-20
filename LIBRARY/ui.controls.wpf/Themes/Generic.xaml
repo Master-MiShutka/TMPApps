@@ -9,6 +9,7 @@
     <ResourceDictionary.MergedDictionaries>
         <!--  ResourceDictionary Source="/PresentationFramework.Royale;component/themes/royale.normalcolor.xaml" /  -->
         <ResourceDictionary Source="/ui.controls.wpf;component/Themes/NoDataTemplate.xaml" />
+        <ResourceDictionary Source="/ui.controls.wpf;component/Themes/TreeMap.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
     <converters:NullOrEmptyToVisibilityConverter x:Key="NullOrEmptyToVisibilityConverter" />

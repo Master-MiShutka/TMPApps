@@ -11,11 +11,13 @@
     xmlns:local_extensions="clr-namespace:TMP.WORK.AramisChetchiki.Extensions"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:model="clr-namespace:TMP.WORK.AramisChetchiki.Model"
+    xmlns:options="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
     xmlns:sharptreeview="clr-namespace:ICSharpCode.TreeView;assembly=ICSharpCode.TreeView"
     xmlns:treemap="clr-namespace:TMP.UI.Controls.WPF.TreeMap;assembly=ui.controls.wpf"
     xmlns:vm="clr-namespace:TMP.WORK.AramisChetchiki.ViewModel"
     xmlns:xcdg="clr-namespace:Xceed.Wpf.DataGrid;assembly=Xceed.Wpf.DataGrid"
     xmlns:xcdgext="clr-namespace:Xceed.Wpf.DataGrid.Extensions;assembly=Xceed.Wpf.DataGrid"
+    x:Name="root"
     d:DataContext="{d:DesignInstance {x:Type vm:AbonentsBindingViewViewModel},
                                      IsDesignTimeCreatable=True}"
     d:DesignHeight="250"
@@ -26,53 +28,61 @@
     TextOptions.TextFormattingMode="Display"
     mc:Ignorable="d">
     <UserControl.Resources>
+
         <local_converters:AbonentBindingInfoConverter x:Key="AbonentBindingInfoConverter" />
+
+        <RadialGradientBrush x:Key="radialBrush1" options:Freeze="True" GradientOrigin="0.2,0.2" RadiusX="1" RadiusY="1">
+            <RadialGradientBrush.GradientStops>
+                <GradientStop Offset="0" Color="White" />
+                <GradientStop Offset="0.1" Color="LightGray" />
+                <GradientStop Offset="1" Color="Gray" />
+            </RadialGradientBrush.GradientStops>
+        </RadialGradientBrush>
+        <RadialGradientBrush x:Key="radialBrush2" options:Freeze="True" GradientOrigin="0.2,0.2" RadiusX="1" RadiusY="1">
+            <RadialGradientBrush.GradientStops>
+                <GradientStop Offset="0" Color="DarkGray" />
+                <GradientStop Offset="0.1" Color="LightGray" />
+                <GradientStop Offset="1" Color="White" />
+            </RadialGradientBrush.GradientStops>
+        </RadialGradientBrush>
 
         <Style TargetType="{x:Type treemap:TreeMapItem}">
             <Setter Property="Padding" Value="0" />
-            <Setter Property="BorderBrush" Value="Transparent" />
-            <Setter Property="BorderThickness" Value="0" />
-            <Setter Property="Background">
-                <Setter.Value>
-                    <RadialGradientBrush Center="0.2,0.2" GradientOrigin="0.2,0.2" RadiusX="1" RadiusY="1">
-                        <RadialGradientBrush.GradientStops>
-                            <GradientStop Offset="0" Color="White" />
-                            <GradientStop Offset="0.1" Color="LightGray" />
-                            <GradientStop Offset="1" Color="Black" />
-                        </RadialGradientBrush.GradientStops>
-                    </RadialGradientBrush>
-                </Setter.Value>
-            </Setter>
-            <Setter Property="Opacity" Value=".75" />
+            <Setter Property="BorderBrush" Value="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}" />
+            <Setter Property="BorderThickness" Value="0.5" />
+            <Setter Property="Background" Value="{StaticResource radialBrush1}" />
             <Style.Triggers>
                 <Trigger Property="IsMouseOver" Value="true">
-                    <Setter Property="BorderBrush" Value="Red" />
+                    <Setter Property="BorderBrush" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
                     <Setter Property="BorderThickness" Value="1" />
-                    <Setter Property="Background">
-                        <Setter.Value>
-                            <RadialGradientBrush Center="0.2,0.2" GradientOrigin="0.2,0.2" RadiusX="1" RadiusY="1">
-                                <RadialGradientBrush.GradientStops>
-                                    <GradientStop Offset="0" Color="DarkGray" />
-                                    <GradientStop Offset="0.1" Color="LightGray" />
-                                    <GradientStop Offset="1" Color="White" />
-                                </RadialGradientBrush.GradientStops>
-                            </RadialGradientBrush>
-                        </Setter.Value>
-                    </Setter>
+                    <Setter Property="Background" Value="{StaticResource radialBrush2}" />
+                    <Trigger.EnterActions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <ColorAnimation
+                                    Storyboard.TargetProperty="BorderBrush.Color"
+                                    From="Gray"
+                                    To="White"
+                                    Duration="0:0:0.2" />
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </Trigger.EnterActions>
                 </Trigger>
             </Style.Triggers>
         </Style>
 
         <HierarchicalDataTemplate x:Key="bindingDataTemplate" ItemsSource="{Binding Path=Children}">
-            <Border Background="Transparent" BorderThickness="1" BorderBrush="Gray">
-                <Border.ToolTip>
-                    <StackPanel Orientation="Vertical">
-                        <TextBlock Margin="0,0,0,2" Text="{Binding Path=Header}" />
-                        <TextBlock Text="{Binding Path=MetersCount}" />
-                    </StackPanel>
-                </Border.ToolTip>
+            <Border
+                BorderBrush="Gray"
+                BorderThickness="1"
+                ToolTip="{Binding ToolTip}">
+                <Label
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Content="{Binding Header}" />
             </Border>
         </HierarchicalDataTemplate>
+
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -149,8 +159,8 @@
             <treemap:TreeMaps
                 Grid.Column="2"
                 ItemTemplate="{StaticResource bindingDataTemplate}"
-                ItemsSource="{Binding AbonentBindingNodes}"
-                MaxDepth="4"
+                ItemsSource="{Binding TreeMapItems}"
+                MaxDepth="2"
                 TreeMapMode="Squarified"
                 ValuePropertyName="MetersCount"
                 Visibility="{Binding IsVisualizing, Converter={StaticResource BooleanToVisibilityConverter}}" />

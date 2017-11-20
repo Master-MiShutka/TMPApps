@@ -123,26 +123,33 @@ namespace TMP.WORK.AramisChetchiki.ViewModel
                     String.IsNullOrWhiteSpace(i.ТП) |
                     String.IsNullOrWhiteSpace(i.Фидер04)
                     ).ToList();
-                AbonentBindingNodes = new AbonentBindingNode() {
+                AbonentBindingNode root = new AbonentBindingNode() {
                     Type = AbonentBindingNode.NodeType.Departament,
                     Header = "РЭС",
                     Meters = new List<Meter>(meters),
                     MetersCount = meters.Count,
                     NotBindingMetersCount = list.Count };
                 if (list.Count > 0)
-                    AbonentBindingNodes.Children.Add(new AbonentBindingNode(
+                    root.Children.Add(new AbonentBindingNode(
                         "Не полная привязка",
                         list,
                         AbonentBindingNode.NodeType.Group
                         ));
-                list = meters.Where(i => String.IsNullOrWhiteSpace(i.Подстанция)).ToList();
-                if (list.Count > 0)
-                    AbonentBindingNodes.Children.Add(new AbonentBindingNode(
-                        empty,
-                        list,
-                        AbonentBindingNode.NodeType.Substation
-                        ));
-                AbonentBindingNodes.Children.AddRange(nodes);
+
+                if (nodes.Cast<AbonentBindingNode>().Where(i => String.Equals(i.Header, empty)).Count() == 0)
+                {
+                    list = meters.Where(i => String.IsNullOrWhiteSpace(i.Подстанция)).ToList();
+                    if (list.Count > 0)
+                        root.Children.Add(new AbonentBindingNode(
+                            empty,
+                            list,
+                            AbonentBindingNode.NodeType.Substation
+                            ));
+                }
+
+                root.Children.AddRange(nodes);
+
+                AbonentBindingNodes = root;
 
                 IsAnalizingData = false;
                 Status = null;
@@ -188,6 +195,7 @@ namespace TMP.WORK.AramisChetchiki.ViewModel
             {
                 _abonentBindingNodes = value;
                 RaisePropertyChanged("AbonentBindingNodes");
+                BuildTreeMapItems();
             }
         }
 
@@ -200,6 +208,20 @@ namespace TMP.WORK.AramisChetchiki.ViewModel
                 _selectedAbonentBindingNode = value;
                 RaisePropertyChanged("SelectedAbonentBindingNode");
                 PrepareMetersList();
+                BuildTreeMapItems();
+            }
+        }
+
+        public int TotalMetersCount => SelectedAbonentBindingNode == null ? (AbonentBindingNodes == null ? 0 : AbonentBindingNodes.MetersCount) : SelectedAbonentBindingNode.MetersCount;
+
+        private ICollection<TreeMapItem> _treeMapItems = null;
+        public ICollection<TreeMapItem> TreeMapItems
+        {
+            get { return _treeMapItems; }
+            set
+            {
+                _treeMapItems = value;
+                RaisePropertyChanged("TreeMapItems");
             }
         }
 
@@ -208,6 +230,81 @@ namespace TMP.WORK.AramisChetchiki.ViewModel
             if (_selectedAbonentBindingNode != null)
             {
                 ListOfMeters = new List<Meter>(_selectedAbonentBindingNode.Meters);
+            }
+        }
+
+        private void BuildTreeMapItems()
+        {
+            if (AbonentBindingNodes == null)
+                return;
+            AbonentBindingNode source = null;
+            if (SelectedAbonentBindingNode == null)
+                source = AbonentBindingNodes;
+            else
+                source = SelectedAbonentBindingNode;
+
+            Func<IList<ICSharpCode.TreeView.SharpTreeNode>, ICollection<TreeMapItem>> recursiveBuild = null;
+            recursiveBuild = (nodes) =>
+            {
+                ICollection<TreeMapItem> result = new List<TreeMapItem>();
+                foreach (AbonentBindingNode node in nodes)
+                {
+                    TreeMapItem item = new TreeMapItem(node.Header, node.MetersCount);
+                    item.AddChildren(recursiveBuild(node.Children));
+                    result.Add(item);
+                }
+                return result;
+            };
+
+            TreeMapItems = recursiveBuild(source.Children);
+        }
+
+        public class TreeMapItem
+        {
+            public string Header { get; set; }
+            public int MetersCount { get; set; }
+            public ICollection<TreeMapItem> Children { get; private set; }
+
+            public TreeMapItem Parent { get; private set; }
+
+            public string ToolTip
+            {
+                get
+                {
+                    string result = string.Format("{0}\n{1} счётчиков", Header, MetersCount);
+                    TreeMapItem p = Parent;
+                    while (p != null)
+                    {
+                        result = p.Header + " \\ " + result;
+                        p = p.Parent;
+                    }
+                    return result;
+                }
+            }           
+
+            public TreeMapItem()
+            {
+                Children = new List<TreeMapItem>();
+            }
+            public TreeMapItem(string header, int metersCount) : this()
+            {
+                Parent = null;
+                Header = header;
+                MetersCount = metersCount;
+            }
+
+            public void AddChildren(IEnumerable<TreeMapItem> children)
+            {
+                foreach (TreeMapItem child in children)
+                {
+                    child.Parent = this;
+                    Children.Add(child);
+                }
+            }
+
+            public override string ToString()
+            {
+                return String.Format("TreeMapItem - {0}, count {1}", Header, MetersCount);
             }
         }
     }

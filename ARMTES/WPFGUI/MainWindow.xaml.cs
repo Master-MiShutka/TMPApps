@@ -57,12 +57,12 @@ namespace TMP.ARMTES
             if (null == obj) return;
             RoutedEventArgs args = obj as System.Windows.RoutedEventArgs;
             ArmtesElement element = null;
-            TreeViewItem tvi = null;
+            System.Windows.Controls.TreeViewItem tvi = null;
             if (null == args)
             {
-                if (obj is TreeViewItem)
+                if (obj is System.Windows.Controls.TreeViewItem)
                 {
-                    tvi = obj as TreeViewItem;
+                    tvi = obj as System.Windows.Controls.TreeViewItem;
                     if (tvi.Header is ArmtesElement)
                         element = tvi.Header as ArmtesElement;
                 }
@@ -80,7 +80,7 @@ namespace TMP.ARMTES
             else
             {
                 if (null == args.Source) return;
-                TreeViewItem treeViewItem = args.Source as System.Windows.Controls.TreeViewItem;
+                System.Windows.Controls.TreeViewItem treeViewItem = args.Source as System.Windows.Controls.TreeViewItem;
                 if (null == treeViewItem) return;
                 if (null == treeViewItem.Header) return;
                 element = treeViewItem.Header as ArmtesElement;
@@ -663,7 +663,7 @@ namespace TMP.ARMTES
                         }
                     }
 
-                    armtes.test("424014");
+                    //armtes.test("424014");
                 }
             }
         }
@@ -853,7 +853,7 @@ namespace TMP.ARMTES
         }
         private void TreeViewItem_Expanded(object sender, RoutedEventArgs e)
         {
-            TreeViewItem tvi = e.OriginalSource as TreeViewItem;
+            System.Windows.Controls.TreeViewItem tvi = e.OriginalSource as System.Windows.Controls.TreeViewItem;
             if (tvi != null)
             {
                 ExecuteExpandingCommand(tvi);

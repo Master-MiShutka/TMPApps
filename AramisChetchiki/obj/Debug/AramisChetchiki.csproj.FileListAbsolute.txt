@@ -26,7 +26,6 @@ Y:\Developer\CURRENT\TMPApps\AramisChetchiki\obj\Debug\Views\ChangesOfMetersView
 Y:\Developer\CURRENT\TMPApps\AramisChetchiki\obj\Debug\Windows\MainWindow.baml
 Y:\Developer\CURRENT\TMPApps\AramisChetchiki\obj\Debug\Windows\PreferencesWindow.baml
 Y:\Developer\CURRENT\TMPApps\AramisChetchiki\obj\Debug\Windows\PrintPreviewView.baml
-Y:\Developer\CURRENT\TMPApps\AramisChetchiki\obj\Debug\Themes\generic.baml
 Y:\Developer\CURRENT\TMPApps\AramisChetchiki\obj\Debug\Views\SummaryInfoView.baml
 Y:\Developer\CURRENT\TMPApps\AramisChetchiki\obj\Debug\Windows\SelectFieldsAndSortCollectionViewWindow.baml
 Y:\Developer\CURRENT\TMPApps\AramisChetchiki\obj\Debug\Windows\ViewCollectionWindow.baml
@@ -45,3 +44,6 @@ Y:\Developer\CURRENT\TMPApps\AramisChetchiki\obj\Debug\Views\AbonentsBindingView
 Y:\Developer\CURRENT\TMPApps\AramisChetchiki\obj\Debug\Views\MetrologyView.g.cs
 Y:\Developer\CURRENT\TMPApps\AramisChetchiki\obj\Debug\Views\AbonentsBindingView.baml
 Y:\Developer\CURRENT\TMPApps\AramisChetchiki\obj\Debug\Views\MetrologyView.baml
+Y:\Developer\CURRENT\TMPApps\out\Debug\Aramis\AramisChetchiki.exe.config
+Y:\Developer\CURRENT\TMPApps\out\Debug\Aramis\AramisChetchiki.exe
+Y:\Developer\CURRENT\TMPApps\out\Debug\Aramis\AramisChetchiki.pdb

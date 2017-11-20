@@ -32,6 +32,10 @@ namespace TMP.UI.Controls.WPF.TreeMap
             DefaultStyleKeyProperty.OverrideMetadata(typeof(TreeMaps), new FrameworkPropertyMetadata(typeof(TreeMaps)));
         }
 
+        public TreeMaps()
+        {
+        }
+
         #endregion
 
         #region properties
