@@ -54,17 +54,21 @@
     <Reference Include="ExcelApi, Version=1.7.3.0, Culture=neutral, PublicKeyToken=9084b9221296229e, processorArchitecture=MSIL">
       <HintPath>..\packages\NetOffice.Excel.1.7.3.0\lib\net40\ExcelApi.dll</HintPath>
       <EmbedInteropTypes>False</EmbedInteropTypes>
+      <Private>True</Private>
     </Reference>
     <Reference Include="GongSolutions.Wpf.DragDrop, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\gong-wpf-dragdrop.1.1.0\lib\net40\GongSolutions.Wpf.DragDrop.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="NetOffice, Version=1.7.3.0, Culture=neutral, PublicKeyToken=297f57b43ae7c1de, processorArchitecture=MSIL">
       <HintPath>..\packages\NetOffice.Core.1.7.3.0\lib\net40\NetOffice.dll</HintPath>
       <EmbedInteropTypes>False</EmbedInteropTypes>
+      <Private>True</Private>
     </Reference>
     <Reference Include="OfficeApi, Version=1.7.3.0, Culture=neutral, PublicKeyToken=a39beb0835c43c8e, processorArchitecture=MSIL">
       <HintPath>..\packages\NetOffice.Core.1.7.3.0\lib\net40\OfficeApi.dll</HintPath>
       <EmbedInteropTypes>False</EmbedInteropTypes>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Ookii.Dialogs.Wpf, Version=1.0.0.0, Culture=neutral, PublicKeyToken=0c15020868fd6249, processorArchitecture=MSIL">
       <HintPath>..\packages\Ookii.Dialogs.1.0\lib\net35\Ookii.Dialogs.Wpf.dll</HintPath>
@@ -84,6 +88,7 @@
     <Reference Include="PresentationUI, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\Windows\Microsoft.NET\assembly\GAC_MSIL\PresentationUI\v4.0_4.0.0.0__31bf3856ad364e35\PresentationUI.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="ReachFramework" />
     <Reference Include="System" />
@@ -299,29 +304,34 @@
     <Resource Include="MAINICON.ico" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\ExtendedWPFToolkitSolution\Src\Xceed.Wpf.DataGrid\Xceed.Wpf.DataGrid.csproj">
+    <ProjectReference Include="..\ExtendedWPFToolkitSolution\Src\Xceed.Wpf.DataGrid\Xceed.Wpf.DataGrid.csproj">
       <Project>{63648392-6ce9-4a60-96d4-f9fd718d29b0}</Project>
       <Name>Xceed.Wpf.DataGrid</Name>
     </ProjectReference>
     <ProjectReference Include="..\LIBRARY\DBF\DBF.csproj">
       <Project>{71a88ea2-06d4-444e-8bda-8b399bcb8dc4}</Project>
       <Name>DBF</Name>
+      <Private>True</Private>
     </ProjectReference>
     <ProjectReference Include="..\LIBRARY\Extensions\TMP.Extensions.csproj">
       <Project>{3f72fbe4-5f95-43fd-9029-3cc145c978b4}</Project>
       <Name>TMP.Extensions</Name>
+      <Private>True</Private>
     </ProjectReference>
     <ProjectReference Include="..\LIBRARY\ItemsFilter\ItemsFilter.csproj">
       <Project>{7ed20c3a-c707-43ac-b085-f353869b061b}</Project>
       <Name>ItemsFilter</Name>
+      <Private>True</Private>
     </ProjectReference>
     <ProjectReference Include="..\LIBRARY\SharpTreeView\ICSharpCode.TreeView.csproj">
       <Project>{dde2a481-8271-4eac-a330-8fa6a38d13d1}</Project>
       <Name>ICSharpCode.TreeView</Name>
+      <Private>True</Private>
     </ProjectReference>
     <ProjectReference Include="..\LIBRARY\ui.controls.wpf\ui.controls.wpf.csproj">
       <Project>{5c7f0d6e-3247-4e12-bfe7-5fb05842f6f3}</Project>
       <Name>ui.controls.wpf</Name>
+      <Private>True</Private>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

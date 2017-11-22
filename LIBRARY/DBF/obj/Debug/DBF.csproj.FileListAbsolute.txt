@@ -20,7 +20,6 @@ T:\! Aramis\TM.WORK.Aramis\DBF\obj\Debug\DBF.dll
 T:\! Aramis\TM.WORK.Aramis\DBF\obj\Debug\DBF.pdb
 Y:\Developer\CURRENT\TMPApps\out\Debug\Libs\DBF.dll
 Y:\Developer\CURRENT\TMPApps\out\Debug\Libs\DBF.pdb
-Y:\Developer\CURRENT\TMPApps\LIBRARY\DBF\obj\Debug\DBF.csprojResolveAssemblyReference.cache
 Y:\Developer\CURRENT\TMPApps\LIBRARY\DBF\obj\Debug\DBF.csproj.CoreCompileInputs.cache
 Y:\Developer\CURRENT\TMPApps\LIBRARY\DBF\obj\Debug\DBF.dll
 Y:\Developer\CURRENT\TMPApps\LIBRARY\DBF\obj\Debug\DBF.pdb

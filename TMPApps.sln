@@ -131,7 +131,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmallEngineDataViewer", "AR
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ui.controls.wpf", "LIBRARY\ui.controls.wpf\ui.controls.wpf.csproj", "{5C7F0D6E-3247-4E12-BFE7-5FB05842F6F3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xceed.Wpf.DataGrid", "..\ExtendedWPFToolkitSolution\Src\Xceed.Wpf.DataGrid\Xceed.Wpf.DataGrid.csproj", "{63648392-6CE9-4A60-96D4-F9FD718D29B0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xceed.Wpf.DataGrid", "ExtendedWPFToolkitSolution\Src\Xceed.Wpf.DataGrid\Xceed.Wpf.DataGrid.csproj", "{63648392-6CE9-4A60-96D4-F9FD718D29B0}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Aramis", "Aramis", "{0AE8770F-5FC3-458B-A193-32A884D517D7}"
 EndProject

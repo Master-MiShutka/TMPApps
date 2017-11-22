@@ -39,7 +39,6 @@ T:\! Aramis\TM.WORK.Aramis\ItemsFilter\obj\Debug\ItemsFilter.dll
 T:\! Aramis\TM.WORK.Aramis\ItemsFilter\obj\Debug\ItemsFilter.pdb
 Y:\Developer\CURRENT\TMPApps\out\Debug\Libs\ItemsFilter.dll
 Y:\Developer\CURRENT\TMPApps\out\Debug\Libs\ItemsFilter.pdb
-Y:\Developer\CURRENT\TMPApps\LIBRARY\ItemsFilter\obj\Debug\ItemsFilter.csprojResolveAssemblyReference.cache
 Y:\Developer\CURRENT\TMPApps\LIBRARY\ItemsFilter\obj\Debug\GeneratedInternalTypeHelper.g.cs
 Y:\Developer\CURRENT\TMPApps\LIBRARY\ItemsFilter\obj\Debug\ItemsFilter_MarkupCompile.cache
 Y:\Developer\CURRENT\TMPApps\LIBRARY\ItemsFilter\obj\Debug\ItemsFilter_MarkupCompile.lref
