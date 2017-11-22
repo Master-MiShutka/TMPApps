@@ -7,7 +7,7 @@
     xmlns:xcdg="clr-namespace:Xceed.Wpf.DataGrid;assembly=Xceed.Wpf.DataGrid"
     xmlns:xcdgv="clr-namespace:Xceed.Wpf.DataGrid.Views;assembly=Xceed.Wpf.DataGrid"
     Name="table"
-    AlternationCount="2"
+    AlternationCount="2" SelectionUnit="Cell"
     AutoCreateColumns="False"
     ReadOnly="True">
     <xcdg:DataGridControl.Resources>
