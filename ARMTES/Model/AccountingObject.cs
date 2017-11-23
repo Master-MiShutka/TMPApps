@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Xml.Serialization;
 
-using TMP.Shared;
-
 namespace TMP.ARMTES.Model
 {
     [XmlRoot("AccountingObject")]
@@ -23,7 +21,7 @@ namespace TMP.ARMTES.Model
         public string City
         {
             get { return _city; }
-            set { SetProp<string>(ref _city, value, "City"); }
+            set { SetProperty<string>(ref _city, value, "City"); }
         }
         /// <summary>
         /// № договора
@@ -31,7 +29,7 @@ namespace TMP.ARMTES.Model
         public string Contract
         {
             get { return _contract; }
-            set { SetProp<string>(ref _contract, value, "Contract"); }
+            set { SetProperty<string>(ref _contract, value, "Contract"); }
         }
         /// <summary>
         /// Наименование абонента
@@ -39,7 +37,7 @@ namespace TMP.ARMTES.Model
         public string Subscriber
         {
             get { return _subscriber; }
-            set { SetProp<string>(ref _subscriber, value, "Subscriber"); }
+            set { SetProperty<string>(ref _subscriber, value, "Subscriber"); }
         }
         /// <summary>
         /// Объект учета
@@ -47,7 +45,7 @@ namespace TMP.ARMTES.Model
         public string Name
         {
             get { return _name; }
-            set { SetProp<string>(ref _name, value, "Name"); }
+            set { SetProperty<string>(ref _name, value, "Name"); }
         }
         /// <summary>
         /// Номер ТП
@@ -55,19 +53,19 @@ namespace TMP.ARMTES.Model
         public string Tp
         {
             get { return _tp; }
-            set { SetProp<string>(ref _tp, value, "Tp"); }
+            set { SetProperty<string>(ref _tp, value, "Tp"); }
         }
         public string TpLink { get; set; }
 
         public List<Counter> Counters
         {
             get { return _counters; }
-            set { SetProp<List<Counter>>(ref _counters, value, "Counters"); }
+            set { SetProperty<List<Counter>>(ref _counters, value, "Counters"); }
         }
         public string Description
         {
             get { return _description; }
-            set { SetProp<string>(ref _description, value, "Description"); }
+            set { SetProperty<string>(ref _description, value, "Description"); }
         }
 
         [XmlIgnore]

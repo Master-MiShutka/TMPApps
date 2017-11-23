@@ -6,10 +6,16 @@
     xmlns:reskeys="clr-namespace:TMPApplication.Themes"
     xmlns:shell="clr-namespace:MS.Windows.Shell;assembly=WindowsShell">
 
+<<<<<<< HEAD
     <Style TargetType="{x:Type local:WindowButtonCommands}">
         <Style.Resources>
             <BooleanToVisibilityConverter x:Key="booleanToVisibilityConverter " />
         </Style.Resources>
+=======
+    <BooleanToVisibilityConverter x:Key="booleanToVisibilityConverter" />
+
+    <Style TargetType="{x:Type local:WindowButtonCommands}">
+>>>>>>> 5913ea3033c1d9573d4f918e829630390915727c
         <Setter Property="Foreground" Value="{DynamicResource {x:Static reskeys:ResourceKeys.BlackBrushKey}}" />
         <Setter Property="TextBlock.FontFamily" Value="Marlett" />
         <Setter Property="TextBlock.FontSize" Value="{DynamicResource {x:Static reskeys:ResourceKeys.SystemButtonFontSizeKey}}" />

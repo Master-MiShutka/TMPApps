@@ -58,15 +58,6 @@
     <Compile Include="Utils.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\LIBRARY\Logger\Logger.csproj">
-      <Project>{04ce65d3-1dbf-4a95-8b6e-44ec2c896d00}</Project>
-      <Name>Logger</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\LIBRARY\MsgBox\MsgBox.csproj">
-      <Project>{2f8ef004-1e7a-429d-863b-5a062a90705a}</Project>
-      <Name>MsgBox</Name>
-      <Private>True</Private>
-    </ProjectReference>
     <ProjectReference Include="..\..\LIBRARY\NetHelper\NetHelper.csproj">
       <Project>{e00c55d0-971a-4d59-8c91-e7a4d79d50e8}</Project>
       <Name>NetHelper</Name>

@@ -1,0 +1,30 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="TMP.WORK.AramisChetchiki.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="FontSize" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">14</Value>
+    </Setting>
+    <Setting Name="AramisPath" Type="System.String" Scope="User">
+      <Value Profile="(Default)">e:\aramis\DiskF\OSHM\aramis</Value>
+    </Setting>
+    <Setting Name="DataStorePath" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="Theme" Type="TMP.WORK.AramisChetchiki.ViewModel.Theme" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="ChangesOfMetersFields" Type="System.Collections.ObjectModel.ObservableCollection&lt;Xceed.Wpf.DataGrid.TableField&gt;" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="SelectedSummaryView" Type="TMP.WORK.AramisChetchiki.Model.InfoViewType" Scope="User">
+      <Value Profile="(Default)">ViewAsList</Value>
+    </Setting>
+    <Setting Name="Departaments" Type="System.Collections.ObjectModel.ObservableCollection&lt;TMP.WORK.AramisChetchiki.Model.Departament&gt;" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="SummaryInfoFields" Type="System.Collections.ObjectModel.ObservableCollection&lt;Xceed.Wpf.DataGrid.TableField&gt;" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+  </Settings>
+</SettingsFile>

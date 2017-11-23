@@ -1,0 +1,18 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="TMP.ARMTES.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="ArmtesServerAddress" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">http://10.182.3.19/ARMTES/</Value>
+    </Setting>
+    <Setting Name="AmperWebService" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">http://10.182.5.13/esbyt/hs/web/</Value>
+    </Setting>
+    <Setting Name="TableSettings" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="DataViews" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+  </Settings>
+</SettingsFile>

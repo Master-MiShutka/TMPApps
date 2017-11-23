@@ -57,12 +57,12 @@ namespace TMP.ARMTES
             if (null == obj) return;
             RoutedEventArgs args = obj as System.Windows.RoutedEventArgs;
             ArmtesElement element = null;
-            TreeViewItem tvi = null;
+            System.Windows.Controls.TreeViewItem tvi = null;
             if (null == args)
             {
-                if (obj is TreeViewItem)
+                if (obj is System.Windows.Controls.TreeViewItem)
                 {
-                    tvi = obj as TreeViewItem;
+                    tvi = obj as System.Windows.Controls.TreeViewItem;
                     if (tvi.Header is ArmtesElement)
                         element = tvi.Header as ArmtesElement;
                 }
@@ -80,7 +80,7 @@ namespace TMP.ARMTES
             else
             {
                 if (null == args.Source) return;
-                TreeViewItem treeViewItem = args.Source as System.Windows.Controls.TreeViewItem;
+                System.Windows.Controls.TreeViewItem treeViewItem = args.Source as System.Windows.Controls.TreeViewItem;
                 if (null == treeViewItem) return;
                 if (null == treeViewItem.Header) return;
                 element = treeViewItem.Header as ArmtesElement;
@@ -370,6 +370,51 @@ namespace TMP.ARMTES
             {
                 bool result = await Task.Run<bool>(() =>
                 {
+                    /*PageResult<AllTariffsExportIndicationViewItem> pageResult = armtes.GetSmallEngineExportIndications(MainViewModel.Instance.StartDate);
+                    if (pageResult != null)
+                    {
+                        List<AllTariffsExportIndicationViewItem> items = pageResult.Items;                        
+                        if (items != null)
+                        {
+                            var accounts = armtes.GetPersonalAccounts();
+                            if (accounts != null)
+                            {
+                                var list = accounts.Items;
+                                var accountsReses = list.GroupBy(i => i.ResName);
+
+                                var entp = armtes.GetEnterprises();
+                                var enterprises = entp.Items;
+
+                                var flat = enterprises.SelectMany(i => i.ChildEnterprises);
+
+                                var fes = flat.Where(i => i.EnterpriseName == "ОЭС");
+                                var reses = fes.SelectMany(i => i.ChildEnterprises);
+
+                                foreach (var res in reses)
+                                {
+                                    var resAccounts = accountsReses.Where(a => a.Key == res.EnterpriseName).Select(i => i.ToList()).ToList();
+                                    if (resAccounts != null && resAccounts.Count > 0)
+                                    foreach (var item in resAccounts[0])
+                                    {
+                                        var viewitem = items.Where(i => i.PersonalAccount == item.PersonalAccount).ToList();
+                                        if (viewitem != null)
+                                            {
+                                                ;
+                                            }
+                                        else
+                                            {
+                                                ;
+                                            }
+                                    }
+                                }
+
+                            }
+
+
+                            var c = pageResult.Count;
+                        }
+                    }*/
+
                     data = armtes.SelectElement(
                         MainViewModel.Instance.SelectedElement.Value,
                         MainViewModel.Instance.StartDate,
@@ -418,10 +463,10 @@ namespace TMP.ARMTES
 
                         int processed = 0;
                         object sync = new object();
-                        Parallel.For(0, collectorsCount, (i, state) =>
+                        ParallelOptions po = new ParallelOptions();
+                        po.MaxDegreeOfParallelism = 4;
+                        Parallel.For(0, collectorsCount, po, (i, state) =>
                         {
-                            Dispatcher.BeginInvoke(new Action(() => SetAppStatus(String.Format(info, 100 * processed / collectorsCount))), System.Windows.Threading.DispatcherPriority.Send);
-
                             if (state.ShouldExitCurrentIteration)
                             {
                                 if (state.LowestBreakIteration < i)
@@ -450,7 +495,7 @@ namespace TMP.ARMTES
                                 int attempts = 1;
                                 while (data == null && attempts <= 3)
                                 {
-                                    data = armtes.ViewDevice(
+                                    data = armtes.ViewObject(
                                     obj.Id,
                                     MainViewModel.Instance.SelectedElement.Value,
                                     MainViewModel.Instance.StartDate,
@@ -482,7 +527,7 @@ namespace TMP.ARMTES
                                         attempts = 1;
                                         while (data == null && attempts <= 3)
                                         {
-                                            data = armtes.ViewCounter(
+                                            data = armtes.ViewMeter(
                                                 counter.Id,
                                                 MainViewModel.Instance.SelectedElement.Value,
                                                 counter.ParentId,
@@ -510,6 +555,7 @@ namespace TMP.ARMTES
                             lock (sync)
                             {
                                 processed++;
+                                Dispatcher.BeginInvoke(new Action(() => SetAppStatus(String.Format(info, 100 * processed / collectorsCount))), System.Windows.Threading.DispatcherPriority.Send);
                             }
                         });
 
@@ -616,6 +662,8 @@ namespace TMP.ARMTES
                             CheckHostAvailablity();
                         }
                     }
+
+                    //armtes.test("424014");
                 }
             }
         }
@@ -805,7 +853,7 @@ namespace TMP.ARMTES
         }
         private void TreeViewItem_Expanded(object sender, RoutedEventArgs e)
         {
-            TreeViewItem tvi = e.OriginalSource as TreeViewItem;
+            System.Windows.Controls.TreeViewItem tvi = e.OriginalSource as System.Windows.Controls.TreeViewItem;
             if (tvi != null)
             {
                 ExecuteExpandingCommand(tvi);
@@ -817,6 +865,7 @@ namespace TMP.ARMTES
             logger.TraceEvent(System.Diagnostics.TraceEventType.Information, 0, "Program start.");
 
             CheckARMTESHostAvailablity();
+
         }
 
         private void FilterButtons_Click(object sender, RoutedEventArgs e)
@@ -902,10 +951,10 @@ namespace TMP.ARMTES
                             case ProfileType.Current:
                                 xmlWriter.WriteComment(" * параметр: текущие показания");
                                 break;
-                            case ProfileType.BeginningOfTheDay:
+                            case ProfileType.Days:
                                 xmlWriter.WriteComment(" * параметр: показания на начало суток");
                                 break;
-                            case ProfileType.BeginningOfTheMonth:
+                            case ProfileType.Months:
                                 xmlWriter.WriteComment(" * параметр: показания на начало месяца");
                                 break;
                         }

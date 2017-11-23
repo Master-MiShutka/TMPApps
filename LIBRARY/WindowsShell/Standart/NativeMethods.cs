@@ -17,7 +17,7 @@
 
     #region Native Values
 
-    internal static class Win32Value
+    public static class Win32Value
     {
         public const uint MAX_PATH = 260;
         public const uint INFOTIPSIZE = 1024;
@@ -32,7 +32,7 @@
     /// HIGHCONTRAST flags
     /// </summary>
     [Flags]
-    internal enum HCF
+    public enum HCF
     {
         HIGHCONTRASTON = 0x00000001,
         AVAILABLE = 0x00000002,
@@ -43,7 +43,7 @@
         HOTKEYAVAILABLE = 0x00000040,
     }
 
-    internal enum DROPEFFECT
+    public enum DROPEFFECT
     {
         NONE = 0,
         COPY = 1,
@@ -55,7 +55,7 @@
     /// <summary>
     /// DROPIMAGE_*
     /// </summary>
-    internal enum DROPIMAGETYPE
+    public enum DROPIMAGETYPE
     {
         INVALID = -1,
         NONE = 0,
@@ -72,7 +72,7 @@
     /// <summary>
     /// BITMAPINFOHEADER Compression type.  BI_*.
     /// </summary>
-    internal enum BI
+    public enum BI
     {
         RGB = 0,
     }
@@ -80,7 +80,7 @@
     /// <summary>
     /// CombingRgn flags.  RGN_*
     /// </summary>
-    internal enum RGN
+    public enum RGN
     {
         /// <summary>
         /// Creates the intersection of the two combined regions.
@@ -108,7 +108,7 @@
         COPY = 5,
     }
 
-    internal enum CombineRgnResult
+    public enum CombineRgnResult
     {
         ERROR = 0,
         NULLREGION = 1,
@@ -119,7 +119,7 @@
     /// <summary>
     /// For IWebBrowser2.  OLECMDEXECOPT_*
     /// </summary>
-    internal enum OLECMDEXECOPT
+    public enum OLECMDEXECOPT
     {
         DODEFAULT = 0,
         PROMPTUSER = 1,
@@ -130,7 +130,7 @@
     /// <summary>
     /// For IWebBrowser2.  OLECMDF_*
     /// </summary>
-    internal enum OLECMDF
+    public enum OLECMDF
     {
         SUPPORTED = 1,
         ENABLED = 2,
@@ -143,7 +143,7 @@
     /// <summary>
     /// For IWebBrowser2.  OLECMDID_*
     /// </summary>
-    internal enum OLECMDID
+    public enum OLECMDID
     {
         OPEN = 1,
         NEW = 2,
@@ -207,7 +207,7 @@
     /// <summary>
     /// For IWebBrowser2.  READYSTATE_*
     /// </summary>
-    internal enum READYSTATE
+    public enum READYSTATE
     {
         UNINITIALIZED = 0,
         LOADING = 1,
@@ -219,7 +219,7 @@
     /// <summary>
     /// DATAOBJ_GET_ITEM_FLAGS.  DOGIF_*.
     /// </summary>
-    internal enum DOGIF
+    public enum DOGIF
     {
         DEFAULT = 0x0000,
         TRAVERSE_LINK = 0x0001,    // if the item is a link get the target
@@ -228,14 +228,14 @@
         ONLY_IF_ONE = 0x0008,    // only return the item if there is one item in the array
     }
 
-    internal enum DWM_SIT
+    public enum DWM_SIT
     {
         None,
         DISPLAYFRAME = 1,
     }
 
     [Flags]
-    internal enum ErrorModes
+    public enum ErrorModes
     {
         /// <summary>Use the system default, which is to display all error dialog boxes.</summary>
         Default = 0x0,
@@ -270,7 +270,7 @@
     /// <summary>
     /// Non-client hit test values, HT*
     /// </summary>
-    internal enum HT
+    public enum HT
     {
         ERROR = -2,
         TRANSPARENT = -1,
@@ -301,7 +301,7 @@
     /// <summary>
     /// GetClassLongPtr values, GCLP_*
     /// </summary>
-    internal enum GCLP
+    public enum GCLP
     {
         HBRBACKGROUND = -10,
     }
@@ -309,7 +309,7 @@
     /// <summary>
     /// GetWindowLongPtr values, GWL_*
     /// </summary>
-    internal enum GWL
+    public enum GWL
     {
         WNDPROC = (-4),
         HINSTANCE = (-6),
@@ -323,7 +323,7 @@
     /// <summary>
     /// SystemMetrics.  SM_*
     /// </summary>
-    internal enum SM
+    public enum SM
     {
         CXSCREEN = 0,
         CYSCREEN = 1,
@@ -414,7 +414,7 @@
     /// <summary>
     /// SystemParameterInfo values, SPI_*
     /// </summary>
-    internal enum SPI
+    public enum SPI
     {
         GETBEEP = 0x0001,
         SETBEEP = 0x0002,
@@ -654,7 +654,7 @@
     /// SystemParameterInfo flag values, SPIF_*
     /// </summary>
     [Flags]
-    internal enum SPIF
+    public enum SPIF
     {
         None = 0,
         UPDATEINIFILE = 0x01,
@@ -662,7 +662,7 @@
     }
 
     [Flags]
-    internal enum STATE_SYSTEM
+    public enum STATE_SYSTEM
     {
         UNAVAILABLE = 0x00000001, // Disabled
         SELECTED = 0x00000002,
@@ -698,7 +698,7 @@
         VALID = 0x3FFFFFFF,
     }
 
-    internal enum StockObject : int
+    public enum StockObject : int
     {
         WHITE_BRUSH = 0,
         LTGRAY_BRUSH = 1,
@@ -718,7 +718,7 @@
     /// CS_*
     /// </summary>
     [Flags]
-    internal enum CS : uint
+    public enum CS : uint
     {
         VREDRAW = 0x0001,
         HREDRAW = 0x0002,
@@ -739,7 +739,7 @@
     /// WindowStyle values, WS_*
     /// </summary>
     [Flags]
-    internal enum WS : uint
+    public enum WS : uint
     {
         OVERLAPPED = 0x00000000,
         POPUP = 0x80000000,
@@ -776,7 +776,7 @@
     /// <summary>
     /// Window message values, WM_*
     /// </summary>
-    internal enum WM
+    public enum WM
     {
         NULL = 0x0000,
         CREATE = 0x0001,
@@ -939,7 +939,7 @@
     /// Window style extended values, WS_EX_*
     /// </summary>
     [Flags]
-    internal enum WS_EX : uint
+    public enum WS_EX : uint
     {
         None = 0,
         DLGMODALFRAME = 0x00000001,
@@ -973,7 +973,7 @@
     /// <summary>
     /// GetDeviceCaps nIndex values.
     /// </summary>
-    internal enum DeviceCap
+    public enum DeviceCap
     {
         /// <summary>Number of bits per pixel
         /// </summary>
@@ -995,7 +995,7 @@
         LOGPIXELSY = 90,
     }
 
-    internal enum FO : int
+    public enum FO : int
     {
         MOVE = 0x0001,
         COPY = 0x0002,
@@ -1006,7 +1006,7 @@
     /// <summary>
     /// "FILEOP_FLAGS", FOF_*.
     /// </summary>
-    internal enum FOF : ushort
+    public enum FOF : ushort
     {
         MULTIDESTFILES = 0x0001,
         CONFIRMMOUSE = 0x0002,
@@ -1030,7 +1030,7 @@
     /// EnableMenuItem uEnable values, MF_*
     /// </summary>
     [Flags]
-    internal enum MF : uint
+    public enum MF : uint
     {
         /// <summary>
         /// Possible return value for EnableMenuItem
@@ -1044,7 +1044,7 @@
     }
 
     /// <summary>Specifies the type of visual style attribute to set on a window.</summary>
-    internal enum WINDOWTHEMEATTRIBUTETYPE : uint
+    public enum WINDOWTHEMEATTRIBUTETYPE : uint
     {
         /// <summary>Non-client area window attributes will be set.</summary>
         WTA_NONCLIENT = 1,
@@ -1053,7 +1053,7 @@
     /// <summary>
     /// DWMFLIP3DWINDOWPOLICY.  DWMFLIP3D_*
     /// </summary>
-    internal enum DWMFLIP3D
+    public enum DWMFLIP3D
     {
         DEFAULT,
         EXCLUDEBELOW,
@@ -1064,7 +1064,7 @@
     /// <summary>
     /// DWMNCRENDERINGPOLICY. DWMNCRP_*
     /// </summary>
-    internal enum DWMNCRP
+    public enum DWMNCRP
     {
         USEWINDOWSTYLE,
         DISABLED,
@@ -1075,7 +1075,7 @@
     /// <summary>
     /// DWMWINDOWATTRIBUTE.  DWMWA_*
     /// </summary>
-    internal enum DWMWA
+    public enum DWMWA
     {
         NCRENDERING_ENABLED = 1,
         NCRENDERING_POLICY,
@@ -1100,7 +1100,7 @@
     /// WindowThemeNonClientAttributes
     /// </summary>
     [Flags]
-    internal enum WTNCA : uint
+    public enum WTNCA : uint
     {
         /// <summary>Prevents the window caption from being drawn.</summary>
         NODRAWCAPTION = 0x00000001,
@@ -1122,7 +1122,7 @@
     /// SetWindowPos options
     /// </summary>
     [Flags]
-    internal enum SWP
+    public enum SWP
     {
         ASYNCWINDOWPOS = 0x4000,
         DEFERERASE = 0x2000,
@@ -1144,7 +1144,7 @@
     /// <summary>
     /// ShowWindow options
     /// </summary>
-    internal enum SW
+    public enum SW
     {
         HIDE = 0,
         SHOWNORMAL = 1,
@@ -1162,7 +1162,7 @@
         FORCEMINIMIZE = 11,
     }
 
-    internal enum SC
+    public enum SC
     {
         SIZE = 0xF000,
         MOVE = 0xF010,
@@ -1197,7 +1197,7 @@
     /// <summary>
     /// GDI+ Status codes
     /// </summary>
-    internal enum Status
+    public enum Status
     {
         Ok = 0,
         GenericError = 1,
@@ -1223,7 +1223,7 @@
         ProfileNotFound = 21,
     }
 
-    internal enum MOUSEEVENTF : int
+    public enum MOUSEEVENTF : int
     {
         //mouse event constants
         LEFTDOWN = 2,
@@ -1234,7 +1234,7 @@
     /// <summary>
     /// MSGFLT_*.  New in Vista.  Realiased in Windows 7.
     /// </summary>
-    internal enum MSGFLT
+    public enum MSGFLT
     {
         // Win7 versions of this enum:
         RESET = 0,
@@ -1247,7 +1247,7 @@
         // REMOVE = 2,
     }
 
-    internal enum MSGFLTINFO
+    public enum MSGFLTINFO
     {
         NONE = 0,
         ALREADYALLOWED_FORWND = 1,
@@ -1255,7 +1255,7 @@
         ALLOWED_HIGHER = 3,
     }
 
-    internal enum INPUT_TYPE : uint
+    public enum INPUT_TYPE : uint
     {
         MOUSE = 0,
     }
@@ -1263,7 +1263,7 @@
     /// <summary>
     /// Shell_NotifyIcon messages.  NIM_*
     /// </summary>
-    internal enum NIM : uint
+    public enum NIM : uint
     {
         ADD = 0,
         MODIFY = 1,
@@ -1275,7 +1275,7 @@
     /// <summary>
     /// SHAddToRecentDocuments flags.  SHARD_*
     /// </summary>
-    internal enum SHARD
+    public enum SHARD
     {
         PIDL = 0x00000001,
         PATHA = 0x00000002,
@@ -1287,7 +1287,7 @@
     }
 
     [Flags]
-    internal enum SLGP
+    public enum SLGP
     {
         SHORTPATH = 0x1,
         UNCPRIORITY = 0x2,
@@ -1298,7 +1298,7 @@
     /// Shell_NotifyIcon flags.  NIF_*
     /// </summary>
     [Flags]
-    internal enum NIF : uint
+    public enum NIF : uint
     {
         MESSAGE = 0x0001,
         ICON = 0x0002,
@@ -1324,7 +1324,7 @@
     /// <summary>
     /// Shell_NotifyIcon info flags.  NIIF_*
     /// </summary>
-    internal enum NIIF
+    public enum NIIF
     {
         NONE = 0x00000000,
         INFO = 0x00000001,
@@ -1350,20 +1350,20 @@
     /// <summary>
     /// AC_*
     /// </summary>
-    internal enum AC : byte
+    public enum AC : byte
     {
         SRC_OVER = 0,
         SRC_ALPHA = 1,
     }
 
-    internal enum ULW
+    public enum ULW
     {
         ALPHA = 2,
         COLORKEY = 1,
         OPAQUE = 4,
     }
 
-    internal enum WVR
+    public enum WVR
     {
         ALIGNTOP = 0x0010,
         ALIGNLEFT = 0x0020,
@@ -1375,19 +1375,19 @@
         REDRAW = HREDRAW | VREDRAW,
     }
 
-    internal enum DSH
+    public enum DSH
     {
         ALLOWDROPDESCRIPTIONTEXT = 1,
     }
 
-    internal enum MonitorOptions : uint
+    public enum MonitorOptions : uint
     {
         MONITOR_DEFAULTTONULL = 0x00000000,
         MONITOR_DEFAULTTOPRIMARY = 0x00000001,
         MONITOR_DEFAULTTONEAREST = 0x00000002
     }
 
-    internal enum ABEdge
+    public enum ABEdge
     {
         ABE_LEFT = 0,
         ABE_TOP = 1,
@@ -1395,7 +1395,7 @@
         ABE_BOTTOM = 3
     }
 
-    internal enum ABMsg
+    public enum ABMsg
     {
         ABM_NEW = 0,
         ABM_REMOVE = 1,
@@ -1414,7 +1414,7 @@
 
     #region SafeHandles
 
-    internal sealed class SafeFindHandle : SafeHandleZeroOrMinusOneIsInvalid
+    public sealed class SafeFindHandle : SafeHandleZeroOrMinusOneIsInvalid
     {
         [SecurityCritical]
         private SafeFindHandle() : base(true) { }
@@ -1425,7 +1425,7 @@
         }
     }
 
-    internal sealed class SafeDC : SafeHandleZeroOrMinusOneIsInvalid
+    public sealed class SafeDC : SafeHandleZeroOrMinusOneIsInvalid
     {
         private static class NativeMethods
         {
@@ -1594,7 +1594,7 @@
         }
     }
 
-    internal sealed class SafeHBITMAP : SafeHandleZeroOrMinusOneIsInvalid
+    public sealed class SafeHBITMAP : SafeHandleZeroOrMinusOneIsInvalid
     {
         private SafeHBITMAP()
             : base(true)
@@ -1608,7 +1608,7 @@
         }
     }
 
-    internal sealed class SafeGdiplusStartupToken : SafeHandleZeroOrMinusOneIsInvalid
+    public sealed class SafeGdiplusStartupToken : SafeHandleZeroOrMinusOneIsInvalid
     {
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         private SafeGdiplusStartupToken(IntPtr ptr)
@@ -1640,7 +1640,7 @@
         }
     }
 
-    internal sealed class SafeConnectionPointCookie : SafeHandleZeroOrMinusOneIsInvalid
+    public sealed class SafeConnectionPointCookie : SafeHandleZeroOrMinusOneIsInvalid
     {
         private IConnectionPoint _cp;
         // handle holds the cookie value.
@@ -1717,7 +1717,7 @@
     #region Native Types
 
     [StructLayout(LayoutKind.Sequential)]
-    internal struct BLENDFUNCTION
+    public struct BLENDFUNCTION
     {
         // Must be AC_SRC_OVER
         public AC BlendOp;
@@ -1733,7 +1733,7 @@
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    internal struct HIGHCONTRAST
+    public struct HIGHCONTRAST
     {
         public int cbSize;
         public HCF dwFlags;
@@ -1744,7 +1744,7 @@
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    internal struct RGBQUAD
+    public struct RGBQUAD
     {
         public byte rgbBlue;
         public byte rgbGreen;
@@ -1753,7 +1753,7 @@
     }
 
     [StructLayout(LayoutKind.Sequential, Pack = 2)]
-    internal struct BITMAPINFOHEADER
+    public struct BITMAPINFOHEADER
     {
         public int biSize;
         public int biWidth;
@@ -1769,7 +1769,7 @@
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    internal struct BITMAPINFO
+    public struct BITMAPINFO
     {
         public BITMAPINFOHEADER bmiHeader;
         public RGBQUAD bmiColors;
@@ -1777,14 +1777,14 @@
 
     // Win7 only.
     [StructLayout(LayoutKind.Sequential)]
-    internal struct CHANGEFILTERSTRUCT
+    public struct CHANGEFILTERSTRUCT
     {
         public uint cbSize;
         public MSGFLTINFO ExtStatus;
     }
 
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
-    internal struct CREATESTRUCT
+    public struct CREATESTRUCT
     {
         public IntPtr lpCreateParams;
         public IntPtr hInstance;
@@ -1806,7 +1806,7 @@
     }
 
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode, Pack = 1)]
-    internal struct SHFILEOPSTRUCT
+    public struct SHFILEOPSTRUCT
     {
         public IntPtr hwnd;
 
@@ -1829,7 +1829,7 @@
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    internal struct TITLEBARINFO
+    public struct TITLEBARINFO
     {
         public int cbSize;
         public RECT rcTitleBar;
@@ -1843,7 +1843,7 @@
 
     // New to Vista.
     [StructLayout(LayoutKind.Sequential)]
-    internal struct TITLEBARINFOEX
+    public struct TITLEBARINFOEX
     {
         public int cbSize;
         public RECT rcTitleBar;
@@ -1861,9 +1861,9 @@
         public RECT rgrect_CloseButton;
     }
 
-    [SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedInternalClasses")]
+    [SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedpublicClasses")]
     [StructLayout(LayoutKind.Sequential)]
-    internal class NOTIFYICONDATA
+    public class NOTIFYICONDATA
     {
         public int cbSize;
         public IntPtr hWnd;
@@ -1900,14 +1900,14 @@
         private IntPtr hBalloonIcon;
     }
 
-    [SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedInternalClasses")]
+    [SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedpublicClasses")]
     [StructLayout(LayoutKind.Explicit)]
-    internal class PROPVARIANT : IDisposable
+    public class PROPVARIANT : IDisposable
     {
         private static class NativeMethods
         {
             [DllImport("ole32.dll")]
-            internal static extern HRESULT PropVariantClear(PROPVARIANT pvar);
+            public static extern HRESULT PropVariantClear(PROPVARIANT pvar);
         }
 
         [SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
@@ -1992,9 +1992,9 @@
         #endregion IDisposable Pattern
     }
 
-    [SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedInternalClasses")]
+    [SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedpublicClasses")]
     [StructLayout(LayoutKind.Sequential, Pack = 4)]
-    internal class SHARDAPPIDINFO
+    public class SHARDAPPIDINFO
     {
         [MarshalAs(UnmanagedType.Interface)]
         private object psi;    // The namespace location of the the item that should be added to the recent docs folder.
@@ -2003,9 +2003,9 @@
         private string pszAppID;  // The id of the application that should be associated with this recent doc.
     }
 
-    [SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedInternalClasses")]
+    [SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedpublicClasses")]
     [StructLayout(LayoutKind.Sequential, Pack = 4)]
-    internal class SHARDAPPIDINFOIDLIST
+    public class SHARDAPPIDINFOIDLIST
     {
         /// <summary>The idlist for the shell item that should be added to the recent docs folder.</summary>
         private IntPtr pidl;
@@ -2015,9 +2015,9 @@
         private string pszAppID;
     }
 
-    [SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedInternalClasses")]
+    [SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedpublicClasses")]
     [StructLayout(LayoutKind.Sequential, Pack = 4)]
-    internal class SHARDAPPIDINFOLINK
+    public class SHARDAPPIDINFOLINK
     {
         private IntPtr psl;     // An IShellLink instance that when launched opens a recently used item in the specified
 
@@ -2028,7 +2028,7 @@
     }
 
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
-    internal struct LOGFONT
+    public struct LOGFONT
     {
         public int lfHeight;
         public int lfWidth;
@@ -2049,7 +2049,7 @@
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    internal struct MINMAXINFO
+    public struct MINMAXINFO
     {
         public POINT ptReserved;
         public POINT ptMaxSize;
@@ -2059,7 +2059,7 @@
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    internal struct NONCLIENTMETRICS
+    public struct NONCLIENTMETRICS
     {
         public int cbSize;
         public int iBorderWidth;
@@ -2104,7 +2104,7 @@
 
     /// <summary>Defines options that are used to set window visual style attributes.</summary>
     [StructLayout(LayoutKind.Explicit)]
-    internal struct WTA_OPTIONS
+    public struct WTA_OPTIONS
     {
         // public static readonly uint Size = (uint)Marshal.SizeOf(typeof(WTA_OPTIONS));
         public const uint Size = 8;
@@ -2128,7 +2128,7 @@
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    internal struct MARGINS
+    public struct MARGINS
     {
         /// <summary>Width of left border that retains its size.</summary>
         public int cxLeftWidth;
@@ -2144,7 +2144,7 @@
     };
 
     [StructLayout(LayoutKind.Sequential)]
-    internal class MONITORINFO
+    public class MONITORINFO
     {
         public int cbSize = Marshal.SizeOf(typeof(MONITORINFO));
         public RECT rcMonitor;
@@ -2153,22 +2153,22 @@
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    internal struct POINT
+    public struct POINT
     {
         public int x;
         public int y;
     }
 
-    [SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedInternalClasses")]
+    [SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedpublicClasses")]
     [StructLayout(LayoutKind.Sequential)]
-    internal class RefPOINT
+    public class RefPOINT
     {
         public int x;
         public int y;
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    internal struct RECT
+    public struct RECT
     {
         private int _left;
         private int _top;
@@ -2270,9 +2270,9 @@
         }
     }
 
-    [SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedInternalClasses")]
+    [SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedpublicClasses")]
     [StructLayout(LayoutKind.Sequential)]
-    internal class RefRECT
+    public class RefRECT
     {
         private int _left;
         private int _top;
@@ -2339,21 +2339,21 @@
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    internal struct SIZE
+    public struct SIZE
     {
         public int cx;
         public int cy;
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    internal struct StartupOutput
+    public struct StartupOutput
     {
         public IntPtr hook;
         public IntPtr unhook;
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    internal class StartupInput
+    public class StartupInput
     {
         public int GdiplusVersion = 1;
         public IntPtr DebugEventCallback;
@@ -2361,10 +2361,10 @@
         public bool SuppressExternalCodecs;
     }
 
-    [SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedInternalClasses")]
+    [SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedpublicClasses")]
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
     [BestFitMapping(false)]
-    internal class WIN32_FIND_DATAW
+    public class WIN32_FIND_DATAW
     {
         public FileAttributes dwFileAttributes;
         public System.Runtime.InteropServices.ComTypes.FILETIME ftCreationTime;
@@ -2383,7 +2383,7 @@
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    internal class WINDOWPLACEMENT
+    public class WINDOWPLACEMENT
     {
         public int length = Marshal.SizeOf(typeof(WINDOWPLACEMENT));
         public int flags;
@@ -2394,7 +2394,7 @@
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    internal struct WINDOWPOS
+    public struct WINDOWPOS
     {
         public IntPtr hwnd;
         public IntPtr hwndInsertAfter;
@@ -2406,7 +2406,7 @@
     }
 
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
-    internal struct WNDCLASSEX
+    public struct WNDCLASSEX
     {
         public int cbSize;
         public CS style;
@@ -2428,7 +2428,7 @@
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    internal struct WINDOWINFO
+    public struct WINDOWINFO
     {
         public int cbSize;
         public RECT rcWindow;
@@ -2443,7 +2443,7 @@
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    internal struct MOUSEINPUT
+    public struct MOUSEINPUT
     {
         public int dx;
         public int dy;
@@ -2454,21 +2454,21 @@
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    internal struct INPUT
+    public struct INPUT
     {
         public uint type;
         public MOUSEINPUT mi;
     };
 
     [StructLayout(LayoutKind.Sequential)]
-    internal struct UNSIGNED_RATIO
+    public struct UNSIGNED_RATIO
     {
         public uint uiNumerator;
         public uint uiDenominator;
     }
 
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    internal struct DWM_TIMING_INFO
+    public struct DWM_TIMING_INFO
     {
         public int cbSize;
         public UNSIGNED_RATIO rateRefresh;
@@ -2513,7 +2513,7 @@
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    internal struct SHDRAGIMAGE
+    public struct SHDRAGIMAGE
     {
         public SIZE sizeDragImage;
         public POINT ptOffset;
@@ -2522,7 +2522,7 @@
     }
 
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode, Size = 1044)]
-    internal struct DROPDESCRIPTION
+    public struct DROPDESCRIPTION
     {
         public DROPIMAGETYPE type;
 
@@ -2534,7 +2534,7 @@
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    internal struct APPBARDATA
+    public struct APPBARDATA
     {
         /// <summary>
         /// initialize this field using: Marshal.SizeOf(typeof(APPBARDATA));
@@ -2557,7 +2557,7 @@
         InterfaceType(ComInterfaceType.InterfaceIsIUnknown),
         Guid(IID.ServiceProvider)
     ]
-    internal interface IServiceProvider
+    public interface IServiceProvider
     {
         [return: MarshalAs(UnmanagedType.IUnknown)]
         object QueryService(ref Guid guidService, ref Guid riid);
@@ -2568,7 +2568,7 @@
         Guid(IID.DragSourceHelper),
         InterfaceType(ComInterfaceType.InterfaceIsIUnknown)
     ]
-    internal interface IDragSourceHelper
+    public interface IDragSourceHelper
     {
         void InitializeFromBitmap([In] ref SHDRAGIMAGE pshdi, [In] IDataObject pDataObject);
 
@@ -2580,7 +2580,7 @@
         Guid(IID.DragSourceHelper2),
         InterfaceType(ComInterfaceType.InterfaceIsIUnknown)
     ]
-    internal interface IDragSourceHelper2 : IDragSourceHelper
+    public interface IDragSourceHelper2 : IDragSourceHelper
     {
         #region IDragSourceHelper redeclaration
 
@@ -2598,7 +2598,7 @@
         Guid(IID.DropTargetHelper),
         InterfaceType(ComInterfaceType.InterfaceIsIUnknown)
     ]
-    internal interface IDropTargetHelper
+    public interface IDropTargetHelper
     {
         void DragEnter(IntPtr hwndTarget, IDataObject pDataObject, ref POINT ppt, int effect);
 
@@ -2614,13 +2614,13 @@
     #endregion Interfaces
 
     /// <summary>Delegate declaration that matches native WndProc signatures.</summary>
-    internal delegate IntPtr WndProc(IntPtr hwnd, WM uMsg, IntPtr wParam, IntPtr lParam);
+    public delegate IntPtr WndProc(IntPtr hwnd, WM uMsg, IntPtr wParam, IntPtr lParam);
 
     /// <summary>Delegate declaration that matches managed WndProc signatures.</summary>
-    internal delegate IntPtr MessageHandler(WM uMsg, IntPtr wParam, IntPtr lParam, out bool handled);
+    public delegate IntPtr MessageHandler(WM uMsg, IntPtr wParam, IntPtr lParam, out bool handled);
 
     // Some native methods are shimmed through public versions that handle converting failures into thrown exceptions.
-    internal static class NativeMethods
+    public static class NativeMethods
     {
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         [DllImport("user32.dll", EntryPoint = "AdjustWindowRectEx", SetLastError = true)]

@@ -50,7 +50,7 @@ namespace TMP.ARMTES.Model
 
     public class QualityIndications
     {
-        public string Month { get; set; }
+        public string Period { get; set; }
         public List<PointQualityIndications> PointsData { get; set; }
     }
     public class PointQualityIndications
@@ -61,7 +61,7 @@ namespace TMP.ARMTES.Model
 
     public class PointQualityIndicationsLegend
     {
-        public byte Day { get; set; }
+        public string Interval { get; set; }
         public PointQualityIndicationsType Type { get; set; }
         public System.Windows.Media.Brush Brush
         {

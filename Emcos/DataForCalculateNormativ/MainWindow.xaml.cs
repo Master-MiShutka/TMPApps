@@ -1,35 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
-using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Threading;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Runtime.CompilerServices;
-using System.Diagnostics;
 
 namespace TMP.Work.Emcos.DataForCalculateNormativ
 {
+    using Dialogs = TMPApplication.WpfDialogs.Contracts;
+
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : WaitableWindow
+    public partial class MainWindow : TMPApplication.CustomWpfWindow.WindowWithDialogs, INotifyPropertyChanged
     {
         #region Fields
 
         private bool _isReadyToGetData = false;
-        private ObservableCollection<ListPoint> _pointsList;
-        private ICollectionView _view;
+        private TreeModel _treeModel;
 
         private Task _backgroudTask;
         private CancellationTokenSource cts = new CancellationTokenSource();
@@ -41,23 +36,25 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
         /// Id 60 Ошмянские ЭС Code 143
         /// </summary>
         private readonly ListPoint DEFAULT_ROOT_EMCOS_GROUP = new ListPoint { Id = 60, TypeCode = "FES", Name = "Ошмянские ЭС" };
-        private ListPoint _rootEmcosGroup;
+        private ListPoint _rootEmcosGroup;               
 
         #endregion
 
-        #region Constructor
+        #region Constructor and desstructor
 
         public MainWindow()
         {
+            App.Log("Создание главного окна");
+
+            InitializeComponent();
+            Title = App.Title;
+
+            DataContext = this;
+
             // настройка сервиса
             App.InitServiceClient(String.Format("http://{0}/{1}",
                     Properties.Settings.Default.ServerAddress,
                     Properties.Settings.Default.ServiceName));
-
-            InitializeComponent();
-            DataContext = this;
-
-            App.UIDispatcher = Dispatcher.CurrentDispatcher;
 
             cts = new CancellationTokenSource();
 
@@ -65,16 +62,17 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
 
             this.Loaded += (s, e) =>
             {
-                var list = LoadList();
-                if (list != null)
+                App.Log("Главное окно загружено");
+                var points = LoadList();
+                if (points != null)
                 {
-                    PointsList = new ObservableCollection<ListPoint>(list);
+                    InitModel(points);
                     IsReadyToGetData = true;
                 }
                 else
                 {
                     UpdateCommand.Execute(null);
-                }
+                }                
             };
             this.Closing += async (s, e) =>
             {
@@ -84,58 +82,111 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
                     {
                         e.Cancel = true;
                         if (cts != null) cts.Cancel();
-                        ShowWaitingScreen(Strings.TerminatingMessage);
-                        await _backgroudTask;
+                        else
+                        {
+                            cts = new CancellationTokenSource();
+                            cts.Cancel();
+                        }
+                        this.ShowDialogWaitingScreen(Strings.TerminatingMessage);
+                        await _backgroudTask;                     
+
                         this.Close();
                     }
                 }
             };
             this.Closed += (s, e) =>
             {
-                if (_pointsList != null)
-                    SaveList(_pointsList.ToList());
+                if (_treeModel != null)
+                    SaveList(_treeModel.Point.Items);
             };
+
+            TMPApplication.ServiceInjector.Instance.AddService<TMPApplication.WpfDialogs.Contracts.IWindowWithDialogs>(this);
         }
+
+        #endregion
+
+        #region Public Methods
 
         #endregion
 
         #region Private Methods
 
+        private void InitModel(IList<ListPoint> points)
+        {
+            var model = new TreeModel(new ListPoint() { Name = "ROOT", Items = points });
+            UpdateCheackableList(model);
+            TreeModel = model;
+        }
+
+        private void UpdateCheackableList(ICSharpCode.TreeView.SharpTreeNode node)
+        {
+            if (node.Children != null && node.Children.Count > 0)
+                foreach (ICSharpCode.TreeView.SharpTreeNode child in node.Children)
+                    UpdateCheackableList(child);
+            if (node.IsCheckable)
+            {
+                int childCount = node.Children.Count((c) => c.IsCheckable);
+                if (childCount == 0)
+                    return;
+                int checkedChildCount = node.Children.Count((c) => c.IsCheckable && c.IsChecked != null && c.IsChecked.Value);
+
+                if (checkedChildCount == 0)
+                    node.IsChecked = false;
+                else
+                    if (checkedChildCount == childCount)
+                        node.IsChecked = true;
+                    else
+                        node.IsChecked = null;
+            }
+
+        }
+
         private void InitCommands()
         {
+            App.Log("Иницилизация команд главного окна");
             SettingsCommand = new DelegateCommand(o =>
             {
-                Action updateUI = () =>
-                {
-                    DialogHost = null;
-                };
-                SettingsControl settings = new SettingsControl(updateUI);
-                DialogHost = settings;
+                App.Log("Просмотр настроек");
+                Dialogs.IDialog dialog = null;
+                Action updateUI = () => 
+                    dialog.Close();
+                var control = new SettingsControl(updateUI);
+                dialog = this.DialogCustom(control);
+                dialog.Show();
             });
 
-            UpdateCommand = new DelegateCommand(async o =>
+            UpdateCommand = new DelegateCommand(o =>
             {
-                ShowWaitingScreen(Strings.UpdatingInProgress);
+                cts = new CancellationTokenSource();
 
-                if (await CheckAvailability() == false)
+                Dialogs.IDialog dialog = this.DialogInfo(Strings.UpdatingInProgress, null, MessageBoxImage.None, TMPApplication.WpfDialogs.DialogMode.Cancel);
+                dialog.CloseBehavior = TMPApplication.WpfDialogs.DialogCloseBehavior.ExplicitClose;
+                dialog.Cancel = () =>
                 {
-                    ClearDialogHost();
+                    cts.Cancel();
+                    dialog.CanCancel = false;
+                };
+                dialog.Show();
+
+                if (CheckAvailability() == false)
+                {
+                    this.ShowDialogWarning(Strings.MessageServerNotAvailability, null, () => dialog.Close());
                     return;
                 }
                 try
                 {
-                    if (App.ShowInfo(Strings.OnUpdatingPointsList) == MessageBoxResult.OK)
+                    this.ShowDialogInfo(Strings.OnUpdatingPointsList, null, () =>
                     {
+                        App.Log("Получение списка точек от сервиса");
                         _rootEmcosGroup = null;
                         try
                         {
-                            _rootEmcosGroup = App.Base64StringToObject<ListPoint>(Properties.Settings.Default.RootPoint);
+                            _rootEmcosGroup = Utils.Base64StringToObject<ListPoint>(Properties.Settings.Default.RootPoint);
                         }
                         catch
                         { }
                         if (_rootEmcosGroup == null)
                             _rootEmcosGroup = DEFAULT_ROOT_EMCOS_GROUP;
-
 
                         _backgroudTask = Task.Factory.StartNew(async () =>
                         {
@@ -144,183 +195,158 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
                             var source = await FillPointsTree(_rootEmcosGroup);
                             if (source.Count == 0 && String.IsNullOrEmpty(ServiceHelper.ErrorMessage) == false)
                             {
-                                App.UIAction(() =>
-                                {
-                                    App.ShowWarning(ServiceHelper.ErrorMessage);
-                                    ClearDialogHost();
-                                });
+                                this.ShowDialogWarning(ServiceHelper.ErrorMessage);
+                                dialog.Close();
                                 return;
                             }
-                            PointsList = new ObservableCollection<ListPoint>(source);
-                            App.UIAction(() =>
-                            {
-                                IsReadyToGetData = true;
-                                SaveList(_pointsList.ToList());
-                                ClearDialogHost();
-                            });
+                            InitModel(source);
+                            IsReadyToGetData = true;
+                            SaveList(source);
+                            dialog.Close();
                         }, cts.Token, TaskCreationOptions.LongRunning, TaskScheduler.Default);
-                    }
-                    else
-                        ClearDialogHost();
+                    });
                 }
                 catch (Exception ex)
                 {
-                    ClearDialogHost();
-                    App.ShowError(String.Format(Strings.Error, App.GetExceptionDetails(ex)));
+                    App.Log("Получение списка точек от сервиса - ошибка");
+                    dialog.Close();
+                    this.ShowDialogError(String.Format(Strings.Error, App.GetExceptionDetails(ex)));
                 }
             });
-            GetReportCommand = new DelegateCommand(async o =>
+            GetReportCommand = new DelegateCommand(o =>
             {
-                App.ShowInfo(Strings.OnGettingData);
-
-                if (await CheckAvailability() == false)
+                this.ShowDialogInfo(Strings.OnGettingData, null, () => 
                 {
-                    ClearDialogHost();
-                    return;
-                }
+                    App.Log("Получение отчёта по точкам");
 
-                var list = HierarchicalListToFlatList(_pointsList.ToList());
+                    if (CheckAvailability() == false)
+                    {
+                        this.ShowDialogWarning(Strings.MessageServerNotAvailability);
+                        return;
+                    }
 
-                var substations = list
-                    .Where(i => (i.TypeCode == "SUBSTATION" || i.TypeCode == "VOLTAGE") && i.Checked)
-                    .OrderBy(i => i.Name).ToList<ListPoint>();
-                if (substations == null || substations.Count == 0)
-                {
-                    App.ShowWarning(Strings.EmptyList);
-                    return;
-                }
+                    var substations = _treeModel.Point.Items
+                        .Flatten(i => i.Items)
+                        .Where(i => (i.TypeCode == "SUBSTATION" || i.TypeCode == "VOLTAGE") && i.IsChecked)
+                        .OrderBy(i => i.ParentName)
+                        .ThenBy(i => i.Name)
+                        .ToList<ListPoint>();
+                    if (substations == null || substations.Count == 0)
+                    {
+                        this.ShowDialogWarning(Strings.EmptyList);
+                        return;
+                    }
 
-                btnPanel.IsEnabled = false;
-                try
-                {
-                    App.Current.MainWindow.TaskbarItemInfo = new System.Windows.Shell.TaskbarItemInfo()
+                    Dialogs.IDialog dialog = null;
+
+                    btnPanel.IsEnabled = false;
+                    try
                     {
-                        Description = Strings.GetDataHeader,
-                        ProgressState = System.Windows.Shell.TaskbarItemProgressState.Normal,
-                        ProgressValue = 0.01
-                    };
-                    Action updateUI = () =>
-                    {
-                        btnPanel.IsEnabled = true;
-                        ClearDialogHost();
-                    };
-                    Action completed = () =>
-                    {
-                        App.UIAction(() =>
+                        App.Current.MainWindow.TaskbarItemInfo = new System.Windows.Shell.TaskbarItemInfo()
+                        {
+                            Description = Strings.GetDataHeader,
+                            ProgressState = System.Windows.Shell.TaskbarItemProgressState.Normal,
+                            ProgressValue = 0.01
+                        };
+                        Action updateUI = () =>
+                        {
+                            btnPanel.IsEnabled = true;
+                            dialog.Close();
+                        };
+                        Action completed = () =>
                         {
                             App.Current.MainWindow.TaskbarItemInfo.ProgressState = System.Windows.Shell.TaskbarItemProgressState.None;
                             updateUI();
-                        });                        
-                    };
-                    Action canceled = () =>
-                    {
-                        App.UIAction(() =>
+                        };
+                        Action canceled = () =>
                         {
                             App.Current.MainWindow.TaskbarItemInfo.ProgressState = System.Windows.Shell.TaskbarItemProgressState.Paused;
-                            App.ShowInfo(Strings.Canceled);
+                            this.ShowDialogInfo(Strings.Canceled);
                             updateUI();
-                        });                        
-                    };
-                    Action<Exception> faulted = (Exception e) =>
-                    {
-                        App.UIAction(() =>
+                        };
+                        Action<Exception> faulted = (Exception e) =>
                         {
                             App.Current.MainWindow.TaskbarItemInfo.ProgressState = System.Windows.Shell.TaskbarItemProgressState.Error;
-                            App.ShowError(e, null);
+                            this.ShowDialogError(App.GetExceptionDetails(e));
                             updateUI();
-                        });                        
-                    };
+                        };
 
-                    GetDataControl get = new GetDataControl(substations, completed, canceled, faulted);
-                    DialogHost = get;
-                }
-                catch (Exception ex)
-                {
-                    App.ShowError(ex, null);
-                    btnPanel.IsEnabled = true;
-                    ClearDialogHost();
-                }
+                        dialog = this.DialogCustom(new GetDataControl(substations, completed, canceled, faulted));
+                        dialog.Show();
+                    }
+                    catch (Exception ex)
+                    {
+                        App.Log("Получение отчётов - ошибка");
+                        this.ShowDialogError(App.GetExceptionDetails(ex), null,
+                            () => TMPApplication.DispatcherExtensions.InUi(() => btnPanel.IsEnabled = true));
+                        dialog.Close();
+                    }
+                });
             },
             o => IsReadyToGetData);
-            GetAuxiliariesCommand = new DelegateCommand(async o =>
+            GetEnergyCommand = new DelegateCommand(o =>
             {
-                App.ShowInfo(Strings.OnGettingData);
-
-                if (await CheckAvailability() == false)
+                this.ShowDialogInfo(Strings.OnGettingData, null, () =>
                 {
-                    ClearDialogHost();
-                    return;
-                }
-
-                var list = HierarchicalListToFlatList(_pointsList.ToList());
-
-                var auxiliary = list
-                    .Where(i => i.ParentTypeCode == "AUXILIARY" && i.TypeCode == "ELECTRICITY" && i.EсpName == "Свои нужды")
-                    .OrderBy(i => i.ParentName)
-                    .OrderBy(i => i.Name)
-                    .ToList<ListPoint>();
-                if (auxiliary == null || auxiliary.Count == 0)
-                {
-                    App.ShowWarning(Strings.EmptyList);
-                    return;
-                }
-
-                btnPanel.IsEnabled = false;
-                try
-                {
-                    App.Current.MainWindow.TaskbarItemInfo = new System.Windows.Shell.TaskbarItemInfo();
-                    App.Current.MainWindow.TaskbarItemInfo.Description = Strings.GetDataHeader;
-                    App.Current.MainWindow.TaskbarItemInfo.ProgressState = System.Windows.Shell.TaskbarItemProgressState.Normal;
-                    App.Current.MainWindow.TaskbarItemInfo.ProgressValue = 0.01;
-
-                    Action updateUI = () =>
+                    App.Log("Получение суточных значений");
+                    if (CheckAvailability() == false)
                     {
-                        btnPanel.IsEnabled = true;
-                        ClearDialogHost();
-                    };
-                    Action completed = () =>
+                        this.ShowDialogWarning(Strings.MessageServerNotAvailability);
+                        return;
+                    }
+
+                    Dialogs.IDialog dialog = null;
+
+                    btnPanel.IsEnabled = false;
+                    try
                     {
-                        App.UIAction(() =>
+                        App.Current.MainWindow.TaskbarItemInfo = new System.Windows.Shell.TaskbarItemInfo();
+                        App.Current.MainWindow.TaskbarItemInfo.Description = Strings.GetDataHeader;
+                        App.Current.MainWindow.TaskbarItemInfo.ProgressState = System.Windows.Shell.TaskbarItemProgressState.Normal;
+                        App.Current.MainWindow.TaskbarItemInfo.ProgressValue = 0.01;
+
+                        Action updateUI = () =>
+                        {
+                            TMPApplication.DispatcherExtensions.InUi(() => btnPanel.IsEnabled = true);
+                            dialog.Close();
+                        };
+                        Action completed = () =>
                         {
                             App.Current.MainWindow.TaskbarItemInfo.ProgressState = System.Windows.Shell.TaskbarItemProgressState.None;
                             updateUI();
-                        });
-                    };
-                    Action canceled = () =>
-                    {
-                        App.UIAction(() =>
+                        };
+                        Action canceled = () =>
                         {
                             App.Current.MainWindow.TaskbarItemInfo.ProgressState = System.Windows.Shell.TaskbarItemProgressState.Paused;
-                            App.ShowInfo(Strings.Canceled);
+                            this.ShowDialogInfo(Strings.Canceled, Strings.Message, null);
                             updateUI();
-                        });
-                    };
-                    Action<Exception> faulted = (Exception e) =>
-                    {
-                        App.UIAction(() =>
+                        };
+                        Action<Exception> faulted = (Exception e) =>
                         {
                             App.Current.MainWindow.TaskbarItemInfo.ProgressState = System.Windows.Shell.TaskbarItemProgressState.Error;
-                            App.ShowError(e, null);
-                            updateUI();
-                        });
-                    };
 
-                    GetAuxiliaryControl get = new GetAuxiliaryControl(auxiliary, completed, canceled, faulted);
-                    DialogHost = get;
-                }
-                catch (Exception ex)
-                {
-                    App.ShowError(ex, null);
-                    btnPanel.IsEnabled = true;
-                    ClearDialogHost();
-                }
+                            this.ShowDialogError(App.GetExceptionDetails(e));
+                            updateUI();
+                        };
+
+                        dialog = this.DialogCustom(new GetEnergyControl(_treeModel.Point.Items, completed, canceled, faulted));
+                        dialog.Show();
+                    }
+                    catch (Exception ex)
+                    {
+                        App.Log("Получение суточных значений - ошибка");
+                        this.ShowDialogError(App.GetExceptionDetails(ex), null,
+                            () => TMPApplication.DispatcherExtensions.InUi(() => btnPanel.IsEnabled = true));
+                        dialog.Close();
+                    }
+                });
             },
             o => IsReadyToGetData);
 
             TreeCheckOrUncheckItemsCommand = new DelegateCommand(
                 o =>
                 {
-                    TreeView tree = o as TreeView;
+                    ICSharpCode.TreeView.SharpTreeView tree = o as ICSharpCode.TreeView.SharpTreeView;
                     if (tree != null)
                     {
                         ListPoint point = (ListPoint)tree.SelectedItem;
@@ -328,54 +354,54 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
                         {
                             foreach (var child in point.Items)
                                 if (child.TypeCode == "FES" || child.TypeCode == "RES" || child.TypeCode == "SUBSTATION" || child.TypeCode == "VOLTAGE")
-                                    child.Checked = !child.Checked;
+                                    child.IsChecked = !child.IsChecked;
                         }
                     }
                 },
-                o => PointsList != null && PointsList.Count > 0);
+                o => _treeModel != null && _treeModel.Children != null && _treeModel.Children.Count > 0);
             TreeUnselectAllCommand = new DelegateCommand(
                 o =>
                 {
-                    if (PointsList != null)
+                    if (_treeModel != null)
                     {
-                        foreach (var item in PointsList)
-                            ForEachPointInTree(item, p => true, p => p.Checked = false);
+                        foreach (var item in _treeModel.Point.Items)
+                            ForEachPointInTree(item, p => true, p => p.IsChecked = false);
                     }
                 },
-                o => PointsList != null && PointsList.Count > 0);
+                o => _treeModel != null && _treeModel.Children != null && _treeModel.Children.Count > 0);
             TreeSelectAllCommand = new DelegateCommand(
                 o =>
                 {
-                    if (PointsList != null)
+                    if (_treeModel != null)
                     {
-                        foreach (var item in PointsList)
-                            ForEachPointInTree(item, p => p.TypeCode == "SUBSTATION" || p.TypeCode == "VOLTAGE", p => p.Checked = true);
+                        foreach (var item in _treeModel.Point.Items)
+                            ForEachPointInTree(item, p => p.TypeCode == "SUBSTATION" || p.TypeCode == "VOLTAGE", p => p.IsChecked = true);
                     }
                 },
-                o => PointsList != null && PointsList.Count > 0);
+                o => _treeModel != null && _treeModel.Children != null && _treeModel.Children.Count > 0);
         }
 
-        private async Task<bool> CheckAvailability()
+        private bool CheckAvailability()
         {
-            if (await ServiceHelper.IsServerOnline())
+            if (ServiceHelper.IsServerOnline())
                 return true;
             else
-            {
-                App.ShowWarning(String.Format(Strings.ServerAvailability, Strings.No));
                 return false;
-            }
         }
 
         private readonly int maxItemsCount = 10000;
         private int _index = 0;
         private async Task<IList<ListPoint>> FillPointsTree(ListPoint point)
         {
+            if (cts.Token.IsCancellationRequested) return null;
+
             var table = App.EmcosWebServiceClient.GetPointInfo("PSDTU_SERVER", point.Id.ToString());
 
             IList<ListPoint> list = await ServiceHelper.CreatePointsListAsync(point);
             if (list != null && list.Count > 0)
                 for (int i = 0; i < list.Count; i++)
                 {
+                    if (cts.Token.IsCancellationRequested) return null;
                     if (list[i].IsGroup)
                     {
                         list[i].Items = new ObservableCollection<ListPoint>(await FillPointsTree(list[i]));
@@ -383,36 +409,27 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
                         if (_index > maxItemsCount) throw new OverflowException("Превышено максимальное количество элементов в дереве - " + maxItemsCount);
                     }
                 }
+            if (cts.Token.IsCancellationRequested) return null;
             return list;
-        }
-
-        private IList<ListPoint> HierarchicalListToFlatList(IList<ListPoint> source)
-        {
-            List<ListPoint> result = new List<ListPoint>();
-            foreach (var item in source)
-            {
-                result.Add(item);
-                if (item.Items != null && item.Items.Count > 0)
-                    result.AddRange(HierarchicalListToFlatList(item.Items));
-            }
-            return result;
         }
 
         private IList<ListPoint> LoadList()
         {
+            App.Log("Загрузка списка точек из параметров");
             //return Common.RepositoryCommon.BaseRepository<List<ListPoint>>.GzJsonDeSerialize("data.list");
-            return App.Base64StringToObject<IList<ListPoint>>(Properties.Settings.Default.PointsList);
+            return Utils.Base64StringToObject<IList<ListPoint>>(Properties.Settings.Default.PointsList);
         }
         private void SaveList(IList<ListPoint> source)
         {
+            App.Log("Сохранение списка точек");
             try
             {
-                Properties.Settings.Default.PointsList = App.ObjectToBase64String(source);
+                Properties.Settings.Default.PointsList = Utils.ObjectToBase64String(source);
                 Properties.Settings.Default.Save();
             }
             catch (Exception e)
             {
-                App.ShowError(String.Format(Strings.ErrorOnSavePointsList, App.GetExceptionDetails(e)));
+                this.ShowDialogError(String.Format(Strings.ErrorOnSavePointsList, App.GetExceptionDetails(e)));
             }
         }
 
@@ -429,11 +446,9 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
 
         #region Command and Properties
 
-        public ICommand SettingsCommand { get; private set; }
-
         public ICommand UpdateCommand { get; private set; }
         public ICommand GetReportCommand { get; private set; }
-        public ICommand GetAuxiliariesCommand { get; private set; }
+        public ICommand GetEnergyCommand { get; private set; }
 
         public ICommand TreeCheckOrUncheckItemsCommand { get; private set; }
         public ICommand TreeUnselectAllCommand { get; private set; }
@@ -444,22 +459,69 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
             get { return _isReadyToGetData; }
             private set { SetProperty(ref _isReadyToGetData, value); }
         }
-        public ObservableCollection<ListPoint> PointsList
+
+
+        public TreeModel TreeModel
         {
-            get { return _pointsList; }
+            get { return _treeModel; }
             private set
             {
-                SetProperty(ref _pointsList, value);
-                View = CollectionViewSource.GetDefaultView(_pointsList);
+                SetProperty(ref _treeModel, value);
             }
         }
 
-        public ICollectionView View
+        #endregion
+
+        #region INotifyPropertyChanged Members
+
+        #region Debugging Aides
+
+        protected virtual bool ThrowOnInvalidPropertyName { get; private set; }
+
+        [Conditional("DEBUG")]
+        [DebuggerStepThrough]
+        public void VerifyPropertyName(string propertyName)
         {
-            get { return _view; }
-            private set { SetProperty(ref _view, value); }
+            // Verify that the property name matches a real,
+            // public, instance property on this object.
+            if (TypeDescriptor.GetProperties(this)[propertyName] == null)
+            {
+                string msg = "Invalid property name: " + propertyName;
+
+                if (this.ThrowOnInvalidPropertyName)
+                    throw new Exception(msg);
+                else
+                    Debug.Fail(msg);
+            }
+        }
+        #endregion Debugging Aides
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public bool SetProperty<T>(ref T storage, T value, [System.Runtime.CompilerServices.CallerMemberName] string propertyName = null)
+        {
+            if (Equals(storage, value))
+            {
+                return false;
+            }
+
+            storage = value;
+            this.OnPropertyChanged(propertyName);
+            return true;
         }
 
-        #endregion
+        protected virtual void OnPropertyChanged(string propertyName)
+        {
+            this.VerifyPropertyName(propertyName);
+
+            PropertyChangedEventHandler handler = this.PropertyChanged;
+            if (handler != null)
+            {
+                var e = new PropertyChangedEventArgs(propertyName);
+                handler(this, e);
+            }
+        }
+
+        #endregion INotifyPropertyChanged Members
     }
 }

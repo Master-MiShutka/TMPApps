@@ -1,0 +1,37 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:System="clr-namespace:System;assembly=mscorlib"
+    xmlns:converters="clr-namespace:TMP.UI.Controls.WPF.Converters;assembly=ui.controls.wpf"
+    xmlns:itemsfilter="clr-namespace:ItemsFilter;assembly=ItemsFilter"
+    xmlns:local="clr-namespace:TMP.WORK.AramisChetchiki"
+    xmlns:local_converters="clr-namespace:TMP.WORK.AramisChetchiki.Converters"
+    xmlns:model="clr-namespace:TMP.WORK.AramisChetchiki.Model">
+
+    <converters:UnderLineTextToSpaceConverter x:Key="TextSpaceConverter" />
+
+    <HierarchicalDataTemplate
+        x:Key="HierarchicalMenuTemplate"
+        DataType="{x:Type model:HierarchicalItem}"
+        ItemsSource="{Binding Items}">
+        <MenuItem
+            x:Name="menuitem"
+            Command="{Binding Command}"
+            CommandParameter="{Binding CommandParameter}"
+            Header="{Binding Name, Converter={StaticResource TextSpaceConverter}}"
+            IsCheckable="{Binding IsCheckable}"
+            Tag="{Binding Tag}" />
+        <HierarchicalDataTemplate.Triggers>
+            <DataTrigger Binding="{Binding CommandParameter}" Value="{x:Null}">
+                <Setter TargetName="menuitem" Property="CommandParameter" Value="{Binding}" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding HasTemplate}" Value="true">
+                <Setter TargetName="menuitem" Property="Template" Value="{Binding Template}" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding HasDataContext}" Value="true">
+                <Setter TargetName="menuitem" Property="DataContext" Value="{Binding DataContext}" />
+            </DataTrigger>
+        </HierarchicalDataTemplate.Triggers>
+    </HierarchicalDataTemplate>
+
+</ResourceDictionary>

@@ -76,8 +76,9 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
                     }
             }
         }
-        public static async Task<bool> IsServerOnline()
+        public static bool IsServerOnline()
         {
+            App.Log("Проверка доступности сервера");
             if (String.IsNullOrEmpty(Properties.Settings.Default.ServerAddress))
                 throw new ArgumentNullException("ServerAddress");
 
@@ -87,22 +88,25 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
             try
             {
                 if (Properties.Settings.Default.ServerAddress.Contains(":"))
-                    reply = await pingSender.SendPingAsync(Properties.Settings.Default.ServerAddress.Substring(0, Properties.Settings.Default.ServerAddress.IndexOf(':')), 100);
+                    reply = pingSender.Send(Properties.Settings.Default.ServerAddress.Substring(0, Properties.Settings.Default.ServerAddress.IndexOf(':')), 100);
                 else
-                    reply = await pingSender.SendPingAsync(Properties.Settings.Default.ServerAddress, 100);
+                    reply = pingSender.Send(Properties.Settings.Default.ServerAddress, 100);
                 if (reply.Status == IPStatus.Success)
                 {
+                    App.Log("Сервер доступен.");
                     return true;
                 }
                 else
                 {
                     ErrorMessage = "Сервер не доступен.";
+                    App.Log(ErrorMessage);
                     return false;
                 }
             }
             catch (Exception ex)
             {
                 ErrorMessage = App.GetExceptionDetails(ex);
+                App.Log("Сервер не доступен, ошибка - " + ErrorMessage);
                 return false;
             }
             finally
@@ -115,13 +119,13 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
 
         public static bool IsSiteOnline()
         {
+            App.Log("Проверка доступа к сервису");
             if (Uri.CheckHostName(SiteAddress) == UriHostNameType.Unknown)
                 throw new ArgumentNullException("SiteAddress");
             if (String.IsNullOrEmpty(SiteAddress))
                 throw new ArgumentNullException("SiteAddress");
 
             Boolean ret = false;
-
             try
             {
                 var req = (HttpWebRequest)HttpWebRequest.Create(SiteAddress + "/");
@@ -136,6 +140,7 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
                 if (resp.StatusCode == HttpStatusCode.OK)
                 {
                     // HTTP = 200 - Internet connection available, server online
+                    App.Log("Сервис доступен");
                     ret = true;
                 }
                 resp.Close();
@@ -144,6 +149,7 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
             catch (Exception ex)
             {
                 ErrorMessage = App.GetExceptionDetails(ex);
+                App.Log("Сервис не доступен, ошибка - " + ErrorMessage);
                 return false;
             }
         }
@@ -163,6 +169,7 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
             catch (Exception ex)
             {
                 ErrorMessage = App.GetExceptionDetails(ex);
+                App.Log("Не удалось добавить куки, ошибка - " + ErrorMessage);
                 return true;
             }
             return true;
@@ -175,14 +182,15 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
                 return System.Web.HttpUtility.UrlDecode(input);
                 //return Uri.UnescapeDataString(answer);
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                var s = e.Message;
+                ErrorMessage = App.GetExceptionDetails(ex);
+                App.Log("Не удалось декодировать ответ, ошибка - " + ErrorMessage);
                 return null;
             }
         }
 
-        public static async Task<bool> Login(bool getRights = false)
+        public static async Task<bool> LoginAsync(bool getRights = false)
         {
             var url = @"{0}scripts/autentification.asp";
             url = string.Format(url, SiteAddress);
@@ -190,36 +198,50 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
             string answer;
             if (getRights)
             {
+                App.Log("Проверка наличия прав");
                 data = "action=getrights";
                 answer = await MakeRequestAsync(url, data, false);
             }
             else
             {
+                App.Log("Авторизация");
                 data = string.Format("user={0}&password={1}&action=login", Properties.Settings.Default.UserName, Properties.Settings.Default.Password);
                 answer = await MakeRequestAsync(url, data);
             }
             if (string.IsNullOrEmpty(answer))
             {
+                App.Log("Пустой ответ");
                 ErrorMessage = StatusCodeAsString;
                 return false;
             }
             ErrorMessage = answer;
             if (answer.Contains("result=0"))
             {
+                App.Log("Ответ содержит result=0");
                 if (answer.Contains("user=" + Properties.Settings.Default.UserName))
                 {
+                    App.Log("и содержит user=, значит авторизация успешна");
                     ErrorMessage = string.Empty;
                     return true;
                 }
                 if (getRights == false)
+                {
+                    App.Log("Авторизация прошла успешно");
                     return true;
+                }
                 else
+                {
+                    App.Log("Нет доступа");
                     return false;
+                }
             }
             if (answer.Contains("result=1") && answer.Contains("errType=2"))
             {
+                App.Log("Ответ = " + answer);
                 return false;
             }
+
+            App.Log("Непонятный ответ = " + answer);
             ErrorMessage = answer;
             return false;
         }
@@ -244,7 +266,7 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
                 // передаём куки
                 if (Cookie != null && TryAddCookie(ref httpWebRequest) == false)
                 {
-                    return Task.FromResult(String.Empty);
+                    return new Task<string>(() => String.Empty);
                 }
             data = Uri.EscapeUriString(data).Replace("_", "%5F");
             var buffer = Encoding.ASCII.GetBytes(data);
@@ -307,7 +329,8 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
             catch (Exception ex)
             {
                 ErrorMessage = App.GetExceptionDetails(ex);
-                return Task.FromResult(String.Empty);
+                App.Log("Ошибка при отправке запроса: " + ErrorMessage);
+                return new Task<string>(() => String.Empty);
             }
         }
 
@@ -376,7 +399,7 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
                 TypeCode = i.TypeCode,
                 EсpName = i is Model.EmcosPointElement ? (i as Model.EmcosPointElement).EcpName : String.Empty,
                 Type = i.Type,
-                Checked = false,
+                IsChecked = false,
                 ParentId = parent.Id,
                 ParentTypeCode = parent.TypeCode,
                 ParentName = parent.Name
@@ -398,6 +421,7 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
             catch (Exception ex)
             {
                 ErrorMessage = App.GetExceptionDetails(ex);
+                App.Log("Ошибка в CreatePointsListAsync: " + ErrorMessage);
                 return new List<ListPoint>();
             }
         }
@@ -405,17 +429,18 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
         private static int _attemptCount = 0;
         public static async Task<string> ExecuteFunctionAsync(Func<string, string, bool, Task<string>> function, string param1, string param2, bool param3, Func<string, string> postAction = null)
         {
+            App.Log("ExecuteFunctionAsync");
             string answer;
             if (Cookie == null)
             {
-                // нет куков - логин
-                bool hasRights = await ServiceHelper.Login();
+                App.Log("нет куков - логин");
+                bool hasRights = await ServiceHelper.LoginAsync();
                 answer = ServiceHelper.ErrorMessage;
                 // если доступ не получен и не авторизованы
                 if (hasRights == false)
                 {
-                    // ещё раз
-                    hasRights = await ServiceHelper.Login();
+                    App.Log("ещё раз");
+                    hasRights = await ServiceHelper.LoginAsync();
                     // авторизация не успешна
                     if (hasRights == false)
                         return string.Empty;
@@ -423,15 +448,16 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
             }
 
             answer = await function(param1, param2, param3);
-            // нет резульатата - что-то не так с сервером - возврат пустого значения
+            // нет результата - что-то не так с сервером - возврат пустого значения
             if (String.IsNullOrEmpty(answer))
                 return string.Empty;
-            // Пользователь незарегистрирован. Необходима повторная регистрация ?
+            // Пользователь незарегистрирован. Необходима повторная регистрация?
             // &result=1&errDescription=Пользователь незарегистрирован. Необходима повторная регистрация.&errType=2
             if (answer.Contains("result=1") && answer.Contains("errType=2") && _attemptCount < 4)
             {
+                App.Log("ответ содержит result=1 и errType=2");
                 _attemptCount++;
-                Login();
+                LoginAsync().RunSynchronously();
                 answer = await ExecuteFunctionAsync(function, param1, param2, param3, postAction);
                 if (postAction != null)
                     answer = postAction(answer);
@@ -440,8 +466,9 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
             // есть результат, но неверный ответ
             if (answer == "result=0&user=")
             {
+                App.Log("попытка авторизации");
                 _attemptCount++;
-                Login();
+                LoginAsync().RunSynchronously();
                 answer = await ExecuteFunctionAsync(function, param1, param2, param3, postAction);
                 if (postAction != null)
                     answer = postAction(answer);
@@ -453,10 +480,12 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
                 ErrorMessage = string.Empty;
                 if (postAction != null)
                     answer = postAction(answer);
+                App.Log("есть ответ, длина - " + answer.Length);
                 return answer;
             }
             else
             {
+                App.Log("непонятный ответ");
                 return string.Empty;
             }
         }

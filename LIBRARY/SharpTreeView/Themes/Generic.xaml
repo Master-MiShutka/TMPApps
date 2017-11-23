@@ -243,6 +243,10 @@
                                     <ColumnDefinition Width="Auto" />
                                     <ColumnDefinition Width="*" />
                                     <ColumnDefinition Width="Auto" />
+<<<<<<< HEAD
+=======
+                                    <ColumnDefinition Width="Auto" />
+>>>>>>> 5913ea3033c1d9573d4f918e829630390915727c
                                 </Grid.ColumnDefinitions>
                                 <ContentPresenter
                                     Name="icon"
@@ -264,18 +268,52 @@
                                     Grid.Column="1"
                                     Background="{TemplateBinding TextBackground}">
                                     <ContentPresenter
+<<<<<<< HEAD
                                         Margin="2,0,6,0"
                                         VerticalAlignment="Center"
                                         Content="{Binding Text}"
                                         Focusable="False" />
                                 </Border>
                                 <Border Name="textEditorContainer" Grid.Column="2" />
+=======
+                                        Name="textContainerPresenter"
+                                        Margin="2,0,0,0"
+                                        VerticalAlignment="Center"
+                                        Content="{Binding}"
+                                        ContentTemplate="{Binding ParentTreeView.NodeTextTemplate, RelativeSource={RelativeSource Mode=TemplatedParent}}"
+                                        Focusable="False" />
+                                </Border>
+                                <Border
+                                    Name="childrenCountContainer"
+                                    Grid.Column="2"
+                                    Background="{TemplateBinding TextBackground}"
+                                    Visibility="Collapsed">
+                                    <TextBlock
+                                        Margin="0,0,2,0"
+                                        HorizontalAlignment="Right"
+                                        VerticalAlignment="Center"
+                                        Focusable="False"
+                                        FontWeight="Bold"
+                                        Text="{Binding ChildrenCount}" />
+                                </Border>
+                                <Border Name="textEditorContainer" Grid.Column="3" />
+>>>>>>> 5913ea3033c1d9573d4f918e829630390915727c
                             </Grid>
                         </Grid>
                     </Grid>
                     <ControlTemplate.Triggers>
                         <DataTrigger Binding="{Binding IsEditing}" Value="True">
                             <Setter TargetName="textContainer" Property="Visibility" Value="Collapsed" />
+<<<<<<< HEAD
+=======
+                            <Setter TargetName="childrenCountContainer" Property="Visibility" Value="Collapsed" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding ParentTreeView.ShowNodeChildrenCount, RelativeSource={RelativeSource Mode=TemplatedParent}}" Value="True">
+                            <Setter TargetName="childrenCountContainer" Property="Visibility" Value="Visible" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding ParentTreeView.NodeTextTemplate, RelativeSource={RelativeSource Mode=TemplatedParent}}" Value="{x:Null}">
+                            <Setter TargetName="textContainerPresenter" Property="Content" Value="{Binding Text}" />
+>>>>>>> 5913ea3033c1d9573d4f918e829630390915727c
                         </DataTrigger>
                         <DataTrigger Binding="{Binding ShowIcon}" Value="False">
                             <Setter TargetName="icon" Property="Visibility" Value="Collapsed" />

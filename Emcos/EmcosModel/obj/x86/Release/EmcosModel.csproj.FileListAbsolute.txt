@@ -1,0 +1,5 @@
+Y:\Developer\CURRENT\TMPApps\out\Release\x86\Emcos\Libs\EmcosModel.dll
+Y:\Developer\CURRENT\TMPApps\out\Release\x86\Emcos\Libs\EmcosModel.pdb
+Y:\Developer\CURRENT\TMPApps\Emcos\EmcosModel\obj\x86\Release\EmcosModel.csprojResolveAssemblyReference.cache
+Y:\Developer\CURRENT\TMPApps\Emcos\EmcosModel\obj\x86\Release\EmcosModel.dll
+Y:\Developer\CURRENT\TMPApps\Emcos\EmcosModel\obj\x86\Release\EmcosModel.pdb

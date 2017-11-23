@@ -1,0 +1,454 @@
+﻿<Window
+    x:Class="TMP.ARMTES.Views.SESIndicationsWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="clr-namespace:TMP.UI.Controls.WPF;assembly=ui.controls.wpf"
+    xmlns:converters="clr-namespace:TMP.UI.Controls.WPF.Converters;assembly=ui.controls.wpf"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:data_views="clr-namespace:TMP.ARMTES.Controls.DataViews"
+    xmlns:extensions="clr-namespace:TMP.UI.Controls.WPF.Extensions;assembly=ui.controls.wpf"
+    xmlns:local="clr-namespace:TMP.ARMTES"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:views="clr-namespace:TMP.ARMTES.Views"
+    xmlns:vm="clr-namespace:TMP.ARMTES.ViewModel"
+    xmlns:xcdg="http://schemas.xceed.com/wpf/xaml/datagrid"
+    xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+    Title="Просмотр показаний по мелкомоторному сектору"
+    Width="900"
+    Height="300"
+    MinWidth="900"
+    Background="{DynamicResource {x:Static SystemColors.AppWorkspaceBrushKey}}"
+    Icon="{StaticResource MainIcon}"
+    SnapsToDevicePixels="True"
+    TextOptions.TextFormattingMode="Ideal"
+    WindowStartupLocation="CenterOwner"
+    WindowState="Maximized"
+    mc:Ignorable="d">
+    <Window.Resources>
+
+        <Style x:Key="ItemIndexSelectorStyle" TargetType="{x:Type xcdg:RowSelector}">
+            <Setter Property="Content" Value="{Binding RelativeSource={RelativeSource Self}, Path=ItemIndex, Converter={StaticResource IndexConverter}}" />
+            <Setter Property="Width" Value="Auto" />
+            <Style.Triggers>
+                <Trigger Property="IsCurrent" Value="true">
+                    <Setter Property="FontWeight" Value="Bold" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <Style TargetType="{x:Type xcdg:Cell}">
+            <Setter Property="Padding" Value="0" />
+        </Style>
+        <Style TargetType="{x:Type xcdg:DataRow}">
+            <Setter Property="MinHeight" Value="20" />
+            <Setter Property="Height" Value="Auto" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <!--  Setter Property="xcdg:RowSelector.RowSelectorStyle" Value="{StaticResource ItemIndexSelectorStyle}" /  -->
+        </Style>
+
+        <Style BasedOn="{StaticResource {x:Type DatePicker}}" TargetType="{x:Type DatePicker}">
+            <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
+        <Style BasedOn="{StaticResource {x:Type ComboBox}}" TargetType="{x:Type ComboBox}">
+            <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
+
+        <Style BasedOn="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" TargetType="{x:Type Separator}">
+            <Setter Property="Margin" Value="5,0" />
+        </Style>
+
+        <!--<xcdg:DataGridCollectionViewSource x:Key="indications" Source="{Binding Items}">
+            <xcdg:DataGridCollectionViewSource.SortDescriptions>
+                <scm:SortDescription Direction="Ascending" PropertyName="ContractNumber" />
+                <scm:SortDescription Direction="Ascending" PropertyName="CityName" />
+                <scm:SortDescription Direction="Ascending" PropertyName="ObjectName" />
+                <scm:SortDescription Direction="Ascending" PropertyName="AccountingPointName" />
+            </xcdg:DataGridCollectionViewSource.SortDescriptions>
+        </xcdg:DataGridCollectionViewSource>-->
+
+        <DataTemplate x:Key="doubleValue">
+            <TextBlock Text="{Binding StringFormat=N0}" />
+        </DataTemplate>
+
+    </Window.Resources>
+    <Grid d:DataContext="{d:DesignInstance {x:Type vm:SESIndicationsViewModel}, IsDesignTimeCreatable=True}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <controls:BusyControl Grid.RowSpan="3" Visibility="{Binding IsBusy, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Hidden}" />
+        <Border Background="{extensions:ValueFromStyle StyleKey={x:Type ToolBar}, Property=Control.Background}">
+            <WrapPanel Margin="2" HorizontalAlignment="Center">
+                <WrapPanel.Resources>
+                    <Style BasedOn="{StaticResource {x:Type Button}}" TargetType="{x:Type Button}">
+                        <Setter Property="Margin" Value="5,2" />
+                    </Style>
+                </WrapPanel.Resources>
+                <StackPanel Margin="5,0" Orientation="Horizontal">
+                    <TextBlock
+                        Margin="5,0"
+                        VerticalAlignment="Center"
+                        Text="Параметр"
+                        TextAlignment="Left" />
+                    <ComboBox
+                        ItemsSource="{Binding SelectedProfile, Converter={converters:EnumBindingConverter}}"
+                        SelectedItem="{Binding SelectedProfile, Converter={converters:EnumBindingConverter}, UpdateSourceTrigger=PropertyChanged}"
+                        SelectedValuePath="Value" />
+                </StackPanel>
+                <Separator />
+                <StackPanel Margin="2" Orientation="Horizontal">
+                    <TextBlock
+                        Margin="5,0,2,0"
+                        VerticalAlignment="Center"
+                        Text="Начальная дата"
+                        TextAlignment="Left" />
+                    <DatePicker SelectedDate="{Binding FromDate}" />
+                    <TextBlock
+                        Margin="5,0,2,0"
+                        VerticalAlignment="Center"
+                        Text="Конечная дата"
+                        TextAlignment="Left" />
+                    <DatePicker SelectedDate="{Binding ToDate}" />
+                </StackPanel>
+                <Separator />
+                <StackPanel Orientation="Horizontal">
+                    <Button Command="{Binding GetData}" ToolTip="Получить">
+                        <Button.Content>
+                            <controls:Icons Kind="Download" />
+                        </Button.Content>
+                    </Button>
+                    <Button Command="{Binding Update}" ToolTip="Обновить">
+                        <Button.Content>
+                            <controls:Icons Kind="Refresh" />
+                        </Button.Content>
+                    </Button>
+                    <Button
+                        Command="{Binding Save}"
+                        CommandParameter="{Binding ElementName=table}"
+                        ToolTip="Сохранить">
+                        <Button.Content>
+                            <controls:Icons Kind="Save" />
+                        </Button.Content>
+                    </Button>
+                    <Button
+                        Command="{Binding Print}"
+                        CommandParameter="{Binding ElementName=table}"
+                        ToolTip="Печать">
+                        <Button.Content>
+                            <controls:Icons Kind="PrinterText" />
+                        </Button.Content>
+                    </Button>
+                </StackPanel>
+            </WrapPanel>
+            <Border.Effect>
+                <DropShadowEffect
+                    BlurRadius="8"
+                    Direction="-90"
+                    RenderingBias="Performance"
+                    ShadowDepth="1" />
+            </Border.Effect>
+        </Border>
+        <Border
+            Name="border_content"
+            Grid.Row="1"
+            Margin="5"
+            Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}">
+            <Border.Effect>
+                <DropShadowEffect
+                    BlurRadius="10"
+                    Direction="-90"
+                    RenderingBias="Performance"
+                    ShadowDepth="2" />
+            </Border.Effect>
+            <!--  /  -->
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <ListBox Style="{StaticResource EnterprisesListBox}" />
+                <TabControl Grid.Row="1">
+                    <TabItem Header="Показания">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <xcdg:DataGridControl
+                                x:Name="table"
+                                xcdg:RowSelector.RowSelectorStyle="{StaticResource ItemIndexSelectorStyle}"
+                                AllowDetailToggle="False"
+                                AlternationCount="2"
+                                AutoCreateColumns="False"
+                                ItemsSource="{Binding View}"
+                                NavigationBehavior="RowOnly"
+                                ReadOnly="True"
+                                SelectedItem="{Binding SelectedData}"
+                                SelectionUnit="Row">
+                                <xcdg:DataGridControl.View>
+                                    <xcdg:TableflowView
+                                        AllowRowResize="True"
+                                        AreFootersSticky="False"
+                                        AreHeadersSticky="True"
+                                        ColumnStretchMinWidth="40"
+                                        ColumnStretchMode="All"
+                                        ContainerHeight="24"
+                                        IsAlternatingRowStyleEnabled="True"
+                                        IsDeferredLoadingEnabled="False" />
+                                </xcdg:DataGridControl.View>
+                                <xcdg:DataGridControl.Columns>
+                                    <xcdg:Column
+                                        Title="РЭС"
+                                        MaxWidth="100"
+                                        AllowGroup="True"
+                                        FieldName="ResName" />
+                                    <xcdg:Column
+                                        Title="№ дог"
+                                        MaxWidth="45"
+                                        FieldName="ContractNumber" />
+                                    <xcdg:Column Title="Потребитель" FieldName="SubscriberShortName" />
+                                    <xcdg:Column Title="Объект" FieldName="ObjectName" />
+                                    <xcdg:Column Title="Точка" FieldName="AccountingPointName" />
+                                    <xcdg:Column Title="Населенный пункт" FieldName="CityName" />
+                                    <xcdg:Column
+                                        Title="ТП"
+                                        MaxWidth="70"
+                                        FieldName="TransformationSubStation" />
+                                    <xcdg:Column
+                                        Title="Статус данных"
+                                        MaxWidth="45"
+                                        FieldName="Indications.ErrorCode" />
+                                    <xcdg:Column Title="Тип счётчика" FieldName="CounterType" />
+                                    <xcdg:Column Title="№ счетчика" FieldName="CounterSerialNumber" />
+                                    <xcdg:Column
+                                        Title="Пред. ТΣ"
+                                        CellContentTemplate="{StaticResource doubleValue}"
+                                        FieldName="Indications.PreviousValue" />
+                                    <xcdg:Column
+                                        Title="Т1"
+                                        CellContentTemplate="{StaticResource doubleValue}"
+                                        FieldName="Indications.PreviousTariff1Value" />
+                                    <xcdg:Column
+                                        Title="Т2"
+                                        CellContentTemplate="{StaticResource doubleValue}"
+                                        FieldName="Indications.PreviousTariff2Value" />
+                                    <xcdg:Column
+                                        Title="След. ТΣ"
+                                        CellContentTemplate="{StaticResource doubleValue}"
+                                        FieldName="Indications.NextValue" />
+                                    <xcdg:Column
+                                        Title="Т1"
+                                        CellContentTemplate="{StaticResource doubleValue}"
+                                        FieldName="Indications.NextTariff1Value" />
+                                    <xcdg:Column
+                                        Title="Т2"
+                                        CellContentTemplate="{StaticResource doubleValue}"
+                                        FieldName="Indications.NextTariff2Value" />
+                                    <xcdg:Column
+                                        Title="ΔТ"
+                                        CellContentTemplate="{StaticResource doubleValue}"
+                                        FieldName="Indications.Difference" />
+                                    <xcdg:Column
+                                        Title="ΔТ1"
+                                        CellContentTemplate="{StaticResource doubleValue}"
+                                        FieldName="Indications.Tariff1Difference" />
+                                    <xcdg:Column
+                                        Title="ΔТ2"
+                                        CellContentTemplate="{StaticResource doubleValue}"
+                                        FieldName="Indications.Tariff2Difference" />
+                                    <xcdg:Column Title="Время" FieldName="Indications.TimeStamp" />
+                                </xcdg:DataGridControl.Columns>
+                            </xcdg:DataGridControl>
+                            <views:TableIndicationsView Grid.Row="1" DataContext="{Binding SelectedDataTableIndications}" />
+                        </Grid>
+                    </TabItem>
+                    <TabItem Header="Показания 2">
+                        <xcdg:DataGridControl
+                            xcdg:RowSelector.RowSelectorStyle="{StaticResource ItemIndexSelectorStyle}"
+                            AlternationCount="2"
+                            AutoCreateColumns="True"
+                            ItemsSource="{Binding SEO}"
+                            ReadOnly="True"
+                            SelectionUnit="Row" />
+                    </TabItem>
+                    <TabItem Header="Проблеммные счётчики">
+                        <xcdg:DataGridControl
+                            xcdg:RowSelector.RowSelectorStyle="{StaticResource ItemIndexSelectorStyle}"
+                            AlternationCount="2"
+                            AutoCreateColumns="True"
+                            ItemsSource="{Binding ProblemMetersList}"
+                            ReadOnly="True"
+                            SelectionUnit="Row" />
+                    </TabItem>
+                    <TabItem Header="Data views">
+                        <TabControl Margin="5">
+                            <TabItem Header="SubscriberResItems">
+                                <data_views:BillingExportApi />
+                            </TabItem>
+                            <TabItem Header="CollectorsApi">
+                                <data_views:CollectorsApi />
+                            </TabItem>
+                            <TabItem Header="ConfigurationApi">
+                                <data_views:ConfigurationApi />
+                            </TabItem>
+                        </TabControl>
+                    </TabItem>
+                    <TabItem Header="Перечень систем" IsSelected="True">
+                        <DockPanel>
+                            <DockPanel.Resources>
+                                <xcdg:DataGridCollectionViewSource x:Key="devicesList" Source="{Binding Source={StaticResource Configuration}, Path=DevicesList}">
+                                    <xcdg:DataGridCollectionViewSource.DetailDescriptions>
+                                        <xcdg:DataRelationDetailDescription Title="Meter Configurations" RelationName="MeterConfigurations">
+                                            <xcdg:DataRelationDetailDescription.ItemProperties>
+                                                <xcdg:DataGridItemProperty Name="Number" />
+                                                <xcdg:DataGridItemProperty Name="City" />
+                                            </xcdg:DataRelationDetailDescription.ItemProperties>
+                                        </xcdg:DataRelationDetailDescription>
+                                    </xcdg:DataGridCollectionViewSource.DetailDescriptions>
+                                </xcdg:DataGridCollectionViewSource>
+                            </DockPanel.Resources>
+                            <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" />
+                            <xcdg:DataGridControl
+                                xcdg:RowSelector.RowSelectorStyle="{StaticResource ItemIndexSelectorStyle}"
+                                AllowDetailToggle="True"
+                                AlternationCount="2"
+                                AutoCreateColumns="False"
+                                AutoCreateDetailConfigurations="True"
+                                ItemScrollingBehavior="Immediate"
+                                ItemsSource="{Binding Source={StaticResource devicesList}}"
+                                NavigationBehavior="RowOnly"
+                                ReadOnly="True"
+                                SelectionUnit="Row">
+                                <xcdg:DataGridControl.View>
+                                    <xcdg:TableflowView
+                                        AllowRowResize="True"
+                                        ContainerHeight="24"
+                                        IsAlternatingRowStyleEnabled="True"
+                                        IsDeferredLoadingEnabled="False" />
+                                </xcdg:DataGridControl.View>
+                                <xcdg:DataGridControl.Columns>
+                                    <xcdg:Column
+                                        Title="РЭС"
+                                        Width="60"
+                                        AllowGroup="True"
+                                        FieldName="ResName" />
+                                    <xcdg:Column
+                                        Title="{converters:RemoveSpacesInTextConverter Value=Модель УСПД}"
+                                        Width="55"
+                                        FieldName="CollectorModel" />
+                                    <xcdg:Column
+                                        Title="{converters:RemoveSpacesInTextConverter Value=Версия УСПД}"
+                                        Width="45"
+                                        FieldName="CollectorSoftwareVersion" />
+                                    <xcdg:Column
+                                        Title="{converters:RemoveSpacesInTextConverter Value=Зав. № УСПД}"
+                                        Width="45"
+                                        FieldName="CollectorSerial" />
+                                    <xcdg:Column
+                                        Title="{converters:RemoveSpacesInTextConverter Value=Сетевой адрес УСПД}"
+                                        Width="55"
+                                        FieldName="CollectorNetworkAdress" />
+                                    <xcdg:Column
+                                        Title="{converters:RemoveSpacesInTextConverter Value=№ телефона}"
+                                        Width="75"
+                                        FieldName="PhoneNumber" />
+                                    <xcdg:Column
+                                        Title="Модем"
+                                        Width="55"
+                                        FieldName="ModemName" />
+                                    <xcdg:Column
+                                        Title="{converters:RemoveSpacesInTextConverter Value=Зав. № модема}"
+                                        Width="55"
+                                        FieldName="ModemSerial" />
+                                    <xcdg:Column
+                                        Title="Регион"
+                                        Width="45"
+                                        FieldName="RegionName" />
+                                    <xcdg:Column
+                                        Title="Сельсовет"
+                                        Width="65"
+                                        FieldName="VillageUnionName" />
+                                    <xcdg:Column
+                                        Title="ТП"
+                                        Width="45"
+                                        FieldName="TransformationSubstationName" />
+                                    <xcdg:Column
+                                        Title="ProjectName"
+                                        Width="75"
+                                        FieldName="ProjectName" />
+                                    <xcdg:Column
+                                        Title="ТУ"
+                                        Width="45"
+                                        FieldName="TechnicalConditionsName" />
+                                    <xcdg:Column
+                                        Title="{converters:RemoveSpacesInTextConverter Value=Пароль УСПД}"
+                                        Width="50"
+                                        FieldName="CollectorsPasswords" />
+                                    <xcdg:Column
+                                        Title="{converters:RemoveSpacesInTextConverter Value=Пароль счётчиков}"
+                                        Width="65"
+                                        FieldName="MetersPasswords" />
+                                </xcdg:DataGridControl.Columns>
+                                <!-- xcdg:DataGridControl.DefaultDetailConfiguration>
+                                    <xcdg:DefaultDetailConfiguration ItemContainerStyle="{StaticResource alternatingDataRowStyle}" UseDefaultHeadersFooters="False">
+                                        <xcdg:DefaultDetailConfiguration.Headers>
+                                            <DataTemplate>
+                                                <DockPanel>
+                                                    <xcdg:HierarchicalGroupLevelIndicatorPane
+                                                        xcdg:GroupLevelIndicatorPane.ShowIndicators="False"
+                                                        xcdg:TableView.CanScrollHorizontally="False"
+                                                        DockPanel.Dock="Left" />
+                                                    <ContentPresenter Content="{Binding RelativeSource={RelativeSource Self}, Path=(xcdg:DataGridControl.DataGridContext).SourceDetailConfiguration.Title}" ContentTemplate="{Binding RelativeSource={RelativeSource Self}, Path=(xcdg:DataGridControl.DataGridContext).SourceDetailConfiguration.TitleTemplate}" />
+                                                </DockPanel>
+                                            </DataTemplate>
+                                            <DataTemplate>
+                                                <xcdg:ColumnManagerRow AllowColumnReorder="False" AllowSort="False" />
+                                            </DataTemplate>
+                                        </xcdg:DefaultDetailConfiguration.Headers>
+                                        <xcdg:DefaultDetailConfiguration.DetailIndicatorStyle>
+                                            <Style TargetType="{x:Type xcdg:DetailIndicator}">
+                                                <Setter Property="Background" Value="AliceBlue" />
+                                            </Style>
+                                        </xcdg:DefaultDetailConfiguration.DetailIndicatorStyle>
+                                    </xcdg:DefaultDetailConfiguration>
+                                </-->
+                                <!-- xcdg:DataGridControl.DetailConfigurations>
+                                    <xcdg:DetailConfiguration
+                                        Title="Счётчики"
+                                        ItemContainerStyle="{StaticResource alternatingDataRowStyle}"
+                                        RelationName="MeterConfigurations">
+                                        <xcdg:DetailConfiguration.Headers>
+                                            <DataTemplate>
+                                                <xcdg:ColumnManagerRow />
+                                            </DataTemplate>
+                                        </xcdg:DetailConfiguration.Headers>
+                                        <xcdg:DetailConfiguration.Columns>
+                                            <xcdg:Column Title="№ п/п" FieldName="Number" />
+                                            <xcdg:Column Title="Город" FieldName="City" />
+                                        </xcdg:DetailConfiguration.Columns>
+                                    </xcdg:DetailConfiguration>
+                                </-->
+                            </xcdg:DataGridControl>
+                        </DockPanel>
+                    </TabItem>
+                </TabControl>
+            </Grid>
+        </Border>
+        <DockPanel
+            Grid.Row="3"
+            Margin="5,0"
+            TextBlock.FontSize="{DynamicResource SmallFontSize}"
+            ToolTip="Уважайте и цените чужой труд!">
+            <TextBlock
+                Margin="5,0,5,3"
+                DockPanel.Dock="Right"
+                FontStyle="Italic"
+                FontWeight="Light"
+                TextAlignment="Right">
+                <Run Text="© 2017, ведущий инженер отдела сбыта ОЭС" />
+                <Run Text="Трус Михаил Петрович" /></TextBlock>
+        </DockPanel>
+    </Grid>
+</Window>

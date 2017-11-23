@@ -12,6 +12,8 @@ namespace TMP.Work.Emcos.Model
         public string RP_TYPE_NAME { get; set; }
         public static string TYPE { get; } = "RP_TYPE";
         public bool RP_PUBLIC { get; set; }
+
+        public EmcosReportType() { }
     }
     [Serializable]
     public class EmcosReport
@@ -26,6 +28,8 @@ namespace TMP.Work.Emcos.Model
         public string USER_NAME { get; set; }
         public static string TYPE { get; } = "RP";
 
+        public EmcosReport() { }
+
         public override string ToString()
         {
             return string.Format("Id:{0}, Name:{1}, TypeId:{2}",
@@ -39,6 +43,10 @@ namespace TMP.Work.Emcos.Model
             if (o == null) return false;
 
             return this.RP_ID == o.RP_ID && this.RP_TYPE_ID == o.RP_TYPE_ID && this.RP_NAME == o.RP_NAME; 
+        }
+        public override int GetHashCode()
+        {
+            return RP_ID;
         }
     }
 }

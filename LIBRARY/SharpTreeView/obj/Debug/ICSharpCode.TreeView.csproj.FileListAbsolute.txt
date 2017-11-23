@@ -1,0 +1,11 @@
+Y:\Developer\CURRENT\TMPApps\out\Debug\Libs\ICSharpCode.TreeView.dll
+Y:\Developer\CURRENT\TMPApps\out\Debug\Libs\ICSharpCode.TreeView.pdb
+Y:\Developer\CURRENT\TMPApps\LIBRARY\SharpTreeView\obj\Debug\ICSharpCode.TreeView.csprojResolveAssemblyReference.cache
+Y:\Developer\CURRENT\TMPApps\LIBRARY\SharpTreeView\obj\Debug\GeneratedInternalTypeHelper.g.cs
+Y:\Developer\CURRENT\TMPApps\LIBRARY\SharpTreeView\obj\Debug\ICSharpCode.TreeView_MarkupCompile.cache
+Y:\Developer\CURRENT\TMPApps\LIBRARY\SharpTreeView\obj\Debug\ICSharpCode.TreeView_MarkupCompile.lref
+Y:\Developer\CURRENT\TMPApps\LIBRARY\SharpTreeView\obj\Debug\Themes\Generic.baml
+Y:\Developer\CURRENT\TMPApps\LIBRARY\SharpTreeView\obj\Debug\ICSharpCode.TreeView.g.resources
+Y:\Developer\CURRENT\TMPApps\LIBRARY\SharpTreeView\obj\Debug\ICSharpCode.TreeView.dll
+Y:\Developer\CURRENT\TMPApps\LIBRARY\SharpTreeView\obj\Debug\ICSharpCode.TreeView.pdb
+Y:\Developer\CURRENT\TMPApps\LIBRARY\SharpTreeView\obj\Debug\ICSharpCode.TreeView.csproj.CoreCompileInputs.cache

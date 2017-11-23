@@ -2,7 +2,7 @@
 {
     using System.Diagnostics.CodeAnalysis;
 
-    internal static partial class IID
+    public static partial class IID
     {
         /// <summary>IID_IApplicationAssociationRegistration</summary>
         public const string ApplicationAssociationRegistration = "4e530b0a-e611-4c77-a3ac-9031d022281b";
@@ -148,13 +148,13 @@
         #endregion Win7 IIDs
     }
 
-    internal static partial class SID
+    public static partial class SID
     {
         /// <summary>SID_SWebBrowserApp</summary>
         public const string SWebBrowserApp = "0002DF05-0000-0000-C000-000000000046";
     }
 
-    internal static partial class CLSID
+    public static partial class CLSID
     {
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         public static T CoCreateInstance<T>(string clsid)

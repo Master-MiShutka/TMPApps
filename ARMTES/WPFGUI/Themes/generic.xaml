@@ -1,6 +1,9 @@
-﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="clr-namespace:TMP.ARMTES.Controls"
+    xmlns:conv="clr-namespace:TMP.ARMTES.Converters"
+    xmlns:sys="clr-namespace:System;assembly=mscorlib">
 
     <LinearGradientBrush x:Key="HeaderGradientBackground" StartPoint="0,0" EndPoint="0,1">
         <LinearGradientBrush.GradientStops>
@@ -15,5 +18,6 @@
     <SolidColorBrush x:Key="CollectorListBackground" Color="Transparent" />
 
     <sys:Double x:Key="imageWidthAndHeight">16</sys:Double>
+
 
 </ResourceDictionary>

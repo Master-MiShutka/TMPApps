@@ -101,22 +101,6 @@ namespace TMP.ARMTES.Model
         public string[] Dates { get; set; }
     }
 
-    public class ChartStatisticsViewModel
-    {
-        public string MinDate { get; set; }
-        public string MaxDate { get; set; }
-        public string ChartTitle { get; set; }
-        public string[] Flats { get; set; }
-        public ChartStatisticsViewPoint[] ChartStatisticsViewPoints { get; set; }
-
-    }
-
-    public class ChartStatisticsViewPoint
-    {
-        public string TimeStamp { get; set; }
-        public double BalanceValue { get; set; }
-    }
-
     public class CounterChoosingViewModel
     {
         public string[] CounterChoosingViewItems { get; set; }

@@ -59,17 +59,15 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="GongSolutions.Wpf.DragDrop, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\gong-wpf-dragdrop.1.0.0\lib\net45\GongSolutions.Wpf.DragDrop.dll</HintPath>
-      <Private>False</Private>
+    <Reference Include="GongSolutions.Wpf.DragDrop, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\gong-wpf-dragdrop.1.1.0\lib\net45\GongSolutions.Wpf.DragDrop.dll</HintPath>
     </Reference>
     <Reference Include="ICSharpCode.AvalonEdit, Version=5.0.3.0, Culture=neutral, PublicKeyToken=9cc39be672370310, processorArchitecture=MSIL">
       <HintPath>..\..\packages\AvalonEdit.5.0.3\lib\Net40\ICSharpCode.AvalonEdit.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="MahApps.Metro.IconPacks.Modern, Version=1.6.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\MahApps.Metro.IconPacks.Modern.1.6.0\lib\net45\MahApps.Metro.IconPacks.Modern.dll</HintPath>
-      <Private>False</Private>
+    <Reference Include="MahApps.Metro.IconPacks.Modern, Version=1.7.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\MahApps.Metro.IconPacks.Modern.1.7.1\lib\net45\MahApps.Metro.IconPacks.Modern.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -97,22 +95,15 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controls\CollectionViewNavigator.xaml.cs">
-      <DependentUpon>CollectionViewNavigator.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Controls\CompositeTextBox.cs" />
     <Compile Include="Controls\LayoutGroup\LabelledContent.xaml.cs">
       <DependentUpon>LabelledContent.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\PagedDataGrid.xaml.cs">
-      <DependentUpon>PagedDataGrid.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\ViewFuncResultAsSelector.xaml.cs">
       <DependentUpon>ViewFuncResultAsSelector.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\ZoomBorder.cs" />
     <Compile Include="Converters\IncreaseIntConverter.cs" />
-    <Compile Include="Converters\MultibindingStringFormatConverter.cs" />
     <Compile Include="Converters\FormatTypeToTextConverter.cs" />
     <Compile Include="Converters\RequestFuncTypeToTextConverter.cs" />
     <Compile Include="Converters\FuncParameterToTextConverter.cs" />
@@ -122,7 +113,6 @@
     <Compile Include="EzSbyt\DataParser.cs" />
     <Compile Include="MessageBox.cs" />
     <Compile Include="ObservableCollectionAdv.cs" />
-    <Compile Include="PagingCollectionView.cs" />
     <Compile Include="Utils.cs" />
     <Compile Include="ViewModel\AbstractViewModelWaitable.cs" />
     <Compile Include="ViewModel\Funcs\BaseFuncViewModel.cs" />
@@ -201,19 +191,11 @@
     <Compile Include="ViewModel\ShemaUchetViewModel.cs" />
     <Compile Include="ViewModel\AbstractViewModel.cs" />
     <Compile Include="ViewModel\TabViewModel.cs" />
-    <Page Include="Controls\CollectionViewNavigator.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Controls\LayoutGroup\LabelledContent.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Controls\LayoutGroup\LabelledTextBox.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Controls\PagedDataGrid.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -376,10 +358,6 @@
       <Project>{588a47ee-dbc1-48c3-987b-bbd5163a8cce}</Project>
       <Name>Interactivity</Name>
       <Private>False</Private>
-    </ProjectReference>
-    <ProjectReference Include="..\..\LIBRARY\Logger\Logger.csproj">
-      <Project>{04ce65d3-1dbf-4a95-8b6e-44ec2c896d00}</Project>
-      <Name>Logger</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\LIBRARY\NetHelper\NetHelper.csproj">
       <Project>{e00c55d0-971a-4d59-8c91-e7a4d79d50e8}</Project>

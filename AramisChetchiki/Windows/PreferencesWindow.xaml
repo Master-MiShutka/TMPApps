@@ -1,0 +1,285 @@
+﻿<Window
+    x:Class="TMP.WORK.AramisChetchiki.PreferencesWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="clr-namespace:TMP.UI.Controls.WPF;assembly=ui.controls.wpf"
+    xmlns:converters="clr-namespace:TMP.UI.Controls.WPF.Converters;assembly=ui.controls.wpf"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:dd="urn:gong-wpf-dragdrop"
+    xmlns:extensions="clr-namespace:TMP.Extensions;assembly=TMP.Extensions"
+    xmlns:local="clr-namespace:TMP.WORK.AramisChetchiki"
+    xmlns:local_extensions="clr-namespace:TMP.WORK.AramisChetchiki.Extensions"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:model="clr-namespace:TMP.WORK.AramisChetchiki.Model"
+    xmlns:properties="clr-namespace:TMP.WORK.AramisChetchiki.Properties"
+    xmlns:sys="clr-namespace:System;assembly=mscorlib"
+    xmlns:view="clr-namespace:TMP.WORK.AramisChetchiki.Views"
+    xmlns:xcdg="http://schemas.xceed.com/wpf/xaml/datagrid"
+    Title="Параметры"
+    MinHeight="200"
+    Padding="10"
+    d:DesignHeight="250"
+    d:DesignWidth="800"
+    FontSize="{local_extensions:SettingBinding FontSize,
+                                               14.0,
+                                               Mode=OneTime}"
+    ResizeMode="CanResize"
+    ShowInTaskbar="False"
+    SizeToContent="WidthAndHeight"
+    WindowStartupLocation="CenterOwner"
+    WindowStyle="ToolWindow"
+    mc:Ignorable="d">
+    <Window.Resources>
+        <Style TargetType="{x:Type Separator}">
+            <Setter Property="Margin" Value="0,5" />
+        </Style>
+        <DataTemplate x:Key="TabItemHeaderTemplate">
+            <TextBlock
+                x:Name="txt"
+                Padding="5,10"
+                Text="{Binding}" />
+            <DataTemplate.Triggers>
+                <DataTrigger Binding="{Binding Path=IsSelected, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type TabItem}}}" Value="true">
+                    <Setter TargetName="txt" Property="FontWeight" Value="Bold" />
+                </DataTrigger>
+            </DataTemplate.Triggers>
+        </DataTemplate>
+        <Style BasedOn="{StaticResource {x:Type TabItem}}" TargetType="{x:Type TabItem}">
+            <Setter Property="HeaderTemplate" Value="{StaticResource TabItemHeaderTemplate}" />
+        </Style>
+        <Style
+            x:Key="ListBoxItemWithTableField"
+            BasedOn="{StaticResource {x:Type ListBoxItem}}"
+            TargetType="{x:Type ListBoxItem}">
+            <Setter Property="Tag" Value="{Binding RelativeSource={RelativeSource Mode=Self}, Converter={StaticResource ConverterForUpdateTableFieldDisplayOrder}}" />
+            <Style.Triggers>
+                <Trigger Property="ItemsControl.AlternationIndex" Value="1">
+                    <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+    <TabControl
+        Margin="5"
+        SelectedIndex="0"
+        TabStripPlacement="Left">
+        <TabControl.Template>
+            <ControlTemplate TargetType="{x:Type TabControl}">
+                <Grid KeyboardNavigation.TabNavigation="Local">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" MinWidth="200" />
+                    </Grid.ColumnDefinitions>
+                    <TabPanel
+                        Name="HeaderPanel"
+                        Grid.Column="0"
+                        Margin="1,0,-1,0"
+                        Panel.ZIndex="1"
+                        Background="Transparent"
+                        IsItemsHost="True"
+                        KeyboardNavigation.TabIndex="1" />
+                    <Border
+                        Name="Border"
+                        Grid.Column="1"
+                        Margin="-2"
+                        BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}"
+                        BorderThickness="1"
+                        KeyboardNavigation.DirectionalNavigation="Contained"
+                        KeyboardNavigation.TabIndex="2"
+                        KeyboardNavigation.TabNavigation="Local">
+                        <ContentPresenter x:Name="PART_SelectedContentHost" ContentSource="SelectedContent" />
+                    </Border>
+                </Grid>
+            </ControlTemplate>
+        </TabControl.Template>
+        <TabItem Header="Оформление">
+            <Grid>
+                <controls:LayoutGroup Margin="10">
+                    <controls:LabelledContent Label="Тема оформления">
+                        <ComboBox
+                            MinHeight="25"
+                            DisplayMemberPath="ShortName"
+                            IsSynchronizedWithCurrentItem="True"
+                            ItemsSource="{Binding MainViewModel.Themes}"
+                            SelectedItem="{Binding MainViewModel.SelectedTheme, Mode=TwoWay}"
+                            Text="{Binding MainViewModel.SelectedTheme.ShortName, Mode=TwoWay}" />
+                    </controls:LabelledContent>
+                    <Separator />
+                    <DockPanel>
+                        <Label Content="Размер текста в программе" DockPanel.Dock="Left" />
+                        <TextBlock
+                            Margin="4,0,0,0"
+                            VerticalAlignment="Center"
+                            DockPanel.Dock="Left"
+                            Text="{Binding Path=Value, StringFormat=N1, ElementName=sliderFontSize, Mode=OneWay}" />
+                        <Slider
+                            Name="sliderFontSize"
+                            AutoToolTipPlacement="TopLeft"
+                            IsHitTestVisible="True"
+                            LargeChange="1"
+                            Maximum="20"
+                            Minimum="8"
+                            SmallChange="0.5"
+                            TickFrequency="2"
+                            TickPlacement="BottomRight"
+                            Value="{local_extensions:SettingBinding FontSize,
+                                                                    Mode=TwoWay}" />
+                    </DockPanel>
+                </controls:LayoutGroup>
+            </Grid>
+        </TabItem>
+        <TabItem Header="Расположение данных">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <GroupBox Margin="10" Header="Список подразделений">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <controls:SelectFolderTextBox Label="Путь к папке с программой 'Арамис'" SelectedPath="{Binding DBPath, Mode=TwoWay}" />
+                        <Button
+                            Grid.Column="1"
+                            Margin="2,0"
+                            VerticalAlignment="Bottom"
+                            Command="{Binding CommandAddDepartament}"
+                            Content="добавить" />
+                        <ListBox
+                            Grid.Row="1"
+                            IsSynchronizedWithCurrentItem="True"
+                            ItemsSource="{local_extensions:SettingBinding Departaments,
+                                                                          Mode=TwoWay}"
+                            SelectedValue="{Binding SelectedDepartament}">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Border
+                                        Name="border"
+                                        Margin="2"
+                                        Background="{extensions:ValueFromStyle StyleKey={x:Type Button},
+                                                                               Property=Control.Background}"
+                                        BorderBrush="{DynamicResource {x:Static SystemColors.InactiveBorderBrushKey}}"
+                                        CornerRadius="3">
+                                        <StackPanel Margin="2,1" Orientation="Horizontal">
+                                            <TextBlock FontWeight="Bold" Text="{Binding Name}" />
+                                            <TextBlock
+                                                Margin="5,0,0,0"
+                                                FontStyle="Italic"
+                                                Text="{Binding Path}" />
+                                        </StackPanel>
+                                    </Border>
+                                    <DataTemplate.Triggers>
+                                        <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBoxItem}}}" Value="True">
+                                            <Setter TargetName="border" Property="Background" Value="Transparent" />
+                                        </DataTrigger>
+                                    </DataTemplate.Triggers>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                            <!--    -->
+                        </ListBox>
+                        <StackPanel
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            Margin="2,0">
+                            <Button Command="{Binding CommandRemoveDepartament}" Content="удалить" />
+                            <Button Command="{Binding CommandClearDepartamentsList}" Content="очистить" />
+                        </StackPanel>
+                    </Grid>
+                </GroupBox>
+                <controls:LayoutGroup Grid.Row="1" Margin="10">
+                    <controls:SelectFolderTextBox Label="Путь к папке для хранения данных программы" SelectedPath="{local_extensions:SettingBinding DataStorePath, Mode=TwoWay}" />
+                </controls:LayoutGroup>
+            </Grid>
+        </TabItem>
+        <TabItem Header="Сводная информация">
+            <Grid Margin="10" IsSharedSizeScope="True">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <controls:LabelledContent Label="Вид по умолчанию">
+                    <ComboBox
+                        IsEditable="False"
+                        ItemsSource="{local_extensions:SettingBinding SelectedSummaryView,
+                                                                      Converter={converters:EnumBindingConverter}}"
+                        SelectedItem="{local_extensions:SettingBinding SelectedSummaryView,
+                                                                       Converter={converters:EnumBindingConverter},
+                                                                       UpdateSourceTrigger=PropertyChanged}" />
+                </controls:LabelledContent>
+                <Separator Grid.Row="1" />
+                <Label
+                    Grid.Row="2"
+                    HorizontalContentAlignment="Center"
+                    Content="Измените порядок полей, перетаскивая их с помощью мыши." />
+                <controls:LabelledContent Grid.Row="3" Label="Используемые поля&#x0a;и и их порядок">
+                    <ListBox
+                        dd:DragDrop.IsDragSource="True"
+                        dd:DragDrop.IsDropTarget="True"
+                        AlternationCount="2"
+                        ItemContainerStyle="{StaticResource ListBoxItemWithTableField}"
+                        ItemsSource="{local_extensions:SettingBinding SummaryInfoFields}">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate DataType="{x:Type xcdg:TableField}">
+                                <DockPanel>
+                                    <CheckBox
+                                        Margin="2,0"
+                                        VerticalAlignment="Center"
+                                        DockPanel.Dock="Left"
+                                        IsChecked="{Binding IsVisible}" />
+                                    <TextBlock
+                                        Margin="2,0"
+                                        Text="{Binding DisplayName}"
+                                        TextTrimming="CharacterEllipsis" />
+                                </DockPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </controls:LabelledContent>
+            </Grid>
+        </TabItem>
+        <TabItem Header="Список замен счётчиков">
+            <Grid Margin="10" IsSharedSizeScope="True">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <Label
+                    Grid.Row="0"
+                    HorizontalContentAlignment="Center"
+                    Content="Измените порядок полей, перетаскивая их с помощью мыши." />
+                <controls:LabelledContent Grid.Row="1" Label="Используемые поля&#x0a;и их порядок">
+                    <ListBox
+                        dd:DragDrop.IsDragSource="True"
+                        dd:DragDrop.IsDropTarget="True"
+                        AlternationCount="2"
+                        ItemContainerStyle="{StaticResource ListBoxItemWithTableField}"
+                        ItemsSource="{local_extensions:SettingBinding ChangesOfMetersFields}">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate DataType="{x:Type xcdg:TableField}">
+                                <DockPanel>
+                                    <CheckBox
+                                        Margin="2,0"
+                                        VerticalAlignment="Center"
+                                        DockPanel.Dock="Left"
+                                        IsChecked="{Binding IsVisible}" />
+                                    <TextBlock
+                                        Margin="2,0"
+                                        Text="{Binding DisplayName}"
+                                        TextTrimming="CharacterEllipsis" />
+                                </DockPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </controls:LabelledContent>
+            </Grid>
+        </TabItem>
+    </TabControl>
+</Window>

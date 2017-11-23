@@ -5,8 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 
-using TMP.Shared;
-
 namespace TMP.ARMTES.Model
 {
     [XmlRoot("Counter")]
@@ -28,7 +26,7 @@ namespace TMP.ARMTES.Model
         public bool IsAnswered
         {
             get { return _isAnswered; }
-            set { SetProp<bool>(ref _isAnswered, value, "IsAnswered"); }
+            set { SetProperty<bool>(ref _isAnswered, value, "IsAnswered"); }
         }
         public int TarifsCount
         {
@@ -42,27 +40,27 @@ namespace TMP.ARMTES.Model
                     _tarifsCount = 1;
                 return _tarifsCount;
             }
-            set { SetProp<int>(ref _tarifsCount, value, "TarifsCount"); }
+            set { SetProperty<int>(ref _tarifsCount, value, "TarifsCount"); }
         }
         public string AccountingPoint
         {
             get { return _accountingPoint; }
-            set { SetProp<string>(ref _accountingPoint, value, "AccountingPoint"); }
+            set { SetProperty<string>(ref _accountingPoint, value, "AccountingPoint"); }
         }
         public string CounterType
         {
             get { return _counterType; }
-            set { SetProp<string>(ref _counterType, value, "CounterType"); }
+            set { SetProperty<string>(ref _counterType, value, "CounterType"); }
         }
         public string CounterNetworkAdress
         {
             get { return _сounterNetworkAdress; }
-            set { SetProp<string>(ref _сounterNetworkAdress, value, "CounterNetworkAdress"); }
+            set { SetProperty<string>(ref _сounterNetworkAdress, value, "CounterNetworkAdress"); }
         }
         public string SerialNumber
         {
             get { return _serialNumber; }
-            set { SetProp<string>(ref _serialNumber, value, "SerialNumber"); }
+            set { SetProperty<string>(ref _serialNumber, value, "SerialNumber"); }
         }
         
         public long? PreviousIndication { get; set; }
@@ -73,12 +71,12 @@ namespace TMP.ARMTES.Model
         public Indications PreviousIndications
         {
             get { return _previousIndications;}
-            set { SetProp<Indications>(ref _previousIndications, value, "PreviousIndications"); }
+            set { SetProperty<Indications>(ref _previousIndications, value, "PreviousIndications"); }
         }
         public Indications NextIndications
         {
             get { return _nextIndications; }
-            set { SetProp<Indications>(ref _nextIndications, value, "NextIndications"); }
+            set { SetProperty<Indications>(ref _nextIndications, value, "NextIndications"); }
         }
 
         [XmlIgnore]
@@ -107,7 +105,7 @@ namespace TMP.ARMTES.Model
         public string Description
         {
             get { return _description; }
-            set { SetProp<string>(ref _description, value, "Description"); }
+            set { SetProperty<string>(ref _description, value, "Description"); }
         }
         public ViewCounterModel ViewModel { get; set; }
         

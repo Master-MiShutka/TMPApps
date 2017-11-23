@@ -7,8 +7,6 @@ using System.Linq;
 using System.Text;
 
 
-using TMP.Shared;
-
 namespace TMP.ARMTES.Model
 {
     public class EditorModel : INotifyPropertyChanged
@@ -107,7 +105,7 @@ namespace TMP.ARMTES.Model
         public List<string> Departaments
         {
             get { return _departaments; }
-            private set { SetProp<List<string>>(ref _departaments, value, "Departaments"); }
+            private set { SetProperty<List<string>>(ref _departaments, value, "Departaments"); }
         }
         public List<RegistryCollector> Collectors
         {
@@ -133,7 +131,7 @@ namespace TMP.ARMTES.Model
                     }
                 }
             }
-            private set { SetProp<List<RegistryCollector>>(ref _collectors, value, "Collectors"); }
+            private set { SetProperty<List<RegistryCollector>>(ref _collectors, value, "Collectors"); }
         }
 
         public string FilterProperty
@@ -141,17 +139,17 @@ namespace TMP.ARMTES.Model
             get { return _filterProperty; }
             set 
             {
-                SetProp<string>(ref _filterProperty, value, "FilterProperty");
-                base.RaisePropertyChanged("Collectors");
-                base.RaisePropertyChanged("CollectorsCount");
-                base.RaisePropertyChanged("CountersCount");
+                SetProperty<string>(ref _filterProperty, value, "FilterProperty");
+                base.OnPropertyChanged("Collectors");
+                base.OnPropertyChanged("CollectorsCount");
+                base.OnPropertyChanged("CountersCount");
             }
         }
 
         public object FilterValue
         {
             get { return _filterValue; }
-            set { SetProp<object>(ref _filterValue, value, "FilterValue"); }
+            set { SetProperty<object>(ref _filterValue, value, "FilterValue"); }
         }
 
         public int DepartamentsCount
@@ -203,10 +201,10 @@ namespace TMP.ARMTES.Model
 
         public void Update()
         {
-            base.RaisePropertyChanged("FilterProperty");
-            base.RaisePropertyChanged("Collectors");
-            base.RaisePropertyChanged("CollectorsCount");
-            base.RaisePropertyChanged("CountersCount");
+            base.OnPropertyChanged("FilterProperty");
+            base.OnPropertyChanged("Collectors");
+            base.OnPropertyChanged("CollectorsCount");
+            base.OnPropertyChanged("CountersCount");
         }
     }
 }

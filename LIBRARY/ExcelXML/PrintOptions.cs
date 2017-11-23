@@ -36,6 +36,7 @@ namespace TMP.ExcelXml
 
 		#region Public Properties
 		private PageLayout layout;
+		private PaperSize paperSize = PaperSize.A4;
 		/// <summary>
 		/// Gets or sets page layout
 		/// </summary>
@@ -51,6 +52,23 @@ namespace TMP.ExcelXml
 
 				if (!layout.IsValid())
 					throw new ArgumentException("Invalid page layout defined");
+			}
+		}
+		/// <summary>
+		/// Gets or sets paper size
+		/// </summary>
+		public PaperSize PaperSize
+		{
+			get
+			{
+				return paperSize;
+			}
+			set
+			{
+				paperSize = value;
+
+				if (!paperSize.IsValid())
+					throw new ArgumentException("Invalid paper size defined");
 			}
 		}
 
@@ -262,7 +280,9 @@ namespace TMP.ExcelXml
 
 			// Print options
 			writer.WriteStartElement("Print");
-			writer.WriteElementString("ValidPrinterInfo", "");
+            // Paper size
+            writer.WriteElementString("PaperSizeIndex", ((byte)PaperSize).ToString());
+            writer.WriteElementString("ValidPrinterInfo", "");
 
 			writer.WriteElementString("FitHeight", FitHeight.ToString(CultureInfo.InvariantCulture));
 			writer.WriteElementString("FitWidth", FitWidth.ToString(CultureInfo.InvariantCulture));

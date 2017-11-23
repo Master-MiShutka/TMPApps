@@ -37,9 +37,8 @@
       <HintPath>..\..\packages\AvalonEdit.5.0.3\lib\Net40\ICSharpCode.AvalonEdit.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="MahApps.Metro.IconPacks.Modern, Version=1.6.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\MahApps.Metro.IconPacks.Modern.1.6.0\lib\net45\MahApps.Metro.IconPacks.Modern.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="MahApps.Metro.IconPacks.Modern, Version=1.7.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\MahApps.Metro.IconPacks.Modern.1.7.1\lib\net45\MahApps.Metro.IconPacks.Modern.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -82,6 +81,13 @@
     <Compile Include="Controls\LoadingWait.xaml.cs">
       <DependentUpon>LoadingWait.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\PagedDataGrid\CollectionViewNavigator.xaml.cs">
+      <DependentUpon>CollectionViewNavigator.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\PagedDataGrid\PagedDataGrid.xaml.cs">
+      <DependentUpon>PagedDataGrid.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\PagedDataGrid\PagingCollectionView.cs" />
     <Compile Include="Controls\TreeListView\ITreeModel.cs" />
     <Compile Include="Controls\TreeListView\ObservableCollectionAdv.cs" />
     <Compile Include="Controls\TreeListView\RowExpander.cs" />
@@ -95,6 +101,7 @@
     <Compile Include="Controls\DropDownButton.cs" />
     <Compile Include="Controls\Wait.cs" />
     <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
+    <Compile Include="Converters\MultibindingStringFormatConverter.cs" />
     <Compile Include="Converters\TreeListConverters.cs" />
     <Compile Include="Dialogs\ModalDialog.xaml.cs">
       <DependentUpon>ModalDialog.xaml</DependentUpon>
@@ -263,6 +270,14 @@
     <Page Include="Controls\LoadingWait.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\PagedDataGrid\CollectionViewNavigator.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\PagedDataGrid\PagedDataGrid.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Dialogs\ModalDialog.xaml">
       <SubType>Designer</SubType>
@@ -667,6 +682,7 @@
       <LastGenOutput>Strings.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

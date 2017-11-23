@@ -1,0 +1,228 @@
+﻿<Window
+    x:Class="TMP.WORK.AramisChetchiki.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="clr-namespace:TMP.UI.Controls.WPF;assembly=ui.controls.wpf"
+    xmlns:converters="clr-namespace:TMP.UI.Controls.WPF.Converters;assembly=ui.controls.wpf"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:extensions="clr-namespace:TMP.Extensions;assembly=TMP.Extensions"
+    xmlns:local="clr-namespace:TMP.WORK.AramisChetchiki"
+    xmlns:local_controls="clr-namespace:TMP.WORK.AramisChetchiki.Controls"
+    xmlns:local_extensions="clr-namespace:TMP.WORK.AramisChetchiki.Extensions"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vm="clr-namespace:TMP.WORK.AramisChetchiki.ViewModel"
+    Title="Просмотр списка счетчиков из программы «Арамис»"
+    Width="1024"
+    Height="600"
+    d:DataContext="{d:DesignInstance {x:Type vm:MainViewModel},
+                                     IsDesignTimeCreatable=True}"
+    Background="{DynamicResource {x:Static SystemColors.AppWorkspaceBrushKey}}"
+    Closed="Window_Closed"
+    FontSize="{local_extensions:SettingBinding FontSize,
+                                               13.0}"
+    Icon="{StaticResource MainIcon}"
+    SnapsToDevicePixels="True"
+    TextOptions.TextFormattingMode="Display"
+    WindowStartupLocation="CenterOwner"
+    mc:Ignorable="d">
+    <Window.Resources />
+    <Window.InputBindings>
+        <KeyBinding Key="F2" Command="{Binding CommandSaveData}" />
+        <KeyBinding
+            Key="S"
+            Command="{Binding CommandSaveData}"
+            Modifiers="Ctrl" />
+        <KeyBinding Key="F9" Command="{Binding CommandGetData}" />
+
+        <KeyBinding Key="F10" Command="{Binding CommandShowPreferences}" />
+        <KeyBinding Key="F1" Command="{Binding CommandShowHelp}" />
+    </Window.InputBindings>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <controls:BusyControl Grid.RowSpan="4" Visibility="{Binding IsBusy, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Hidden}" />
+        <Border Background="{extensions:ValueFromStyle StyleKey={x:Type ToolBar}, Property=Control.Background}">
+            <WrapPanel Margin="2">
+                <Button
+                    Margin="5,0"
+                    Command="{Binding CommandSaveData}"
+                    Content="{Binding CommandSaveData.Header}"
+                    ContentTemplate="{StaticResource ButtonContentTemplate}"
+                    FontWeight="SemiBold"
+                    Visibility="{Binding DataNotSaved, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                <Button
+                    Margin="5,0"
+                    Command="{Binding CommandGetData}"
+                    Content="{Binding CommandGetData.Header}"
+                    ContentTemplate="{StaticResource ButtonContentTemplate}" />
+                <Button
+                    Margin="5,0"
+                    Command="{Binding CommandShowPreferences}"
+                    Content="{Binding CommandShowPreferences.Header}"
+                    ContentTemplate="{StaticResource ButtonContentTemplate}" />
+                <Separator />
+                <Button
+                    Margin="5,0"
+                    Command="{Binding CommandShowAll}"
+                    Content="{Binding CommandShowAll.Header}" />
+                <Button
+                    Margin="5,0"
+                    Command="{Binding CommandShowMetersFilter}"
+                    Content="{Binding CommandShowMetersFilter.Header}" />
+                <Separator />
+                <StackPanel
+                    Margin="5,4"
+                    HorizontalAlignment="Center"
+                    Orientation="Horizontal">
+                    <TextBlock
+                        Width="Auto"
+                        Margin="2,0"
+                        VerticalAlignment="Center"
+                        LineHeight="12"
+                        Text="Дата сравнения&#x0a;поверки счётчика"
+                        TextWrapping="Wrap" />
+                    <ComboBox
+                        MinWidth="50"
+                        DisplayMemberPath="Value"
+                        IsEditable="False"
+                        ItemsSource="{Binding Quarters}"
+                        SelectedItem="{Binding SelectedQuarter, Mode=TwoWay}" />
+                    <ComboBox
+                        MinWidth="50"
+                        IsEditable="False"
+                        ItemsSource="{Binding Years}"
+                        SelectedItem="{Binding SelectedYear, Mode=TwoWay}" />
+                </StackPanel>
+                <!--
+                    Button
+                    Margin="5,0"
+                    Command="{Binding CommandShowHelp}"
+                    Content="{Binding CommandShowHelp.Header}"
+                    ContentTemplate="{StaticResource ButtonContentTemplate}" /
+                -->
+            </WrapPanel>
+            <Border.Effect>
+                <DropShadowEffect
+                    BlurRadius="8"
+                    Direction="-90"
+                    RenderingBias="Performance"
+                    ShadowDepth="1" />
+            </Border.Effect>
+        </Border>
+        <Border
+            Grid.Row="1"
+            Margin="0,-0,0,0"
+            Padding="10,0"
+            HorizontalAlignment="Center"
+            Background="{extensions:ValueFromStyle StyleKey={x:Type ToolBar},
+                                                   Property=Control.Background}"
+            CornerRadius="0 0 5 5">
+            <ListBox
+                MinWidth="150"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Top"
+                Background="Transparent"
+                BorderThickness="0"
+                ItemContainerStyle="{StaticResource horizontalListBoxItem}"
+                ItemsSource="{Binding CurrentMode, Converter={converters:EnumBindingConverter}}"
+                SelectedItem="{Binding CurrentMode, Converter={converters:EnumBindingConverter}}">
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Horizontal" />
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+            </ListBox>
+            <Border.Effect>
+                <DropShadowEffect
+                    BlurRadius="10"
+                    Direction="-90"
+                    RenderingBias="Performance"
+                    ShadowDepth="4" />
+            </Border.Effect>
+        </Border>
+
+        <Border
+            Name="border_content"
+            Grid.Row="2"
+            Margin="5"
+            Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}">
+            <Border.Effect>
+                <DropShadowEffect
+                    BlurRadius="10"
+                    Direction="-90"
+                    RenderingBias="Performance"
+                    ShadowDepth="2" />
+            </Border.Effect>
+            <ContentControl
+                Margin="2,0,2,4"
+                Content="{Binding CurrentView}"
+                SnapsToDevicePixels="True" />
+        </Border>
+        <DockPanel
+            Grid.Row="3"
+            Margin="0,0"
+            Background="{extensions:ValueFromStyle StyleKey={x:Type ToolBar},
+                                                   Property=Control.Background}"
+            TextBlock.FontSize="{DynamicResource SmallFontSize}"
+            ToolTip="Уважайте и цените чужой труд!">
+            <StackPanel Orientation="Horizontal" Visibility="{Binding Data, Converter={StaticResource NullOrEmptyToVisibilityConverter}}">
+                <controls:LabelledTextBlock
+                    Margin="5,0"
+                    Label="Версия данных от:"
+                    Text="{Binding Data.Date, StringFormat=dd.MM.yyyy}" />
+                <Separator />
+                <controls:LabelledTextBlock Label="Размер данных:" Text="{Binding DataSize}" />
+                <Separator />
+            </StackPanel>
+            <controls:LabelledContent
+                Margin="5,0"
+                VerticalContentAlignment="Center"
+                Label="РЭС:">
+                <ComboBox
+                    MinWidth="150"
+                    DisplayMemberPath="Name"
+                    ItemsSource="{local_extensions:SettingBinding Departaments,
+                                                                  Mode=TwoWay}"
+                    SelectedValue="{Binding SelectedDepartament, Mode=TwoWay}">
+                    <ComboBox.Style>
+                        <Style BasedOn="{StaticResource {x:Type ComboBox}}" TargetType="ComboBox">
+                            <Style.Triggers>
+                                <Trigger Property="ItemsSource" Value="{x:Null}">
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate>
+                                                <Label VerticalAlignment="Center" Content="не заданы" />
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Trigger>
+                                <Trigger Property="HasItems" Value="false">
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate>
+                                                <Label VerticalAlignment="Center" Content="не заданы" />
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ComboBox.Style>
+                </ComboBox>
+            </controls:LabelledContent>
+            <ResizeGrip DockPanel.Dock="Right" />
+            <TextBlock
+                Margin="5,0,15,3"
+                DockPanel.Dock="Right"
+                FontStyle="Italic"
+                FontWeight="Light"
+                TextAlignment="Right">
+                <Run Text="© 2017, ведущий инженер отдела сбыта ОЭС" />
+                <Run Text="Трус Михаил Петрович" /></TextBlock>
+        </DockPanel>
+    </Grid>
+</Window>

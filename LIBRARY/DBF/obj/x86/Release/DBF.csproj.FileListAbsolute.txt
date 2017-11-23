@@ -1,0 +1,9 @@
+D:\Документы\MiShutka\Visual Studio 2013\Projects\TM.WORK.Aramis\bin\x86\Release\DBF.dll
+D:\Документы\MiShutka\Visual Studio 2013\Projects\TM.WORK.Aramis\bin\x86\Release\DBF.pdb
+D:\Документы\MiShutka\Visual Studio 2013\Projects\TM.WORK.Aramis\DBF\obj\x86\Release\DBF.dll
+D:\Документы\MiShutka\Visual Studio 2013\Projects\TM.WORK.Aramis\DBF\obj\x86\Release\DBF.pdb
+d:\Developer\MY\PROJECTS\TM.WORK.Aramis\bin\x86\Release\DBF.dll
+d:\Developer\MY\PROJECTS\TM.WORK.Aramis\bin\x86\Release\DBF.pdb
+d:\Developer\MY\PROJECTS\TM.WORK.Aramis\DBF\obj\x86\Release\DBF.csprojResolveAssemblyReference.cache
+d:\Developer\MY\PROJECTS\TM.WORK.Aramis\DBF\obj\x86\Release\DBF.dll
+d:\Developer\MY\PROJECTS\TM.WORK.Aramis\DBF\obj\x86\Release\DBF.pdb

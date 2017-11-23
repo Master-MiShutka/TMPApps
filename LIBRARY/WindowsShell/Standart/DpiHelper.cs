@@ -4,7 +4,7 @@
     using System.Windows;
     using System.Windows.Media;
 
-    internal static class DpiHelper
+    public static class DpiHelper
     {
         private static Matrix _transformToDevice;
         private static Matrix _transformToDip;
