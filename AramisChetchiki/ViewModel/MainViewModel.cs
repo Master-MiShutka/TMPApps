@@ -1125,7 +1125,13 @@ namespace TMP.WORK.AramisChetchiki.ViewModel
                 _selectedDepartament = value;
                 RaisePropertyChanged("SelectedDepartament");
                 Settings.Default.SelectDepartamentAndStore(_selectedDepartament);
-                Task.Factory.StartNew(() => LoadData());
+                _currentView = null;
+                Data = null;
+                Task.Factory.StartNew(() => LoadData())
+                    .ContinueWith((t) =>
+                    {
+                        RaisePropertyChanged("CurrentView");
+                    });
             }
         }
         public IDataViewModel<IModel> ActiveViewModel { get; private set; }
@@ -1224,6 +1230,8 @@ namespace TMP.WORK.AramisChetchiki.ViewModel
             {
                 if (Data != null && _currentView is System.Windows.Controls.UserControl == false)
                     CreateView();
+                if (_currentView == null)
+                    CreateViewNotLoadedData();
                 return _currentView;
             }
         }

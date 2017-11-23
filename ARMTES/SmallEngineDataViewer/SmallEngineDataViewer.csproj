@@ -237,7 +237,7 @@
     <Analyzer Include="..\..\packages\ClrHeapAllocationAnalyzer.1.0.0.8\analyzers\dotnet\cs\ClrHeapAllocationAnalyzer.dll" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\ExtendedWPFToolkitSolution\Src\Xceed.Wpf.DataGrid\Xceed.Wpf.DataGrid.csproj">
+    <ProjectReference Include="..\..\ExtendedWPFToolkitSolution\Src\Xceed.Wpf.DataGrid\Xceed.Wpf.DataGrid.csproj">
       <Project>{63648392-6ce9-4a60-96d4-f9fd718d29b0}</Project>
       <Name>Xceed.Wpf.DataGrid</Name>
     </ProjectReference>

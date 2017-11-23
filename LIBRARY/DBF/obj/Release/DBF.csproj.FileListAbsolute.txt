@@ -4,3 +4,9 @@ Y:\! Aramis\TM.WORK.Aramis\DBF\obj\Release\DBF.csprojResolveAssemblyReference.ca
 Y:\! Aramis\TM.WORK.Aramis\DBF\obj\Release\DBF.csproj.CoreCompileInputs.cache
 Y:\! Aramis\TM.WORK.Aramis\DBF\obj\Release\DBF.dll
 Y:\! Aramis\TM.WORK.Aramis\DBF\obj\Release\DBF.pdb
+Y:\Developer\CURRENT\TMPApps\out\Release\Libs\DBF.dll
+Y:\Developer\CURRENT\TMPApps\out\Release\Libs\DBF.pdb
+Y:\Developer\CURRENT\TMPApps\LIBRARY\DBF\obj\Release\DBF.csprojResolveAssemblyReference.cache
+Y:\Developer\CURRENT\TMPApps\LIBRARY\DBF\obj\Release\DBF.csproj.CoreCompileInputs.cache
+Y:\Developer\CURRENT\TMPApps\LIBRARY\DBF\obj\Release\DBF.dll
+Y:\Developer\CURRENT\TMPApps\LIBRARY\DBF\obj\Release\DBF.pdb

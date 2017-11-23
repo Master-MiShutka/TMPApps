@@ -313,6 +313,10 @@
       <Name>DBF</Name>
       <Private>True</Private>
     </ProjectReference>
+    <ProjectReference Include="..\LIBRARY\ExcelOutput\ExcelOutput.csproj">
+      <Project>{f15afdef-1eb8-4136-96ef-ba9bbeeb684b}</Project>
+      <Name>ExcelOutput</Name>
+    </ProjectReference>
     <ProjectReference Include="..\LIBRARY\Extensions\TMP.Extensions.csproj">
       <Project>{3f72fbe4-5f95-43fd-9029-3cc145c978b4}</Project>
       <Name>TMP.Extensions</Name>

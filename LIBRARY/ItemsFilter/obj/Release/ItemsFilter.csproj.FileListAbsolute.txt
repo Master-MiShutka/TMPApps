@@ -24,3 +24,16 @@ Y:\! Aramis\TM.WORK.Aramis\ItemsFilter\obj\Release\ItemsFilter.csproj.GenerateRe
 Y:\! Aramis\TM.WORK.Aramis\ItemsFilter\obj\Release\ItemsFilter.csproj.CoreCompileInputs.cache
 Y:\! Aramis\TM.WORK.Aramis\ItemsFilter\obj\Release\ItemsFilter.dll
 Y:\! Aramis\TM.WORK.Aramis\ItemsFilter\obj\Release\ItemsFilter.pdb
+Y:\Developer\CURRENT\TMPApps\out\Release\Libs\ItemsFilter.dll
+Y:\Developer\CURRENT\TMPApps\out\Release\Libs\ItemsFilter.pdb
+Y:\Developer\CURRENT\TMPApps\LIBRARY\ItemsFilter\obj\Release\ItemsFilter.csprojResolveAssemblyReference.cache
+Y:\Developer\CURRENT\TMPApps\LIBRARY\ItemsFilter\obj\Release\GeneratedInternalTypeHelper.g.cs
+Y:\Developer\CURRENT\TMPApps\LIBRARY\ItemsFilter\obj\Release\ItemsFilter_MarkupCompile.cache
+Y:\Developer\CURRENT\TMPApps\LIBRARY\ItemsFilter\obj\Release\ItemsFilter_MarkupCompile.lref
+Y:\Developer\CURRENT\TMPApps\LIBRARY\ItemsFilter\obj\Release\Themes\Generic.baml
+Y:\Developer\CURRENT\TMPApps\LIBRARY\ItemsFilter\obj\Release\ItemsFilter.g.resources
+Y:\Developer\CURRENT\TMPApps\LIBRARY\ItemsFilter\obj\Release\ItemsFilter.Resources.Strings.resources
+Y:\Developer\CURRENT\TMPApps\LIBRARY\ItemsFilter\obj\Release\ItemsFilter.csproj.GenerateResource.Cache
+Y:\Developer\CURRENT\TMPApps\LIBRARY\ItemsFilter\obj\Release\ItemsFilter.csproj.CoreCompileInputs.cache
+Y:\Developer\CURRENT\TMPApps\LIBRARY\ItemsFilter\obj\Release\ItemsFilter.dll
+Y:\Developer\CURRENT\TMPApps\LIBRARY\ItemsFilter\obj\Release\ItemsFilter.pdb

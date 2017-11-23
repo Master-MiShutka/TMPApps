@@ -4,16 +4,16 @@
 winexe
 C#
 .cs
-y:\Developer\CURRENT\TMPApps\AramisChetchiki\obj\Debug\
+Y:\Developer\CURRENT\TMPApps\AramisChetchiki\obj\Debug\
 TMP.WORK.AramisChetchiki
 none
 false
 DEBUG;TRACE
-y:\Developer\CURRENT\TMPApps\AramisChetchiki\App.xaml
+Y:\Developer\CURRENT\TMPApps\AramisChetchiki\App.xaml
 17430680789
 
 57-712837238
-342039271819
+35-720061995
 Charts\Legend.xaml;Charts\PieChartLayout.xaml;Charts\PieChart.xaml;Themes\Common.xaml;Themes\SummaryInfoDataTemplate.xaml;Views\AbonentsBindingView.xaml;Views\ChangesOfMetersView.xaml;Views\MetrologyView.xaml;Windows\FiltersWindow.xaml;Windows\MainWindow.xaml;Windows\PreferencesWindow.xaml;Windows\PrintPreviewView.xaml;Themes\Styles.xaml;Views\SummaryInfoView.xaml;Windows\SelectFieldsAndSortCollectionViewWindow.xaml;Windows\ViewCollectionWindow.xaml;Windows\Window1.xaml;
 
 False
