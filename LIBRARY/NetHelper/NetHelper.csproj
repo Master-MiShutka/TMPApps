@@ -58,6 +58,12 @@
     <Compile Include="RequestState.cs" />
     <Compile Include="ServiceResult.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Logger\Logger.csproj">
+      <Project>{04ce65d3-1dbf-4a95-8b6e-44ec2c896d00}</Project>
+      <Name>Logger</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>echo "$(TargetDir)$(TargetFileName)"

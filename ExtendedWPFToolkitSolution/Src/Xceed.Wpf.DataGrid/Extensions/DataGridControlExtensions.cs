@@ -29,10 +29,11 @@ namespace Xceed.Wpf.DataGrid.Extensions
 
                 switch (typecode)
                 {
-                    case TypeCode.Boolean:
+                    /*case TypeCode.Boolean:
 
                         FrameworkElementFactory factory = new FrameworkElementFactory(typeof(DataGridCheckBox));
                         factory.SetBinding(DataGridCheckBox.IsCheckedProperty, new Binding(field.Name));
+                        factory.SetBinding(DataGridCheckBox.ToolTipProperty, new Binding());
 
                         result.Add(new UnboundColumn()
                         {
@@ -42,7 +43,7 @@ namespace Xceed.Wpf.DataGrid.Extensions
                             Visible = field.IsVisible,
                             CellContentTemplate = new DataTemplate() { VisualTree = factory }
                         });
-                        break;
+                        break;*/
                     case TypeCode.Double:
                         result.Add(new Column()
                         {

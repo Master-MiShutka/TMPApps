@@ -4,7 +4,7 @@
 library
 C#
 .cs
-Y:\Developer\CURRENT\TMPApps\LIBRARY\WPFHexaEditor.Control\obj\Release\
+y:\Repos\TMPApps\LIBRARY\WPFHexaEditor.Control\obj\Release\
 WPFHexaEditor.Control
 none
 false
@@ -13,7 +13,7 @@ TRACE
 6-1435655764
 
 20-353346189
-13-592717205
+121654848548
 ResourceDictionary\FontDictionary.xaml;ResourceDictionary\ToolTipDictionary.xaml;StringByteControl.xaml;HexaEditor.xaml;HexByteControl.xaml;ResourceDictionary\BrushesDictionary.xaml;
 
 True

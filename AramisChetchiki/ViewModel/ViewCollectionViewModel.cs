@@ -42,7 +42,7 @@ namespace TMP.WORK.AramisChetchiki.ViewModel
             {
                 if (_fw.IsVisible == false)
                     _fw.Show();
-            });
+            }, "Фильтры");
 
             CommandDoSort = new DelegateCommand<HierarchicalItem>((field) =>
             {
@@ -127,25 +127,6 @@ namespace TMP.WORK.AramisChetchiki.ViewModel
             });
             foreach (var item in l2) GroupFields.Add(item);
 
-            CommandChangeView = new DelegateCommand<object>((o) =>
-           {
-               object[] values = (object[])o;
-               if (values == null) return;
-               string viewName = values[0] as string;
-               DataGrid table = values[1] as DataGrid;
-               if (String.IsNullOrWhiteSpace(viewName) == false && table != null)
-               {
-                   table.BeginInit();
-                   table.AutoGenerateColumns = false;
-                   table.Columns.Clear();
-
-                   ChangeView();
-
-                   table.EndInit();
-               }
-           },
-           () => CollectionOfMeters != null,
-           "Вид");
 
             CommandPrint = new DelegateCommand(() =>
             {
@@ -153,13 +134,13 @@ namespace TMP.WORK.AramisChetchiki.ViewModel
             },
             () => CollectionOfMeters != null && false,
             "Печать");
-            CommandExport = new DelegateCommand<DataGrid>((table) =>
+            CommandExport = new DelegateCommand(() =>
             {
                 IsBusy = true;
                 Status = "Экспорт данных";
                 DetailedStatus = "подготовка ...";
 
-                var task = System.Threading.Tasks.Task.Factory.StartNew(() => Export(table));
+                var task = System.Threading.Tasks.Task.Factory.StartNew(() => Export());
                 task.ContinueWith(t =>
                 {
                     IsBusy = false;
@@ -267,15 +248,16 @@ namespace TMP.WORK.AramisChetchiki.ViewModel
             get { return _groupingFields; }
             private set { _groupingFields = value; RaisePropertyChanged("GroupingFields"); }
         }
-
-        public ICommand CommandChangeView { get; private set; }
-
         public override ICommand CommandExport { get; }
         public override ICommand CommandPrint { get; }
 
         public ICommand CommandShowFilters { get; private set; }
 
         TableView _selectedView = TableView.ShortView;
+
+        /// <summary>
+        /// Режим просмотра таблицы - набор колонок
+        /// </summary>
         public TableView SelectedView
         {
             get { return _selectedView; }
@@ -287,8 +269,10 @@ namespace TMP.WORK.AramisChetchiki.ViewModel
             }
         }
 
-        private IList<string> _tableColumnsFields = null;
         private ObservableCollection<DataGridColumn> _tableColumns;
+        /// <summary>
+        /// Коллекция колонок
+        /// </summary>
         public ObservableCollection<DataGridColumn> TableColumns
         {
             get {
@@ -340,111 +324,30 @@ namespace TMP.WORK.AramisChetchiki.ViewModel
             _tableColumns = new ObservableCollection<Xceed.Wpf.DataGrid.ColumnBase>(Xceed.Wpf.DataGrid.Extensions.DataGridControlExtensions.BuildColumns(fields));
         }
 
-        private void Export(DataGrid dataGrid)
+        private Dictionary<string, string> GetFieldsAndFormats()
         {
-            IEnumerable<Meter> collection = CollectionOfMeters.SourceCollection.Cast<Meter>();
-            int numberOfRows = collection.Count();
-            // +1 т.к. первый столбец номер по порядку
-            int numberOfColumns = _tableColumnsFields.Count() + 1;
-            // +1 т.к. первая строка шапка
-            object[,] output = new object[numberOfRows + 1, numberOfColumns];
-
-            output[0, 0] = "№ п/п";
-            int ind = 1;
-            foreach (var column in _tableColumnsFields)
-                output[0, ind++] = column.Replace("_", " ");
-
-            Type meterType = typeof(Model.Meter);
-            int rowIndex = 1;
-            foreach (Model.Meter meter in collection)
+            var fieldsAndFormats = new Dictionary<string, string>();
+            Application.Current.Dispatcher.Invoke((Action)(() =>
             {
-                output[rowIndex, 0] = rowIndex;
-                ind = 1; // т.к. первый столбец номер по порядку
-                foreach (string column in _tableColumnsFields)
+                var columns = TableColumns
+                    .Where(c => c.Visible)
+                    .OrderBy(c => c.VisiblePosition);
+                var columnsFields = columns.Select(c => new
                 {
-                    object value = ModelHelper.MeterGetPropertyValue(meter, column);
-                    output[rowIndex, ind++] = value;
-                }
-                rowIndex++;
-            }
+                    Key = c.FieldName,
+                    Format = c.CellContentStringFormat
+                });
+                foreach (var item in columnsFields)
+                    fieldsAndFormats.Add(item.Key, item.Format);
+            }));
+            return fieldsAndFormats;
+        }
 
-            string fileName = System.IO.Path.GetTempFileName();
-            fileName = System.IO.Path.ChangeExtension(fileName, "xls");
-
-            Excel.Application excelApplication = null;
-            Excel.Workbook xlWorkbook = null;
-            Excel.Worksheet xlWorksheet = null;
-            try
-            {
-                excelApplication = new Excel.Application();
-                excelApplication.DisplayAlerts = false;
-                excelApplication.ScreenUpdating = false;
-                Excel.Tools.CommonUtils utils = new Excel.Tools.CommonUtils(excelApplication);
-
-                xlWorkbook = excelApplication.Workbooks.Add();
-                xlWorksheet = (Excel.Worksheet)xlWorkbook.Sheets[1];
-
-                Excel.Range header = xlWorksheet.Range("A1");
-                header.Value = "Перечень счетчиков";
-                header.Resize(1, numberOfColumns).Merge();
-                using (Excel.Font font = header.Font)
-                {
-                    font.Size = 14;
-                    font.Bold = true;
-                }
-                header.HorizontalAlignment = XlHAlign.xlHAlignCenter;
-
-                Excel.Range data = xlWorksheet.Range("A2").Resize(numberOfRows + 1, numberOfColumns);
-                data.NumberFormat = "@";
-
-                data.Value = output;
-
-                xlWorksheet.ListObjects.Add(XlListObjectSourceType.xlSrcRange, data,
-                    Type.Missing, XlYesNoGuess.xlYes, Type.Missing).Name = "DataTable";
-                xlWorksheet.ListObjects["DataTable"].TableStyle = "TableStyleMedium1";
-
-
-                var ps = xlWorksheet.PageSetup;
-                ps.PaperSize = XlPaperSize.xlPaperA4;
-                ps.Orientation = XlPageOrientation.xlLandscape;
-                ps.Zoom = false;
-                ps.FitToPagesWide = 1;
-                ps.FitToPagesTall = false;
-
-                ps.LeftMargin = excelApplication.CentimetersToPoints(1.0);
-                ps.RightMargin = excelApplication.CentimetersToPoints(1.0);
-                ps.TopMargin = excelApplication.CentimetersToPoints(2.0);
-                ps.BottomMargin = excelApplication.CentimetersToPoints(1.0);
-
-                ps.HeaderMargin = excelApplication.CentimetersToPoints(0.6);
-                ps.FooterMargin = excelApplication.CentimetersToPoints(0.6);
-
-                ps.CenterHorizontally = true;
-                ps.RightHeader = DateTime.Now.ToLongDateString();
-                ps.CenterFooter = "Страница &P / &N";
-                ps.PrintArea = header.Resize(numberOfRows + 2, numberOfColumns).Address;
-
-                xlWorkbook.SaveAs(fileName);
-                xlWorkbook.Close(false);
-
-                excelApplication.ScreenUpdating = true;
-                excelApplication.Quit();
-
-                System.Diagnostics.Process.Start(fileName);
-            }
-            catch (Exception e)
-            {
-#if DEBUG
-                App.ToDebug(e);
-#endif
-                MessageBox.Show("Произошла ошибка:\n" + App.GetExceptionDetails(e), "", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-            finally
-            {
-                xlWorkbook.Dispose();
-                xlWorksheet.Dispose();
-                excelApplication.Dispose();
-            }
+        private void Export()
+        {
+            CollectionOfMeters.Export<Model.Meter>(
+                GetFieldsAndFormats(), "Список счётчиков",
+                ModelHelper.MeterGetPropertyValue);
         }
     }
 }

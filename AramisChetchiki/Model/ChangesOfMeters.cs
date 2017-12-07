@@ -64,16 +64,20 @@ namespace TMP.WORK.AramisChetchiki.Model
         public uint Год_выпуска_снятого { get; set; }
 
         [DataMember]
+        [DisplayName("Тип установленного счётчика")]
+        [Display(Order = 13, GroupName = "Снятый счётчик")]
+        public string Тип_установленного_счетчика { get; set; }
+        [DataMember]
         [DisplayName("Номер установленного счётчика")]
-        [Display(Order = 13, GroupName = "Установленный счётчик")]
+        [Display(Order = 14, GroupName = "Установленный счётчик")]
         public string Номер_установленного_счетчика { get; set; }
         [DataMember]
         [DisplayName("Показание установленного")]
-        [Display(Order = 14, GroupName = "Установленный счётчик")]
+        [Display(Order = 15, GroupName = "Установленный счётчик")]
         public double Показание_установленного { get; set; }
 
         [DataMember]
-        [Display(Order = 15)]
+        [Display(Order = 16)]
         public string Причина { get; set; }
     }
 }

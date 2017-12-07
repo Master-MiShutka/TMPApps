@@ -1,6 +1,6 @@
 using System.Text.RegularExpressions;
-using TMP.Extensions;
 using System.Globalization;
+using TMP.Extensions;
 
 namespace TMP.ExcelXml
 {
@@ -157,8 +157,8 @@ namespace TMP.ExcelXml
 			if (match.Groups["Sheet"].Success)
 			{
 				string sheet = match.Groups["Sheet"].Value;
-				if (sheet.Right(1) == "'")
-					sheet = sheet.Left(sheet.Length - 1);
+				if (StringExtensions.Right(sheet, 1) == "'")
+					sheet = StringExtensions.Left(sheet, sheet.Length - 1);
 
 				ws = cell.GetParentBook()[sheet];
 			}

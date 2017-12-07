@@ -23,3 +23,9 @@ Y:\Developer\CURRENT\TMPApps\out\Debug\Libs\DBF.pdb
 Y:\Developer\CURRENT\TMPApps\LIBRARY\DBF\obj\Debug\DBF.csproj.CoreCompileInputs.cache
 Y:\Developer\CURRENT\TMPApps\LIBRARY\DBF\obj\Debug\DBF.dll
 Y:\Developer\CURRENT\TMPApps\LIBRARY\DBF\obj\Debug\DBF.pdb
+y:\Repos\TMPApps\out\Debug\Libs\DBF.dll
+y:\Repos\TMPApps\out\Debug\Libs\DBF.pdb
+y:\Repos\TMPApps\LIBRARY\DBF\obj\Debug\DBF.csprojResolveAssemblyReference.cache
+y:\Repos\TMPApps\LIBRARY\DBF\obj\Debug\DBF.csproj.CoreCompileInputs.cache
+y:\Repos\TMPApps\LIBRARY\DBF\obj\Debug\DBF.dll
+y:\Repos\TMPApps\LIBRARY\DBF\obj\Debug\DBF.pdb

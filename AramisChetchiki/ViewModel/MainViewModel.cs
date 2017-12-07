@@ -785,7 +785,7 @@ namespace TMP.WORK.AramisChetchiki.ViewModel
             //
             var values = meters
                 // группируем список по значению текущего свойства
-                .GroupBy(i => ModelHelper.MeterGetPropertyValue(i, field));
+                .GroupBy(i => ModelHelper.MeterGetPropertyValue(i, String.Empty, field));
 
             var data = values
                 // создание типа: значение, список счетчиков с этим значением, количество

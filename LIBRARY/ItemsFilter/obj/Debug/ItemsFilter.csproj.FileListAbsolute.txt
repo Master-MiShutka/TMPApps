@@ -49,3 +49,16 @@ Y:\Developer\CURRENT\TMPApps\LIBRARY\ItemsFilter\obj\Debug\ItemsFilter.csproj.Ge
 Y:\Developer\CURRENT\TMPApps\LIBRARY\ItemsFilter\obj\Debug\ItemsFilter.csproj.CoreCompileInputs.cache
 Y:\Developer\CURRENT\TMPApps\LIBRARY\ItemsFilter\obj\Debug\ItemsFilter.dll
 Y:\Developer\CURRENT\TMPApps\LIBRARY\ItemsFilter\obj\Debug\ItemsFilter.pdb
+y:\Repos\TMPApps\out\Debug\Libs\ItemsFilter.dll
+y:\Repos\TMPApps\out\Debug\Libs\ItemsFilter.pdb
+y:\Repos\TMPApps\LIBRARY\ItemsFilter\obj\Debug\ItemsFilter.csprojResolveAssemblyReference.cache
+y:\Repos\TMPApps\LIBRARY\ItemsFilter\obj\Debug\GeneratedInternalTypeHelper.g.cs
+y:\Repos\TMPApps\LIBRARY\ItemsFilter\obj\Debug\ItemsFilter_MarkupCompile.cache
+y:\Repos\TMPApps\LIBRARY\ItemsFilter\obj\Debug\ItemsFilter_MarkupCompile.lref
+y:\Repos\TMPApps\LIBRARY\ItemsFilter\obj\Debug\Themes\Generic.baml
+y:\Repos\TMPApps\LIBRARY\ItemsFilter\obj\Debug\ItemsFilter.g.resources
+y:\Repos\TMPApps\LIBRARY\ItemsFilter\obj\Debug\ItemsFilter.Resources.Strings.resources
+y:\Repos\TMPApps\LIBRARY\ItemsFilter\obj\Debug\ItemsFilter.csproj.GenerateResource.Cache
+y:\Repos\TMPApps\LIBRARY\ItemsFilter\obj\Debug\ItemsFilter.csproj.CoreCompileInputs.cache
+y:\Repos\TMPApps\LIBRARY\ItemsFilter\obj\Debug\ItemsFilter.dll
+y:\Repos\TMPApps\LIBRARY\ItemsFilter\obj\Debug\ItemsFilter.pdb

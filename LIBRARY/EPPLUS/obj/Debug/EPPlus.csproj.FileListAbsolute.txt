@@ -18,3 +18,9 @@ Y:\Developer\CURRENT\TMPApps\out\Debug\Amper-M\EPPlus.pdb
 Y:\Developer\CURRENT\TMPApps\LIBRARY\EPPLUS\obj\Debug\EPPlus.csprojResolveAssemblyReference.cache
 Y:\Developer\CURRENT\TMPApps\LIBRARY\EPPLUS\obj\Debug\EPPlus.dll
 Y:\Developer\CURRENT\TMPApps\LIBRARY\EPPLUS\obj\Debug\EPPlus.pdb
+y:\Repos\TMPApps\out\Debug\Libs\EPPlus.dll
+y:\Repos\TMPApps\out\Debug\Libs\EPPlus.pdb
+y:\Repos\TMPApps\LIBRARY\EPPLUS\obj\Debug\EPPlus.csprojResolveAssemblyReference.cache
+y:\Repos\TMPApps\LIBRARY\EPPLUS\obj\Debug\EPPlus.csproj.CoreCompileInputs.cache
+y:\Repos\TMPApps\LIBRARY\EPPLUS\obj\Debug\EPPlus.dll
+y:\Repos\TMPApps\LIBRARY\EPPLUS\obj\Debug\EPPlus.pdb
