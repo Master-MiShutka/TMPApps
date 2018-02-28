@@ -1,0 +1,66 @@
+﻿<UserControl
+    x:Class="TMP.WORK.AramisChetchiki.Views.MetersInfoView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="clr-namespace:TMP.UI.Controls.WPF;assembly=ui.controls.wpf"
+    xmlns:extensions="clr-namespace:TMP.Extensions;assembly=TMP.Extensions"
+    xmlns:local_extensions="clr-namespace:TMP.WORK.AramisChetchiki.Extensions"
+    Background="#FFF5F5F5"
+    FontSize="{local_extensions:SettingBinding FontSize,
+                                               13.0}"
+    TextOptions.TextFormattingMode="Display">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <controls:BusyControl Grid.RowSpan="2" Visibility="{Binding IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}" />
+        <StackPanel
+            Margin="2"
+            Background="{extensions:ValueFromStyle StyleKey={x:Type ToolBar},
+                                                   Property=Control.Background}"
+            Orientation="Horizontal">
+            <Button
+                Margin="0,2"
+                Padding="10,0"
+                Command="{Binding CommandUpdate}"
+                Content="{Binding CommandUpdate.Header}" />
+        </StackPanel>
+        <ScrollViewer Grid.Row="1">
+            <WrapPanel Orientation="Vertical">
+                <WrapPanel.Resources>
+                    <Style x:Key="{x:Type TextBlock}" TargetType="{x:Type TextBlock}">
+                        <Setter Property="TextBlock.FontWeight" Value="SemiBold" />
+                        <Setter Property="FrameworkElement.HorizontalAlignment" Value="Center" />
+                        <Setter Property="FrameworkElement.VerticalAlignment" Value="Center" />
+                    </Style>
+                </WrapPanel.Resources>
+                <ContentPresenter
+                    Margin="2"
+                    Content="{Binding MetersCountPerTypesPivot}"
+                    ContentTemplate="{StaticResource ViewAsDataTableInfoItemTemplate}" />
+                <StackPanel Margin="2" SnapsToDevicePixels="True">
+                    <TextBlock Text="Свод по типу счётчика и году поверки" />
+                    <controls:TableView
+                        AutoCreateColumns="True"
+                        ItemsSource="{Binding MetersCountPerTypesPerPoverkaYearPivot}"
+                        NavigationBehavior="RowOnly" />
+                </StackPanel>
+                <StackPanel Margin="2" SnapsToDevicePixels="True">
+                    <TextBlock Text="Свод по категории счётчика и типу населённого пункта" />
+                    <controls:TableView
+                        AutoCreateColumns="True"
+                        ItemsSource="{Binding MetersCountPerCategoryForReportPivot}"
+                        NavigationBehavior="RowOnly" />
+                </StackPanel>
+                <StackPanel Margin="2" SnapsToDevicePixels="True">
+                    <TextBlock Text="Свод по населенному пункту и принципу действия счётчика" />
+                    <controls:TableView
+                        AutoCreateColumns="True"
+                        ItemsSource="{Binding MetersCountPerLocalityPivot}"
+                        NavigationBehavior="RowOnly" />
+                </StackPanel>
+            </WrapPanel>
+        </ScrollViewer>
+    </Grid>
+</UserControl>

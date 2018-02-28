@@ -9,7 +9,7 @@ namespace TMP.WORK.AramisChetchiki.Model
 {
     [Serializable]
     [DataContract]
-    public class SummaryInfoItem : IModel
+    public class SummaryInfoItem : IModel, INotifyPropertyChanged
     {
         [DataMember]
         public string FieldName { get; set; }
@@ -35,6 +35,43 @@ namespace TMP.WORK.AramisChetchiki.Model
         }
         [DataMember]
         public bool IsChecked { get; set; } = true;
+
+        [IgnoreDataMember]
+        private bool _ShowAllGroups = false;
+        [IgnoreDataMember]
+        public bool ShowAllGroups
+        {
+            get
+            {
+                return this._ShowAllGroups;
+            }
+            set
+            {
+                this._ShowAllGroups = value;
+                this.RaisePropertyChanged("ShowAllGroups");
+            }
+        }
+
+        #region INotifyPropertyChanged implementation
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected bool SetProperty<T>(ref T field, T value, string propertyName = null)
+        {
+            if (Equals(field, value)) { return false; }
+
+            field = value;
+            RaisePropertyChanged(propertyName);
+            return true;
+        }
+        protected void RaisePropertyChanged(string propertyName = null)
+        {
+            OnPropertyChanged(new PropertyChangedEventArgs(propertyName));
+        }
+        protected virtual void OnPropertyChanged(PropertyChangedEventArgs e)
+
+        {
+            PropertyChanged?.Invoke(this, e);
+        }
+        #endregion
     }
 
     [Serializable]

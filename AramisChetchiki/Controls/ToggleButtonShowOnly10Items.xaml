@@ -1,0 +1,31 @@
+﻿<ToggleButton
+    x:Class="TMP.WORK.AramisChetchiki.Controls.ToggleButtonShowOnly10Items"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:TMP.WORK.AramisChetchiki.Controls"
+    Name="root"
+    Margin="2"
+    Padding="0"
+    DockPanel.Dock="Right"
+    IsChecked="{Binding ShowAllGroups, Mode=TwoWay, FallbackValue=False}"
+    ToolTip="Отображать только первые 10 групп&#xA;в порядке убывания количества элементов">
+    <ToggleButton.Resources>
+        <local:ItemsCountGreaterThan11ToBoolConverter x:Key="ItemsCountGreaterThan11ToBoolConverter" />
+    </ToggleButton.Resources>
+    <ToggleButton.Style>
+        <Style BasedOn="{StaticResource {x:Type ToggleButton}}" TargetType="{x:Type ToggleButton}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding AllItems.Count, Converter={StaticResource ItemsCountGreaterThan11ToBoolConverter}}" Value="False">
+                    <Setter Property="UIElement.Visibility" Value="Collapsed" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+    </ToggleButton.Style>
+    <Grid>
+        <TextBlock
+            VerticalAlignment="Center"
+            Text="все"
+            TextBlock.FontSize="{StaticResource HeaderFontSize}"
+            TextBlock.TextAlignment="Center" />
+    </Grid>
+</ToggleButton>

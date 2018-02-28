@@ -775,137 +775,6 @@ namespace TMP.WORK.AramisChetchiki.ViewModel
             return data;
         }
 
-        private SummaryInfoItem BuildSummaryInfoItem(ICollection<Meter> meters, string field)
-        {
-            const string empty = "(пусто)";
-            string fieldDisplayName = ModelHelper.MeterPropertyDisplayNames[field];
-
-            SummaryInfoItem si = new SummaryInfoItem(fieldDisplayName);
-            si.FieldName = field;
-            //
-            var values = meters
-                // группируем список по значению текущего свойства
-                .GroupBy(i => ModelHelper.MeterGetPropertyValue(i, String.Empty, field));
-
-            var data = values
-                // создание типа: значение, список счетчиков с этим значением, количество
-                .Select(group => new SummaryInfoGroupItem
-                {
-                    Key = group.Key == null || String.IsNullOrWhiteSpace(group.Key.ToString()) ? empty : group.Key,
-                    HasEmptyValue = group.Key == null || String.IsNullOrWhiteSpace(group.Key.ToString()),
-                    Value = group.ToList(),
-                    Count = group.Count()
-                })
-                // сортировка по убыванию количества значений
-                .OrderByDescending(o => o.Count)
-                .ToList();
-            // количество уникальных значений свойства
-            int groupsCount = data.Count();
-            string groupsInfo = String.Empty;
-            string first10String = "первые 10 по убыванию количества счетчиков: ";
-            if (groupsCount > 10)
-            {
-                // склоняем 'группа' согласно количества
-                int mod = groupsCount % 100;
-                if (mod == 0)
-                    groupsInfo += "не имеется групп.";
-                else
-                if ((mod == 1 || (mod % 10) == 1) && mod != 11)
-                    groupsInfo += "имеется " + groupsCount.ToString() + " группа:";
-                else
-                if ((mod >= 2 & mod <= 4 || (mod % 10 >= 2 & mod % 10 <= 4)) && mod / 10 != 1)
-                    groupsInfo += "имеется " + groupsCount.ToString() + " группы" + (groupsCount <= 10 ? ":" : ", " + first10String);
-                else
-                    groupsInfo += "имеется " + groupsCount.ToString() + " групп" + (groupsCount <= 10 ? ":" : ", " + first10String);
-            }
-            if (groupsCount == 0)
-            {
-                groupsInfo += "не имеется групп.";
-                return si;
-            }
-            // описание сводной информации
-            si.Info = groupsInfo;
-
-            // количество счетчиков в группе
-            int totalCount = data.Sum(i => i.Count);
-
-            Func<SummaryInfoGroupItem, SummaryInfoChildItem> createInfoChild = g =>
-            {
-                return new SummaryInfoChildItem
-                {
-                        // значение поля - количество счетчиков со значением поля
-                        Header = String.Format("{0} ({1:N0})", g.Key, g.Count),
-                        // значение - количество счётчиков
-                        Count = (uint)g.Count,
-                        // процент от общего количества в группе
-                        Percent = 100d * g.Count / totalCount,
-                        // значение группируемого поля
-                        Value = g.Key.ToString(),
-                        IsEmpty = g.HasEmptyValue
-                };
-            };
-
-            si.AllItems = data.Select(group => createInfoChild(group)).ToList();
-
-            si.OnlyFirst10Items = new List<SummaryInfoChildItem>();
-
-            // создание списка с пустыми значениями
-            IEnumerable<SummaryInfoChildItem> withEmptyValue = data.Where(g => g.HasEmptyValue).Select(group => createInfoChild(group));
-            int withEmptyValueCount = data.Where(g => g.HasEmptyValue).Sum(g => g.Value.Count);
-
-            Action<string, uint, double, string> addOnlyFirst10ItemsChild = (header, count, percent, value) =>
-              {
-                  si.OnlyFirst10Items.Add(new SummaryInfoChildItem()
-                  {
-                          // значение поля - количество счетчиков со значением поля
-                          Header = header,
-                          // значение - количество счётчиков
-                          Count = count,
-                          // процент от общего количества в группе
-                          Percent = percent,
-                          // значение группируемого поля
-                          Value = value
-                  });
-              };
-
-            // создание списка с не пустыми значениями
-            var dataWhereHasValues = data.Where(g => g.HasEmptyValue == false);
-            IEnumerable<SummaryInfoChildItem> first;
-            int lastCount = 0;
-
-            if (groupsCount <= 10)
-            {
-                first = dataWhereHasValues.Select(group => createInfoChild(group));
-            }
-            else
-            {
-                first = dataWhereHasValues.Take(10).Select(group => createInfoChild(group));
-
-                IEnumerable<SummaryInfoChildItem> last = dataWhereHasValues.Skip(10)
-                    .Select(group => createInfoChild(group));
-                lastCount = dataWhereHasValues.Skip(10).Sum(g => g.Value.Count);
-            }
-
-            foreach (var item in first)
-                si.OnlyFirst10Items.Add(item);
-
-            if (withEmptyValueCount > 0)
-                addOnlyFirst10ItemsChild(
-                String.Format("{0} ({1:N0})", empty, withEmptyValueCount),
-                (uint)withEmptyValueCount,
-                100d * withEmptyValueCount / totalCount,
-                string.Empty);
-
-            if (lastCount > 0)
-                addOnlyFirst10ItemsChild(
-                    String.Format("{0} ({1:N0})", "(остальное)", lastCount),
-                    (uint)lastCount,
-                    100d * lastCount / totalCount,
-                    "!last!");
-
-            return si;
-        }
-
         private ObservableCollection<SummaryInfoItem> BuildSummaryInfo(ICollection<Meter> meters)
         {
             if (meters == null) return null;
@@ -925,7 +794,7 @@ namespace TMP.WORK.AramisChetchiki.ViewModel
             // по всем свойствам
             foreach (Xceed.Wpf.DataGrid.TableField field in Settings.Default.SummaryInfoFields.OrderBy(f => f.DisplayOrder))
             {
-                infos.Add(BuildSummaryInfoItem(meters, field.Name));
+                infos.Add(SummaryInfoHelper.BuildSummaryInfoItem(meters, field.Name));
                 _updateUI(++processedRows);
             }
 
@@ -958,7 +827,9 @@ namespace TMP.WORK.AramisChetchiki.ViewModel
                 case Mode.Metrology:
                     _currentView = new Views.MetrologyView() { DataContext = new MetrologyViewViewModel() };
                     break;
-
+                case Mode.MetersInfo:
+                    this._currentView = new Views.MetersInfoView() { DataContext = new MetersInfoViewModel(this.Data) };
+                    break;
                 default:
                     throw new NotImplementedException("CreateView: unknown CurrentMode");
             }
@@ -1001,7 +872,7 @@ namespace TMP.WORK.AramisChetchiki.ViewModel
                 int index = Data.Infos.IndexOf(item);
                 if (item != null)
                 {
-                    item = BuildSummaryInfoItem(_data.Meters, "Поверен");
+                    item = SummaryInfoHelper.BuildSummaryInfoItem(_data.Meters, "Поверен");
                     App.Current.Dispatcher.Invoke((Action)(() => Data.Infos[index] = item));
                 }
             });
@@ -1125,13 +996,7 @@ namespace TMP.WORK.AramisChetchiki.ViewModel
                 _selectedDepartament = value;
                 RaisePropertyChanged("SelectedDepartament");
                 Settings.Default.SelectDepartamentAndStore(_selectedDepartament);
-                _currentView = null;
-                Data = null;
-                Task.Factory.StartNew(() => LoadData())
-                    .ContinueWith((t) =>
-                    {
-                        RaisePropertyChanged("CurrentView");
-                    });
+                Task.Factory.StartNew(() => LoadData());
             }
         }
         public IDataViewModel<IModel> ActiveViewModel { get; private set; }
@@ -1230,8 +1095,6 @@ namespace TMP.WORK.AramisChetchiki.ViewModel
             {
                 if (Data != null && _currentView is System.Windows.Controls.UserControl == false)
                     CreateView();
-                if (_currentView == null)
-                    CreateViewNotLoadedData();
                 return _currentView;
             }
         }

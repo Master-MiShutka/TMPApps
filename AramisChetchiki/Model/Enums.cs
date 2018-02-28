@@ -16,6 +16,8 @@ namespace TMP.WORK.AramisChetchiki.Model
         AbonentsBinding,
         [Description("Сведения по поверке учёта")]
         Metrology,
+        [Description("Сведения учётам")]
+        MetersInfo
     }
 
     /// <summary>

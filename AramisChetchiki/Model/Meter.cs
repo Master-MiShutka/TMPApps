@@ -315,6 +315,104 @@ namespace TMP.WORK.AramisChetchiki.Model
         [Display(Order = 45, GroupName = "")]
         public bool HasSMS => String.IsNullOrWhiteSpace(SMS) == false;
 
+        [Display(Order = 46, GroupName = ""), DisplayName("Год поверки для отчётов"), IgnoreDataMember, SummaryInfo]
+        public string Год_поверки_для_отчётов
+        {
+            get
+            {
+                int currentYear = DateTime.Now.Year;
+                string result;
+                switch (currentYear - this._год_поверки)
+                {
+                    case 0:
+                        result = currentYear.ToString();
+                        break;
+                    case 1:
+                        result = (currentYear - 1).ToString();
+                        break;
+                    case 2:
+                        result = (currentYear - 2).ToString();
+                        break;
+                    case 3:
+                        result = (currentYear - 3).ToString();
+                        break;
+                    case 4:
+                        result = (currentYear - 4).ToString();
+                        break;
+                    case 5:
+                        result = (currentYear - 5).ToString();
+                        break;
+                    case 6:
+                        result = (currentYear - 6).ToString();
+                        break;
+                    case 7:
+                        result = (currentYear - 7).ToString();
+                        break;
+                    case 8:
+                        result = (currentYear - 8).ToString();
+                        break;
+                    default:
+                        result = "<" + (currentYear - 8).ToString();
+                        break;
+                }
+                return result;
+            }
+        }
+
+        [Display(Order = 47, GroupName = ""), DisplayName("Группа счётчика для отчётов"), IgnoreDataMember, SummaryInfo]
+        public string Группа_счётчика_для_отчётов
+        {
+            get
+            {
+                string result;
+                if (this.Фаз == 1)
+                {
+                    if (this.Принцип == "И")
+                    {
+                        result = "1ф инд.";
+                    }
+                    else
+                    {
+                        if (this.Принцип == "Э")
+                        {
+                            result = "1ф эл.";
+                        }
+                        else
+                        {
+                            result = "1ф неизв.";
+                        }
+                    }
+                }
+                else
+                {
+                    if (this.Фаз == 3)
+                    {
+                        if (this.Принцип == "И")
+                        {
+                            result = "3ф инд.";
+                        }
+                        else
+                        {
+                            if (this.Принцип == "Э")
+                            {
+                                result = "3ф эл.";
+                            }
+                            else
+                            {
+                                result = "3ф неизв.";
+                            }
+                        }
+                    }
+                    else
+                    {
+                        result = "неверное кол-во фаз";
+                    }
+                }
+                return result;
+            }
+        }
+
+
         #region Наборы полей для отображения в таблицах
 
         public static IList<string> BaseViewColumns => new List<string>()

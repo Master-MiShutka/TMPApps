@@ -44,16 +44,13 @@
     <Style BasedOn="{StaticResource {x:Type Button}}" TargetType="{x:Type Button}">
         <Setter Property="ContentTemplate" Value="{StaticResource ButtonContentTemplate}" />
     </Style>
-    <Style x:Key="defaultButtonStyle" BasedOn="{StaticResource {x:Type Button}}" TargetType="{x:Type Button}"/>
+    <Style
+        x:Key="defaultButtonStyle"
+        BasedOn="{StaticResource {x:Type Button}}"
+        TargetType="{x:Type Button}" />
 
 
     <Style BasedOn="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" TargetType="{x:Type Separator}" />
-
-    <Style TargetType="{x:Type ToolTip}">
-        <Setter Property="FontSize" Value="{extensions:SettingBinding FontSize, 12.0}" />
-        <Setter Property="ToolTipService.ShowDuration" Value="5000" />
-        <Setter Property="ToolTipService.InitialShowDelay" Value="500" />
-    </Style>
 
     <Style x:Key="horizontalListBoxItem" TargetType="ListBoxItem">
         <Setter Property="Padding" Value="10,0" />
@@ -93,6 +90,47 @@
 
     <Style BasedOn="{StaticResource {x:Type DatePicker}}" TargetType="{x:Type DatePicker}">
         <Setter Property="VerticalContentAlignment" Value="Center" />
+    </Style>
+
+    <ControlTemplate x:Key="BaseToolTipControlTemplate" TargetType="{x:Type ToolTip}">
+        <Grid
+            Width="{TemplateBinding FrameworkElement.Width}"
+            Height="{TemplateBinding FrameworkElement.Height}"
+            Margin="5"
+            Background="#00FFFFFF">
+            <Rectangle
+                Height="{TemplateBinding FrameworkElement.Height}"
+                Fill="#FFFFFFFF"
+                RadiusX="7.5"
+                RadiusY="7.5">
+                <Rectangle.BitmapEffect>
+                    <DropShadowBitmapEffect ShadowDepth="3" />
+                </Rectangle.BitmapEffect>
+            </Rectangle>
+            <ContentPresenter
+                Margin="5"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center" />
+        </Grid>
+    </ControlTemplate>
+    <Style x:Key="{x:Type ToolTip}" TargetType="{x:Type ToolTip}">
+        <Setter Property="Control.FontSize" Value="{extensions:SettingBinding FontSize, 13.0}" />
+        <Setter Property="UIElement.Opacity" Value=".95" />
+        <Setter Property="ToolTipService.InitialShowDelay" Value="100" />
+        <Setter Property="ToolTipService.ShowDuration" Value="3000" />
+        <Setter Property="Control.Template" Value="{StaticResource BaseToolTipControlTemplate}" />
+        <Setter Property="ContentControl.ContentTemplate">
+            <Setter.Value>
+                <DataTemplate>
+                    <StackPanel
+                        Margin="2"
+                        Orientation="Horizontal"
+                        TextBlock.FontSize="{DynamicResource NormalFontSize}">
+                        <TextBlock Text="{Binding}" TextWrapping="Wrap" />
+                    </StackPanel>
+                </DataTemplate>
+            </Setter.Value>
+        </Setter>
     </Style>
 
 </ResourceDictionary>
