@@ -4,11 +4,11 @@
         <ResourceDictionary Source="pack://application:,,,/TMP.Wpf.CommonControls;component/Styles/Fonts.xaml" />
         <ResourceDictionary Source="pack://application:,,,/TMP.Wpf.CommonControls;component/Styles/Shadows.xaml" />
         <ResourceDictionary Source="pack://application:,,,/TMP.Wpf.CommonControls;component/Styles/CommonStyles.xaml" />
-        <ResourceDictionary Source="pack://application:,,,/TMP.Wpf.CommonControls;component/Resources/Icons.xaml" />              
+        <ResourceDictionary Source="pack://application:,,,/TMP.Wpf.CommonControls;component/Resources/Icons.xaml" />
 
         <ResourceDictionary Source="pack://application:,,,/TMP.Wpf.CommonControls;component/Styles/Controls.xaml" />
-       
-      
+
+
         <ResourceDictionary Source="/TMP.Wpf.CommonControls;component/Themes/Glow.xaml" />
         <ResourceDictionary Source="/TMP.Wpf.CommonControls;component/Themes/DropDownButton.xaml" />
         <ResourceDictionary Source="/TMP.Wpf.CommonControls;component/Themes/NumericUpDown.xaml" />

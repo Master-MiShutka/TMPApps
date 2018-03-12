@@ -363,13 +363,34 @@
         <Setter Property="TextBlock.TextAlignment" Value="Center" />
     </Style>
 
+    <xcdg:IndexToOddConverter x:Key="rowIndexConverter" />
+
+    <Style x:Key="alternatingDataRowStyle" TargetType="{x:Type xcdg:DataRow}">
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=(xcdg:DataGridVirtualizingPanel.ItemIndex), Converter={StaticResource rowIndexConverter}}" Value="True">
+                <Setter Property="Background" Value="AliceBlue" />
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style x:Key="ItemIndexSelectorStyle" TargetType="{x:Type xcdg:RowSelector}">
+        <Setter Property="FrameworkElement.Width" Value="Auto" />
+        <Style.Triggers>
+            <Trigger Property="xcdg:RowSelector.IsCurrent" Value="True">
+                <Setter Property="Control.FontWeight" Value="Bold" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
     <Style TargetType="{x:Type xcdg:Cell}">
         <Setter Property="Padding" Value="0" />
     </Style>
+
     <Style TargetType="{x:Type xcdg:DataRow}">
         <Setter Property="MinHeight" Value="20" />
         <Setter Property="Height" Value="Auto" />
         <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="xcdg:RowSelector.RowSelectorStyle" Value="{StaticResource ItemIndexSelectorStyle}" />
     </Style>
 
 </ResourceDictionary>

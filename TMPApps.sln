@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27004.2006
+VisualStudioVersion = 15.0.27130.2027
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DwRES Helper", "DwRES Helper", "{67224CC1-4606-4634-B588-4D1BF6A51660}"
 EndProject
@@ -142,6 +142,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ItemsFilter", "LIBRARY\ItemsFilter\ItemsFilter.csproj", "{7ED20C3A-C707-43AC-B085-F353869B061B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExcelOutput", "LIBRARY\ExcelOutput\ExcelOutput.csproj", "{F15AFDEF-1EB8-4136-96EF-BA9BBEEB684B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reporting", "LIBRARY\Reporting\Reporting.csproj", "{5703367D-5919-44BF-982A-42458E1093A6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xceed.Wpf.Toolkit", "ExtendedWPFToolkitSolution\Src\Xceed.Wpf.Toolkit\Xceed.Wpf.Toolkit.csproj", "{72E591D6-8F83-4D8C-8F67-9C325E623234}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -753,6 +757,30 @@ Global
 		{F15AFDEF-1EB8-4136-96EF-BA9BBEEB684B}.Release|x64.Build.0 = Release|Any CPU
 		{F15AFDEF-1EB8-4136-96EF-BA9BBEEB684B}.Release|x86.ActiveCfg = Release|Any CPU
 		{F15AFDEF-1EB8-4136-96EF-BA9BBEEB684B}.Release|x86.Build.0 = Release|Any CPU
+		{5703367D-5919-44BF-982A-42458E1093A6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5703367D-5919-44BF-982A-42458E1093A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5703367D-5919-44BF-982A-42458E1093A6}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{5703367D-5919-44BF-982A-42458E1093A6}.Debug|x64.Build.0 = Debug|Any CPU
+		{5703367D-5919-44BF-982A-42458E1093A6}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{5703367D-5919-44BF-982A-42458E1093A6}.Debug|x86.Build.0 = Debug|Any CPU
+		{5703367D-5919-44BF-982A-42458E1093A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5703367D-5919-44BF-982A-42458E1093A6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5703367D-5919-44BF-982A-42458E1093A6}.Release|x64.ActiveCfg = Release|Any CPU
+		{5703367D-5919-44BF-982A-42458E1093A6}.Release|x64.Build.0 = Release|Any CPU
+		{5703367D-5919-44BF-982A-42458E1093A6}.Release|x86.ActiveCfg = Release|Any CPU
+		{5703367D-5919-44BF-982A-42458E1093A6}.Release|x86.Build.0 = Release|Any CPU
+		{72E591D6-8F83-4D8C-8F67-9C325E623234}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{72E591D6-8F83-4D8C-8F67-9C325E623234}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{72E591D6-8F83-4D8C-8F67-9C325E623234}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{72E591D6-8F83-4D8C-8F67-9C325E623234}.Debug|x64.Build.0 = Debug|Any CPU
+		{72E591D6-8F83-4D8C-8F67-9C325E623234}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{72E591D6-8F83-4D8C-8F67-9C325E623234}.Debug|x86.Build.0 = Debug|Any CPU
+		{72E591D6-8F83-4D8C-8F67-9C325E623234}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{72E591D6-8F83-4D8C-8F67-9C325E623234}.Release|Any CPU.Build.0 = Release|Any CPU
+		{72E591D6-8F83-4D8C-8F67-9C325E623234}.Release|x64.ActiveCfg = Release|Any CPU
+		{72E591D6-8F83-4D8C-8F67-9C325E623234}.Release|x64.Build.0 = Release|Any CPU
+		{72E591D6-8F83-4D8C-8F67-9C325E623234}.Release|x86.ActiveCfg = Release|Any CPU
+		{72E591D6-8F83-4D8C-8F67-9C325E623234}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -805,6 +833,7 @@ Global
 		{71A88EA2-06D4-444E-8BDA-8B399BCB8DC4} = {AC74A6D8-3BE6-42A8-9C3B-5D13A3406561}
 		{7ED20C3A-C707-43AC-B085-F353869B061B} = {AC74A6D8-3BE6-42A8-9C3B-5D13A3406561}
 		{F15AFDEF-1EB8-4136-96EF-BA9BBEEB684B} = {AC74A6D8-3BE6-42A8-9C3B-5D13A3406561}
+		{5703367D-5919-44BF-982A-42458E1093A6} = {AC74A6D8-3BE6-42A8-9C3B-5D13A3406561}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {309EC34B-15FF-4C88-9BC4-BF880606737B}

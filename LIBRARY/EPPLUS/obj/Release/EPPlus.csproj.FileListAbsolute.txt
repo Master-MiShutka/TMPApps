@@ -11,3 +11,9 @@ Y:\Developer\CURRENT\TMPApps\LIBRARY\EPPLUS\EPPlus\obj\Release\EPPlus.pdb
 Y:\Developer\CURRENT\TMPApps\LIBRARY\EPPLUS\obj\Release\EPPlus.csprojResolveAssemblyReference.cache
 Y:\Developer\CURRENT\TMPApps\LIBRARY\EPPLUS\obj\Release\EPPlus.dll
 Y:\Developer\CURRENT\TMPApps\LIBRARY\EPPLUS\obj\Release\EPPlus.pdb
+D:\Developer\CURRENT\TMPApps\out\Release\Libs\EPPlus.dll
+D:\Developer\CURRENT\TMPApps\out\Release\Libs\EPPlus.pdb
+D:\Developer\CURRENT\TMPApps\LIBRARY\EPPLUS\obj\Release\EPPlus.csprojResolveAssemblyReference.cache
+D:\Developer\CURRENT\TMPApps\LIBRARY\EPPLUS\obj\Release\EPPlus.csproj.CoreCompileInputs.cache
+D:\Developer\CURRENT\TMPApps\LIBRARY\EPPLUS\obj\Release\EPPlus.dll
+D:\Developer\CURRENT\TMPApps\LIBRARY\EPPLUS\obj\Release\EPPlus.pdb

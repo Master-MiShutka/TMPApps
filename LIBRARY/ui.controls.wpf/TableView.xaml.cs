@@ -15,6 +15,8 @@ namespace TMP.UI.Controls.WPF
         {
             InitializeComponent();
 
+            foreach (var item in this.ClipboardExporters)
+                System.Diagnostics.Debug.WriteLine("exporter - " + item.Key);
         }
 
 

@@ -4,7 +4,7 @@
 library
 C#
 .cs
-y:\Repos\TMPApps\LIBRARY\ui.controls.wpf\obj\Release\
+T:\Developer\CURRENT\TMPApps\LIBRARY\ui.controls.wpf\obj\Release\
 TMP.UI.Controls.WPF
 none
 false
@@ -12,8 +12,8 @@ TRACE
 
 9-876750446
 
-34974774916
-14-582416129
+35-252681761
+14-1251566503
 BusyControl.xaml;LabelledContent.xaml;LabelledTextBlock.xaml;LabelledTextBox.xaml;SelectFolderTextBox.xaml;TableView.xaml;Themes\Generic.xaml;Themes\NoDataTemplate.xaml;Themes\TreeMap.xaml;
 
 True

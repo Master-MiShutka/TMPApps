@@ -4,16 +4,16 @@
 winexe
 C#
 .cs
-y:\Repos\TMPApps\ElectricMeterComm\obj\Release\
+T:\Developer\CURRENT\TMPApps\ElectricMeterComm\obj\Release\
 TMP.ElectricMeterComm
 none
 false
 TRACE
-y:\Repos\TMPApps\ElectricMeterComm\App.xaml
+T:\Developer\CURRENT\TMPApps\ElectricMeterComm\App.xaml
 2-1801261417
 
-10-883666072
-15-1867664859
+141189648076
+151733734258
 IPAddressControl.xaml;MainWindow.xaml;
 
 True

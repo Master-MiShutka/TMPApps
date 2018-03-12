@@ -21,16 +21,21 @@
     WindowState="Maximized"
     mc:Ignorable="d">
     <Window.InputBindings>
-        <KeyBinding Key="Esc" Command="{x:Static local:CloseThisWindowCommand.Instance}" CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}" />
+        <KeyBinding
+            Key="Esc"
+            Command="{x:Static local:CloseThisWindowCommand.Instance}"
+            CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}" />
     </Window.InputBindings>
     <Window.Resources>
         <ContextMenu x:Key="TableContextMenu" FontSize="{local_extensions:SettingBinding FontSize, 12.0}">
             <ContextMenu.Resources>
-                <Style x:Key="TableViewMenuItem" BasedOn="{StaticResource {x:Type MenuItem}}" TargetType="{x:Type MenuItem}">
+                <Style
+                    x:Key="TableViewMenuItem"
+                    BasedOn="{StaticResource {x:Type MenuItem}}"
+                    TargetType="{x:Type MenuItem}">
                     <Setter Property="Padding" Value="0,2" />
                     <Setter Property="extensions:MenuItemExtensions.GroupName" Value="ViewGroup" />
-                    <Setter Property="Command" Value="{Binding PlacementTarget.DataContext.CommandChangeView, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ContextMenu}}}" />
-                    <Setter Property="Tag" Value="{Binding DataContext, RelativeSource={RelativeSource Mode=Self}, Converter={converters:EnumBindingConverter}}" />
+                    <Setter Property="Command" Value="{Binding CommandChangeView, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ContextMenu}}}" />
                     <Setter Property="IsCheckable" Value="True" />
                     <Setter Property="CommandParameter">
                         <Setter.Value>
@@ -52,7 +57,24 @@
                 Header="Группировка"
                 ItemTemplate="{StaticResource HierarchicalMenuTemplate}"
                 ItemsSource="{Binding GroupFields}" />
+            <Separator />
+            <MenuItem
+                Padding="0,2"
+                Header="Вид"
+                ItemContainerStyle="{StaticResource TableViewMenuItem}"
+                ItemsSource="{Binding SelectedView, Converter={converters:EnumBindingConverter}}" />
+            <Separator />
+            <MenuItem
+                Padding="0,2"
+                Command="{Binding CommandExport}"
+                CommandParameter="{Binding PlacementTarget, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContextMenu}}}"
+                Header="{Binding CommandExport.Header}" />
             <!--  MenuItem Padding="0,6" Command="{Binding CommandPrint}" Header="Печать" /  -->
+            <Separator />
+            <MenuItem
+                Padding="0,2"
+                Command="{Binding CommandShowFilters}"
+                Header="Фильтры" />
         </ContextMenu>
 
     </Window.Resources>
@@ -64,35 +86,16 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
-                    <DockPanel Margin="2">
-                        <Button Command="{Binding CommandExport}" Content="{Binding CommandExport.Header}" DockPanel.Dock="Right" />
-                        <Button Command="{Binding CommandShowFilters}" Content="{Binding CommandShowFilters.Header}" DockPanel.Dock="Right" />
-                        <ListBox
-                            HorizontalAlignment="Center"
-                            Background="Transparent"
-                            BorderThickness="0"
-                            ItemContainerStyle="{StaticResource horizontalListBoxItem}"
-                            ItemsSource="{Binding SelectedView, Converter={converters:EnumBindingConverter}}"
-                            SelectedItem="{Binding SelectedView, Converter={converters:EnumBindingConverter}}">
-                            <ListBox.ItemsPanel>
-                                <ItemsPanelTemplate>
-                                    <StackPanel Orientation="Horizontal" />
-                                </ItemsPanelTemplate>
-                            </ListBox.ItemsPanel>
-                        </ListBox>
-                    </DockPanel>
-                    <TextBlock Grid.Row="1" Text="{Binding SortingFields, Mode=OneWay, StringFormat=Отсортировано по: {0}}" Visibility="{Binding SortingFields, Mode=OneWay, Converter={StaticResource NullOrEmptyToVisibilityConverter}}" />
+                    <TextBlock Text="{Binding SortingFields, Mode=OneWay, StringFormat=Отсортировано по: {0}}" Visibility="{Binding SortingFields, Mode=OneWay, Converter={StaticResource NullOrEmptyToVisibilityConverter}}" />
                     <TextBox
-                        Grid.Row="2"
                         BorderThickness="0"
                         IsReadOnly="True"
                         Text="{Binding GroupingFields, Mode=OneWay, StringFormat=Сгруппировано по: {0}}"
                         Visibility="{Binding GroupingFields, Mode=OneWay, Converter={StaticResource NullOrEmptyToVisibilityConverter}}" />
                     <controls:TableView
-                        Grid.Row="3"
+                        Grid.Row="2"
                         BindableColumns="{Binding TableColumns}"
                         ContextMenu="{StaticResource TableContextMenu}"
                         ItemsSource="{Binding CollectionOfMeters}" />

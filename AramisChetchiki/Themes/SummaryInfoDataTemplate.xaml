@@ -6,7 +6,8 @@
     xmlns:local_controls="clr-namespace:TMP.WORK.AramisChetchiki.Controls"
     xmlns:model="clr-namespace:TMP.WORK.AramisChetchiki.Model"
     xmlns:views="clr-namespace:TMP.WORK.AramisChetchiki.Views"
-    xmlns:xcdg="http://schemas.xceed.com/wpf/xaml/datagrid">
+    xmlns:xcdg="http://schemas.xceed.com/wpf/xaml/datagrid"
+    xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit">
 
     <Style x:Key="SummaryInfoItemToolTip" TargetType="{x:Type ToolTip}">
         <Setter Property="UIElement.Opacity" Value=".95" />
@@ -359,9 +360,11 @@
             </DataTrigger>
         </DataTemplate.Triggers>
     </DataTemplate>
+
     <ControlTemplate x:Key="ItemsControlBaseTemplate" TargetType="{x:Type ItemsControl}">
         <ItemsPresenter />
     </ControlTemplate>
+
     <ControlTemplate x:Key="ItemsControlWithDiagrams" TargetType="{x:Type ItemsControl}">
         <Grid>
             <ContentControl
@@ -403,12 +406,18 @@
                         Margin="2"
                         Text="крупнее" />
                 </Grid>
-                <WrapPanel
+
+                <xctk:SwitchPanel
                     Grid.Row="1"
                     Grid.ColumnSpan="3"
-                    IsItemsHost="True"
-                    ItemWidth="{Binding Path=Value, ElementName=slider}"
-                    Orientation="Horizontal" />
+                    IsItemsHost="True">
+                    <xctk:SwitchPanel.Layouts>
+                        <xctk:WrapPanel
+                            x:Name="_wrapPanel"
+                            ItemHeight="{Binding Path=Value, ElementName=slider}"
+                            ItemWidth="{Binding Path=Value, ElementName=slider}" />
+                    </xctk:SwitchPanel.Layouts>
+                </xctk:SwitchPanel>
             </Grid>
         </Grid>
         <ControlTemplate.Triggers>

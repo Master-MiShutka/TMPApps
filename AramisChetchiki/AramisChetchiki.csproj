@@ -38,6 +38,15 @@
   <PropertyGroup>
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release .NET 4.5|AnyCPU'">
+    <OutputPath>bin\Release .NET 4.5\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>none</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>MAINICON.ico</ApplicationIcon>
   </PropertyGroup>
@@ -124,6 +133,12 @@
       <DependentUpon>PieChart.xaml</DependentUpon>
     </Compile>
     <Compile Include="CloseThisWindowCommand.cs" />
+    <Compile Include="Controls\ReportTable.xaml.cs">
+      <DependentUpon>ReportTable.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ToggleButtonShowOnly10Items.xaml.cs">
+      <DependentUpon>ToggleButtonShowOnly10Items.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\WaitableControl.cs" />
     <Compile Include="Converters\AbonentBindingInfoConverter.cs" />
     <Compile Include="Converters\ConverterForUpdateTableFieldDisplayOrder.cs" />
@@ -138,6 +153,7 @@
     <Compile Include="Model\IModel.cs" />
     <Compile Include="Model\SummaryInfoGroupItem.cs" />
     <Compile Include="Settings.cs" />
+    <Compile Include="SummaryInfoHelper.cs" />
     <Compile Include="ThemeHelper.cs" />
     <Compile Include="Charts\LegendConverter.cs" />
     <Compile Include="ViewModel\AbonentsBindingViewViewModel.cs" />
@@ -146,6 +162,7 @@
     <Compile Include="ViewModel\IViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="Model\Data.cs" />
+    <Compile Include="ViewModel\MetersInfoViewModel.cs" />
     <Compile Include="ViewModel\MetrologyViewViewModel.cs" />
     <Compile Include="ViewModel\SummaryInfoViewViewModel.cs" />
     <Compile Include="ViewModel\ViewCollectionViewModel.cs" />
@@ -154,6 +171,9 @@
     </Compile>
     <Compile Include="Views\ChangesOfMetersView.xaml.cs">
       <DependentUpon>ChangesOfMetersView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MetersInfoView.xaml.cs">
+      <DependentUpon>MetersInfoView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MetrologyView.xaml.cs">
       <DependentUpon>MetrologyView.xaml</DependentUpon>
@@ -199,6 +219,14 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Controls\ReportTable.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ToggleButtonShowOnly10Items.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Themes\Common.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -212,6 +240,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\ChangesOfMetersView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MetersInfoView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -299,14 +331,14 @@
       <Project>{63648392-6ce9-4a60-96d4-f9fd718d29b0}</Project>
       <Name>Xceed.Wpf.DataGrid</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ExtendedWPFToolkitSolution\Src\Xceed.Wpf.Toolkit\Xceed.Wpf.Toolkit.csproj">
+      <Project>{72e591d6-8f83-4d8c-8f67-9c325e623234}</Project>
+      <Name>Xceed.Wpf.Toolkit</Name>
+    </ProjectReference>
     <ProjectReference Include="..\LIBRARY\DBF\DBF.csproj">
       <Project>{71a88ea2-06d4-444e-8bda-8b399bcb8dc4}</Project>
       <Name>DBF</Name>
       <Private>True</Private>
-    </ProjectReference>
-    <ProjectReference Include="..\LIBRARY\ExcelOutput\ExcelOutput.csproj">
-      <Project>{f15afdef-1eb8-4136-96ef-ba9bbeeb684b}</Project>
-      <Name>ExcelOutput</Name>
     </ProjectReference>
     <ProjectReference Include="..\LIBRARY\Extensions\TMP.Extensions.csproj">
       <Project>{3f72fbe4-5f95-43fd-9029-3cc145c978b4}</Project>
@@ -317,6 +349,10 @@
       <Project>{7ed20c3a-c707-43ac-b085-f353869b061b}</Project>
       <Name>ItemsFilter</Name>
       <Private>True</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\LIBRARY\Reporting\Reporting.csproj">
+      <Project>{5703367d-5919-44bf-982a-42458e1093a6}</Project>
+      <Name>Reporting</Name>
     </ProjectReference>
     <ProjectReference Include="..\LIBRARY\SharpTreeView\ICSharpCode.TreeView.csproj">
       <Project>{dde2a481-8271-4eac-a330-8fa6a38d13d1}</Project>

@@ -2,8 +2,3 @@ Y:\Developer\CURRENT\TMPApps\out\Debug\MessageStructure.dll
 Y:\Developer\CURRENT\TMPApps\out\Debug\MessageStructure.pdb
 Y:\Developer\CURRENT\TMPApps\Library\MessageStructure\obj\Debug\MessageStructure.dll
 Y:\Developer\CURRENT\TMPApps\Library\MessageStructure\obj\Debug\MessageStructure.pdb
-y:\Repos\TMPApps\out\Debug\MessageStructure.dll
-y:\Repos\TMPApps\out\Debug\MessageStructure.pdb
-y:\Repos\TMPApps\Library\MessageStructure\obj\Debug\MessageStructure.csproj.CoreCompileInputs.cache
-y:\Repos\TMPApps\Library\MessageStructure\obj\Debug\MessageStructure.dll
-y:\Repos\TMPApps\Library\MessageStructure\obj\Debug\MessageStructure.pdb

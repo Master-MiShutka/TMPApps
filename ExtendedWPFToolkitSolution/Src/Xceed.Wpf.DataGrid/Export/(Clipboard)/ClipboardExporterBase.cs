@@ -193,55 +193,41 @@ namespace Xceed.Wpf.DataGrid.Export
             {
                 dataGridControl.ShowWaitCursor();
 
-                if (dataGridControl.SelectionUnit == SelectionUnit.Cell && dataGridContext.SelectedCellRanges.Count == 1)
+                Dictionary<string, ClipboardExporterBase> exporters = dataGridControl.ClipboardExporters;
+
+                foreach (KeyValuePair<string, ClipboardExporterBase> keyPair in exporters)
                 {
-                    object content = dataGridContext.CurrentCell.Content;
-                    if (content != null)
-                    Clipboard.SetText(content.ToString(), TextDataFormat.Text);
+                    if (keyPair.Value == null)
+                        throw new DataGridException("ClipboardExporterBase cannot be null.");
+
+                    keyPair.Value.StartExporter(keyPair.Key);
                 }
-                else
+
+                using (ManualExporter exporter = new ManualExporter(exporters.Values as IEnumerable<ClipboardExporterBase>))
                 {
-                    if (dataGridContext.CurrentRow.IsSelected)
-                    {
-                        //var fefe = dataGridContext.CurrentRow.
-                    }
-
-                    Dictionary<string, ClipboardExporterBase> exporters = dataGridControl.ClipboardExporters;
-
-                    foreach (KeyValuePair<string, ClipboardExporterBase> keyPair in exporters)
-                    {
-                        if (keyPair.Value == null)
-                            throw new DataGridException("ClipboardExporterBase cannot be null.");
-
-                        keyPair.Value.StartExporter(keyPair.Key);
-                    }
-
-                    using (ManualExporter exporter = new ManualExporter(exporters.Values as IEnumerable<ClipboardExporterBase>))
-                    {
-                        exporter.Export(dataGridContext);
-                    }
-
-                    foreach (KeyValuePair<string, ClipboardExporterBase> keyPair in exporters)
-                    {
-                        keyPair.Value.EndExporter(keyPair.Key);
-
-                        if (dataObject == null)
-                        {
-                            dataObject = new XceedDataObject();
-                        }
-
-                        object clipboardExporterValue = keyPair.Value.ClipboardData;
-
-                        // For other formats, we directly copy the content to the IDataObject
-                        if (clipboardExporterValue != null)
-                        {
-                            ((IDataObject)dataObject).SetData(keyPair.Key, clipboardExporterValue);
-                        }
-
-                        keyPair.Value.ResetExporter();
-                    }
-                    Clipboard.SetDataObject(dataObject, true);
+                    exporter.Export(dataGridContext);
                 }
+
+                foreach (KeyValuePair<string, ClipboardExporterBase> keyPair in exporters)
+                {
+                    keyPair.Value.EndExporter(keyPair.Key);
+
+                    if (dataObject == null)
+                    {
+                        dataObject = new XceedDataObject();
+                    }
+
+                    object clipboardExporterValue = keyPair.Value.ClipboardData;
+
+                    // For other formats, we directly copy the content to the IDataObject
+                    if (clipboardExporterValue != null)
+                    {
+                        ((IDataObject)dataObject).SetData(keyPair.Key, clipboardExporterValue);
+                    }
+
+                    keyPair.Value.ResetExporter();
+                }
+                Clipboard.SetDataObject(dataObject, true);
             }
             finally
             {

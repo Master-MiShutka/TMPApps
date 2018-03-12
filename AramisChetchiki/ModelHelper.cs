@@ -144,7 +144,7 @@ namespace TMP.WORK.AramisChetchiki
             }
         }
 
-        public static object MeterGetPropertyValue(Model.Meter meter, string format, string property)
+        public static object MeterGetPropertyValue(Model.Meter meter, string property)
         {
             PropertyInfo pi = MeterProperties[property];
             object value = pi.GetValue(meter, null);
@@ -152,10 +152,7 @@ namespace TMP.WORK.AramisChetchiki
             {
                 return (bool)value ? "да" : "нет";
             }
-            if (String.IsNullOrWhiteSpace(format))
-                return value;
-            else
-                return string.Format("{0:" + format + "}", value);
+            return value;
         }
 
         #endregion
@@ -246,7 +243,7 @@ namespace TMP.WORK.AramisChetchiki
             if (String.IsNullOrWhiteSpace(format))
                 return value;
             else
-                return string.Format("{0:" + format + "}", value);
+                return string.Format(format, value);
         }
 
         #endregion

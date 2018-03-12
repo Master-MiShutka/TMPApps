@@ -4,9 +4,3 @@ Y:\Developer\CURRENT\TMPApps\out\Debug\Libs\ExcelOutput.dll
 Y:\Developer\CURRENT\TMPApps\out\Debug\Libs\ExcelOutput.pdb
 Y:\Developer\CURRENT\TMPApps\LIBRARY\ExcelOutput\obj\Debug\ExcelOutput.dll
 Y:\Developer\CURRENT\TMPApps\LIBRARY\ExcelOutput\obj\Debug\ExcelOutput.pdb
-y:\Repos\TMPApps\out\Debug\Libs\ExcelOutput.dll
-y:\Repos\TMPApps\out\Debug\Libs\ExcelOutput.pdb
-y:\Repos\TMPApps\LIBRARY\ExcelOutput\obj\Debug\ExcelOutput.csprojResolveAssemblyReference.cache
-y:\Repos\TMPApps\LIBRARY\ExcelOutput\obj\Debug\ExcelOutput.csproj.CoreCompileInputs.cache
-y:\Repos\TMPApps\LIBRARY\ExcelOutput\obj\Debug\ExcelOutput.dll
-y:\Repos\TMPApps\LIBRARY\ExcelOutput\obj\Debug\ExcelOutput.pdb

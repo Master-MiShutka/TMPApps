@@ -1,31 +1,49 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Threading;
-using System.Globalization;
-using System.Reflection;
-using System.Diagnostics;
-using System.IO;
-using System.Threading;
+﻿// **************************************************
+//
+// * TMPApp.cs
+// * 06/03/2018
+//
+// **************************************************
 
 namespace TMPApplication
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Data;
+    using System.Diagnostics;
+    using System.Globalization;
+    using System.IO;
+    using System.Linq;
+    using System.Reflection;
+    using System.Threading;
+    using System.Windows;
     using System.Windows.Navigation;
+    using System.Windows.Threading;
     using TMP.Common.Logger;
 
+    /// <summary>
+    /// Defines the <see cref="TMPApp" />
+    /// </summary>
     public partial class TMPApp : Application, IAppWithLogger
     {
-        protected const int MINIMUM_SPLASH_TIME = 1500; // Miliseconds
-        protected const int SPLASH_FADE_TIME = 500;     // Miliseconds
+        /// <summary>
+        /// Defines the MINIMUM_SPLASH_TIME
+        /// </summary>
+        protected const int MINIMUM_SPLASH_TIME = 1500;// Miliseconds
 
+        /// <summary>
+        /// Defines the SPLASH_FADE_TIME
+        /// </summary>
+        protected const int SPLASH_FADE_TIME = 500;// Miliseconds
+
+        /// <summary>
+        /// Defines the _consoleMode
+        /// </summary>
         private bool _consoleMode = false;
 
-        #region Constructor
-
+        /// <summary>
+        /// Initializes static members of the <see cref="TMPApp"/> class.
+        /// </summary>
         static TMPApp()
         {
             ServiceInjector.Instance.AddService<TMP.Common.Logger.ILoggerFacade>(Logger);
@@ -39,6 +57,9 @@ namespace TMPApplication
             LoadReferencedAssemblies();
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TMPApp"/> class.
+        /// </summary>
         public TMPApp()
         {
             Log("Инициализация приложения");
@@ -48,8 +69,10 @@ namespace TMPApplication
             Navigating += TMPApp_Navigating;
         }
 
-        #endregion
-
+        /// <summary>
+        /// The RunConsole
+        /// </summary>
+        /// <param name="args">The <see cref="string[]"/></param>
         private void RunConsole(string[] args)
         {
             Log("Отображение консоли");
@@ -84,6 +107,10 @@ namespace TMPApplication
             }
             Application.Current.Shutdown(0);
         }
+
+        /// <summary>
+        /// The RunApp
+        /// </summary>
         private void RunApp()
         {
             Log("Создание приложения WPF");
@@ -120,11 +147,22 @@ namespace TMPApplication
                 Application.Current.Shutdown(-1);
             }
         }
+
+        /// <summary>
+        /// The TMPApp_Navigating
+        /// </summary>
+        /// <param name="sender">The <see cref="object"/></param>
+        /// <param name="e">The <see cref="NavigatingCancelEventArgs"/></param>
         private void TMPApp_Navigating(object sender, NavigatingCancelEventArgs e)
         {
             if (_consoleMode)
                 e.Cancel = true;
         }
+
+        /// <summary>
+        /// The OnStartup
+        /// </summary>
+        /// <param name="e">The <see cref="StartupEventArgs"/></param>
         protected override void OnStartup(StartupEventArgs e)
         {
             if (e.Args.Length > 0)
@@ -144,6 +182,11 @@ namespace TMPApplication
                 RunApp();
             }
         }
+
+        /// <summary>
+        /// The OnExit
+        /// </summary>
+        /// <param name="e">The <see cref="ExitEventArgs"/></param>
         protected override void OnExit(ExitEventArgs e)
         {
             base.OnExit(e);
@@ -153,10 +196,19 @@ namespace TMPApplication
             Log("Завершение работы");
         }
 
-        #region Properties
-
+        /// <summary>
+        /// Gets or sets the Title
+        /// </summary>
         public static string Title { get; set; }
+
+        /// <summary>
+        /// Gets the WindowTitle
+        /// </summary>
         public static string WindowTitle => (Current.MainWindow == null) ? "APP" : Current.MainWindow.Title;
+
+        /// <summary>
+        /// Gets the AssemblyTitle
+        /// </summary>
         public static string AssemblyTitle
         {
             get
@@ -165,6 +217,9 @@ namespace TMPApplication
             }
         }
 
+        /// <summary>
+        /// Gets the AssemblyEntryLocation
+        /// </summary>
         public static string AssemblyEntryLocation
         {
             get
@@ -172,6 +227,10 @@ namespace TMPApplication
                 return System.IO.Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
             }
         }
+
+        /// <summary>
+        /// Gets the AppDataFolder
+        /// </summary>
         public static string AppDataFolder
         {
             get
@@ -181,6 +240,10 @@ namespace TMPApplication
                                                  TMPApp.Company;
             }
         }
+
+        /// <summary>
+        /// Gets the AppDataSettingFileName
+        /// </summary>
         public static string AppDataSettingFileName
         {
             get
@@ -189,6 +252,10 @@ namespace TMPApplication
                                               string.Format(CultureInfo.InvariantCulture, "{0}.App.settings", TMPApp.AssemblyTitle));
             }
         }
+
+        /// <summary>
+        /// Gets the AppSessionFileName
+        /// </summary>
         public static string AppSessionFileName
         {
             get
@@ -197,6 +264,10 @@ namespace TMPApplication
                                               string.Format(CultureInfo.InvariantCulture, "{0}.App.session", TMPApp.AssemblyTitle));
             }
         }
+
+        /// <summary>
+        /// Gets the MyDocumentsFolder
+        /// </summary>
         public static string MyDocumentsFolder
         {
             get
@@ -205,7 +276,9 @@ namespace TMPApplication
             }
         }
 
-
+        /// <summary>
+        /// Gets the Company
+        /// </summary>
         public static string Company
         {
             get
@@ -214,9 +287,10 @@ namespace TMPApplication
             }
         }
 
-        #endregion
-
-        #region Public Methods
+        /// <summary>
+        /// The CorrectMainWindowSizeAndPos
+        /// </summary>
+        /// <param name="window">The <see cref="Window"/></param>
         public static void CorrectMainWindowSizeAndPos(Window window)
         {
             if (window.Height > System.Windows.SystemParameters.VirtualScreenHeight)
@@ -247,8 +321,12 @@ namespace TMPApplication
             {
                 window.Left = 0;
             }
-
         }
+
+        /// <summary>
+        /// The GetUserAppDataPath
+        /// </summary>
+        /// <returns>The <see cref="string"/></returns>
         public static string GetUserAppDataPath()
         {
             string path = string.Empty;
@@ -274,6 +352,11 @@ namespace TMPApplication
                 );
             return path;
         }
+
+        /// <summary>
+        /// The CreateAppDataFolder
+        /// </summary>
+        /// <returns>The <see cref="bool"/></returns>
         public static bool CreateAppDataFolder()
         {
             try
@@ -291,6 +374,10 @@ namespace TMPApplication
             return true;
         }
 
+        /// <summary>
+        /// The SetAppDomainCultures
+        /// </summary>
+        /// <param name="name">The <see cref="string"/></param>
         public static void SetAppDomainCultures(string name)
         {
             try
@@ -315,10 +402,48 @@ namespace TMPApplication
             }
         }
 
-        #endregion
+        /// <summary>
+        /// The LoadThemeDictionary
+        /// </summary>
+        /// <param name="t">The <see cref="Type"/></param>
+        /// <param name="themeName">The <see cref="string"/></param>
+        /// <param name="colorScheme">The <see cref="string"/></param>
+        /// <returns>The <see cref="ResourceDictionary"/></returns>
+        public static ResourceDictionary LoadThemeDictionary(Type t, string themeName, string colorScheme)
+        {
+            Assembly controlAssembly = t.Assembly;
+            AssemblyName themeAssemblyName = controlAssembly.GetName();
 
-        #region Private Methods
+            object[] attrs = controlAssembly.GetCustomAttributes(typeof(ThemeInfoAttribute), false);
+            if (attrs.Length > 0)
+            {
+                ThemeInfoAttribute ti = (ThemeInfoAttribute)attrs[0];
 
+                if (ti.ThemeDictionaryLocation == ResourceDictionaryLocation.None)
+                {
+                    // There are no theme-specific resources.
+                    return null;
+                }
+
+                if (ti.ThemeDictionaryLocation == ResourceDictionaryLocation.ExternalAssembly)
+                {
+                    themeAssemblyName.Name += "." + themeName;
+                }
+            }
+
+            string relativePackUriForResources = "/" +
+                themeAssemblyName.FullName +
+                ";component/themes/" +
+                themeName + "." +
+                colorScheme + ".xaml";
+
+            Uri resourceLocater = new System.Uri(relativePackUriForResources, System.UriKind.Relative);
+            return Application.LoadComponent(resourceLocater) as ResourceDictionary;
+        }
+
+        /// <summary>
+        /// The CheckEnviroment
+        /// </summary>
         private static void CheckEnviroment()
         {
             OperatingSystem OS = Environment.OSVersion;
@@ -343,10 +468,15 @@ namespace TMPApplication
                 Application.Current.Shutdown(-1);
             }
         }
-        #region Check .Net Framework version
+
         // Checking the version using >= will enable forward compatibility, 
         // however you should always compile your code on newer versions of
         // the framework to ensure your app works the same.
+        /// <summary>
+        /// The CheckFor45DotVersion
+        /// </summary>
+        /// <param name="releaseKey">The <see cref="int"/></param>
+        /// <returns>The <see cref="string"/></returns>
         private static string CheckFor45DotVersion(int releaseKey)
         {
             if (releaseKey >= 393295)
@@ -370,6 +500,9 @@ namespace TMPApplication
             return "No 4.5 or later version detected";
         }
 
+        /// <summary>
+        /// The Get45or451FromRegistry
+        /// </summary>
         private static void Get45or451FromRegistry()
         {
             using (Microsoft.Win32.RegistryKey ndpKey = Microsoft.Win32.RegistryKey.OpenBaseKey(Microsoft.Win32.RegistryHive.LocalMachine, Microsoft.Win32.RegistryView.Registry32).OpenSubKey("SOFTWARE\\Microsoft\\NET Framework Setup\\NDP\\v4\\Full\\"))
@@ -384,9 +517,18 @@ namespace TMPApplication
                 }
             }
         }
-        #endregion
 
+        /// <summary>
+        /// Defines the LoadedAsmsCache
+        /// </summary>
         private static readonly Dictionary<string, Assembly> LoadedAsmsCache = new Dictionary<string, Assembly>(StringComparer.InvariantCultureIgnoreCase);
+
+        /// <summary>
+        /// The OnResolveAssembly
+        /// </summary>
+        /// <param name="sender">The <see cref="object"/></param>
+        /// <param name="args">The <see cref="ResolveEventArgs"/></param>
+        /// <returns>The <see cref="Assembly"/></returns>
         private static Assembly OnResolveAssembly(object sender, ResolveEventArgs args)
         {
             Assembly cachedAsm;
@@ -425,6 +567,12 @@ namespace TMPApplication
                 return loadedAsm;
             }
         }
+
+        /// <summary>
+        /// The FindAssembly
+        /// </summary>
+        /// <param name="name">The <see cref="string"/></param>
+        /// <returns>The <see cref="Assembly"/></returns>
         private static Assembly FindAssembly(string name)
         {
             try
@@ -450,6 +598,10 @@ namespace TMPApplication
             }
             return null;
         }
+
+        /// <summary>
+        /// The LoadReferencedAssemblies
+        /// </summary>
         private static void LoadReferencedAssemblies()
         {
             try
@@ -557,7 +709,5 @@ namespace TMPApplication
                 Application.Current.Shutdown(-1);
             }
         }
-
-        #endregion
     }
 }

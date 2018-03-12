@@ -4,7 +4,7 @@
 library
 C#
 .cs
-y:\Repos\TMPApps\LIBRARY\ItemsFilter\obj\Debug\
+D:\Developer\CURRENT\TMPApps\LIBRARY\ItemsFilter\obj\Debug\
 ItemsFilter
 none
 false
@@ -12,9 +12,9 @@ DEBUG;TRACE
 
 1-731644535
 
-51516136734
+511420501839
 121654848548
 Themes\Generic.xaml;
 
-True
+False
 

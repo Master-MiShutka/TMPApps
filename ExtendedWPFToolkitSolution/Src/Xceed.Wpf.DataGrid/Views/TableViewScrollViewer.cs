@@ -60,7 +60,7 @@ namespace Xceed.Wpf.DataGrid.Views
       "RowSelectorPaneWidth",
       typeof( double ),
       typeof( TableViewScrollViewer ),
-      new FrameworkPropertyMetadata( 25d ) );
+      new FrameworkPropertyMetadata( 20d ) );
 
     public double RowSelectorPaneWidth
     {

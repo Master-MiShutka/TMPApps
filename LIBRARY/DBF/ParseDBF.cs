@@ -76,7 +76,7 @@ namespace TMP.DBF
             // If there isn't even a file, just return an empty DataTable
             if ((false == File.Exists(dbfFile)))
             {
-                throw new System.IO.FileNotFoundException("Файл не найден!", dbfFile);
+                throw new System.IO.FileNotFoundException(String.Format("Файл не найден!\n'{0}'", dbfFile));
             }
             try
             {

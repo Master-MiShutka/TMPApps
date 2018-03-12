@@ -1,0 +1,96 @@
+﻿<Window
+    x:Class="TestApp.TestWindow2"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:TestApp"
+    xmlns:matrix="clr-namespace:TMP.UI.Controls.WPF.Reporting.MatrixGrid;assembly=ui.controls.wpf.reporting"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:xcdg="http://schemas.xceed.com/wpf/xaml/datagrid"
+    xmlns:xcdgv="clr-namespace:Xceed.Wpf.DataGrid.Views;assembly=Xceed.Wpf.DataGrid"
+    xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+    Title="TestWindow2"
+    Width="800"
+    Height="500"
+    Loaded="Window_Loaded"
+    mc:Ignorable="d">
+    <StackPanel d:DataContext="{d:DesignInstance {x:Type local:MatrixModel}, IsDesignTimeCreatable=True}" Orientation="Vertical">
+        <!-- StackPanel
+            Margin="2,8,2,0"
+            DockPanel.Dock="Top"
+            Orientation="Horizontal">
+            <TextBlock
+                Width="200"
+                Height="50"
+                Background="Aquamarine"
+                DockPanel.Dock="Top"
+                Text="{Binding SampleText, FallbackValue=aaaa, TargetNullValue=bbbb}" />
+            <xcdg:DataGridControl MinWidth="350" MinHeight="150">
+                <xcdg:DataGridControl.Columns>
+                    <xcdg:Column Title="hghg hg" FieldName="jh" />
+                    <xcdg:Column Title="Second col" FieldName="jhh" />
+                </xcdg:DataGridControl.Columns>
+                <xcdg:DataGridControl.Resources>
+                    <Style TargetType="{x:Type DataGridColumnHeader}">
+                        <Setter Property="HorizontalContentAlignment" Value="Center" />
+                        <Setter Property="TextBlock.TextAlignment" Value="Center" />
+                    </Style>
+                </xcdg:DataGridControl.Resources>
+                <xcdg:DataGridControl.View>
+                    <xcdgv:TableView
+                        ColumnStretchMode="Last"
+                        IsAlternatingRowStyleEnabled="True"
+                        IsColumnVirtualizationEnabled="True"
+                        UseDefaultHeadersFooters="False">
+                        <xcdgv:TableView.FixedHeaders>
+                            <DataTemplate>
+                                <xcdg:ColumnManagerRow
+                                    AllowColumnReorder="True"
+                                    AllowColumnResize="True"
+                                    AllowSort="True" />
+                            </DataTemplate>
+                        </xcdgv:TableView.FixedHeaders>
+                    </xcdgv:TableView>
+                </xcdg:DataGridControl.View>
+                <xcdg:DataGridControl.Style>
+                    <Style TargetType="{x:Type xcdg:DataGridControl}">
+                        <Setter Property="Background" Value="WhiteSmoke" />
+                    </Style>
+                </xcdg:DataGridControl.Style>
+            </xcdg:DataGridControl>
+            <xctk:ButtonSpinner
+                Height="30"
+                Content="Gjjo"
+                ShowButtonSpinner="True"
+                ValidSpinDirection="Increase" />
+            <xctk:ButtonChrome Margin="2" Content="ButtonChrome" />
+            <xctk:DateTimePicker CalendarDisplayMode="Month" Text="jn" />
+        </ -->
+        <DockPanel DockPanel.Dock="Bottom">
+            <StackPanel DockPanel.Dock="Left" Orientation="Horizontal">
+                <StackPanel.Resources>
+                    <Style BasedOn="{StaticResource {x:Type ToggleButton}}" TargetType="{x:Type RadioButton}">
+                        <Setter Property="GroupName" Value="themes" />
+                        <!-- Setter Property="Command" Value="{Binding CommandSetTheme}" />
+                        <Setter Property="CommandParameter" Value="{Binding Path=Tag, RelativeSource={RelativeSource Mode=Self}}"  /-->
+                    </Style>
+                </StackPanel.Resources>
+                <RadioButton Click="Set_aero_normalcolor" Content="aero normalcolor" />
+                <RadioButton Click="Set_aero2_normalcolor" Content="aero2 normalcolor" />
+                <RadioButton Click="Set_classic" Content="classic" />
+                <RadioButton Click="Set_luna_normalcolor" Content="luna normalcolor" />
+                <RadioButton Click="Set_luna_homestead" Content="luna homestead" />
+                <RadioButton Click="Set_luna_metallic" Content="luna metallic" />
+                <RadioButton Click="Set_royale_mnormalcolor" Content="royale normalcolor" />
+                <RadioButton Click="Set_zune_normalcolor" Content="zune normalcolor" />
+            </StackPanel>
+            <Button
+                Margin="20,5"
+                Click="Button_Click"
+                Content="GO" />
+        </DockPanel>
+        <Border Margin="2">
+            <matrix:MatrixGridControl Margin="5" Matrix="{Binding Model}" />
+        </Border>
+    </StackPanel>
+</Window>

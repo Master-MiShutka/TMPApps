@@ -21,14 +21,16 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ButtonBase}">
-                    <Border x:Name="Border"
-                            Background="{DynamicResource TransparentWhiteBrush}"
-                            BorderBrush="{DynamicResource TransparentWhiteBrush}"
-                            BorderThickness="1">
-                        <ContentPresenter Margin="2"
-                                          HorizontalAlignment="Center"
-                                          VerticalAlignment="Center"
-                                          RecognizesAccessKey="True" />
+                    <Border
+                        x:Name="Border"
+                        Background="{DynamicResource TransparentWhiteBrush}"
+                        BorderBrush="{DynamicResource TransparentWhiteBrush}"
+                        BorderThickness="1">
+                        <ContentPresenter
+                            Margin="2"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            RecognizesAccessKey="True" />
                     </Border>
 
                     <ControlTemplate.Triggers>
@@ -58,13 +60,28 @@
     </Style>
 
     <!--  Style for all types of regular buttons  -->
-    <Style x:Key="{x:Static ToolBar.ButtonStyleKey}" BasedOn="{StaticResource ToolBarButtonBaseStyle}" TargetType="{x:Type Button}" />
-    <Style x:Key="{x:Static ToolBar.ToggleButtonStyleKey}" BasedOn="{StaticResource ToolBarButtonBaseStyle}" TargetType="{x:Type ToggleButton}" />
-    <Style x:Key="{x:Static ToolBar.CheckBoxStyleKey}" BasedOn="{StaticResource ToolBarButtonBaseStyle}" TargetType="{x:Type CheckBox}" />
-    <Style x:Key="{x:Static ToolBar.RadioButtonStyleKey}" BasedOn="{StaticResource ToolBarButtonBaseStyle}" TargetType="{x:Type RadioButton}" />
+    <Style
+        x:Key="{x:Static ToolBar.ButtonStyleKey}"
+        BasedOn="{StaticResource ToolBarButtonBaseStyle}"
+        TargetType="{x:Type Button}" />
+    <Style
+        x:Key="{x:Static ToolBar.ToggleButtonStyleKey}"
+        BasedOn="{StaticResource ToolBarButtonBaseStyle}"
+        TargetType="{x:Type ToggleButton}" />
+    <Style
+        x:Key="{x:Static ToolBar.CheckBoxStyleKey}"
+        BasedOn="{StaticResource ToolBarButtonBaseStyle}"
+        TargetType="{x:Type CheckBox}" />
+    <Style
+        x:Key="{x:Static ToolBar.RadioButtonStyleKey}"
+        BasedOn="{StaticResource ToolBarButtonBaseStyle}"
+        TargetType="{x:Type RadioButton}" />
 
     <!--  Style for text box inside a toolbar if needed  -->
-    <Style x:Key="{x:Static ToolBar.TextBoxStyleKey}" BasedOn="{StaticResource TMPTextBox}" TargetType="{x:Type TextBox}" />
+    <Style
+        x:Key="{x:Static ToolBar.TextBoxStyleKey}"
+        BasedOn="{StaticResource TMPTextBox}"
+        TargetType="{x:Type TextBox}" />
 
     <!--  Style the toolbar thumb  -->
     <Style x:Key="ToolBarThumbStyle" TargetType="{x:Type Thumb}">
@@ -73,15 +90,19 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Thumb}">
-                    <Border Margin="0,3,0,3" Background="Transparent" SnapsToDevicePixels="True">
+                    <Border
+                        Margin="0,3,0,3"
+                        Background="Transparent"
+                        SnapsToDevicePixels="True">
                         <Rectangle Width="4.9">
                             <Rectangle.Fill>
                                 <!--  Brush similar to visual studio, can be improved  -->
-                                <DrawingBrush TileMode="Tile"
-                                              Viewbox="0,0,5,4"
-                                              ViewboxUnits="Absolute"
-                                              Viewport="0,0,5,4"
-                                              ViewportUnits="Absolute">
+                                <DrawingBrush
+                                    TileMode="Tile"
+                                    Viewbox="0,0,5,4"
+                                    ViewboxUnits="Absolute"
+                                    Viewport="0,0,5,4"
+                                    ViewportUnits="Absolute">
                                     <DrawingBrush.Drawing>
                                         <GeometryDrawing Brush="{DynamicResource GrayBrush3}">
                                             <GeometryDrawing.Geometry>
@@ -109,23 +130,26 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ToggleButton}">
-                    <Border Name="Bd"
-                            Background="Transparent"
-                            CornerRadius="0,3,3,0"
-                            SnapsToDevicePixels="true">
+                    <Border
+                        Name="Bd"
+                        Background="Transparent"
+                        CornerRadius="0,3,3,0"
+                        SnapsToDevicePixels="true">
                         <Grid>
                             <!--  Overflow button similar to visual studio  -->
-                            <Rectangle Name="Rectangle"
-                                       Width="6"
-                                       Height="1"
-                                       Margin="2,8"
-                                       VerticalAlignment="Bottom"
-                                       Fill="{DynamicResource BlackBrush}" />
-                            <Path Name="Arrow"
-                                  Margin="2,3"
-                                  VerticalAlignment="Bottom"
-                                  Data="M 0 0 L 6 0 3 3 Z"
-                                  Fill="{DynamicResource BlackBrush}" />
+                            <Rectangle
+                                Name="Rectangle"
+                                Width="6"
+                                Height="1"
+                                Margin="2,8"
+                                VerticalAlignment="Bottom"
+                                Fill="{DynamicResource BlackBrush}" />
+                            <Path
+                                Name="Arrow"
+                                Margin="2,3"
+                                VerticalAlignment="Bottom"
+                                Data="M 0 0 L 6 0 3 3 Z"
+                                Fill="{DynamicResource BlackBrush}" />
                             <ContentPresenter />
                         </Grid>
                     </Border>
@@ -162,45 +186,53 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ToolBar}">
-                    <Border x:Name="Border"
-                            Background="{DynamicResource TransparentWhiteBrush}"
-                            BorderBrush="{DynamicResource TransparentWhiteBrush}"
-                            BorderThickness="1"
-                            CornerRadius="2">
+                    <Border
+                        x:Name="Border"
+                        Background="{DynamicResource TransparentWhiteBrush}"
+                        BorderBrush="{DynamicResource TransparentWhiteBrush}"
+                        BorderThickness="1"
+                        CornerRadius="2">
                         <DockPanel>
-                            <ToggleButton ClickMode="Press"
-                                          DockPanel.Dock="Right"
-                                          IsChecked="{Binding Path=IsOverflowOpen,
-                                                              Mode=TwoWay,
-                                                              RelativeSource={RelativeSource TemplatedParent}}"
-                                          IsEnabled="{TemplateBinding HasOverflowItems}"
-                                          Style="{StaticResource ToolBarOverflowButtonStyle}">
-                                <Popup x:Name="OverflowPopup"
-                                       AllowsTransparency="true"
-                                       Focusable="false"
-                                       IsOpen="{Binding Path=IsOverflowOpen,
-                                                        RelativeSource={RelativeSource TemplatedParent}}"
-                                       Placement="Bottom"
-                                       PopupAnimation="Slide"
-                                       StaysOpen="false">
-                                    <Border x:Name="DropDownBorder"
-                                            Background="{DynamicResource ControlBackgroundBrush}"
-                                            BorderBrush="{DynamicResource ControlBorderBrush}"
-                                            BorderThickness="1">
-                                        <ToolBarOverflowPanel x:Name="PART_ToolBarOverflowPanel"
-                                                              Margin="2"
-                                                              FocusVisualStyle="{x:Null}"
-                                                              Focusable="true"
-                                                              KeyboardNavigation.DirectionalNavigation="Cycle"
-                                                              KeyboardNavigation.TabNavigation="Cycle"
-                                                              WrapWidth="200" />
+                            <ToggleButton
+                                ClickMode="Press"
+                                DockPanel.Dock="Right"
+                                IsChecked="{Binding Path=IsOverflowOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                IsEnabled="{TemplateBinding HasOverflowItems}"
+                                Style="{StaticResource ToolBarOverflowButtonStyle}">
+                                <Popup
+                                    x:Name="OverflowPopup"
+                                    AllowsTransparency="true"
+                                    Focusable="false"
+                                    IsOpen="{Binding Path=IsOverflowOpen, RelativeSource={RelativeSource TemplatedParent}}"
+                                    Placement="Bottom"
+                                    PopupAnimation="Slide"
+                                    StaysOpen="false">
+                                    <Border
+                                        x:Name="DropDownBorder"
+                                        Background="{DynamicResource ControlBackgroundBrush}"
+                                        BorderBrush="{DynamicResource ControlBorderBrush}"
+                                        BorderThickness="1">
+                                        <ToolBarOverflowPanel
+                                            x:Name="PART_ToolBarOverflowPanel"
+                                            Margin="2"
+                                            FocusVisualStyle="{x:Null}"
+                                            Focusable="true"
+                                            KeyboardNavigation.DirectionalNavigation="Cycle"
+                                            KeyboardNavigation.TabNavigation="Cycle"
+                                            WrapWidth="200" />
                                     </Border>
                                 </Popup>
                             </ToggleButton>
 
-                            <Thumb x:Name="ToolBarThumb" Width="10" Style="{StaticResource ToolBarThumbStyle}" />
+                            <Thumb
+                                x:Name="ToolBarThumb"
+                                Width="10"
+                                Style="{StaticResource ToolBarThumbStyle}" />
 
-                            <ToolBarPanel x:Name="PART_ToolBarPanel" Margin="0,1,2,2" IsItemsHost="true" />
+                            <ToolBarPanel
+                                x:Name="PART_ToolBarPanel"
+                                Margin="0,1,2,2"
+                                IsItemsHost="true" />
                         </DockPanel>
                     </Border>
 

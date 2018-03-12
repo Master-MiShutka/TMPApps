@@ -23,6 +23,7 @@ namespace TMP.WORK.AramisChetchiki.ViewModel
 {
     using Model;
     using Extensions;
+    using TMP.UI.Controls.WPF.Reporting.MatrixGrid;
 
     public class ChangesOfMetersViewModel : BaseDataViewModel<ChangesOfMeters>
     {
@@ -35,19 +36,15 @@ namespace TMP.WORK.AramisChetchiki.ViewModel
 
             CommandExport = new DelegateCommand(() =>
             {
-                IsAnalizingData = true;
-                //IsBusy = true;
+                IsBusy = true;
+                App.DoEvents();
+
                 Status = "Экспорт данных";
                 DetailedStatus = "подготовка ...";
 
                 var task = System.Threading.Tasks.Task.Factory.StartNew(() => Export());
                 task.ContinueWith(t =>
                 {
-                    IsAnalizingData = false;
-                    IsBusy = false;
-                    Status = null;
-                    DetailedStatus = null;
-
                     MessageBox.Show(String.Format("Произошла ошибка при формировании отчёта.\nОписание: {0}", App.GetExceptionDetails(t.Exception)),
                         "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
 
@@ -55,18 +52,18 @@ namespace TMP.WORK.AramisChetchiki.ViewModel
 
                 task.ContinueWith(t =>
                 {
-                    IsAnalizingData = false;
                     IsBusy = false;
                     Status = null;
                     DetailedStatus = null;
-                }, System.Threading.Tasks.TaskContinuationOptions.OnlyOnRanToCompletion);
+                });
 
 
             }, () => View != null, "Экспорт");
             CommandPrint = new DelegateCommand(() =>
             {
-                IsAnalizingData = true;
-                //IsBusy = true;
+                IsBusy = true;
+                App.DoEvents();
+
                 Status = "Печать данных";
                 DetailedStatus = "подготовка ...";
                 App.DoEvents();
@@ -95,13 +92,65 @@ namespace TMP.WORK.AramisChetchiki.ViewModel
 
             CommandSetSorting = new DelegateCommand(() =>
             {
-                Windows.SelectFieldsAndSortCollectionViewWindow window = new Windows.SelectFieldsAndSortCollectionViewWindow();
+                Windows.SelectFieldsAndSortCollectionViewWindow window = new Windows.SelectFieldsAndSortCollectionViewWindow(this.TableColumns, this.View);
                 window.ShowDialog();
             }, () => Data != null, "Сортировка");
 
+            CommandStatistic = new DelegateCommand(() =>
+            {
+                IsBusy = true;
+
+                Window wnd = new Window();
+                wnd.Owner = App.Current.MainWindow;
+                wnd.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+                wnd.ShowInTaskbar = false;
+                wnd.Title = "Статистика по установке электронных счётчиков";
+
+                int curYear = DateTime.Now.Year;
+                const int yearsCount = 3;
+                MatrixModelDelegate matrix1 = new MatrixModelDelegate()
+                {
+                    Header = "Свод по установке счётчиков в за последние три года помесячно",
+                    Description = "количество счётчиков",
+                    GetRowHeaderValuesFunc = () => Enumerable.Range(curYear - yearsCount, yearsCount).Reverse().Select(i => new MatrixRowHeaderItem(i.ToString())),
+                    GetColumnHeaderValuesFunc = () => System.Globalization.DateTimeFormatInfo.CurrentInfo.MonthNames.Take(12)
+                        .Select(i => new MatrixColumnHeaderItem(i)),
+                    GetCellValueFunc = (row, column) =>
+                    {
+                        var l = _data
+                            .Where(i => i.Дата_замены.HasValue)
+                            .Select(i => i.Дата_замены.Value)
+                            .ToList();
+                        var l1 = l
+                            .Where(i => i.Year.ToString() == row.Header)
+                            .ToList();
+
+                        var values = l1
+                            .Where(i => string.Equals(i.ToString("MMMM"), column.Header))
+                            .ToList();
+                        if (values == null || values.Count() == 0)
+                            return string.Empty;
+                        else
+                            return values.Count();
+                    }
+                };
+
+
+
+                wnd.Content = new ContentPresenter()
+                {
+                    Margin = new Thickness(2),
+                    Content = new MatrixGridControl() { Matrix = matrix1 }
+                };
+
+                wnd.ShowDialog();
+
+                IsBusy = false;
+            }, () => Data != null, "Статистика");
+
             if (System.ComponentModel.DesignerProperties.GetIsInDesignMode(new DependencyObject()))
             {
-                IsAnalizingData = false;
+                IsBusy = false;
                 Status = "подготовка";
                 Data = new List<ChangesOfMeters>();
                 //CreateView();
@@ -180,6 +229,7 @@ namespace TMP.WORK.AramisChetchiki.ViewModel
 
         public override ICommand CommandExport { get; }
         public override ICommand CommandPrint { get; }
+        public ICommand CommandStatistic { get; }
 
         #endregion
 
@@ -189,6 +239,7 @@ namespace TMP.WORK.AramisChetchiki.ViewModel
 
         private void CreateView()
         {
+            IsBusy = true;
             App.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new Action(() =>
             {
                 System.Diagnostics.Debug.WriteLine("*** start generating view ChangesOfMetersViewModel");
@@ -205,7 +256,7 @@ namespace TMP.WORK.AramisChetchiki.ViewModel
                 System.Diagnostics.Debug.WriteLine("*** generated view ChangesOfMetersViewModel = " + ms.ToString("N1"));
 
                 RaisePropertyChanged("View");
-                IsAnalizingData = false;
+                IsBusy = false;
             }));
         }
 
@@ -261,7 +312,7 @@ namespace TMP.WORK.AramisChetchiki.ViewModel
             doc.PageWidth = printDialog.PrintableAreaWidth;
 
             doc.FontFamily = new FontFamily("Verdana;Tahoma");
-            doc.FontSize = 12d;
+            doc.FontSize = 10d;
             doc.ColumnWidth = Double.PositiveInfinity;
 
             Paragraph p = new Paragraph(new Run(String.Format("Сведения по заменам счётчиков за период с {0} по {1}", FromDate.Value.ToShortDateString(), ToDate.Value.ToShortDateString())))

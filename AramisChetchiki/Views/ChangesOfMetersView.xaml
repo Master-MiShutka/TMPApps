@@ -52,6 +52,11 @@
                 Padding="10,0"
                 Command="{Binding CommandExport}"
                 Content="{Binding CommandExport.Header}" />
+            <Button
+                Margin="0,2,5,2"
+                Padding="10,0"
+                Command="{Binding CommandStatistic}"
+                Content="{Binding CommandStatistic.Header}" />
         </StackPanel>
         <controls:TableView
             x:Name="table"

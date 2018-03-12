@@ -4,7 +4,7 @@
 library
 C#
 .cs
-y:\Repos\TMPApps\ExtendedWPFToolkitSolution\Src\Xceed.Wpf.AvalonDock.Themes.Aero\obj\Debug\
+T:\Developer\CURRENT\TMPApps\ExtendedWPFToolkitSolution\Src\Xceed.Wpf.AvalonDock.Themes.Aero\obj\Debug\
 Xceed.Wpf.AvalonDock.Themes
 none
 false
@@ -13,7 +13,7 @@ DEBUG;TRACE
 2-109355679
 
 6592878137
-13-2097774628
+13-1053458767
 Brushes.xaml;Theme.xaml;
 
 True

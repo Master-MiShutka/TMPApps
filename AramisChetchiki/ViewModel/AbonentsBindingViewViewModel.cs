@@ -36,7 +36,7 @@ namespace TMP.WORK.AramisChetchiki.ViewModel
                 {
                     // группируем список по значению свойства
                     var groups = metersList
-                        .GroupBy(i => ModelHelper.MeterGetPropertyValue(i, string.Empty, propName))
+                        .GroupBy(i => ModelHelper.MeterGetPropertyValue(i, propName))
                         .ToList();
                     if (groups.Count >= 1)
                     {

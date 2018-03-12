@@ -58,26 +58,35 @@
                 <RowDefinition Height="Auto" MinHeight="{TemplateBinding Slider.MinHeight}" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
-            <TickBar x:Name="TopTick" Placement="Top" Style="{StaticResource SliderTickBarStyle}" />
-            <TickBar x:Name="BottomTick" Placement="Bottom" Style="{StaticResource SliderTickBarStyle}" />
+            <TickBar
+                x:Name="TopTick"
+                Placement="Top"
+                Style="{StaticResource SliderTickBarStyle}" />
+            <TickBar
+                x:Name="BottomTick"
+                Placement="Bottom"
+                Style="{StaticResource SliderTickBarStyle}" />
             <Track x:Name="PART_Track" Grid.Row="1">
                 <Track.DecreaseRepeatButton>
-                    <RepeatButton Height="{TemplateBinding Slider.Height}"
-                                  Background="{TemplateBinding Slider.Foreground}"
-                                  Command="Slider.DecreaseLarge"
-                                  Style="{StaticResource SliderButtonStyle}" />
+                    <RepeatButton
+                        Height="{TemplateBinding Slider.Height}"
+                        Background="{TemplateBinding Slider.Foreground}"
+                        Command="Slider.DecreaseLarge"
+                        Style="{StaticResource SliderButtonStyle}" />
                 </Track.DecreaseRepeatButton>
                 <Track.Thumb>
-                    <Thumb Width="{TemplateBinding Slider.Height}"
-                           Height="{TemplateBinding Slider.Height}"
-                           Background="{TemplateBinding Slider.BorderBrush}"
-                           Style="{StaticResource SliderThumbStyle}" />
+                    <Thumb
+                        Width="{TemplateBinding Slider.Height}"
+                        Height="{TemplateBinding Slider.Height}"
+                        Background="{TemplateBinding Slider.BorderBrush}"
+                        Style="{StaticResource SliderThumbStyle}" />
                 </Track.Thumb>
                 <Track.IncreaseRepeatButton>
-                    <RepeatButton Height="{TemplateBinding Slider.Height}"
-                                  Background="{TemplateBinding Slider.Background}"
-                                  Command="Slider.IncreaseLarge"
-                                  Style="{StaticResource SliderButtonStyle}" />
+                    <RepeatButton
+                        Height="{TemplateBinding Slider.Height}"
+                        Background="{TemplateBinding Slider.Background}"
+                        Command="Slider.IncreaseLarge"
+                        Style="{StaticResource SliderButtonStyle}" />
                 </Track.IncreaseRepeatButton>
             </Track>
         </Grid>
@@ -102,26 +111,35 @@
                 <ColumnDefinition Width="Auto" MinWidth="{TemplateBinding Slider.MinWidth}" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
-            <TickBar x:Name="TopTick" Placement="Left" Style="{StaticResource SliderTickBarStyle}" />
-            <TickBar x:Name="BottomTick" Placement="Right" Style="{StaticResource SliderTickBarStyle}" />
+            <TickBar
+                x:Name="TopTick"
+                Placement="Left"
+                Style="{StaticResource SliderTickBarStyle}" />
+            <TickBar
+                x:Name="BottomTick"
+                Placement="Right"
+                Style="{StaticResource SliderTickBarStyle}" />
             <Track x:Name="PART_Track" Grid.Column="1">
                 <Track.DecreaseRepeatButton>
-                    <RepeatButton Height="{TemplateBinding Slider.Height}"
-                                  Background="{TemplateBinding Slider.Foreground}"
-                                  Command="Slider.DecreaseLarge"
-                                  Style="{StaticResource SliderButtonStyle}" />
+                    <RepeatButton
+                        Height="{TemplateBinding Slider.Height}"
+                        Background="{TemplateBinding Slider.Foreground}"
+                        Command="Slider.DecreaseLarge"
+                        Style="{StaticResource SliderButtonStyle}" />
                 </Track.DecreaseRepeatButton>
                 <Track.Thumb>
-                    <Thumb Width="{TemplateBinding Slider.Width}"
-                           Height="{TemplateBinding Slider.Width}"
-                           Background="{TemplateBinding Slider.BorderBrush}"
-                           Style="{StaticResource SliderThumbStyle}" />
+                    <Thumb
+                        Width="{TemplateBinding Slider.Width}"
+                        Height="{TemplateBinding Slider.Width}"
+                        Background="{TemplateBinding Slider.BorderBrush}"
+                        Style="{StaticResource SliderThumbStyle}" />
                 </Track.Thumb>
                 <Track.IncreaseRepeatButton>
-                    <RepeatButton Height="{TemplateBinding Slider.Height}"
-                                  Background="{TemplateBinding Slider.Background}"
-                                  Command="Slider.IncreaseLarge"
-                                  Style="{StaticResource SliderButtonStyle}" />
+                    <RepeatButton
+                        Height="{TemplateBinding Slider.Height}"
+                        Background="{TemplateBinding Slider.Background}"
+                        Command="Slider.IncreaseLarge"
+                        Style="{StaticResource SliderButtonStyle}" />
                 </Track.IncreaseRepeatButton>
             </Track>
         </Grid>

@@ -113,7 +113,7 @@ namespace TMP.WORK.AramisChetchiki.ViewModel
                     IList<SummaryInfoItem> list = new List<SummaryInfoItem>();
                     foreach (var f in fields)
                     {
-                        SummaryInfoItem si = _data.First(i => i.FieldName == f);
+                        SummaryInfoItem si = _data.FirstOrDefault(i => i.FieldName == f);
                         if (si != null)
                             list.Add(si);
                     }

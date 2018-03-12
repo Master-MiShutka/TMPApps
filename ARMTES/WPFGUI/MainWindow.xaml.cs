@@ -568,7 +568,8 @@ namespace TMP.ARMTES
                         MainViewModel.Instance.UpdatingProcessStarted = false;
                         SetAppStatus();
 
-                        cancelTokenSource.Dispose();
+                        if (cancelTokenSource != null)
+                            cancelTokenSource.Dispose();
                         cancelTokenSource = null;
 
                         MainViewModel.Instance.FilteredCollectors.Refresh();
@@ -756,11 +757,40 @@ namespace TMP.ARMTES
                     EndDate = MainViewModel.Instance.EndDate,
                     EndDateFormat = "dd.MM.yyyy"
                 },
-                    MainViewModel.Instance.FilteredCollectors.Cast<Collector>().OrderBy((item) => item.Objects.FirstOrDefault().Contract).ToList<Collector>());
+                    MainViewModel.Instance.FilteredCollectors.Cast<Collector>().ToList<Collector>());
             ecl.Export("report.xml");
 
             System.Diagnostics.Process.Start("report.xml");
         }
+
+        private void ExportCollectorListWithTP2_TP5Report_MenuItemClick(object sender, RoutedEventArgs e)
+        {
+            if (MainViewModel.Instance.FilteredCollectors == null)
+            {
+                this.ShowErrorMessage("Чтот-то пошло не так... Источник данных пуст!");
+                return;
+            }
+
+            BaseSmallEngineExport ecl;
+            ecl = new ExportCollectorListWithTP2_TP5(
+                new ExportInfo()
+                {
+                    ElementName = MainViewModel.Instance.SelectedDepartament,
+                    Param = MainViewModel.Instance.ProfileType,
+                    StartDate = MainViewModel.Instance.StartDate,
+                    StartDateFormat = "dd.MM.yyyy",
+                    EndDate = MainViewModel.Instance.EndDate,
+                    EndDateFormat = "dd.MM.yyyy"
+                },
+                    MainViewModel.Instance.FilteredCollectors
+                    .Cast<Collector>()
+                    .Where(c => c.Objects.Any(o => o.Counters.Any(counter => counter.HasDifferenceBetweenT1AndT0))) 
+                    .ToList<Collector>());
+            ecl.Export("report_with_difference.xml");
+
+            System.Diagnostics.Process.Start("report_with_difference.xml");
+        }
+        
 
         private void ExportNotAnswered_MenuItemClick(object sender, RoutedEventArgs e)
         {

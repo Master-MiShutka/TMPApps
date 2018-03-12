@@ -29,11 +29,10 @@ namespace Xceed.Wpf.DataGrid.Extensions
 
                 switch (typecode)
                 {
-                    /*case TypeCode.Boolean:
+                    case TypeCode.Boolean:
 
                         FrameworkElementFactory factory = new FrameworkElementFactory(typeof(DataGridCheckBox));
                         factory.SetBinding(DataGridCheckBox.IsCheckedProperty, new Binding(field.Name));
-                        factory.SetBinding(DataGridCheckBox.ToolTipProperty, new Binding());
 
                         result.Add(new UnboundColumn()
                         {
@@ -43,12 +42,12 @@ namespace Xceed.Wpf.DataGrid.Extensions
                             Visible = field.IsVisible,
                             CellContentTemplate = new DataTemplate() { VisualTree = factory }
                         });
-                        break;*/
+                        break;
                     case TypeCode.Double:
                         result.Add(new Column()
                         {
                             Title = field.DisplayName,
-                            CellContentStringFormat = "N0",
+                            CellContentStringFormat = "{0:N0}",
                             FieldName = field.Name,
                             VisiblePosition = field.DisplayOrder,
                             Visible = field.IsVisible
@@ -58,7 +57,7 @@ namespace Xceed.Wpf.DataGrid.Extensions
                         result.Add(new Column()
                         {
                             Title = field.DisplayName,
-                            CellContentStringFormat = "dd.MM.yyyy",
+                            CellContentStringFormat = "{0:dd.MM.yyyy}",
                             FieldName = field.Name,
                             VisiblePosition = field.DisplayOrder,
                             Visible = field.IsVisible

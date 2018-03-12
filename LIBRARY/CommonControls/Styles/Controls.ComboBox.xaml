@@ -50,12 +50,12 @@
                                                 <Rectangle
                                                     x:Name="FocusVisualElement"
                                                     Margin="1"
+                                                    IsHitTestVisible="false"
                                                     Stroke="{DynamicResource HighlightBrush}"
                                                     StrokeThickness="1"
-                                                    IsHitTestVisible="false"
                                                     Visibility="Collapsed" />
 
-                                                <Grid Margin="1 0">
+                                                <Grid Margin="1,0">
                                                     <Grid.ColumnDefinitions>
                                                         <ColumnDefinition Width="*" />
                                                         <ColumnDefinition Width="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Grid}}, Path=ActualHeight, Mode=OneWay}" />
@@ -65,12 +65,12 @@
                                                     <Button
                                                         x:Name="PART_ClearText"
                                                         Grid.Column="1"
-                                                        Style="{DynamicResource ChromelessButtonStyle}"
-                                                        Foreground="{TemplateBinding Foreground}"
+                                                        Content="r"
                                                         FontFamily="Marlett"
                                                         FontSize="16"
-                                                        Content="r"
+                                                        Foreground="{TemplateBinding Foreground}"
                                                         IsTabStop="False"
+                                                        Style="{DynamicResource ChromelessButtonStyle}"
                                                         Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type ComboBox}}, Path=(Controls:TextBoxHelper.ClearTextButton), Converter={StaticResource BooleanToVisibilityConverter}}" />
                                                     <Rectangle
                                                         x:Name="BtnArrowBackground"
@@ -81,8 +81,8 @@
                                                         x:Name="BtnArrow"
                                                         Grid.Column="2"
                                                         HorizontalAlignment="Center"
-                                                        Fill="{DynamicResource BlackBrush}"
                                                         Data="F1 M4,0 H16 L 10,10 Z "
+                                                        Fill="{DynamicResource BlackBrush}"
                                                         IsHitTestVisible="false"
                                                         SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
                                                         Stretch="Uniform" />
@@ -128,14 +128,15 @@
                             <ToggleButton
                                 x:Name="PART_DropDownToggle"
                                 Grid.ColumnSpan="3"
-                                Margin="0" Padding="0"
+                                Margin="0"
+                                Padding="0"
                                 VerticalAlignment="Stretch"
-                                Style="{DynamicResource comboToggleStyle}"
                                 Background="{TemplateBinding Background}"
                                 BorderBrush="{TemplateBinding BorderBrush}"
                                 BorderThickness="{TemplateBinding BorderThickness}"
                                 IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
-                                KeyboardNavigation.IsTabStop="False" />
+                                KeyboardNavigation.IsTabStop="False"
+                                Style="{DynamicResource comboToggleStyle}" />
 
                             <Border
                                 x:Name="EditableTextBoxBorder"
@@ -145,21 +146,22 @@
                                 Visibility="Collapsed">
                                 <TextBox
                                     x:Name="PART_EditableTextBox"
-                                    Margin="0,0,0,-2" Padding="0"
+                                    Margin="0,0,0,-2"
+                                    Padding="0"
                                     HorizontalAlignment="Stretch"
                                     VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
                                     HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                    Controls:TextBoxHelper.Watermark="{TemplateBinding Controls:TextBoxHelper.Watermark}"
                                     Background="{x:Null}"
-                                    Foreground="{TemplateBinding Foreground}"
                                     BorderThickness="0"
+                                    Focusable="True"
                                     FontFamily="{TemplateBinding FontFamily}"
                                     FontSize="{TemplateBinding FontSize}"
-                                    Controls:TextBoxHelper.Watermark="{TemplateBinding Controls:TextBoxHelper.Watermark}"
-                                    Focusable="True"
+                                    Foreground="{TemplateBinding Foreground}"
                                     IsReadOnly="{TemplateBinding IsReadOnly}"
                                     SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
                             </Border>
-                            <Grid x:Name="ContentSite" Margin="7 0 0 0">
+                            <Grid x:Name="ContentSite" Margin="7,0,0,0">
                                 <ContentPresenter
                                     Margin="{TemplateBinding Padding}"
                                     HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
@@ -174,13 +176,13 @@
                         </Grid>
                         <Rectangle
                             x:Name="FocusRectangle"
-                            Stroke="{DynamicResource ComboBoxMouseOverInnerBorderBrush}"
-                            Opacity="0" />
+                            Opacity="0"
+                            Stroke="{DynamicResource ComboBoxMouseOverInnerBorderBrush}" />
                         <Rectangle
                             x:Name="DisabledVisualElement"
                             Fill="{DynamicResource DisabledWhiteBrush}"
-                            Opacity="0"
-                            IsHitTestVisible="false" />
+                            IsHitTestVisible="false"
+                            Opacity="0" />
                         <!--  AllowsTransparency="true" fixes the redraw problem under windows vista/7 with a selected non aero theme  -->
                         <Popup
                             x:Name="PART_Popup"
@@ -231,9 +233,9 @@
                                 <VisualState x:Name="FocusedDropDown">
                                     <Storyboard>
                                         <ObjectAnimationUsingKeyFrames
-                                            Duration="00:00:00"
                                             Storyboard.TargetName="PopupBorder"
-                                            Storyboard.TargetProperty="(UIElement.Visibility)">
+                                            Storyboard.TargetProperty="(UIElement.Visibility)"
+                                            Duration="00:00:00">
                                             <DiscreteObjectKeyFrame KeyTime="00:00:00">
                                                 <DiscreteObjectKeyFrame.Value>
                                                     <Visibility>Visible</Visibility>
@@ -304,13 +306,13 @@
                         <Rectangle
                             x:Name="SelectedRectangle"
                             Fill="{DynamicResource AccentColorBrush}"
-                            Opacity="0"
-                            IsHitTestVisible="False" />
+                            IsHitTestVisible="False"
+                            Opacity="0" />
                         <Rectangle
                             x:Name="MouseOverRectangle"
                             Fill="{DynamicResource AccentColorBrush3}"
-                            Opacity="0"
-                            IsHitTestVisible="False" />
+                            IsHitTestVisible="False"
+                            Opacity="0" />
                         <ContentControl Foreground="{TemplateBinding Foreground}">
                             <ContentPresenter
                                 x:Name="contentPresenter"

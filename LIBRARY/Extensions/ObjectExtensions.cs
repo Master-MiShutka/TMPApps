@@ -15,35 +15,7 @@ namespace TMP.Extensions
     public static class ObjectExtensions
     {
         private static XmlDocument _staticDoc;
-        /// <summary>
-        /// Returns specified number of characters from the left of string
-        /// </summary>
-        /// <param name="text">String on which extension method is used</param>
-        /// <param name="chars">Number of chars to return</param>
-        /// <returns>Returns specified number of characters from the left of string</returns>
-        public static string Left(this string text, int chars)
-        {
-            return text.Substring(0, Math.Min(text.Length, chars));
-        }
-        /// <summary>
-        /// Returns specified number of characters from the right of string
-        /// </summary>
-        /// <param name="text">String on which extension method is used</param>
-        /// <param name="chars">Number of chars to return</param>
-        /// <returns>Returns specified number of characters from the right of string</returns>
-        public static string Right(this string text, int chars)
-        {
-            string result;
-            if (text.Length <= chars)
-            {
-                result = text;
-            }
-            else
-            {
-                result = text.Substring(text.Length - chars, chars);
-            }
-            return result;
-        }
+
         /// <summary>
         /// Checks if the string is empty or only contains spaces
         /// </summary>

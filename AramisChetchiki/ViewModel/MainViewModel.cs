@@ -341,7 +341,7 @@ namespace TMP.WORK.AramisChetchiki.ViewModel
             if (Directory.Exists(SelectedDepartament.Path) == false)
             {
                 MessageBox.Show(String.Format(
-                    "Указанный в параметрах путь к папке с программой 'Арамис' для подразделения '{1}' не доступен!",
+                    "Указанный в параметрах путь к папке с программой 'Арамис' для подразделения '{0}' не доступен!",
                     SelectedDepartament.Name),
                     "ОШИБКА", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
@@ -379,23 +379,21 @@ namespace TMP.WORK.AramisChetchiki.ViewModel
                     });
 
                     Data = null;
-
-                    IsBusy = false;
-                    Status = String.Empty;
-                    DetailedStatus = String.Empty;
                 }, TaskContinuationOptions.OnlyOnFaulted);
             task.ContinueWith(t =>
                 {
                     Data = t.Result;
                     _data.Date = DateTime.Now;
 
-                    InUI(() => _mainWindow.TaskbarItemInfo.ProgressState = System.Windows.Shell.TaskbarItemProgressState.None);
-
-                    IsBusy = false;
-                    Status = String.Empty;
-                    DetailedStatus = String.Empty;
-                })
+                    InUI(() => _mainWindow.TaskbarItemInfo.ProgressState = System.Windows.Shell.TaskbarItemProgressState.None);                  
+                }, TaskContinuationOptions.OnlyOnRanToCompletion)
             .ContinueWith(t => SaveData(), TaskContinuationOptions.OnlyOnRanToCompletion);
+            task.ContinueWith(t =>
+            {
+                IsBusy = false;
+                Status = String.Empty;
+                DetailedStatus = String.Empty;
+            });
             task.Start();
         }
         private Data GetData(Departament departament)
@@ -416,37 +414,52 @@ namespace TMP.WORK.AramisChetchiki.ViewModel
             {
 
                 #region чтение таблиц
+
+                Func<string, DataTable> getTable = (fileName) =>
+                {
+                    try
+                    {
+                        return ParseDBF.ReadDBF(fileName);
+                    }
+                    catch (Exception)
+                    {
+                        // TODO: Logging
+                        return new DataTable();
+                    }
+                };
+
                 DetailedStatus = "чтение таблиц";
-                DataTable dtKARTSCH = ParseDBF.ReadDBF(Path.Combine(pathDBF, "KARTSCH.DBF"));
+                DataTable dtKARTSCH = getTable(Path.Combine(pathDBF, "KARTSCH.DBF"));
+                DataTable dtKARTSCH_old = getTable(Path.Combine(pathDBFC, "KARTSCH.DBF"));
                 // справочник типов счетчиков
-                DataTable dtKARTTSCH = ParseDBF.ReadDBF(Path.Combine(pathDBFC, "KARTTSCH.DBF"));
-                DataTable dtKARTAB = ParseDBF.ReadDBF(Path.Combine(pathDBF, "KARTAB.DBF"));
+                DataTable dtKARTTSCH = getTable(Path.Combine(pathDBFC, "KARTTSCH.DBF"));
+                DataTable dtKARTAB = getTable(Path.Combine(pathDBF, "KARTAB.DBF"));
                 // справочник мест установки
-                DataTable dtASVIDYST = ParseDBF.ReadDBF(Path.Combine(pathDBFC, "ASVIDYST.DBF"));
+                DataTable dtASVIDYST = getTable(Path.Combine(pathDBFC, "ASVIDYST.DBF"));
 
                 // Справочник  населенных пунктов
-                DataTable dtKartTn = ParseDBF.ReadDBF(Path.Combine(pathDBFC, "KartTn.DBF"));
+                DataTable dtKartTn = getTable(Path.Combine(pathDBFC, "KartTn.DBF"));
                 // Справочник  улиц
-                DataTable dtKartSt = ParseDBF.ReadDBF(Path.Combine(pathDBFC, "KartSt.DBF"));
+                DataTable dtKartSt = getTable(Path.Combine(pathDBFC, "KartSt.DBF"));
                 // Справочник  токоприемников
-                DataTable dtKartTpr = ParseDBF.ReadDBF(Path.Combine(pathDBFC, "KartTpr.DBF"));
+                DataTable dtKartTpr = getTable(Path.Combine(pathDBFC, "KartTpr.DBF"));
                 // Справочник  использования
-                DataTable dtKartIsp = ParseDBF.ReadDBF(Path.Combine(pathDBFC, "KartIsp.DBF"));
+                DataTable dtKartIsp = getTable(Path.Combine(pathDBFC, "KartIsp.DBF"));
                 // Справочник  категорий
-                DataTable dtKartKat = ParseDBF.ReadDBF(Path.Combine(pathDBFC, "KartKat.DBF"));
+                DataTable dtKartKat = getTable(Path.Combine(pathDBFC, "KartKat.DBF"));
 
                 // подстанции
-                DataTable dtKartps = ParseDBF.ReadDBF(Path.Combine(pathDBFC, "Kartps.DBF"));
+                DataTable dtKartps = getTable(Path.Combine(pathDBFC, "Kartps.DBF"));
                 // фидера 10 кВ
-                DataTable dtKartfid = ParseDBF.ReadDBF(Path.Combine(pathDBFC, "Kartfid.DBF"));
+                DataTable dtKartfid = getTable(Path.Combine(pathDBFC, "Kartfid.DBF"));
                 // пс 10 кВ
-                DataTable dtKartktp_old = ParseDBF.ReadDBF(Path.Combine(pathDBFC, "Kartktp.DBF"));
+                DataTable dtKartktp_old = getTable(Path.Combine(pathDBFC, "Kartktp.DBF"));
 
                 // замены
-                DataTable dtAssmena = ParseDBF.ReadDBF(Path.Combine(pathDBF, "Assmena.DBF"));
+                DataTable dtAssmena = getTable(Path.Combine(pathDBF, "Assmena.DBF"));
 
                 // наименование РЭС
-                DataTable dtKartPd = ParseDBF.ReadDBF(Path.Combine(pathDBFC, "KartPd.DBF"));
+                DataTable dtKartPd = getTable(Path.Combine(pathDBFC, "KartPd.DBF"));
 
                 #endregion
 
@@ -483,6 +496,7 @@ namespace TMP.WORK.AramisChetchiki.ViewModel
                 DataSet ds = new DataSet();
                 ds.Tables.Add(dtKARTAB);
                 ds.Tables.Add(dtKARTSCH);
+                ds.Tables.Add(dtKARTSCH_old);
                 ds.Tables.Add(dtKARTTSCH);
                 ds.Tables.Add(dtASVIDYST);
                 ds.Tables.Add(dtKartTn);
@@ -530,6 +544,9 @@ namespace TMP.WORK.AramisChetchiki.ViewModel
                 ds.Relations.Add("замены_тип_счетчика", dtAssmena.Columns["ТИП_СЧЕТЧ"], dtKARTTSCH.Columns["COD_TSCH"], false);
                 ds.Relations.Add("замены_инф_по_счетчику", dtAssmena.Columns["ЛИЦ_СЧЕТ"], dtKARTSCH.Columns["LIC_SCH"], false);
                 ds.Relations.Add("замены_абонент", dtAssmena.Columns["ЛИЦ_СЧЕТ"], dtKARTAB.Columns["LIC_SCH"], false);
+                if (dtKARTSCH_old.Columns.Count > 0)
+                    ds.Relations.Add("счетчики_снятые", dtAssmena.Columns["ЛИЦ_СЧЕТ"], dtKARTSCH_old.Columns["LIC_SCH"], false);
+
                 #endregion
 
                 Func<object, string> _getString = value => value.ToString().Trim();
@@ -548,7 +565,7 @@ namespace TMP.WORK.AramisChetchiki.ViewModel
                 Func<object, int, int, int> _getInt = (value, startPos, length) =>
                 {
                     string s = value.ToString();
-                    if (String.IsNullOrWhiteSpace(s) || s.Length <= length)
+                    if (String.IsNullOrWhiteSpace(s) || s.Length < length)
                         return 0;
                     try
                     {
@@ -722,31 +739,63 @@ namespace TMP.WORK.AramisChetchiki.ViewModel
                 {
                     ChangesOfMeters change = new ChangesOfMeters();
 
-                    DataRow[] meterTypes = changeOfMeterRow.GetChildRows("замены_тип_счетчика");
-                    DataRow[] meterInfos = changeOfMeterRow.GetChildRows("замены_инф_по_счетчику");
-                    DataRow[] abonents = changeOfMeterRow.GetChildRows("замены_абонент");
+                    System.Data.DataRow[] meterTypes = changeOfMeterRow.GetChildRows("замены_тип_счетчика");
+                    System.Data.DataRow[] meterInfos2 = changeOfMeterRow.GetChildRows("замены_инф_по_счетчику");
+                    System.Data.DataRow[] abonents = changeOfMeterRow.GetChildRows("замены_абонент");
 
+                    System.Data.DataRow[] old_meter = null;
+                    if (ds.Relations.Contains("счетчики_снятые"))
+                        old_meter = changeOfMeterRow.GetChildRows("счетчики_снятые");
                     change.Тип_снятого_счетчика = _getChildRelationValue(changeOfMeterRow, "замены_тип_счетчика", "NAME");
-                    if (meterInfos != null && meterInfos.Length != 0)
+
+                    if (meterTypes != null && meterTypes.Length != 0)
                     {
-                        DataRow meterInfo = meterInfos[0];
-                        change.Квартал_поверки_снятого = _getByte(meterInfo["G_PROV"], 0, 1, 1);
-                        change.Год_поверки_снятого = _getByte(meterInfo["G_PROV"], 2, 2, 0);
-                        change.Год_выпуска_снятого = (uint)_getInt(meterInfo["GODVYPUSKA"], 0, 4);
-                        change.Дата_установки_снятого = _getDate(meterInfo["DATE_UST"]);
+                        DataRow meterInfo1 = meterTypes[0];
+                        change.Тип_снятого_счетчика = _getString(meterInfo1["NAME"]);
+                    }
+
+                    if (meterInfos2 != null && meterInfos2.Length != 0)
+                    {
+                        DataRow meterInfo1 = meterInfos2[0];
+                        change.Год_выпуска_установленного = (uint)_getInt(meterInfo1["GODVYPUSKA"], 0, 4);
+
+                        DataRow[] meterInfos1 = meterInfo1.GetChildRows("счетчики_типы");
+
+                        if (meterInfos1 != null && meterInfos1.Length != 0)
+                        {
+                            change.Тип_установленного_счетчика = _getString(meterInfos1[0]["NAME"]);
+                            change.ЭтоЭлектронный = _getString(meterInfos1[0]["TIP"]) == "Э";
+                        }
+                    }
+
+                    if (old_meter != null && old_meter.Length != 0)
+                    {
+                        DataRow meterInfo3 = old_meter[0];
+                        change.Квартал_поверки_снятого = _getByte(meterInfo3["G_PROV"], 0, 1, 1);
+                        change.Год_поверки_снятого = _getByte(meterInfo3["G_PROV"], 2, 2, 0);
+                        change.Год_выпуска_снятого = (uint)_getInt(meterInfo3["GODVYPUSKA"], 0, 4);
+                        change.Дата_установки_снятого = _getDate(meterInfo3["DATE_UST"]);
                     }
                     if (abonents != null && abonents.Length != 0)
                     {
                         DataRow abonent = abonents[0];
                         change.Населённый_пункт = _getChildRelationValue(abonent, "населенный_пункт", "TOWN");
+                        change.Адрес = string.Join(", ", new string[]
+                        {
+                            _getChildRelationValue(abonent, "улицы", "STREET"),
+                            _getString(abonent["HOME"]),
+                            _getString(abonent["KV"])
+                        });
                         string name = _getString(abonent["NAME"]);
                         string otch = _getString(abonent["OTCH"]);
                         change.ФИО = _getString(abonent["FAM"]) +
                             " " + name.FirstOrDefault() + "." + otch.FirstOrDefault() + ".";
                     }
-                    change.Лицевой = Convert.ToUInt64(changeOfMeterRow["ЛИЦ_СЧЕТ"]);
+                    change.Лицевой = Convert.ToUInt64(changeOfMeterRow["ЛИЦ_СЧЕТ"]);                    
                     change.Номер_снятого_счетчика = _getString(changeOfMeterRow["НОМЕР_СНЯТ"]);
                     change.Показание_снятого = Convert.ToDouble(changeOfMeterRow["ПОКАЗ_СНЯТ"], System.Globalization.CultureInfo.InvariantCulture);
+                    
+
                     change.Номер_установленного_счетчика = _getString(changeOfMeterRow["НОМЕР_УСТ"]);
                     change.Показание_установленного = Convert.ToDouble(changeOfMeterRow["ПОКАЗ_УСТ"], System.Globalization.CultureInfo.InvariantCulture);
                     change.Дата_замены = _getDate(changeOfMeterRow["ДАТА_ЗАМЕН"]);

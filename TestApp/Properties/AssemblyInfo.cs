@@ -32,7 +32,7 @@ using System.Windows;
 
 
 [assembly: ThemeInfo(
-    ResourceDictionaryLocation.None, //где расположены словари ресурсов по конкретным тематикам
+    ResourceDictionaryLocation.SourceAssembly, //где расположены словари ресурсов по конкретным тематикам
     //(используется, если ресурс не найден на странице 
     // или в словарях ресурсов приложения)
     ResourceDictionaryLocation.SourceAssembly //где расположен словарь универсальных ресурсов

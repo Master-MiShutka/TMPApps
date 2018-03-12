@@ -14,6 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
 using TMP.UI.Controls.WPF;
+using Xceed.Wpf.DataGrid;
 
 namespace TMP.WORK.AramisChetchiki.Windows
 {
@@ -72,7 +73,7 @@ namespace TMP.WORK.AramisChetchiki.Windows
 
         private ICollectionView _collectionView;
         private SortDescriptionCollection _sourceSortDescriptionCollection;
-        private ObservableCollection<DataGridColumn> _columns, _sourceColumns;
+        private ObservableCollection<ColumnBase> _columns, _sourceColumns;
 
         private bool _canSelectFields = false;
 
@@ -90,12 +91,12 @@ namespace TMP.WORK.AramisChetchiki.Windows
                     for (int index = 0; index < _fields.Count; index++)
                     {
                         Field item = _fields[index];
-                        DataGridColumn column = _columns.First(c => ((c as DataGridBoundColumn).Binding as Binding).Path.Path == item.FieldName);
-                        column.Visibility = item.IsChecked ? Visibility.Visible : Visibility.Collapsed;
-                        if (column.DisplayIndex != item.DisplayIndex)
+                        ColumnBase column = _columns.First((ColumnBase c) => c.FieldName == item.FieldName);
+                        column.Visible = item.IsChecked;
+                        if (column.VisiblePosition != item.DisplayIndex)
                         {
-                            _columns.Move(column.DisplayIndex, index);
-                            _columns[index].DisplayIndex = index;
+                            _columns.Move(column.VisiblePosition, index);
+                            _columns[index].VisiblePosition = index;
                         }
                     }
                 }
@@ -110,12 +111,12 @@ namespace TMP.WORK.AramisChetchiki.Windows
 
                 if (_canSelectFields)
                 {
-                    foreach (DataGridBoundColumn item in _sourceColumns)
+                    foreach (ColumnBase item in _sourceColumns)
                     {
-                        DataGridColumn column = _columns.First(c => c == item);
-                        column.Visibility = item.Visibility;
-                        if (column.DisplayIndex != item.DisplayIndex)
-                            _columns.Move(column.DisplayIndex, item.DisplayIndex);
+                        ColumnBase column = _columns.First((ColumnBase c) => c == item);
+                        column.Visible = item.Visible;
+                        if (column.VisiblePosition != item.VisiblePosition)
+                            _columns.Move(column.VisiblePosition, item.VisiblePosition);
                     }
                 }
 
@@ -131,10 +132,10 @@ namespace TMP.WORK.AramisChetchiki.Windows
                 {
                     foreach (Field item in _fields)
                     {
-                        DataGridColumn column = _columns.First(c => ((c as DataGridBoundColumn).Binding as Binding).Path.Path == item.FieldName);
-                        column.Visibility = item.IsChecked ? Visibility.Visible : Visibility.Collapsed;
-                        if (column.DisplayIndex != item.DisplayIndex)
-                            _columns.Move(column.DisplayIndex, item.DisplayIndex);
+                        ColumnBase column = _columns.First((ColumnBase c) => c.FieldName == item.FieldName);
+                        column.Visible = item.IsChecked;
+                        if (column.VisiblePosition != item.DisplayIndex)
+                            _columns.Move(column.VisiblePosition, item.DisplayIndex);
                     }
                 }
             }, () => Fields != null && SortingFields != null);
@@ -204,23 +205,17 @@ namespace TMP.WORK.AramisChetchiki.Windows
                 _fields.Add(new Field() { Name = field });
         }
 
-        public SelectFieldsAndSortCollectionViewWindow(ObservableCollection<DataGridColumn> columns, ICollectionView collectionView) : this()
+        public SelectFieldsAndSortCollectionViewWindow(ObservableCollection<ColumnBase> columns, ICollectionView collectionView) : this()
         {
             _canSelectFields = true;
-
-
-
-
-
-
 
             if (columns == null)
                 throw new ArgumentNullException("Columns");
             _columns = columns;
 
-            DataGridColumn[] copyOfColumnsArray = new DataGridColumn[columns.Count];
+            ColumnBase[] copyOfColumnsArray = new ColumnBase[columns.Count];
             columns.CopyTo(copyOfColumnsArray, 0);
-            _sourceColumns = new ObservableCollection<DataGridColumn>(copyOfColumnsArray);
+            _sourceColumns = new ObservableCollection<ColumnBase>(copyOfColumnsArray);
 
             _collectionView = collectionView ?? throw new ArgumentNullException("ICollectionView");
             _sourceSortDescriptionCollection = _collectionView.SortDescriptions;
@@ -233,13 +228,13 @@ namespace TMP.WORK.AramisChetchiki.Windows
             if (columns == null)
                 throw new ArgumentNullException("Fields");
             _fields = new ObservableCollection<Field>();
-            foreach (DataGridColumn column in columns)
+            foreach (ColumnBase column in columns)
                 _fields.Add(new Field() 
                 {
-                    Name = column.Header.ToString(),
-                    FieldName = ((column as DataGridBoundColumn).Binding as Binding).Path.Path,
-                    IsChecked = column.Visibility == Visibility.Visible,
-                    DisplayIndex = column.DisplayIndex
+                    Name = column.Title.ToString(),
+                    FieldName = column.FieldName,
+                    IsChecked = column.Visible,
+                    DisplayIndex = column.VisiblePosition
                 });
         }
 

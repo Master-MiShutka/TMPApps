@@ -4,7 +4,7 @@
 library
 C#
 .cs
-Y:\Developer\CURRENT\TMPApps\LIBRARY\ItemsFilter\obj\Release\
+D:\Developer\CURRENT\TMPApps\LIBRARY\ItemsFilter\obj\Release\
 ItemsFilter
 none
 false
@@ -16,5 +16,5 @@ TRACE
 121654848548
 Themes\Generic.xaml;
 
-True
+False
 

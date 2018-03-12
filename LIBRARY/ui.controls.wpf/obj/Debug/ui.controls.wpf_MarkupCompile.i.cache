@@ -4,7 +4,7 @@
 library
 C#
 .cs
-y:\Repos\TMPApps\LIBRARY\ui.controls.wpf\obj\Debug\
+Y:\Developer\CURRENT\TMPApps\LIBRARY\ui.controls.wpf\obj\Debug\
 TMP.UI.Controls.WPF
 none
 false
@@ -13,8 +13,8 @@ DEBUG;TRACE
 9-876750446
 
 35-252681761
-14-381567604
+141524160543
 BusyControl.xaml;LabelledContent.xaml;LabelledTextBlock.xaml;LabelledTextBox.xaml;SelectFolderTextBox.xaml;TableView.xaml;Themes\Generic.xaml;Themes\NoDataTemplate.xaml;Themes\TreeMap.xaml;
 
-True
+False
 

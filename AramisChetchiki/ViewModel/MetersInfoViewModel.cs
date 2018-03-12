@@ -109,7 +109,7 @@ namespace TMP.WORK.AramisChetchiki.ViewModel
 
         private void PrepareData()
         {
-            base.IsAnalizingData = true;
+            IsBusy = true;
             base.Status = "Подготовка данных";
             base.DetailedStatus = "подготовка ...";
             Task task = Task.Factory.StartNew(delegate
@@ -142,7 +142,6 @@ namespace TMP.WORK.AramisChetchiki.ViewModel
             });
             task.ContinueWith(delegate (Task t)
             {
-                base.IsAnalizingData = false;
                 base.IsBusy = false;
                 base.Status = null;
                 base.DetailedStatus = null;
