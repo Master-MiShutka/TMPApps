@@ -13,15 +13,16 @@ namespace TMP.WORK.AramisChetchiki.ViewModel
     using TMP.Extensions;
     using TMP.UI.Controls.WPF;
     using TMP.WORK.AramisChetchiki.Model;
+    using TMP.UI.Controls.WPF.Reporting.MatrixGrid;
 
     public class MetersInfoViewModel : BaseViewModel
     {
         private Data _data;
 
-        private SummaryInfoItem _metersCountPerTypesPivot;
-        private DataTable _metersCountPerTypesPerPoverkaYearPivot;
-        private DataTable _metersCountPerCategoryForReportPivot;
-        private DataTable _metersCountPerLocalityPivot;
+        private IMatrix _metersCountPerTypesPivot;
+        private IMatrix _metersCountPerTypesPerPoverkaYearPivot;
+        private IMatrix _metersCountPerCategoryForReportPivot;
+        private IMatrix _metersCountPerLocalityPivot;
 
         #region Constructors
 
@@ -51,7 +52,7 @@ namespace TMP.WORK.AramisChetchiki.ViewModel
 
         public ICommand CommandUpdate { get; private set; }
 
-        public SummaryInfoItem MetersCountPerTypesPivot
+        public IMatrix MetersCountPerTypesPivot
         {
             get
             {
@@ -64,7 +65,7 @@ namespace TMP.WORK.AramisChetchiki.ViewModel
             }
         }
 
-        public DataTable MetersCountPerTypesPerPoverkaYearPivot
+        public IMatrix MetersCountPerTypesPerPoverkaYearPivot
         {
             get
             {
@@ -77,7 +78,7 @@ namespace TMP.WORK.AramisChetchiki.ViewModel
             }
         }
 
-        public DataTable MetersCountPerCategoryForReportPivot
+        public IMatrix MetersCountPerCategoryForReportPivot
         {
             get
             {
@@ -90,7 +91,7 @@ namespace TMP.WORK.AramisChetchiki.ViewModel
             }
         }
 
-        public DataTable MetersCountPerLocalityPivot
+        public IMatrix MetersCountPerLocalityPivot
         {
             get
             {
@@ -116,28 +117,82 @@ namespace TMP.WORK.AramisChetchiki.ViewModel
             {
                 if (!(this._data == null || this._data.Meters == null || this._data.Meters.Count == 0))
                 {
-                    this.MetersCountPerTypesPivot = SummaryInfoHelper.BuildSummaryInfoItem(this._data.Meters, "Тип_счетчика");
+                    IEnumerable<SummaryInfoGroupItem> meterTypes = SummaryInfoHelper.BuildFirst10LargeGroups(this._data.Meters, "Тип_счетчика");
 
-                    this.MetersCountPerTypesPerPoverkaYearPivot = this._data.Meters
-                        .ToPivotTable(
-                        (Meter item) => item.Год_поверки_для_отчётов,
-                        (Meter item) => item.Тип_счетчика,
-                        (items) => items.Any<Meter>() ? items.Count<Meter>() : 0,
-                        (object selector) => this.MetersCountPerTypesPivot.OnlyFirst10Items.Any((SummaryInfoChildItem i) => i.Value == selector.ToString()));
+                    this.MetersCountPerTypesPivot = new MatrixModelDelegate()
+                    {
+                        Header = "Свод по типам счётчиков",
+                        Description = "* количество счётчиков",
+                        GetRowHeaderValuesFunc = () => meterTypes.Select(i => new MatrixRowHeaderItem(i.Key.ToString())),
+                        GetColumnHeaderValuesFunc = () => new string[] { "Количество", "%" }.Select(i => new MatrixColumnHeaderItem(i)),
+                        GetCellValueFunc = (row, column) =>
+                        {
+                            var group = meterTypes.Where(i => i.Key.ToString() == row.Header).FirstOrDefault();
+                            if (column.Header == "%")
+                                return group.Percent;
+                            else
+                                return group.Count;
+                        }
+                    };
 
-                    this.MetersCountPerCategoryForReportPivot = this._data.Meters
-                        .ToPivotTable(
-                        (Meter item) => item.Тип_населённого_пункта,
-                        (Meter item) => item.Группа_счётчика_для_отчётов,
-                        (items) => items.Any<Meter>() ? items.Count<Meter>() : 0, 
-                        null);
+                    // Свод по типу счётчика и году поверки
+                    this.MetersCountPerTypesPerPoverkaYearPivot = new MatrixModelDelegate()
+                    {
+                        Header = "Свод по типу счётчика и году поверки",
+                        Description = "* количество счётчиков",
+                        GetRowHeaderValuesFunc = () => meterTypes.Select(i => new MatrixRowHeaderItem(i.Key.ToString())),
+                        GetColumnHeaderValuesFunc = () => this._data.Meters.Select(i => i.Год_поверки_для_отчётов).Distinct().OrderBy(i => i).Select(i => new MatrixColumnHeaderItem(i)),
+                        GetCellValueFunc = (row, column) =>
+                        {
+                            var group = meterTypes.Where(i => i.Key.ToString() == row.Header).FirstOrDefault();
+                            var list = group.Value.Where(i => i.Год_поверки_для_отчётов == column.Header).ToList();
+                            if (list != null)
+                                return list.Count();
+                            else
+                                return 0;
+                        }
+                    };
 
-                    this.MetersCountPerLocalityPivot = this._data.Meters
-                        .ToPivotTable(
-                            (Meter item) => item.Принцип,
-                            (Meter item) => item.Населённый_пункт, 
-                            (items) => items.Any<Meter>() ? items.Count<Meter>() : 0, 
-                            null);
+                    // Свод по категории счётчика и типу населённого пункта
+                    this.MetersCountPerCategoryForReportPivot = new MatrixModelDelegate()
+                    {
+                        Header = "Свод по категории счётчика и\nтипу населённого пункта",
+                        Description = "* количество счётчиков",
+                        GetRowHeaderValuesFunc = () => this._data.Meters.Select(i => i.Группа_счётчика_для_отчётов).Distinct().Select(i => new MatrixRowHeaderItem(i)),
+                        GetColumnHeaderValuesFunc = () => this._data.Meters.Select(i => i.Тип_населённого_пункта).Distinct().Select(i => new MatrixColumnHeaderItem(i)),
+                        GetCellValueFunc = (row, column) =>
+                        {
+                            var list = this._data.Meters
+                                .Where(i => i.Группа_счётчика_для_отчётов == row.Header)
+                                .Where(i => i.Тип_населённого_пункта == column.Header)
+                                .ToList();
+                            if (list != null)
+                                return list.Count();
+                            else
+                                return 0;
+                        }
+                    };
+
+                    // Свод по населенному пункту и принципу действия счётчика
+                    SummaryInfoItem infoCountMetersPerLocality = SummaryInfoHelper.BuildSummaryInfoItem(this._data.Meters, "Населённый_пункт");
+                    this.MetersCountPerLocalityPivot = new MatrixModelDelegate()
+                    {
+                        Header = "Свод по населенному пункту и\nпринципу действия счётчика",
+                        Description = "* количество счётчиков",
+                        GetRowHeaderValuesFunc = () => infoCountMetersPerLocality.OnlyFirst10Items.Select(i => new MatrixRowHeaderItem(i.Value)),
+                        GetColumnHeaderValuesFunc = () => this._data.Meters.Select(i => i.Принцип).Distinct().Select(i => new MatrixColumnHeaderItem(i)),
+                        GetCellValueFunc = (row, column) =>
+                        {
+                            var list = this._data.Meters
+                                .Where(i => i.Принцип == column.Header)
+                                .Where(i => i.Населённый_пункт == row.Header)
+                                .ToList();
+                            if (list != null)
+                                return list.Count();
+                            else
+                                return 0;
+                        }
+                    };
                 }
             });
             task.ContinueWith(delegate (Task t)

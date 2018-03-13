@@ -75,8 +75,8 @@ namespace TMP.UI.Controls.WPF.Reporting.MatrixGrid
 
         public event PropertyChangedEventHandler Builded;
 
-        public bool ShowColumnsTotal { get; set; }
-        public bool ShowRowsTotal { get; set; }
+        public bool? ShowColumnsTotal { get; set; }
+        public bool? ShowRowsTotal { get; set; }
 
         #endregion // Properties
 
@@ -116,7 +116,7 @@ namespace TMP.UI.Controls.WPF.Reporting.MatrixGrid
                 return result;
             };
 
-            if (ShowRowsTotal)
+            if (ShowRowsTotal.GetValueOrDefault())
             {
                 matrixItems.Add(new MatrixSummaryHeaderItem("Итого") { GridRow = 0, GridRowSpan = _columnHeadersRowSpan, GridColumn = _rowHeadersColumnSpan + _columnHeaders.Count });
 
@@ -132,7 +132,7 @@ namespace TMP.UI.Controls.WPF.Reporting.MatrixGrid
                     matrixItems.Add(new MatrixSummaryColumnItem(summ) { GridRow = rowIndex, GridColumn = _rowHeadersColumnSpan + _columnHeaders.Count });
                 }
             }
-            if (ShowColumnsTotal)
+            if (ShowColumnsTotal.GetValueOrDefault())
             {
                 matrixItems.Add(new MatrixSummaryHeaderItem("Итого") { GridRow = _columnHeadersRowSpan + _rowHeaders.Count, GridColumn = 0, GridColumnSpan = _rowHeadersColumnSpan });
 
@@ -149,7 +149,7 @@ namespace TMP.UI.Controls.WPF.Reporting.MatrixGrid
                 }
             }
 
-            if (ShowRowsTotal & ShowColumnsTotal)
+            if (ShowRowsTotal.GetValueOrDefault() & ShowColumnsTotal.GetValueOrDefault())
             {
                 int summ = matrixItems.
                 Where(i => i.GridColumn == _rowHeadersColumnSpan + _columnHeaders.Count)

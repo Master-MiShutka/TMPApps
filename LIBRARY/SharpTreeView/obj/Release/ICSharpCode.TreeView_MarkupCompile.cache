@@ -4,7 +4,7 @@
 library
 C#
 .cs
-T:\Developer\CURRENT\TMPApps\LIBRARY\SharpTreeView\obj\Release\
+t:\Developer\CURRENT\TMPApps\LIBRARY\SharpTreeView\obj\Release\
 ICSharpCode.TreeView
 none
 false
@@ -12,9 +12,9 @@ TRACE
 
 1-731644535
 
-20-1142927464
+19817240205
 131924304037
 Themes\Generic.xaml;
 
-True
+False
 

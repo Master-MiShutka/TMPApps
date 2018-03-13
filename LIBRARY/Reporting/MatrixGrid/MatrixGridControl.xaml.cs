@@ -95,8 +95,10 @@ namespace TMP.UI.Controls.WPF.Reporting.MatrixGrid
                 oldmatrix.Builded -= handler;
             if (e.NewValue != null && e.NewValue is IMatrix newmatrix)
             {
-                newmatrix.ShowRowsTotal = target.ShowRowsTotal;
-                newmatrix.ShowColumnsTotal = target.ShowColumnsTotal;
+                if (newmatrix.ShowRowsTotal.HasValue == false)
+                    newmatrix.ShowRowsTotal = target.ShowRowsTotal;
+                if (newmatrix.ShowColumnsTotal.HasValue == false)
+                    newmatrix.ShowColumnsTotal = target.ShowColumnsTotal;
 
                 newmatrix.Builded += handler;
                 target.state = State.Building;

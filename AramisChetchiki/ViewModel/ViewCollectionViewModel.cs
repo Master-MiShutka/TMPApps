@@ -42,7 +42,7 @@ namespace TMP.WORK.AramisChetchiki.ViewModel
             {
                 if (_fw.IsVisible == false)
                     _fw.Show();
-            });
+            }, "Фильтр");
 
             CommandDoSort = new DelegateCommand<HierarchicalItem>((field) =>
             {
@@ -69,7 +69,7 @@ namespace TMP.WORK.AramisChetchiki.ViewModel
                 SortingFields = String.Join(" > ", values.Select(s => s.Replace("_", " ").AsParallel()));
                 foreach (string value in values)
                     CollectionOfMeters.SortDescriptions.Add(new SortDescription(value, ListSortDirection.Ascending));           
-            });
+            }, "Сортировка");
             CommandDoGroup = new DelegateCommand<HierarchicalItem>((field) =>
             {
                 if (field == null) return;
@@ -95,7 +95,7 @@ namespace TMP.WORK.AramisChetchiki.ViewModel
                 GroupingFields = String.Join(" > ", values.Select(s => s.Replace("_", " ").AsParallel()));
                 foreach (string value in values)
                     CollectionOfMeters.GroupDescriptions.Add(new PropertyGroupDescription(value));
-            });
+            }, "Группировка");
 
             SortFields = new List<HierarchicalItem>
             {
@@ -126,26 +126,6 @@ namespace TMP.WORK.AramisChetchiki.ViewModel
                     })
             });
             foreach (var item in l2) GroupFields.Add(item);
-
-            CommandChangeView = new DelegateCommand<object>((o) =>
-           {
-               object[] values = (object[])o;
-               if (values == null) return;
-               string viewName = values[0] as string;
-               DataGrid table = values[1] as DataGrid;
-               if (String.IsNullOrWhiteSpace(viewName) == false && table != null)
-               {
-                   table.BeginInit();
-                   table.AutoGenerateColumns = false;
-                   table.Columns.Clear();
-
-                   ChangeView();
-
-                   table.EndInit();
-               }
-           },
-           () => CollectionOfMeters != null,
-           "Вид");
 
             CommandPrint = new DelegateCommand(() =>
             {
@@ -268,7 +248,6 @@ namespace TMP.WORK.AramisChetchiki.ViewModel
             private set { _groupingFields = value; RaisePropertyChanged("GroupingFields"); }
         }
 
-        public ICommand CommandChangeView { get; private set; }
 
         public override ICommand CommandExport { get; }
         public override ICommand CommandPrint { get; }
@@ -284,6 +263,7 @@ namespace TMP.WORK.AramisChetchiki.ViewModel
                 _selectedView = value;
                 RaisePropertyChanged("SelectedView");
                 ChangeView();
+                RaisePropertyChanged("TableColumns");
             }
         }
 

@@ -1,0 +1,105 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:TMP.Work.Emcos.DataForCalculateNormativ"
+                    xmlns:model="clr-namespace:TMP.Work.Emcos.Model;assembly=EmcosModel">
+
+    <BitmapImage x:Key="Area" UriSource="/DataForCalculateNormativ;component/Resources/area.png" />
+    <BitmapImage x:Key="Auxiliary" UriSource="/DataForCalculateNormativ;component/Resources/Auxiliary.png" />
+    <BitmapImage x:Key="Departament" UriSource="/DataForCalculateNormativ;component/Resources/Departament.png" />
+    <BitmapImage x:Key="Fider" UriSource="/DataForCalculateNormativ;component/Resources/fider10.png" />
+    <BitmapImage x:Key="FiderHighVoltage" UriSource="/DataForCalculateNormativ;component/Resources/fider35.png" />
+    <BitmapImage x:Key="Group" UriSource="/DataForCalculateNormativ;component/Resources/Group.png" />
+    <BitmapImage x:Key="Prom" UriSource="/DataForCalculateNormativ;component/Resources/Prom.png" />
+    <BitmapImage x:Key="Section" UriSource="/DataForCalculateNormativ;component/Resources/section.png" />
+    <BitmapImage x:Key="Substation" UriSource="/DataForCalculateNormativ;component/Resources/substation.png" />
+    <BitmapImage x:Key="Transformer" UriSource="/DataForCalculateNormativ;component/Resources/Transformer.png" />
+    <BitmapImage x:Key="Voltage" UriSource="/DataForCalculateNormativ;component/Resources/Voltage.png" />
+
+    <HierarchicalDataTemplate  DataType="{x:Type local:ListPoint}" ItemsSource="{Binding Items}">
+        <DockPanel>
+            <Image DockPanel.Dock="Left" Height="20" Width="20" Margin="2 1">
+                <Image.Style>
+                    <Style TargetType="{x:Type Image}">
+                        <Setter Property="Source" Value="{StaticResource Group}" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Path=TypeCode}" Value="REGION">
+                                <Setter Property="Source" Value="{StaticResource Area}" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding Path=TypeCode}" Value="FES">
+                                <Setter Property="Source" Value="{StaticResource Departament}" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding Path=TypeCode}" Value="RES">
+                                <Setter Property="Source" Value="{StaticResource Departament}" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding Path=TypeCode}" Value="SUBSTATION">
+                                <Setter Property="Source" Value="{StaticResource Substation}" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding Path=TypeCode}" Value="VOLTAGE">
+                                <Setter Property="Source" Value="{StaticResource Voltage}" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding Path=TypeCode}" Value="AUXILIARY">
+                                <Setter Property="Source" Value="{StaticResource Auxiliary}" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding Path=TypeCode}" Value="SECTIONBUS">
+                                <Setter Property="Source" Value="{StaticResource Section}" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding Path=TypeCode}" Value="TRANSFORMER">
+                                <Setter Property="Source" Value="{StaticResource Group}" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding Path=TypeCode}" Value="ENTERPRISE">
+                                <Setter Property="Source" Value="{StaticResource Prom}" />
+                            </DataTrigger>
+                            <!-- Fider 35-750 -->
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding Path=TypeCode}" Value="ELECTRICITY"/>
+                                    <Condition Binding="{Binding Path=EсpName}" Value="Линии"/>
+                                    <Condition Binding="{Binding Path=ParentTypeCode}" Value="VOLTAGE"/>
+                                </MultiDataTrigger.Conditions>
+                                <MultiDataTrigger.Setters>
+                                    <Setter Property="Source" Value="{StaticResource FiderHighVoltage}" />
+                                </MultiDataTrigger.Setters>
+                            </MultiDataTrigger>
+                            <!-- Transformer -->
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding Path=TypeCode}" Value="ELECTRICITY"/>
+                                    <Condition Binding="{Binding Path=EсpName}" Value="Трансформаторы"/>
+                                </MultiDataTrigger.Conditions>
+                                <MultiDataTrigger.Setters>
+                                    <Setter Property="Source" Value="{StaticResource Transformer}" />
+                                </MultiDataTrigger.Setters>
+                            </MultiDataTrigger>
+                            <!-- Auxiliary -->
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding Path=TypeCode}" Value="ELECTRICITY"/>
+                                    <Condition Binding="{Binding Path=EсpName}" Value="Свои нужды"/>
+                                </MultiDataTrigger.Conditions>
+                                <MultiDataTrigger.Setters>
+                                    <Setter Property="Source" Value="{StaticResource Transformer}" />
+                                </MultiDataTrigger.Setters>
+                            </MultiDataTrigger>
+                            <!-- Fider 6-10 -->
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding Path=TypeCode}" Value="ELECTRICITY"/>
+                                    <Condition Binding="{Binding Path=EсpName}" Value="Линии"/>
+                                </MultiDataTrigger.Conditions>
+                                <MultiDataTrigger.Setters>
+                                    <Setter Property="Source" Value="{StaticResource Fider}" />
+                                </MultiDataTrigger.Setters>
+                            </MultiDataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Image.Style>
+            </Image>
+            <CheckBox IsChecked="{Binding Path=Checked}" DockPanel.Dock="Left" VerticalAlignment="Center"/>
+            <TextBlock Text="{Binding Path=EсpName}" Background="Azure" MinWidth="20" DockPanel.Dock="Right" VerticalAlignment="Center" Padding="0" Margin="5 2"/>
+            <TextBlock Text="{Binding Path=TypeCode}" DockPanel.Dock="Right" VerticalAlignment="Center" Padding="0" Margin="5 2"/>
+            <TextBlock Text="{Binding Path=Type}" DockPanel.Dock="Right" VerticalAlignment="Center" Padding="0" Margin="5 2"/>
+            <TextBlock Text="{Binding Path=Name}" VerticalAlignment="Center" Padding="0" Margin="5 2"/>
+        </DockPanel>
+    </HierarchicalDataTemplate>
+
+</ResourceDictionary>

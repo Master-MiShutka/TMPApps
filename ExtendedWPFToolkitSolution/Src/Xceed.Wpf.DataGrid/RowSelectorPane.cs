@@ -23,6 +23,8 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
+using System.Linq;
+using System.Linq.Expressions;
 
 namespace Xceed.Wpf.DataGrid
 {
@@ -87,7 +89,15 @@ namespace Xceed.Wpf.DataGrid
         }
       }
 
-      return RowSelectorPane.EmptySize;
+        var l = this.InternalChildren.Cast<RowSelectorDecorator>().Select(i => i.DesiredSize).ToList();
+            double max = this.DesiredSize.Width;
+        if (l != null && l.Count > 0)
+                max = l.Select(i => i.Width).Max();
+
+            if (double.IsInfinity(availableSize.Height))
+                return RowSelectorPane.EmptySize;
+
+      return new Size(max, availableSize.Height);
     }
 
     protected override Size ArrangeOverride( Size finalSize )

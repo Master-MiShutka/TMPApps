@@ -28,25 +28,6 @@
     </Window.InputBindings>
     <Window.Resources>
         <ContextMenu x:Key="TableContextMenu" FontSize="{local_extensions:SettingBinding FontSize, 12.0}">
-            <ContextMenu.Resources>
-                <Style
-                    x:Key="TableViewMenuItem"
-                    BasedOn="{StaticResource {x:Type MenuItem}}"
-                    TargetType="{x:Type MenuItem}">
-                    <Setter Property="Padding" Value="0,2" />
-                    <Setter Property="extensions:MenuItemExtensions.GroupName" Value="ViewGroup" />
-                    <Setter Property="Command" Value="{Binding CommandChangeView, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ContextMenu}}}" />
-                    <Setter Property="IsCheckable" Value="True" />
-                    <Setter Property="CommandParameter">
-                        <Setter.Value>
-                            <MultiBinding Converter="{StaticResource ParametersToOneConverter}">
-                                <Binding Path="Tag" RelativeSource="{RelativeSource Mode=Self}" />
-                                <Binding Path="PlacementTarget" RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType={x:Type ContextMenu}}" />
-                            </MultiBinding>
-                        </Setter.Value>
-                    </Setter>
-                </Style>
-            </ContextMenu.Resources>
             <MenuItem
                 Padding="0,2"
                 Header="Сортировка"
@@ -57,53 +38,56 @@
                 Header="Группировка"
                 ItemTemplate="{StaticResource HierarchicalMenuTemplate}"
                 ItemsSource="{Binding GroupFields}" />
-            <Separator />
-            <MenuItem
-                Padding="0,2"
-                Header="Вид"
-                ItemContainerStyle="{StaticResource TableViewMenuItem}"
-                ItemsSource="{Binding SelectedView, Converter={converters:EnumBindingConverter}}" />
-            <Separator />
-            <MenuItem
-                Padding="0,2"
-                Command="{Binding CommandExport}"
-                CommandParameter="{Binding PlacementTarget, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContextMenu}}}"
-                Header="{Binding CommandExport.Header}" />
-            <!--  MenuItem Padding="0,6" Command="{Binding CommandPrint}" Header="Печать" /  -->
-            <Separator />
-            <MenuItem
-                Padding="0,2"
-                Command="{Binding CommandShowFilters}"
-                Header="Фильтры" />
         </ContextMenu>
 
     </Window.Resources>
     <Grid>
         <controls:BusyControl Visibility="{Binding IsBusy, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Hidden}" />
-        <TabControl>
-            <TabItem Header="Список">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="*" />
-                    </Grid.RowDefinitions>
-                    <TextBlock Text="{Binding SortingFields, Mode=OneWay, StringFormat=Отсортировано по: {0}}" Visibility="{Binding SortingFields, Mode=OneWay, Converter={StaticResource NullOrEmptyToVisibilityConverter}}" />
-                    <TextBox
-                        BorderThickness="0"
-                        IsReadOnly="True"
-                        Text="{Binding GroupingFields, Mode=OneWay, StringFormat=Сгруппировано по: {0}}"
-                        Visibility="{Binding GroupingFields, Mode=OneWay, Converter={StaticResource NullOrEmptyToVisibilityConverter}}" />
-                    <controls:TableView
-                        Grid.Row="2"
-                        BindableColumns="{Binding TableColumns}"
-                        ContextMenu="{StaticResource TableContextMenu}"
-                        ItemsSource="{Binding CollectionOfMeters}" />
-                </Grid>
-            </TabItem>
-            <TabItem Header="Свод">
-                <views:SummaryInfoView DataContext="{Binding SummaryInfoViewModel}" />
-            </TabItem>
-        </TabControl>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <StackPanel Orientation="Horizontal">
+                <Label VerticalAlignment="Center" Content="Вид" />
+                <ListBox
+                    Background="Transparent"
+                    BorderThickness="0"
+                    ItemContainerStyle="{StaticResource horizontalListBoxItem}"
+                    ItemsSource="{Binding SelectedView, Converter={converters:EnumBindingConverter}}"
+                    SelectedItem="{Binding SelectedView, Converter={converters:EnumBindingConverter}}">
+                    <ListBox.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Horizontal" />
+                        </ItemsPanelTemplate>
+                    </ListBox.ItemsPanel>
+                </ListBox>
+                <Separator />
+                <Button Command="{Binding CommandExport}" Content="{Binding CommandExport.Header}" />
+                <Button Command="{Binding CommandShowFilters}" Content="{Binding CommandShowFilters.Header}" />
+                <Button
+                    Command="{Binding CommandPrint}"
+                    Content="{Binding CommandPrint.Header}"
+                    IsEnabled="False" />
+            </StackPanel>
+            <TextBlock
+                Grid.Row="1"
+                Text="{Binding SortingFields, Mode=OneWay, StringFormat=Отсортировано по: {0}}"
+                Visibility="{Binding SortingFields, Mode=OneWay, Converter={StaticResource NullOrEmptyToVisibilityConverter}}" />
+            <TextBox
+                Grid.Row="2"
+                BorderThickness="0"
+                IsReadOnly="True"
+                Text="{Binding GroupingFields, Mode=OneWay, StringFormat=Сгруппировано по: {0}}"
+                Visibility="{Binding GroupingFields, Mode=OneWay, Converter={StaticResource NullOrEmptyToVisibilityConverter}}" />
+            <controls:TableView
+                x:Name="table"
+                Grid.Row="3"
+                BindableColumns="{Binding TableColumns}"
+                ContextMenu="{StaticResource TableContextMenu}"
+                ItemsSource="{Binding CollectionOfMeters}" />
+        </Grid>
     </Grid>
 </Window>

@@ -557,7 +557,9 @@ namespace TMP.WORK.AramisChetchiki.ViewModel
                         return defaultValue;
                     try
                     {
-                        var substring = s.Substring(startPos, length);
+                        var substring = s.Substring(startPos, length).Trim();
+                        if (String.IsNullOrWhiteSpace(substring))
+                            return defaultValue;
                         return Convert.ToByte(substring);
                     }
                     catch { return defaultValue; }
@@ -570,9 +572,17 @@ namespace TMP.WORK.AramisChetchiki.ViewModel
                     try
                     {
                         var substring = s.Substring(startPos, length);
+                        if (String.IsNullOrWhiteSpace(substring))
+                            return 0;
                         return Convert.ToInt32(substring);
                     }
                     catch { return 0; }
+                };
+                Func<object, ulong> _convertToULong = (value) =>
+                {
+                    ulong result = 0;
+                    ulong.TryParse(value.ToString(), out result);
+                    return result;
                 };
                 Func<object, DateTime?> _getDate = value =>
                 {
@@ -651,7 +661,7 @@ namespace TMP.WORK.AramisChetchiki.ViewModel
                         meter.Многодетная_семья = abonentRow["PRIZNAK"].ToString().Substring(2, 1) == "1";
                         meter.Выносное_АСКУЭ = abonentRow["PRIZNAK"].ToString().Substring(14, 1) == "1";
 
-                        meter.Лицевой = Convert.ToUInt64(abonentRow["LIC_SCH"]);
+                        meter.Лицевой = _convertToULong(abonentRow["LIC_SCH"]);
                         meter.ФИО = String.Join(" ", _getString(abonentRow["FAM"]), _getString(abonentRow["NAME"]), _getString(abonentRow["OTCH"]));
 
                         meter.Населённый_пункт = _getChildRelationValue(abonentRow, "населенный_пункт", "TOWN");
@@ -791,7 +801,7 @@ namespace TMP.WORK.AramisChetchiki.ViewModel
                         change.ФИО = _getString(abonent["FAM"]) +
                             " " + name.FirstOrDefault() + "." + otch.FirstOrDefault() + ".";
                     }
-                    change.Лицевой = Convert.ToUInt64(changeOfMeterRow["ЛИЦ_СЧЕТ"]);                    
+                    change.Лицевой = _convertToULong(changeOfMeterRow["ЛИЦ_СЧЕТ"]);                    
                     change.Номер_снятого_счетчика = _getString(changeOfMeterRow["НОМЕР_СНЯТ"]);
                     change.Показание_снятого = Convert.ToDouble(changeOfMeterRow["ПОКАЗ_СНЯТ"], System.Globalization.CultureInfo.InvariantCulture);
                     

@@ -16,7 +16,7 @@ namespace TMP.UI.Controls.WPF.Reporting.MatrixGrid
         string Description { get; set; }
         ICommand CommandExport { get; set; }
         ICommand CommandCopyToClipboard { get; set; }
-        bool ShowColumnsTotal { get; set; }
-        bool ShowRowsTotal { get; set; }
+        bool? ShowColumnsTotal { get; set; }
+        bool? ShowRowsTotal { get; set; }
     }
 }

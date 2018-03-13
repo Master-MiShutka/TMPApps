@@ -38,7 +38,8 @@
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
                 Content="{Binding Header}"
-                Tag="{Binding Tag}" />
+                Tag="{Binding Tag}"
+                ToolTip="{Binding ToolTip}" />
         </Border>
     </DataTemplate>
 
@@ -49,10 +50,11 @@
             BorderThickness="{Binding Converter={x:Static local_converters:HeaderBorderThicknessConverter.Singleton}}">
             <ContentControl
                 x:Name="rowHeaderPresenter"
-                HorizontalAlignment="Center"
+                HorizontalAlignment="Left"
                 VerticalAlignment="Center"
                 Content="{Binding Header}"
-                Tag="{Binding Tag}" />
+                Tag="{Binding Tag}"
+                ToolTip="{Binding ToolTip}" />
         </Border>
     </DataTemplate>
 
@@ -66,7 +68,8 @@
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
                 Content="{Binding Value}"
-                ContentStringFormat="N0" />
+                ContentStringFormat="{Binding ContentFormat}"
+                ToolTip="{Binding ToolTip}" />
         </Border>
     </DataTemplate>
 
@@ -81,8 +84,9 @@
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
                 Content="{Binding Value}"
-                ContentStringFormat="N0"
-                FontWeight="ExtraBold" />
+                ContentStringFormat="{Binding ContentFormat}"
+                FontWeight="ExtraBold"
+                ToolTip="{Binding ToolTip}" />
         </Border>
     </DataTemplate>
 
@@ -97,8 +101,9 @@
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
                 Content="{Binding Value}"
-                ContentStringFormat="N0"
-                FontWeight="Bold" />
+                ContentStringFormat="{Binding ContentFormat}"
+                FontWeight="Bold"
+                ToolTip="{Binding ToolTip}" />
         </Border>
     </DataTemplate>
 
@@ -113,8 +118,9 @@
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
                 Content="{Binding Value}"
-                ContentStringFormat="N0"
-                FontWeight="Bold" />
+                ContentStringFormat="{Binding ContentFormat}"
+                FontWeight="Bold"
+                ToolTip="{Binding ToolTip}" />
         </Border>
     </DataTemplate>
 

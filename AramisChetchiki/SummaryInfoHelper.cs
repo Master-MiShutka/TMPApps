@@ -13,18 +13,14 @@ namespace TMP.WORK.AramisChetchiki
         private const string COUNT_STRING_FORMAT = "{0} ({1:N0})";
         private const string FIRST_10_STRING = "первые 10 по убыванию количества счетчиков: ";
 
-        public static SummaryInfoItem BuildSummaryInfoItem(ICollection<Meter> meters, string field)
-        {
-            string fieldDisplayName = ModelHelper.MeterPropertyDisplayNames[field];
 
-            SummaryInfoItem si = new SummaryInfoItem(fieldDisplayName);
-            si.FieldName = field;
-            //
+        public static IEnumerable<SummaryInfoGroupItem> BuildGroups(ICollection<Meter> meters, string field)
+        {
             var values = meters
                 // группируем список по значению текущего свойства
                 .GroupBy(i => ModelHelper.MeterGetPropertyValue(i, field));
 
-            var data = values
+            return values
                 // создание типа: значение, список счетчиков с этим значением, количество
                 .Select(group => new SummaryInfoGroupItem
                 {
@@ -36,6 +32,71 @@ namespace TMP.WORK.AramisChetchiki
                 // сортировка по убыванию количества значений
                 .OrderByDescending(o => o.Count)
                 .ToList();
+        }
+
+        public static IEnumerable<SummaryInfoGroupItem> BuildFirst10LargeGroups(ICollection<Meter> meters, string field)
+        {
+            var values = meters
+                // группируем список по значению текущего свойства
+                .GroupBy(i => ModelHelper.MeterGetPropertyValue(i, field));
+
+            IEnumerable<SummaryInfoGroupItem> data = values
+                // создание типа: значение, список счетчиков с этим значением, количество
+                .Select(group => new SummaryInfoGroupItem
+                {
+                    Key = group.Key == null || String.IsNullOrWhiteSpace(group.Key.ToString()) ? EMPTY_STRING : group.Key,
+                    HasEmptyValue = group.Key == null || String.IsNullOrWhiteSpace(group.Key.ToString()),
+                    Value = group.ToList(),
+                    Count = group.Count()
+                })
+                // сортировка по убыванию количества значений
+                .OrderByDescending(o => o.Count)
+                .ToList();
+
+            // количество уникальных значений свойства
+            int groupsCount = data.Count();
+
+            // количество счетчиков
+            int totalCount = data.Sum(i => i.Count);
+
+            if (groupsCount > 10)
+            {
+                var first = data.Take(9);
+                foreach (var item in first)
+                    item.Percent = 100 * item.Count / totalCount;
+
+                var last = data.Skip(9);
+                List<Meter> otherMeters = new List<Meter>();
+                foreach (var item in last)
+                    otherMeters.AddRange(item.Value);
+
+                List<SummaryInfoGroupItem> list = new List<SummaryInfoGroupItem>();
+                list.AddRange(first);
+                var other = new SummaryInfoGroupItem()
+                {
+                    Key = ANOTHER_STRING,
+                    HasEmptyValue = false,
+                    Value = otherMeters,
+                    Count = otherMeters.Count,
+                    Percent = 100 * otherMeters.Count / totalCount
+                };
+                list.Add(other);
+                return list;
+            }
+            else
+                return data;
+        }
+
+
+        public static SummaryInfoItem BuildSummaryInfoItem(ICollection<Meter> meters, string field)
+        {
+            string fieldDisplayName = ModelHelper.MeterPropertyDisplayNames[field];
+
+            SummaryInfoItem si = new SummaryInfoItem(fieldDisplayName);
+            si.FieldName = field;
+
+            var data = BuildGroups(meters, field);
+
             // количество уникальных значений свойства
             int groupsCount = data.Count();
             string groupsInfo = String.Empty;
@@ -62,7 +123,7 @@ namespace TMP.WORK.AramisChetchiki
             // описание сводной информации
             si.Info = groupsInfo;
 
-            // количество счетчиков в группе
+            // количество счетчиков
             int totalCount = data.Sum(i => i.Count);
 
             Func<SummaryInfoGroupItem, SummaryInfoChildItem> createInfoChild = g =>

@@ -9,6 +9,8 @@
 
         public int Value { get; private set; }
 
+        public string ContentFormat { get; set; } = "N0";
+
         public override string ToString()
         {
             return Value.ToString();

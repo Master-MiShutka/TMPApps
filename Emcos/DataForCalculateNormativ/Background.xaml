@@ -1,0 +1,35 @@
+﻿<UserControl x:Class="TMP.Work.Emcos.DataForCalculateNormativ.Background"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TMP.Work.Emcos.DataForCalculateNormativ"
+             mc:Ignorable="d" 
+             d:DesignHeight="150" d:DesignWidth="500"
+             TextOptions.TextRenderingMode="ClearType"
+             TextOptions.TextFormattingMode="Ideal"
+             FontFamily="Calibri,Verdana,Tahoma"
+             Loaded="UserControl_Loaded">
+    <UserControl.Resources>
+        <Style TargetType="{x:Type TextBlock}">
+            <Setter Property="Foreground" Value="DarkGray"/>
+            <Setter Property="FontStyle" Value="Oblique"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Color="WhiteSmoke" BlurRadius="3" Direction="0" ShadowDepth="0"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+    <Grid>
+        <Rectangle Fill="Black" Opacity="0.6"/>
+        <TextBlock HorizontalAlignment="Right" VerticalAlignment="Top"
+                   FontWeight="ExtraLight"
+                   TextAlignment="Right"
+                   ToolTip="Калі Вам гэта праграмма чымсьці дапамагла, аддзячыце чалавека!"
+                   Text="© 2016, вед. инженер отдела сбыта Ошмянских ЭС&#xA;Трус Михаил Петрович" />
+        <TextBlock Text="Уважайте чужой труд!" ToolTip="Паважайце чужую працу"
+                        HorizontalAlignment="Center" VerticalAlignment="Bottom"/>
+    </Grid>
+</UserControl>
