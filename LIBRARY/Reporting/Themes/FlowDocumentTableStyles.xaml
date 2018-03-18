@@ -1,0 +1,15 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Style TargetType="{x:Type Table}">
+        <Setter Property="CellSpacing" Value="0" />
+        <Setter Property="BorderThickness" Value="0.5" />
+        <Setter Property="BorderBrush" Value="Gray" />
+        <Setter Property="FontFamily" Value="Verdana,Segoe UI,Calibri" />
+    </Style>
+
+    <Style TargetType="{x:Type TableCell}">
+        <Setter Property="TextAlignment" Value="Center" />
+        <Setter Property="BorderBrush" Value="LightGray" />
+    </Style>
+
+</ResourceDictionary>

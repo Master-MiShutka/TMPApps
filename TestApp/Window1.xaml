@@ -1,0 +1,1311 @@
+﻿<Window
+    x:Class="TestApp.Window1"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:TestApp"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="Window1"
+    Width="1200"
+    mc:Ignorable="d">
+    <FlowDocumentReader ViewingMode="Scroll">
+        <FlowDocument
+            xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+            FontFamily="Consolas"
+            FontSize="12">
+            <Table
+                xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                xmlns:s="clr-namespace:System;assembly=mscorlib">
+                <Table.Columns>
+                    <TableColumn />
+                    <TableColumn />
+                    <TableColumn />
+                    <TableColumn />
+                    <TableColumn />
+                    <TableColumn />
+                    <TableColumn />
+                    <TableColumn />
+                    <TableColumn />
+                    <TableColumn />
+                    <TableColumn />
+                    <TableColumn />
+                    <TableColumn />
+                    <TableColumn />
+                    <TableColumn />
+                    <TableColumn />
+                    <TableColumn />
+                    <TableColumn />
+                    <TableColumn />
+                    <TableColumn />
+                </Table.Columns>
+                <Table.Resources>
+                    <Style x:Key="{x:Type Table}" TargetType="Table">
+                        <Style.Resources>
+                            <ResourceDictionary />
+                        </Style.Resources>
+                        <Setter Property="Table.CellSpacing">
+                            <Setter.Value>
+                                <s:Double>0</s:Double>
+                            </Setter.Value>
+                        </Setter>
+                        <Setter Property="Block.BorderThickness">
+                            <Setter.Value>
+                                <Thickness>0.5,0.5,0.5,0.5</Thickness>
+                            </Setter.Value>
+                        </Setter>
+                        <Setter Property="Block.BorderBrush">
+                            <Setter.Value>
+                                <SolidColorBrush>#FF808080</SolidColorBrush>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                    <Style x:Key="{x:Type TableCell}" TargetType="TableCell">
+                        <Style.Resources>
+                            <ResourceDictionary />
+                        </Style.Resources>
+                        <Setter Property="Block.TextAlignment">
+                            <Setter.Value>
+                                <x:Static Member="TextAlignment.Center" />
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </Table.Resources>
+                <TableRowGroup>
+                    <TableRow>
+                        <TableCell ColumnSpan="3" RowSpan="2">
+                            <Paragraph xml:space="preserve" />
+                        </TableCell>
+                        <TableCell
+                            Background="#FFD3D3D3"
+                            ColumnSpan="1"
+                            RowSpan="2">
+                            <Paragraph>студзень</Paragraph>
+                        </TableCell>
+                        <TableCell
+                            Background="#FFD3D3D3"
+                            ColumnSpan="1"
+                            RowSpan="1">
+                            <Paragraph>люты</Paragraph>
+                        </TableCell>
+                        <TableCell
+                            Background="#FFD3D3D3"
+                            ColumnSpan="1"
+                            RowSpan="1">
+                            <Paragraph>сакавік</Paragraph>
+                        </TableCell>
+                        <TableCell
+                            Background="#FFD3D3D3"
+                            ColumnSpan="2"
+                            RowSpan="1">
+                            <Paragraph>красавік</Paragraph>
+                        </TableCell>
+                        <TableCell
+                            Background="#FFD3D3D3"
+                            ColumnSpan="1"
+                            RowSpan="1">
+                            <Paragraph>май</Paragraph>
+                        </TableCell>
+                        <TableCell
+                            Background="#FFD3D3D3"
+                            ColumnSpan="2"
+                            RowSpan="1">
+                            <Paragraph>чэрвень</Paragraph>
+                        </TableCell>
+                        <TableCell
+                            Background="#FFD3D3D3"
+                            ColumnSpan="1"
+                            RowSpan="1">
+                            <Paragraph>ліпень</Paragraph>
+                        </TableCell>
+                        <TableCell
+                            Background="#FFD3D3D3"
+                            ColumnSpan="1"
+                            RowSpan="1">
+                            <Paragraph>жнівень</Paragraph>
+                        </TableCell>
+                        <TableCell
+                            Background="#FFD3D3D3"
+                            ColumnSpan="1"
+                            RowSpan="2">
+                            <Paragraph>верасень</Paragraph>
+                        </TableCell>
+                        <TableCell
+                            Background="#FFD3D3D3"
+                            ColumnSpan="2"
+                            RowSpan="1">
+                            <Paragraph>кастрычнік</Paragraph>
+                        </TableCell>
+                        <TableCell
+                            Background="#FFD3D3D3"
+                            ColumnSpan="2"
+                            RowSpan="1">
+                            <Paragraph>лістапад</Paragraph>
+                        </TableCell>
+                        <TableCell
+                            Background="#FFD3D3D3"
+                            ColumnSpan="1"
+                            RowSpan="2">
+                            <Paragraph>снежань</Paragraph>
+                        </TableCell>
+                        <TableCell
+                            Background="#FFD3D3D3"
+                            ColumnSpan="1"
+                            RowSpan="2">
+                            <Paragraph>Итого</Paragraph>
+                        </TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell
+                            Background="#FFD3D3D3"
+                            ColumnSpan="1"
+                            RowSpan="1">
+                            <Paragraph>36</Paragraph>
+                        </TableCell>
+                        <TableCell
+                            Background="#FFD3D3D3"
+                            ColumnSpan="1"
+                            RowSpan="1">
+                            <Paragraph>63</Paragraph>
+                        </TableCell>
+                        <TableCell
+                            Background="#FFD3D3D3"
+                            ColumnSpan="1"
+                            RowSpan="1">
+                            <Paragraph>47</Paragraph>
+                        </TableCell>
+                        <TableCell
+                            Background="#FFD3D3D3"
+                            ColumnSpan="1"
+                            RowSpan="1">
+                            <Paragraph>63</Paragraph>
+                        </TableCell>
+                        <TableCell
+                            Background="#FFD3D3D3"
+                            ColumnSpan="1"
+                            RowSpan="1">
+                            <Paragraph>64</Paragraph>
+                        </TableCell>
+                        <TableCell
+                            Background="#FFD3D3D3"
+                            ColumnSpan="1"
+                            RowSpan="1">
+                            <Paragraph>59</Paragraph>
+                        </TableCell>
+                        <TableCell
+                            Background="#FFD3D3D3"
+                            ColumnSpan="1"
+                            RowSpan="1">
+                            <Paragraph>16</Paragraph>
+                        </TableCell>
+                        <TableCell
+                            Background="#FFD3D3D3"
+                            ColumnSpan="1"
+                            RowSpan="1">
+                            <Paragraph>58</Paragraph>
+                        </TableCell>
+                        <TableCell
+                            Background="#FFD3D3D3"
+                            ColumnSpan="1"
+                            RowSpan="1">
+                            <Paragraph>50</Paragraph>
+                        </TableCell>
+                        <TableCell
+                            Background="#FFD3D3D3"
+                            ColumnSpan="1"
+                            RowSpan="1">
+                            <Paragraph>66</Paragraph>
+                        </TableCell>
+                        <TableCell
+                            Background="#FFD3D3D3"
+                            ColumnSpan="1"
+                            RowSpan="1">
+                            <Paragraph>25</Paragraph>
+                        </TableCell>
+                        <TableCell
+                            Background="#FFD3D3D3"
+                            ColumnSpan="1"
+                            RowSpan="1">
+                            <Paragraph>67</Paragraph>
+                        </TableCell>
+                        <TableCell
+                            Background="#FFD3D3D3"
+                            ColumnSpan="1"
+                            RowSpan="1">
+                            <Paragraph>96</Paragraph>
+                        </TableCell>
+                    </TableRow>
+                </TableRowGroup>
+                <TableRowGroup>
+                    <TableRow>
+                        <TableCell
+                            Background="#FFD3D3D3"
+                            ColumnSpan="3"
+                            RowSpan="1">
+                            <Paragraph>80</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>76</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>5</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>15</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>50</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>66</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>79</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>64</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>90</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>28</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>18</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>26</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>10</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>70</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>39</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>31</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>71</Paragraph>
+                        </TableCell>
+                        <TableCell
+                            Background="#FF808080"
+                            ColumnSpan="1"
+                            FontWeight="SemiBold"
+                            RowSpan="1">
+                            <Paragraph>738</Paragraph>
+                        </TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell
+                            Background="#FFD3D3D3"
+                            ColumnSpan="1"
+                            RowSpan="1">
+                            <Paragraph>81</Paragraph>
+                        </TableCell>
+                        <TableCell
+                            Background="#FFD3D3D3"
+                            ColumnSpan="2"
+                            RowSpan="1">
+                            <Paragraph>50</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>26</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>52</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>98</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>93</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>59</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>85</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>54</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>14</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>23</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>76</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>83</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>27</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>7</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>80</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>39</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>94</Paragraph>
+                        </TableCell>
+                        <TableCell
+                            Background="#FF808080"
+                            ColumnSpan="1"
+                            FontWeight="SemiBold"
+                            RowSpan="1">
+                            <Paragraph>910</Paragraph>
+                        </TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell
+                            Background="#FFD3D3D3"
+                            ColumnSpan="1"
+                            RowSpan="6">
+                            <Paragraph>82</Paragraph>
+                        </TableCell>
+                        <TableCell
+                            Background="#FFD3D3D3"
+                            ColumnSpan="1"
+                            RowSpan="1">
+                            <Paragraph>80</Paragraph>
+                        </TableCell>
+                        <TableCell
+                            Background="#FFD3D3D3"
+                            ColumnSpan="1"
+                            RowSpan="1">
+                            <Paragraph>77</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>23</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>52</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>83</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>20</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>53</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>97</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>93</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>74</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>81</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>62</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>49</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>97</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>48</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>63</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>7</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>89</Paragraph>
+                        </TableCell>
+                        <TableCell
+                            Background="#FF808080"
+                            ColumnSpan="1"
+                            FontWeight="SemiBold"
+                            RowSpan="1">
+                            <Paragraph>991</Paragraph>
+                        </TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell
+                            Background="#FFD3D3D3"
+                            ColumnSpan="1"
+                            RowSpan="2">
+                            <Paragraph>37</Paragraph>
+                        </TableCell>
+                        <TableCell
+                            Background="#FFD3D3D3"
+                            ColumnSpan="1"
+                            RowSpan="1">
+                            <Paragraph>16</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>16</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>7</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>47</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>78</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>98</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>55</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>54</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>90</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>51</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>6</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>31</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>90</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>95</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>41</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>88</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>48</Paragraph>
+                        </TableCell>
+                        <TableCell
+                            Background="#FF808080"
+                            ColumnSpan="1"
+                            FontWeight="SemiBold"
+                            RowSpan="1">
+                            <Paragraph>895</Paragraph>
+                        </TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell
+                            Background="#FFD3D3D3"
+                            ColumnSpan="1"
+                            RowSpan="1">
+                            <Paragraph>89</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>78</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>31</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>86</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>23</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>56</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>15</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>23</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>29</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>58</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>28</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>16</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>96</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>41</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>57</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>66</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>60</Paragraph>
+                        </TableCell>
+                        <TableCell
+                            Background="#FF808080"
+                            ColumnSpan="1"
+                            FontWeight="SemiBold"
+                            RowSpan="1">
+                            <Paragraph>763</Paragraph>
+                        </TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell
+                            Background="#FFD3D3D3"
+                            ColumnSpan="2"
+                            RowSpan="1">
+                            <Paragraph>39</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>73</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>94</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>15</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>5</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>37</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>61</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>96</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>67</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>97</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>92</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>69</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>51</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>70</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>8</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>79</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>44</Paragraph>
+                        </TableCell>
+                        <TableCell
+                            Background="#FF808080"
+                            ColumnSpan="1"
+                            FontWeight="SemiBold"
+                            RowSpan="1">
+                            <Paragraph>958</Paragraph>
+                        </TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell
+                            Background="#FFD3D3D3"
+                            ColumnSpan="1"
+                            RowSpan="2">
+                            <Paragraph>19</Paragraph>
+                        </TableCell>
+                        <TableCell
+                            Background="#FFD3D3D3"
+                            ColumnSpan="1"
+                            RowSpan="1">
+                            <Paragraph>5</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>74</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>5</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>23</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>21</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>77</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>83</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>37</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>5</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>83</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>23</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>24</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>74</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>44</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>58</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>54</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>93</Paragraph>
+                        </TableCell>
+                        <TableCell
+                            Background="#FF808080"
+                            ColumnSpan="1"
+                            FontWeight="SemiBold"
+                            RowSpan="1">
+                            <Paragraph>778</Paragraph>
+                        </TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell
+                            Background="#FFD3D3D3"
+                            ColumnSpan="1"
+                            RowSpan="1">
+                            <Paragraph>36</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>39</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>71</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>21</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>5</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>31</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>88</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>15</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>22</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>35</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>23</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>25</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>64</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>46</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>71</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>58</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>55</Paragraph>
+                        </TableCell>
+                        <TableCell
+                            Background="#FF808080"
+                            ColumnSpan="1"
+                            FontWeight="SemiBold"
+                            RowSpan="1">
+                            <Paragraph>669</Paragraph>
+                        </TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell
+                            Background="#FFD3D3D3"
+                            ColumnSpan="1"
+                            RowSpan="6">
+                            <Paragraph>83</Paragraph>
+                        </TableCell>
+                        <TableCell
+                            Background="#FFD3D3D3"
+                            ColumnSpan="2"
+                            RowSpan="1">
+                            <Paragraph>16</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>49</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>71</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>26</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>40</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>39</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>50</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>83</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>90</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>62</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>14</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>21</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>19</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>41</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>26</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>28</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>44</Paragraph>
+                        </TableCell>
+                        <TableCell
+                            Background="#FF808080"
+                            ColumnSpan="1"
+                            FontWeight="SemiBold"
+                            RowSpan="1">
+                            <Paragraph>703</Paragraph>
+                        </TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell
+                            Background="#FFD3D3D3"
+                            ColumnSpan="1"
+                            RowSpan="2">
+                            <Paragraph>64</Paragraph>
+                        </TableCell>
+                        <TableCell
+                            Background="#FFD3D3D3"
+                            ColumnSpan="1"
+                            RowSpan="1">
+                            <Paragraph>33</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>43</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>75</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>17</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>99</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>87</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>78</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>18</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>86</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>89</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>5</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>85</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>58</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>63</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>73</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>59</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>16</Paragraph>
+                        </TableCell>
+                        <TableCell
+                            Background="#FF808080"
+                            ColumnSpan="1"
+                            FontWeight="SemiBold"
+                            RowSpan="1">
+                            <Paragraph>951</Paragraph>
+                        </TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell
+                            Background="#FFD3D3D3"
+                            ColumnSpan="1"
+                            RowSpan="1">
+                            <Paragraph>86</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>64</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>69</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>29</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>72</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>36</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>18</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>59</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>89</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>88</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>31</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>43</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>21</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>71</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>95</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>80</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>13</Paragraph>
+                        </TableCell>
+                        <TableCell
+                            Background="#FF808080"
+                            ColumnSpan="1"
+                            FontWeight="SemiBold"
+                            RowSpan="1">
+                            <Paragraph>878</Paragraph>
+                        </TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell
+                            Background="#FFD3D3D3"
+                            ColumnSpan="1"
+                            RowSpan="2">
+                            <Paragraph>65</Paragraph>
+                        </TableCell>
+                        <TableCell
+                            Background="#FFD3D3D3"
+                            ColumnSpan="1"
+                            RowSpan="1">
+                            <Paragraph>78</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>94</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>81</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>25</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>71</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>59</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>59</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>68</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>71</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>58</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>40</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>51</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>38</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>64</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>29</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>31</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>88</Paragraph>
+                        </TableCell>
+                        <TableCell
+                            Background="#FF808080"
+                            ColumnSpan="1"
+                            FontWeight="SemiBold"
+                            RowSpan="1">
+                            <Paragraph>927</Paragraph>
+                        </TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell
+                            Background="#FFD3D3D3"
+                            ColumnSpan="1"
+                            RowSpan="1">
+                            <Paragraph>72</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>55</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>10</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>55</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>72</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>97</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>56</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>13</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>29</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>20</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>27</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>16</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>60</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>40</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>97</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>19</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>94</Paragraph>
+                        </TableCell>
+                        <TableCell
+                            Background="#FF808080"
+                            ColumnSpan="1"
+                            FontWeight="SemiBold"
+                            RowSpan="1">
+                            <Paragraph>760</Paragraph>
+                        </TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell
+                            Background="#FFD3D3D3"
+                            ColumnSpan="1"
+                            RowSpan="1">
+                            <Paragraph>93</Paragraph>
+                        </TableCell>
+                        <TableCell
+                            Background="#FFD3D3D3"
+                            ColumnSpan="1"
+                            RowSpan="1">
+                            <Paragraph>32</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>25</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>76</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>64</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>82</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>52</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>87</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>56</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>10</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>5</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>58</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>18</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>95</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>67</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>26</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>30</Paragraph>
+                        </TableCell>
+                        <TableCell ColumnSpan="1" RowSpan="1">
+                            <Paragraph>64</Paragraph>
+                        </TableCell>
+                        <TableCell
+                            Background="#FF808080"
+                            ColumnSpan="1"
+                            FontWeight="SemiBold"
+                            RowSpan="1">
+                            <Paragraph>815</Paragraph>
+                        </TableCell>
+                    </TableRow>
+                </TableRowGroup>
+                <TableRowGroup>
+                    <TableRow>
+                        <TableCell
+                            Background="#FFD3D3D3"
+                            ColumnSpan="3"
+                            FontWeight="Bold"
+                            RowSpan="1">
+                            <Paragraph>Итого</Paragraph>
+                        </TableCell>
+                        <TableCell
+                            Background="#FFD3D3D3"
+                            ColumnSpan="1"
+                            FontWeight="Bold"
+                            RowSpan="1">
+                            <Paragraph>735</Paragraph>
+                        </TableCell>
+                        <TableCell
+                            Background="#FFD3D3D3"
+                            ColumnSpan="1"
+                            FontWeight="Bold"
+                            RowSpan="1">
+                            <Paragraph>699</Paragraph>
+                        </TableCell>
+                        <TableCell
+                            Background="#FFD3D3D3"
+                            ColumnSpan="1"
+                            FontWeight="Bold"
+                            RowSpan="1">
+                            <Paragraph>604</Paragraph>
+                        </TableCell>
+                        <TableCell
+                            Background="#FFD3D3D3"
+                            ColumnSpan="1"
+                            FontWeight="Bold"
+                            RowSpan="1">
+                            <Paragraph>731</Paragraph>
+                        </TableCell>
+                        <TableCell
+                            Background="#FFD3D3D3"
+                            ColumnSpan="1"
+                            FontWeight="Bold"
+                            RowSpan="1">
+                            <Paragraph>847</Paragraph>
+                        </TableCell>
+                        <TableCell
+                            Background="#FFD3D3D3"
+                            ColumnSpan="1"
+                            FontWeight="Bold"
+                            RowSpan="1">
+                            <Paragraph>911</Paragraph>
+                        </TableCell>
+                        <TableCell
+                            Background="#FFD3D3D3"
+                            ColumnSpan="1"
+                            FontWeight="Bold"
+                            RowSpan="1">
+                            <Paragraph>733</Paragraph>
+                        </TableCell>
+                        <TableCell
+                            Background="#FFD3D3D3"
+                            ColumnSpan="1"
+                            FontWeight="Bold"
+                            RowSpan="1">
+                            <Paragraph>766</Paragraph>
+                        </TableCell>
+                        <TableCell
+                            Background="#FFD3D3D3"
+                            ColumnSpan="1"
+                            FontWeight="Bold"
+                            RowSpan="1">
+                            <Paragraph>778</Paragraph>
+                        </TableCell>
+                        <TableCell
+                            Background="#FFD3D3D3"
+                            ColumnSpan="1"
+                            FontWeight="Bold"
+                            RowSpan="1">
+                            <Paragraph>503</Paragraph>
+                        </TableCell>
+                        <TableCell
+                            Background="#FFD3D3D3"
+                            ColumnSpan="1"
+                            FontWeight="Bold"
+                            RowSpan="1">
+                            <Paragraph>557</Paragraph>
+                        </TableCell>
+                        <TableCell
+                            Background="#FFD3D3D3"
+                            ColumnSpan="1"
+                            FontWeight="Bold"
+                            RowSpan="1">
+                            <Paragraph>800</Paragraph>
+                        </TableCell>
+                        <TableCell
+                            Background="#FFD3D3D3"
+                            ColumnSpan="1"
+                            FontWeight="Bold"
+                            RowSpan="1">
+                            <Paragraph>767</Paragraph>
+                        </TableCell>
+                        <TableCell
+                            Background="#FFD3D3D3"
+                            ColumnSpan="1"
+                            FontWeight="Bold"
+                            RowSpan="1">
+                            <Paragraph>763</Paragraph>
+                        </TableCell>
+                        <TableCell
+                            Background="#FFD3D3D3"
+                            ColumnSpan="1"
+                            FontWeight="Bold"
+                            RowSpan="1">
+                            <Paragraph>669</Paragraph>
+                        </TableCell>
+                        <TableCell
+                            Background="#FFD3D3D3"
+                            ColumnSpan="1"
+                            FontWeight="Bold"
+                            RowSpan="1">
+                            <Paragraph>873</Paragraph>
+                        </TableCell>
+                        <TableCell
+                            Background="#FFA9A9A9"
+                            ColumnSpan="1"
+                            FontWeight="ExtraBold"
+                            Foreground="#FFFFFFFF"
+                            RowSpan="1">
+                            <Paragraph>11 736</Paragraph>
+                        </TableCell>
+                    </TableRow>
+                </TableRowGroup>
+            </Table>
+        </FlowDocument>
+    </FlowDocumentReader>
+</Window>
