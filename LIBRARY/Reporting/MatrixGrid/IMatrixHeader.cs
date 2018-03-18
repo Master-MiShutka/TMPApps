@@ -5,7 +5,7 @@ namespace TMP.UI.Controls.WPF.Reporting.MatrixGrid
     /// <summary>
     /// Интерфейс, описывающий заголовок матрицы <see cref="IMatrix"/>
     /// </summary>
-    public interface IMatrixHeader : IMatrixItem
+    public interface IMatrixHeader : IMatrixCell
     {
         /// <summary>
         /// Ссылка на родительский заголовок
@@ -23,5 +23,9 @@ namespace TMP.UI.Controls.WPF.Reporting.MatrixGrid
         /// Список подзаголовков
         /// </summary>
         IList<IMatrixHeader> Children { get; }
+        /// <summary>
+        /// Количество подзаголовков
+        /// </summary>
+        int ChildrenCount { get; }
     }
 }

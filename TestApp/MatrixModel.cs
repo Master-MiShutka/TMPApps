@@ -27,7 +27,19 @@ namespace TestApp
         string _sampleText;
         public string SampleText { get { return _sampleText; } set { _sampleText = value; RaisePropertyChanged("SampleText"); } }
 
-        public IMatrix Model { get { if (_model == null) _model = Get(); return _model; } set { _model = value; RaisePropertyChanged("Model"); } }
+        public IMatrix Model
+        {
+            get
+            {
+                if (_model == null)
+                    Task.Factory.StartNew(() =>
+                    {
+                        Model = Get(true);
+                    });
+                return _model;
+            }
+            set
+            { _model = value; RaisePropertyChanged("Model"); } }
 
         IMatrix Get(bool delayed = false)
         {
@@ -39,7 +51,7 @@ namespace TestApp
                 List<IMatrixHeader> result = new List<IMatrixHeader>();
                 for (int i = count; i > 0; i--)
                 {
-                    result.Add(new MatrixRowHeaderItem(rnd.Next(100).ToString(), generateChilds(rnd.Next(count - 1))));
+                    result.Add(MatrixHeaderCell.CreateRowHeader(rnd.Next(100).ToString(), generateChilds(rnd.Next(count - 1))));
                 }
                 return result;
             };
@@ -49,17 +61,16 @@ namespace TestApp
                 Header = "Sample title",
                 Description = "sample description",
                 GetRowHeaderValuesFunc = () => Enumerable.Range(rnd.Next(100), rnd.Next(5))
-                    .Select(i => new MatrixRowHeaderItem(
-                        i.ToString(), 
-                        children: generateChilds(rnd.Next(5))
-                        )
+                    .Select(i => MatrixHeaderCell.CreateHeaderCell(i.ToString(), children: generateChilds(rnd.Next(5)))
                     ),
                 GetColumnHeaderValuesFunc = () => System.Globalization.DateTimeFormatInfo.CurrentInfo.MonthNames.Take(12)
-                    .Select(i => new MatrixColumnHeaderItem(i, generateChilds(rnd.Next(3)))),
-                GetCellValueFunc = (row, column) =>
+                    .Select(i => MatrixHeaderCell.CreateHeaderCell(i, generateChilds(rnd.Next(3)))),
+                GetDataCellFunc = (row, column) =>
                 {
                     if (delayed) System.Threading.Thread.Sleep(10);
-                    return rnd.Next(5, 100);
+                    IMatrixDataCell cell = new MatrixDataCell(rnd.Next(5, 100));
+                    cell.ToolTip = cell.ToString();
+                    return cell;
                 }
             };
         }
@@ -67,12 +78,6 @@ namespace TestApp
         public void Go()
         {
             Model = null;
-            Task.Factory.StartNew(() =>
-            {
-                //System.Threading.Thread.Sleep(500);
-
-                Model = Get(true);
-            });
         }
 
         #region INotifyPropertyChanged implementation

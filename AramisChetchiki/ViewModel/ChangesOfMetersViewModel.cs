@@ -112,10 +112,10 @@ namespace TMP.WORK.AramisChetchiki.ViewModel
                 {
                     Header = "Свод по установке счётчиков в за последние три года помесячно",
                     Description = "количество счётчиков",
-                    GetRowHeaderValuesFunc = () => Enumerable.Range(curYear - yearsCount, yearsCount).Reverse().Select(i => new MatrixRowHeaderItem(i.ToString())),
+                    GetRowHeaderValuesFunc = () => Enumerable.Range(curYear - yearsCount, yearsCount).Reverse().Select(i => MatrixHeaderCell.CreateRowHeader(i.ToString())),
                     GetColumnHeaderValuesFunc = () => System.Globalization.DateTimeFormatInfo.CurrentInfo.MonthNames.Take(12)
-                        .Select(i => new MatrixColumnHeaderItem(i)),
-                    GetCellValueFunc = (row, column) =>
+                        .Select(i => MatrixHeaderCell.CreateColumnHeader(i)),
+                    GetDataCellFunc = (row, column) =>
                     {
                         var l = _data
                             .Where(i => i.Дата_замены.HasValue)
@@ -129,9 +129,9 @@ namespace TMP.WORK.AramisChetchiki.ViewModel
                             .Where(i => string.Equals(i.ToString("MMMM"), column.Header))
                             .ToList();
                         if (values == null || values.Count() == 0)
-                            return string.Empty;
+                            return new MatrixDataCell(string.Empty);
                         else
-                            return values.Count();
+                            return new MatrixDataCell(values.Count());
                     }
                 };
 

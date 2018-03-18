@@ -117,21 +117,23 @@ namespace TMP.WORK.AramisChetchiki.ViewModel
             {
                 if (!(this._data == null || this._data.Meters == null || this._data.Meters.Count == 0))
                 {
+                    int metersCount = this._data.Meters.Count;
+
                     IEnumerable<SummaryInfoGroupItem> meterTypes = SummaryInfoHelper.BuildFirst10LargeGroups(this._data.Meters, "Тип_счетчика");
 
                     this.MetersCountPerTypesPivot = new MatrixModelDelegate()
                     {
                         Header = "Свод по типам счётчиков",
                         Description = "* количество счётчиков",
-                        GetRowHeaderValuesFunc = () => meterTypes.Select(i => new MatrixRowHeaderItem(i.Key.ToString())),
-                        GetColumnHeaderValuesFunc = () => new string[] { "Количество", "%" }.Select(i => new MatrixColumnHeaderItem(i)),
-                        GetCellValueFunc = (row, column) =>
+                        GetRowHeaderValuesFunc = () => meterTypes.Select(i => MatrixHeaderCell.CreateRowHeader(i.Key.ToString())),
+                        GetColumnHeaderValuesFunc = () => new string[] { "Количество", "%" }.Select(i => MatrixHeaderCell.CreateColumnHeader(i)),
+                        GetDataCellFunc = (row, column) =>
                         {
                             var group = meterTypes.Where(i => i.Key.ToString() == row.Header).FirstOrDefault();
                             if (column.Header == "%")
-                                return group.Percent;
+                                return new MatrixDataCell(group.Percent);
                             else
-                                return group.Count;
+                                return new MatrixDataCell(group.Count);
                         }
                     };
 
@@ -140,16 +142,16 @@ namespace TMP.WORK.AramisChetchiki.ViewModel
                     {
                         Header = "Свод по типу счётчика и году поверки",
                         Description = "* количество счётчиков",
-                        GetRowHeaderValuesFunc = () => meterTypes.Select(i => new MatrixRowHeaderItem(i.Key.ToString())),
-                        GetColumnHeaderValuesFunc = () => this._data.Meters.Select(i => i.Год_поверки_для_отчётов).Distinct().OrderBy(i => i).Select(i => new MatrixColumnHeaderItem(i)),
-                        GetCellValueFunc = (row, column) =>
+                        GetRowHeaderValuesFunc = () => meterTypes.Select(i => MatrixHeaderCell.CreateRowHeader(i.Key.ToString())),
+                        GetColumnHeaderValuesFunc = () => this._data.Meters.Select(i => i.Год_поверки_для_отчётов).Distinct().OrderBy(i => i).Select(i => MatrixHeaderCell.CreateColumnHeader(i)),
+                        GetDataCellFunc = (row, column) =>
                         {
                             var group = meterTypes.Where(i => i.Key.ToString() == row.Header).FirstOrDefault();
                             var list = group.Value.Where(i => i.Год_поверки_для_отчётов == column.Header).ToList();
                             if (list != null)
-                                return list.Count();
+                                return new MatrixDataCell(list.Count());
                             else
-                                return 0;
+                                return new MatrixDataCell(0);
                         }
                     };
 
@@ -158,39 +160,44 @@ namespace TMP.WORK.AramisChetchiki.ViewModel
                     {
                         Header = "Свод по категории счётчика и\nтипу населённого пункта",
                         Description = "* количество счётчиков",
-                        GetRowHeaderValuesFunc = () => this._data.Meters.Select(i => i.Группа_счётчика_для_отчётов).Distinct().Select(i => new MatrixRowHeaderItem(i)),
-                        GetColumnHeaderValuesFunc = () => this._data.Meters.Select(i => i.Тип_населённого_пункта).Distinct().Select(i => new MatrixColumnHeaderItem(i)),
-                        GetCellValueFunc = (row, column) =>
+                        GetRowHeaderValuesFunc = () => this._data.Meters.Select(i => i.Группа_счётчика_для_отчётов).Distinct().Select(i => MatrixHeaderCell.CreateRowHeader(i)),
+                        GetColumnHeaderValuesFunc = () => this._data.Meters.Select(i => i.Тип_населённого_пункта).Distinct().Select(i => MatrixHeaderCell.CreateColumnHeader(i)),
+                        GetDataCellFunc = (row, column) =>
                         {
                             var list = this._data.Meters
                                 .Where(i => i.Группа_счётчика_для_отчётов == row.Header)
                                 .Where(i => i.Тип_населённого_пункта == column.Header)
                                 .ToList();
                             if (list != null)
-                                return list.Count();
+                            {
+                                int count = list.Count();
+                                return new MatrixDataCell(count) { ToolTip = String.Format("{0:N1}%", 100 * count / metersCount) };
+                            }
                             else
-                                return 0;
+                                return new MatrixDataCell(0);
                         }
                     };
 
                     // Свод по населенному пункту и принципу действия счётчика
-                    SummaryInfoItem infoCountMetersPerLocality = SummaryInfoHelper.BuildSummaryInfoItem(this._data.Meters, "Населённый_пункт");
+                    IEnumerable<SummaryInfoGroupItem> meterPerLocality = SummaryInfoHelper.BuildFirst10LargeGroups(this._data.Meters, "Населённый_пункт");
+
                     this.MetersCountPerLocalityPivot = new MatrixModelDelegate()
                     {
                         Header = "Свод по населенному пункту и\nпринципу действия счётчика",
                         Description = "* количество счётчиков",
-                        GetRowHeaderValuesFunc = () => infoCountMetersPerLocality.OnlyFirst10Items.Select(i => new MatrixRowHeaderItem(i.Value)),
-                        GetColumnHeaderValuesFunc = () => this._data.Meters.Select(i => i.Принцип).Distinct().Select(i => new MatrixColumnHeaderItem(i)),
-                        GetCellValueFunc = (row, column) =>
+                        GetRowHeaderValuesFunc = () => meterPerLocality.Select(i => MatrixHeaderCell.CreateRowHeader(i.Key.ToString())),
+                        GetColumnHeaderValuesFunc = () => this._data.Meters.Select(i => i.Принцип).Distinct().Select(i => MatrixHeaderCell.CreateColumnHeader(i)),
+                        GetDataCellFunc = (row, column) =>
                         {
-                            var list = this._data.Meters
-                                .Where(i => i.Принцип == column.Header)
-                                .Where(i => i.Населённый_пункт == row.Header)
-                                .ToList();
+                            var group = meterPerLocality.Where(i => i.Key.ToString() == row.Header).FirstOrDefault();
+                            var list = group.Value.Where(i => i.Принцип == column.Header).ToList();
                             if (list != null)
-                                return list.Count();
+                            {
+                                int count = list.Count();
+                                return new MatrixDataCell(count) { ToolTip = String.Format("{0:N1}%", 100 * count / metersCount) };
+                            }
                             else
-                                return 0;
+                                return new MatrixDataCell(0);
                         }
                     };
                 }

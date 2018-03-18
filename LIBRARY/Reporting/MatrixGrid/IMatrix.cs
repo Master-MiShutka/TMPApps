@@ -11,10 +11,15 @@ namespace TMP.UI.Controls.WPF.Reporting.MatrixGrid
     public interface IMatrix
     {
         event PropertyChangedEventHandler Builded;
-        ReadOnlyCollection<MatrixItemBase> Items { get; }
+        IList<IMatrixCell> Items { get; }
+        IMatrixCell[,] Cells { get; }
+
+        int RowHeadersCount { get; }
+        int ColumnHeadersCount { get; }
+        System.Windows.Size Size { get; }
+
         string Header { get; set; }
         string Description { get; set; }
-        ICommand CommandExport { get; set; }
         ICommand CommandCopyToClipboard { get; set; }
         bool? ShowColumnsTotal { get; set; }
         bool? ShowRowsTotal { get; set; }

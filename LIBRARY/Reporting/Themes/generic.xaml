@@ -6,121 +6,102 @@
 
     <ResourceDictionary.MergedDictionaries />
 
-    <DataTemplate DataType="{x:Type matrixGrid:MatrixEmptyHeaderItem}">
-        <Border
-            Padding="2"
-            BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}"
-            BorderThickness="0,0,1,1" />
+
+    <Style x:Key="ContentControlStyle" TargetType="{x:Type ContentControl}">
+        <Setter Property="HorizontalAlignment" Value="Center" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="ToolTip" Value="{Binding ToolTip}" />
+    </Style>
+
+    <DataTemplate x:Key="EmptyCellTemplate">
+        <!--    -->
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type matrixGrid:MatrixSummaryHeaderItem}">
+    <DataTemplate DataType="{x:Type matrixGrid:MatrixHeaderCell}">
         <Border
+            x:Name="rootBorder"
+            Margin="0"
             Padding="2"
-            BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}"
-            BorderThickness="{Binding Converter={x:Static local_converters:HeaderBorderThicknessConverter.Singleton}}">
+            BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}">
+            <Border.BorderThickness>
+                <MultiBinding Converter="{x:Static local_converters:HeaderBorderThicknessConverter.Singleton}">
+                    <Binding />
+                    <Binding Path="Matrix" RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType={x:Type matrixGrid:MatrixGridControl}}" />
+                </MultiBinding>
+            </Border.BorderThickness>
             <ContentControl
-                x:Name="summaryHeaderPresenter"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center"
+                x:Name="content"
                 Content="{Binding Header}"
-                FontWeight="SemiBold"
-                ToolTip="{Binding ToolTip}" />
-        </Border>
-    </DataTemplate>
-
-    <DataTemplate DataType="{x:Type matrixGrid:MatrixColumnHeaderItem}">
-        <Border
-            Padding="2"
-            BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}"
-            BorderThickness="{Binding Converter={x:Static local_converters:HeaderBorderThicknessConverter.Singleton}}">
-            <ContentControl
-                x:Name="columnHeaderPresenter"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center"
-                Content="{Binding Header}"
+                Style="{StaticResource ContentControlStyle}"
                 Tag="{Binding Tag}"
                 ToolTip="{Binding ToolTip}" />
         </Border>
+        <DataTemplate.Triggers>
+            <DataTrigger Binding="{Binding CellType}" Value="{x:Static matrixGrid:MatrixCellType.Empty}">
+                <Setter TargetName="content" Property="ContentTemplate" Value="{StaticResource EmptyCellTemplate}" />
+                <Setter TargetName="rootBorder" Property="BorderThickness" Value="0,0,2,2" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding CellType}" Value="{x:Static matrixGrid:MatrixCellType.RowHeader}">
+                <Setter TargetName="content" Property="HorizontalAlignment" Value="Left" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding CellType}" Value="{x:Static matrixGrid:MatrixCellType.RowSummaryHeader}">
+                <Setter TargetName="content" Property="FontWeight" Value="SemiBold" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding CellType}" Value="{x:Static matrixGrid:MatrixCellType.ColumnSummaryHeader}">
+                <Setter TargetName="content" Property="FontWeight" Value="SemiBold" />
+            </DataTrigger>
+        </DataTemplate.Triggers>
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type matrixGrid:MatrixRowHeaderItem}">
+    <DataTemplate DataType="{x:Type matrixGrid:MatrixSummaryCell}">
         <Border
+            x:Name="rootBorder"
+            Margin="0"
             Padding="2"
-            BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}"
-            BorderThickness="{Binding Converter={x:Static local_converters:HeaderBorderThicknessConverter.Singleton}}">
+            Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"
+            BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}">
+            <Border.BorderThickness>
+                <MultiBinding Converter="{x:Static local_converters:HeaderBorderThicknessConverter.Singleton}">
+                    <Binding />
+                    <Binding Path="Matrix" RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType={x:Type matrixGrid:MatrixGridControl}}" />
+                </MultiBinding>
+            </Border.BorderThickness>
             <ContentControl
-                x:Name="rowHeaderPresenter"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Center"
-                Content="{Binding Header}"
-                Tag="{Binding Tag}"
-                ToolTip="{Binding ToolTip}" />
+                x:Name="content"
+                Content="{Binding Value}"
+                ContentStringFormat="{Binding ContentFormat}"
+                Style="{StaticResource ContentControlStyle}" />
         </Border>
+        <DataTemplate.Triggers>
+            <DataTrigger Binding="{Binding SummaryType}" Value="{x:Static matrixGrid:MatrixSummaryType.RowSummary}">
+                <Setter TargetName="content" Property="FontWeight" Value="Bold" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding SummaryType}" Value="{x:Static matrixGrid:MatrixSummaryType.ColumnSummary}">
+                <Setter TargetName="content" Property="FontWeight" Value="Bold" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding SummaryType}" Value="{x:Static matrixGrid:MatrixSummaryType.TotalSummary}">
+                <Setter TargetName="content" Property="FontWeight" Value="ExtraBold" />
+            </DataTrigger>
+
+        </DataTemplate.Triggers>
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type matrixGrid:MatrixCellItem}">
+    <DataTemplate DataType="{x:Type matrixGrid:MatrixDataCell}">
         <Border
-            Padding="1"
-            BorderBrush="{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}"
-            BorderThickness="0,0,1,1">
+            Margin="0"
+            Padding="2"
+            BorderBrush="{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}">
+            <Border.BorderThickness>
+                <MultiBinding Converter="{x:Static local_converters:HeaderBorderThicknessConverter.Singleton}">
+                    <Binding />
+                    <Binding Path="Matrix" RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType={x:Type matrixGrid:MatrixGridControl}}" />
+                </MultiBinding>
+            </Border.BorderThickness>
             <ContentControl
                 x:Name="dataPresenter"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center"
                 Content="{Binding Value}"
                 ContentStringFormat="{Binding ContentFormat}"
-                ToolTip="{Binding ToolTip}" />
-        </Border>
-    </DataTemplate>
-
-    <DataTemplate DataType="{x:Type matrixGrid:MatrixSummaryItem}">
-        <Border
-            Padding="1"
-            Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"
-            BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}"
-            BorderThickness="0,0,1,1">
-            <ContentControl
-                x:Name="totalPresenter"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center"
-                Content="{Binding Value}"
-                ContentStringFormat="{Binding ContentFormat}"
-                FontWeight="ExtraBold"
-                ToolTip="{Binding ToolTip}" />
-        </Border>
-    </DataTemplate>
-
-    <DataTemplate DataType="{x:Type matrixGrid:MatrixSummaryColumnItem}">
-        <Border
-            Padding="1"
-            Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"
-            BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}"
-            BorderThickness="1,0,1,1">
-            <ContentControl
-                x:Name="totalPresenter"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center"
-                Content="{Binding Value}"
-                ContentStringFormat="{Binding ContentFormat}"
-                FontWeight="Bold"
-                ToolTip="{Binding ToolTip}" />
-        </Border>
-    </DataTemplate>
-
-    <DataTemplate DataType="{x:Type matrixGrid:MatrixSummaryRowItem}">
-        <Border
-            Padding="1"
-            Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"
-            BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}"
-            BorderThickness="0,1,1,1">
-            <ContentControl
-                x:Name="totalPresenter"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center"
-                Content="{Binding Value}"
-                ContentStringFormat="{Binding ContentFormat}"
-                FontWeight="Bold"
-                ToolTip="{Binding ToolTip}" />
+                Style="{StaticResource ContentControlStyle}" />
         </Border>
     </DataTemplate>
 

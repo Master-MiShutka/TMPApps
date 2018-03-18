@@ -65,7 +65,7 @@
                 ValidSpinDirection="Increase" />
             <xctk:ButtonChrome Margin="2" Content="ButtonChrome" />
             <xctk:DateTimePicker CalendarDisplayMode="Month" Text="jn" />
-        </ -->
+        </-->
         <DockPanel DockPanel.Dock="Bottom">
             <StackPanel DockPanel.Dock="Left" Orientation="Horizontal">
                 <StackPanel.Resources>
@@ -92,5 +92,16 @@
         <Border Margin="2">
             <matrix:MatrixGridControl Margin="5" Matrix="{Binding Model}" />
         </Border>
+        <TextBlock Text="{Binding Model.RowHeadersCount, StringFormat={}RowHeadersCount {0} шт, FallbackValue=-1}" />
+        <TextBlock Text="{Binding Model.ColumnHeadersCount, StringFormat={}ColumnHeadersCount {0} шт, FallbackValue=-1}" />
+        <TextBlock>
+            <TextBlock.Text>
+                <MultiBinding StringFormat="{}Размер матрицы {0}x{1}">
+                    <Binding Path="Model.Size.Height" />
+                    <Binding Path="Model.Size.Width" />
+                </MultiBinding>
+            </TextBlock.Text>
+        </TextBlock>
+        <TextBlock Text="{Binding Model}" />
     </StackPanel>
 </Window>

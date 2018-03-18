@@ -28,6 +28,11 @@
         <Setter Property="LineHeight" Value="15" />
     </Style>
 
+    <Style
+        x:Key="defaultButtonStyle"
+        BasedOn="{StaticResource {x:Type Button}}"
+        TargetType="{x:Type Button}" />
+
     <DataTemplate x:Key="ButtonContentTemplate">
         <TextBlock
             Margin="10,1"
@@ -44,10 +49,6 @@
     <Style BasedOn="{StaticResource {x:Type Button}}" TargetType="{x:Type Button}">
         <Setter Property="ContentTemplate" Value="{StaticResource ButtonContentTemplate}" />
     </Style>
-    <Style
-        x:Key="defaultButtonStyle"
-        BasedOn="{StaticResource {x:Type Button}}"
-        TargetType="{x:Type Button}" />
 
 
     <Style BasedOn="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" TargetType="{x:Type Separator}" />

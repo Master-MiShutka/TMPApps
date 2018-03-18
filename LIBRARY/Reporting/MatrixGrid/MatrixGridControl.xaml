@@ -58,14 +58,25 @@
                                         <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
                                     </ScrollViewer>
                                     <!--  Description  -->
-                                    <DockPanel Margin="2,0">
-                                        <Button
+                                    <StackPanel Margin="2,0" Orientation="Horizontal">
+                                        <ContentControl VerticalAlignment="Top" Content="{Binding Path=Description}" />
+                                        <Separator />
+                                        <RepeatButton
+                                            Margin="2,0"
                                             Padding="5,0"
-                                            Command="{Binding CommandExport}"
-                                            Content="To Excel"
+                                            VerticalAlignment="Top"
+                                            Command="{Binding CommandPrint}"
+                                            Content="печать"
                                             DockPanel.Dock="Right" />
-                                        <ContentControl Content="{Binding Path=Description}" />
-                                    </DockPanel>
+                                        <RepeatButton
+                                            Margin="2,0"
+                                            Padding="5,0"
+                                            VerticalAlignment="Top"
+                                            Command="{Binding CommandCopyToClipboard}"
+                                            Content="копировать"
+                                            DockPanel.Dock="Right"
+                                            ToolTip="Копировать таблицу в буфер обмена" />
+                                    </StackPanel>
                                 </StackPanel>
                             </Grid>
                             <VisualStateManager.VisualStateGroups>

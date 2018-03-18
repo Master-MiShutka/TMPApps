@@ -9,9 +9,9 @@ Y:\Developer\CURRENT\TMPApps\LIBRARY\DBF\obj\Debug\DBF.csprojResolveAssemblyRefe
 Y:\Developer\CURRENT\TMPApps\LIBRARY\DBF\obj\Debug\DBF.csproj.CoreCompileInputs.cache
 Y:\Developer\CURRENT\TMPApps\LIBRARY\DBF\obj\Debug\DBF.dll
 Y:\Developer\CURRENT\TMPApps\LIBRARY\DBF\obj\Debug\DBF.pdb
-t:\Developer\CURRENT\TMPApps\out\Debug\Libs\DBF.dll
-t:\Developer\CURRENT\TMPApps\out\Debug\Libs\DBF.pdb
-t:\Developer\CURRENT\TMPApps\LIBRARY\DBF\obj\Debug\DBF.csprojResolveAssemblyReference.cache
-t:\Developer\CURRENT\TMPApps\LIBRARY\DBF\obj\Debug\DBF.csproj.CoreCompileInputs.cache
-t:\Developer\CURRENT\TMPApps\LIBRARY\DBF\obj\Debug\DBF.dll
-t:\Developer\CURRENT\TMPApps\LIBRARY\DBF\obj\Debug\DBF.pdb
+T:\Developer\CURRENT\TMPApps\out\Debug\Libs\DBF.dll
+T:\Developer\CURRENT\TMPApps\out\Debug\Libs\DBF.pdb
+T:\Developer\CURRENT\TMPApps\LIBRARY\DBF\obj\Debug\DBF.csprojResolveAssemblyReference.cache
+T:\Developer\CURRENT\TMPApps\LIBRARY\DBF\obj\Debug\DBF.csproj.CoreCompileInputs.cache
+T:\Developer\CURRENT\TMPApps\LIBRARY\DBF\obj\Debug\DBF.dll
+T:\Developer\CURRENT\TMPApps\LIBRARY\DBF\obj\Debug\DBF.pdb

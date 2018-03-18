@@ -5,6 +5,7 @@ using System.Data;
 using System.Linq;
 using System.Reflection;
 using System.Windows;
+using System.Windows.Threading;
 
 namespace TMP.WORK.AramisChetchiki
 {
@@ -60,6 +61,9 @@ namespace TMP.WORK.AramisChetchiki
 
         private void Application_Startup(object sender, StartupEventArgs e)
         {
+            AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+            Dispatcher.CurrentDispatcher.UnhandledException += Application_DispatcherUnhandledException;
+
             FrameworkElement.LanguageProperty.OverrideMetadata(
                 typeof(FrameworkElement), 
                 new FrameworkPropertyMetadata(System.Windows.Markup.XmlLanguage.GetLanguage(System.Globalization.CultureInfo.CurrentCulture.IetfLanguageTag)));
@@ -106,6 +110,11 @@ namespace TMP.WORK.AramisChetchiki
                 e.Handled = true;
             else
                 App.Current.Shutdown(-1);
+        }
+        private static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            MessageBox.Show(App.GetExceptionDetails(e.ExceptionObject as Exception) + "\nНажмите ОК для завершения работы.", "Необработанная ошибка", MessageBoxButton.OKCancel, MessageBoxImage.Error);
+            App.Current.Shutdown(-1);
         }
     }
 }

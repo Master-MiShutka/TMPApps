@@ -11,7 +11,7 @@ namespace TMP.UI.Controls.WPF.Reporting.MatrixGrid
 
         public Func<IEnumerable<IMatrixHeader>> GetColumnHeaderValuesFunc { get; set; }
         public Func<IEnumerable<IMatrixHeader>> GetRowHeaderValuesFunc { get; set; }
-        public Func<IMatrixHeader, IMatrixHeader, object> GetCellValueFunc { get; set; }
+        public Func<IMatrixHeader, IMatrixHeader, IMatrixDataCell> GetDataCellFunc { get; set; }
 
         #endregion
 
@@ -35,9 +35,9 @@ namespace TMP.UI.Controls.WPF.Reporting.MatrixGrid
                 return func();
         }
 
-        protected override object GetCellValue(IMatrixHeader rowHeaderValue, IMatrixHeader columnHeaderValue)
+        protected override IMatrixDataCell GetDataCell(IMatrixHeader rowHeaderValue, IMatrixHeader columnHeaderValue)
         {
-            var func = GetCellValueFunc;
+            var func = GetDataCellFunc;
             if (func == null)
                 throw new ArgumentNullException("GetCellValueFunc is null!");
             else

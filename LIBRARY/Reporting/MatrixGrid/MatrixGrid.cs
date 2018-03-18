@@ -43,11 +43,7 @@ namespace TMP.UI.Controls.WPF.Reporting.MatrixGrid
                 {
                     while (base.RowDefinitions.Count - 1 < index)
                     {
-                        base.RowDefinitions.Add(new RowDefinition());
-
-                        // Колонка с заголовками строк занимает всю доступную ширину
-                        if (base.RowDefinitions.Count == 1)
-                            base.RowDefinitions[0].Height = new GridLength(1, GridUnitType.Auto);
+                        base.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(1, GridUnitType.Auto) });
                     }
                 }));
         }
@@ -58,11 +54,7 @@ namespace TMP.UI.Controls.WPF.Reporting.MatrixGrid
                 {
                     while (base.ColumnDefinitions.Count - 1 < index)
                     {
-                        base.ColumnDefinitions.Add(new ColumnDefinition());
-
-                        // Строка с заголовками столбцов занимает всю доступную высоту
-                        if (base.ColumnDefinitions.Count == 1)
-                            base.ColumnDefinitions[0].Width = new GridLength(1, GridUnitType.Auto);
+                        base.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Auto) });
                     }
                 }));
         }
