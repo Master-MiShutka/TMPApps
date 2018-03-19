@@ -1,5 +1,0 @@
-Y:\Developer\CURRENT\TMPApps\out\Debug\x86\Emcos\Libs\EmcosModel.dll
-Y:\Developer\CURRENT\TMPApps\out\Debug\x86\Emcos\Libs\EmcosModel.pdb
-Y:\Developer\CURRENT\TMPApps\Emcos\EmcosModel\obj\x86\Debug\EmcosModel.csprojResolveAssemblyReference.cache
-Y:\Developer\CURRENT\TMPApps\Emcos\EmcosModel\obj\x86\Debug\EmcosModel.dll
-Y:\Developer\CURRENT\TMPApps\Emcos\EmcosModel\obj\x86\Debug\EmcosModel.pdb

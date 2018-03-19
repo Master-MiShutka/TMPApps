@@ -1,6 +1,0 @@
-Y:\Developer\CURRENT\TMPApps\out\Debug\EPPlusSamples.exe.config
-Y:\Developer\CURRENT\TMPApps\out\Debug\EPPlusSamples.exe
-Y:\Developer\CURRENT\TMPApps\out\Debug\EPPlusSamples.pdb
-Y:\Developer\CURRENT\TMPApps\EpplusSampleApp\obj\Debug\EPPlusSamples.csprojResolveAssemblyReference.cache
-Y:\Developer\CURRENT\TMPApps\EpplusSampleApp\obj\Debug\EPPlusSamples.exe
-Y:\Developer\CURRENT\TMPApps\EpplusSampleApp\obj\Debug\EPPlusSamples.pdb
