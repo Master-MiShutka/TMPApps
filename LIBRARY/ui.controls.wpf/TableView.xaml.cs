@@ -14,9 +14,6 @@ namespace TMP.UI.Controls.WPF
         public TableView()
         {
             InitializeComponent();
-
-            foreach (var item in this.ClipboardExporters)
-                System.Diagnostics.Debug.WriteLine("exporter - " + item.Key);
         }
 
 

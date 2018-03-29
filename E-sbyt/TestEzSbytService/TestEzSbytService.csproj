@@ -140,7 +140,6 @@
     <Compile Include="Controls\ErrorView.xaml.cs">
       <DependentUpon>ErrorView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\RepositoryControl\BindableSelectedItemBehavior.cs" />
     <Compile Include="Converters\CharReplaceConverter.cs" />
     <Compile Include="DataAccess\RepositoryItemAddedEventArgs.cs" />
     <Compile Include="Model\EzSbytSqlRequest.cs" />

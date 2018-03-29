@@ -96,58 +96,6 @@ namespace TMP.WORK.AramisChetchiki.ViewModel
                 window.ShowDialog();
             }, () => Data != null, "Сортировка");
 
-            CommandStatistic = new DelegateCommand(() =>
-            {
-                IsBusy = true;
-
-                Window wnd = new Window();
-                wnd.Owner = App.Current.MainWindow;
-                wnd.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-                wnd.ShowInTaskbar = false;
-                wnd.Title = "Статистика по установке электронных счётчиков";
-
-                int curYear = DateTime.Now.Year;
-                const int yearsCount = 3;
-                MatrixModelDelegate matrix1 = new MatrixModelDelegate()
-                {
-                    Header = "Свод по установке счётчиков в за последние три года помесячно",
-                    Description = "количество счётчиков",
-                    GetRowHeaderValuesFunc = () => Enumerable.Range(curYear - yearsCount, yearsCount).Reverse().Select(i => MatrixHeaderCell.CreateRowHeader(i.ToString())),
-                    GetColumnHeaderValuesFunc = () => System.Globalization.DateTimeFormatInfo.CurrentInfo.MonthNames.Take(12)
-                        .Select(i => MatrixHeaderCell.CreateColumnHeader(i)),
-                    GetDataCellFunc = (row, column) =>
-                    {
-                        var l = _data
-                            .Where(i => i.Дата_замены.HasValue)
-                            .Select(i => i.Дата_замены.Value)
-                            .ToList();
-                        var l1 = l
-                            .Where(i => i.Year.ToString() == row.Header)
-                            .ToList();
-
-                        var values = l1
-                            .Where(i => string.Equals(i.ToString("MMMM"), column.Header))
-                            .ToList();
-                        if (values == null || values.Count() == 0)
-                            return new MatrixDataCell(string.Empty);
-                        else
-                            return new MatrixDataCell(values.Count());
-                    }
-                };
-
-
-
-                wnd.Content = new ContentPresenter()
-                {
-                    Margin = new Thickness(2),
-                    Content = new MatrixGridControl() { Matrix = matrix1 }
-                };
-
-                wnd.ShowDialog();
-
-                IsBusy = false;
-            }, () => Data != null, "Статистика");
-
             if (System.ComponentModel.DesignerProperties.GetIsInDesignMode(new DependencyObject()))
             {
                 IsBusy = false;
@@ -229,7 +177,6 @@ namespace TMP.WORK.AramisChetchiki.ViewModel
 
         public override ICommand CommandExport { get; }
         public override ICommand CommandPrint { get; }
-        public ICommand CommandStatistic { get; }
 
         #endregion
 
@@ -245,7 +192,7 @@ namespace TMP.WORK.AramisChetchiki.ViewModel
                 System.Diagnostics.Debug.WriteLine("*** start generating view ChangesOfMetersViewModel");
                 DateTime start = DateTime.Now;
 
-                _view = CollectionViewSource.GetDefaultView(_data);
+                _view = new TMP.UI.Controls.WPF.PagingCollectionView(_data.ToList());
                 _view.SortDescriptions.Add(new SortDescription("Дата_замены", ListSortDirection.Ascending));
                 _view.SortDescriptions.Add(new SortDescription("Номер_акта", ListSortDirection.Ascending));
                 _view.SortDescriptions.Add(new SortDescription("Населённый_пункт", ListSortDirection.Ascending));

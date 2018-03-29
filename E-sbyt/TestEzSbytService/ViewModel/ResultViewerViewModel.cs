@@ -12,7 +12,7 @@ namespace TMP.Work.AmperM.TestApp.ViewModel
     using TMP.Common.NetHelper;
     using TMP.Shared.Commands;
     using EzSbyt;
-   
+    using TMP.Wpf.CommonControls;
 
     public class ResultViewerViewModel : ViewModel.AbstractViewModel
     {
@@ -315,7 +315,7 @@ namespace TMP.Work.AmperM.TestApp.ViewModel
 
         private FrameworkElement GetDataGridViewer()
         {
-            Controls.PagedDataGrid grid = new Controls.PagedDataGrid();
+            PagedDataGrid grid = new PagedDataGrid();
             grid.View = new PagingCollectionView(Source);
             return grid;
         }
@@ -406,7 +406,7 @@ namespace TMP.Work.AmperM.TestApp.ViewModel
             }
             catch (Exception ex)
             {
-                App.ToLogException(ex);
+                App.LogException(ex);
             }
         }
 

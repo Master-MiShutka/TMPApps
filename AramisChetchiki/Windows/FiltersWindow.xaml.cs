@@ -2,6 +2,8 @@
 
 namespace TMP.WORK.AramisChetchiki
 {
+    using System;
+    using System.ComponentModel;
     using ViewModel;
 
     /// <summary>
@@ -12,6 +14,17 @@ namespace TMP.WORK.AramisChetchiki
         public FiltersWindow()
         {
             InitializeComponent();
+        }
+
+        protected override void OnClosed(EventArgs e)
+        {
+            base.OnClosed(e);
+        }
+
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            e.Cancel = true;
+            Hide();
         }
     }
 }

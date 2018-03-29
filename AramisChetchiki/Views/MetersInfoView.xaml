@@ -27,15 +27,18 @@
                 Content="{Binding CommandUpdate.Header}" />
         </StackPanel>
         <ScrollViewer Grid.Row="1">
-            <WrapPanel Orientation="Horizontal">
-                <matrix:MatrixGridControl
-                    Margin="2"
-                    Matrix="{Binding MetersCountPerTypesPivot}"
-                    ShowRowsTotal="False" />
-                <matrix:MatrixGridControl Margin="2" Matrix="{Binding MetersCountPerTypesPerPoverkaYearPivot}" />
-                <matrix:MatrixGridControl Margin="2" Matrix="{Binding MetersCountPerCategoryForReportPivot}" />
-                <matrix:MatrixGridControl Margin="2" Matrix="{Binding MetersCountPerLocalityPivot}" />
-            </WrapPanel>
+            <ItemsControl Margin="2" ItemsSource="{Binding PivotCollection}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel Orientation="Horizontal" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <matrix:MatrixGridControl Margin="2,1" Matrix="{Binding}" />
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
         </ScrollViewer>
     </Grid>
 </UserControl>

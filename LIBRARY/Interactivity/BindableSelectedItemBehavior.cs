@@ -8,7 +8,7 @@ using System.Windows;
 using System.Windows.Controls;
 using Interactivity;
 
-namespace TMP.Work.AmperM.TestApp.Controls.RepositoryControl
+namespace Interactivity
 {
     public class BindableSelectedItemBehavior : Behavior<TreeView>
     {

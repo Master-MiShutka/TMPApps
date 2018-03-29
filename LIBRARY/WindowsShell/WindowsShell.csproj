@@ -29,6 +29,12 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>TMPDevLabs.pfx</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -248,6 +254,7 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <None Include="TMPDevLabs.pfx" />
     <None Include="WindowsAPICodePack\Design\ShellObjects.cd" />
     <None Include="WindowsAPICodePack\Design\ShellThumbnailClassDiagram.cd" />
   </ItemGroup>

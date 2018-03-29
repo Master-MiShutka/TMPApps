@@ -49,6 +49,7 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
             <StackPanel Orientation="Horizontal">
                 <Label VerticalAlignment="Center" Content="Вид" />
@@ -88,6 +89,7 @@
                 BindableColumns="{Binding TableColumns}"
                 ContextMenu="{StaticResource TableContextMenu}"
                 ItemsSource="{Binding CollectionOfMeters}" />
+            <controls:CollectionViewNavigator Grid.Row="4" DataContext="{Binding CollectionOfMeters}" />
         </Grid>
     </Grid>
 </Window>

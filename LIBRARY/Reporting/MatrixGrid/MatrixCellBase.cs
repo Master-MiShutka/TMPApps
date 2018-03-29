@@ -24,7 +24,7 @@
             this.GridColumnSpan = columnSpan;
 
 #if DEBUG
-            this.ToolTip = ToString();
+            this.ToolTip = string.IsNullOrWhiteSpace(this.ToolTip) ? ToString() : ToString() + "\n" + this.ToolTip;
 #endif
         }
     }

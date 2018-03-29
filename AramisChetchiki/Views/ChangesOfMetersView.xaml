@@ -24,6 +24,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <controls:BusyControl Grid.RowSpan="2" Visibility="{Binding IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}" />
         <StackPanel
@@ -52,16 +53,12 @@
                 Padding="10,0"
                 Command="{Binding CommandExport}"
                 Content="{Binding CommandExport.Header}" />
-            <Button
-                Margin="0,2,5,2"
-                Padding="10,0"
-                Command="{Binding CommandStatistic}"
-                Content="{Binding CommandStatistic.Header}" />
         </StackPanel>
         <controls:TableView
             x:Name="table"
-            Grid.Row="1"            
+            Grid.Row="1"
             BindableColumns="{Binding TableColumns}"
             ItemsSource="{Binding View}" />
+        <controls:CollectionViewNavigator Grid.Row="2" DataContext="{Binding View}" />
     </Grid>
 </UserControl>

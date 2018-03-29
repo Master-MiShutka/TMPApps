@@ -34,7 +34,7 @@ namespace Xceed.Wpf.DataGrid.Extensions
                         FrameworkElementFactory factory = new FrameworkElementFactory(typeof(DataGridCheckBox));
                         factory.SetBinding(DataGridCheckBox.IsCheckedProperty, new Binding(field.Name));
 
-                        result.Add(new UnboundColumn()
+                       result.Add(new UnboundColumn()
                         {
                             Title = field.DisplayName,
                             FieldName = field.Name,

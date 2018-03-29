@@ -30,6 +30,12 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>TMPDevLabs.pfx</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Ookii.Dialogs.Wpf, Version=1.0.0.0, Culture=neutral, PublicKeyToken=0c15020868fd6249, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Ookii.Dialogs.1.0\lib\net35\Ookii.Dialogs.Wpf.dll</HintPath>
@@ -65,6 +71,18 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="PagedDataGrid\CollectionViewNavigator.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="PagedDataGrid\PagedDataGrid.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="SelectFileTextBox.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="SelectFolderTextBox.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -72,6 +90,10 @@
     <Page Include="TableView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\FullRowItemSelectTreeViewStyle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Themes\Generic.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -93,17 +115,20 @@
     </Compile>
     <Compile Include="Conveters\BooleanOrConverter.cs" />
     <Compile Include="Conveters\EnumBindingConverter.cs" />
+    <Compile Include="Conveters\EnumBooleanConverter.cs" />
     <Compile Include="Conveters\ExpandCollapseToggleMargin.cs" />
     <Compile Include="Conveters\IndexConverter.cs" />
     <Compile Include="Conveters\InverseBoolToVisibilityConverter.cs" />
     <Compile Include="Conveters\ItemsControlItemIndexConverter.cs" />
     <Compile Include="Conveters\MarkupConverter.cs" />
     <Compile Include="Conveters\ItemsControlItemsToVisibilityConverter.cs" />
+    <Compile Include="Conveters\MultibindingStringFormatConverter.cs" />
     <Compile Include="Conveters\NullOrEmptyToVisibilityConverter.cs" />
     <Compile Include="Conveters\NullToUnsetValueConverter.cs" />
     <Compile Include="Conveters\ParametersToOneConverter.cs" />
     <Compile Include="Conveters\RemoveSpacesInTextConverter.cs" />
     <Compile Include="Conveters\TextSpaceConverter.cs" />
+    <Compile Include="Conveters\TreeViewMarginConverter.cs" />
     <Compile Include="DelegateCommand.cs" />
     <Compile Include="Extensions\DependencyExtensions.cs" />
     <Compile Include="Extensions\GridViewColumns.cs" />
@@ -119,6 +144,13 @@
       <DependentUpon>LabelledTextBox.xaml</DependentUpon>
     </Compile>
     <Compile Include="LayoutGroup.cs" />
+    <Compile Include="PagedDataGrid\CollectionViewNavigator.xaml.cs">
+      <DependentUpon>CollectionViewNavigator.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="PagedDataGrid\PagedDataGrid.xaml.cs">
+      <DependentUpon>PagedDataGrid.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="PagedDataGrid\PagingCollectionView.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -131,6 +163,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <Compile Include="SelectFileTextBox.xaml.cs">
+      <DependentUpon>SelectFileTextBox.xaml</DependentUpon>
     </Compile>
     <Compile Include="SelectFolderTextBox.xaml.cs">
       <DependentUpon>SelectFolderTextBox.xaml</DependentUpon>
@@ -152,6 +187,7 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <None Include="TMPDevLabs.pfx" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\ExtendedWPFToolkitSolution\Src\Xceed.Wpf.DataGrid\Xceed.Wpf.DataGrid.csproj">

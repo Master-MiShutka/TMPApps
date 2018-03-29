@@ -173,7 +173,7 @@ namespace TMP.WORK.AramisChetchiki.ViewModel
             if (meters == null)
                 throw new ArgumentNullException("Meters collection");
 
-            _collectionOfMeters = new ListCollectionView(meters);
+            _collectionOfMeters = new TMP.UI.Controls.WPF.PagingCollectionView(meters);
 
             //SummaryInfoViewModel.Meters = meters as IList<Model.Meter>;
 
