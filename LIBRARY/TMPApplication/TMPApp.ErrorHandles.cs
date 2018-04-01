@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Windows;
 
 namespace TMPApplication
 {
@@ -50,6 +51,7 @@ namespace TMPApplication
 
         private static void Dispatcher_UnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
         {
+            TMPApp app = Application.Current as TMPApp;
 #if DEBUG
             System.Diagnostics.Debug.WriteLine(TMPApp.GetExceptionDetails(e.Exception));
 #endif

@@ -69,19 +69,19 @@
                             x:Name="sortUp"
                             Grid.Column="2"
                             Fill="{DynamicResource AccentColorBrush}"
-                            Stroke="Transparent"
-                            StrokeThickness="1"
                             Points="4,0 0,8 8,8"
                             Stretch="Uniform"
+                            Stroke="Transparent"
+                            StrokeThickness="1"
                             Visibility="Collapsed" />
                         <Polygon
                             x:Name="sortDown"
                             Grid.Column="2"
                             Fill="{DynamicResource AccentColorBrush}"
-                            Stroke="Transparent"
-                            StrokeThickness="1"
                             Points="0,0 8,0 4,8"
                             Stretch="Uniform"
+                            Stroke="Transparent"
+                            StrokeThickness="1"
                             Visibility="Collapsed" />
                         <local:TableViewHeaderThumb Grid.Column="3" Style="{StaticResource TableViewHeaderThumbStyle}" />
                     </Grid>
@@ -261,7 +261,7 @@
         <Setter Property="Background" Value="{DynamicResource ControlBackgroundBrush}" />
         <Setter Property="BorderThickness" Value="1" />
         <Setter Property="BorderBrush" Value="{DynamicResource ControlBorderBrush}" />
-        <Setter Property="VirtualizingStackPanel.IsVirtualizing" Value="True"/>
+        <Setter Property="VirtualizingStackPanel.IsVirtualizing" Value="True" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="local:TableView">
@@ -280,16 +280,16 @@
                             <local:TableViewHeaderPresenter
                                 x:Name="PART_HeaderPresenter"
                                 Grid.Row="0"
-                                Style="{StaticResource headerPresenterStyle}"
                                 ItemContainerStyle="{StaticResource columnHeaderStyle}"
-                                ItemsSource="{Binding Path=Columns, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:TableView}}}" />
+                                ItemsSource="{Binding Path=Columns, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:TableView}}}"
+                                Style="{StaticResource headerPresenterStyle}" />
 
                             <local:TableViewRowsPresenter
                                 x:Name="PART_RowsPresenter"
                                 Grid.Row="1"
-                                Style="{StaticResource rowsPresenterStyle}"
                                 ItemContainerStyle="{StaticResource cellsPresenterStyle}"
-                                ItemsSource="{Binding Path=ItemsSource, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:TableView}}}" />
+                                ItemsSource="{Binding Path=ItemsSource, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:TableView}}}"
+                                Style="{StaticResource rowsPresenterStyle}" />
                         </Grid>
                     </Border>
                 </ControlTemplate>

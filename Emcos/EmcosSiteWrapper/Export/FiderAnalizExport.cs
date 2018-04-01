@@ -50,8 +50,7 @@ namespace TMP.Work.Emcos.Export
                 IList<Substation> list = grouping.Cast<Substation>()
                     .OrderBy(x => x.Voltage)
                     .ToList<Substation>();
-                if (list == null)
-                    continue;
+
                 var departament = list.FirstOrDefault().Departament;
                 sheet = book.Worksheets.Add(departament);
                 CreateSheetHeader(departament);
@@ -66,8 +65,6 @@ namespace TMP.Work.Emcos.Export
                     var substation = list[index];
 
                     IList<IBalansItem> sections = substation.Children.Where((c) => c.Type == Model.ElementTypes.SECTION && (c as SubstationSection).IsLowVoltage).ToList();
-                    if (sections == null)
-                        continue;
                     foreach (IBalansItem section in sections)
                     {
                         var bss = section as SubstationSection;
@@ -131,7 +128,7 @@ namespace TMP.Work.Emcos.Export
             sheet.HeaderFooter.OddHeader.LeftAlignedText = exportInfo.Title;
             sheet.HeaderFooter.OddHeader.RightAlignedText = string.Format("Экспортировано: {0}", DateTime.Now);
             // нижний колонтитул
-            sheet.HeaderFooter.OddHeader.RightAlignedText = String.Format("Стр. {0} из {1}", ExcelHeaderFooter.PageNumber, ExcelHeaderFooter.NumberOfPages);
+            sheet.HeaderFooter.OddHeader.CenteredText = String.Format("Стр. {0} из {1}", ExcelHeaderFooter.PageNumber, ExcelHeaderFooter.NumberOfPages);
 
             sheet.PrinterSettings.PaperSize = ePaperSize.A4;
             // установка параметров страницы

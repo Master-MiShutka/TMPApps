@@ -400,33 +400,24 @@ namespace TMP.Work.Emcos.Controls
 		/// <param name="text"></param>
 		public void DispatchActiveStateChangedEvent(bool active, string text)
 		{
-			if (ActiveStateChanged != null)
-			{
-				ActiveStateChanged(new SearchBoxEventArgs(active, text));
-			}
-		}
+            ActiveStateChanged?.Invoke(new SearchBoxEventArgs(active, text));
+        }
 
 		/// <summary>
 		/// 
 		/// </summary>
 		public void DispatchClearedEvent()
 		{
-			if (Cleared != null)
-			{
-				Cleared();
-			}
-		}
+            Cleared?.Invoke();
+        }
 
 		/// <summary>
 		/// 
 		/// </summary>
 		public void DispatchAddToNewClickedEvent()
 		{
-			if (AddToNewClicked != null)
-			{
-				AddToNewClicked(new SearchBoxAddToNewEventArgs());
-			}
-		}
+            AddToNewClicked?.Invoke(new SearchBoxAddToNewEventArgs());
+        }
 
 		/// <summary>
 		/// 
@@ -434,11 +425,8 @@ namespace TMP.Work.Emcos.Controls
 		/// <param name="name"></param>
 		public void DispatchAddToPlaylistClickedEvent(string name)
 		{
-			if (AddClicked != null)
-			{
-				AddClicked(new SearchBoxAddEventArgs(name));
-			}
-		}
+            AddClicked?.Invoke(new SearchBoxAddEventArgs(name));
+        }
 
 		/// <summary>
 		/// 
@@ -446,11 +434,8 @@ namespace TMP.Work.Emcos.Controls
 		/// <param name="name"></param>
 		public void DispatchRemoveFromPlaylistClickedEvent(string name)
 		{
-			if (RemoveClicked != null)
-			{
-				RemoveClicked(new SearchBoxRemoveEventArgs(name));
-			}
-		}
+            RemoveClicked?.Invoke(new SearchBoxRemoveEventArgs(name));
+        }
 
 		/// <summary>
 		/// 
@@ -459,11 +444,8 @@ namespace TMP.Work.Emcos.Controls
 		/// <param name="text"></param>
 		public void DispatchTextChangedEvent(bool active, string text)
 		{
-			if (TextChanged != null)
-			{
-				TextChanged(new SearchBoxEventArgs(active, text));
-			}
-		}
+            TextChanged?.Invoke(new SearchBoxEventArgs(active, text));
+        }
 
 		#endregion
 	}

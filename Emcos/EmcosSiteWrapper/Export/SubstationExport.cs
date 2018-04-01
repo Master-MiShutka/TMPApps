@@ -221,7 +221,7 @@ namespace TMP.Work.Emcos.Export
             sheet.HeaderFooter.OddHeader.LeftAlignedText = "ПС " + balansGroup.SubstationTitle;
             sheet.HeaderFooter.OddHeader.RightAlignedText = string.Format("Экспортировано: {0}", DateTime.Now);
             // нижний колонтитул
-            sheet.HeaderFooter.OddHeader.RightAlignedText = String.Format("Стр. {0} из {1}", ExcelHeaderFooter.PageNumber, ExcelHeaderFooter.NumberOfPages);
+            sheet.HeaderFooter.OddHeader.CenteredText = String.Format("Стр. {0} из {1}", ExcelHeaderFooter.PageNumber, ExcelHeaderFooter.NumberOfPages);
 
             sheet.PrinterSettings.PaperSize = ePaperSize.A4;
             // установка параметров страницы

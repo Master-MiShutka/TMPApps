@@ -1,153 +1,129 @@
-﻿<!--***********************************************************************************
+﻿<!--
+    ***********************************************************************************
+    
+    Extended WPF Toolkit
+    
+    Copyright (C) 2007-2013 Xceed Software Inc.
+    
+    This program is provided to you under the terms of the Microsoft Public
+    License (Ms-PL) as published at http://wpftoolkit.codeplex.com/license
+    
+    For more features, controls, and fast professional support,
+    pick up the Plus Edition at http://xceed.com/wpf_toolkit
+    
+    Stay informed: follow @datagrid on Twitter or Like http://facebook.com/datagrids
+    
+    **********************************************************************************
+-->
 
-   Extended WPF Toolkit
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:conv="clr-namespace:Xceed.Wpf.DataGrid.Converters"
+    xmlns:local="clr-namespace:Xceed.Wpf.DataGrid"
+    xmlns:markup="clr-namespace:Xceed.Wpf.DataGrid.Markup"
+    xmlns:views="clr-namespace:Xceed.Wpf.DataGrid.Views">
 
-   Copyright (C) 2007-2013 Xceed Software Inc.
+    <ResourceDictionary.MergedDictionaries>
 
-   This program is provided to you under the terms of the Microsoft Public
-   License (Ms-PL) as published at http://wpftoolkit.codeplex.com/license 
+        <!--  Include the view independant, color-scheme independant, theme resources  -->
+        <markup:DataGridThemeResourceDictionary Source="Resources/Luna.Resources.xaml" />
 
-   For more features, controls, and fast professional support,
-   pick up the Plus Edition at http://xceed.com/wpf_toolkit
+        <!--  Include the view dependant, color-scheme independant, theme graphics  -->
+        <markup:DataGridThemeResourceDictionary Source="Resources/TableView.Luna.Graphics.xaml" />
 
-   Stay informed: follow @datagrid on Twitter or Like http://facebook.com/datagrids
+        <!--  Include the view independant, color-scheme dependant, theme resources  -->
+        <markup:DataGridThemeResourceDictionary Source="Resources/Luna.homestead.Resources.xaml" />
 
-  **********************************************************************************-->
+        <!--  Include the standard grid element templates  -->
+        <markup:DataGridThemeResourceDictionary Source="../Common/TableView.GridElementTemplates.xaml" />
 
-<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:local="clr-namespace:Xceed.Wpf.DataGrid"
-                    xmlns:conv="clr-namespace:Xceed.Wpf.DataGrid.Converters"
-                    xmlns:markup="clr-namespace:Xceed.Wpf.DataGrid.Markup"
-                    xmlns:views="clr-namespace:Xceed.Wpf.DataGrid.Views">
+    </ResourceDictionary.MergedDictionaries>
 
-   <ResourceDictionary.MergedDictionaries>
+    <!--  ===================================================================  -->
+    <!--  Resources specific to this View/Theme/ColorScheme  -->
+    <!--  ===================================================================  -->
 
-      <!-- Include the view independant, color-scheme independant, theme resources -->
-      <markup:DataGridThemeResourceDictionary Source="Resources/Luna.Resources.xaml" />
+    <SolidColorBrush x:Key="gridLineBrush" Color="Gray" />
 
-      <!-- Include the view dependant, color-scheme independant, theme graphics -->
-      <markup:DataGridThemeResourceDictionary Source="Resources/TableView.Luna.Graphics.xaml" />
+    <SolidColorBrush x:Key="headerBackgroundBrush" Color="#EBEADB" />
 
-      <!-- Include the view independant, color-scheme dependant, theme resources -->
-      <markup:DataGridThemeResourceDictionary Source="Resources/Luna.homestead.Resources.xaml" />
+    <SolidColorBrush x:Key="headerForegroundBrush" Color="Black" />
 
-      <!-- Include the standard grid element templates -->
-      <markup:DataGridThemeResourceDictionary Source="../Common/TableView.GridElementTemplates.xaml" />
+    <SolidColorBrush x:Key="headerDelimiterDarkBorderBrush" Color="#C7C5B2" />
 
-   </ResourceDictionary.MergedDictionaries>
+    <SolidColorBrush x:Key="headerDelimiterLightBorderBrush" Color="White" />
 
-   <!-- =================================================================== -->
-   <!-- Resources specific to this View/Theme/ColorScheme                   -->
-   <!-- =================================================================== -->
+    <SolidColorBrush x:Key="headerHotBackgroundBrush" Color="#FAF8F3" />
 
-   <SolidColorBrush x:Key="gridLineBrush"
-                    Color="Gray" />
+    <SolidColorBrush x:Key="headerPressedBorderBrush" Color="#A5A597" />
 
-   <SolidColorBrush x:Key="headerBackgroundBrush"
-                    Color="#EBEADB" />
+    <SolidColorBrush x:Key="headerPressedLightInnerHighlightBrush" Color="#D0D1C9" />
 
-   <SolidColorBrush x:Key="headerForegroundBrush"
-                    Color="Black" />
+    <SolidColorBrush x:Key="headerPressedDarkInnerHighlightBrush" Color="#C1C2B8" />
 
-   <SolidColorBrush x:Key="headerDelimiterDarkBorderBrush"
-                    Color="#C7C5B2" />
+    <SolidColorBrush x:Key="headerPressedBackgroundBrush" Color="#DEDFD8" />
 
-   <SolidColorBrush x:Key="headerDelimiterLightBorderBrush"
-                    Color="White" />
+    <SolidColorBrush x:Key="warningBackgroundBrush" Color="#FFC400" />
 
-   <SolidColorBrush x:Key="headerHotBackgroundBrush"
-                    Color="#FAF8F3" />
+    <SolidColorBrush x:Key="warningForegroundBrush" Color="Black" />
 
-   <SolidColorBrush x:Key="headerPressedBorderBrush"
-                    Color="#A5A597" />
+    <LinearGradientBrush x:Key="headerHighlightVerticalBorderBrush" StartPoint="0,0.5" EndPoint="1,0.5">
 
-   <SolidColorBrush x:Key="headerPressedLightInnerHighlightBrush"
-                    Color="#D0D1C9" />
+        <GradientStop Offset="0" Color="#ECE9D8" />
 
-   <SolidColorBrush x:Key="headerPressedDarkInnerHighlightBrush"
-                    Color="#C1C2B8" />
+        <GradientStop Offset="1" Color="#CBC7B8" />
 
-   <SolidColorBrush x:Key="headerPressedBackgroundBrush"
-                    Color="#DEDFD8" />
+    </LinearGradientBrush>
 
-   <SolidColorBrush x:Key="warningBackgroundBrush"
-                    Color="#FFC400" />
+    <LinearGradientBrush x:Key="headerHighlightHorizontalBorderBrush" StartPoint="0,0" EndPoint="0,1">
 
-   <SolidColorBrush x:Key="warningForegroundBrush"
-                    Color="Black" />
+        <GradientStop Offset="0" Color="#ECE9D8" />
 
-   <LinearGradientBrush x:Key="headerHighlightVerticalBorderBrush"
-                        StartPoint="0,0.5"
-                        EndPoint="1,0.5">
+        <GradientStop Offset="1" Color="#CBC7B8" />
 
-      <GradientStop Offset="0"
-                    Color="#ECE9D8" />
+    </LinearGradientBrush>
 
-      <GradientStop Offset="1"
-                    Color="#CBC7B8" />
+    <SolidColorBrush x:Key="headerHotHighlightVerticalBorderBrush" Color="#CF7225" />
 
-   </LinearGradientBrush>
+    <SolidColorBrush x:Key="headerHotHighlightVerticalBackgroundBrush" Color="#E3914F" />
 
-   <LinearGradientBrush x:Key="headerHighlightHorizontalBorderBrush"
-                        StartPoint="0,0"
-                        EndPoint="0,1">
+    <SolidColorBrush x:Key="headerHotHighlightHorizontalBorderBrush" Color="#CF7225" />
 
-      <GradientStop Offset="0"
-                    Color="#ECE9D8" />
+    <SolidColorBrush x:Key="headerHotHighlightHorizontalBackgroundBrush" Color="#E3914F" />
 
-      <GradientStop Offset="1"
-                    Color="#CBC7B8" />
+    <LinearGradientBrush x:Key="groupByControlBackgroundBrush" StartPoint="0,0.5" EndPoint="1,0.5">
 
-   </LinearGradientBrush>
+        <GradientStop Offset="0" Color="#ACA899" />
+        <GradientStop Offset="1" Color="#D6D3CD" />
 
-   <SolidColorBrush x:Key="headerHotHighlightVerticalBorderBrush"
-                    Color="#CF7225" />
+    </LinearGradientBrush>
 
-   <SolidColorBrush x:Key="headerHotHighlightVerticalBackgroundBrush"
-                    Color="#E3914F" />
+    <SolidColorBrush x:Key="groupByControlForegroundBrush" Color="Black" />
 
-   <SolidColorBrush x:Key="headerHotHighlightHorizontalBorderBrush"
-                    Color="#CF7225" />
+    <!--  ===================================================================  -->
+    <!--  Templates specific to this View/Theme/ColorScheme  -->
+    <!--  ===================================================================  -->
 
-   <SolidColorBrush x:Key="headerHotHighlightHorizontalBackgroundBrush"
-                    Color="#E3914F" />
+    <!--
+        **************************
+        * TEMPLATE: RowSelector
+        **************************
+    -->
+    <ControlTemplate x:Key="tableViewRowSelectorTemplate" TargetType="local:RowSelector">
 
-   <LinearGradientBrush x:Key="groupByControlBackgroundBrush"
-                        StartPoint="0,0.5"
-                        EndPoint="1,0.5">
+        <!--  This Grid is used to position the resizer Thumb over the RowSelector  -->
+        <Grid>
 
-      <GradientStop Offset="0"
-                    Color="#ACA899" />
-      <GradientStop Offset="1"
-                    Color="#D6D3CD" />
+            <!--
+                Since we use a very specific border arrangement to represent the RowSelector,
+                we do not use the TemplatedParent's BorderBrush and BorderThickness properties.
+            -->
+            <Border x:Name="rootBorder" Background="{TemplateBinding Background}">
 
-   </LinearGradientBrush>
+                <Grid>
 
-   <SolidColorBrush x:Key="groupByControlForegroundBrush"
-                    Color="Black" />
-
-   <!-- =================================================================== -->
-   <!-- Templates specific to this View/Theme/ColorScheme                   -->
-   <!-- =================================================================== -->
-
-   <!--**************************
-    * TEMPLATE: RowSelector 
-    ************************** -->
-   <ControlTemplate x:Key="tableViewRowSelectorTemplate"
-                    TargetType="local:RowSelector">
-
-      <!-- This Grid is used to position the resizer Thumb over the RowSelector -->
-      <Grid>
-
-         <!-- Since we use a very specific border arrangement to represent the RowSelector,
-              we do not use the TemplatedParent's BorderBrush and BorderThickness properties.-->
-         <Border x:Name="rootBorder"
-                 Background="{TemplateBinding Background}">
-
-            <Grid>
-
-               <Border Padding="{TemplateBinding Padding}">
+                    <Border Padding="{TemplateBinding Padding}">
 
                         <StackPanel Orientation="Horizontal">
                             <ContentPresenter VerticalAlignment="Center" Content="{TemplateBinding ItemIndex, Converter={StaticResource intAdditionConverter}, ConverterParameter=1}" />
@@ -160,1646 +136,1450 @@
                                 ContentTemplateSelector="{TemplateBinding ContentTemplateSelector}" />
                         </StackPanel>
 
-               </Border>
+                    </Border>
 
-               <Border x:Name="isPressedDarkInnerHighlight"
-                       BorderThickness="1,1,0,0">
+                    <Border x:Name="isPressedDarkInnerHighlight" BorderThickness="1,1,0,0">
 
-                  <Border x:Name="isPressedLightInnerHighlight"
-                          BorderThickness="1,1,0,0" />
-               </Border>
+                        <Border x:Name="isPressedLightInnerHighlight" BorderThickness="1,1,0,0" />
+                    </Border>
 
-            </Grid>
+                </Grid>
 
-         </Border>
+            </Border>
 
-         <Border x:Name="rightBorder"
-                 Width="3"
-                 HorizontalAlignment="Right"
-                 Background="{StaticResource headerHighlightVerticalBorderBrush}" />
+            <Border
+                x:Name="rightBorder"
+                Width="3"
+                HorizontalAlignment="Right"
+                Background="{StaticResource headerHighlightVerticalBorderBrush}" />
 
-         <Rectangle x:Name="topBorder"
-                    Fill="{StaticResource headerDelimiterLightBorderBrush}"
-                    HorizontalAlignment="Stretch"
-                    VerticalAlignment="Top"
-                    Height="1"
-                    Margin="3,0,4,0" />
+            <Rectangle
+                x:Name="topBorder"
+                Height="1"
+                Margin="3,0,4,0"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Top"
+                Fill="{StaticResource headerDelimiterLightBorderBrush}" />
 
-         <Rectangle x:Name="bottomBorder"
-                    Fill="{StaticResource headerDelimiterDarkBorderBrush}"
-                    HorizontalAlignment="Stretch"
-                    VerticalAlignment="Bottom"
-                    Height="1"
-                    Margin="3,0,4,0" />
+            <Rectangle
+                x:Name="bottomBorder"
+                Height="1"
+                Margin="3,0,4,0"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Bottom"
+                Fill="{StaticResource headerDelimiterDarkBorderBrush}" />
 
-         <!-- Thumb that is used to resize the Row. -->
-         <Thumb x:Name="PART_RowResizerThumb"
-                Style="{StaticResource invisibleThumbStyle}"
-                VerticalAlignment="Bottom" />
+            <!--  Thumb that is used to resize the Row.  -->
+            <Thumb
+                x:Name="PART_RowResizerThumb"
+                VerticalAlignment="Bottom"
+                Style="{StaticResource invisibleThumbStyle}" />
 
-      </Grid>
+        </Grid>
 
-      <ControlTemplate.Triggers>
+        <ControlTemplate.Triggers>
 
-         <Trigger Property="IsMouseOver"
-                  Value="True">
+            <Trigger Property="IsMouseOver" Value="True">
 
-            <Setter TargetName="rootBorder"
-                    Property="Background"
-                    Value="{StaticResource headerHotBackgroundBrush}" />
+                <Setter TargetName="rootBorder" Property="Background" Value="{StaticResource headerHotBackgroundBrush}" />
 
-            <Setter TargetName="rightBorder"
-                    Property="Background"
-                    Value="{StaticResource headerHotHighlightVerticalBackgroundBrush}" />
+                <Setter TargetName="rightBorder" Property="Background" Value="{StaticResource headerHotHighlightVerticalBackgroundBrush}" />
 
-            <Setter TargetName="rightBorder"
-                    Property="BorderBrush"
-                    Value="{StaticResource headerHotHighlightVerticalBorderBrush}" />
+                <Setter TargetName="rightBorder" Property="BorderBrush" Value="{StaticResource headerHotHighlightVerticalBorderBrush}" />
 
-            <Setter TargetName="rightBorder"
-                    Property="BorderThickness"
-                    Value="0,1,1,1" />
+                <Setter TargetName="rightBorder" Property="BorderThickness" Value="0,1,1,1" />
 
-            <Setter TargetName="rightBorder"
-                    Property="CornerRadius"
-                    Value="0,3,3,0" />
+                <Setter TargetName="rightBorder" Property="CornerRadius" Value="0,3,3,0" />
 
-            <Setter TargetName="topBorder"
-                    Property="Visibility"
-                    Value="Hidden" />
+                <Setter TargetName="topBorder" Property="Visibility" Value="Hidden" />
 
-            <Setter TargetName="bottomBorder"
-                    Property="Visibility"
-                    Value="Hidden" />
+                <Setter TargetName="bottomBorder" Property="Visibility" Value="Hidden" />
 
-         </Trigger>
+            </Trigger>
 
-         <Trigger Property="IsPressed"
-                  Value="True">
+            <Trigger Property="IsPressed" Value="True">
 
-            <Setter TargetName="rootBorder"
-                    Property="Background"
-                    Value="{StaticResource headerPressedBackgroundBrush}" />
+                <Setter TargetName="rootBorder" Property="Background" Value="{StaticResource headerPressedBackgroundBrush}" />
 
-            <Setter TargetName="rootBorder"
-                    Property="BorderBrush"
-                    Value="{StaticResource headerPressedBorderBrush}" />
+                <Setter TargetName="rootBorder" Property="BorderBrush" Value="{StaticResource headerPressedBorderBrush}" />
 
-            <Setter TargetName="rootBorder"
-                    Property="BorderThickness"
-                    Value="0,1,1,1" />
+                <Setter TargetName="rootBorder" Property="BorderThickness" Value="0,1,1,1" />
 
-            <Setter TargetName="contentPresenter"
-                    Property="Margin"
-                    Value="3,0,0,0" />
+                <Setter TargetName="contentPresenter" Property="Margin" Value="3,0,0,0" />
 
-            <Setter TargetName="rightBorder"
-                    Property="Visibility"
-                    Value="Hidden" />
+                <Setter TargetName="rightBorder" Property="Visibility" Value="Hidden" />
 
-            <Setter TargetName="isPressedLightInnerHighlight"
-                    Property="BorderBrush"
-                    Value="{StaticResource headerPressedLightInnerHighlightBrush}" />
+                <Setter TargetName="isPressedLightInnerHighlight" Property="BorderBrush" Value="{StaticResource headerPressedLightInnerHighlightBrush}" />
 
-            <Setter TargetName="isPressedDarkInnerHighlight"
-                    Property="BorderBrush"
-                    Value="{StaticResource headerPressedDarkInnerHighlightBrush}" />
+                <Setter TargetName="isPressedDarkInnerHighlight" Property="BorderBrush" Value="{StaticResource headerPressedDarkInnerHighlightBrush}" />
 
-         </Trigger>
+            </Trigger>
 
-      </ControlTemplate.Triggers>
+        </ControlTemplate.Triggers>
 
-   </ControlTemplate>
+    </ControlTemplate>
 
-   <!--**************************
-    * TEMPLATE: ColumnManagerCell 
-    ************************** -->
-   <conv:SortingDirectionToBooleanConverter x:Key="SortingDirectionToBooleanConverter" />
+    <!--
+        **************************
+        * TEMPLATE: ColumnManagerCell
+        **************************
+    -->
+    <conv:SortingDirectionToBooleanConverter x:Key="SortingDirectionToBooleanConverter" />
 
-   <ControlTemplate x:Key="tableViewColumnManagerCellTemplate"
-                    TargetType="local:ColumnManagerCell">
+    <ControlTemplate x:Key="tableViewColumnManagerCellTemplate" TargetType="local:ColumnManagerCell">
 
-      <!-- This Grid is used to position the resizer Thumb over the ColumnManagerCell -->
-      <Grid>
+        <!--  This Grid is used to position the resizer Thumb over the ColumnManagerCell  -->
+        <Grid>
 
-         <Border BorderBrush="{TemplateBinding BorderBrush}"
-                 BorderThickness="{TemplateBinding BorderThickness}">
+            <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
 
-            <Grid>
+                <Grid>
 
-               <DockPanel>
+                    <DockPanel>
 
-                  <Border x:Name="thumbToggleBackgroundBorder"
-                          DockPanel.Dock="Right">
+                        <Border x:Name="thumbToggleBackgroundBorder" DockPanel.Dock="Right">
 
-                     <Grid>
+                            <Grid>
 
-                        <Border x:Name="toggleDelimeterBorder"
-                                BorderBrush="{StaticResource headerDelimiterDarkBorderBrush}"
-                                BorderThickness="1,0,0,0"
-                                Margin="0,4,0,4"
-                                Background="Transparent"
-                                Visibility="Collapsed">
+                                <Border
+                                    x:Name="toggleDelimeterBorder"
+                                    Margin="0,4,0,4"
+                                    Background="Transparent"
+                                    BorderBrush="{StaticResource headerDelimiterDarkBorderBrush}"
+                                    BorderThickness="1,0,0,0"
+                                    Visibility="Collapsed">
 
-                           <Border x:Name="toggleDelimeterBorder2"
-                                   BorderBrush="{StaticResource headerDelimiterLightBorderBrush}"
-                                   BorderThickness="1,0,0,0"
-                                   Margin="0,0,0,0"
-                                   Background="Transparent"
-                                   Visibility="Collapsed">
+                                    <Border
+                                        x:Name="toggleDelimeterBorder2"
+                                        Margin="0,0,0,0"
+                                        Background="Transparent"
+                                        BorderBrush="{StaticResource headerDelimiterLightBorderBrush}"
+                                        BorderThickness="1,0,0,0"
+                                        Visibility="Collapsed" />
 
-                           </Border>
+                                </Border>
+
+                                <ToggleButton
+                                    x:Name="toggleButton"
+                                    Margin="2,0,0,0"
+                                    VerticalAlignment="Stretch"
+                                    Focusable="False"
+                                    Opacity="0.5"
+                                    Visibility="Collapsed" />
+                            </Grid>
 
                         </Border>
 
-                        <ToggleButton x:Name="toggleButton"
-                                      VerticalAlignment="Stretch"
-                                      Focusable="False"
-                                      Visibility="Collapsed"
-                                      Margin="2,0,0,0"
-                                      Opacity="0.5" />
-                     </Grid>
+                        <!--
+                            Since we use a very specific border arrangement to represent the ColumnManagerCell,
+                            we do not use the TemplatedParent's BorderBrush and BorderThickness properties.
+                        -->
+                        <Border x:Name="rootBorder" Background="{TemplateBinding Background}">
 
-                  </Border>
+                            <Grid>
 
-                  <!-- Since we use a very specific border arrangement to represent the ColumnManagerCell,
-              we do not use the TemplatedParent's BorderBrush and BorderThickness properties.-->
-                  <Border x:Name="rootBorder"
-                          Background="{TemplateBinding Background}">
+                                <Border Padding="{TemplateBinding Padding}">
 
-                     <Grid>
+                                    <Grid
+                                        x:Name="contentPanel"
+                                        HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                        VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
 
-                        <Border Padding="{TemplateBinding Padding}">
+                                        <!--  Same ContentPresenter as in the base Cell Template.  -->
+                                        <local:CellContentPresenter x:Name="PART_CellContentPresenter" Grid.Column="0" />
 
-                           <Grid x:Name="contentPanel"
-                                 HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                 VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
-                              <Grid.ColumnDefinitions>
-                                 <ColumnDefinition Width="*" />
-                                 <ColumnDefinition Width="Auto" />
-                                 <ColumnDefinition Width="Auto" />
-                              </Grid.ColumnDefinitions>
+                                        <!--
+                                            ContentPresenter that is used to display the sort glyph.
+                                            We explicitely set its Content property to Null to prevent the XAML parser
+                                            from implicitely setting it to its TemplatedParent's Content.
+                                        -->
+                                        <ContentPresenter
+                                            x:Name="sortGlyphPresenter"
+                                            Grid.Column="1"
+                                            Content="{x:Null}"
+                                            ContentTemplate="{x:Null}" />
+                                    </Grid>
 
-                              <!-- Same ContentPresenter as in the base Cell Template. -->
-                              <local:CellContentPresenter x:Name="PART_CellContentPresenter"
-                                                          Grid.Column="0" />
+                                </Border>
 
-                              <!-- ContentPresenter that is used to display the sort glyph.
-                                      We explicitely set its Content property to Null to prevent the XAML parser
-                                      from implicitely setting it to its TemplatedParent's Content. -->
-                              <ContentPresenter x:Name="sortGlyphPresenter"
-                                                Content="{x:Null}"
-                                                ContentTemplate="{x:Null}"
-                                                Grid.Column="1" />
-                           </Grid>
+                            </Grid>
 
                         </Border>
 
-                     </Grid>
+                    </DockPanel>
 
-                  </Border>
+                    <Border
+                        x:Name="bottomBorder"
+                        Height="3"
+                        VerticalAlignment="Bottom"
+                        Background="{StaticResource headerHighlightHorizontalBorderBrush}" />
 
-               </DockPanel>
+                    <Border
+                        x:Name="rightBorder"
+                        Width="2"
+                        Margin="0,3,0,4"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Stretch"
+                        Background="{StaticResource headerDelimiterDarkBorderBrush}"
+                        BorderBrush="{StaticResource headerDelimiterLightBorderBrush}"
+                        BorderThickness="0,0,1,0" />
 
-               <Border x:Name="bottomBorder"
-                       Height="3"
-                       VerticalAlignment="Bottom"
-                       Background="{StaticResource headerHighlightHorizontalBorderBrush}" />
+                    <Border
+                        x:Name="rightPressedBorder"
+                        Width="1"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Stretch"
+                        BorderBrush="{StaticResource headerPressedBorderBrush}"
+                        BorderThickness="0,0,1,0"
+                        Visibility="Hidden" />
 
-               <Border x:Name="rightBorder"
-                       BorderThickness="0,0,1,0"
-                       BorderBrush="{StaticResource headerDelimiterLightBorderBrush}"
-                       Background="{StaticResource headerDelimiterDarkBorderBrush}"
-                       Margin="0,3,0,4"
-                       VerticalAlignment="Stretch"
-                       HorizontalAlignment="Right"
-                       Width="2" />
+                    <Border
+                        x:Name="isPressedDarkInnerHighlight"
+                        Margin="1,0,1,0"
+                        BorderThickness="1,1,0,0">
 
-               <Border x:Name="rightPressedBorder"
-                       BorderThickness="0,0,1,0"
-                       BorderBrush="{StaticResource headerPressedBorderBrush}"
-                       Visibility="Hidden"
-                       VerticalAlignment="Stretch"
-                       HorizontalAlignment="Right"
-                       Width="1" />
+                        <Border x:Name="isPressedLightInnerHighlight" BorderThickness="1,1,0,0" />
 
-               <Border x:Name="isPressedDarkInnerHighlight"
-                       BorderThickness="1,1,0,0"
-                       Margin="1,0,1,0">
+                    </Border>
 
-                  <Border x:Name="isPressedLightInnerHighlight"
-                          BorderThickness="1,1,0,0" />
+                </Grid>
 
-               </Border>
+            </Border>
 
-            </Grid>
-
-         </Border>
-
-         <!-- Thumb that is used to resize the Column. -->
-         <Thumb x:Name="PART_ColumnResizerThumbLeft"
-                Style="{StaticResource invisibleThumbStyle}"
+            <!--  Thumb that is used to resize the Column.  -->
+            <Thumb
+                x:Name="PART_ColumnResizerThumbLeft"
                 Width="6"
-                HorizontalAlignment="Left" />
+                HorizontalAlignment="Left"
+                Style="{StaticResource invisibleThumbStyle}" />
 
-         <!-- Thumb that is used to resize the Column. -->
-         <Thumb x:Name="PART_ColumnResizerThumb"
-                Style="{StaticResource invisibleThumbStyle}"
+            <!--  Thumb that is used to resize the Column.  -->
+            <Thumb
+                x:Name="PART_ColumnResizerThumb"
                 Width="6"
-                HorizontalAlignment="Right" />
-
-      </Grid>
-
-      <ControlTemplate.Triggers>
-         <!-- The following triggers allows the content to correctly align to the center when the mouse is over the ColumnManagerCell and the HorizontalContentAlignment is Center -->
-         <MultiDataTrigger>
-            <MultiDataTrigger.Conditions>
-               <Condition Value="Visible"
-                          Binding="{Binding ElementName=toggleButton, Path=Visibility}" />
-               <Condition Value="Center"
-                          Binding="{Binding RelativeSource={RelativeSource Self},
-                        Path=HorizontalContentAlignment}" />
-            </MultiDataTrigger.Conditions>
-
-            <Setter TargetName="PART_CellContentPresenter"
-                    Property="Margin"
-                    Value="18,0,0,0" />
-         </MultiDataTrigger>
-         <!-- Trigger related to the filteringToggleButton-->
-         <Trigger SourceName="toggleButton"
-                  Property="IsMouseOver"
-                  Value="True">
+                HorizontalAlignment="Right"
+                Style="{StaticResource invisibleThumbStyle}" />
 
-            <Setter TargetName="toggleButton"
-                    Property="Opacity"
-                    Value="1" />
-         </Trigger>
+        </Grid>
 
-         <Trigger Property="IsMouseOver"
-                  Value="True">
+        <ControlTemplate.Triggers>
+            <!--  The following triggers allows the content to correctly align to the center when the mouse is over the ColumnManagerCell and the HorizontalContentAlignment is Center  -->
+            <MultiDataTrigger>
+                <MultiDataTrigger.Conditions>
+                    <Condition Binding="{Binding ElementName=toggleButton, Path=Visibility}" Value="Visible" />
+                    <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=HorizontalContentAlignment}" Value="Center" />
+                </MultiDataTrigger.Conditions>
 
-            <Setter TargetName="rootBorder"
-                    Property="Background"
-                    Value="{StaticResource headerHotBackgroundBrush}" />
+                <Setter TargetName="PART_CellContentPresenter" Property="Margin" Value="18,0,0,0" />
+            </MultiDataTrigger>
+            <!--  Trigger related to the filteringToggleButton  -->
+            <Trigger SourceName="toggleButton" Property="IsMouseOver" Value="True">
 
-            <Setter TargetName="thumbToggleBackgroundBorder"
-                    Property="Background"
-                    Value="{StaticResource headerHotBackgroundBrush}" />
+                <Setter TargetName="toggleButton" Property="Opacity" Value="1" />
+            </Trigger>
 
-            <Setter TargetName="bottomBorder"
-                    Property="Background"
-                    Value="{StaticResource headerHotHighlightHorizontalBackgroundBrush}" />
+            <Trigger Property="IsMouseOver" Value="True">
 
-            <Setter TargetName="bottomBorder"
-                    Property="BorderBrush"
-                    Value="{StaticResource headerHotHighlightHorizontalBorderBrush}" />
-
-            <Setter TargetName="bottomBorder"
-                    Property="BorderThickness"
-                    Value="1,0,1,1" />
-
-            <Setter TargetName="bottomBorder"
-                    Property="CornerRadius"
-                    Value="0,0,3,3" />
-
-            <Setter TargetName="rightBorder"
-                    Property="Visibility"
-                    Value="Hidden" />
-
-         </Trigger>
-
-         <Trigger Property="IsPressed"
-                  Value="True">
-
-            <Setter TargetName="rootBorder"
-                    Property="Background"
-                    Value="{StaticResource headerPressedBackgroundBrush}" />
-
-            <Setter TargetName="thumbToggleBackgroundBorder"
-                    Property="Background"
-                    Value="{StaticResource headerPressedBackgroundBrush}" />
-
-            <Setter TargetName="rootBorder"
-                    Property="BorderBrush"
-                    Value="{StaticResource headerPressedBorderBrush}" />
-
-            <Setter TargetName="rootBorder"
-                    Property="BorderThickness"
-                    Value="1,0,0,0" />
-
-            <Setter TargetName="contentPanel"
-                    Property="Margin"
-                    Value="1,1,-1,-1" />
-
-            <Setter TargetName="bottomBorder"
-                    Property="Visibility"
-                    Value="Hidden" />
-
-            <Setter TargetName="rightPressedBorder"
-                    Property="Visibility"
-                    Value="Visible" />
-
-            <Setter TargetName="isPressedLightInnerHighlight"
-                    Property="BorderBrush"
-                    Value="{StaticResource headerPressedLightInnerHighlightBrush}" />
-
-            <Setter TargetName="isPressedDarkInnerHighlight"
-                    Property="BorderBrush"
-                    Value="{StaticResource headerPressedDarkInnerHighlightBrush}" />
-
-         </Trigger>
+                <Setter TargetName="rootBorder" Property="Background" Value="{StaticResource headerHotBackgroundBrush}" />
 
-         <!-- The following 2 triggers allow to display the appropriate Sort Glyph
-              depending on the ParentColumn's SortDirection. -->
+                <Setter TargetName="thumbToggleBackgroundBorder" Property="Background" Value="{StaticResource headerHotBackgroundBrush}" />
 
-         <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=ParentColumn.SortDirection}"
-                      Value="Ascending">
+                <Setter TargetName="bottomBorder" Property="Background" Value="{StaticResource headerHotHighlightHorizontalBackgroundBrush}" />
 
-            <Setter TargetName="sortGlyphPresenter"
-                    Property="ContentPresenter.ContentTemplate"
-                    Value="{Binding RelativeSource={RelativeSource Self}, Path=(local:DataGridControl.DataGridContext).AscendingSortGlyph}" />
+                <Setter TargetName="bottomBorder" Property="BorderBrush" Value="{StaticResource headerHotHighlightHorizontalBorderBrush}" />
 
-            <Setter TargetName="sortGlyphPresenter"
-                    Property="Margin"
-                    Value="6,0,0,0" />
-
-         </DataTrigger>
-
-         <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=ParentColumn.SortDirection}"
-                      Value="Descending">
-
-            <Setter TargetName="sortGlyphPresenter"
-                    Property="ContentPresenter.ContentTemplate"
-                    Value="{Binding RelativeSource={RelativeSource Self}, Path=(local:DataGridControl.DataGridContext).DescendingSortGlyph}" />
-
-            <Setter TargetName="sortGlyphPresenter"
-                    Property="Margin"
-                    Value="6,0,0,0" />
-
-         </DataTrigger>
-
-         <MultiDataTrigger>
-            <MultiDataTrigger.Conditions>
-               <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=ParentColumn.HasFixedWidth}"
-                          Value="True" />
-
-               <!-- Don't disable resizing if ColumnStretching can be disabled by an 
-                    end-user resize. -->
-               <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=(local:DataGridControl.DataGridContext).RemoveColumnStretchingOnResize}"
-                          Value="False" />
-            </MultiDataTrigger.Conditions>
+                <Setter TargetName="bottomBorder" Property="BorderThickness" Value="1,0,1,1" />
 
-            <Setter TargetName="PART_ColumnResizerThumb"
-                    Property="IsEnabled"
-                    Value="False" />
-         </MultiDataTrigger>
+                <Setter TargetName="bottomBorder" Property="CornerRadius" Value="0,0,3,3" />
 
-         <MultiDataTrigger>
-            <MultiDataTrigger.Conditions>
-               <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=ParentColumn.PreviousVisibleColumn.HasFixedWidth}"
-                          Value="True" />
+                <Setter TargetName="rightBorder" Property="Visibility" Value="Hidden" />
 
-               <!-- Don't disable resizing if ColumnStretching can be disabled by an 
-                    end-user resize. -->
-               <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=(local:DataGridControl.DataGridContext).RemoveColumnStretchingOnResize}"
-                          Value="False" />
-            </MultiDataTrigger.Conditions>
+            </Trigger>
 
-            <Setter TargetName="PART_ColumnResizerThumbLeft"
-                    Property="IsEnabled"
-                    Value="False" />
-         </MultiDataTrigger>
+            <Trigger Property="IsPressed" Value="True">
 
-         <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=ParentRow.AllowColumnResize}"
-                      Value="False">
-            <Setter TargetName="PART_ColumnResizerThumb"
-                    Property="IsEnabled"
-                    Value="False" />
-            <Setter TargetName="PART_ColumnResizerThumbLeft"
-                    Property="IsEnabled"
-                    Value="False" />
-         </DataTrigger>
+                <Setter TargetName="rootBorder" Property="Background" Value="{StaticResource headerPressedBackgroundBrush}" />
 
-         <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=ParentColumn.Visible}"
-                      Value="False">
-            <Setter Property="Visibility"
-                    Value="Collapsed" />
-         </DataTrigger>
+                <Setter TargetName="thumbToggleBackgroundBorder" Property="Background" Value="{StaticResource headerPressedBackgroundBrush}" />
 
-      </ControlTemplate.Triggers>
+                <Setter TargetName="rootBorder" Property="BorderBrush" Value="{StaticResource headerPressedBorderBrush}" />
 
-   </ControlTemplate>
+                <Setter TargetName="rootBorder" Property="BorderThickness" Value="1,0,0,0" />
 
-   <!--**************************
-    * TEMPLATE: GroupByItem 
-    ************************** -->
-   <ControlTemplate x:Key="tableViewGroupByItemTemplate"
-                    TargetType="local:GroupByItem">
+                <Setter TargetName="contentPanel" Property="Margin" Value="1,1,-1,-1" />
 
-      <Grid>
+                <Setter TargetName="bottomBorder" Property="Visibility" Value="Hidden" />
 
-         <Border x:Name="rootBorder"
-                 BorderBrush="{TemplateBinding BorderBrush}"
-                 BorderThickness="{TemplateBinding BorderThickness}"
-                 Background="{TemplateBinding Background}">
+                <Setter TargetName="rightPressedBorder" Property="Visibility" Value="Visible" />
 
-            <Grid>
+                <Setter TargetName="isPressedLightInnerHighlight" Property="BorderBrush" Value="{StaticResource headerPressedLightInnerHighlightBrush}" />
 
-               <Border Padding="{TemplateBinding Padding}">
+                <Setter TargetName="isPressedDarkInnerHighlight" Property="BorderBrush" Value="{StaticResource headerPressedDarkInnerHighlightBrush}" />
 
-                  <!-- This StackPanel is used to layout the ContentPresenter and the Sort Glyph (when present). -->
-                  <StackPanel x:Name="contentPanel"
-                              Orientation="Horizontal">
+            </Trigger>
 
-                     <!-- Same ContentPresenter as in the base Cell Template. -->
-                     <ContentPresenter Content="{TemplateBinding Content}"
-                                       ContentTemplate="{TemplateBinding ContentTemplate}"
-                                       ContentTemplateSelector="{TemplateBinding ContentTemplateSelector}"
-                                       HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                       VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+            <!--
+                The following 2 triggers allow to display the appropriate Sort Glyph
+                depending on the ParentColumn's SortDirection.
+            -->
 
-                     <!-- ContentPresenter that is used to display the sort glyph.
-                          We explicitely set its Content property to Null to prevent the XAML parser
-                          from implicitely setting it to its TemplatedParent's Content. -->
-                     <ContentPresenter x:Name="sortGlyphPresenter"
-                                       Content="{x:Null}"
-                                       ContentTemplate="{Binding RelativeSource={RelativeSource Self}, Path=(local:DataGridControl.DataGridContext).AscendingSortGlyph}"
-                                       Margin="6,0,0,0"
-                                       Visibility="Hidden" />
+            <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=ParentColumn.SortDirection}" Value="Ascending">
 
-                  </StackPanel>
+                <Setter TargetName="sortGlyphPresenter" Property="ContentPresenter.ContentTemplate" Value="{Binding RelativeSource={RelativeSource Self}, Path=(local:DataGridControl.DataGridContext).AscendingSortGlyph}" />
 
-               </Border>
+                <Setter TargetName="sortGlyphPresenter" Property="Margin" Value="6,0,0,0" />
 
-               <Border x:Name="isPressedDarkInnerHighlight"
-                       BorderThickness="1,1,0,0">
+            </DataTrigger>
 
-                  <Border x:Name="isPressedLightInnerHighlight"
-                          BorderThickness="1,1,0,0" />
-               </Border>
+            <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=ParentColumn.SortDirection}" Value="Descending">
 
-               <!-- This Grid is used to draw the gradient at the right side of the RowSelector.-->
-               <Border x:Name="bottomBorder"
-                       Height="3"
-                       VerticalAlignment="Bottom" />
+                <Setter TargetName="sortGlyphPresenter" Property="ContentPresenter.ContentTemplate" Value="{Binding RelativeSource={RelativeSource Self}, Path=(local:DataGridControl.DataGridContext).DescendingSortGlyph}" />
 
-            </Grid>
+                <Setter TargetName="sortGlyphPresenter" Property="Margin" Value="6,0,0,0" />
 
-         </Border>
+            </DataTrigger>
 
-      </Grid>
+            <MultiDataTrigger>
+                <MultiDataTrigger.Conditions>
+                    <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=ParentColumn.HasFixedWidth}" Value="True" />
 
-      <ControlTemplate.Triggers>
+                    <!--
+                        Don't disable resizing if ColumnStretching can be disabled by an
+                        end-user resize.
+                    -->
+                    <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=(local:DataGridControl.DataGridContext).RemoveColumnStretchingOnResize}" Value="False" />
+                </MultiDataTrigger.Conditions>
 
-         <Trigger Property="IsMouseOver"
-                  Value="True">
+                <Setter TargetName="PART_ColumnResizerThumb" Property="IsEnabled" Value="False" />
+            </MultiDataTrigger>
 
-            <Setter TargetName="rootBorder"
-                    Property="Background"
-                    Value="{StaticResource headerHotBackgroundBrush}" />
+            <MultiDataTrigger>
+                <MultiDataTrigger.Conditions>
+                    <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=ParentColumn.PreviousVisibleColumn.HasFixedWidth}" Value="True" />
 
-            <Setter TargetName="bottomBorder"
-                    Property="Background"
-                    Value="{StaticResource headerHotHighlightHorizontalBackgroundBrush}" />
+                    <!--
+                        Don't disable resizing if ColumnStretching can be disabled by an
+                        end-user resize.
+                    -->
+                    <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=(local:DataGridControl.DataGridContext).RemoveColumnStretchingOnResize}" Value="False" />
+                </MultiDataTrigger.Conditions>
 
-            <Setter TargetName="bottomBorder"
-                    Property="BorderBrush"
-                    Value="{StaticResource headerHotHighlightHorizontalBorderBrush}" />
+                <Setter TargetName="PART_ColumnResizerThumbLeft" Property="IsEnabled" Value="False" />
+            </MultiDataTrigger>
 
-            <Setter TargetName="bottomBorder"
-                    Property="BorderThickness"
-                    Value="1,0,1,1" />
+            <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=ParentRow.AllowColumnResize}" Value="False">
+                <Setter TargetName="PART_ColumnResizerThumb" Property="IsEnabled" Value="False" />
+                <Setter TargetName="PART_ColumnResizerThumbLeft" Property="IsEnabled" Value="False" />
+            </DataTrigger>
 
-            <Setter TargetName="bottomBorder"
-                    Property="CornerRadius"
-                    Value="0,0,3,3" />
+            <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=ParentColumn.Visible}" Value="False">
+                <Setter Property="Visibility" Value="Collapsed" />
+            </DataTrigger>
 
-         </Trigger>
+        </ControlTemplate.Triggers>
 
-         <Trigger Property="IsPressed"
-                  Value="True">
+    </ControlTemplate>
 
-            <Setter TargetName="rootBorder"
-                    Property="Background"
-                    Value="{StaticResource headerPressedBackgroundBrush}" />
+    <!--
+        **************************
+        * TEMPLATE: GroupByItem
+        **************************
+    -->
+    <ControlTemplate x:Key="tableViewGroupByItemTemplate" TargetType="local:GroupByItem">
 
-            <Setter TargetName="rootBorder"
-                    Property="BorderBrush"
-                    Value="{StaticResource headerPressedBorderBrush}" />
+        <Grid>
 
-            <Setter TargetName="rootBorder"
-                    Property="BorderThickness"
-                    Value="1,0,1,1" />
+            <Border
+                x:Name="rootBorder"
+                Background="{TemplateBinding Background}"
+                BorderBrush="{TemplateBinding BorderBrush}"
+                BorderThickness="{TemplateBinding BorderThickness}">
 
-            <Setter TargetName="contentPanel"
-                    Property="Margin"
-                    Value="1,1,-1,0" />
+                <Grid>
 
-            <Setter TargetName="bottomBorder"
-                    Property="Visibility"
-                    Value="Hidden" />
+                    <Border Padding="{TemplateBinding Padding}">
 
-            <Setter TargetName="isPressedLightInnerHighlight"
-                    Property="BorderBrush"
-                    Value="{StaticResource headerPressedLightInnerHighlightBrush}" />
+                        <!--  This StackPanel is used to layout the ContentPresenter and the Sort Glyph (when present).  -->
+                        <StackPanel x:Name="contentPanel" Orientation="Horizontal">
 
-            <Setter TargetName="isPressedDarkInnerHighlight"
-                    Property="BorderBrush"
-                    Value="{StaticResource headerPressedDarkInnerHighlightBrush}" />
+                            <!--  Same ContentPresenter as in the base Cell Template.  -->
+                            <ContentPresenter
+                                HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                Content="{TemplateBinding Content}"
+                                ContentTemplate="{TemplateBinding ContentTemplate}"
+                                ContentTemplateSelector="{TemplateBinding ContentTemplateSelector}" />
 
-         </Trigger>
+                            <!--
+                                ContentPresenter that is used to display the sort glyph.
+                                We explicitely set its Content property to Null to prevent the XAML parser
+                                from implicitely setting it to its TemplatedParent's Content.
+                            -->
+                            <ContentPresenter
+                                x:Name="sortGlyphPresenter"
+                                Margin="6,0,0,0"
+                                Content="{x:Null}"
+                                ContentTemplate="{Binding RelativeSource={RelativeSource Self}, Path=(local:DataGridControl.DataGridContext).AscendingSortGlyph}"
+                                Visibility="Hidden" />
 
-         <!-- The following 2 triggers allow to display the appropriate Sort Glyph
-              depending on the ParentColumn's SortDirection. -->
+                        </StackPanel>
 
-         <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=SortDirection}"
-                      Value="Ascending">
+                    </Border>
 
-            <Setter TargetName="sortGlyphPresenter"
-                    Property="Visibility"
-                    Value="Visible" />
+                    <Border x:Name="isPressedDarkInnerHighlight" BorderThickness="1,1,0,0">
 
-         </DataTrigger>
+                        <Border x:Name="isPressedLightInnerHighlight" BorderThickness="1,1,0,0" />
+                    </Border>
 
-         <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=SortDirection}"
-                      Value="Descending">
+                    <!--  This Grid is used to draw the gradient at the right side of the RowSelector.  -->
+                    <Border
+                        x:Name="bottomBorder"
+                        Height="3"
+                        VerticalAlignment="Bottom" />
 
-            <Setter TargetName="sortGlyphPresenter"
-                    Property="ContentPresenter.ContentTemplate"
-                    Value="{Binding RelativeSource={RelativeSource Self}, Path=(local:DataGridControl.DataGridContext).DescendingSortGlyph}" />
+                </Grid>
 
-            <Setter TargetName="sortGlyphPresenter"
-                    Property="Visibility"
-                    Value="Visible" />
+            </Border>
 
-         </DataTrigger>
+        </Grid>
 
-      </ControlTemplate.Triggers>
+        <ControlTemplate.Triggers>
 
-   </ControlTemplate>
+            <Trigger Property="IsMouseOver" Value="True">
 
-   <!--**************************
-    * TEMPLATE: HierarchicalGroupByControlNode
-    ************************** -->
-   <ControlTemplate x:Key="tableViewHierarchicalGroupByControlNodeTemplate"
-                    TargetType="local:HierarchicalGroupByControlNode">
+                <Setter TargetName="rootBorder" Property="Background" Value="{StaticResource headerHotBackgroundBrush}" />
 
-      <StackPanel Orientation="Horizontal"
-                  Background="{TemplateBinding Background}">
+                <Setter TargetName="bottomBorder" Property="Background" Value="{StaticResource headerHotHighlightHorizontalBackgroundBrush}" />
 
-         <Border BorderBrush="{StaticResource gridLineBrush}"
-                 Background="#55FFFFFF"
-                 BorderThickness="1"
-                 VerticalAlignment="Top"
-                 HorizontalAlignment="Center">
+                <Setter TargetName="bottomBorder" Property="BorderBrush" Value="{StaticResource headerHotHighlightHorizontalBorderBrush}" />
 
-            <TextBlock x:Name="titleTextBlock"
-                       Text="{TemplateBinding Title}"
-                       Margin="2" />
-         </Border>
+                <Setter TargetName="bottomBorder" Property="BorderThickness" Value="1,0,1,1" />
 
-         <ItemsPresenter />
-      </StackPanel>
+                <Setter TargetName="bottomBorder" Property="CornerRadius" Value="0,0,3,3" />
 
-   </ControlTemplate>
+            </Trigger>
 
-   <!--**************************
-    * TEMPLATE: HierarchicalGroupByItem
-    ************************** -->
-   <ControlTemplate x:Key="tableViewHierarchicalGroupByItemTemplate"
-                    TargetType="local:HierarchicalGroupByItem">
+            <Trigger Property="IsPressed" Value="True">
 
-      <Grid>
+                <Setter TargetName="rootBorder" Property="Background" Value="{StaticResource headerPressedBackgroundBrush}" />
 
-         <Border x:Name="rootBorder"
-                 BorderBrush="{TemplateBinding BorderBrush}"
-                 BorderThickness="{TemplateBinding BorderThickness}"
-                 Background="{TemplateBinding Background}">
+                <Setter TargetName="rootBorder" Property="BorderBrush" Value="{StaticResource headerPressedBorderBrush}" />
 
-            <Grid>
+                <Setter TargetName="rootBorder" Property="BorderThickness" Value="1,0,1,1" />
 
-               <Border Padding="{TemplateBinding Padding}">
+                <Setter TargetName="contentPanel" Property="Margin" Value="1,1,-1,0" />
 
-                  <!-- This StackPanel is used to layout the ContentPresenter and the Sort Glyph (when present). -->
-                  <StackPanel x:Name="contentPanel"
-                              Orientation="Horizontal">
+                <Setter TargetName="bottomBorder" Property="Visibility" Value="Hidden" />
 
-                     <!-- Same ContentPresenter as in the base Cell Template. -->
-                     <ContentPresenter Content="{TemplateBinding Content}"
-                                       ContentTemplate="{TemplateBinding ContentTemplate}"
-                                       ContentTemplateSelector="{TemplateBinding ContentTemplateSelector}"
-                                       HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                       VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                <Setter TargetName="isPressedLightInnerHighlight" Property="BorderBrush" Value="{StaticResource headerPressedLightInnerHighlightBrush}" />
 
-                     <!-- ContentPresenter that is used to display the sort glyph.
-                          We explicitely set its Content property to Null to prevent the XAML parser
-                          from implicitely setting it to its TemplatedParent's Content. -->
-                     <ContentPresenter x:Name="sortGlyphPresenter"
-                                       Content="{x:Null}"
-                                       ContentTemplate="{Binding RelativeSource={RelativeSource Self}, Path=(local:DataGridControl.DataGridContext).AscendingSortGlyph}"
-                                       Margin="6,0,0,0"
-                                       Visibility="Hidden" />
+                <Setter TargetName="isPressedDarkInnerHighlight" Property="BorderBrush" Value="{StaticResource headerPressedDarkInnerHighlightBrush}" />
 
-                  </StackPanel>
+            </Trigger>
 
-               </Border>
+            <!--
+                The following 2 triggers allow to display the appropriate Sort Glyph
+                depending on the ParentColumn's SortDirection.
+            -->
 
-               <Border x:Name="isPressedDarkInnerHighlight"
-                       BorderThickness="1,1,0,0">
+            <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=SortDirection}" Value="Ascending">
 
-                  <Border x:Name="isPressedLightInnerHighlight"
-                          BorderThickness="1,1,0,0" />
-               </Border>
+                <Setter TargetName="sortGlyphPresenter" Property="Visibility" Value="Visible" />
 
-               <!-- This Grid is used to draw the gradient at the right side of the RowSelector.-->
-               <Border x:Name="bottomBorder"
-                       Height="3"
-                       VerticalAlignment="Bottom" />
+            </DataTrigger>
 
-            </Grid>
+            <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=SortDirection}" Value="Descending">
 
-         </Border>
+                <Setter TargetName="sortGlyphPresenter" Property="ContentPresenter.ContentTemplate" Value="{Binding RelativeSource={RelativeSource Self}, Path=(local:DataGridControl.DataGridContext).DescendingSortGlyph}" />
 
-      </Grid>
+                <Setter TargetName="sortGlyphPresenter" Property="Visibility" Value="Visible" />
 
-      <ControlTemplate.Triggers>
+            </DataTrigger>
 
-         <Trigger Property="IsMouseOver"
-                  Value="True">
+        </ControlTemplate.Triggers>
 
-            <Setter TargetName="rootBorder"
-                    Property="Background"
-                    Value="{StaticResource headerHotBackgroundBrush}" />
+    </ControlTemplate>
 
-            <Setter TargetName="bottomBorder"
-                    Property="Background"
-                    Value="{StaticResource headerHotHighlightHorizontalBackgroundBrush}" />
+    <!--
+        **************************
+        * TEMPLATE: HierarchicalGroupByControlNode
+        **************************
+    -->
+    <ControlTemplate x:Key="tableViewHierarchicalGroupByControlNodeTemplate" TargetType="local:HierarchicalGroupByControlNode">
 
-            <Setter TargetName="bottomBorder"
-                    Property="BorderBrush"
-                    Value="{StaticResource headerHotHighlightHorizontalBorderBrush}" />
+        <StackPanel Background="{TemplateBinding Background}" Orientation="Horizontal">
 
-            <Setter TargetName="bottomBorder"
-                    Property="BorderThickness"
-                    Value="1,0,1,1" />
+            <Border
+                HorizontalAlignment="Center"
+                VerticalAlignment="Top"
+                Background="#55FFFFFF"
+                BorderBrush="{StaticResource gridLineBrush}"
+                BorderThickness="1">
 
-            <Setter TargetName="bottomBorder"
-                    Property="CornerRadius"
-                    Value="0,0,3,3" />
+                <TextBlock
+                    x:Name="titleTextBlock"
+                    Margin="2"
+                    Text="{TemplateBinding Title}" />
+            </Border>
 
-         </Trigger>
+            <ItemsPresenter />
+        </StackPanel>
 
-         <Trigger Property="IsPressed"
-                  Value="True">
+    </ControlTemplate>
 
-            <Setter TargetName="rootBorder"
-                    Property="Background"
-                    Value="{StaticResource headerPressedBackgroundBrush}" />
+    <!--
+        **************************
+        * TEMPLATE: HierarchicalGroupByItem
+        **************************
+    -->
+    <ControlTemplate x:Key="tableViewHierarchicalGroupByItemTemplate" TargetType="local:HierarchicalGroupByItem">
 
-            <Setter TargetName="rootBorder"
-                    Property="BorderBrush"
-                    Value="{StaticResource headerPressedBorderBrush}" />
+        <Grid>
 
-            <Setter TargetName="rootBorder"
-                    Property="BorderThickness"
-                    Value="1,0,1,1" />
+            <Border
+                x:Name="rootBorder"
+                Background="{TemplateBinding Background}"
+                BorderBrush="{TemplateBinding BorderBrush}"
+                BorderThickness="{TemplateBinding BorderThickness}">
 
-            <Setter TargetName="contentPanel"
-                    Property="Margin"
-                    Value="1,1,-1,0" />
+                <Grid>
 
-            <Setter TargetName="bottomBorder"
-                    Property="Visibility"
-                    Value="Hidden" />
+                    <Border Padding="{TemplateBinding Padding}">
 
-            <Setter TargetName="isPressedLightInnerHighlight"
-                    Property="BorderBrush"
-                    Value="{StaticResource headerPressedLightInnerHighlightBrush}" />
+                        <!--  This StackPanel is used to layout the ContentPresenter and the Sort Glyph (when present).  -->
+                        <StackPanel x:Name="contentPanel" Orientation="Horizontal">
 
-            <Setter TargetName="isPressedDarkInnerHighlight"
-                    Property="BorderBrush"
-                    Value="{StaticResource headerPressedDarkInnerHighlightBrush}" />
+                            <!--  Same ContentPresenter as in the base Cell Template.  -->
+                            <ContentPresenter
+                                HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                Content="{TemplateBinding Content}"
+                                ContentTemplate="{TemplateBinding ContentTemplate}"
+                                ContentTemplateSelector="{TemplateBinding ContentTemplateSelector}" />
 
-         </Trigger>
+                            <!--
+                                ContentPresenter that is used to display the sort glyph.
+                                We explicitely set its Content property to Null to prevent the XAML parser
+                                from implicitely setting it to its TemplatedParent's Content.
+                            -->
+                            <ContentPresenter
+                                x:Name="sortGlyphPresenter"
+                                Margin="6,0,0,0"
+                                Content="{x:Null}"
+                                ContentTemplate="{Binding RelativeSource={RelativeSource Self}, Path=(local:DataGridControl.DataGridContext).AscendingSortGlyph}"
+                                Visibility="Hidden" />
 
-         <!-- The following 2 triggers allow to display the appropriate Sort Glyph
-              depending on the ParentColumn's SortDirection. -->
+                        </StackPanel>
 
-         <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=SortDirection}"
-                      Value="Ascending">
+                    </Border>
 
-            <Setter TargetName="sortGlyphPresenter"
-                    Property="Visibility"
-                    Value="Visible" />
+                    <Border x:Name="isPressedDarkInnerHighlight" BorderThickness="1,1,0,0">
 
-         </DataTrigger>
+                        <Border x:Name="isPressedLightInnerHighlight" BorderThickness="1,1,0,0" />
+                    </Border>
 
-         <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=SortDirection}"
-                      Value="Descending">
+                    <!--  This Grid is used to draw the gradient at the right side of the RowSelector.  -->
+                    <Border
+                        x:Name="bottomBorder"
+                        Height="3"
+                        VerticalAlignment="Bottom" />
 
-            <Setter TargetName="sortGlyphPresenter"
-                    Property="ContentPresenter.ContentTemplate"
-                    Value="{Binding RelativeSource={RelativeSource Self}, Path=(local:DataGridControl.DataGridContext).DescendingSortGlyph}" />
+                </Grid>
 
-            <Setter TargetName="sortGlyphPresenter"
-                    Property="Visibility"
-                    Value="Visible" />
+            </Border>
 
-         </DataTrigger>
+        </Grid>
 
-      </ControlTemplate.Triggers>
+        <ControlTemplate.Triggers>
 
-   </ControlTemplate>
+            <Trigger Property="IsMouseOver" Value="True">
 
-   <!-- =================================================================== -->
-   <!-- Styles required by some grid elements                               -->
-   <!-- =================================================================== -->
+                <Setter TargetName="rootBorder" Property="Background" Value="{StaticResource headerHotBackgroundBrush}" />
 
-   <!--**************************
-    * STYLE: CellErrorStyle 
-    ************************** -->
-   <Style x:Key="cellErrorStyle"
-          TargetType="local:Cell">
+                <Setter TargetName="bottomBorder" Property="Background" Value="{StaticResource headerHotHighlightHorizontalBackgroundBrush}" />
 
-      <Setter Property="Background"
-              Value="{StaticResource errorBackgroundBrush}" />
+                <Setter TargetName="bottomBorder" Property="BorderBrush" Value="{StaticResource headerHotHighlightHorizontalBorderBrush}" />
 
-      <Setter Property="Foreground"
-              Value="{StaticResource errorForegroundBrush}" />
+                <Setter TargetName="bottomBorder" Property="BorderThickness" Value="1,0,1,1" />
 
-      <Setter Property="ToolTip"
-              Value="{Binding RelativeSource={RelativeSource Self},Path=ValidationError.ErrorContent}" />
+                <Setter TargetName="bottomBorder" Property="CornerRadius" Value="0,0,3,3" />
 
-      <Style.Triggers>
-         <Trigger Property="IsValidationErrorRestrictive"
-                  Value="True">
-            <Setter Property="Background"
-                    Value="{StaticResource errorBackgroundBrush}" />
+            </Trigger>
 
-         </Trigger>
+            <Trigger Property="IsPressed" Value="True">
 
-         <Trigger Property="IsValidationErrorRestrictive"
-                  Value="False">
+                <Setter TargetName="rootBorder" Property="Background" Value="{StaticResource headerPressedBackgroundBrush}" />
 
-            <Setter Property="Foreground"
-                    Value="{StaticResource warningForegroundBrush}" />
+                <Setter TargetName="rootBorder" Property="BorderBrush" Value="{StaticResource headerPressedBorderBrush}" />
 
-            <Setter Property="Background"
-                    Value="{StaticResource warningBackgroundBrush}" />
+                <Setter TargetName="rootBorder" Property="BorderThickness" Value="1,0,1,1" />
 
-         </Trigger>
-      </Style.Triggers>
+                <Setter TargetName="contentPanel" Property="Margin" Value="1,1,-1,0" />
 
-   </Style>
+                <Setter TargetName="bottomBorder" Property="Visibility" Value="Hidden" />
 
-   <!-- =================================================================== -->
-   <!-- Keyed Styles of grid elements                                       -->
-   <!-- =================================================================== -->
+                <Setter TargetName="isPressedLightInnerHighlight" Property="BorderBrush" Value="{StaticResource headerPressedLightInnerHighlightBrush}" />
 
-   <!--**************************
-    * STYLE: DataGridControl 
-    ************************** -->
-   <Style x:Key="tableViewLunaHomesteadGridControlStyle"
-          TargetType="local:DataGridControl">
+                <Setter TargetName="isPressedDarkInnerHighlight" Property="BorderBrush" Value="{StaticResource headerPressedDarkInnerHighlightBrush}" />
 
-      <Setter Property="BorderBrush"
-              Value="{StaticResource gridControlBorderBrush}" />
+            </Trigger>
 
-      <Setter Property="BorderThickness"
-              Value="1" />
+            <!--
+                The following 2 triggers allow to display the appropriate Sort Glyph
+                depending on the ParentColumn's SortDirection.
+            -->
 
-      <Setter Property="Background"
-              Value="{DynamicResource {x:Static SystemColors.WindowBrushKey}}" />
+            <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=SortDirection}" Value="Ascending">
 
-      <Setter Property="Foreground"
-              Value="{DynamicResource {x:Static SystemColors.WindowTextBrushKey}}" />
+                <Setter TargetName="sortGlyphPresenter" Property="Visibility" Value="Visible" />
 
-      <!-- This is required to display gridlines of uniform thickness -->
-      <Setter Property="SnapsToDevicePixels"
-              Value="True" />
+            </DataTrigger>
 
-      <Setter Property="CellErrorStyle"
-              Value="{StaticResource cellErrorStyle}" />
+            <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=SortDirection}" Value="Descending">
 
-      <Setter Property="Template"
-              Value="{StaticResource tableViewDataGridControlTemplate}" />
+                <Setter TargetName="sortGlyphPresenter" Property="ContentPresenter.ContentTemplate" Value="{Binding RelativeSource={RelativeSource Self}, Path=(local:DataGridControl.DataGridContext).DescendingSortGlyph}" />
 
-   </Style>
+                <Setter TargetName="sortGlyphPresenter" Property="Visibility" Value="Visible" />
 
-   <!--**************************
-    * STYLE: DataGridControl (with hosted controls theming)
-    ************************** -->
-   <Style x:Key="tableViewForcedLunaHomesteadGridControlStyle"
-          BasedOn="{StaticResource tableViewLunaHomesteadGridControlStyle}"
-          TargetType="local:DataGridControl">
+            </DataTrigger>
 
-      <Style.Resources>
-         <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-               <markup:FrameworkThemeResourceDictionary Source="/PresentationFramework.Luna;V4.0.0.0;31bf3856ad364e35;component\themes/luna.homestead.xaml" />
-            </ResourceDictionary.MergedDictionaries>
-         </ResourceDictionary>
-      </Style.Resources>
+        </ControlTemplate.Triggers>
 
-   </Style>
+    </ControlTemplate>
 
-   <!--**************************
-    * STYLE: RowSelectorPane
-    ************************** -->
-   <Style x:Key="tableViewLunaHomesteadRowSelectorPaneStyle"
-          TargetType="local:RowSelectorPane">
+    <!--  ===================================================================  -->
+    <!--  Styles required by some grid elements  -->
+    <!--  ===================================================================  -->
 
-      <Setter Property="Background"
-              Value="{StaticResource headerBackgroundBrush}" />
+    <!--
+        **************************
+        * STYLE: CellErrorStyle
+        **************************
+    -->
+    <Style x:Key="cellErrorStyle" TargetType="local:Cell">
 
-      <Setter Property="TextElement.Foreground"
-              Value="{StaticResource headerForegroundBrush}" />
+        <Setter Property="Background" Value="{StaticResource errorBackgroundBrush}" />
 
-   </Style>
+        <Setter Property="Foreground" Value="{StaticResource errorForegroundBrush}" />
 
-   <!--**************************
-    * STYLE: RowSelector 
-    ************************** -->
-   <conv:TypeToBooleanConverter x:Key="rowTypeConverter" />
-   <Style x:Key="tableViewLunaHomesteadRowSelectorStyle"
-          TargetType="local:RowSelector">
+        <Setter Property="ToolTip" Value="{Binding RelativeSource={RelativeSource Self}, Path=ValidationError.ErrorContent}" />
 
-      <!-- Set the RowSelector's background to Transparent to make it hit-testable
-           while preserving the background drawn by the underlying RowSelectorPane. -->
-      <Setter Property="Background"
-              Value="Transparent" />
+        <Style.Triggers>
+            <Trigger Property="IsValidationErrorRestrictive" Value="True">
+                <Setter Property="Background" Value="{StaticResource errorBackgroundBrush}" />
 
-      <Setter Property="HorizontalContentAlignment"
-              Value="Center" />
+            </Trigger>
 
-      <Setter Property="VerticalContentAlignment"
-              Value="Top" />
+            <Trigger Property="IsValidationErrorRestrictive" Value="False">
 
-      <Setter Property="Padding"
-              Value="2" />
+                <Setter Property="Foreground" Value="{StaticResource warningForegroundBrush}" />
 
-      <Setter Property="Template"
-              Value="{StaticResource tableViewRowSelectorTemplate}" />
+                <Setter Property="Background" Value="{StaticResource warningBackgroundBrush}" />
 
-      <Style.Triggers>
+            </Trigger>
+        </Style.Triggers>
 
-         <!-- The DataContext of a RowSelector is always set to its corresponding
-              Row/item. This is why we use DataTriggers with no explicit Binding Source
-              when we want to react to properties of the Row/item. -->
+    </Style>
 
-         <!-- When the Row is Current, display the current glyph in the RowSelector -->
-         <MultiDataTrigger>
-            <MultiDataTrigger.Conditions>
-               <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsCurrent}"
-                          Value="True" />
-            </MultiDataTrigger.Conditions>
-            <Setter Property="ContentTemplate"
-                    Value="{Binding RelativeSource={RelativeSource Self}, Path=(local:DataGridControl.DataGridContext).CurrentItemGlyph}" />
-         </MultiDataTrigger>
+    <!--  ===================================================================  -->
+    <!--  Keyed Styles of grid elements  -->
+    <!--  ===================================================================  -->
 
-         <!-- When the Row is being edited, display the appropriate glyph in the RowSelector. -->
-         <Trigger Property="IsBeingEdited"
-                  Value="True">
-            <Setter Property="ContentTemplate"
-                    Value="{Binding RelativeSource={RelativeSource Self}, Path=(local:DataGridControl.DataGridContext).EditingRowGlyph}" />
+    <!--
+        **************************
+        * STYLE: DataGridControl
+        **************************
+    -->
+    <Style x:Key="tableViewLunaHomesteadGridControlStyle" TargetType="local:DataGridControl">
 
-         </Trigger>
+        <Setter Property="BorderBrush" Value="{StaticResource gridControlBorderBrush}" />
 
-         <!-- When the Row has a validation error, display the appropriate glyph in the RowSelector. -->
-         <Trigger Property="HasValidationError"
-                  Value="True">
-            <Setter Property="ContentTemplate"
-                    Value="{Binding RelativeSource={RelativeSource Self}, Path=(local:DataGridControl.DataGridContext).ValidationErrorGlyph}" />
-         </Trigger>
+        <Setter Property="BorderThickness" Value="1" />
 
-      </Style.Triggers>
+        <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.WindowBrushKey}}" />
 
-   </Style>
+        <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.WindowTextBrushKey}}" />
 
-   <!--**************************
-    * STYLE: Row Style
-    ************************** -->
-   <Style x:Key="tableViewLunaHomesteadRowStyle"
-          TargetType="local:Row">
+        <!--  This is required to display gridlines of uniform thickness  -->
+        <Setter Property="SnapsToDevicePixels" Value="True" />
 
-      <Setter Property="FocusVisualStyle"
-              Value="{StaticResource tableViewRowFocusVisualStyle}" />
+        <Setter Property="CellErrorStyle" Value="{StaticResource cellErrorStyle}" />
 
-      <Setter Property="SelectionBackground"
-              Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
+        <Setter Property="Template" Value="{StaticResource tableViewDataGridControlTemplate}" />
 
-      <Setter Property="SelectionForeground"
-              Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}" />
+    </Style>
 
-      <Setter Property="InactiveSelectionBackground"
-              Value="{DynamicResource {x:Static SystemColors.InactiveCaptionBrushKey}}" />
+    <!--
+        **************************
+        * STYLE: DataGridControl (with hosted controls theming)
+        **************************
+    -->
+    <Style
+        x:Key="tableViewForcedLunaHomesteadGridControlStyle"
+        BasedOn="{StaticResource tableViewLunaHomesteadGridControlStyle}"
+        TargetType="local:DataGridControl">
 
-      <Setter Property="InactiveSelectionForeground"
-              Value="{DynamicResource {x:Static SystemColors.InactiveCaptionTextBrushKey}}" />
+        <Style.Resources>
+            <ResourceDictionary>
+                <ResourceDictionary.MergedDictionaries>
+                    <markup:FrameworkThemeResourceDictionary Source="/PresentationFramework.Luna;V4.0.0.0;31bf3856ad364e35;component\themes/luna.homestead.xaml" />
+                </ResourceDictionary.MergedDictionaries>
+            </ResourceDictionary>
+        </Style.Resources>
 
-      <!-- The Row is responsible for drawing the horizontal gridlines. It draws only its top gridline,
-           assuming that the bottom gridline will be drawn by its following row/element -->
+    </Style>
 
-      <Setter Property="BorderThickness"
-              Value="{Binding RelativeSource={RelativeSource Self}, Path=(local:DataGridControl.DataGridContext).HorizontalGridLineThickness, Converter={StaticResource thicknessConverter}, ConverterParameter='Top'}" />
+    <!--
+        **************************
+        * STYLE: RowSelectorPane
+        **************************
+    -->
+    <Style x:Key="tableViewLunaHomesteadRowSelectorPaneStyle" TargetType="local:RowSelectorPane">
 
-      <Setter Property="BorderBrush"
-              Value="{Binding RelativeSource={RelativeSource Self}, Path=(local:DataGridControl.DataGridContext).HorizontalGridLineBrush}" />
+        <Setter Property="Background" Value="{StaticResource headerBackgroundBrush}" />
 
-      <Setter Property="Template"
-              Value="{StaticResource tableViewRowTemplate}" />
+        <Setter Property="TextElement.Foreground" Value="{StaticResource headerForegroundBrush}" />
 
-      <Setter Property="Background"
-              Value="Transparent" />
+    </Style>
 
-      <Setter Property="Foreground"
-              Value="{Binding RelativeSource={RelativeSource Self}, Path=ParentForeground}" />
+    <!--
+        **************************
+        * STYLE: RowSelector
+        **************************
+    -->
+    <conv:TypeToBooleanConverter x:Key="rowTypeConverter" />
+    <Style x:Key="tableViewLunaHomesteadRowSelectorStyle" TargetType="local:RowSelector">
 
-      <Style.Triggers>
-         <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=(views:ViewBase.IsLastItem)}"
-                      Value="True">
-            <Setter Property="BorderThickness"
-                    Value="{Binding RelativeSource={RelativeSource Self}, Path=(local:DataGridControl.DataGridContext).HorizontalGridLineThickness, Converter={StaticResource thicknessConverter}, ConverterParameter='Top, Bottom'}" />
-            <Setter Property="Margin"
-                    Value="0,0,0,5" />
-         </DataTrigger>
+        <!--
+            Set the RowSelector's background to Transparent to make it hit-testable
+            while preserving the background drawn by the underlying RowSelectorPane.
+        -->
+        <Setter Property="Background" Value="Transparent" />
 
-         <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=(local:DataGridControl.HasExpandedDetails)}"
-                      Value="True">
-            <Setter Property="BorderThickness"
-                    Value="{Binding RelativeSource={RelativeSource Self}, Path=(local:DataGridControl.DataGridContext).HorizontalGridLineThickness, Converter={StaticResource thicknessConverter}, ConverterParameter='Top, Bottom'}" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
 
-         </DataTrigger>
+        <Setter Property="VerticalContentAlignment" Value="Top" />
 
-         <!-- Enabled/Disabled Odd datarow style alternation -->
-         <MultiDataTrigger>
-            <MultiDataTrigger.Conditions>
-               <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=(local:DataGridControl.DataGridContext).IsAlternatingRowStyleEnabled}"
-                          Value="True" />
-               <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=(local:DataGridVirtualizingPanel.ItemIndex), Converter={x:Static conv:IndexToOddConverter.Singleton}}"
-                          Value="True" />
-            </MultiDataTrigger.Conditions>
+        <Setter Property="Padding" Value="2" />
 
-            <Setter Property="Background"
-                    Value="#F2F1E7" />
+        <Setter Property="Template" Value="{StaticResource tableViewRowSelectorTemplate}" />
 
-         </MultiDataTrigger>
-      </Style.Triggers>
+        <Style.Triggers>
 
-   </Style>
+            <!--
+                The DataContext of a RowSelector is always set to its corresponding
+                Row/item. This is why we use DataTriggers with no explicit Binding Source
+                when we want to react to properties of the Row/item.
+            -->
 
-   <!--**************************
-    * STYLE: DataRow 
-    ************************** -->
-   <Style x:Key="tableViewLunaHomesteadDataRowStyle"
-          TargetType="local:DataRow"
-          BasedOn="{StaticResource tableViewLunaHomesteadRowStyle}">
-   </Style>
+            <!--  When the Row is Current, display the current glyph in the RowSelector  -->
+            <MultiDataTrigger>
+                <MultiDataTrigger.Conditions>
+                    <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsCurrent}" Value="True" />
+                </MultiDataTrigger.Conditions>
+                <Setter Property="ContentTemplate" Value="{Binding RelativeSource={RelativeSource Self}, Path=(local:DataGridControl.DataGridContext).CurrentItemGlyph}" />
+            </MultiDataTrigger>
 
-   <!--**************************
-    * STYLE: ColumnManagerRow 
-    ************************** -->
-   <Style x:Key="tableViewLunaHomesteadColumnManagerRowStyle"
-          TargetType="local:ColumnManagerRow"
-          BasedOn="{StaticResource tableViewLunaHomesteadRowStyle}">
+            <!--  When the Row is being edited, display the appropriate glyph in the RowSelector.  -->
+            <Trigger Property="IsBeingEdited" Value="True">
+                <Setter Property="ContentTemplate" Value="{Binding RelativeSource={RelativeSource Self}, Path=(local:DataGridControl.DataGridContext).EditingRowGlyph}" />
 
-      <!-- Use a different background and foreground than the base Row style. -->
-      <Setter Property="Background"
-              Value="{StaticResource headerBackgroundBrush}" />
+            </Trigger>
 
-      <Setter Property="Foreground"
-              Value="{StaticResource headerForegroundBrush}" />
+            <!--  When the Row has a validation error, display the appropriate glyph in the RowSelector.  -->
+            <Trigger Property="HasValidationError" Value="True">
+                <Setter Property="ContentTemplate" Value="{Binding RelativeSource={RelativeSource Self}, Path=(local:DataGridControl.DataGridContext).ValidationErrorGlyph}" />
+            </Trigger>
 
-      <Setter Property="local:RowSelector.Visible"
-              Value="False" />
+        </Style.Triggers>
 
-      <Setter Property="Template"
-              Value="{StaticResource tableViewColumnManagerRowTemplate}" />
+    </Style>
 
-      <Style.Triggers>
-         <Trigger Property="local:GroupLevelIndicatorPane.GroupLevel"
-                  Value="-1">
-            <!-- We don't want to display the Group Margins for the ColumnManagerRow. -->
-            <Setter Property="local:GroupLevelIndicatorPane.ShowIndicators"
-                    Value="False" />
-         </Trigger>
+    <!--
+        **************************
+        * STYLE: Row Style
+        **************************
+    -->
+    <Style x:Key="tableViewLunaHomesteadRowStyle" TargetType="local:Row">
 
-      </Style.Triggers>
+        <Setter Property="FocusVisualStyle" Value="{StaticResource tableViewRowFocusVisualStyle}" />
 
-   </Style>
+        <Setter Property="SelectionBackground" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
 
-   <!--**************************
-    * STYLE: Cell Style
-    ************************** -->
-   <Style x:Key="tableViewLunaHomesteadCellStyle"
-          TargetType="local:Cell">
+        <Setter Property="SelectionForeground" Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}" />
 
-      <Setter Property="CurrentBackground"
-              Value="{DynamicResource {x:Static SystemColors.WindowBrushKey}}" />
+        <Setter Property="InactiveSelectionBackground" Value="{DynamicResource {x:Static SystemColors.InactiveCaptionBrushKey}}" />
 
-      <Setter Property="CurrentForeground"
-              Value="{DynamicResource {x:Static SystemColors.WindowTextBrushKey}}" />
+        <Setter Property="InactiveSelectionForeground" Value="{DynamicResource {x:Static SystemColors.InactiveCaptionTextBrushKey}}" />
 
-      <Setter Property="SelectionBackground"
-              Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
+        <!--
+            The Row is responsible for drawing the horizontal gridlines. It draws only its top gridline,
+            assuming that the bottom gridline will be drawn by its following row/element
+        -->
 
-      <Setter Property="SelectionForeground"
-              Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}" />
+        <Setter Property="BorderThickness" Value="{Binding RelativeSource={RelativeSource Self}, Path=(local:DataGridControl.DataGridContext).HorizontalGridLineThickness, Converter={StaticResource thicknessConverter}, ConverterParameter='Top'}" />
 
-      <Setter Property="InactiveSelectionBackground"
-              Value="{DynamicResource {x:Static SystemColors.InactiveCaptionBrushKey}}" />
+        <Setter Property="BorderBrush" Value="{Binding RelativeSource={RelativeSource Self}, Path=(local:DataGridControl.DataGridContext).HorizontalGridLineBrush}" />
 
-      <Setter Property="InactiveSelectionForeground"
-              Value="{DynamicResource {x:Static SystemColors.InactiveCaptionTextBrushKey}}" />
+        <Setter Property="Template" Value="{StaticResource tableViewRowTemplate}" />
 
-      <!-- Set the Cell's background to Transparent to make it hit-testable
-           while preserving the background drawn by the underlying Row. -->
-      <Setter Property="Background"
-              Value="Transparent" />
+        <Setter Property="Background" Value="Transparent" />
 
-      <Setter Property="Foreground"
-              Value="{Binding RelativeSource={RelativeSource Self}, Path=ParentForeground}" />
+        <Setter Property="Foreground" Value="{Binding RelativeSource={RelativeSource Self}, Path=ParentForeground}" />
 
-      <!-- In TableView, each Cell has the same width as its ParentColum's ActualWidth -->
-      <Setter Property="Width"
-              Value="{Binding RelativeSource={RelativeSource Self}, Path=ParentColumn.ActualWidth}" />
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=(views:ViewBase.IsLastItem)}" Value="True">
+                <Setter Property="BorderThickness" Value="{Binding RelativeSource={RelativeSource Self}, Path=(local:DataGridControl.DataGridContext).HorizontalGridLineThickness, Converter={StaticResource thicknessConverter}, ConverterParameter='Top, Bottom'}" />
+                <Setter Property="Margin" Value="0,0,0,5" />
+            </DataTrigger>
 
-      <Setter Property="Padding"
-              Value="{StaticResource cellPadding}" />
+            <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=(local:DataGridControl.HasExpandedDetails)}" Value="True">
+                <Setter Property="BorderThickness" Value="{Binding RelativeSource={RelativeSource Self}, Path=(local:DataGridControl.DataGridContext).HorizontalGridLineThickness, Converter={StaticResource thicknessConverter}, ConverterParameter='Top, Bottom'}" />
 
-      <Setter Property="HorizontalContentAlignment"
-              Value="{Binding RelativeSource={RelativeSource Self}, Path=ParentColumn.CellHorizontalContentAlignment, FallbackValue=Stretch}" />
+            </DataTrigger>
 
-      <Setter Property="VerticalContentAlignment"
-              Value="{Binding RelativeSource={RelativeSource Self}, Path=ParentColumn.CellVerticalContentAlignment, FallbackValue=Stretch}" />
+            <!--  Enabled/Disabled Odd datarow style alternation  -->
+            <MultiDataTrigger>
+                <MultiDataTrigger.Conditions>
+                    <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=(local:DataGridControl.DataGridContext).IsAlternatingRowStyleEnabled}" Value="True" />
+                    <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=(local:DataGridVirtualizingPanel.ItemIndex), Converter={x:Static conv:IndexToOddConverter.Singleton}}" Value="True" />
+                </MultiDataTrigger.Conditions>
 
-      <!-- The Cell is responsible for drawing the vertical gridlines. It draws only its right gridline, 
-           assuming that the left gridline will have been drawn by its preceding cell -->
+                <Setter Property="Background" Value="#F2F1E7" />
 
-      <Setter Property="BorderThickness"
-              Value="{Binding RelativeSource={RelativeSource Self}, Path=(local:DataGridControl.DataGridContext).VerticalGridLineThickness, Converter={StaticResource thicknessConverter}, ConverterParameter='Right'}" />
+            </MultiDataTrigger>
+        </Style.Triggers>
 
-      <Setter Property="BorderBrush"
-              Value="{Binding RelativeSource={RelativeSource Self}, Path=(local:DataGridControl.DataGridContext).VerticalGridLineBrush}" />
+    </Style>
 
-      <Setter Property="Template"
-              Value="{StaticResource tableViewCellTemplate}" />
+    <!--
+        **************************
+        * STYLE: DataRow
+        **************************
+    -->
+    <Style
+        x:Key="tableViewLunaHomesteadDataRowStyle"
+        BasedOn="{StaticResource tableViewLunaHomesteadRowStyle}"
+        TargetType="local:DataRow" />
 
-   </Style>
+    <!--
+        **************************
+        * STYLE: ColumnManagerRow
+        **************************
+    -->
+    <Style
+        x:Key="tableViewLunaHomesteadColumnManagerRowStyle"
+        BasedOn="{StaticResource tableViewLunaHomesteadRowStyle}"
+        TargetType="local:ColumnManagerRow">
 
-   <!--**************************
-    * STYLE: DataCell
-    ************************** -->
-   <Style x:Key="tableViewLunaHomesteadDataCellStyle"
-          TargetType="local:DataCell"
-          BasedOn="{StaticResource tableViewLunaHomesteadCellStyle}" />
+        <!--  Use a different background and foreground than the base Row style.  -->
+        <Setter Property="Background" Value="{StaticResource headerBackgroundBrush}" />
 
-   <!--**************************
-    * STYLE: ColumnManagerCell 
-    ************************** -->
-   <Style x:Key="tableViewLunaHomesteadColumnManagerCellStyle"
-          TargetType="local:ColumnManagerCell">
+        <Setter Property="Foreground" Value="{StaticResource headerForegroundBrush}" />
 
-      <!-- Set the Cell's background to Transparent to make it hit-testable
-           while preserving the background drawn by the underlying Row. -->
-      <Setter Property="Background"
-              Value="Transparent" />
+        <Setter Property="local:RowSelector.Visible" Value="False" />
 
-      <!-- In TableView, each Cell has the same width as its ParentColum's ActualWidth -->
-      <Setter Property="Width"
-              Value="{Binding RelativeSource={RelativeSource Self},Path=ParentColumn.ActualWidth}" />
+        <Setter Property="Template" Value="{StaticResource tableViewColumnManagerRowTemplate}" />
 
-      <Setter Property="Padding"
-              Value="{StaticResource columnManagerCellPadding}" />
+        <Style.Triggers>
+            <Trigger Property="local:GroupLevelIndicatorPane.GroupLevel" Value="-1">
+                <!--  We don't want to display the Group Margins for the ColumnManagerRow.  -->
+                <Setter Property="local:GroupLevelIndicatorPane.ShowIndicators" Value="False" />
+            </Trigger>
 
-      <Setter Property="HorizontalContentAlignment"
-              Value="{Binding RelativeSource={RelativeSource Self}, Path=ParentColumn.CellHorizontalContentAlignment, FallbackValue=Stretch}" />
+        </Style.Triggers>
 
-      <Setter Property="VerticalContentAlignment"
-              Value="{Binding RelativeSource={RelativeSource Self}, Path=ParentColumn.CellVerticalContentAlignment, FallbackValue=Stretch}" />
+    </Style>
 
-      <Setter Property="Template"
-              Value="{StaticResource tableViewColumnManagerCellTemplate}" />
+    <!--
+        **************************
+        * STYLE: Cell Style
+        **************************
+    -->
+    <Style x:Key="tableViewLunaHomesteadCellStyle" TargetType="local:Cell">
 
-   </Style>
+        <Setter Property="CurrentBackground" Value="{DynamicResource {x:Static SystemColors.WindowBrushKey}}" />
 
-   <!--**************************
-    * STYLE: GroupByControl 
-    ************************** -->
-   <Style x:Key="tableViewLunaHomesteadGroupByControlStyle"
-          TargetType="local:GroupByControl">
+        <Setter Property="CurrentForeground" Value="{DynamicResource {x:Static SystemColors.WindowTextBrushKey}}" />
 
-      <!-- If we don't specify a MinHeight, the default "size-to-content" behavior will arrange 
-           the control with a Height of 0, which makes it invisible and unusable.
-           In a typical TableView, a height of at least 25 is appropriate for the GroupByControl. -->
-      <Setter Property="MinHeight"
-              Value="25" />
+        <Setter Property="SelectionBackground" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
 
-      <Setter Property="Background"
-              Value="{StaticResource groupByControlBackgroundBrush}" />
+        <Setter Property="SelectionForeground" Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}" />
 
-      <Setter Property="Foreground"
-              Value="{StaticResource groupByControlForegroundBrush}" />
+        <Setter Property="InactiveSelectionBackground" Value="{DynamicResource {x:Static SystemColors.InactiveCaptionBrushKey}}" />
 
-      <Setter Property="Padding"
-              Value="8" />
+        <Setter Property="InactiveSelectionForeground" Value="{DynamicResource {x:Static SystemColors.InactiveCaptionTextBrushKey}}" />
 
-      <Setter Property="BorderBrush"
-              Value="{StaticResource gridLineBrush}" />
+        <!--
+            Set the Cell's background to Transparent to make it hit-testable
+            while preserving the background drawn by the underlying Row.
+        -->
+        <Setter Property="Background" Value="Transparent" />
 
-      <Setter Property="BorderThickness"
-              Value="1,1,1,0" />
+        <Setter Property="Foreground" Value="{Binding RelativeSource={RelativeSource Self}, Path=ParentForeground}" />
 
-      <Setter Property="local:RowSelector.Visible"
-              Value="False" />
+        <!--  In TableView, each Cell has the same width as its ParentColum's ActualWidth  -->
+        <Setter Property="Width" Value="{Binding RelativeSource={RelativeSource Self}, Path=ParentColumn.ActualWidth}" />
 
-      <Setter Property="views:TableView.CanScrollHorizontally"
-              Value="False" />
+        <Setter Property="Padding" Value="{StaticResource cellPadding}" />
 
-      <Setter Property="Template"
-              Value="{StaticResource tableViewGroupByControlTemplate}" />
+        <Setter Property="HorizontalContentAlignment" Value="{Binding RelativeSource={RelativeSource Self}, Path=ParentColumn.CellHorizontalContentAlignment, FallbackValue=Stretch}" />
 
-   </Style>
+        <Setter Property="VerticalContentAlignment" Value="{Binding RelativeSource={RelativeSource Self}, Path=ParentColumn.CellVerticalContentAlignment, FallbackValue=Stretch}" />
 
-   <!--**************************
-    * STYLE: GroupByItem
-    ************************** -->
-   <Style x:Key="tableViewLunaHomesteadGroupByItemStyle"
-          TargetType="local:GroupByItem">
+        <!--
+            The Cell is responsible for drawing the vertical gridlines. It draws only its right gridline,
+            assuming that the left gridline will have been drawn by its preceding cell
+        -->
 
-      <Setter Property="Background"
-              Value="{StaticResource headerBackgroundBrush}" />
+        <Setter Property="BorderThickness" Value="{Binding RelativeSource={RelativeSource Self}, Path=(local:DataGridControl.DataGridContext).VerticalGridLineThickness, Converter={StaticResource thicknessConverter}, ConverterParameter='Right'}" />
 
-      <Setter Property="Foreground"
-              Value="{StaticResource headerForegroundBrush}" />
+        <Setter Property="BorderBrush" Value="{Binding RelativeSource={RelativeSource Self}, Path=(local:DataGridControl.DataGridContext).VerticalGridLineBrush}" />
 
-      <Setter Property="Padding"
-              Value="{StaticResource cellPadding}" />
+        <Setter Property="Template" Value="{StaticResource tableViewCellTemplate}" />
 
-      <Setter Property="BorderBrush"
-              Value="{StaticResource gridLineBrush}" />
+    </Style>
 
-      <Setter Property="BorderThickness"
-              Value="1" />
+    <!--
+        **************************
+        * STYLE: DataCell
+        **************************
+    -->
+    <Style
+        x:Key="tableViewLunaHomesteadDataCellStyle"
+        BasedOn="{StaticResource tableViewLunaHomesteadCellStyle}"
+        TargetType="local:DataCell" />
 
-      <Setter Property="Template"
-              Value="{StaticResource tableViewGroupByItemTemplate}" />
+    <!--
+        **************************
+        * STYLE: ColumnManagerCell
+        **************************
+    -->
+    <Style x:Key="tableViewLunaHomesteadColumnManagerCellStyle" TargetType="local:ColumnManagerCell">
 
-   </Style>
+        <!--
+            Set the Cell's background to Transparent to make it hit-testable
+            while preserving the background drawn by the underlying Row.
+        -->
+        <Setter Property="Background" Value="Transparent" />
 
-   <!--**************************
-    * STYLE: GroupHeaderControl 
-    ************************** -->
-   <Style x:Key="tableViewLunaHomesteadGroupHeaderControlStyle"
-          TargetType="local:GroupHeaderControl">
+        <!--  In TableView, each Cell has the same width as its ParentColum's ActualWidth  -->
+        <Setter Property="Width" Value="{Binding RelativeSource={RelativeSource Self}, Path=ParentColumn.ActualWidth}" />
 
-      <Setter Property="Background"
-              Value="{StaticResource headerBackgroundBrush}" />
+        <Setter Property="Padding" Value="{StaticResource columnManagerCellPadding}" />
 
-      <Setter Property="Foreground"
-              Value="{StaticResource headerForegroundBrush}" />
+        <Setter Property="HorizontalContentAlignment" Value="{Binding RelativeSource={RelativeSource Self}, Path=ParentColumn.CellHorizontalContentAlignment, FallbackValue=Stretch}" />
 
-      <Setter Property="SelectionBackground"
-              Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
+        <Setter Property="VerticalContentAlignment" Value="{Binding RelativeSource={RelativeSource Self}, Path=ParentColumn.CellVerticalContentAlignment, FallbackValue=Stretch}" />
 
-      <Setter Property="SelectionForeground"
-              Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}" />
+        <Setter Property="Template" Value="{StaticResource tableViewColumnManagerCellTemplate}" />
 
-      <Setter Property="InactiveSelectionBackground"
-              Value="{DynamicResource {x:Static SystemColors.InactiveCaptionBrushKey}}" />
+    </Style>
 
-      <Setter Property="InactiveSelectionForeground"
-              Value="{DynamicResource {x:Static SystemColors.InactiveCaptionTextBrushKey}}" />
+    <!--
+        **************************
+        * STYLE: GroupByControl
+        **************************
+    -->
+    <Style x:Key="tableViewLunaHomesteadGroupByControlStyle" TargetType="local:GroupByControl">
 
-      <Setter Property="BorderBrush"
-              Value="{StaticResource gridLineBrush}" />
+        <!--
+            If we don't specify a MinHeight, the default "size-to-content" behavior will arrange
+            the control with a Height of 0, which makes it invisible and unusable.
+            In a typical TableView, a height of at least 25 is appropriate for the GroupByControl.
+        -->
+        <Setter Property="MinHeight" Value="25" />
 
-      <Setter Property="views:TableView.CanScrollHorizontally"
-              Value="False" />
+        <Setter Property="Background" Value="{StaticResource groupByControlBackgroundBrush}" />
 
-      <Setter Property="BorderThickness"
-              Value="0,1,1,0" />
+        <Setter Property="Foreground" Value="{StaticResource groupByControlForegroundBrush}" />
 
-      <Setter Property="Padding"
-              Value="{StaticResource cellPadding}" />
+        <Setter Property="Padding" Value="8" />
 
-      <Setter Property="VerticalContentAlignment"
-              Value="Center" />
+        <Setter Property="BorderBrush" Value="{StaticResource gridLineBrush}" />
 
-      <!-- The GroupHeaderControl itself must not be focusable. The main Border inside its Template will
-           be made Focusable because it is holding the various InputBindings that make the
-           GroupHeaderControl work. -->
-      <Setter Property="Focusable"
-              Value="False" />
+        <Setter Property="BorderThickness" Value="1,1,1,0" />
 
-      <Setter Property="Template"
-              Value="{StaticResource tableViewGroupHeaderControlTemplate}" />
+        <Setter Property="local:RowSelector.Visible" Value="False" />
 
-      <Style.Triggers>
-         <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=(views:ViewBase.IsLastItem)}"
-                      Value="True">
+        <Setter Property="views:TableView.CanScrollHorizontally" Value="False" />
 
-            <Setter Property="BorderThickness"
-                    Value="0,1,1,1" />
+        <Setter Property="Template" Value="{StaticResource tableViewGroupByControlTemplate}" />
 
-            <Setter Property="Margin"
-                    Value="0,0,0,5" />
-         </DataTrigger>
+    </Style>
 
-      </Style.Triggers>
+    <!--
+        **************************
+        * STYLE: GroupByItem
+        **************************
+    -->
+    <Style x:Key="tableViewLunaHomesteadGroupByItemStyle" TargetType="local:GroupByItem">
 
-   </Style>
+        <Setter Property="Background" Value="{StaticResource headerBackgroundBrush}" />
 
-   <!--**************************
-    * STYLE: GroupLevelIndicator
-    ************************** -->
-   <Style x:Key="tableViewLunaHomesteadGroupLevelIndicatorStyle"
-          TargetType="local:GroupLevelIndicator">
+        <Setter Property="Foreground" Value="{StaticResource headerForegroundBrush}" />
 
-      <Setter Property="Background"
-              Value="{StaticResource headerBackgroundBrush}" />
+        <Setter Property="Padding" Value="{StaticResource cellPadding}" />
 
-      <Setter Property="Foreground"
-              Value="{StaticResource headerForegroundBrush}" />
+        <Setter Property="BorderBrush" Value="{StaticResource gridLineBrush}" />
 
-      <Setter Property="BorderBrush"
-              Value="{StaticResource gridLineBrush}" />
+        <Setter Property="BorderThickness" Value="1" />
 
-      <Setter Property="BorderThickness"
-              Value="0,0,1,0" />
+        <Setter Property="Template" Value="{StaticResource tableViewGroupByItemTemplate}" />
 
-      <Setter Property="Width"
-              Value="{Binding RelativeSource={RelativeSource Self}, Path=(local:DataGridControl.DataGridContext).GroupLevelIndicatorWidth}" />
+    </Style>
 
-      <Setter Property="Template"
-              Value="{StaticResource tableViewGroupLevelIndicatorTemplate}" />
+    <!--
+        **************************
+        * STYLE: GroupHeaderControl
+        **************************
+    -->
+    <Style x:Key="tableViewLunaHomesteadGroupHeaderControlStyle" TargetType="local:GroupHeaderControl">
 
-   </Style>
+        <Setter Property="Background" Value="{StaticResource headerBackgroundBrush}" />
 
-   <!--**************************
-    * STYLE: DetailIndicator
-    ************************** -->
-   <Style x:Key="tableViewLunaHomesteadDetailIndicatorStyle"
-          TargetType="local:DetailIndicator">
+        <Setter Property="Foreground" Value="{StaticResource headerForegroundBrush}" />
 
-      <Setter Property="Background"
-              Value="{x:Null}" />
+        <Setter Property="SelectionBackground" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
 
-      <Setter Property="Width"
-              Value="{Binding RelativeSource={RelativeSource Self}, Path=(local:DataGridControl.DataGridContext).DetailIndicatorWidth}" />
+        <Setter Property="SelectionForeground" Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}" />
 
-      <Setter Property="Template"
-              Value="{StaticResource tableViewDetailIndicatorTemplate}" />
+        <Setter Property="InactiveSelectionBackground" Value="{DynamicResource {x:Static SystemColors.InactiveCaptionBrushKey}}" />
 
-   </Style>
+        <Setter Property="InactiveSelectionForeground" Value="{DynamicResource {x:Static SystemColors.InactiveCaptionTextBrushKey}}" />
 
-   <!--**************************
-    * STYLE: GroupLevelIndicatorPane
-    ************************** -->
-   <Style x:Key="tableViewLunaHomesteadGroupLevelIndicatorPaneStyle"
-          TargetType="local:GroupLevelIndicatorPane">
+        <Setter Property="BorderBrush" Value="{StaticResource gridLineBrush}" />
 
-      <Setter Property="Template"
-              Value="{StaticResource tableViewGroupLevelIndicatorPaneTemplate}" />
+        <Setter Property="views:TableView.CanScrollHorizontally" Value="False" />
 
-      <Setter Property="BorderBrush"
-              Value="{StaticResource gridLineBrush}" />
+        <Setter Property="BorderThickness" Value="0,1,1,0" />
 
-      <Style.Triggers>
-         <MultiTrigger>
-            <MultiTrigger.Conditions>
-               <Condition Property="IsLeaf"
-                          Value="False" />
-               <Condition Property="views:ViewBase.IsLastItem"
-                          Value="True" />
-            </MultiTrigger.Conditions>
+        <Setter Property="Padding" Value="{StaticResource cellPadding}" />
 
-            <Setter Property="Margin"
-                    Value="0,0,0,-5" />
-         </MultiTrigger>
+        <Setter Property="VerticalContentAlignment" Value="Center" />
 
-      </Style.Triggers>
+        <!--
+            The GroupHeaderControl itself must not be focusable. The main Border inside its Template will
+            be made Focusable because it is holding the various InputBindings that make the
+            GroupHeaderControl work.
+        -->
+        <Setter Property="Focusable" Value="False" />
 
-   </Style>
+        <Setter Property="Template" Value="{StaticResource tableViewGroupHeaderControlTemplate}" />
 
-   <!--**************************
-    * STYLE: HierarchicalGroupLevelIndicatorPane
-    ************************** -->
-   <Style x:Key="tableViewLunaHomesteadHierarchicalGroupLevelIndicatorPaneStyle"
-          TargetType="local:HierarchicalGroupLevelIndicatorPane">
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=(views:ViewBase.IsLastItem)}" Value="True">
 
-      <Setter Property="Template"
-              Value="{StaticResource tableViewHierarchicalGroupLevelIndicatorPaneTemplate}" />
+                <Setter Property="BorderThickness" Value="0,1,1,1" />
 
-      <Setter Property="local:GroupLevelIndicatorPane.ShowIndicators"
-              Value="True" />
+                <Setter Property="Margin" Value="0,0,0,5" />
+            </DataTrigger>
 
-      <Setter Property="local:GroupLevelIndicatorPane.ShowVerticalBorder"
-              Value="True" />
+        </Style.Triggers>
 
-      <Style.Triggers>
-         <Trigger Property="local:GroupLevelIndicatorPane.GroupLevel"
-                  Value="-1">
+    </Style>
 
-            <!-- Stop the propagation of the value set by the default style trigger of
-                 the ColumnManagerRow -->
-            <Setter Property="local:GroupLevelIndicatorPane.ShowIndicators"
-                    Value="True" />
+    <!--
+        **************************
+        * STYLE: GroupLevelIndicator
+        **************************
+    -->
+    <Style x:Key="tableViewLunaHomesteadGroupLevelIndicatorStyle" TargetType="local:GroupLevelIndicator">
 
-         </Trigger>
-      </Style.Triggers>
-   </Style>
+        <Setter Property="Background" Value="{StaticResource headerBackgroundBrush}" />
 
-   <!--**************************
-    * STYLE: HierarchicalGroupByControlNode
-    ************************** -->
-   <Style x:Key="tableViewLunaHomesteadHierarchicalGroupByControlNodeStyle"
-          TargetType="local:HierarchicalGroupByControlNode">
+        <Setter Property="Foreground" Value="{StaticResource headerForegroundBrush}" />
 
-      <Setter Property="StairHeight"
-              Value="0" />
+        <Setter Property="BorderBrush" Value="{StaticResource gridLineBrush}" />
 
-      <Setter Property="ConnectionLineOffset"
-              Value="0" />
+        <Setter Property="BorderThickness" Value="0,0,1,0" />
 
-      <Setter Property="Focusable"
-              Value="False" />
+        <Setter Property="Width" Value="{Binding RelativeSource={RelativeSource Self}, Path=(local:DataGridControl.DataGridContext).GroupLevelIndicatorWidth}" />
 
-      <Setter Property="ConnectionLineAlignment"
-              Value="CenterToCenter" />
+        <Setter Property="Template" Value="{StaticResource tableViewGroupLevelIndicatorTemplate}" />
 
-      <Setter Property="Margin"
-              Value="0,5,0,5" />
+    </Style>
 
-      <Setter Property="Template"
-              Value="{StaticResource tableViewHierarchicalGroupByControlNodeTemplate}" />
+    <!--
+        **************************
+        * STYLE: DetailIndicator
+        **************************
+    -->
+    <Style x:Key="tableViewLunaHomesteadDetailIndicatorStyle" TargetType="local:DetailIndicator">
 
-   </Style>
+        <Setter Property="Background" Value="{x:Null}" />
 
-   <!--**************************
-    * STYLE: HierarchicalGroupByControl
-    ************************** -->
-   <Style x:Key="tableViewLunaHomesteadHierarchicalGroupByControlStyle"
-          TargetType="local:HierarchicalGroupByControl">
+        <Setter Property="Width" Value="{Binding RelativeSource={RelativeSource Self}, Path=(local:DataGridControl.DataGridContext).DetailIndicatorWidth}" />
 
-      <Setter Property="Background"
-              Value="{StaticResource groupByControlBackgroundBrush}" />
+        <Setter Property="Template" Value="{StaticResource tableViewDetailIndicatorTemplate}" />
 
-      <Setter Property="StairHeight"
-              Value="0" />
+    </Style>
 
-      <Setter Property="ConnectionLineOffset"
-              Value="0" />
+    <!--
+        **************************
+        * STYLE: GroupLevelIndicatorPane
+        **************************
+    -->
+    <Style x:Key="tableViewLunaHomesteadGroupLevelIndicatorPaneStyle" TargetType="local:GroupLevelIndicatorPane">
 
-      <Setter Property="ConnectionLineAlignment"
-              Value="CenterToCenter" />
+        <Setter Property="Template" Value="{StaticResource tableViewGroupLevelIndicatorPaneTemplate}" />
 
-      <Setter Property="local:RowSelector.Visible"
-              Value="False" />
+        <Setter Property="BorderBrush" Value="{StaticResource gridLineBrush}" />
 
-      <Setter Property="views:TableView.CanScrollHorizontally"
-              Value="False" />
+        <Style.Triggers>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="IsLeaf" Value="False" />
+                    <Condition Property="views:ViewBase.IsLastItem" Value="True" />
+                </MultiTrigger.Conditions>
 
-      <Setter Property="Template"
-              Value="{StaticResource tableViewCommonHierarchicalGroupByControlTemplate}" />
+                <Setter Property="Margin" Value="0,0,0,-5" />
+            </MultiTrigger>
 
-      <Style.Triggers>
+        </Style.Triggers>
 
-         <!-- We use the old GroupByControl Template if there are no Details in the DataGridControl.ItemsSource -->
-         <MultiDataTrigger>
-            <MultiDataTrigger.Conditions>
+    </Style>
 
-               <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=(local:DataGridControl.DataGridContext).HasDetails}"
-                          Value="False" />
+    <!--
+        **************************
+        * STYLE: HierarchicalGroupLevelIndicatorPane
+        **************************
+    -->
+    <Style x:Key="tableViewLunaHomesteadHierarchicalGroupLevelIndicatorPaneStyle" TargetType="local:HierarchicalGroupLevelIndicatorPane">
 
-               <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=(local:DataGridControl.DataGridContext).ParentDataGridContext, Converter={StaticResource nullToBooleanConverter}}"
-                          Value="True" />
+        <Setter Property="Template" Value="{StaticResource tableViewHierarchicalGroupLevelIndicatorPaneTemplate}" />
 
-            </MultiDataTrigger.Conditions>
+        <Setter Property="local:GroupLevelIndicatorPane.ShowIndicators" Value="True" />
 
-            <Setter Property="Template"
-                    Value="{StaticResource tableViewCommonHierarchicalGroupByControlOldGroupByControlTemplate}" />
+        <Setter Property="local:GroupLevelIndicatorPane.ShowVerticalBorder" Value="True" />
 
-         </MultiDataTrigger>
+        <Style.Triggers>
+            <Trigger Property="local:GroupLevelIndicatorPane.GroupLevel" Value="-1">
 
-      </Style.Triggers>
+                <!--
+                    Stop the propagation of the value set by the default style trigger of
+                    the ColumnManagerRow
+                -->
+                <Setter Property="local:GroupLevelIndicatorPane.ShowIndicators" Value="True" />
 
-   </Style>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
 
-   <!--**************************
-    * STYLE: HierarchicalGroupByItem
-    ************************** -->
-   <Style x:Key="tableViewLunaHomesteadHierarchicalGroupByItemStyle"
-          TargetType="local:HierarchicalGroupByItem">
+    <!--
+        **************************
+        * STYLE: HierarchicalGroupByControlNode
+        **************************
+    -->
+    <Style x:Key="tableViewLunaHomesteadHierarchicalGroupByControlNodeStyle" TargetType="local:HierarchicalGroupByControlNode">
 
-      <Setter Property="Background"
-              Value="{StaticResource headerBackgroundBrush}" />
+        <Setter Property="StairHeight" Value="0" />
 
-      <Setter Property="Foreground"
-              Value="{StaticResource headerForegroundBrush}" />
+        <Setter Property="ConnectionLineOffset" Value="0" />
 
-      <Setter Property="Padding"
-              Value="{StaticResource cellPadding}" />
+        <Setter Property="Focusable" Value="False" />
 
-      <Setter Property="BorderBrush"
-              Value="{StaticResource gridLineBrush}" />
+        <Setter Property="ConnectionLineAlignment" Value="CenterToCenter" />
 
-      <Setter Property="BorderThickness"
-              Value="1" />
+        <Setter Property="Margin" Value="0,5,0,5" />
 
-      <Setter Property="Margin"
-              Value="4,0,4,0" />
+        <Setter Property="Template" Value="{StaticResource tableViewHierarchicalGroupByControlNodeTemplate}" />
 
-      <Setter Property="Template"
-              Value="{StaticResource tableViewHierarchicalGroupByItemTemplate}" />
+    </Style>
 
-   </Style>
+    <!--
+        **************************
+        * STYLE: HierarchicalGroupByControl
+        **************************
+    -->
+    <Style x:Key="tableViewLunaHomesteadHierarchicalGroupByControlStyle" TargetType="local:HierarchicalGroupByControl">
 
-   <!--**************************
-    * STYLE: ScrollTip
-    ************************** -->
-   <Style x:Key="tableViewLunaHomesteadScrollTipStyle"
-          TargetType="local:ScrollTip">
+        <Setter Property="Background" Value="{StaticResource groupByControlBackgroundBrush}" />
 
-      <Setter Property="Template"
-              Value="{StaticResource scrollTipTemplate}" />
+        <Setter Property="StairHeight" Value="0" />
 
-      <Setter Property="Background">
-         <Setter.Value>
-            <LinearGradientBrush StartPoint="0.5,1"
-                                 EndPoint="0.5,0">
-               <GradientStop Color="#FFC7CDAC"
-                             Offset="0" />
+        <Setter Property="ConnectionLineOffset" Value="0" />
 
-               <GradientStop Color="#FFE8ECD1"
-                             Offset="1" />
-            </LinearGradientBrush>
-         </Setter.Value>
-      </Setter>
+        <Setter Property="ConnectionLineAlignment" Value="CenterToCenter" />
 
-      <Setter Property="BorderBrush"
-              Value="#FF849072" />
+        <Setter Property="local:RowSelector.Visible" Value="False" />
 
-      <Setter Property="TextElement.Foreground"
-              Value="Black" />
+        <Setter Property="views:TableView.CanScrollHorizontally" Value="False" />
 
-      <Setter Property="VerticalAlignment"
-              Value="Center" />
+        <Setter Property="Template" Value="{StaticResource tableViewCommonHierarchicalGroupByControlTemplate}" />
 
-      <Setter Property="HorizontalAlignment"
-              Value="Right" />
+        <Style.Triggers>
 
-   </Style>
+            <!--  We use the old GroupByControl Template if there are no Details in the DataGridControl.ItemsSource  -->
+            <MultiDataTrigger>
+                <MultiDataTrigger.Conditions>
 
-   <!-- =================================================================== -->
-   <!-- Default values for the View                                         -->
-   <!-- =================================================================== -->
+                    <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=(local:DataGridControl.DataGridContext).HasDetails}" Value="False" />
 
-   <Style x:Key="tableViewLunaHomesteadDefaultValues"
-          TargetType="views:TableView">
+                    <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=(local:DataGridControl.DataGridContext).ParentDataGridContext, Converter={StaticResource nullToBooleanConverter}}" Value="True" />
 
-      <Setter Property="HorizontalGridLineBrush"
-              Value="{StaticResource gridLineBrush}" />
+                </MultiDataTrigger.Conditions>
 
-      <Setter Property="HorizontalGridLineThickness"
-              Value="1" />
+                <Setter Property="Template" Value="{StaticResource tableViewCommonHierarchicalGroupByControlOldGroupByControlTemplate}" />
 
-      <Setter Property="VerticalGridLineBrush"
-              Value="{StaticResource gridLineBrush}" />
+            </MultiDataTrigger>
 
-      <Setter Property="VerticalGridLineThickness"
-              Value="1" />
+        </Style.Triggers>
 
-      <Setter Property="GroupLevelIndicatorWidth"
-              Value="17" />
+    </Style>
 
-      <Setter Property="DetailIndicatorWidth"
-              Value="34" />
+    <!--
+        **************************
+        * STYLE: HierarchicalGroupByItem
+        **************************
+    -->
+    <Style x:Key="tableViewLunaHomesteadHierarchicalGroupByItemStyle" TargetType="local:HierarchicalGroupByItem">
 
-      <Setter Property="DefaultDropMarkPen"
-              Value="{StaticResource dropMarkPen}" />
+        <Setter Property="Background" Value="{StaticResource headerBackgroundBrush}" />
 
-      <!-- Those glyphs are null by default on ViewBase, so every Theme should define
-           and set their own custom glyphs. -->
+        <Setter Property="Foreground" Value="{StaticResource headerForegroundBrush}" />
 
-      <Setter Property="AscendingSortGlyph"
-              Value="{StaticResource ascendingSortGlyph}" />
+        <Setter Property="Padding" Value="{StaticResource cellPadding}" />
 
-      <Setter Property="DescendingSortGlyph"
-              Value="{StaticResource descendingSortGlyph}" />
+        <Setter Property="BorderBrush" Value="{StaticResource gridLineBrush}" />
 
-      <Setter Property="ExpandGroupGlyph"
-              Value="{StaticResource expandGroupGlyph}" />
+        <Setter Property="BorderThickness" Value="1" />
 
-      <Setter Property="CollapseGroupGlyph"
-              Value="{StaticResource collapseGroupGlyph}" />
+        <Setter Property="Margin" Value="4,0,4,0" />
 
-      <Setter Property="CurrentItemGlyph"
-              Value="{StaticResource currentItemGlyph}" />
+        <Setter Property="Template" Value="{StaticResource tableViewHierarchicalGroupByItemTemplate}" />
 
-      <Setter Property="EditingRowGlyph"
-              Value="{StaticResource editingRowGlyph}" />
+    </Style>
 
-      <Setter Property="ValidationErrorGlyph"
-              Value="{StaticResource validationErrorGlyph}" />
+    <!--
+        **************************
+        * STYLE: ScrollTip
+        **************************
+    -->
+    <Style x:Key="tableViewLunaHomesteadScrollTipStyle" TargetType="local:ScrollTip">
 
-      <Setter Property="ConnectionStateLoadingGlyph"
-              Value="{StaticResource connectionStateLoadingGlyph}" />
+        <Setter Property="Template" Value="{StaticResource scrollTipTemplate}" />
 
-      <Setter Property="ConnectionStateCommittingGlyph"
-              Value="{StaticResource connectionStateLoadingGlyph}" />
+        <Setter Property="Background">
+            <Setter.Value>
+                <LinearGradientBrush StartPoint="0.5,1" EndPoint="0.5,0">
+                    <GradientStop Offset="0" Color="#FFC7CDAC" />
 
-      <Setter Property="ConnectionStateErrorGlyph"
-              Value="{StaticResource connectionStateErrorGlyph}" />
+                    <GradientStop Offset="1" Color="#FFE8ECD1" />
+                </LinearGradientBrush>
+            </Setter.Value>
+        </Setter>
 
-   </Style>
+        <Setter Property="BorderBrush" Value="#FF849072" />
 
-   <!-- =================================================================== -->
-   <!-- DefaultStyleKey declarations                                        -->
-   <!-- =================================================================== -->
+        <Setter Property="TextElement.Foreground" Value="Black" />
 
-   <Style x:Key="{markup:ThemeKey TargetViewType=views:TableView, ThemeType=views:LunaHomesteadTheme}"
-          TargetType="views:TableView"
-          BasedOn="{StaticResource tableViewLunaHomesteadDefaultValues}" />
+        <Setter Property="VerticalAlignment" Value="Center" />
 
-   <Style x:Key="{markup:ThemeKey TargetViewType=views:TableView, ThemeType=views:LunaHomesteadTheme, TargetElementType=local:DataGridControl}"
-          TargetType="local:DataGridControl"
-          BasedOn="{StaticResource tableViewForcedLunaHomesteadGridControlStyle}" />
+        <Setter Property="HorizontalAlignment" Value="Right" />
 
-   <Style x:Key="{markup:ThemeKey TargetViewType=views:TableView, ThemeType=views:LunaHomesteadTheme, TargetElementType=local:RowSelectorPane}"
-          TargetType="local:RowSelectorPane"
-          BasedOn="{StaticResource tableViewLunaHomesteadRowSelectorPaneStyle}" />
+    </Style>
 
-   <Style x:Key="{markup:ThemeKey TargetViewType=views:TableView, ThemeType=views:LunaHomesteadTheme, TargetElementType=local:RowSelector}"
-          TargetType="local:RowSelector"
-          BasedOn="{StaticResource tableViewLunaHomesteadRowSelectorStyle}" />
+    <!--  ===================================================================  -->
+    <!--  Default values for the View  -->
+    <!--  ===================================================================  -->
 
-   <Style x:Key="{markup:ThemeKey TargetViewType=views:TableView, ThemeType=views:LunaHomesteadTheme, TargetElementType=local:Row}"
-          TargetType="local:Row"
-          BasedOn="{StaticResource tableViewLunaHomesteadRowStyle}" />
+    <Style x:Key="tableViewLunaHomesteadDefaultValues" TargetType="views:TableView">
 
-   <Style x:Key="{markup:ThemeKey TargetViewType=views:TableView, ThemeType=views:LunaHomesteadTheme, TargetElementType=local:DataRow}"
-          TargetType="local:DataRow"
-          BasedOn="{StaticResource tableViewLunaHomesteadDataRowStyle}" />
+        <Setter Property="HorizontalGridLineBrush" Value="{StaticResource gridLineBrush}" />
 
-   <Style x:Key="{markup:ThemeKey TargetViewType=views:TableView, ThemeType=views:LunaHomesteadTheme, TargetElementType=local:ColumnManagerRow}"
-          TargetType="local:ColumnManagerRow"
-          BasedOn="{StaticResource tableViewLunaHomesteadColumnManagerRowStyle}" />
+        <Setter Property="HorizontalGridLineThickness" Value="1" />
 
-   <Style x:Key="{markup:ThemeKey TargetViewType=views:TableView, ThemeType=views:LunaHomesteadTheme, TargetElementType=local:Cell}"
-          TargetType="local:Cell"
-          BasedOn="{StaticResource tableViewLunaHomesteadCellStyle}" />
+        <Setter Property="VerticalGridLineBrush" Value="{StaticResource gridLineBrush}" />
 
-   <Style x:Key="{markup:ThemeKey TargetViewType=views:TableView, ThemeType=views:LunaHomesteadTheme, TargetElementType=local:DataCell}"
-          TargetType="local:DataCell"
-          BasedOn="{StaticResource tableViewLunaHomesteadDataCellStyle}" />
+        <Setter Property="VerticalGridLineThickness" Value="1" />
 
-   <Style x:Key="{markup:ThemeKey TargetViewType=views:TableView, ThemeType=views:LunaHomesteadTheme, TargetElementType=local:ColumnManagerCell}"
-          TargetType="local:ColumnManagerCell"
-          BasedOn="{StaticResource tableViewLunaHomesteadColumnManagerCellStyle}" />
+        <Setter Property="GroupLevelIndicatorWidth" Value="17" />
 
-   <Style x:Key="{markup:ThemeKey TargetViewType=views:TableView, ThemeType=views:LunaHomesteadTheme, TargetElementType=local:GroupByControl}"
-          TargetType="local:GroupByControl"
-          BasedOn="{StaticResource tableViewLunaHomesteadGroupByControlStyle}" />
+        <Setter Property="DetailIndicatorWidth" Value="34" />
 
-   <Style x:Key="{markup:ThemeKey TargetViewType=views:TableView, ThemeType=views:LunaHomesteadTheme, TargetElementType=local:GroupByItem}"
-          TargetType="local:GroupByItem"
-          BasedOn="{StaticResource tableViewLunaHomesteadGroupByItemStyle}" />
+        <Setter Property="DefaultDropMarkPen" Value="{StaticResource dropMarkPen}" />
 
-   <Style x:Key="{markup:ThemeKey TargetViewType=views:TableView, ThemeType=views:LunaHomesteadTheme, TargetElementType=local:GroupHeaderControl}"
-          TargetType="local:GroupHeaderControl"
-          BasedOn="{StaticResource tableViewLunaHomesteadGroupHeaderControlStyle}" />
+        <!--
+            Those glyphs are null by default on ViewBase, so every Theme should define
+            and set their own custom glyphs.
+        -->
 
-   <Style x:Key="{markup:ThemeKey TargetViewType=views:TableView, ThemeType=views:LunaHomesteadTheme, TargetElementType=local:GroupLevelIndicator}"
-          TargetType="local:GroupLevelIndicator"
-          BasedOn="{StaticResource tableViewLunaHomesteadGroupLevelIndicatorStyle}" />
+        <Setter Property="AscendingSortGlyph" Value="{StaticResource ascendingSortGlyph}" />
 
-   <Style x:Key="{markup:ThemeKey TargetViewType=views:TableView, ThemeType=views:LunaHomesteadTheme, TargetElementType=local:DetailIndicator}"
-          TargetType="local:DetailIndicator"
-          BasedOn="{StaticResource tableViewLunaHomesteadDetailIndicatorStyle}" />
+        <Setter Property="DescendingSortGlyph" Value="{StaticResource descendingSortGlyph}" />
 
-   <Style x:Key="{markup:ThemeKey TargetViewType=views:TableView, ThemeType=views:LunaHomesteadTheme, TargetElementType=local:GroupLevelIndicatorPane}"
-          TargetType="local:GroupLevelIndicatorPane"
-          BasedOn="{StaticResource tableViewLunaHomesteadGroupLevelIndicatorPaneStyle}" />
+        <Setter Property="ExpandGroupGlyph" Value="{StaticResource expandGroupGlyph}" />
 
-   <Style x:Key="{markup:ThemeKey TargetViewType=views:TableView, ThemeType=views:LunaHomesteadTheme, TargetElementType=local:HierarchicalGroupLevelIndicatorPane}"
-          TargetType="local:HierarchicalGroupLevelIndicatorPane"
-          BasedOn="{StaticResource tableViewLunaHomesteadHierarchicalGroupLevelIndicatorPaneStyle}" />
+        <Setter Property="CollapseGroupGlyph" Value="{StaticResource collapseGroupGlyph}" />
 
-   <Style x:Key="{markup:ThemeKey TargetViewType=views:TableView, ThemeType=views:LunaHomesteadTheme, TargetElementType=local:ScrollTip}"
-          TargetType="local:ScrollTip"
-          BasedOn="{StaticResource tableViewLunaHomesteadScrollTipStyle}" />
+        <Setter Property="CurrentItemGlyph" Value="{StaticResource currentItemGlyph}" />
 
-   <Style x:Key="{markup:ThemeKey TargetViewType=views:TableView, ThemeType=views:LunaHomesteadTheme, TargetElementType=local:HierarchicalGroupByControlNode}"
-          TargetType="local:HierarchicalGroupByControlNode"
-          BasedOn="{StaticResource tableViewLunaHomesteadHierarchicalGroupByControlNodeStyle}" />
+        <Setter Property="EditingRowGlyph" Value="{StaticResource editingRowGlyph}" />
 
-   <Style x:Key="{markup:ThemeKey TargetViewType=views:TableView, ThemeType=views:LunaHomesteadTheme, TargetElementType=local:HierarchicalGroupByControl}"
-          TargetType="local:HierarchicalGroupByControl"
-          BasedOn="{StaticResource tableViewLunaHomesteadHierarchicalGroupByControlStyle}" />
+        <Setter Property="ValidationErrorGlyph" Value="{StaticResource validationErrorGlyph}" />
 
-   <Style x:Key="{markup:ThemeKey TargetViewType=views:TableView, ThemeType=views:LunaHomesteadTheme, TargetElementType=local:HierarchicalGroupByItem}"
-          TargetType="local:HierarchicalGroupByItem"
-          BasedOn="{StaticResource tableViewLunaHomesteadHierarchicalGroupByItemStyle}" />
+        <Setter Property="ConnectionStateLoadingGlyph" Value="{StaticResource connectionStateLoadingGlyph}" />
+
+        <Setter Property="ConnectionStateCommittingGlyph" Value="{StaticResource connectionStateLoadingGlyph}" />
+
+        <Setter Property="ConnectionStateErrorGlyph" Value="{StaticResource connectionStateErrorGlyph}" />
+
+    </Style>
+
+    <!--  ===================================================================  -->
+    <!--  DefaultStyleKey declarations  -->
+    <!--  ===================================================================  -->
+
+    <Style
+        x:Key="{markup:ThemeKey TargetViewType=views:TableView,
+                                ThemeType=views:LunaHomesteadTheme}"
+        BasedOn="{StaticResource tableViewLunaHomesteadDefaultValues}"
+        TargetType="views:TableView" />
+
+    <Style
+        x:Key="{markup:ThemeKey TargetViewType=views:TableView,
+                                ThemeType=views:LunaHomesteadTheme,
+                                TargetElementType=local:DataGridControl}"
+        BasedOn="{StaticResource tableViewForcedLunaHomesteadGridControlStyle}"
+        TargetType="local:DataGridControl" />
+
+    <Style
+        x:Key="{markup:ThemeKey TargetViewType=views:TableView,
+                                ThemeType=views:LunaHomesteadTheme,
+                                TargetElementType=local:RowSelectorPane}"
+        BasedOn="{StaticResource tableViewLunaHomesteadRowSelectorPaneStyle}"
+        TargetType="local:RowSelectorPane" />
+
+    <Style
+        x:Key="{markup:ThemeKey TargetViewType=views:TableView,
+                                ThemeType=views:LunaHomesteadTheme,
+                                TargetElementType=local:RowSelector}"
+        BasedOn="{StaticResource tableViewLunaHomesteadRowSelectorStyle}"
+        TargetType="local:RowSelector" />
+
+    <Style
+        x:Key="{markup:ThemeKey TargetViewType=views:TableView,
+                                ThemeType=views:LunaHomesteadTheme,
+                                TargetElementType=local:Row}"
+        BasedOn="{StaticResource tableViewLunaHomesteadRowStyle}"
+        TargetType="local:Row" />
+
+    <Style
+        x:Key="{markup:ThemeKey TargetViewType=views:TableView,
+                                ThemeType=views:LunaHomesteadTheme,
+                                TargetElementType=local:DataRow}"
+        BasedOn="{StaticResource tableViewLunaHomesteadDataRowStyle}"
+        TargetType="local:DataRow" />
+
+    <Style
+        x:Key="{markup:ThemeKey TargetViewType=views:TableView,
+                                ThemeType=views:LunaHomesteadTheme,
+                                TargetElementType=local:ColumnManagerRow}"
+        BasedOn="{StaticResource tableViewLunaHomesteadColumnManagerRowStyle}"
+        TargetType="local:ColumnManagerRow" />
+
+    <Style
+        x:Key="{markup:ThemeKey TargetViewType=views:TableView,
+                                ThemeType=views:LunaHomesteadTheme,
+                                TargetElementType=local:Cell}"
+        BasedOn="{StaticResource tableViewLunaHomesteadCellStyle}"
+        TargetType="local:Cell" />
+
+    <Style
+        x:Key="{markup:ThemeKey TargetViewType=views:TableView,
+                                ThemeType=views:LunaHomesteadTheme,
+                                TargetElementType=local:DataCell}"
+        BasedOn="{StaticResource tableViewLunaHomesteadDataCellStyle}"
+        TargetType="local:DataCell" />
+
+    <Style
+        x:Key="{markup:ThemeKey TargetViewType=views:TableView,
+                                ThemeType=views:LunaHomesteadTheme,
+                                TargetElementType=local:ColumnManagerCell}"
+        BasedOn="{StaticResource tableViewLunaHomesteadColumnManagerCellStyle}"
+        TargetType="local:ColumnManagerCell" />
+
+    <Style
+        x:Key="{markup:ThemeKey TargetViewType=views:TableView,
+                                ThemeType=views:LunaHomesteadTheme,
+                                TargetElementType=local:GroupByControl}"
+        BasedOn="{StaticResource tableViewLunaHomesteadGroupByControlStyle}"
+        TargetType="local:GroupByControl" />
+
+    <Style
+        x:Key="{markup:ThemeKey TargetViewType=views:TableView,
+                                ThemeType=views:LunaHomesteadTheme,
+                                TargetElementType=local:GroupByItem}"
+        BasedOn="{StaticResource tableViewLunaHomesteadGroupByItemStyle}"
+        TargetType="local:GroupByItem" />
+
+    <Style
+        x:Key="{markup:ThemeKey TargetViewType=views:TableView,
+                                ThemeType=views:LunaHomesteadTheme,
+                                TargetElementType=local:GroupHeaderControl}"
+        BasedOn="{StaticResource tableViewLunaHomesteadGroupHeaderControlStyle}"
+        TargetType="local:GroupHeaderControl" />
+
+    <Style
+        x:Key="{markup:ThemeKey TargetViewType=views:TableView,
+                                ThemeType=views:LunaHomesteadTheme,
+                                TargetElementType=local:GroupLevelIndicator}"
+        BasedOn="{StaticResource tableViewLunaHomesteadGroupLevelIndicatorStyle}"
+        TargetType="local:GroupLevelIndicator" />
+
+    <Style
+        x:Key="{markup:ThemeKey TargetViewType=views:TableView,
+                                ThemeType=views:LunaHomesteadTheme,
+                                TargetElementType=local:DetailIndicator}"
+        BasedOn="{StaticResource tableViewLunaHomesteadDetailIndicatorStyle}"
+        TargetType="local:DetailIndicator" />
+
+    <Style
+        x:Key="{markup:ThemeKey TargetViewType=views:TableView,
+                                ThemeType=views:LunaHomesteadTheme,
+                                TargetElementType=local:GroupLevelIndicatorPane}"
+        BasedOn="{StaticResource tableViewLunaHomesteadGroupLevelIndicatorPaneStyle}"
+        TargetType="local:GroupLevelIndicatorPane" />
+
+    <Style
+        x:Key="{markup:ThemeKey TargetViewType=views:TableView,
+                                ThemeType=views:LunaHomesteadTheme,
+                                TargetElementType=local:HierarchicalGroupLevelIndicatorPane}"
+        BasedOn="{StaticResource tableViewLunaHomesteadHierarchicalGroupLevelIndicatorPaneStyle}"
+        TargetType="local:HierarchicalGroupLevelIndicatorPane" />
+
+    <Style
+        x:Key="{markup:ThemeKey TargetViewType=views:TableView,
+                                ThemeType=views:LunaHomesteadTheme,
+                                TargetElementType=local:ScrollTip}"
+        BasedOn="{StaticResource tableViewLunaHomesteadScrollTipStyle}"
+        TargetType="local:ScrollTip" />
+
+    <Style
+        x:Key="{markup:ThemeKey TargetViewType=views:TableView,
+                                ThemeType=views:LunaHomesteadTheme,
+                                TargetElementType=local:HierarchicalGroupByControlNode}"
+        BasedOn="{StaticResource tableViewLunaHomesteadHierarchicalGroupByControlNodeStyle}"
+        TargetType="local:HierarchicalGroupByControlNode" />
+
+    <Style
+        x:Key="{markup:ThemeKey TargetViewType=views:TableView,
+                                ThemeType=views:LunaHomesteadTheme,
+                                TargetElementType=local:HierarchicalGroupByControl}"
+        BasedOn="{StaticResource tableViewLunaHomesteadHierarchicalGroupByControlStyle}"
+        TargetType="local:HierarchicalGroupByControl" />
+
+    <Style
+        x:Key="{markup:ThemeKey TargetViewType=views:TableView,
+                                ThemeType=views:LunaHomesteadTheme,
+                                TargetElementType=local:HierarchicalGroupByItem}"
+        BasedOn="{StaticResource tableViewLunaHomesteadHierarchicalGroupByItemStyle}"
+        TargetType="local:HierarchicalGroupByItem" />
 
 </ResourceDictionary>

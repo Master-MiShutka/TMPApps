@@ -411,7 +411,6 @@
                     Grid.Row="1"
                     Grid.ColumnSpan="3"
                     IsItemsHost="True"
-                    
                     ItemWidth="{Binding Path=Value, ElementName=slider}" />
             </Grid>
         </Grid>

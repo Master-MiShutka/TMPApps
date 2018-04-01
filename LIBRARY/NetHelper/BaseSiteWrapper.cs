@@ -32,7 +32,7 @@ namespace TMP.Common.NetHelper
         {
             var appWithLogger = System.Windows.Application.Current as IAppWithLogger;
             if (appWithLogger != null)
-                Log = appWithLogger.Log;
+                Log = appWithLogger.Logger;
             else
                 System.Diagnostics.Debug.WriteLine("Application as IAppWithLogger not found!");
         }

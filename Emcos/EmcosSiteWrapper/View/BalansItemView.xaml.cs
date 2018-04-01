@@ -13,7 +13,7 @@ using System.Windows.Shapes;
 
 namespace TMP.Work.Emcos.View
 {
-    using TMP.Common.Logger;
+    using TMPApplication;
     /// <summary>
     /// Interaction logic for BalansItemView.xaml
     /// </summary>
@@ -114,11 +114,11 @@ namespace TMP.Work.Emcos.View
                 }
                 catch (Exception ex)
                 {
-                    App.ToLogError(String.Format("Обновление данных по точке ({0}). Произошла ошибка: {1}", item.Name, ex.Message));
+                    App.LogError(String.Format("Обновление данных по точке ({0}). Произошла ошибка: {1}", item.Name, ex.Message));
                     State = State.Idle;
                 }
 
-                App.UIAction(() =>
+                DispatcherExtensions.InUi(() =>
                   {
                       Progress = 0;
                   });

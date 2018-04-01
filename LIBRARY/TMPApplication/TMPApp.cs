@@ -174,11 +174,11 @@ namespace TMPApplication
             else
             {
                 base.OnStartup(e);
-                if (StartupUri == null)
+                /*if (StartupUri == null)
                 {
                     LogError("Не задано главное окно!\nАварийное завершение!");
                     Application.Current.Shutdown(-1);
-                }
+                }*/
                 RunApp();
             }
         }

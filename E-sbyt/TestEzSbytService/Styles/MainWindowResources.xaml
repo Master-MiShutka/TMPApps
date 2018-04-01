@@ -32,9 +32,9 @@
                 Padding="0"
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Top"
-                Foreground="{DynamicResource BlackBrush}"
                 FontFamily="{StaticResource ToolTipFontFamily}"
                 FontSize="{StaticResource ToolTipFontSize}"
+                Foreground="{DynamicResource BlackBrush}"
                 Text="{TemplateBinding Content}"
                 TextWrapping="Wrap" />
         </Border>
@@ -57,13 +57,13 @@
                 Width="20"
                 Margin="4,0,0,0"
                 Padding="0"
-                Style="{DynamicResource TMPWindowCloseButtonStyle}"
-                FontFamily="Marlett"
                 Command="{Binding Path=CloseCommand}"
                 Content="r"
                 Cursor="Hand"
                 DockPanel.Dock="Right"
                 Focusable="False"
+                FontFamily="Marlett"
+                Style="{DynamicResource TMPWindowCloseButtonStyle}"
                 ToolTip="Закрыть вкладку"
                 Visibility="{Binding Path=CanClose, Converter={StaticResource BooleanToVisibilityConverter}}" />
             <ContentPresenter VerticalAlignment="Center" Content="{Binding Path=DisplayName}" />
@@ -106,8 +106,8 @@
                             MinWidth="24"
                             Margin="2"
                             Padding="0"
-                            Style="{DynamicResource TMPFlatButton}"
                             Command="{Binding Path=DataContext.CreateNewManualRequestTabCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
+                            Style="{DynamicResource TMPFlatButton}"
                             ToolTip="Добавить вкладку с ручным запросом">
                             <iconpack:PackIconModern
                                 Width="12"
@@ -182,12 +182,12 @@
     <DataTemplate x:Key="TabsTemplate">
         <TabControl
             Margin="2,0,2,2"
-            Style="{StaticResource TabControlStyle}"
             behaviors:TabContent.IsCached="True"
             IsSynchronizedWithCurrentItem="True"
             ItemTemplate="{StaticResource ClosableTabItemTemplate}"
             ItemsSource="{Binding}"
-            SelectedItem="{Binding SelectedItem}" />
+            SelectedItem="{Binding SelectedItem}"
+            Style="{StaticResource TabControlStyle}" />
     </DataTemplate>
 
     <DataTemplate x:Key="Repository">

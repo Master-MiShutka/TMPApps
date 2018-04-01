@@ -17,38 +17,41 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ContextMenu}">
                     <Grid Margin="4">
-                        <Border Margin="-1"
-                                Background="#0C000000"
-                                BorderBrush="#0F000000"
-                                BorderThickness="1"
-                                CornerRadius="2.5" />
-                        <Border Margin="-2"
-                                Background="#0A000000"
-                                BorderBrush="#0C000000"
-                                BorderThickness="1"
-                                CornerRadius="2.75" />
-                        <Border Name="ContextMenuBorder"
-                                Margin="0,-1,0,0"
-                                Background="{DynamicResource PopupBackground}"
-                                BorderBrush="{DynamicResource WindowBorderActive}"
-                                BorderThickness="1">
+                        <Border
+                            Margin="-1"
+                            Background="#0C000000"
+                            BorderBrush="#0F000000"
+                            BorderThickness="1"
+                            CornerRadius="2.5" />
+                        <Border
+                            Margin="-2"
+                            Background="#0A000000"
+                            BorderBrush="#0C000000"
+                            BorderThickness="1"
+                            CornerRadius="2.75" />
+                        <Border
+                            Name="ContextMenuBorder"
+                            Margin="0,-1,0,0"
+                            Background="{DynamicResource PopupBackground}"
+                            BorderBrush="{DynamicResource WindowBorderActive}"
+                            BorderThickness="1">
                             <ScrollViewer Name="ContextMenuScrollViewer">
                                 <Grid RenderOptions.ClearTypeHint="Enabled">
-                                    <Canvas Width="0"
-                                            Height="0"
-                                            HorizontalAlignment="Left"
-                                            VerticalAlignment="Top">
-                                        <Rectangle Name="OpaqueRect"
-                                                   Width="{Binding ElementName=ContextMenuBorder,
-                                                                   Path=ActualWidth}"
-                                                   Height="{Binding ElementName=ContextMenuBorder,
-                                                                    Path=ActualHeight}"
-                                                   Fill="{Binding ElementName=ContextMenuBorder,
-                                                                  Path=Background}" />
+                                    <Canvas
+                                        Width="0"
+                                        Height="0"
+                                        HorizontalAlignment="Left"
+                                        VerticalAlignment="Top">
+                                        <Rectangle
+                                            Name="OpaqueRect"
+                                            Width="{Binding ElementName=ContextMenuBorder, Path=ActualWidth}"
+                                            Height="{Binding ElementName=ContextMenuBorder, Path=ActualHeight}"
+                                            Fill="{Binding ElementName=ContextMenuBorder, Path=Background}" />
                                     </Canvas>
-                                    <ItemsPresenter Name="ItemsPresenter"
-                                                    KeyboardNavigation.DirectionalNavigation="Contained"
-                                                    SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}" />
+                                    <ItemsPresenter
+                                        Name="ItemsPresenter"
+                                        KeyboardNavigation.DirectionalNavigation="Contained"
+                                        SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}" />
                                 </Grid>
                             </ScrollViewer>
                         </Border>

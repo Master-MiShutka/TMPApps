@@ -91,7 +91,7 @@ namespace TMP.Work.Emcos.Model
                         substation.Departament = departamentPoint.Name;
                         // название имеет формат вида ПС 35кВ Бакшты
                         var nameParts = substationPoint.Name.Split(' ');
-                        if (nameParts == null || nameParts.Length < 3)
+                        if (nameParts.Length < 3)
                             throw new System.ArgumentException(string.Format("Неверный формат названия подстанции - '{0}'", substationPoint.Name));
                         // выделяем название
                         var title = "";
@@ -115,7 +115,6 @@ namespace TMP.Work.Emcos.Model
                                 {
                                     case "AUXILIARY":
                                         group = new SubstationAuxiliary();
-                                        if (groupPoint.Children != null)
                                             foreach (var subgroupPoint in groupPoint.Children)
                                             {
                                                 if (subgroupPoint.Type == ElementTypes.UNITTRANSFORMER)
@@ -134,7 +133,6 @@ namespace TMP.Work.Emcos.Model
 
                                     case "POWERTRANSFORMERS":
                                         group = new SubstationPowerTransformers();
-                                        if (groupPoint.Children != null)
                                             foreach (var subgroupPoint in groupPoint.Children)
                                             {
                                                 item = new PowerTransformer();
@@ -150,7 +148,6 @@ namespace TMP.Work.Emcos.Model
 
                                     case "SECTIONS":
                                         // проход по ступеням напряжения
-                                        if (groupPoint.Children != null)
                                             foreach (var subgroupPoint in groupPoint.Children)
                                             {
                                                 SubstationSection highSection = null;

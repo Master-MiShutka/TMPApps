@@ -130,6 +130,7 @@
     <Compile Include="Conveters\TextSpaceConverter.cs" />
     <Compile Include="Conveters\TreeViewMarginConverter.cs" />
     <Compile Include="DelegateCommand.cs" />
+    <Compile Include="Extensions\DataGridColumns.cs" />
     <Compile Include="Extensions\DependencyExtensions.cs" />
     <Compile Include="Extensions\GridViewColumns.cs" />
     <Compile Include="Extensions\ValueFromStyleExtension.cs" />

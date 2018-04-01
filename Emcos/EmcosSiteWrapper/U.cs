@@ -175,7 +175,7 @@ namespace TMP.Work.Emcos
             {
                 if (substation.Items == null)
                 {
-                    App.ToLogInfo(String.Format("Подстанция <{0}> не имеет точек.", substation.Name));
+                    App.LogInfo(String.Format("Подстанция <{0}> не имеет точек.", substation.Name));
                     error = true;
                 }
                 else
@@ -192,12 +192,12 @@ namespace TMP.Work.Emcos
                     }
                     catch (Exception e)
                     {
-                        App.ToLogInfo("GetSubstationsDaylyArchives - ошибка: " + e.Message);
+                        App.LogInfo("GetSubstationsDaylyArchives - ошибка: " + e.Message);
                         error = true;
                     }
                     if (wids == null || wids.Length == 0)
                     {
-                        App.ToLogInfo("GetSubstationsDaylyArchives - ошибка получен неверный wid. Подстанция - " + substation.Name);
+                        App.LogInfo("GetSubstationsDaylyArchives - ошибка получен неверный wid. Подстанция - " + substation.Name);
                         error = true;
                     }
                 }
@@ -232,7 +232,7 @@ namespace TMP.Work.Emcos
                             }
                             catch (Exception e)
                             {
-                                App.ToLogInfo(String.Format("GetSubstationsDaylyArchives-getPointArchive. Ошибка получения данных по точке {0}. Сообщение: {1}",
+                                App.LogInfo(String.Format("GetSubstationsDaylyArchives-getPointArchive. Ошибка получения данных по точке {0}. Сообщение: {1}",
                                     item.Id, e.Message));
                                 return null;
                             }
@@ -276,7 +276,7 @@ namespace TMP.Work.Emcos
                     }
                     catch (Exception e)
                     {
-                        App.ToLogInfo(String.Format("GetSubstationsDaylyArchives. Ошибка получения данных по точке: ID={0}, NAME={1}. Сообщение: {2}",
+                        App.LogInfo(String.Format("GetSubstationsDaylyArchives. Ошибка получения данных по точке: ID={0}, NAME={1}. Сообщение: {2}",
                                     item.Id, item.Name, e.Message));
                         continue;
                     }
@@ -325,12 +325,12 @@ namespace TMP.Work.Emcos
             }
             catch (Exception e)
             {
-                App.ToLogInfo("GetDaylyArchiveDataForItem - GetArchiveWIds - ошибка: " + e.Message);
+                App.LogInfo("GetDaylyArchiveDataForItem - GetArchiveWIds - ошибка: " + e.Message);
                 error = true;
             }
             if (wids == null || wids.Length == 0)
             {
-                App.ToLogInfo("GetDaylyArchiveDataForItem - ошибка получен неверный wid. Элемент - " + item.Name);
+                App.LogInfo("GetDaylyArchiveDataForItem - ошибка получен неверный wid. Элемент - " + item.Name);
                 error = true;
             }
 
@@ -350,7 +350,7 @@ namespace TMP.Work.Emcos
                         }
                         catch (Exception e)
                         {
-                            App.ToLogInfo(String.Format("GetDaylyArchiveDataForItem-getPointArchive. Ошибка получения данных по точке {0}. Сообщение: {1}",
+                            App.LogInfo(String.Format("GetDaylyArchiveDataForItem-getPointArchive. Ошибка получения данных по точке {0}. Сообщение: {1}",
                                 item.Id, e.Message));
                             return null;
                         }
@@ -394,7 +394,7 @@ namespace TMP.Work.Emcos
                 }
                 catch (Exception e)
                 {
-                    App.ToLogInfo(String.Format("GetDaylyArchiveDataForItem. Ошибка получения данных по точке: ID={0}, NAME={1}. Сообщение: {2}",
+                    App.LogInfo(String.Format("GetDaylyArchiveDataForItem. Ошибка получения данных по точке: ID={0}, NAME={1}. Сообщение: {2}",
                                 item.Id, item.Name, e.Message));
                 }
             }
@@ -435,7 +435,7 @@ namespace TMP.Work.Emcos
                     }
             }
             else
-                App.ToLogInfo(String.Format("ParseData данные за сутки. Ошибка в данных. Точка: {0}", name));
+                App.LogInfo(String.Format("ParseData данные за сутки. Ошибка в данных. Точка: {0}", name));
         }
         /// <summary>
         /// Разбор архивных данных за месяц
@@ -457,7 +457,7 @@ namespace TMP.Work.Emcos
                 }
             }
             else
-                App.ToLogInfo(String.Format("ParseData данные за месяц. Ошибка в данных. Точка: {0}", name));
+                App.LogInfo(String.Format("ParseData данные за месяц. Ошибка в данных. Точка: {0}", name));
         }
     }
 }

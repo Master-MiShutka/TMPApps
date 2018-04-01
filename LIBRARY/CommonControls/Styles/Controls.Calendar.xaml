@@ -181,6 +181,21 @@
                                     <Grid.Resources>
                                         <ControlTemplate x:Key="PreviousButtonTemplate" TargetType="{x:Type Button}">
                                             <Grid Cursor="Hand">
+                                                <Rectangle
+                                                    Fill="{DynamicResource AccentColorBrush}"
+                                                    Opacity="0.1"
+                                                    Stretch="Fill" />
+                                                <Path
+                                                    x:Name="path"
+                                                    Width="6"
+                                                    Height="10"
+                                                    Margin="14,-6,0,0"
+                                                    HorizontalAlignment="Left"
+                                                    VerticalAlignment="Center"
+                                                    Data="M288.75,232.25 L288.75,240.625 L283,236.625 z"
+                                                    Fill="white"
+                                                    Opacity="0.7"
+                                                    Stretch="Fill" />
                                                 <VisualStateManager.VisualStateGroups>
                                                     <VisualStateGroup x:Name="CommonStates">
                                                         <VisualState x:Name="Normal" />
@@ -204,6 +219,10 @@
                                                         </VisualState>
                                                     </VisualStateGroup>
                                                 </VisualStateManager.VisualStateGroups>
+                                            </Grid>
+                                        </ControlTemplate>
+                                        <ControlTemplate x:Key="NextButtonTemplate" TargetType="{x:Type Button}">
+                                            <Grid Cursor="Hand">
                                                 <Rectangle
                                                     Fill="{DynamicResource AccentColorBrush}"
                                                     Opacity="0.1"
@@ -212,17 +231,13 @@
                                                     x:Name="path"
                                                     Width="6"
                                                     Height="10"
-                                                    Margin="14,-6,0,0"
-                                                    HorizontalAlignment="Left"
+                                                    Margin="0,-6,14,0"
+                                                    HorizontalAlignment="Right"
                                                     VerticalAlignment="Center"
-                                                    Data="M288.75,232.25 L288.75,240.625 L283,236.625 z"
+                                                    Data="M282.875,231.875 L282.875,240.375 L288.625,236 z"
                                                     Fill="white"
                                                     Opacity="0.7"
                                                     Stretch="Fill" />
-                                            </Grid>
-                                        </ControlTemplate>
-                                        <ControlTemplate x:Key="NextButtonTemplate" TargetType="{x:Type Button}">
-                                            <Grid Cursor="Hand">
                                                 <VisualStateManager.VisualStateGroups>
                                                     <VisualStateGroup x:Name="CommonStates">
                                                         <VisualState x:Name="Normal" />
@@ -246,25 +261,20 @@
                                                         </VisualState>
                                                     </VisualStateGroup>
                                                 </VisualStateManager.VisualStateGroups>
-                                                <Rectangle
-                                                    Fill="{DynamicResource AccentColorBrush}"
-                                                    Opacity="0.1"
-                                                    Stretch="Fill" />
-                                                <Path
-                                                    x:Name="path"
-                                                    Width="6"
-                                                    Height="10"
-                                                    Margin="0,-6,14,0"
-                                                    HorizontalAlignment="Right"
-                                                    VerticalAlignment="Center"
-                                                    Data="M282.875,231.875 L282.875,240.375 L288.625,236 z"
-                                                    Fill="white"
-                                                    Opacity="0.7"
-                                                    Stretch="Fill" />
                                             </Grid>
                                         </ControlTemplate>
                                         <ControlTemplate x:Key="HeaderButtonTemplate" TargetType="{x:Type Button}">
                                             <Grid Cursor="Hand">
+                                                <ContentPresenter
+                                                    x:Name="buttonContent"
+                                                    Margin="1,4,1,9"
+                                                    HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                    VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                                    Content="{TemplateBinding Content}"
+                                                    ContentTemplate="{TemplateBinding ContentTemplate}"
+                                                    Opacity="0.7"
+                                                    TextElement.FontFamily="{DynamicResource ContentFontFamily}"
+                                                    TextElement.Foreground="{DynamicResource AccentSelectedColorBrush}" />
                                                 <VisualStateManager.VisualStateGroups>
                                                     <VisualStateGroup x:Name="CommonStates">
                                                         <VisualState x:Name="Normal" />
@@ -288,16 +298,6 @@
                                                         </VisualState>
                                                     </VisualStateGroup>
                                                 </VisualStateManager.VisualStateGroups>
-                                                <ContentPresenter
-                                                    x:Name="buttonContent"
-                                                    Margin="1,4,1,9"
-                                                    HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                                    VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                                    Content="{TemplateBinding Content}"
-                                                    ContentTemplate="{TemplateBinding ContentTemplate}"
-                                                    Opacity="0.7"
-                                                    TextElement.FontFamily="{DynamicResource ContentFontFamily}"
-                                                    TextElement.Foreground="{DynamicResource AccentSelectedColorBrush}" />
                                             </Grid>
                                         </ControlTemplate>
 

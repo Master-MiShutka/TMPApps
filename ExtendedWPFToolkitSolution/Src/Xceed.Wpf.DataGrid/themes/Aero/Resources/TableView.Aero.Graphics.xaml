@@ -1,244 +1,186 @@
-﻿<!--***********************************************************************************
+﻿<!--
+    ***********************************************************************************
+    
+    Extended WPF Toolkit
+    
+    Copyright (C) 2007-2013 Xceed Software Inc.
+    
+    This program is provided to you under the terms of the Microsoft Public
+    License (Ms-PL) as published at http://wpftoolkit.codeplex.com/license
+    
+    For more features, controls, and fast professional support,
+    pick up the Plus Edition at http://xceed.com/wpf_toolkit
+    
+    Stay informed: follow @datagrid on Twitter or Like http://facebook.com/datagrids
+    
+    **********************************************************************************
+-->
 
-   Extended WPF Toolkit
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:Xceed.Wpf.DataGrid"
+    xmlns:markup="clr-namespace:Xceed.Wpf.DataGrid.Markup">
 
-   Copyright (C) 2007-2013 Xceed Software Inc.
+    <ResourceDictionary.MergedDictionaries>
 
-   This program is provided to you under the terms of the Microsoft Public
-   License (Ms-PL) as published at http://wpftoolkit.codeplex.com/license 
+        <!--  Aero uses the same graphics as Luna, so reuse the same ResourceDictionary.  -->
+        <markup:DataGridThemeResourceDictionary Source="../../Luna/Resources/TableView.Luna.Graphics.xaml" />
 
-   For more features, controls, and fast professional support,
-   pick up the Plus Edition at http://xceed.com/wpf_toolkit
+    </ResourceDictionary.MergedDictionaries>
 
-   Stay informed: follow @datagrid on Twitter or Like http://facebook.com/datagrids
+    <DataTemplate x:Key="ascendingSortGlyph">
+        <Canvas Width="7" Height="4">
+            <Path Data="M 3.59375,0.15625 C3.59375,0.15625 7,4 7,4 7,4 0,4 0,4 0,4 3.59375,0.15625 3.59375,0.15625 z" Opacity="1">
+                <Path.Fill>
+                    <LinearGradientBrush StartPoint="0.285,-0.0406" EndPoint="0.476,0.869">
+                        <GradientStop Offset="0" Color="#406274" />
+                        <GradientStop Offset="0.972" Color="#C3E4F5" />
+                    </LinearGradientBrush>
+                </Path.Fill>
+            </Path>
+            <Path
+                Data="M 0.5,3.5 C0.5,3.5 3.5,0.5 3.5,0.5 "
+                Opacity="1"
+                Stroke="#406274"
+                StrokeThickness="1" />
+        </Canvas>
+    </DataTemplate>
 
-  **********************************************************************************-->
+    <DataTemplate x:Key="descendingSortGlyph">
+        <Canvas Width="7" Height="4">
+            <Path Data="M 3.59375,4 C3.59375,4 7,0.15625 7,0.15625 7,0.15625 0,0.15625 0,0.15625 0,0.15625 3.59375,4 3.59375,4 z" Opacity="1">
+                <Path.Fill>
+                    <LinearGradientBrush StartPoint="0,-0.040" EndPoint="0.669,-0.040">
+                        <LinearGradientBrush.GradientStops>
+                            <GradientStopCollection>
+                                <GradientStop Offset="0" Color="#3D6F89" />
+                                <GradientStop Offset="0.961" Color="#A6D8F3" />
+                            </GradientStopCollection>
+                        </LinearGradientBrush.GradientStops>
+                    </LinearGradientBrush>
+                </Path.Fill>
+            </Path>
+            <Path
+                Data="M 0.5,0.5 C0.5,0.5 3.5,3.5 3.5,3.5 "
+                Opacity="1"
+                Stroke="#406274"
+                StrokeThickness="1" />
+        </Canvas>
+    </DataTemplate>
 
-<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:local="clr-namespace:Xceed.Wpf.DataGrid"
-                    xmlns:markup="clr-namespace:Xceed.Wpf.DataGrid.Markup">
+    <DataTemplate x:Key="collapseGroupGlyph">
+        <Grid Width="15" Height="15">
 
-   <ResourceDictionary.MergedDictionaries>
+            <Ellipse
+                x:Name="mouseOverEllipse"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch"
+                Fill="Transparent"
+                Stretch="Fill" />
 
-      <!-- Aero uses the same graphics as Luna, so reuse the same ResourceDictionary. -->
-      <markup:DataGridThemeResourceDictionary Source="../../Luna/Resources/TableView.Luna.Graphics.xaml" />
+            <Canvas>
+                <Path Data="M 7.46875,5.125 C7.46875,5.125 11,9 11,9 11,9 11,10 11,10 11,10 9,10 9,10 9,10 7.625,7.84375 7.625,7.84375 7.625,7.84375 6,10 6,10 6,10 4,10 4,10 4,10 4,9 4,9 4,9 7.46875,5.125 7.46875,5.125 z" Fill="#000262" />
+            </Canvas>
+        </Grid>
 
-   </ResourceDictionary.MergedDictionaries>
+        <DataTemplate.Triggers>
 
-   <DataTemplate x:Key="ascendingSortGlyph">
-      <Canvas Height="4"
-              Width="7">
-         <Path Opacity="1"
-               Data="M 3.59375,0.15625 C3.59375,0.15625 7,4 7,4 7,4 0,4 0,4 0,4 3.59375,0.15625 3.59375,0.15625 z">
-            <Path.Fill>
-               <LinearGradientBrush
-                  StartPoint="0.285,-0.0406"
-                  EndPoint="0.476,0.869">
-                  <GradientStop Offset="0" 
-                                Color="#406274"/>
-                  <GradientStop Offset="0.972"
-                                Color="#C3E4F5" />
-               </LinearGradientBrush>
-            </Path.Fill>
-         </Path>
-         <Path Opacity="1"
-               Data="M 0.5,3.5 C0.5,3.5 3.5,0.5 3.5,0.5 "
-               Stroke="#406274"
-               StrokeThickness="1" />
-      </Canvas>
-   </DataTemplate>
+            <DataTrigger Binding="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(ButtonBase.IsMouseOver)}" Value="True">
 
-   <DataTemplate x:Key="descendingSortGlyph">
-      <Canvas Height="4"
-              Width="7">
-         <Path Opacity="1"
-               Data="M 3.59375,4 C3.59375,4 7,0.15625 7,0.15625 7,0.15625 0,0.15625 0,0.15625 0,0.15625 3.59375,4 3.59375,4 z">
-            <Path.Fill>
-               <LinearGradientBrush
-                  StartPoint="0,-0.040"
-                  EndPoint="0.669,-0.040">
-                  <LinearGradientBrush.GradientStops>
-                     <GradientStopCollection>
-                        <GradientStop Offset="0" 
-                                      Color="#3D6F89"/>
-                        <GradientStop 
-                           Offset="0.961"
-                           Color="#A6D8F3" />
-                     </GradientStopCollection>
-                  </LinearGradientBrush.GradientStops>
-               </LinearGradientBrush>
-            </Path.Fill>
-         </Path>
-         <Path Opacity="1"
-               Data="M 0.5,0.5 C0.5,0.5 3.5,3.5 3.5,3.5 "
-               Stroke="#406274"
-               StrokeThickness="1" />
-      </Canvas>
-   </DataTemplate>
+                <Setter TargetName="mouseOverEllipse" Property="Stroke" Value="#688DC4" />
 
-   <DataTemplate x:Key="collapseGroupGlyph">
-      <Grid Height="15"
-            Width="15">
+                <Setter TargetName="mouseOverEllipse" Property="Fill">
 
-         <Ellipse x:Name="mouseOverEllipse"
-                  Stretch="Fill"
-                  HorizontalAlignment="Stretch"
-                  VerticalAlignment="Stretch"
-                  Fill="Transparent"/>
+                    <Setter.Value>
+                        <RadialGradientBrush Center="0.466,1" GradientOrigin="0.466,1" RadiusX="0.9875" RadiusY="0.9875">
+                            <GradientStop Offset="0" Color="#CAF0E5" />
+                            <GradientStop Offset="0.244" Color="#B9E3E7" />
+                            <GradientStop Offset="0.3" Color="#9ACEDE" />
+                            <GradientStop Offset="0.489" Color="#5E97C3" />
+                            <GradientStop Offset="0.789" Color="#C5E1E6" />
+                            <GradientStop Offset="0.983" Color="#FFFFFF" />
+                        </RadialGradientBrush>
+                    </Setter.Value>
+                </Setter>
+            </DataTrigger>
 
-         <Canvas>
-            <Path Data="M 7.46875,5.125 C7.46875,5.125 11,9 11,9 11,9 11,10 11,10 11,10 9,10 9,10 9,10 7.625,7.84375 7.625,7.84375 7.625,7.84375 6,10 6,10 6,10 4,10 4,10 4,10 4,9 4,9 4,9 7.46875,5.125 7.46875,5.125 z"
-                  Fill="#000262" />
-         </Canvas>
-      </Grid>
+            <DataTrigger Binding="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(ButtonBase.IsPressed)}" Value="True">
 
-      <DataTemplate.Triggers>
+                <Setter TargetName="mouseOverEllipse" Property="Fill">
 
-         <DataTrigger Binding="{Binding RelativeSource={RelativeSource TemplatedParent},Path=(ButtonBase.IsMouseOver)}" 
-                      Value="True">
+                    <Setter.Value>
+                        <RadialGradientBrush Center="0.467,1" GradientOrigin="0.467,1" RadiusX="0.9875" RadiusY="0.9875">
+                            <GradientStop Offset="0" Color="#EAFFFF" />
+                            <GradientStop Offset="0.161" Color="#FFFFFF" />
+                            <GradientStop Offset="0.361" Color="#D1F7FC" />
+                            <GradientStop Offset="0.538" Color="#B0DDEE" />
+                            <GradientStop Offset="0.694" Color="#D4EDF8" />
+                            <GradientStop Offset="0.994" Color="#FFFFFF" />
+                        </RadialGradientBrush>
+                    </Setter.Value>
+                </Setter>
 
-            <Setter TargetName="mouseOverEllipse"
-                    Property="Stroke"
-                    Value="#688DC4" />
+            </DataTrigger>
 
-            <Setter TargetName="mouseOverEllipse"
-                    Property="Fill">
+        </DataTemplate.Triggers>
+    </DataTemplate>
 
-               <Setter.Value>
-                  <RadialGradientBrush Center="0.466,1"
-                                       GradientOrigin="0.466,1"
-                                       RadiusX="0.9875"
-                                       RadiusY="0.9875">
-                     <GradientStop Offset="0" 
-                                   Color="#CAF0E5"/>
-                     <GradientStop Offset="0.244"
-                                   Color="#B9E3E7" />
-                     <GradientStop Offset="0.3"
-                                   Color="#9ACEDE" />
-                     <GradientStop Offset="0.489"
-                                   Color="#5E97C3" />
-                     <GradientStop Offset="0.789" 
-                                   Color="#C5E1E6"/>
-                     <GradientStop Offset="0.983"
-                                   Color="#FFFFFF" />
-                  </RadialGradientBrush>
-               </Setter.Value>
-            </Setter>
-         </DataTrigger>
+    <DataTemplate x:Key="expandGroupGlyph">
+        <Grid Width="15" Height="15">
 
-         <DataTrigger Binding="{Binding RelativeSource={RelativeSource TemplatedParent},Path=(ButtonBase.IsPressed)}" 
-                      Value="True">
+            <Ellipse
+                x:Name="mouseOverEllipse"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch"
+                Fill="Transparent"
+                Stretch="Fill" />
 
-            <Setter TargetName="mouseOverEllipse"
-                    Property="Fill">
+            <Canvas>
+                <Path Data="M 7.46875,11 C7.46875,11 11,7.125 11,7.125 11,7.125 11,6.125 11,6.125 11,6.125 9,6.125 9,6.125 9,6.125 7.625,8.28125 7.625,8.28125 7.625,8.28125 6,6.125 6,6.125 6,6.125 4,6.125 4,6.125 4,6.125 4,7.125 4,7.125 4,7.125 7.46875,11 7.46875,11 z" Fill="#000262" />
+            </Canvas>
+        </Grid>
 
-               <Setter.Value>
-                  <RadialGradientBrush Center="0.467,1"
-                                       GradientOrigin="0.467,1"
-                                       RadiusX="0.9875"
-                                       RadiusY="0.9875">
-                     <GradientStop Offset="0" 
-                                   Color="#EAFFFF"/>
-                     <GradientStop Offset="0.161" 
-                                   Color="#FFFFFF"/>
-                     <GradientStop Offset="0.361" 
-                                   Color="#D1F7FC"/>
-                     <GradientStop Offset="0.538" 
-                                   Color="#B0DDEE"/>
-                     <GradientStop Offset="0.694"
-                                   Color="#D4EDF8" />
-                     <GradientStop Offset="0.994" 
-                                   Color="#FFFFFF"/>
-                  </RadialGradientBrush>
-               </Setter.Value>
-            </Setter>
+        <DataTemplate.Triggers>
 
-         </DataTrigger>
+            <DataTrigger Binding="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(ButtonBase.IsMouseOver)}" Value="True">
 
-      </DataTemplate.Triggers>
-   </DataTemplate>
+                <Setter TargetName="mouseOverEllipse" Property="Stroke" Value="#688DC4" />
 
-   <DataTemplate x:Key="expandGroupGlyph">
-      <Grid Height="15"
-            Width="15">
+                <Setter TargetName="mouseOverEllipse" Property="Fill">
 
-         <Ellipse x:Name="mouseOverEllipse"
-                  Stretch="Fill"
-                  HorizontalAlignment="Stretch"
-                  VerticalAlignment="Stretch"
-                  Fill="Transparent"/>
+                    <Setter.Value>
+                        <RadialGradientBrush Center="0.466,1" GradientOrigin="0.466,1" RadiusX="0.9875" RadiusY="0.9875">
+                            <GradientStop Offset="0" Color="#CAF0E5" />
+                            <GradientStop Offset="0.244" Color="#B9E3E7" />
+                            <GradientStop Offset="0.3" Color="#9ACEDE" />
+                            <GradientStop Offset="0.489" Color="#5E97C3" />
+                            <GradientStop Offset="0.789" Color="#C5E1E6" />
+                            <GradientStop Offset="0.983" Color="#FFFFFF" />
+                        </RadialGradientBrush>
+                    </Setter.Value>
+                </Setter>
+            </DataTrigger>
 
-         <Canvas>
-            <Path Data="M 7.46875,11 C7.46875,11 11,7.125 11,7.125 11,7.125 11,6.125 11,6.125 11,6.125 9,6.125 9,6.125 9,6.125 7.625,8.28125 7.625,8.28125 7.625,8.28125 6,6.125 6,6.125 6,6.125 4,6.125 4,6.125 4,6.125 4,7.125 4,7.125 4,7.125 7.46875,11 7.46875,11 z"
-                  Fill="#000262" />
-         </Canvas>
-      </Grid>
+            <DataTrigger Binding="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(ButtonBase.IsPressed)}" Value="True">
 
-      <DataTemplate.Triggers>
+                <Setter TargetName="mouseOverEllipse" Property="Fill">
 
-         <DataTrigger Binding="{Binding RelativeSource={RelativeSource TemplatedParent},Path=(ButtonBase.IsMouseOver)}" 
-                      Value="True">
+                    <Setter.Value>
+                        <RadialGradientBrush Center="0.467,1" GradientOrigin="0.467,1" RadiusX="0.9875" RadiusY="0.9875">
+                            <GradientStop Offset="0" Color="#EAFFFF" />
+                            <GradientStop Offset="0.161" Color="#FFFFFF" />
+                            <GradientStop Offset="0.361" Color="#D1F7FC" />
+                            <GradientStop Offset="0.538" Color="#B0DDEE" />
+                            <GradientStop Offset="0.694" Color="#D4EDF8" />
+                            <GradientStop Offset="0.994" Color="#FFFFFF" />
+                        </RadialGradientBrush>
+                    </Setter.Value>
+                </Setter>
 
-            <Setter TargetName="mouseOverEllipse"
-                    Property="Stroke"
-                    Value="#688DC4" />
+            </DataTrigger>
 
-            <Setter TargetName="mouseOverEllipse"
-                    Property="Fill">
-
-               <Setter.Value>
-                  <RadialGradientBrush Center="0.466,1"
-                                       GradientOrigin="0.466,1"
-                                       RadiusX="0.9875"
-                                       RadiusY="0.9875">
-                     <GradientStop Offset="0" 
-                                   Color="#CAF0E5"/>
-                     <GradientStop Offset="0.244"
-                                   Color="#B9E3E7" />
-                     <GradientStop Offset="0.3"
-                                   Color="#9ACEDE" />
-                     <GradientStop Offset="0.489"
-                                   Color="#5E97C3" />
-                     <GradientStop Offset="0.789" 
-                                   Color="#C5E1E6"/>
-                     <GradientStop Offset="0.983"
-                                   Color="#FFFFFF" />
-                  </RadialGradientBrush>
-               </Setter.Value>
-            </Setter>
-         </DataTrigger>
-
-         <DataTrigger Binding="{Binding RelativeSource={RelativeSource TemplatedParent},Path=(ButtonBase.IsPressed)}" 
-                      Value="True">
-
-            <Setter TargetName="mouseOverEllipse"
-                    Property="Fill">
-
-               <Setter.Value>
-                  <RadialGradientBrush Center="0.467,1"
-                                       GradientOrigin="0.467,1"
-                                       RadiusX="0.9875"
-                                       RadiusY="0.9875">
-                     <GradientStop Offset="0" 
-                                   Color="#EAFFFF"/>
-                     <GradientStop Offset="0.161" 
-                                   Color="#FFFFFF"/>
-                     <GradientStop Offset="0.361" 
-                                   Color="#D1F7FC"/>
-                     <GradientStop Offset="0.538" 
-                                   Color="#B0DDEE"/>
-                     <GradientStop Offset="0.694"
-                                   Color="#D4EDF8" />
-                     <GradientStop Offset="0.994" 
-                                   Color="#FFFFFF"/>
-                  </RadialGradientBrush>
-               </Setter.Value>
-            </Setter>
-
-         </DataTrigger>
-
-      </DataTemplate.Triggers>
-   </DataTemplate>
+        </DataTemplate.Triggers>
+    </DataTemplate>
 
 </ResourceDictionary>

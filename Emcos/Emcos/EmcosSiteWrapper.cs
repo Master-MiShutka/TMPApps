@@ -16,7 +16,9 @@ using TMP.Common.NetHelper;
 namespace TMP.Work.Emcos
 {
     using ServiceLocator;
-    using MsgBox;
+    using System.Windows;
+    using TMPApplication;
+
     public class EmcosSiteWrapper : BaseSiteWrapper, IDisposable
     {
         #region Singleton
@@ -41,10 +43,7 @@ namespace TMP.Work.Emcos
         }
 
         #endregion
-        /// <summary>
-        /// Сервис отображения сообщений
-        /// </summary>
-        private IMessageBoxService _messageBoxService;
+
         /// <summary>
         /// Настройки
         /// </summary>
@@ -65,10 +64,6 @@ namespace TMP.Work.Emcos
         {
             if (_settings == null)
                 throw new ArgumentNullException("EmcosSettings must be not null");
-
-            _messageBoxService = ServiceContainer.Instance.GetService<IMessageBoxService>();
-            if (_messageBoxService == null)
-                throw new ArgumentNullException("Not found IMessageBoxService");
 
             Cookie = new Cookie("ASPSESSIONIDQSATBDCD", string.Empty);
 
@@ -801,19 +796,16 @@ namespace TMP.Work.Emcos
 
                             case State.Offline:
                                 ToLogWarning("[EmcosSiteWrapper] Web-сервис Emcos Corporate не доступен!");
-                                _messageBoxService.Show("Web-сервис Emcos Corporate не доступен!\nПроверьте сетевые настройки.",
-                                    "Нет доступа", MsgBoxButtons.OK, MsgBoxImage.Error);
+                                TMPApp.ShowError("Web-сервис Emcos Corporate не доступен!\nПроверьте сетевые настройки.");
                                 break;
                             case State.AccessDenied:
                                 ToLogWarning("[EmcosSiteWrapper] Доступ запрещён!");
-                                _messageBoxService.Show("Доступ запрещён.",
-                                    "Нет доступа", MsgBoxButtons.OK, MsgBoxImage.Error);
+                                TMPApp.ShowError("Доступ запрещён.");
                                 break;
 
                             case State.NotAuthorized:
                                 ToLogWarning("[EmcosSiteWrapper] Не удалось авторизоваться.");
-                                _messageBoxService.Show("Не удалось авторизоваться!",
-                                    "Нет доступа", MsgBoxButtons.OK, MsgBoxImage.Error);
+                                TMPApp.ShowError("Не удалось авторизоваться!");
                                 break;
                         }
                         return state;
@@ -822,7 +814,7 @@ namespace TMP.Work.Emcos
                 task.ContinueWith((s) =>
                 {
                     ToLogInfo("[EmcosSiteWrapper] Получение данных отменено.");
-                    _messageBoxService.Show("Отменено.", "", MsgBoxButtons.OK, MsgBoxImage.Warning);
+                    TMPApp.ShowWarning("Отменено.");
                     return State.Online;
                 },
                   TaskContinuationOptions.OnlyOnCanceled);
@@ -830,7 +822,7 @@ namespace TMP.Work.Emcos
                 task.ContinueWith((s) =>
                 {
                     ToLogError("[EmcosSiteWrapper] Получение данных. Ошибка авторизации - " + s.Exception.Message);
-                    _messageBoxService.Show("Произошла ошибка.\n" + s.Exception.Message, "", MsgBoxButtons.OK, MsgBoxImage.Error);
+                    TMPApp.ShowError("Произошла ошибка.\n" + s.Exception.Message);
                     return State.NotAuthorized;
                 }, TaskContinuationOptions.OnlyOnFaulted);
 
@@ -840,7 +832,7 @@ namespace TMP.Work.Emcos
             {
                 LastException = ex;
                 ToLogError("[EmcosSiteWrapper] Получение данных. Ошибка - " + ex.Message);
-                _messageBoxService.Show("Произошла ошибка.\n" + ex.Message, "", MsgBoxButtons.OK, MsgBoxImage.Error);
+                TMPApp.ShowError("Произошла ошибка.\n" + ex.Message);
                 return null;
             }
         }

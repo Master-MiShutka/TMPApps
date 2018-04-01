@@ -10,31 +10,35 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type CheckBox}">
-                    <StackPanel x:Name="LayoutRoot"
-                                Margin="{TemplateBinding Padding}"
-                                Orientation="Horizontal">
-                        <Border x:Name="CheckBorder"
-                                Width="16"
-                                Height="16"
-                                Margin="0,1,4,0"
-                                Background="{TemplateBinding Background}"
-                                BorderBrush="{TemplateBinding BorderBrush}"
-                                BorderThickness="{TemplateBinding BorderThickness}">
+                    <StackPanel
+                        x:Name="LayoutRoot"
+                        Margin="{TemplateBinding Padding}"
+                        Orientation="Horizontal">
+                        <Border
+                            x:Name="CheckBorder"
+                            Width="16"
+                            Height="16"
+                            Margin="0,1,4,0"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}">
                             <Grid>
-                                <Path x:Name="CheckMark"
-                                      Width="10"
-                                      Height="10"
-                                      Margin="2"
-                                      Data="F1 M 15,21L 22,28L 32.9999,14.0001L 35.9999,17.0001L 22,34L 12.0001,24L 15,21 Z"
-                                      Fill="{TemplateBinding Foreground}"
-                                      Stretch="Fill"
-                                      Visibility="Collapsed" />
-                                <Rectangle x:Name="Indeterminate"
-                                           Width="8"
-                                           Height="8"
-                                           Margin="4"
-                                           Fill="{TemplateBinding Foreground}"
-                                           Visibility="Hidden" />
+                                <Path
+                                    x:Name="CheckMark"
+                                    Width="10"
+                                    Height="10"
+                                    Margin="2"
+                                    Data="F1 M 15,21L 22,28L 32.9999,14.0001L 35.9999,17.0001L 22,34L 12.0001,24L 15,21 Z"
+                                    Fill="{TemplateBinding Foreground}"
+                                    Stretch="Fill"
+                                    Visibility="Collapsed" />
+                                <Rectangle
+                                    x:Name="Indeterminate"
+                                    Width="8"
+                                    Height="8"
+                                    Margin="4"
+                                    Fill="{TemplateBinding Foreground}"
+                                    Visibility="Hidden" />
                             </Grid>
                         </Border>
                         <TextBlock VerticalAlignment="Center" Text="{TemplateBinding Content}" />
@@ -76,18 +80,20 @@
     </Style>
 
     <!--  checkbox-in-datagrid styles  -->
-    <Style x:Key="DataGridCheckBoxStyle"
-           BasedOn="{StaticResource {x:Type CheckBox}}"
-           TargetType="CheckBox">
+    <Style
+        x:Key="DataGridCheckBoxStyle"
+        BasedOn="{StaticResource {x:Type CheckBox}}"
+        TargetType="CheckBox">
         <Setter Property="IsHitTestVisible" Value="False" />
         <Setter Property="Focusable" Value="False" />
         <Setter Property="HorizontalAlignment" Value="Center" />
         <Setter Property="VerticalAlignment" Value="Top" />
     </Style>
 
-    <Style x:Key="DataGridEditingCheckBoxStyle"
-           BasedOn="{StaticResource {x:Type CheckBox}}"
-           TargetType="CheckBox">
+    <Style
+        x:Key="DataGridEditingCheckBoxStyle"
+        BasedOn="{StaticResource {x:Type CheckBox}}"
+        TargetType="CheckBox">
         <Setter Property="HorizontalAlignment" Value="Center" />
         <Setter Property="VerticalAlignment" Value="Top" />
     </Style>

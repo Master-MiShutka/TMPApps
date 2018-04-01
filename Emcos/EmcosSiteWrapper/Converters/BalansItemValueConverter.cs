@@ -16,24 +16,20 @@ namespace TMP.Work.Emcos.Converters
             var bi = value as IBalansItem;
             if (bi == null)
                 return DependencyProperty.UnsetValue;
-            bool isItem = false;
+
             switch (bi.Type)
             {
                 case Model.ElementTypes.POWERTRANSFORMER:
                     bi = value as PowerTransformer;
-                    isItem = true;
                     break;
                 case Model.ElementTypes.FIDER:
                     bi = value as Fider;
-                    isItem = true;
                     break;
                 case Model.ElementTypes.UNITTRANSFORMER:
                     bi = value as UnitTransformer;
-                    isItem = true;
                     break;
                 case Model.ElementTypes.UNITTRANSFORMERBUS:
                     bi = value as UnitTransformerBus;
-                    isItem = true;
                     break;
             }
             switch (param)

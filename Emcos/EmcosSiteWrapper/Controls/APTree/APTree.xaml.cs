@@ -17,6 +17,7 @@ using System.ComponentModel;
 
 namespace TMP.Work.Emcos.Controls
 {
+    using TMPApplication;
     using TMP.Work.Emcos;
 
     /// <summary>
@@ -164,7 +165,7 @@ namespace TMP.Work.Emcos.Controls
                             sb.AppendFormat("T2_MD_PER_CODE_{0}={1}&", index, ml.MD.Per_Code);
                             sb.AppendFormat("T2_MD_PER_NAME_{0}={1}&", index, ml.MD.Per_Name);
 
-                            sb.AppendFormat("T2_OBIS_{0}=1&", index, ml.OBIS);
+                            sb.AppendFormat("T2_OBIS_{0}={1}&", index, ml.OBIS);
                             break;
                     }
                     index++;
@@ -433,7 +434,7 @@ namespace TMP.Work.Emcos.Controls
 
                         node.Children = list;
                         // сообщаем, что всё готово
-                        App.UIAction(() => node.State = VTreeView.TreeNodeState.ChildrenPrepared);
+                        DispatcherExtensions.InUi(() => node.State = VTreeView.TreeNodeState.ChildrenPrepared);
                         return true;
                     };
                     Utils.GetData(this, TMP.Work.Emcos.EmcosSiteWrapper.Instance.GetAPointsAsync, node.Id, post);
@@ -449,8 +450,6 @@ namespace TMP.Work.Emcos.Controls
             if (e.Node == null)
                 return;
             var node = e.Node;
-            if (node == null)
-                return;
 
             var param = e.Obj as Model.IParam;
             if (param == null)
@@ -512,7 +511,7 @@ namespace TMP.Work.Emcos.Controls
                         var list = Utils.Params(data);
 
                         if (node == null)
-                            App.UIAction(() =>
+                            DispatcherExtensions.InUi(() =>
                             {
                                 paramstree.Data.ClearAll();
                                 //paramstree.Data.AddRootItems(list);
@@ -527,7 +526,7 @@ namespace TMP.Work.Emcos.Controls
 
                             //node.Children = list;
                             // сообщаем, что всё готово
-                            App.UIAction(() => node.State = VTreeView.TreeNodeState.ChildrenPrepared);                            
+                            DispatcherExtensions.InUi(() => node.State = VTreeView.TreeNodeState.ChildrenPrepared);                            
                         }
                         return true;
                     };

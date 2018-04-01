@@ -30,15 +30,15 @@
                                 VerticalAlignment="Center"
                                 HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
                                 VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
-                                Foreground="{TemplateBinding Foreground}"
-                                FontFamily="{TemplateBinding FontFamily}"
-                                FontSize="{TemplateBinding FontSize}"
-                                FontWeight="{TemplateBinding FontWeight}"
-                                FontStyle="{TemplateBinding FontStyle}"
-                                FontStretch="{TemplateBinding FontStretch}"
                                 Content="{TemplateBinding Header}"
                                 ContentTemplate="{TemplateBinding HeaderTemplate}"
                                 DockPanel.Dock="Top"
+                                FontFamily="{TemplateBinding FontFamily}"
+                                FontSize="{TemplateBinding FontSize}"
+                                FontStretch="{TemplateBinding FontStretch}"
+                                FontStyle="{TemplateBinding FontStyle}"
+                                FontWeight="{TemplateBinding FontWeight}"
+                                Foreground="{TemplateBinding Foreground}"
                                 IsChecked="{Binding IsExpanded, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}">
                                 <ToggleButton.FocusVisualStyle>
                                     <Style>
@@ -48,10 +48,10 @@
                                                     <Border>
                                                         <Rectangle
                                                             Margin="0"
-                                                            Stroke="Black"
-                                                            StrokeThickness="1"
                                                             SnapsToDevicePixels="True"
-                                                            StrokeDashArray="1 2" />
+                                                            Stroke="Black"
+                                                            StrokeDashArray="1 2"
+                                                            StrokeThickness="1" />
                                                     </Border>
                                                 </ControlTemplate>
                                             </Setter.Value>
@@ -81,10 +81,10 @@
                                                                 x:Name="arrow"
                                                                 HorizontalAlignment="Center"
                                                                 VerticalAlignment="Center"
-                                                                Stroke="#FF333333"
-                                                                StrokeThickness="2"
                                                                 Data="M1,1.5L4.5,5 8,1.5"
-                                                                SnapsToDevicePixels="False" />
+                                                                SnapsToDevicePixels="False"
+                                                                Stroke="#FF333333"
+                                                                StrokeThickness="2" />
                                                             <ContentPresenter
                                                                 Grid.Column="1"
                                                                 Margin="4,0,0,0"

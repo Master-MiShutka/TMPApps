@@ -1,8 +1,9 @@
-﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:local="clr-namespace:TMP.DWRES.GUI"
-                    xmlns:sys="clr-namespace:System;assembly=mscorlib"
-                    xmlns:vm="clr-namespace:TMP.DWRES.ViewModel">
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:TMP.DWRES.GUI"
+    xmlns:sys="clr-namespace:System;assembly=mscorlib"
+    xmlns:vm="clr-namespace:TMP.DWRES.ViewModel">
 
     <!--  ee  -->
 

@@ -1,39 +1,44 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <Storyboard x:Key="Timeline1">
-        <DoubleAnimationUsingKeyFrames BeginTime="00:00:00"
-                                       Storyboard.TargetName="glow"
-                                       Storyboard.TargetProperty="(UIElement.Opacity)">
+        <DoubleAnimationUsingKeyFrames
+            BeginTime="00:00:00"
+            Storyboard.TargetName="glow"
+            Storyboard.TargetProperty="(UIElement.Opacity)">
             <SplineDoubleKeyFrame KeyTime="00:00:00.3000000" Value="1" />
         </DoubleAnimationUsingKeyFrames>
     </Storyboard>
     <Storyboard x:Key="Timeline2">
-        <DoubleAnimationUsingKeyFrames BeginTime="00:00:00"
-                                       Storyboard.TargetName="glow"
-                                       Storyboard.TargetProperty="(UIElement.Opacity)">
+        <DoubleAnimationUsingKeyFrames
+            BeginTime="00:00:00"
+            Storyboard.TargetName="glow"
+            Storyboard.TargetProperty="(UIElement.Opacity)">
             <SplineDoubleKeyFrame KeyTime="00:00:00.3000000" Value="0" />
         </DoubleAnimationUsingKeyFrames>
     </Storyboard>
 
     <ControlTemplate x:Key="GlassButton" TargetType="{x:Type Button}">
-        <Border BorderBrush="#FFFFFFFF"
+        <Border
+            BorderBrush="#FFFFFFFF"
+            BorderThickness="1,1,1,1"
+            CornerRadius="4,4,4,4">
+            <Border
+                x:Name="border"
+                Background="{DynamicResource GrayBrush6}"
+                BorderBrush="{DynamicResource GrayBrush2}"
                 BorderThickness="1,1,1,1"
                 CornerRadius="4,4,4,4">
-            <Border x:Name="border"
-                    Background="{DynamicResource GrayBrush6}"
-                    BorderBrush="{DynamicResource GrayBrush2}"
-                    BorderThickness="1,1,1,1"
-                    CornerRadius="4,4,4,4">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="0.507*" />
                         <RowDefinition Height="0.493*" />
                     </Grid.RowDefinitions>
-                    <Border x:Name="glow"
-                            Grid.RowSpan="2"
-                            Width="Auto"
-                            HorizontalAlignment="Stretch"
-                            CornerRadius="4,4,4,4"
-                            Opacity="0">
+                    <Border
+                        x:Name="glow"
+                        Grid.RowSpan="2"
+                        Width="Auto"
+                        HorizontalAlignment="Stretch"
+                        CornerRadius="4,4,4,4"
+                        Opacity="0">
                         <Border.Background>
                             <RadialGradientBrush>
                                 <RadialGradientBrush.RelativeTransform>
@@ -49,18 +54,20 @@
                             </RadialGradientBrush>
                         </Border.Background>
                     </Border>
-                    <ContentPresenter x:Name="PART_ContentPresenter"
-                                    RecognizesAccessKey="True"
-                                    Grid.RowSpan="2"
-                                      Width="Auto"
-                                      Margin="{TemplateBinding Padding}"
-                                      HorizontalAlignment="Center"
-                                      VerticalAlignment="Center" />
-                    <Border x:Name="shine"
-                            Width="Auto"
-                            Margin="0,0,0,0"
-                            HorizontalAlignment="Stretch"
-                            CornerRadius="4,4,0,0">
+                    <ContentPresenter
+                        x:Name="PART_ContentPresenter"
+                        Grid.RowSpan="2"
+                        Width="Auto"
+                        Margin="{TemplateBinding Padding}"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        RecognizesAccessKey="True" />
+                    <Border
+                        x:Name="shine"
+                        Width="Auto"
+                        Margin="0,0,0,0"
+                        HorizontalAlignment="Stretch"
+                        CornerRadius="4,4,0,0">
                         <Border.Background>
                             <LinearGradientBrush StartPoint="0.494,0.028" EndPoint="0.494,0.889">
                                 <GradientStop Offset="0" Color="#99FFFFFF" />
@@ -93,25 +100,28 @@
         </ControlTemplate.Triggers>
     </ControlTemplate>
     <ControlTemplate x:Key="GlassToogleButton" TargetType="{x:Type ToggleButton}">
-        <Border BorderBrush="#FFFFFFFF"
+        <Border
+            BorderBrush="#FFFFFFFF"
+            BorderThickness="1,1,1,1"
+            CornerRadius="4,4,4,4">
+            <Border
+                x:Name="border"
+                Background="{DynamicResource GrayBrush6}"
+                BorderBrush="{DynamicResource GrayBrush2}"
                 BorderThickness="1,1,1,1"
                 CornerRadius="4,4,4,4">
-            <Border x:Name="border"
-                    Background="{DynamicResource GrayBrush6}"
-                    BorderBrush="{DynamicResource GrayBrush2}"
-                    BorderThickness="1,1,1,1"
-                    CornerRadius="4,4,4,4">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="0.507*" />
                         <RowDefinition Height="0.493*" />
                     </Grid.RowDefinitions>
-                    <Border x:Name="glow"
-                            Grid.RowSpan="2"
-                            Width="Auto"
-                            HorizontalAlignment="Stretch"
-                            CornerRadius="4,4,4,4"
-                            Opacity="0">
+                    <Border
+                        x:Name="glow"
+                        Grid.RowSpan="2"
+                        Width="Auto"
+                        HorizontalAlignment="Stretch"
+                        CornerRadius="4,4,4,4"
+                        Opacity="0">
                         <Border.Background>
                             <RadialGradientBrush>
                                 <RadialGradientBrush.RelativeTransform>
@@ -127,16 +137,18 @@
                             </RadialGradientBrush>
                         </Border.Background>
                     </Border>
-                    <ContentPresenter Grid.RowSpan="2"
-                                      Width="Auto"
-                                      Margin="{TemplateBinding Padding}"
-                                      HorizontalAlignment="Center"
-                                      VerticalAlignment="Center" />
-                    <Border x:Name="shine"
-                            Width="Auto"
-                            Margin="0,0,0,0"
-                            HorizontalAlignment="Stretch"
-                            CornerRadius="4,4,0,0">
+                    <ContentPresenter
+                        Grid.RowSpan="2"
+                        Width="Auto"
+                        Margin="{TemplateBinding Padding}"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center" />
+                    <Border
+                        x:Name="shine"
+                        Width="Auto"
+                        Margin="0,0,0,0"
+                        HorizontalAlignment="Stretch"
+                        CornerRadius="4,4,0,0">
                         <Border.Background>
                             <LinearGradientBrush StartPoint="0.494,0.028" EndPoint="0.494,0.889">
                                 <GradientStop Offset="0" Color="#99FFFFFF" />
@@ -172,18 +184,18 @@
     </ControlTemplate>
 
     <Style x:Key="GlassButtonStyle" TargetType="{x:Type Button}">
-        <Setter Property="Margin" Value="0 2" />
-        <Setter Property="Padding" Value="5 2" />
+        <Setter Property="Margin" Value="0,2" />
+        <Setter Property="Padding" Value="5,2" />
         <Setter Property="Template" Value="{StaticResource GlassButton}" />
     </Style>
     <Style BasedOn="{StaticResource GlassButtonStyle}" TargetType="{x:Type Button}">
-        <Setter Property="Margin" Value="0 2" />
-        <Setter Property="Padding" Value="5 2" />
+        <Setter Property="Margin" Value="0,2" />
+        <Setter Property="Padding" Value="5,2" />
         <Setter Property="Template" Value="{StaticResource GlassButton}" />
     </Style>
     <Style TargetType="{x:Type ToggleButton}">
-        <Setter Property="Margin" Value="0 2" />
-        <Setter Property="Padding" Value="5 2" />
+        <Setter Property="Margin" Value="0,2" />
+        <Setter Property="Padding" Value="5,2" />
         <Setter Property="Template" Value="{StaticResource GlassToogleButton}" />
     </Style>
 </ResourceDictionary>

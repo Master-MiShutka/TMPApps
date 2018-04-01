@@ -11,7 +11,7 @@ namespace TMP.Work.Emcos
     {
         protected override void OnStartup(StartupEventArgs e)
         {
-            ToLogInfo("App OnStartup");
+            LogInfo("App OnStartup");
             try
             {
                 base.OnStartup(e);
@@ -20,20 +20,20 @@ namespace TMP.Work.Emcos
                 System.Net.ServicePointManager.Expect100Continue = false;
 
                 View.BalansView mainWindow = new View.BalansView();
-                App.ToLogInfo("Отображение главного окна.");
+                App.LogInfo("Отображение главного окна.");
                 CorrectMainWindowSizeAndPos();
                 mainWindow.Show();
             }
             catch (Exception ex)
             {
-                ToLogException(ex);
+                LogException(ex);
             }
         }
         protected override void OnExit(ExitEventArgs e)
         {
             TMP.Work.Emcos.Properties.Settings.Default.Save();
             base.OnExit(e);
-            ToLogInfo("Попытка завершения работы");
+            LogInfo("Попытка завершения работы");
         }
 
         private static void CorrectMainWindowSizeAndPos()

@@ -15,27 +15,31 @@
             <Trigger Property="IsFocused" Value="True" />
         </Style.Triggers>
     </Style>
-    <Style x:Key="TextBoxTextData"
-           BasedOn="{StaticResource ListTextBoxBaseStyle}"
-           TargetType="TextBox">
+    <Style
+        x:Key="TextBoxTextData"
+        BasedOn="{StaticResource ListTextBoxBaseStyle}"
+        TargetType="TextBox">
         <Setter Property="FontFamily" Value="Calibri" />
         <Setter Property="TextAlignment" Value="Left" />
     </Style>
-    <Style x:Key="TextBoxNumbersData"
-           BasedOn="{StaticResource ListTextBoxBaseStyle}"
-           TargetType="TextBox">
+    <Style
+        x:Key="TextBoxNumbersData"
+        BasedOn="{StaticResource ListTextBoxBaseStyle}"
+        TargetType="TextBox">
         <Setter Property="FontFamily" Value="Century Gothic" />
     </Style>
-    <Style x:Key="TextBoxValuesData"
-           BasedOn="{StaticResource ListTextBoxBaseStyle}"
-           TargetType="TextBox">
+    <Style
+        x:Key="TextBoxValuesData"
+        BasedOn="{StaticResource ListTextBoxBaseStyle}"
+        TargetType="TextBox">
         <Setter Property="FontFamily" Value="Century Gothic" />
         <Setter Property="FontSize" Value="14" />
         <Setter Property="TextAlignment" Value="Right" />
     </Style>
-    <Style x:Key="ListHeaderTextBoxStyle"
-           BasedOn="{StaticResource ListTextBoxBaseStyle}"
-           TargetType="TextBox">
+    <Style
+        x:Key="ListHeaderTextBoxStyle"
+        BasedOn="{StaticResource ListTextBoxBaseStyle}"
+        TargetType="TextBox">
         <Setter Property="FontFamily" Value="Calibri" />
         <Setter Property="FontSize" Value="13" />
         <Setter Property="TextWrapping" Value="Wrap" />

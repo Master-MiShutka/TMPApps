@@ -35,9 +35,9 @@ namespace TMP.Work.Emcos.Controls
         {
             if (String.IsNullOrWhiteSpace(wID))
                 throw new ArgumentNullException("wID");
-            if (String.IsNullOrWhiteSpace(wID))
+            if (timeBegin == null)
                 throw new ArgumentNullException("timeBegin");
-            if (String.IsNullOrWhiteSpace(wID))
+            if (timeEnd == null)
                 throw new ArgumentNullException("timeEnd");
 
             _wid = wID;

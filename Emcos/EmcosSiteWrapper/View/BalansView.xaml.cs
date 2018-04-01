@@ -9,6 +9,7 @@ namespace TMP.Work.Emcos.View
     using TMP.Wpf.Common;
     using TMP.Common.Logger;
     using Model;
+    using TMPApplication;
 
     /// <summary>
     /// Interaction logic for BalansView.xaml
@@ -65,7 +66,7 @@ namespace TMP.Work.Emcos.View
 
         public BalansView()
         {
-            App.ToLogInfo("Инициализация BalansView");
+            App.LogInfo("Инициализация BalansView");
 
             InitializeComponent();
 
@@ -77,7 +78,16 @@ namespace TMP.Work.Emcos.View
 
             vm.PropertyChanged += Vm_PropertyChanged;
 
-            vm.GetDataCommand = new DelegateCommand(GetEmcosArchivesForSubstations);
+            vm.PointsEditorCommand = new DelegateCommand(() =>
+            {
+                var wnd = new WindowPointsEditor(vm.Points);
+                wnd.Owner = this;
+                wnd.ShowInTaskbar = false;
+                wnd.ShowDialog();
+            },
+            () => vm.Points != null);
+
+                vm.GetDataCommand = new DelegateCommand(GetEmcosArchivesForSubstations);
 
             vm.SaveDataCommand = new DelegateCommand(() =>
             {
@@ -203,7 +213,7 @@ namespace TMP.Work.Emcos.View
 
                 Action oncompleted = () =>
                 {
-                    App.UIAction(() => this.TaskbarItemInfo.ProgressState = System.Windows.Shell.TaskbarItemProgressState.None);
+                    DispatcherExtensions.InUi(() => this.TaskbarItemInfo.ProgressState = System.Windows.Shell.TaskbarItemProgressState.None);
                     State = State.Idle;
                     //vm.IsGettingData = false;
                     vm.Raise();
@@ -225,21 +235,21 @@ namespace TMP.Work.Emcos.View
                     task.ContinueWith((s) =>
                     {
                         if (s.Result == true)
-                            App.UIAction(() => App.ShowInfo("Выполнено. "));
+                            DispatcherExtensions.InUi(() => App.ShowInfo("Выполнено. "));
                         else
                             CheckOnError();
                         oncompleted();
                     }, System.Threading.Tasks.TaskContinuationOptions.OnlyOnRanToCompletion);
                     task.ContinueWith((s) =>
                         {
-                        App.UIAction(() => App.ShowError("Произошла ошибка.\n" + s.Exception));
+                        DispatcherExtensions.InUi(() => App.ShowError("Произошла ошибка.\n" + s.Exception));
                             oncompleted();
                         }, System.Threading.Tasks.TaskContinuationOptions.OnlyOnFaulted);
                 }
                 catch (Exception e)
                 {
-                    App.ToLogError(String.Format("Обновление данных [{0}]. Ошибка - {1}", substation.Code, e.Message));
-                    App.ShowError("Произошла ошибка.\n" + e.Message, "");
+                    App.LogError(String.Format("Обновление данных [{0}]. Ошибка - {1}", substation.Code, e.Message));
+                    App.ShowError("Произошла ошибка.\n" + e.Message);
                     oncompleted();
                 }
             }, canExecuteUpdateSubstationDataCommand);
@@ -271,7 +281,7 @@ namespace TMP.Work.Emcos.View
 
         private void CheckOnError()
         {
-            App.UIAction(() =>
+            DispatcherExtensions.InUi(() =>
             {
                 switch (EmcosSiteWrapper.Instance.Status)
                 {
@@ -292,15 +302,15 @@ namespace TMP.Work.Emcos.View
 
         private void ViewModel_Loaded(object sender, RoutedEventArgs e)
         {
-            App.UIAction(() =>
+            DispatcherExtensions.InUi(() =>
                 State = State.Idle);
         }
 
         private void GetEmcosArchivesForSubstations()
         {
-            App.ToLogInfo("Получение архивных данных");
+            App.LogInfo("Получение архивных данных");
 
-            App.ToLogInfo("Сохранение текущей сессии");
+            App.LogInfo("Сохранение текущей сессии");
             vm.SaveSessionData(System.IO.Path.Combine(vm.BALANS_SESSION_FILENAME + vm.SESSION_FILE_EXTENSION + ".bak"));
 
             cts = new System.Threading.CancellationTokenSource();
@@ -314,21 +324,21 @@ namespace TMP.Work.Emcos.View
 
                 task.ContinueWith((s) =>
                     {
-                        App.ToLogInfo("Выполнено получение архивных данных");
+                        App.LogInfo("Выполнено получение архивных данных");
                         try
                         {
-                            App.UIAction(() => App.ShowInfo("Выполнено. "));
+                            DispatcherExtensions.InUi(() => App.ShowInfo("Выполнено. "));
                             vm.IsGettingData = false;
                             vm.Raise();
                         }
                         catch (Exception ex)
                         {
-                            App.ToLogError("Получение данных. Ошибка - " + ex.Message);
+                            App.LogError("Получение данных. Ошибка - " + ex.Message);
                         }
                     }, System.Threading.Tasks.TaskContinuationOptions.OnlyOnRanToCompletion);
                 task.ContinueWith((s) =>
                     {
-                        App.ToLogInfo("Прервано получение архивных данных");
+                        App.LogInfo("Прервано получение архивных данных");
                         Dispatcher.BeginInvoke(new Action(() =>
                         {
                             App.ShowWarning("Прервано. ");
@@ -339,15 +349,15 @@ namespace TMP.Work.Emcos.View
             }
             catch (Exception ex)
             {
-                App.ToLogError("Получение архивных данных. Ошибка - " + ex.Message);
+                App.LogError("Получение архивных данных. Ошибка - " + ex.Message);
                 App.ShowError("Произошла ошибка.\n" + ex.Message);
             }
         }
 
         private void GetSubstationsDaylyArchives()
         {
-            App.UIAction(() => this.TaskbarItemInfo.ProgressState = System.Windows.Shell.TaskbarItemProgressState.Normal);
-           App.UIAction(() => this.TaskbarItemInfo.ProgressValue = 0.01);
+            DispatcherExtensions.InUi(() => this.TaskbarItemInfo.ProgressState = System.Windows.Shell.TaskbarItemProgressState.Normal);
+           DispatcherExtensions.InUi(() => this.TaskbarItemInfo.ProgressValue = 0.01);
 
             vm.ClearCurrentSubstations();
 
@@ -357,18 +367,18 @@ namespace TMP.Work.Emcos.View
             {
                 if (cts.IsCancellationRequested)
                     break;
-                App.UIAction(() => this.TaskbarItemInfo.ProgressValue = index == 0 ? 0.01 : index / (vm.Substations.Count * 1.0));
+                DispatcherExtensions.InUi(() => this.TaskbarItemInfo.ProgressValue = index == 0 ? 0.01 : index / (vm.Substations.Count * 1.0));
 
                 var substation = vm.Substations[index];
 
                 U.GetDaylyArchiveDataForSubstation(vm.Session.Period.StartDate, vm.Session.Period.EndDate, substation, cts, UpdateCallBack);
             }
-            App.UIAction(() => this.TaskbarItemInfo.ProgressState = System.Windows.Shell.TaskbarItemProgressState.None);
+            DispatcherExtensions.InUi(() => this.TaskbarItemInfo.ProgressState = System.Windows.Shell.TaskbarItemProgressState.None);
         }
         private void UpdateCallBack(int current, int total)
         {
             Progress = 100* current / total;
-            /*App.UIAction(() =>
+            /*DispatcherExtensions.InUi(() =>
                   {
                       ;
                   }));*/
@@ -512,8 +522,7 @@ namespace TMP.Work.Emcos.View
             State = State.Busy;
 
             var r = App.ShowQuestion(String.Format("Скопировать файл отчёта в папку '{0}'?",
-                Properties.Settings.Default.ReportBalansPSFolder),
-                "Подготовка отчёта ...");
+                Properties.Settings.Default.ReportBalansPSFolder));
 
             var task = new System.Threading.Tasks.Task(() =>
             {
@@ -526,7 +535,7 @@ namespace TMP.Work.Emcos.View
                     EndDate = vm.Session.Period.EndDate,
                     Substations = vm.Substations
                 });
-                App.UIAction(() =>
+                DispatcherExtensions.InUi(() =>
                 {
                     if (sbe.Export(defaultFileName) == false)
                         return;
@@ -542,8 +551,7 @@ namespace TMP.Work.Emcos.View
                         }
                         catch (System.IO.IOException ioe)
                         {
-                            App.UIAction(() => App.ShowError(String.Format("Папка {0} не найдена. При попытке её создать произошла ошибка: {1}.\nФайл отчёта не скопирован.", Properties.Settings.Default.ReportBalansPSFolder, ioe.Message),
-                                "Подготовка отчёта ..."));
+                            DispatcherExtensions.InUi(() => App.ShowError(String.Format("Папка {0} не найдена. При попытке её создать произошла ошибка: {1}.\nФайл отчёта не скопирован.", Properties.Settings.Default.ReportBalansPSFolder, ioe.Message)));
                         }
                     }
                     var filename = System.IO.Path.Combine(
@@ -559,15 +567,15 @@ namespace TMP.Work.Emcos.View
             task.ContinueWith((t) =>
             {
                 State = State.Idle;
-                App.UIAction(() => this.TaskbarItemInfo.ProgressState = System.Windows.Shell.TaskbarItemProgressState.None);
+                DispatcherExtensions.InUi(() => this.TaskbarItemInfo.ProgressState = System.Windows.Shell.TaskbarItemProgressState.None);
             }, System.Threading.Tasks.TaskContinuationOptions.None);
 
             task.ContinueWith((s) =>
             {
-                App.ToLogError("Экспорт балансов подстанций - ошибка");
-                App.ToLogException(s.Exception);
+                App.LogError("Экспорт балансов подстанций - ошибка");
+                App.LogException(s.Exception);
 
-                App.UIAction(() => App.ShowError("Произошла ошибка при формировании отчёта.\nОбратитесь к разработчику."));
+                DispatcherExtensions.InUi(() => App.ShowError("Произошла ошибка при формировании отчёта.\nОбратитесь к разработчику."));
             }, System.Threading.Tasks.TaskContinuationOptions.OnlyOnFaulted);
             task.Start(System.Threading.Tasks.TaskScheduler.Current);
         }
@@ -605,14 +613,14 @@ namespace TMP.Work.Emcos.View
             task.ContinueWith((t) =>
             {
                 State = State.Idle;
-                App.UIAction(() => this.TaskbarItemInfo.ProgressState = System.Windows.Shell.TaskbarItemProgressState.None);
+                DispatcherExtensions.InUi(() => this.TaskbarItemInfo.ProgressState = System.Windows.Shell.TaskbarItemProgressState.None);
             }, System.Threading.Tasks.TaskContinuationOptions.None);
 
             task.ContinueWith((s) =>
             {
-                App.ToLogError("Экспорт для пофидерного анализа - ошибка");
-                App.ToLogException(s.Exception);
-                App.UIAction(() => App.ShowError("Произошла ошибка при формировании отчёта.\nОбратитесь к разработчику."));
+                App.LogError("Экспорт для пофидерного анализа - ошибка");
+                App.LogException(s.Exception);
+                DispatcherExtensions.InUi(() => App.ShowError("Произошла ошибка при формировании отчёта.\nОбратитесь к разработчику."));
             }, System.Threading.Tasks.TaskContinuationOptions.OnlyOnFaulted);
 
             task.Start(System.Threading.Tasks.TaskScheduler.Current);
@@ -640,7 +648,7 @@ namespace TMP.Work.Emcos.View
                     EndDate = vm.Session.Period.EndDate,
                     Substations = vm.Substations
                 });
-                App.UIAction(() =>
+                DispatcherExtensions.InUi(() =>
                 {
                     if (be.Export(fileName) == false)
                         return;
@@ -651,14 +659,14 @@ namespace TMP.Work.Emcos.View
             task.ContinueWith((t) =>
             {
                 State = State.Idle;
-                App.UIAction(() => this.TaskbarItemInfo.ProgressState = System.Windows.Shell.TaskbarItemProgressState.None);
+                DispatcherExtensions.InUi(() => this.TaskbarItemInfo.ProgressState = System.Windows.Shell.TaskbarItemProgressState.None);
             }, System.Threading.Tasks.TaskContinuationOptions.None);
 
             task.ContinueWith((s) =>
             {
-                App.ToLogError("Экспорт для программы 'Balans' - ошибка");
-                App.ToLogException(s.Exception);
-                App.UIAction(()=> App.ShowError("Произошла ошибка при формировании отчёта.\nОбратитесь к разработчику."));
+                App.LogError("Экспорт для программы 'Balans' - ошибка");
+                App.LogException(s.Exception);
+                DispatcherExtensions.InUi(()=> App.ShowError("Произошла ошибка при формировании отчёта.\nОбратитесь к разработчику."));
             }, System.Threading.Tasks.TaskContinuationOptions.OnlyOnFaulted);
 
             task.Start(System.Threading.Tasks.TaskScheduler.Current);

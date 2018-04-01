@@ -5,11 +5,12 @@
         <GradientStop Offset="1" Color="#DADADA" />
     </LinearGradientBrush>
 
-    <ImageBrush x:Key="backgroundTiledImage"
-                ImageSource="/ARMTES;component/Resources/back_image.png"
-                TileMode="Tile"
-                Viewport="0,0,32,32"
-                ViewportUnits="Absolute" />
+    <ImageBrush
+        x:Key="backgroundTiledImage"
+        ImageSource="/ARMTES;component/Resources/back_image.png"
+        TileMode="Tile"
+        Viewport="0,0,32,32"
+        ViewportUnits="Absolute" />
 
     <Style x:Key="GridSplitterPreviewStyle">
         <Setter Property="Control.Template">
@@ -26,9 +27,10 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type GridSplitter}">
-                    <Border Background="{TemplateBinding Background}"
-                            BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="{TemplateBinding BorderThickness}" />
+                    <Border
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}" />
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
@@ -36,21 +38,20 @@
 
     <!--  THEMES  -->
 
-    <Ellipse x:Key="AppThemeMenuIcon"
-             Width="16"
-             Height="16"
-             Fill="{Binding ColorBrush,
-                            Mode=OneWay}"
-             Stroke="{Binding BorderColorBrush,
-                              Mode=OneWay}"
-             StrokeThickness="1"
-             x:Shared="False" />
-    <Ellipse x:Key="AccentMenuIcon"
-             Width="16"
-             Height="16"
-             Fill="{Binding ColorBrush,
-                            Mode=OneWay}"
-             x:Shared="False" />
+    <Ellipse
+        x:Key="AppThemeMenuIcon"
+        Width="16"
+        Height="16"
+        x:Shared="False"
+        Fill="{Binding ColorBrush, Mode=OneWay}"
+        Stroke="{Binding BorderColorBrush, Mode=OneWay}"
+        StrokeThickness="1" />
+    <Ellipse
+        x:Key="AccentMenuIcon"
+        Width="16"
+        Height="16"
+        x:Shared="False"
+        Fill="{Binding ColorBrush, Mode=OneWay}" />
 
     <Style x:Key="AppThemeMenuItemStyle" TargetType="{x:Type MenuItem}">
         <Setter Property="Command" Value="{Binding ChangeAccentCommand}" />

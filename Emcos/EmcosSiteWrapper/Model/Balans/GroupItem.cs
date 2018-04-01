@@ -13,7 +13,7 @@ namespace TMP.Work.Emcos.Model.Balans
     {
         private int _id;
         private string _code;
-        private string _name;
+        private string _title;
 
         private string _description;
         private double? _maximumAllowableUnbalance = null;
@@ -41,6 +41,11 @@ namespace TMP.Work.Emcos.Model.Balans
             GC.SuppressFinalize(this);
         }
 
+        [IgnoreDataMember]
+        public string TypeCode { get; set; }
+        [IgnoreDataMember]
+        public string EcpName { get; set; }
+
         [DataMember()]
         public int Id { get { return _id; } set { _id = value; RaisePropertyChanged("Id"); } }
 
@@ -54,10 +59,9 @@ namespace TMP.Work.Emcos.Model.Balans
                 var sb = new System.Text.StringBuilder();
                 foreach (IBalansItem item in Items)
                 {
-                    if ((item.AddToEplus != null && item.AddToEplus.HasValue) || (item.AddToEminus != null && item.AddToEminus.HasValue))
+                    if (item.AddToEplus.HasValue || item.AddToEminus.HasValue)
                     {
-                        sb.AppendLine(item.Name);
-                        sb.AppendLine(item.Correction);
+                        sb.AppendFormat("{0,-20}\t{1}\n", item.Name, item.Correction);
                     }
                 }
                 if (sb.Length == 0)
@@ -67,7 +71,7 @@ namespace TMP.Work.Emcos.Model.Balans
             }
         }
         [DataMember()]
-        public string Name { get { return _name; } set { _name = value; RaisePropertyChanged("Name"); } }
+        public string Name { get { return _title; } set { _title = value; RaisePropertyChanged("Title"); } }
         [JsonIgnore]
         public virtual double? Eplus
         {
@@ -92,7 +96,7 @@ namespace TMP.Work.Emcos.Model.Balans
             get
             {
                 if (Items == null) return null;
-                double? sum = Items.Sum((i) => (i.AddToEplus != null && i.AddToEplus.HasValue) ? i.AddToEplus.Value : 0.0);
+                double? sum = Items.Sum((i) => i.AddToEplus ?? 0.0);
                 return sum == 0.0 ? null : sum;
             }
             set {}
@@ -128,7 +132,7 @@ namespace TMP.Work.Emcos.Model.Balans
             get
             {
                 if (Items == null) return null;
-                double? sum = Items.Sum((i) => (i.AddToEminus != null && i.AddToEminus.HasValue) ? i.AddToEminus.Value : 0.0);
+                double? sum = Items.Sum((i) => i.AddToEminus ?? 0.0);
                 return sum == 0.0 ? null : sum;
             }
             set {  }
@@ -168,7 +172,7 @@ namespace TMP.Work.Emcos.Model.Balans
                     return null;
                 var tsn = Tsn;
                 //Double add = (AddToEminus != null && AddToEminus.HasValue) ? AddToEminus.Value : 0.0;
-                return (tsn != null && tsn.HasValue) ? value + tsn /*+ add*/ : value;// + add;
+                return tsn.HasValue ? value + tsn /*+ add*/ : value;// + add;
             }
         }
 
@@ -418,7 +422,6 @@ namespace TMP.Work.Emcos.Model.Balans
                 else
                 {
                     IList<Value> values = DailyEplusValues.Where(i => i.Status != ValueStatus.Missing).ToList();
-                    if (values == null || values.Count == 0) return null;
                     value = DailyEplusValues.Sum((i) => i.DoubleValue.Value);
                 }
                 return value;
@@ -435,7 +438,6 @@ namespace TMP.Work.Emcos.Model.Balans
                 else
                 {
                     IList<Value> values = DailyEplusValues.Where(i => i.Status != ValueStatus.Missing).ToList();
-                    if (values == null || values.Count == 0) return null;
                     value = values.Average((i) => i.DoubleValue.Value);
                 }
                 return value;
@@ -452,7 +454,6 @@ namespace TMP.Work.Emcos.Model.Balans
                 else
                 {
                     IList<Value> values = DailyEplusValues.Where(i => i.Status != ValueStatus.Missing).ToList();
-                    if (values == null || values.Count == 0) return null;
                     value = values.Min((i) => i.DoubleValue.Value);
                 }
                 return value;
@@ -469,7 +470,6 @@ namespace TMP.Work.Emcos.Model.Balans
                 else
                 {
                     IList<Value> values = DailyEplusValues.Where(i => i.Status != ValueStatus.Missing).ToList();
-                    if (values == null || values.Count == 0) return null;
                     value = DailyEplusValues.Max((i) => i.DoubleValue.Value);
                 }
                 return value;
@@ -486,7 +486,6 @@ namespace TMP.Work.Emcos.Model.Balans
                 else
                 {
                     IList<Value> values = DailyEminusValues.Where(i => i.Status != ValueStatus.Missing).ToList();
-                    if (values == null || values.Count == 0) return null;
                     value = values.Sum((i) => i.DoubleValue.Value);
                 }
                 return value;
@@ -503,7 +502,6 @@ namespace TMP.Work.Emcos.Model.Balans
                 else
                 {
                     IList<Value> values = DailyEminusValues.Where(i => i.Status != ValueStatus.Missing).ToList();
-                    if (values == null || values.Count == 0) return null;
                     value = values.Average((i) => i.DoubleValue.Value);
                 }
                 return value;
@@ -520,7 +518,6 @@ namespace TMP.Work.Emcos.Model.Balans
                 else
                 {
                     IList<Value> values = DailyEminusValues.Where(i => i.Status != ValueStatus.Missing).ToList();
-                    if (values == null || values.Count == 0) return null;
                     value = values.Min((i) => i.DoubleValue.Value);
                 }
                 return value;
@@ -537,7 +534,6 @@ namespace TMP.Work.Emcos.Model.Balans
                 else
                 {
                     IList<Value> values = DailyEminusValues.Where(i => i.Status != ValueStatus.Missing).ToList();
-                    if (values == null || values.Count == 0) return null;
                     value = values.Max((i) => i.DoubleValue.Value);
                 }
                 return value;

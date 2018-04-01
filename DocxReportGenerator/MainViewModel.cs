@@ -12,6 +12,7 @@ using System.IO.Packaging;
 using TemplateEngine.Docx;
 using System.Data;
 using TMP.UI.Controls.WPF;
+using System.Windows.Controls;
 
 namespace TMP.Work.DocxReportGenerator
 {
@@ -92,8 +93,8 @@ namespace TMP.Work.DocxReportGenerator
 
         #region Properties
 
+        public IEnumerable<DataGridColumn> SourceTableColumns { get; private set; }
         
-
         public IEnumerable SourceTable
         {
             get { return _sourceTable; }
@@ -192,6 +193,11 @@ namespace TMP.Work.DocxReportGenerator
         {
             if (SelectedReportCreationMode == ReportCreationMode.One)
             {
+                SourceTableColumns = new List<DataGridTextColumn>(new DataGridTextColumn[] {
+                    new DataGridTextColumn() { Header = "Название поля", Binding = new System.Windows.Data.Binding("FieldName") },
+                    new DataGridTextColumn() { Header = "Значение поля", Binding = new System.Windows.Data.Binding("FieldValue") }
+                });
+
                 SourceTable = from field in _listOfFieldsInTemplate
                               where field.HasChildren == false
                               orderby field.Name
@@ -200,13 +206,21 @@ namespace TMP.Work.DocxReportGenerator
             else
                 if (SelectedReportCreationMode == ReportCreationMode.Multiple)
             {
-                var columns = from field in _listOfFieldsInTemplate
-                              where field.HasChildren == false
-                              orderby field.Name
+                var list = _listOfFieldsInTemplate
+                           .Where(field => field.HasChildren == false)
+                           .OrderBy(field => field.Name);
+
+                SourceTableColumns = from field in list
+                                     select new DataGridTextColumn() { Header = field.Name };
+
+                var columns = from field in list
                               select new DataColumn(field.Name, typeof(string));
+
+
 
                 DataTable table = new DataTable("source");
                 table.Columns.AddRange(columns.ToArray());
+                table.NewRow();
                 SourceTable = table.AsEnumerable();
             }
         }

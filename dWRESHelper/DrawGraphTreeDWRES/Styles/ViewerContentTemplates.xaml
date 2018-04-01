@@ -1,9 +1,10 @@
-﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:converters="clr-namespace:TMP.DWRES.Helper.Converters;assembly=TMP.Helper"
-                    xmlns:graph="clr-namespace:TMP.DWRES.Graph;assembly=TMP.DWRES.Graph"
-                    xmlns:local="clr-namespace:TMP.DWRES.GUI"
-                    xmlns:vm="clr-namespace:TMP.DWRES.ViewModel">
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:converters="clr-namespace:TMP.DWRES.Helper.Converters;assembly=TMP.Helper"
+    xmlns:graph="clr-namespace:TMP.DWRES.Graph;assembly=TMP.DWRES.Graph"
+    xmlns:local="clr-namespace:TMP.DWRES.GUI"
+    xmlns:vm="clr-namespace:TMP.DWRES.ViewModel">
 
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="/DWRESGraphBuilder;component/Styles/ContextMenu.xaml" />
@@ -20,47 +21,52 @@
     <Style x:Key="viwerButtonStyle" TargetType="{x:Type Button}">
         <Setter Property="MinWidth" Value="300" />
         <Setter Property="MinHeight" Value="30" />
-        <Setter Property="Margin" Value="10 0 10 10" />
+        <Setter Property="Margin" Value="10,0,10,10" />
         <Setter Property="FontWeight" Value="Bold" />
         <Setter Property="Padding" Value="10" />
     </Style>
 
     <ControlTemplate x:Key="ViewerMessageTemplate" TargetType="{x:Type ContentControl}">
-        <Border Margin="20"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center"
-                Background="#FF325878"
-                CornerRadius="10">
+        <Border
+            Margin="20"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Background="#FF325878"
+            CornerRadius="10">
             <Border.Effect>
                 <DropShadowEffect Color="LightGray" />
             </Border.Effect>
-            <StackPanel HorizontalAlignment="Center"
-                        VerticalAlignment="Center"
-                        Orientation="Vertical">
+            <StackPanel
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Orientation="Vertical">
                 <ContentPresenter />
             </StackPanel>
         </Border>
     </ControlTemplate>
 
     <ControlTemplate x:Key="ViewerMessageTemplate2" TargetType="{x:Type ContentControl}">
-        <Border Margin="20"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center"
-                Background="#FF325878"
-                CornerRadius="10">
+        <Border
+            Margin="20"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Background="#FF325878"
+            CornerRadius="10">
             <Border.Effect>
                 <DropShadowEffect Color="LightGray" />
             </Border.Effect>
             <StackPanel Orientation="Vertical">
-                <Border Width="50"
-                        Height="10"
-                        Margin="20"
-                        Background="Lime" />
+                <Border
+                    Width="50"
+                    Height="10"
+                    Margin="20"
+                    Background="Lime" />
                 <ContentPresenter />
-                <Border Width="50"
-                        Height="10"
-                        Margin="20"
-                        Background="Yellow" />
+                <Border
+                    Width="50"
+                    Height="10"
+                    Margin="20"
+                    Background="Yellow" />
             </StackPanel>
         </Border>
     </ControlTemplate>
@@ -68,34 +74,31 @@
     <DataTemplate x:Key="ViewerNoDataStateTemplate">
         <ContentControl Template="{StaticResource ViewerMessageTemplate}">
             <StackPanel Orientation="Vertical">
-                <Label Content="Не знаете с чего начать?"
-                       FontWeight="Bold"
-                       Style="{StaticResource viwerLabelStyle}" />
+                <Label
+                    Content="Не знаете с чего начать?"
+                    FontWeight="Bold"
+                    Style="{StaticResource viwerLabelStyle}" />
 
-                <StackPanel Margin="10"
-                            Orientation="Vertical"
-                            Visibility="{Binding RecentDBExists,
-                                                 Converter={StaticResource InvertedBoolToVisibilityConverter}}">
-                    <Button Command="{Binding CommandLoadDBFromFile,
-                                              Source={x:Static vm:MainWindowViewModel.Instance}}"
-                            Content="Загрузите базу данных DWRes из файла"
-                            Style="{StaticResource viwerButtonStyle}" />
-                    <TextBlock FontStyle="Italic"
-                               Foreground="White"
-                               TextAlignment="Center">
-                        или, что лучше, и обеспечивается
-                        <LineBreak />
-                        одновременная работа нескольких программ
-                        <LineBreak />
-                        с одной базой данных
-                    </TextBlock>
+                <StackPanel
+                    Margin="10"
+                    Orientation="Vertical"
+                    Visibility="{Binding RecentDBExists, Converter={StaticResource InvertedBoolToVisibilityConverter}}">
+                    <Button
+                        Command="{Binding CommandLoadDBFromFile, Source={x:Static vm:MainWindowViewModel.Instance}}"
+                        Content="Загрузите базу данных DWRes из файла"
+                        Style="{StaticResource viwerButtonStyle}" />
+                    <TextBlock
+                        FontStyle="Italic"
+                        Foreground="White"
+                        TextAlignment="Center">
+                        или, что лучше, и обеспечивается<LineBreak />
+                        одновременная работа нескольких программ<LineBreak />
+                        с одной базой данных</TextBlock>
                 </StackPanel>
                 <Button Command="{Binding CommandConnectToServer, Source={x:Static vm:MainWindowViewModel.Instance}}" Style="{StaticResource viwerButtonStyle}">
                     <TextBlock>
-                        Подключитесь к серверу
-                        <LineBreak />
-                        с базой данных DWRes
-                    </TextBlock>
+                        Подключитесь к серверу<LineBreak />
+                        с базой данных DWRes</TextBlock>
                 </Button>
             </StackPanel>
         </ContentControl>
@@ -113,9 +116,10 @@
     <DataTemplate x:Key="ViewerBuildingStateTemplate">
         <ContentControl Template="{StaticResource ViewerMessageTemplate}">
             <StackPanel Margin="20" Orientation="Vertical">
-                <Label Content="Построение схемы ..."
-                       FontStyle="Italic"
-                       Style="{StaticResource viwerLabelStyle}" />
+                <Label
+                    Content="Построение схемы ..."
+                    FontStyle="Italic"
+                    Style="{StaticResource viwerLabelStyle}" />
             </StackPanel>
         </ContentControl>
     </DataTemplate>

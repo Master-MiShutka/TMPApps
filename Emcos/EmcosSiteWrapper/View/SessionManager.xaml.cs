@@ -37,8 +37,8 @@ namespace TMP.Work.Emcos.View
 
         private void ButtonNewSession_Click(object sender, RoutedEventArgs e)
         {
-            var session = new BalansSession();
-            session.Substations = new List<Model.Balans.Substation>();
+            using (var session = new BalansSession())
+                session.Substations = new List<Model.Balans.Substation>();
 
         }
 

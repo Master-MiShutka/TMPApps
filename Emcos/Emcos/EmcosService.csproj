@@ -67,6 +67,10 @@
       <Name>ServiceLocator</Name>
       <Private>True</Private>
     </ProjectReference>
+    <ProjectReference Include="..\..\LIBRARY\TMPApplication\TMPApplication.csproj">
+      <Project>{DFE89862-64EF-44F8-98A8-07B410EC180E}</Project>
+      <Name>TMPApplication</Name>
+    </ProjectReference>
     <ProjectReference Include="..\EmcosModel\EmcosModel.csproj">
       <Project>{4ea193ae-23a4-411c-aee6-0afbaac1c1ca}</Project>
       <Name>EmcosModel</Name>

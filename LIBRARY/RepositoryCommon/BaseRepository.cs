@@ -17,7 +17,13 @@ namespace TMP.Common.RepositoryCommon
         {
             try
             {
-                XmlSerializer serializer = new XmlSerializer(typeof(T));
+                Type t = typeof(T);
+                Type[] extraTypes = t.GetProperties()
+                    .Where(p => p.PropertyType.IsInterface)
+                    .Select(p => p.GetValue(model, null).GetType())
+                    .ToArray();
+
+                XmlSerializer serializer = new XmlSerializer(typeof(T), extraTypes);
                 using (TextWriter writer = new StreamWriter(fileName))
                 {
                     serializer.Serialize(writer, model);
@@ -47,7 +53,10 @@ namespace TMP.Common.RepositoryCommon
                     result = data;
                 }
             }
-            catch (Exception ex) { toLog(ex); return null; }
+            catch (Exception ex)
+            {
+                toLog(ex); return null;
+            }
             return result;
         }
 

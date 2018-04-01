@@ -8,7 +8,7 @@ using System.Runtime.Serialization;
 namespace TMP.Work.Emcos.Model.Balans
 {
     [DataContract(Name = "UnitTransformerBus")]
-    public class UnitTransformerBus : BalansItem, IBalansItem
+    public class UnitTransformerBus : BalansItem
     {
         public override ElementTypes Type { get { return ElementTypes.UNITTRANSFORMERBUS; } }
         public override IBalansItem Copy()

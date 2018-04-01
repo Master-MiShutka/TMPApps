@@ -18,15 +18,15 @@
                 <ControlTemplate TargetType="{x:Type TreeViewItem}">
                     <StackPanel>
                         <Border
-                            x:Name="Bd" CornerRadius="2"
+                            x:Name="Bd"
                             MinHeight="{TemplateBinding MinHeight}"
-                                Background="{TemplateBinding Background}"
-                                BorderBrush="{TemplateBinding BorderBrush}"
-                                BorderThickness="{TemplateBinding BorderThickness}"
-                                Padding="{TemplateBinding Padding}"
-                                SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}">
-                            <Grid Margin="{Binding Converter={StaticResource LengthConverter},
-                                                   RelativeSource={x:Static RelativeSource.TemplatedParent}}">
+                            Padding="{TemplateBinding Padding}"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="2"
+                            SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}">
+                            <Grid Margin="{Binding Converter={StaticResource LengthConverter}, RelativeSource={x:Static RelativeSource.TemplatedParent}}">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="Auto" MinWidth="19" />
                                     <ColumnDefinition Width="*" />
@@ -37,9 +37,9 @@
                                 </Grid.RowDefinitions>
                                 <ToggleButton
                                     x:Name="Expander"
-                                    Style="{StaticResource ExpandCollapsePlusMinusToggleStyle}"
                                     ClickMode="Press"
-                                    IsChecked="{Binding IsExpanded, RelativeSource={RelativeSource TemplatedParent}}" />
+                                    IsChecked="{Binding IsExpanded, RelativeSource={RelativeSource TemplatedParent}}"
+                                    Style="{StaticResource ExpandCollapsePlusMinusToggleStyle}" />
                                 <ContentPresenter
                                     x:Name="PART_Header"
                                     Grid.Column="1"
@@ -61,7 +61,7 @@
                             <Setter TargetName="Bd" Property="Background" Value="{DynamicResource HighlightBrush}" />
                             <Setter Property="Foreground" Value="{DynamicResource WhiteBrush}" />
                         </Trigger>
-                        <Trigger Property="IsMouseOver" Value="true" SourceName="Bd">
+                        <Trigger SourceName="Bd" Property="IsMouseOver" Value="true">
                             <Setter TargetName="Bd" Property="Background" Value="{DynamicResource AccentColorBrush3}" />
                             <Setter Property="Foreground" Value="{DynamicResource BlackColorBrush}" />
                         </Trigger>

@@ -2,9 +2,9 @@
     x:Class="TMP.Work.AmperM.TestApp.App"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:tmpapp="clr-namespace:TMPApplication;assembly=TMPApplication"
+    xmlns:System="clr-namespace:System;assembly=mscorlib"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
-                    xmlns:System="clr-namespace:System;assembly=mscorlib">
+    xmlns:tmpapp="clr-namespace:TMPApplication;assembly=TMPApplication">
     <tmpapp:TMPApp.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>

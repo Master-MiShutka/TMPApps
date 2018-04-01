@@ -14,6 +14,7 @@ using System.Xml.Linq;
 
 namespace TMP.Work.Emcos.View
 {
+    using TMPApplication;
     using TMP.Wpf.Common.Controls.TableView;
     /// <summary>
     /// Interaction logic for BalansSubstationView.xaml
@@ -75,7 +76,7 @@ namespace TMP.Work.Emcos.View
             _task.ContinueWith((t) =>
             {
                 State = State.Idle;
-                App.ToLogError("Просмотр баланса подстанции - ошибка: " + t.Exception.Message);
+                App.LogError("Просмотр баланса подстанции - ошибка: " + t.Exception.Message);
                 App.ShowError("Произошла ошибка.\n" + t.Exception.Message);
             }, TaskContinuationOptions.OnlyOnFaulted);
 
@@ -123,7 +124,7 @@ namespace TMP.Work.Emcos.View
                 _balansGroup = new Model.BalansGrop(substation, _balansGroup.Period);
                 _balansGroup.PropertyChanged += _balansGroup_PropertyChanged;
 
-                App.UIAction(() =>
+                DispatcherExtensions.InUi(() =>
                   {
                       Create_tableColumns();
                       rootGrid.DataContext = _balansGroup;
@@ -137,7 +138,7 @@ namespace TMP.Work.Emcos.View
 
         private void UpdateCallBack(int current, int total)
         {
-            App.UIAction(() =>
+            DispatcherExtensions.InUi(() =>
                   {
                       Progress = 100 * current / total;
                   });
@@ -403,12 +404,12 @@ namespace TMP.Work.Emcos.View
                         reportFileName = System.IO.Path.Combine(System.IO.Path.GetTempPath(), _balansGroup.SubstationTitle + " " + ++index + ".xlsx");
                     }
                 }
-                var sbe = new Export.SubstationExport(_balansGroup);
-                sbe.Export(reportFileName);
+                using (var sbe = new Export.SubstationExport(_balansGroup))
+                    sbe.Export(reportFileName);
 
                 System.Diagnostics.Process.Start(reportFileName);
                 State = State.Idle;
-                App.UIAction(() => wait.Message = "Пожалуйста, подождите..\nПодготовка данных.");
+                DispatcherExtensions.InUi(() => wait.Message = "Пожалуйста, подождите..\nПодготовка данных.");
             }, System.Threading.Tasks.TaskCreationOptions.AttachedToParent);
 
 
@@ -422,8 +423,8 @@ namespace TMP.Work.Emcos.View
                         sb.AppendLine(ex.InnerException.Message);
                         ex = ex.InnerException;
                     }
-                App.ToLogError("Экспорт балансов подстанций - ошибка: " + sb.ToString());
-                App.UIAction(() => App.ShowError("Произошла ошибка при формировании отчёта.\nОбратитесь к разработчику."));
+                App.LogError("Экспорт балансов подстанций - ошибка: " + sb.ToString());
+                DispatcherExtensions.InUi(() => App.ShowError("Произошла ошибка при формировании отчёта.\nОбратитесь к разработчику."));
             }, System.Threading.Tasks.TaskContinuationOptions.OnlyOnFaulted);
             task.Start(System.Threading.Tasks.TaskScheduler.Current);
         }
@@ -443,7 +444,7 @@ namespace TMP.Work.Emcos.View
                 _balansGroup = new Model.BalansGrop(_balansGroup.Substation, _balansGroup.Period);
                 _balansGroup.PropertyChanged += _balansGroup_PropertyChanged;
 
-                App.UIAction(() =>
+                DispatcherExtensions.InUi(() =>
                   {
                       rootGrid.DataContext = _balansGroup;
                       Progress = 0;

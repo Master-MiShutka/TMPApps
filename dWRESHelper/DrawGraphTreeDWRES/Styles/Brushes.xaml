@@ -52,7 +52,7 @@
         <GradientStop Offset="0.054" Color="#FF1D1D1D" />
         <GradientStop Offset="1" Color="#FF007F96" />
         <GradientStop Offset="0.6" Color="#FF1EBCC7" />
-        <GradientStop Color="#FF1CB8C4" Offset="0.8"/>
+        <GradientStop Offset="0.8" Color="#FF1CB8C4" />
     </LinearGradientBrush>
 
 </ResourceDictionary>

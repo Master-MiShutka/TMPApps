@@ -86,6 +86,12 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="PresentationFramework.Aero" />
+    <Reference Include="PresentationFramework.Luna">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="PresentationFramework.Royale">
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -182,6 +188,8 @@
     <Compile Include="Model\IBalansSession.cs" />
     <Compile Include="Model\ModelConverter.cs" />
     <Compile Include="Model\BalansSession.cs" />
+    <Compile Include="Model\TreeEmcosPoint.cs" />
+    <Compile Include="Model\TreeModel.cs" />
     <Compile Include="NullListToEmptyStringConverter.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -205,6 +213,9 @@
     <Compile Include="View\MaximumAllowedUnbalanceColumnTemplateSelector.cs" />
     <Compile Include="View\SessionManager.xaml.cs">
       <DependentUpon>SessionManager.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\WindowPointsEditor.xaml.cs">
+      <DependentUpon>WindowPointsEditor.xaml</DependentUpon>
     </Compile>
     <Compile Include="WaitCursor.cs" />
     <Compile Include="Windows\AuxiliaryReportWindow.xaml.cs">
@@ -275,6 +286,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\SessionManager.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\WindowPointsEditor.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -395,6 +410,10 @@
       <Project>{e00c55d0-971a-4d59-8c91-e7a4d79d50e8}</Project>
       <Name>NetHelper</Name>
       <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LIBRARY\SharpTreeView\ICSharpCode.TreeView.csproj">
+      <Project>{dde2a481-8271-4eac-a330-8fa6a38d13d1}</Project>
+      <Name>ICSharpCode.TreeView</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\LIBRARY\TMPApplication\TMPApplication.csproj">
       <Project>{dfe89862-64ef-44f8-98a8-07b410ec180e}</Project>

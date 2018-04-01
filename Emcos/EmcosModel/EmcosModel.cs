@@ -15,7 +15,24 @@ namespace TMP.Work.Emcos.Model
         [DataMember()]
         string Code { get; set; }
         [DataMember()]
+        string TypeCode { get; set; }
+        [DataMember()]
         ElementTypes Type { get; set; }
+        [DataMember()]
+        string EcpName { get; set; }
+        [DataMember()]
+        string Description { get; set; }
+    }
+
+    public interface IHierarchicalEmcosPoint : IEmcosPoint
+    {
+        [DataMember()]
+        string ParentTypeCode { get; set; }
+        [DataMember()]
+        bool IsGroup { get; set; }
+
+        [DataMember()]
+        IList<IHierarchicalEmcosPoint> Children { get; set; }
     }
 
     [Serializable]
@@ -49,7 +66,7 @@ namespace TMP.Work.Emcos.Model
 
         public EmcosPointWithValue() { }
 
-        public EmcosPointWithValue(EmcosPoint point)
+        public EmcosPointWithValue(IHierarchicalEmcosPoint point)
         {
             this.Id = point.Id;
             this.Name = point.Name;
@@ -83,7 +100,7 @@ namespace TMP.Work.Emcos.Model
     }
 
     [Serializable]
-    public class EmcosPoint : EmcosPointBase
+    public class EmcosPoint : EmcosPointBase, IHierarchicalEmcosPoint
     {
         public EmcosPoint() { }
 
@@ -101,8 +118,21 @@ namespace TMP.Work.Emcos.Model
             this.EcpName = point.EcpName;
         }
 
-        [XmlArray]
-        public List<EmcosPoint> Children { get; set; }
+        [XmlAttribute]
+        public string ParentTypeCode { get; set; }
+        [XmlAttribute]
+        public bool IsGroup { get; set; }
+
+        [XmlIgnore]
+        public IList<IHierarchicalEmcosPoint> Children { get; set; }
+
+        [XmlElement("Children")]
+        public object ChildrenSerializable
+        {
+            get { return Children; }
+            set { ChildrenSerializable = value; Children = value as IList<IHierarchicalEmcosPoint>; }
+        }
+
         [XmlIgnore]
         public int ChildCount { get { return Children != null ? Children.Count : 0; } }
 

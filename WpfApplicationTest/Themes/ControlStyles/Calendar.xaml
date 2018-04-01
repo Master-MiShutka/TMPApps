@@ -13,11 +13,12 @@
             <Setter.Value>
                 <ControlTemplate TargetType="Calendar">
                     <StackPanel Name="PART_Root" HorizontalAlignment="Center">
-                        <CalendarItem Name="PART_CalendarItem"
-                                      Background="{TemplateBinding Background}"
-                                      BorderBrush="{TemplateBinding BorderBrush}"
-                                      BorderThickness="{TemplateBinding BorderThickness}"
-                                      Style="{TemplateBinding CalendarItemStyle}" />
+                        <CalendarItem
+                            Name="PART_CalendarItem"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            Style="{TemplateBinding CalendarItemStyle}" />
                     </StackPanel>
                 </ControlTemplate>
             </Setter.Value>
@@ -30,20 +31,22 @@
                 <ControlTemplate TargetType="CalendarItem">
                     <ControlTemplate.Resources>
                         <DataTemplate x:Key="{x:Static CalendarItem.DayTitleTemplateResourceKey}">
-                            <TextBlock x:Name="Text"
-                                       Margin="0,6,0,6"
-                                       HorizontalAlignment="Center"
-                                       VerticalAlignment="Center"
-                                       FontSize="{DynamicResource DefaultFontSize}"
-                                       FontWeight="Bold"
-                                       Foreground="{DynamicResource ItemText}"
-                                       Text="{Binding}" />
+                            <TextBlock
+                                x:Name="Text"
+                                Margin="0,6,0,6"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                FontSize="{DynamicResource DefaultFontSize}"
+                                FontWeight="Bold"
+                                Foreground="{DynamicResource ItemText}"
+                                Text="{Binding}" />
                         </DataTemplate>
                     </ControlTemplate.Resources>
                     <Grid Name="PART_Root">
-                        <Border Background="{TemplateBinding Background}"
-                                BorderBrush="{TemplateBinding BorderBrush}"
-                                BorderThickness="{TemplateBinding BorderThickness}">
+                        <Border
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}">
                             <Grid>
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto" />
@@ -55,53 +58,57 @@
                                     <ColumnDefinition Width="Auto" />
                                 </Grid.ColumnDefinitions>
 
-                                <Button x:Name="PART_PreviousButton"
-                                        Grid.Row="0"
-                                        Grid.Column="0"
-                                        Margin="-1,-1,0,0"
-                                        Focusable="False"
-                                        Padding="10,4,10,3">
-                                    <Path Width="6"
-                                          Height="10"
-                                          HorizontalAlignment="Center"
-                                          VerticalAlignment="Center"
-                                          Data="F1 M 0,0 1,1 1,-1 Z"
-                                          Fill="{Binding Foreground,
-                                                         RelativeSource={RelativeSource AncestorType=Button}}"
-                                          Stretch="Fill" />
-                                </Button>
-
-                                <Button x:Name="PART_HeaderButton"
-                                        Grid.Row="0"
-                                        Grid.Column="1"
-                                        Margin="-1,-1,-1,0"
-                                        HorizontalAlignment="Stretch"
+                                <Button
+                                    x:Name="PART_PreviousButton"
+                                    Grid.Row="0"
+                                    Grid.Column="0"
+                                    Margin="-1,-1,0,0"
+                                    Padding="10,4,10,3"
+                                    Focusable="False">
+                                    <Path
+                                        Width="6"
+                                        Height="10"
+                                        HorizontalAlignment="Center"
                                         VerticalAlignment="Center"
-                                        Focusable="False"
-                                        FontWeight="Bold" />
-
-                                <Button x:Name="PART_NextButton"
-                                        Grid.Row="0"
-                                        Grid.Column="2"
-                                        Margin="0,-1,-1,0"
-                                        Focusable="False"
-                                        Padding="10,4,10,3">
-                                    <Path Width="6"
-                                          Height="10"
-                                          HorizontalAlignment="Center"
-                                          VerticalAlignment="Center"
-                                          Data="F1 M 0,1 1,0 0,-1 Z"
-                                          Fill="{Binding Foreground,
-                                                         RelativeSource={RelativeSource AncestorType=Button}}"
-                                          Stretch="Fill" />
+                                        Data="F1 M 0,0 1,1 1,-1 Z"
+                                        Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"
+                                        Stretch="Fill" />
                                 </Button>
 
-                                <Grid x:Name="PART_MonthView"
-                                      Grid.Row="1"
-                                      Grid.ColumnSpan="3"
-                                      Margin="8"
-                                      HorizontalAlignment="Center"
-                                      Visibility="Visible">
+                                <Button
+                                    x:Name="PART_HeaderButton"
+                                    Grid.Row="0"
+                                    Grid.Column="1"
+                                    Margin="-1,-1,-1,0"
+                                    HorizontalAlignment="Stretch"
+                                    VerticalAlignment="Center"
+                                    Focusable="False"
+                                    FontWeight="Bold" />
+
+                                <Button
+                                    x:Name="PART_NextButton"
+                                    Grid.Row="0"
+                                    Grid.Column="2"
+                                    Margin="0,-1,-1,0"
+                                    Padding="10,4,10,3"
+                                    Focusable="False">
+                                    <Path
+                                        Width="6"
+                                        Height="10"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        Data="F1 M 0,1 1,0 0,-1 Z"
+                                        Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"
+                                        Stretch="Fill" />
+                                </Button>
+
+                                <Grid
+                                    x:Name="PART_MonthView"
+                                    Grid.Row="1"
+                                    Grid.ColumnSpan="3"
+                                    Margin="8"
+                                    HorizontalAlignment="Center"
+                                    Visibility="Visible">
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="Auto" />
                                         <RowDefinition Height="Auto" />
@@ -122,12 +129,13 @@
                                     </Grid.ColumnDefinitions>
                                 </Grid>
 
-                                <Grid x:Name="PART_YearView"
-                                      Grid.Row="1"
-                                      Grid.ColumnSpan="3"
-                                      Margin="8"
-                                      HorizontalAlignment="Center"
-                                      Visibility="Hidden">
+                                <Grid
+                                    x:Name="PART_YearView"
+                                    Grid.Row="1"
+                                    Grid.ColumnSpan="3"
+                                    Margin="8"
+                                    HorizontalAlignment="Center"
+                                    Visibility="Hidden">
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="Auto" />
                                         <RowDefinition Height="Auto" />
@@ -183,24 +191,27 @@
             <Setter.Value>
                 <ControlTemplate TargetType="CalendarDayButton">
                     <Grid Background="{TemplateBinding Background}">
-                        <ContentPresenter x:Name="NormalText"
-                                          Margin="5,1,5,1"
-                                          HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                          TextElement.Foreground="{TemplateBinding Foreground}" />
-                        <Path x:Name="Blackout"
-                              Margin="3"
-                              HorizontalAlignment="Stretch"
-                              VerticalAlignment="Stretch"
-                              Data="M8.1772461,11.029181 L10.433105,11.029181 L11.700684,12.801641 L12.973633,11.029181 L15.191895,11.029181 L12.844727,13.999395 L15.21875,17.060919 L12.962891,17.060919 L11.673828,15.256231 L10.352539,17.060919 L8.1396484,17.060919 L10.519043,14.042364 z"
-                              Fill="{TemplateBinding Foreground}"
-                              Opacity=".5"
-                              Stretch="Fill"
-                              Visibility="Collapsed" />
-                        <Rectangle x:Name="DayButtonFocusVisual"
-                                   IsHitTestVisible="false"
-                                   Stroke="{DynamicResource Accent}"
-                                   Visibility="Collapsed" />
+                        <ContentPresenter
+                            x:Name="NormalText"
+                            Margin="5,1,5,1"
+                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                            TextElement.Foreground="{TemplateBinding Foreground}" />
+                        <Path
+                            x:Name="Blackout"
+                            Margin="3"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Stretch"
+                            Data="M8.1772461,11.029181 L10.433105,11.029181 L11.700684,12.801641 L12.973633,11.029181 L15.191895,11.029181 L12.844727,13.999395 L15.21875,17.060919 L12.962891,17.060919 L11.673828,15.256231 L10.352539,17.060919 L8.1396484,17.060919 L10.519043,14.042364 z"
+                            Fill="{TemplateBinding Foreground}"
+                            Opacity=".5"
+                            Stretch="Fill"
+                            Visibility="Collapsed" />
+                        <Rectangle
+                            x:Name="DayButtonFocusVisual"
+                            IsHitTestVisible="false"
+                            Stroke="{DynamicResource Accent}"
+                            Visibility="Collapsed" />
                     </Grid>
 
                     <ControlTemplate.Triggers>
@@ -257,15 +268,17 @@
             <Setter.Value>
                 <ControlTemplate TargetType="CalendarButton">
                     <Grid Background="{TemplateBinding Background}">
-                        <ContentPresenter x:Name="NormalText"
-                                          Margin="1,0,1,1"
-                                          HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                          TextElement.Foreground="{TemplateBinding Foreground}" />
-                        <Rectangle x:Name="CalendarButtonFocusVisual"
-                                   IsHitTestVisible="false"
-                                   Stroke="{DynamicResource Accent}"
-                                   Visibility="Collapsed" />
+                        <ContentPresenter
+                            x:Name="NormalText"
+                            Margin="1,0,1,1"
+                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                            TextElement.Foreground="{TemplateBinding Foreground}" />
+                        <Rectangle
+                            x:Name="CalendarButtonFocusVisual"
+                            IsHitTestVisible="false"
+                            Stroke="{DynamicResource Accent}"
+                            Visibility="Collapsed" />
                     </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsFocused" Value="True">

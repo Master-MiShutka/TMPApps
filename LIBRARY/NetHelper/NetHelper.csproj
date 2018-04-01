@@ -58,6 +58,12 @@
     <Compile Include="RequestState.cs" />
     <Compile Include="ServiceResult.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\TMPApplication\TMPApplication.csproj">
+      <Project>{DFE89862-64EF-44F8-98A8-07B410EC180E}</Project>
+      <Name>TMPApplication</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>echo "$(TargetDir)$(TargetFileName)"

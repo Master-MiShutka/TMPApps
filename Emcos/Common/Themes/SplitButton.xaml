@@ -21,10 +21,10 @@
                     Grid.Column="0"
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Stretch"
-                    Style="{StaticResource {x:Type Button}}"
                     Command="{TemplateBinding Command}"
                     CommandParameter="{TemplateBinding CommandParameter}"
-                    CommandTarget="{TemplateBinding CommandTarget}">
+                    CommandTarget="{TemplateBinding CommandTarget}"
+                    Style="{StaticResource {x:Type Button}}">
                     <StackPanel
                         HorizontalAlignment="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource TemplatedParent}}"
                         VerticalAlignment="{Binding VerticalContentAlignment, RelativeSource={RelativeSource TemplatedParent}}"
@@ -73,8 +73,8 @@
                                                 Canvas.Top="15.75"
                                                 Width="18"
                                                 Height="16"
-                                                Fill="{DynamicResource BlackColorBrush}"
                                                 Data="F1 M 23.9063,25L 25.9063,23L 32.9063,15.75L 32.9063,22.25L 23.9062,31.75L 14.9063,22.25L 14.9063,15.75L 21.9063,23L 23.9063,25 Z "
+                                                Fill="{DynamicResource BlackColorBrush}"
                                                 Stretch="Fill" />
                                         </Canvas>
                                     </VisualBrush.Visual>
@@ -92,7 +92,6 @@
                     StaysOpen="True">
                     <ListBox
                         x:Name="PART_ListBox"
-                        Style="{DynamicResource VirtualisedMetroListBox}"
                         BorderBrush="{TemplateBinding BorderBrush}"
                         BorderThickness="{TemplateBinding BorderThickness}"
                         DisplayMemberPath="{TemplateBinding DisplayMemberPath}"
@@ -104,7 +103,8 @@
                         ItemsSource="{TemplateBinding ItemsSource}"
                         SelectedIndex="{Binding SelectedIndex, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
                         SelectedItem="{Binding SelectedItem, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
-                        SelectionMode="Single" />
+                        SelectionMode="Single"
+                        Style="{DynamicResource VirtualisedMetroListBox}" />
                 </Popup>
             </Grid>
         </Border>
@@ -141,10 +141,10 @@
                     MinHeight="20"
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Stretch"
-                    Style="{StaticResource {x:Type Button}}"
                     Command="{TemplateBinding Command}"
                     CommandParameter="{TemplateBinding CommandParameter}"
-                    CommandTarget="{TemplateBinding CommandTarget}">
+                    CommandTarget="{TemplateBinding CommandTarget}"
+                    Style="{StaticResource {x:Type Button}}">
                     <Button.Content>
                         <StackPanel
                             HorizontalAlignment="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource TemplatedParent}}"
@@ -193,8 +193,8 @@
                                                 Canvas.Top="15.75"
                                                 Width="18"
                                                 Height="16"
-                                                Fill="{DynamicResource BlackColorBrush}"
                                                 Data="F1 M 23.9063,25L 25.9063,23L 32.9063,15.75L 32.9063,22.25L 23.9062,31.75L 14.9063,22.25L 14.9063,15.75L 21.9063,23L 23.9063,25 Z "
+                                                Fill="{DynamicResource BlackColorBrush}"
                                                 Stretch="Fill" />
                                         </Canvas>
                                     </VisualBrush.Visual>

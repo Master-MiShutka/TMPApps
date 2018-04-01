@@ -30,7 +30,7 @@
       <Value Profile="(Default)">600</Value>
     </Setting>
     <Setting Name="MainWindowWidth" Type="System.Double" Scope="User">
-      <Value Profile="(Default)">1400</Value>
+      <Value Profile="(Default)">1500</Value>
     </Setting>
     <Setting Name="MainWindowState" Type="System.Windows.WindowState" Scope="User">
       <Value Profile="(Default)">Normal</Value>
@@ -40,6 +40,12 @@
     </Setting>
     <Setting Name="ReportBalansPSFileNameTemplate" Type="System.String" Scope="User">
       <Value Profile="(Default)">Расчёт баланса 6-10 за {0:MM - yyyy}</Value>
+    </Setting>
+    <Setting Name="ServiceName" Type="System.String" Scope="User">
+      <Value Profile="(Default)">testWebService/Service.asmx</Value>
+    </Setting>
+    <Setting Name="SiteName" Type="System.String" Scope="User">
+      <Value Profile="(Default)">emcos</Value>
     </Setting>
   </Settings>
 </SettingsFile>

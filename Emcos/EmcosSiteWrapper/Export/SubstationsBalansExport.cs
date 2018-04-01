@@ -125,9 +125,138 @@ namespace TMP.Work.Emcos.Export
                 #endregion                
                 #region * ТСН ввода *
                 IList<IBalansItem> auxilary = substation.Items.Where((c) => c.Type == Model.ElementTypes.UNITTRANSFORMER).ToList();
-                if (auxilary != null)
+                foreach (UnitTransformer aux in auxilary)
                 {
-                    foreach (UnitTransformer aux in auxilary)
+                    CreateCell(rowIndex, 3, aux.Name);
+                    CreateCell(rowIndex, 4, aux.EnergyIn);
+                    CreateRange(rowIndex, 5, 1, 2, String.IsNullOrWhiteSpace(aux.DataPlusStatus) ? null : "нет данных: " + aux.DataPlusStatus);
+                    CreateCell(rowIndex, 7, aux.EnergyOut);
+                    CreateRange(rowIndex, 8, 1, 2, String.IsNullOrWhiteSpace(aux.DataMinusStatus) ? null : "нет данных: " + aux.DataMinusStatus);
+                    CreateCell(rowIndex, 10, aux.Correction);
+                    CreateRange(rowIndex, 11, 1, 3, null);
+                    ChangeRangeStyle(rowIndex, 3, 1, 11, "style_dottedTableCell");
+
+                    CreateCell(rowIndex, 15, aux.EnergyIn / 1000.0);
+                    CreateCell(rowIndex, 16, aux.EnergyOut / 1000.0);
+                    CreateCell(rowIndex, 17, aux.Code);
+                    ChangeRangeStyle(rowIndex, 15, 1, 3, "style_dottedTableCell");
+
+                    if (String.IsNullOrWhiteSpace(aux.Correction) == false)
+                    {
+                        Range(rowIndex, 3).Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                        Range(rowIndex, 3).Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.Brown);
+                        Range(rowIndex, 3).Style.Font.Color.SetColor(System.Drawing.Color.White);
+                    }
+                    if (aux.AddToEplus != null)
+                    {
+                        Range(rowIndex, 4).Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                        Range(rowIndex, 4).Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.Yellow);
+                    }
+                    if (aux.DataPlusStatus != null)
+                    {
+                        Range(rowIndex, 5, 1, 2).Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                        Range(rowIndex, 5, 1, 2).Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.Aqua);
+                    }
+                    if (aux.AddToEminus != null)
+                    {
+                        Range(rowIndex, 7).Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                        Range(rowIndex, 7).Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.Yellow);
+                    }
+                    if (aux.DataMinusStatus != null)
+                    {
+                        Range(rowIndex, 8, 1, 2).Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                        Range(rowIndex, 8, 1, 2).Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.Aqua);
+                    }
+                    sheet.Row(rowIndex).OutlineLevel = 1;
+                    sheet.Row(rowIndex).Collapsed = true;
+                    rowIndex++;
+                }
+                #endregion
+
+                #region * Секции *
+                IList<IBalansItem> sections = substation.Children.Where((c) => c.Type == Model.ElementTypes.SECTION && (c as SubstationSection).IsLowVoltage).ToList();
+
+                foreach (IBalansItem section in sections)
+                {
+                    int sectionRowIndex = rowIndex;
+
+                    var bss = section as SubstationSection;
+                    if (bss == null)
+                        System.Diagnostics.Debugger.Break();
+                    CreateRange(rowIndex, 2, 1, 2, bss.Name);
+                    CreateCell(rowIndex, 4, bss.EnergyIn);
+                    CreateCell(rowIndex, 7, bss.EnergyOut);
+                    CreateCell(rowIndex, 11, bss.Unbalance);
+                    CreateCell(rowIndex, 12, bss.PercentageOfUnbalance);
+
+                    ChangeRangeStyle(rowIndex, 2, 1, column - 1, "style_table");
+                    Range(rowIndex, 2, 1, column - 1).Style.Font.Italic = true;
+
+                    if (bss.Correction != null)
+                    {
+                        Range(rowIndex, 2, 1, 2).Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                        Range(rowIndex, 2, 1, 2).Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.Brown);
+                        Range(rowIndex, 2, 1, 2).Style.Font.Color.SetColor(System.Drawing.Color.White);
+                    }
+                    sheet.Row(rowIndex).OutlineLevel = 1;
+                    sheet.Row(rowIndex).Collapsed = true;
+                    rowIndex++;
+
+                    int topRowIndex = rowIndex;
+
+                    #region * ТРАСНФОРМАТОРЫ *
+                    IList<IBalansItem> transformers = bss.Children.Where((c) => c.Type == Model.ElementTypes.POWERTRANSFORMER).ToList();
+                    foreach (PowerTransformer transformer in transformers)
+                    {
+                        CreateCell(rowIndex, 3, transformer.Name);
+                        CreateCell(rowIndex, 4, transformer.EnergyIn);
+                        CreateRange(rowIndex, 5, 1, 2, String.IsNullOrWhiteSpace(transformer.DataPlusStatus) ? null : "нет данных: " + transformer.DataPlusStatus);
+                        CreateCell(rowIndex, 7, transformer.EnergyOut);
+                        CreateRange(rowIndex, 8, 1, 2, String.IsNullOrWhiteSpace(transformer.DataMinusStatus) ? null : "нет данных: " + transformer.DataMinusStatus);
+                        CreateCell(rowIndex, 10, transformer.Correction);
+                        CreateRange(rowIndex, 11, 1, 3, transformer.Description);
+                        ChangeRangeStyle(rowIndex, 3, 1, 11, "style_dottedTableCell");
+
+                        CreateCell(rowIndex, 15, transformer.EnergyIn / 1000.0);
+                        CreateCell(rowIndex, 16, transformer.EnergyOut / 1000.0);
+                        CreateCell(rowIndex, 17, transformer.Code);
+                        ChangeRangeStyle(rowIndex, 15, 1, 3, "style_dottedTableCell");
+
+                        if (String.IsNullOrWhiteSpace(transformer.Correction) == false)
+                        {
+                            Range(rowIndex, 3).Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                            Range(rowIndex, 3).Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.Brown);
+                            Range(rowIndex, 3).Style.Font.Color.SetColor(System.Drawing.Color.White);
+                        }
+                        if (transformer.AddToEplus != null)
+                        {
+                            Range(rowIndex, 4).Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                            Range(rowIndex, 4).Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.Yellow);
+                        }
+                        if (transformer.DataPlusStatus != null)
+                        {
+                            Range(rowIndex, 5, 1, 2).Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                            Range(rowIndex, 5, 1, 2).Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.Aqua);
+                        }
+                        if (transformer.AddToEminus != null)
+                        {
+                            Range(rowIndex, 7).Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                            Range(rowIndex, 7).Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.Yellow);
+                        }
+                        if (transformer.DataMinusStatus != null)
+                        {
+                            Range(rowIndex, 8, 1, 2).Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                            Range(rowIndex, 8, 1, 2).Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.Aqua);
+                        }
+                        sheet.Row(rowIndex).OutlineLevel = 2;
+                        sheet.Row(rowIndex).Collapsed = true;
+                        rowIndex++;
+                    }
+
+                    #endregion
+                    #region * ТСН ш *
+                    IList<IBalansItem> auxilaryBus = bss.Children.Where((c) => c.Type == Model.ElementTypes.UNITTRANSFORMERBUS).ToList();
+                    foreach (UnitTransformerBus aux in auxilaryBus)
                     {
                         CreateCell(rowIndex, 3, aux.Name);
                         CreateCell(rowIndex, 4, aux.EnergyIn);
@@ -169,200 +298,113 @@ namespace TMP.Work.Emcos.Export
                             Range(rowIndex, 8, 1, 2).Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
                             Range(rowIndex, 8, 1, 2).Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.Aqua);
                         }
-                        sheet.Row(rowIndex).OutlineLevel = 1;
+                        sheet.Row(rowIndex).OutlineLevel = 2;
                         sheet.Row(rowIndex).Collapsed = true;
                         rowIndex++;
                     }
-                }
-                #endregion
-
-                #region * Секции *
-                IList<IBalansItem> sections = substation.Children.Where((c) => c.Type == Model.ElementTypes.SECTION && (c as SubstationSection).IsLowVoltage).ToList();
-                if (sections == null)
-                    continue;
-                foreach (IBalansItem section in sections)
-                {
-                    int sectionRowIndex = rowIndex;
-
-                    var bss = section as SubstationSection;
-                    if (bss == null)
-                        System.Diagnostics.Debugger.Break();
-                    CreateRange(rowIndex, 2, 1, 2, bss.Name);
-                    CreateCell(rowIndex, 4, bss.EnergyIn);
-                    CreateCell(rowIndex, 7, bss.EnergyOut);
-                    CreateCell(rowIndex, 11, bss.Unbalance);
-                    CreateCell(rowIndex, 12, bss.PercentageOfUnbalance);
-
-                    ChangeRangeStyle(rowIndex, 2, 1, column - 1, "style_table");
-                    Range(rowIndex, 2, 1, column - 1).Style.Font.Italic = true;
-
-                    if (bss.Correction != null)
+                    foreach (UnitTransformerBus aux in auxilaryBus)
                     {
-                        Range(rowIndex, 2, 1, 2).Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
-                        Range(rowIndex, 2, 1, 2).Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.Brown);
-                        Range(rowIndex, 2, 1, 2).Style.Font.Color.SetColor(System.Drawing.Color.White);
+                        CreateCell(rowIndex, 3, aux.Name);
+                        CreateCell(rowIndex, 4, aux.EnergyIn);
+                        CreateRange(rowIndex, 5, 1, 2, String.IsNullOrWhiteSpace(aux.DataPlusStatus) ? null : "нет данных: " + aux.DataPlusStatus);
+                        CreateCell(rowIndex, 7, aux.EnergyOut);
+                        CreateRange(rowIndex, 8, 1, 2, String.IsNullOrWhiteSpace(aux.DataMinusStatus) ? null : "нет данных: " + aux.DataMinusStatus);
+                        CreateCell(rowIndex, 10, aux.Correction);
+                        CreateRange(rowIndex, 11, 1, 3, null);
+                        ChangeRangeStyle(rowIndex, 3, 1, 11, "style_dottedTableCell");
+
+                        CreateCell(rowIndex, 15, aux.EnergyIn / 1000.0);
+                        CreateCell(rowIndex, 16, aux.EnergyOut / 1000.0);
+                        CreateCell(rowIndex, 17, aux.Code);
+                        ChangeRangeStyle(rowIndex, 15, 1, 3, "style_dottedTableCell");
+
+                        if (String.IsNullOrWhiteSpace(aux.Correction) == false)
+                        {
+                            Range(rowIndex, 3).Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                            Range(rowIndex, 3).Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.Brown);
+                            Range(rowIndex, 3).Style.Font.Color.SetColor(System.Drawing.Color.White);
+                        }
+                        if (aux.AddToEplus != null)
+                        {
+                            Range(rowIndex, 4).Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                            Range(rowIndex, 4).Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.Yellow);
+                        }
+                        if (aux.DataPlusStatus != null)
+                        {
+                            Range(rowIndex, 5, 1, 2).Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                            Range(rowIndex, 5, 1, 2).Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.Aqua);
+                        }
+                        if (aux.AddToEminus != null)
+                        {
+                            Range(rowIndex, 7).Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                            Range(rowIndex, 7).Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.Yellow);
+                        }
+                        if (aux.DataMinusStatus != null)
+                        {
+                            Range(rowIndex, 8, 1, 2).Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                            Range(rowIndex, 8, 1, 2).Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.Aqua);
+                        }
+                        sheet.Row(rowIndex).OutlineLevel = 2;
+                        sheet.Row(rowIndex).Collapsed = true;
+                        rowIndex++;
                     }
-                    sheet.Row(rowIndex).OutlineLevel = 1;
-                    sheet.Row(rowIndex).Collapsed = true;
-                    rowIndex++;
 
-                    int topRowIndex = rowIndex;
-
-                    #region * ТРАСНФОРМАТОРЫ *
-                    IList<IBalansItem> transformers = bss.Children.Where((c) => c.Type == Model.ElementTypes.POWERTRANSFORMER).ToList();
-                    if (transformers != null)
-                        foreach (PowerTransformer transformer in transformers)
-                        {
-                            CreateCell(rowIndex, 3, transformer.Name);
-                            CreateCell(rowIndex, 4, transformer.EnergyIn);
-                            CreateRange(rowIndex, 5, 1, 2, String.IsNullOrWhiteSpace(transformer.DataPlusStatus) ? null : "нет данных: " + transformer.DataPlusStatus);
-                            CreateCell(rowIndex, 7, transformer.EnergyOut);                            
-                            CreateRange(rowIndex, 8, 1, 2, String.IsNullOrWhiteSpace(transformer.DataMinusStatus) ? null : "нет данных: " + transformer.DataMinusStatus);
-                            CreateCell(rowIndex, 10, transformer.Correction);
-                            CreateRange(rowIndex, 11, 1, 3, transformer.Description);
-                            ChangeRangeStyle(rowIndex, 3, 1, 11, "style_dottedTableCell");
-
-                            CreateCell(rowIndex, 15, transformer.EnergyIn / 1000.0);
-                            CreateCell(rowIndex, 16, transformer.EnergyOut / 1000.0);
-                            CreateCell(rowIndex, 17, transformer.Code);
-                            ChangeRangeStyle(rowIndex, 15, 1, 3, "style_dottedTableCell");
-
-                            if (String.IsNullOrWhiteSpace(transformer.Correction) == false)
-                            {
-                                Range(rowIndex, 3).Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
-                                Range(rowIndex, 3).Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.Brown);
-                                Range(rowIndex, 3).Style.Font.Color.SetColor(System.Drawing.Color.White);
-                            }
-                            if (transformer.AddToEplus != null)
-                            {
-                                Range(rowIndex, 4).Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
-                                Range(rowIndex, 4).Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.Yellow);
-                            }
-                            if (transformer.DataPlusStatus != null)
-                            {
-                                Range(rowIndex, 5, 1, 2).Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
-                                Range(rowIndex, 5, 1, 2).Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.Aqua);
-                            }
-                            if (transformer.AddToEminus != null)
-                            {
-                                Range(rowIndex, 7).Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
-                                Range(rowIndex, 7).Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.Yellow);
-                            }
-                            if (transformer.DataMinusStatus != null)
-                            {
-                                Range(rowIndex, 8, 1, 2).Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
-                                Range(rowIndex, 8, 1, 2).Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.Aqua);
-                            }
-                            sheet.Row(rowIndex).OutlineLevel = 2;
-                            sheet.Row(rowIndex).Collapsed = true;
-                            rowIndex++;
-                        }
-                    #endregion
-                    #region * ТСН ш *
-                    IList<IBalansItem> auxilaryBus = bss.Children.Where((c) => c.Type == Model.ElementTypes.UNITTRANSFORMERBUS).ToList();
-                    if (auxilaryBus != null)
-                        foreach (UnitTransformerBus aux in auxilaryBus)
-                        {
-                            CreateCell(rowIndex, 3, aux.Name);
-                            CreateCell(rowIndex, 4, aux.EnergyIn);
-                            CreateRange(rowIndex, 5, 1, 2, String.IsNullOrWhiteSpace(aux.DataPlusStatus) ? null : "нет данных: " + aux.DataPlusStatus);
-                            CreateCell(rowIndex, 7, aux.EnergyOut);
-                            CreateRange(rowIndex, 8, 1, 2, String.IsNullOrWhiteSpace(aux.DataMinusStatus) ? null : "нет данных: " + aux.DataMinusStatus);
-                            CreateCell(rowIndex, 10, aux.Correction);
-                            CreateRange(rowIndex, 11, 1, 3, null);
-                            ChangeRangeStyle(rowIndex, 3, 1, 11, "style_dottedTableCell");
-
-                            CreateCell(rowIndex, 15, aux.EnergyIn / 1000.0);
-                            CreateCell(rowIndex, 16, aux.EnergyOut / 1000.0);
-                            CreateCell(rowIndex, 17, aux.Code);
-                            ChangeRangeStyle(rowIndex, 15, 1, 3, "style_dottedTableCell");
-
-                            if (String.IsNullOrWhiteSpace(aux.Correction) == false)
-                            {
-                                Range(rowIndex, 3).Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
-                                Range(rowIndex, 3).Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.Brown);
-                                Range(rowIndex, 3).Style.Font.Color.SetColor(System.Drawing.Color.White);
-                            }
-                            if (aux.AddToEplus != null)
-                            {
-                                Range(rowIndex, 4).Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
-                                Range(rowIndex, 4).Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.Yellow);
-                            }
-                            if (aux.DataPlusStatus != null)
-                            {
-                                Range(rowIndex, 5, 1, 2).Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
-                                Range(rowIndex, 5, 1, 2).Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.Aqua);
-                            }
-                            if (aux.AddToEminus != null)
-                            {
-                                Range(rowIndex, 7).Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
-                                Range(rowIndex, 7).Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.Yellow);
-                            }
-                            if (aux.DataMinusStatus != null)
-                            {
-                                Range(rowIndex, 8, 1, 2).Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
-                                Range(rowIndex, 8, 1, 2).Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.Aqua);
-                            }
-                            sheet.Row(rowIndex).OutlineLevel = 2;
-                            sheet.Row(rowIndex).Collapsed = true;
-                            rowIndex++;
-                        }
                     #endregion
                     #region * ФИДЕРА *
                     IList<IBalansItem> fiders = bss.Children.Where((c) => c.Type == Model.ElementTypes.FIDER).ToList();
-                    if (fiders != null)
-                        foreach (Fider fider in fiders)
+                    foreach (Fider fider in fiders)
+                    {
+                        CreateCell(rowIndex, 3, fider.Name);
+                        CreateCell(rowIndex, 4, fider.EnergyIn);
+
+                        CreateRange(rowIndex, 5, 1, 2, String.IsNullOrWhiteSpace(fider.DataPlusStatus) ? null : "нет данных: " + fider.DataPlusStatus);
+
+                        CreateCell(rowIndex, 7, fider.EnergyOut);
+
+                        CreateRange(rowIndex, 8, 1, 2, String.IsNullOrWhiteSpace(fider.DataMinusStatus) ? null : "нет данных: " + fider.DataMinusStatus);
+
+                        CreateCell(rowIndex, 10, fider.Correction);
+
+                        CreateRange(rowIndex, 11, 1, 3, null);
+
+                        ChangeRangeStyle(rowIndex, 3, 1, 11, "style_dottedTableCell");
+
+                        CreateCell(rowIndex, 15, fider.EnergyIn / 1000.0);
+                        CreateCell(rowIndex, 16, fider.EnergyOut / 1000.0);
+                        CreateCell(rowIndex, 17, fider.Code);
+                        ChangeRangeStyle(rowIndex, 15, 1, 3, "style_dottedTableCell");
+
+                        if (String.IsNullOrWhiteSpace(fider.Correction) == false)
                         {
-                            CreateCell(rowIndex, 3, fider.Name);
-                            CreateCell(rowIndex, 4, fider.EnergyIn);
-
-                            CreateRange(rowIndex, 5, 1, 2, String.IsNullOrWhiteSpace(fider.DataPlusStatus) ? null : "нет данных: " + fider.DataPlusStatus);
-
-                            CreateCell(rowIndex, 7, fider.EnergyOut);
-
-                            CreateRange(rowIndex, 8, 1, 2, String.IsNullOrWhiteSpace(fider.DataMinusStatus) ? null : "нет данных: " + fider.DataMinusStatus);
-
-                            CreateCell(rowIndex, 10, fider.Correction);
-
-                            CreateRange(rowIndex, 11, 1, 3, null);
-
-                            ChangeRangeStyle(rowIndex, 3, 1, 11, "style_dottedTableCell");
-
-                            CreateCell(rowIndex, 15, fider.EnergyIn / 1000.0);
-                            CreateCell(rowIndex, 16, fider.EnergyOut / 1000.0);
-                            CreateCell(rowIndex, 17, fider.Code);
-                            ChangeRangeStyle(rowIndex, 15, 1, 3, "style_dottedTableCell");
-
-                            if (String.IsNullOrWhiteSpace(fider.Correction) == false)
-                            {
-                                Range(rowIndex, 3).Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
-                                Range(rowIndex, 3).Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.Brown);
-                                Range(rowIndex, 3).Style.Font.Color.SetColor(System.Drawing.Color.White);
-                            }
-                            if (fider.AddToEplus != null)
-                            {
-                                Range(rowIndex, 4).Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
-                                Range(rowIndex, 4).Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.Yellow);
-                            }
-                            if (fider.DataPlusStatus != null)
-                            {
-                                Range(rowIndex, 5, 1, 2).Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
-                                Range(rowIndex, 5, 1, 2).Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.Aqua);
-                            }
-                            if (fider.AddToEminus != null)
-                            {
-                                Range(rowIndex, 7).Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
-                                Range(rowIndex, 7).Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.Yellow);
-                            }
-                            if (fider.DataMinusStatus != null)
-                            {
-                                Range(rowIndex, 8, 1, 2).Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
-                                Range(rowIndex, 8, 1, 2).Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.Aqua);
-                            }
-                            sheet.Row(rowIndex).OutlineLevel = 2;
-                            sheet.Row(rowIndex).Collapsed = true;
-                            rowIndex++;
+                            Range(rowIndex, 3).Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                            Range(rowIndex, 3).Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.Brown);
+                            Range(rowIndex, 3).Style.Font.Color.SetColor(System.Drawing.Color.White);
                         }
+                        if (fider.AddToEplus != null)
+                        {
+                            Range(rowIndex, 4).Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                            Range(rowIndex, 4).Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.Yellow);
+                        }
+                        if (fider.DataPlusStatus != null)
+                        {
+                            Range(rowIndex, 5, 1, 2).Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                            Range(rowIndex, 5, 1, 2).Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.Aqua);
+                        }
+                        if (fider.AddToEminus != null)
+                        {
+                            Range(rowIndex, 7).Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                            Range(rowIndex, 7).Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.Yellow);
+                        }
+                        if (fider.DataMinusStatus != null)
+                        {
+                            Range(rowIndex, 8, 1, 2).Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                            Range(rowIndex, 8, 1, 2).Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.Aqua);
+                        }
+                        sheet.Row(rowIndex).OutlineLevel = 2;
+                        sheet.Row(rowIndex).Collapsed = true;
+                        rowIndex++;
+                    }
+
                     #endregion
 
                     Range(sectionRowIndex, 10, rowIndex - sectionRowIndex, 1).Style.Font.Color.SetColor(System.Drawing.Color.Red);
@@ -404,8 +446,8 @@ namespace TMP.Work.Emcos.Export
 
             CreateSheet("ВСЕ РЭСы", exportInfo.Substations
                 .OrderBy(x => x.Departament)
-                .OrderBy(x => x.Voltage)
-                .OrderBy(x => x.Name)
+                .ThenBy(x => x.Voltage)
+                .ThenBy(x => x.Name)
                 .ToList<Substation>());
 
             foreach (var grouping in exportInfo.Substations.GroupBy(x => x.Departament))
@@ -508,7 +550,7 @@ namespace TMP.Work.Emcos.Export
             sheet.HeaderFooter.OddHeader.CenteredText = exportInfo.Title;
             sheet.HeaderFooter.OddHeader.RightAlignedText = string.Format("Экспортировано: {0}", DateTime.Now);
             // нижний колонтитул
-            sheet.HeaderFooter.OddHeader.RightAlignedText = String.Format("Стр. {0} из {1}", ExcelHeaderFooter.PageNumber, ExcelHeaderFooter.NumberOfPages);
+            sheet.HeaderFooter.OddHeader.CenteredText = String.Format("Стр. {0} из {1}", ExcelHeaderFooter.PageNumber, ExcelHeaderFooter.NumberOfPages);
 
             sheet.PrinterSettings.PaperSize = ePaperSize.A4;
             // установка параметров страницы

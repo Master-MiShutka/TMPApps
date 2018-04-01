@@ -5,20 +5,21 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:TMP.Work.Emcos.Controls"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    x:Name="root"
     MinWidth="200"
     MinHeight="100"
     HorizontalAlignment="Center"
     VerticalAlignment="Center"
     Background="{DynamicResource ControlBackgroundBrush}"
-    Foreground="{DynamicResource HighlightBrush}"
-    Opacity="0.8"
+    Effect="{DynamicResource dropShadowAccent}"
     FontSize="{DynamicResource LargeFontSize}"
     FontWeight="Bold"
-    Effect="{DynamicResource dropShadowAccent}"
-    mc:Ignorable="d"
+    Foreground="{DynamicResource HighlightBrush}"
+    Opacity="0.8"
+    SnapsToDevicePixels="True"
     TextOptions.TextFormattingMode="Ideal"
     UseLayoutRounding="True"
-    SnapsToDevicePixels="True">
+    mc:Ignorable="d">
     <UserControl.Resources>
         <SolidColorBrush x:Key="fillNoDataControlBackGeometryBrush" Color="{DynamicResource Gray10}" />
         <SolidColorBrush x:Key="fillNoDataControlGeometryBrush" Color="{DynamicResource AccentColor}" />
@@ -32,8 +33,9 @@
                 BorderBrush="{TemplateBinding BorderBrush}"
                 BorderThickness="{TemplateBinding BorderThickness}"
                 CornerRadius="10">
-                <StackPanel Margin="20 10"
+                <StackPanel
                     Name="nodata"
+                    Margin="20,10"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
                     Orientation="Vertical">
@@ -66,8 +68,8 @@
                                 Canvas.Top="2.2"
                                 Width="49.028"
                                 Height="45.844"
-                                Fill="{StaticResource fillNoDataControlBackGeometryBrush}"
                                 Data="M231.81312,199.57089 L226.34383,199.60188 203.3884,240.01154 206.0133,244.59208 251.19006,244.5922 253.72181,239.8861"
+                                Fill="{StaticResource fillNoDataControlBackGeometryBrush}"
                                 Stretch="Fill" />
                             <Rectangle
                                 Canvas.Left="23.374"
@@ -86,21 +88,18 @@
                                 Canvas.Top="1.395"
                                 Width="50.625"
                                 Height="47.101"
-                                Fill="{StaticResource fillNoDataControlGeometryPathBrush}"
-                                Stroke="{StaticResource strokeNoDataControlGeometryBrush}"
                                 Data="M0.5,42.907 L23.531,0.516 M28.125,0.50000001 L50.125001,42.86 M2.7029999,46.601 L48.008998,46.601"
-                                Stretch="Fill" />
+                                Fill="{StaticResource fillNoDataControlGeometryPathBrush}"
+                                Stretch="Fill"
+                                Stroke="{StaticResource strokeNoDataControlGeometryBrush}" />
                         </Canvas.Children>
                     </Canvas>
                     <TextBlock
                         Effect="{StaticResource dropShadowWhite}"
+                        Text="{Binding Message, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:NoData}}}"
                         TextAlignment="Center"
                         TextOptions.TextFormattingMode="Ideal"
-                        TextWrapping="Wrap">
-                        Нет данных
-                        <LineBreak />
-                        для отображения
-                    </TextBlock>
+                        TextWrapping="Wrap" />
                 </StackPanel>
             </Border>
         </ControlTemplate>

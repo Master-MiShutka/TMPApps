@@ -45,7 +45,7 @@ namespace TMP.Work.Emcos
         /// <summary>
         /// Occurs when an item is added, removed, changed, moved, or the entire list is refreshed.
         /// </summary>
-        public override event NotifyCollectionChangedEventHandler CollectionChanged;
+        public new event NotifyCollectionChangedEventHandler CollectionChanged;
 
         protected override void OnCollectionChanged(NotifyCollectionChangedEventArgs e)
         {

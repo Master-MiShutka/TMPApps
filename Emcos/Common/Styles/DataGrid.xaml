@@ -1,15 +1,17 @@
-﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:Controls="clr-namespace:TMP.Wpf.Common.Controls">
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:Controls="clr-namespace:TMP.Wpf.Common.Controls">
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="pack://application:,,,/TMP.Wpf.Common;component/Styles/CheckBox.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
     <BooleanToVisibilityConverter x:Key="bool2VisibilityConverter" />
 
-    <Style x:Key="MetroDataGridCheckBox"
-           BasedOn="{StaticResource MetroCheckBox}"
-           TargetType="CheckBox">
+    <Style
+        x:Key="MetroDataGridCheckBox"
+        BasedOn="{StaticResource MetroCheckBox}"
+        TargetType="CheckBox">
         <Setter Property="HorizontalAlignment" Value="Center" />
         <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="Margin" Value="0" />
@@ -32,14 +34,15 @@
                                 </Style>
                             </Rectangle.Resources>
                         </Rectangle>
-                        <Polygon x:Name="Arrow"
-                                 Margin="8 8 3 3"
-                                 HorizontalAlignment="Right"
-                                 VerticalAlignment="Bottom"
-                                 Fill="{DynamicResource GrayBrush1}"
-                                 Opacity="0.15"
-                                 Points="0,10 10,10 10,0"
-                                 Stretch="Uniform" />
+                        <Polygon
+                            x:Name="Arrow"
+                            Margin="8,8,3,3"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Bottom"
+                            Fill="{DynamicResource GrayBrush1}"
+                            Opacity="0.15"
+                            Points="0,10 10,10 10,0"
+                            Stretch="Uniform" />
                     </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsPressed" Value="True">
@@ -60,10 +63,11 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Thumb}">
-                    <Border Background="Transparent" Padding="{TemplateBinding Padding}">
-                        <Rectangle Width="1"
-                                   HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                   Fill="{TemplateBinding Background}" />
+                    <Border Padding="{TemplateBinding Padding}" Background="Transparent">
+                        <Rectangle
+                            Width="1"
+                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                            Fill="{TemplateBinding Background}" />
                     </Border>
                 </ControlTemplate>
             </Setter.Value>
@@ -78,10 +82,11 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Thumb}">
-                    <Border Background="Transparent" Padding="{TemplateBinding Padding}">
-                        <Rectangle Height="1"
-                                   VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                   Fill="{TemplateBinding Background}" />
+                    <Border Padding="{TemplateBinding Padding}" Background="Transparent">
+                        <Rectangle
+                            Height="1"
+                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                            Fill="{TemplateBinding Background}" />
                     </Border>
                 </ControlTemplate>
             </Setter.Value>
@@ -92,7 +97,7 @@
         <Setter Property="Foreground" Value="{DynamicResource BlackBrush}" />
         <Setter Property="Background" Value="{DynamicResource GrayBrush8}" />
         <Setter Property="BorderBrush" Value="{DynamicResource GrayBrush5}" />
-        <Setter Property="BorderThickness" Value="0 0 0 2" />
+        <Setter Property="BorderThickness" Value="0,0,0,2" />
         <Setter Property="Cursor" Value="Hand" />
         <Setter Property="FontWeight" Value="SemiBold" />
         <Setter Property="HorizontalContentAlignment" Value="Center" />
@@ -100,15 +105,16 @@
         <Setter Property="Margin" Value="0" />
         <Setter Property="MinHeight" Value="25" />
         <Setter Property="MinWidth" Value="0" />
-        <Setter Property="Padding" Value="5 1 5 5" />
+        <Setter Property="Padding" Value="5,1,5,5" />
         <Setter Property="SnapsToDevicePixels" Value="True" />
         <Setter Property="ContentTemplate">
             <Setter.Value>
                 <DataTemplate>
-                    <TextBlock VerticalAlignment="Center"
-                               Text="{Binding}"
-                               TextAlignment="Center"
-                               TextWrapping="Wrap" />
+                    <TextBlock
+                        VerticalAlignment="Center"
+                        Text="{Binding}"
+                        TextAlignment="Center"
+                        TextWrapping="Wrap" />
                 </DataTemplate>
             </Setter.Value>
         </Setter>
@@ -120,21 +126,23 @@
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
-                        <Border x:Name="BackgroundBorder"
-                                Grid.ColumnSpan="2"
-                                Background="{TemplateBinding Background}"
-                                BorderBrush="{TemplateBinding BorderBrush}"
-                                BorderThickness="{TemplateBinding BorderThickness}" />
+                        <Border
+                            x:Name="BackgroundBorder"
+                            Grid.ColumnSpan="2"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}" />
 
-                        <ContentControl x:Name="HeaderContent"
-                                        HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                        VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
-                                        Content="{TemplateBinding Content}"
-                                        ContentStringFormat="{TemplateBinding ContentStringFormat}"
-                                        ContentTemplate="{TemplateBinding ContentTemplate}"
-                                        ContentTemplateSelector="{TemplateBinding ContentTemplateSelector}"
-                                        Padding="{TemplateBinding Padding}"
-                                        SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}">
+                        <ContentControl
+                            x:Name="HeaderContent"
+                            Padding="{TemplateBinding Padding}"
+                            HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                            VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                            Content="{TemplateBinding Content}"
+                            ContentStringFormat="{TemplateBinding ContentStringFormat}"
+                            ContentTemplate="{TemplateBinding ContentTemplate}"
+                            ContentTemplateSelector="{TemplateBinding ContentTemplateSelector}"
+                            SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}">
                             <ContentControl.Resources>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="TextWrapping" Value="Wrap" />
@@ -143,27 +151,30 @@
                             </ContentControl.Resources>
                         </ContentControl>
 
-                        <Thumb x:Name="PART_LeftHeaderGripper"
-                               HorizontalAlignment="Left"
-                               HorizontalContentAlignment="Left"
-                               Background="Transparent"
-                               Style="{StaticResource MetroColumnHeaderGripperStyle}" />
-                        <Path x:Name="SortArrow"
-                              Grid.Column="1"
-                              Width="8"
-                              Height="10"
-                              Margin="0 0 8 2"
-                              VerticalAlignment="Center"
-                              Fill="{DynamicResource GrayBrush2}"
-                              RenderTransformOrigin="0.5,0.5"
-                              Stretch="Fill"
-                              Visibility="Collapsed" />
+                        <Thumb
+                            x:Name="PART_LeftHeaderGripper"
+                            HorizontalAlignment="Left"
+                            HorizontalContentAlignment="Left"
+                            Background="Transparent"
+                            Style="{StaticResource MetroColumnHeaderGripperStyle}" />
+                        <Path
+                            x:Name="SortArrow"
+                            Grid.Column="1"
+                            Width="8"
+                            Height="10"
+                            Margin="0,0,8,2"
+                            VerticalAlignment="Center"
+                            Fill="{DynamicResource GrayBrush2}"
+                            RenderTransformOrigin="0.5,0.5"
+                            Stretch="Fill"
+                            Visibility="Collapsed" />
 
-                        <Thumb x:Name="PART_RightHeaderGripper"
-                               Grid.Column="1"
-                               HorizontalAlignment="Right"
-                               HorizontalContentAlignment="Right"
-                               Style="{StaticResource MetroColumnHeaderGripperStyle}" />
+                        <Thumb
+                            x:Name="PART_RightHeaderGripper"
+                            Grid.Column="1"
+                            HorizontalAlignment="Right"
+                            HorizontalContentAlignment="Right"
+                            Style="{StaticResource MetroColumnHeaderGripperStyle}" />
                     </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger Property="SortDirection" Value="Ascending">
@@ -172,7 +183,7 @@
                         </Trigger>
                         <Trigger Property="SortDirection" Value="Descending">
                             <Setter TargetName="SortArrow" Property="Data" Value="F1 M 42,19.0002L 34,19.0002L 34,43.7502L 24,33.7502L 24,44.2502L 38,58.2502L 52,44.2502L 52,33.7502L 42,43.7502L 42,19.0002 Z " />
-                            <Setter TargetName="SortArrow" Property="Margin" Value="0 0 8 0" />
+                            <Setter TargetName="SortArrow" Property="Margin" Value="0,0,8,0" />
                             <Setter TargetName="SortArrow" Property="Visibility" Value="Visible" />
                         </Trigger>
                         <Trigger Property="DisplayIndex" Value="0">
@@ -199,41 +210,43 @@
     <Style x:Key="MetroDataGridRowHeader" TargetType="{x:Type DataGridRowHeader}">
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="BorderBrush" Value="{DynamicResource GrayBrush5}" />
-        <Setter Property="BorderThickness" Value="0 0 1 0" />
+        <Setter Property="BorderThickness" Value="0,0,1,0" />
         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
         <Setter Property="Margin" Value="0" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type DataGridRowHeader}">
                     <Grid>
-                        <Border Margin="{TemplateBinding Margin}"
-                                Background="{TemplateBinding Background}"
-                                BorderBrush="{TemplateBinding BorderBrush}"
-                                BorderThickness="{TemplateBinding BorderThickness}"
-                                Padding="{TemplateBinding Padding}"
-                                SnapsToDevicePixels="True">
+                        <Border
+                            Margin="{TemplateBinding Margin}"
+                            Padding="{TemplateBinding Padding}"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            SnapsToDevicePixels="True">
                             <StackPanel Orientation="Horizontal">
-                                <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                                  VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                                  RecognizesAccessKey="True"
-                                                  SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
-                                <Control SnapsToDevicePixels="false"
-                                         Template="{Binding ValidationErrorTemplate,
-                                                            RelativeSource={RelativeSource AncestorType={x:Type DataGridRow}}}"
-                                         Visibility="{Binding (Validation.HasError),
-                                                              Converter={StaticResource bool2VisibilityConverter},
-                                                              RelativeSource={RelativeSource AncestorType={x:Type DataGridRow}}}" />
+                                <ContentPresenter
+                                    HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                    VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                    RecognizesAccessKey="True"
+                                    SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                                <Control
+                                    SnapsToDevicePixels="false"
+                                    Template="{Binding ValidationErrorTemplate, RelativeSource={RelativeSource AncestorType={x:Type DataGridRow}}}"
+                                    Visibility="{Binding (Validation.HasError), Converter={StaticResource bool2VisibilityConverter}, RelativeSource={RelativeSource AncestorType={x:Type DataGridRow}}}" />
                             </StackPanel>
                         </Border>
-                        <Thumb x:Name="PART_TopHeaderGripper"
-                               VerticalAlignment="Top"
-                               VerticalContentAlignment="Top"
-                               Background="Transparent"
-                               Style="{StaticResource MetroRowHeaderGripperStyle}" />
-                        <Thumb x:Name="PART_BottomHeaderGripper"
-                               VerticalAlignment="Bottom"
-                               VerticalContentAlignment="Bottom"
-                               Style="{StaticResource MetroRowHeaderGripperStyle}" />
+                        <Thumb
+                            x:Name="PART_TopHeaderGripper"
+                            VerticalAlignment="Top"
+                            VerticalContentAlignment="Top"
+                            Background="Transparent"
+                            Style="{StaticResource MetroRowHeaderGripperStyle}" />
+                        <Thumb
+                            x:Name="PART_BottomHeaderGripper"
+                            VerticalAlignment="Bottom"
+                            VerticalContentAlignment="Bottom"
+                            Style="{StaticResource MetroRowHeaderGripperStyle}" />
                     </Grid>
                 </ControlTemplate>
             </Setter.Value>
@@ -258,17 +271,19 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type DataGridCell}">
-                    <Border Background="{TemplateBinding Background}"
-                            BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="{TemplateBinding BorderThickness}"
-                            SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}">
-                        <ContentPresenter Margin="{TemplateBinding Padding}"
-                                          HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                          Content="{TemplateBinding Content}"
-                                          ContentStringFormat="{TemplateBinding ContentStringFormat}"
-                                          ContentTemplate="{TemplateBinding ContentTemplate}"
-                                          SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                    <Border
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}">
+                        <ContentPresenter
+                            Margin="{TemplateBinding Padding}"
+                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                            Content="{TemplateBinding Content}"
+                            ContentStringFormat="{TemplateBinding ContentStringFormat}"
+                            ContentTemplate="{TemplateBinding ContentTemplate}"
+                            SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
                     </Border>
                 </ControlTemplate>
             </Setter.Value>
@@ -392,25 +407,25 @@
     </Style>
 
     <ControlTemplate x:Key="DefaultRowValidationErrorTemplate">
-        <Grid Margin="2 0 2 0"
-              VerticalAlignment="Center"
-              DataContext="{Binding RelativeSource={RelativeSource FindAncestor,
-                                                                   AncestorType={x:Type DataGridRow}},
-                                    Path=(Validation.Errors).CurrentItem}"
-              ToolTip="{Binding RelativeSource={RelativeSource Self},
-                                Path=DataContext.ErrorContent}">
-            <Path Width="20"
-                  Height="20"
-                  Data="m 31.630585,39.233818 24.6309,-24.6308 c 0.6183,-0.6184 1.6208,-0.6184 2.2392,0 l 24.6308,24.6308 c 0.6184,0.6184 0.6184,1.6209 0,2.2392 l -24.6308,24.6309 c -0.6183,0.6183 -1.6209,0.6183 -2.2392,0 l -24.6309,-24.6309 c -0.6183,-0.6183 -0.6183,-1.6208 0,-2.2392 z"
-                  Fill="{DynamicResource ControlsValidationBrush}"
-                  Stretch="Uniform" />
-            <Path Width="10"
-                  Height="10"
-                  HorizontalAlignment="Center"
-                  VerticalAlignment="Center"
-                  Data="m 53.781741,31.196677 c -2.237724,0 -4.0625,1.824776 -4.0625,4.0625 0,2.237724 1.824776,4.0625 4.0625,4.0625 2.237724,0 4.0625,-1.824776 4.0625,-4.0625 0,-2.237724 -1.824776,-4.0625 -4.0625,-4.0625 z m -4.09375,-21.375 0.03125,0.53125 1.21875,19.46875 5.6875,0 1.25,-20 -8.1875,0 z"
-                  Fill="{DynamicResource ValidationTextBrush}"
-                  Stretch="Uniform" />
+        <Grid
+            Margin="2,0,2,0"
+            VerticalAlignment="Center"
+            DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGridRow}}, Path=(Validation.Errors).CurrentItem}"
+            ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=DataContext.ErrorContent}">
+            <Path
+                Width="20"
+                Height="20"
+                Data="m 31.630585,39.233818 24.6309,-24.6308 c 0.6183,-0.6184 1.6208,-0.6184 2.2392,0 l 24.6308,24.6308 c 0.6184,0.6184 0.6184,1.6209 0,2.2392 l -24.6308,24.6309 c -0.6183,0.6183 -1.6209,0.6183 -2.2392,0 l -24.6309,-24.6309 c -0.6183,-0.6183 -0.6183,-1.6208 0,-2.2392 z"
+                Fill="{DynamicResource ControlsValidationBrush}"
+                Stretch="Uniform" />
+            <Path
+                Width="10"
+                Height="10"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Data="m 53.781741,31.196677 c -2.237724,0 -4.0625,1.824776 -4.0625,4.0625 0,2.237724 1.824776,4.0625 4.0625,4.0625 2.237724,0 4.0625,-1.824776 4.0625,-4.0625 0,-2.237724 -1.824776,-4.0625 -4.0625,-4.0625 z m -4.09375,-21.375 0.03125,0.53125 1.21875,19.46875 5.6875,0 1.25,-20 -8.1875,0 z"
+                Fill="{DynamicResource ValidationTextBrush}"
+                Stretch="Uniform" />
         </Grid>
     </ControlTemplate>
 
@@ -418,7 +433,7 @@
     <!--  Don't set the MinHeight or Height property, use the MinRowHeight or RowHeight property on DataGrid style!  -->
     <Style x:Key="MetroDataGridRow" TargetType="{x:Type DataGridRow}">
         <Setter Property="Controls:DataGridRowHelper.SelectionUnit" Value="{Binding Path=SelectionUnit, Mode=OneWay, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" />
-        <Setter Property="Margin" Value="0 0 0 0" />
+        <Setter Property="Margin" Value="0,0,0,0" />
         <Setter Property="Validation.ErrorTemplate" Value="{x:Null}" />
         <Setter Property="ValidationErrorTemplate" Value="{StaticResource DefaultRowValidationErrorTemplate}" />
         <Style.Triggers>
@@ -482,7 +497,7 @@
     <Style x:Key="MetroDataGrid" TargetType="{x:Type DataGrid}">
         <Setter Property="Background" Value="{DynamicResource WhiteBrush}" />
         <Setter Property="BorderBrush" Value="{DynamicResource AccentColorBrush}" />
-        <Setter Property="BorderThickness" Value="0 0 0 0" />
+        <Setter Property="BorderThickness" Value="0,0,0,0" />
         <Setter Property="AlternatingRowBackground" Value="{DynamicResource GrayBrush10}" />
         <Setter Property="AlternationCount" Value="2" />
         <Setter Property="CellStyle" Value="{StaticResource MetroDataGridCell}" />
@@ -494,9 +509,10 @@
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate TargetType="Separator">
-                                <Rectangle Width="{TemplateBinding Width}"
-                                           Height="{TemplateBinding Height}"
-                                           Fill="{TemplateBinding Background}" />
+                                <Rectangle
+                                    Width="{TemplateBinding Width}"
+                                    Height="{TemplateBinding Height}"
+                                    Fill="{TemplateBinding Background}" />
                             </ControlTemplate>
                         </Setter.Value>
                     </Setter>
@@ -514,11 +530,12 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type DataGrid}">
-                    <Border Background="{TemplateBinding Background}"
-                            BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="{TemplateBinding BorderThickness}"
-                            Padding="{TemplateBinding Padding}"
-                            SnapsToDevicePixels="True">
+                    <Border
+                        Padding="{TemplateBinding Padding}"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        SnapsToDevicePixels="True">
                         <ScrollViewer x:Name="DG_ScrollViewer" Focusable="false">
                             <ScrollViewer.Template>
                                 <ControlTemplate TargetType="{x:Type ScrollViewer}">
@@ -533,51 +550,45 @@
                                             <RowDefinition Height="*" />
                                             <RowDefinition Height="Auto" />
                                         </Grid.RowDefinitions>
-                                        <Button Width="{Binding CellsPanelHorizontalOffset,
-                                                                RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
-                                                Command="{x:Static DataGrid.SelectAllCommand}"
-                                                Focusable="false"
-                                                Style="{DynamicResource {ComponentResourceKey ResourceId=MetroDataGridSelectAllButtonStyle,
-                                                                                              TypeInTargetAssembly={x:Type DataGrid}}}"
-                                                Visibility="{Binding HeadersVisibility,
-                                                                     ConverterParameter={x:Static DataGridHeadersVisibility.All},
-                                                                     Converter={x:Static DataGrid.HeadersVisibilityConverter},
-                                                                     RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" />
-                                        <DataGridColumnHeadersPresenter x:Name="PART_ColumnHeadersPresenter"
-                                                                        Grid.Column="1"
-                                                                        Visibility="{Binding HeadersVisibility,
-                                                                                             ConverterParameter={x:Static DataGridHeadersVisibility.Column},
-                                                                                             Converter={x:Static DataGrid.HeadersVisibilityConverter},
-                                                                                             RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" />
+                                        <Button
+                                            Width="{Binding CellsPanelHorizontalOffset, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
+                                            Command="{x:Static DataGrid.SelectAllCommand}"
+                                            Focusable="false"
+                                            Style="{DynamicResource {ComponentResourceKey ResourceId=MetroDataGridSelectAllButtonStyle,
+                                                                                          TypeInTargetAssembly={x:Type DataGrid}}}"
+                                            Visibility="{Binding HeadersVisibility, ConverterParameter={x:Static DataGridHeadersVisibility.All}, Converter={x:Static DataGrid.HeadersVisibilityConverter}, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" />
+                                        <DataGridColumnHeadersPresenter
+                                            x:Name="PART_ColumnHeadersPresenter"
+                                            Grid.Column="1"
+                                            Visibility="{Binding HeadersVisibility, ConverterParameter={x:Static DataGridHeadersVisibility.Column}, Converter={x:Static DataGrid.HeadersVisibilityConverter}, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" />
                                         <Grid Grid.Row="1" Grid.ColumnSpan="2">
-                                            <ScrollContentPresenter x:Name="PART_ScrollContentPresenter"
-                                                                    Grid.ColumnSpan="2"
-                                                                    CanContentScroll="{TemplateBinding CanContentScroll}" />
+                                            <ScrollContentPresenter
+                                                x:Name="PART_ScrollContentPresenter"
+                                                Grid.ColumnSpan="2"
+                                                CanContentScroll="{TemplateBinding CanContentScroll}" />
                                         </Grid>
-                                        <ScrollBar x:Name="PART_VerticalScrollBar"
-                                                   Grid.Row="1"
-                                                   Grid.Column="2"
-                                                   Maximum="{TemplateBinding ScrollableHeight}"
-                                                   Orientation="Vertical"
-                                                   ViewportSize="{TemplateBinding ViewportHeight}"
-                                                   Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}"
-                                                   Value="{Binding VerticalOffset,
-                                                                   Mode=OneWay,
-                                                                   RelativeSource={RelativeSource TemplatedParent}}" />
+                                        <ScrollBar
+                                            x:Name="PART_VerticalScrollBar"
+                                            Grid.Row="1"
+                                            Grid.Column="2"
+                                            Maximum="{TemplateBinding ScrollableHeight}"
+                                            Orientation="Vertical"
+                                            ViewportSize="{TemplateBinding ViewportHeight}"
+                                            Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}"
+                                            Value="{Binding VerticalOffset, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}" />
                                         <Grid Grid.Row="2" Grid.Column="1">
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="{Binding NonFrozenColumnsViewportHorizontalOffset, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" />
                                                 <ColumnDefinition Width="*" />
                                             </Grid.ColumnDefinitions>
-                                            <ScrollBar x:Name="PART_HorizontalScrollBar"
-                                                       Grid.Column="1"
-                                                       Maximum="{TemplateBinding ScrollableWidth}"
-                                                       Orientation="Horizontal"
-                                                       ViewportSize="{TemplateBinding ViewportWidth}"
-                                                       Visibility="{TemplateBinding ComputedHorizontalScrollBarVisibility}"
-                                                       Value="{Binding HorizontalOffset,
-                                                                       Mode=OneWay,
-                                                                       RelativeSource={RelativeSource TemplatedParent}}" />
+                                            <ScrollBar
+                                                x:Name="PART_HorizontalScrollBar"
+                                                Grid.Column="1"
+                                                Maximum="{TemplateBinding ScrollableWidth}"
+                                                Orientation="Horizontal"
+                                                ViewportSize="{TemplateBinding ViewportWidth}"
+                                                Visibility="{TemplateBinding ComputedHorizontalScrollBarVisibility}"
+                                                Value="{Binding HorizontalOffset, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}" />
                                         </Grid>
                                     </Grid>
                                 </ControlTemplate>

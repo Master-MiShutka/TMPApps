@@ -39,27 +39,32 @@ namespace TMP.Work.Emcos.ViewModel
 
         #region Private
 
+#if DEBUG
+        private Action<Exception> _callBackAction = (e) => System.Diagnostics.Debug.Fail(App.GetExceptionDetails(e));
+#else
+        private Action<Exception> _callBackAction = App.LogException;
+#endif
         private bool _hasSession = false;
 
         private Properties.Settings _settings = Properties.Settings.Default;
 
         private bool SaveConfigPoints()
         {
-            return BaseRepository<EmcosPoint>.XmlSerialize(new EmcosPoint { Children = Points }, LIST_BALANS_POINTS_FILENAME, App.ToLogException);
+            return BaseRepository<EmcosPoint>.XmlSerialize(new EmcosPoint { Children = Points }, LIST_BALANS_POINTS_FILENAME, _callBackAction);
         }
 
-        private List<EmcosPoint> LoadConfigPoints()
+        private IList<IHierarchicalEmcosPoint> LoadConfigPoints()
         {
             if (File.Exists(LIST_BALANS_POINTS_FILENAME))
             {
-                var result = BaseRepository<EmcosPoint>.XmlDeSerialize(LIST_BALANS_POINTS_FILENAME, App.ToLogException);
+                var result = BaseRepository<EmcosPoint>.XmlDeSerialize(LIST_BALANS_POINTS_FILENAME, _callBackAction);
                 return result != null ? result.Children : null;
             }
             else
-                return new List<EmcosPoint>();
+                return new List<IHierarchicalEmcosPoint>();
         }
 
-        private void ProcessPointsToFloatCollection(Model.EmcosPoint point, ref List<Model.EmcosPoint> collection)
+        private void ProcessPointsToFloatCollection(IHierarchicalEmcosPoint point, ref IList<IHierarchicalEmcosPoint> collection)
         {
             if (point == null) return;
             collection.Add(point);
@@ -77,7 +82,7 @@ namespace TMP.Work.Emcos.ViewModel
             RaisePropertyChanged("SubstationsCollectionView");
         }
 
-        private EmcosPoint GetPointById(int id)
+        private IHierarchicalEmcosPoint GetPointById(int id)
         {
             return _pointsCollection.Where((p) => p.Id == id).FirstOrDefault();
         }
@@ -97,7 +102,7 @@ namespace TMP.Work.Emcos.ViewModel
                         var bi = sender as IBalansItem;
                         if (bi == null)
                             return;
-                        EmcosPoint point = point = GetPointById(bi.Id);
+                        IHierarchicalEmcosPoint point = point = GetPointById(bi.Id);
                         if (point != null)
                             switch (args.PropertyName)
                             {
@@ -133,8 +138,7 @@ namespace TMP.Work.Emcos.ViewModel
 
                     // собственные нужды
                     IList<IBalansItem> sectionAux = s.Children.Where((c) => c.Type == Model.ElementTypes.AUXILIARY && c.Name == "Собственные нужды").ToList();
-                    if (sectionAux == null)
-                        continue;
+
                     foreach (IBalansGroup aux in sectionAux)
                     {
                         if (aux == null || aux.Children == null)
@@ -155,13 +159,13 @@ namespace TMP.Work.Emcos.ViewModel
             }
         }
 
-        #endregion Private
+#endregion Private
 
-        #region Public Methods
+#region Public Methods
 
         public event System.Windows.RoutedEventHandler Loaded;
 
-        #region | SESSION |
+#region | SESSION |
 
         public bool HasSessionDefaultFileName()
         {
@@ -184,7 +188,7 @@ namespace TMP.Work.Emcos.ViewModel
 
                 var fi = new FileInfo(Path.Combine(SESSIONS_FOLDER, filename));
 
-                Session = BaseRepository<BalansSession>.GzJsonDeSerialize(Path.Combine(SESSIONS_FOLDER, filename), App.ToLogException);
+                Session = BaseRepository<BalansSession>.GzJsonDeSerialize(Path.Combine(SESSIONS_FOLDER, filename), _callBackAction);
 
                 Session.FileName = fi.Name;
                 Session.FileSize = fi.Length;
@@ -217,7 +221,7 @@ namespace TMP.Work.Emcos.ViewModel
             }
             catch (Exception ex)
             {
-                App.ToLogException(ex);
+                _callBackAction(ex);
                 return false;
             }
         }
@@ -238,7 +242,7 @@ namespace TMP.Work.Emcos.ViewModel
                 }
                 catch (IOException ex)
                 {
-                    App.ToLogException(ex);
+                    _callBackAction(ex);
                 }
             }
             else
@@ -256,7 +260,7 @@ namespace TMP.Work.Emcos.ViewModel
             if (BaseRepository<BalansSession>.GzJsonSerialize(
                 Session,
                 Path.Combine(SESSIONS_FOLDER, fileName),
-                App.ToLogException) == false)
+                _callBackAction) == false)
                 return false;
 
             // сохранение имени файла последней сессии
@@ -296,7 +300,7 @@ namespace TMP.Work.Emcos.ViewModel
                                 cnt = gzip.Read(bytes, 0, bytes.Length);
                                 if (cnt != bytes.Length)
                                 {
-                                    App.ToLogError(String.Format("Ошибка чтения 1024 байт файла '{0}'", fi.FullName));
+                                    App.LogError(String.Format("Ошибка чтения 1024 байт файла '{0}'", fi.FullName));
                                     continue;
                                 }
                                 var data = System.Text.Encoding.UTF8.GetString(bytes);
@@ -304,21 +308,20 @@ namespace TMP.Work.Emcos.ViewModel
                                 if (periodPropertyPos > 0)
                                 {
                                     var part = "{" + data.Substring(periodPropertyPos, 125) + "}";
-                                    var period = Common.RepositoryCommon.BaseRepository<DatePeriod>.JsonDeSerializeFromString(part, App.ToLogException);
+                                    var period = Common.RepositoryCommon.BaseRepository<DatePeriod>.JsonDeSerializeFromString(part, _callBackAction);
                                     if (period != null)
                                         session.Period = period;
                                 }
                             }
                         }
-                        catch (Exception e) { App.ToLogException(e); }
+                        catch (Exception e) { _callBackAction(e); }
                         SessionsList.Add(session);
                     }
-                if (Loaded != null)
-                    Loaded(this, null);
+                Loaded?.Invoke(this, null);
             }
             catch (Exception e)
             {
-                App.ToLogException(e);
+                _callBackAction(e);
             }
         }
         public void CreateEmptySession()
@@ -334,7 +337,7 @@ namespace TMP.Work.Emcos.ViewModel
             SelectedDepartament = null;
         }
 
-        #endregion
+#endregion
 
         public BalansViewModel() : this(App.Current.MainWindow)
         {
@@ -358,7 +361,7 @@ namespace TMP.Work.Emcos.ViewModel
                 }*/
                 return;
             }
-            #region Проверка наличия папок согласно настроек и наличия файла с описанием точек
+#region Проверка наличия папок согласно настроек и наличия файла с описанием точек
             try
             {
                 if (System.IO.Directory.Exists(SESSIONS_FOLDER) == false)
@@ -376,7 +379,7 @@ namespace TMP.Work.Emcos.ViewModel
 
                 if (File.Exists(LIST_BALANS_POINTS_FILENAME) == false)
                 {
-                    App.ToLogInfo("Файл с точками не найден.");
+                    App.LogInfo("Файл с точками не найден.");
                     // попытка восстановить из ресурсов
                     var bytes = Properties.Resources.DataModel_xml_gz;
                     Stream stream = new MemoryStream(bytes);
@@ -391,25 +394,27 @@ namespace TMP.Work.Emcos.ViewModel
             }
             catch (System.IO.IOException ex)
             {
-                App.ToLogException(ex);
+                _callBackAction(ex);
             }
-            #endregion
-            #region Добавление обработчика на закрытие окна
+#endregion
+#region Добавление обработчика на закрытие окна
             if (window != null)
                 window.Closed += (s, e) =>
                 {
+                    if (Session == null)
+                        return;
                     // сохранение сессии
                     if (SaveSessionData())
-                        App.ToLogInfo("Сессия сохранена");
+                        App.LogInfo("Сессия сохранена");
                     else
-                        App.ToLogInfo("Сессия не сохранена");
+                        App.LogInfo("Сессия не сохранена");
                     // сохранение списка точек
                     if (SaveConfigPoints())
-                        App.ToLogInfo("Список точек сохранен");
+                        App.LogInfo("Список точек сохранен");
                     else
-                        App.ToLogInfo("Список точек не сохранен");
+                        App.LogInfo("Список точек не сохранен");
                 };
-            #endregion
+#endregion
             // Загрузка точек измерений
             Points = LoadConfigPoints();
 
@@ -418,39 +423,39 @@ namespace TMP.Work.Emcos.ViewModel
             // проверка есть файл с которым работали в последний раз
             if (File.Exists(Path.Combine(SESSIONS_FOLDER, "lastsession")))
             {
-                App.ToLogInfo("Обнаружен файл с именем файла последней сессии.");
+                App.LogInfo("Обнаружен файл с именем файла последней сессии.");
                 var lastusedfile = string.Empty;
                 try
                 {
                     // чтение имени файла
                     lastusedfile = File.ReadAllText(Path.Combine(SESSIONS_FOLDER, "lastsession")).Trim();
-                    App.ToLogInfo("Имя файла последней сессии получено.");
+                    App.LogInfo("Имя файла последней сессии получено.");
                     if (File.Exists(lastusedfile))
                     {
                         sessionFileNameToLoad = lastusedfile;
-                        App.ToLogInfo("Файл последней сессии существует, попытаемся его загрузить.");
+                        App.LogInfo("Файл последней сессии существует, попытаемся его загрузить.");
                     }
                     else
-                        App.ToLogInfo("Указанный файл последней сессии не найден.");
+                        App.LogInfo("Указанный файл последней сессии не найден.");
                 }
                 catch (System.IO.IOException ex)
                 {
-                    App.ToLogInfo("Ошибка при чтении файла с именем файла последней сессии.");
-                    App.ToLogException(ex);
+                    App.LogInfo("Ошибка при чтении файла с именем файла последней сессии.");
+                    _callBackAction(ex);
                 }
             }
             else
             {
                 if (File.Exists(Path.Combine(SESSIONS_FOLDER, BALANS_SESSION_FILENAME + SESSION_FILE_EXTENSION)) == false)
                 {
-                    App.ToLogInfo("Сессия не обнаружена.");
+                    App.LogInfo("Сессия не обнаружена.");
                 }
             }
             //
             if (LoadSessionData(sessionFileNameToLoad))
-                App.ToLogInfo("Сессия обнаружена и загружена.");
+                App.LogInfo("Сессия обнаружена и загружена.");
             else
-                App.ToLogInfo(String.Format("Не удалось загрузить сессию. Файл [{0}].", 
+                App.LogInfo(String.Format("Не удалось загрузить сессию. Файл [{0}].", 
                     sessionFileNameToLoad == null ? BALANS_SESSION_FILENAME + SESSION_FILE_EXTENSION : sessionFileNameToLoad));
             //
             var task = System.Threading.Tasks.Task.Factory.StartNew(() => FillSessionsList());
@@ -471,9 +476,9 @@ namespace TMP.Work.Emcos.ViewModel
             }
             RaisePropertyChanged("Substations");
         }
-        #endregion Public Methods
+#endregion Public Methods
 
-        #region | Public Properties |
+#region | Public Properties |
 
         private DatePeriod _selectedPeriod;
         public DatePeriod SelectedPeriod
@@ -522,9 +527,9 @@ namespace TMP.Work.Emcos.ViewModel
         }
 
 
-        private List<EmcosPoint> _points;
-        private List<EmcosPoint> _pointsCollection;
-        public List<EmcosPoint> Points
+        private IList<IHierarchicalEmcosPoint> _points;
+        private IList<IHierarchicalEmcosPoint> _pointsCollection;
+        public IList<IHierarchicalEmcosPoint> Points
         {
             get { return _points; }
             set
@@ -532,33 +537,33 @@ namespace TMP.Work.Emcos.ViewModel
                 _points = null;
                 GC.Collect();
                 _points = value;
-                _pointsCollection = new List<Model.EmcosPoint>();
+                _pointsCollection = new List<IHierarchicalEmcosPoint>();
                 foreach (var point in _points)
                 {
-                    point.Initialize();
+                    (point as EmcosPoint).Initialize();
                     ProcessPointsToFloatCollection(point, ref _pointsCollection);
                 }
                 RaisePropertyChanged("Points");
             }
         }
-        public IList<EmcosPoint> Departaments
+        public IList<IHierarchicalEmcosPoint> Departaments
         {
             get
             {
-                IList<EmcosPoint> result = Points == null
+                IList<IHierarchicalEmcosPoint> result = Points == null
                     ? null
                     : Points
                        .Where(p => p.TypeCode == "RES")
                        .OrderBy(p1 => p1.Name)
                        .ToList();
                 result.Insert(0, new EmcosPoint { Name = "ВСЕ" });
-                return new BindableCollection<EmcosPoint>(result);
+                return new BindableCollection<IHierarchicalEmcosPoint>(result);
             }
         }
 
-        private EmcosPoint _selectedDepartament;
+        private IHierarchicalEmcosPoint _selectedDepartament;
 
-        public EmcosPoint SelectedDepartament
+        public IHierarchicalEmcosPoint SelectedDepartament
         {
             get { return _selectedDepartament == null ? (Departaments == null ? null : Departaments[0]) : _selectedDepartament; }
             set
@@ -653,6 +658,8 @@ namespace TMP.Work.Emcos.ViewModel
             }
         }
 
+        public ICommand PointsEditorCommand { get; set; }
+
         public ICommand SelectSessionCommand { get; set; }
         public ICommand GetDataCommand { get; set; }
         public ICommand SaveDataCommand { get; set; }
@@ -720,6 +727,6 @@ namespace TMP.Work.Emcos.ViewModel
             get { return "© 2016, Ведущий инженер отдела сбыта\r\nэлектроэнергии Ошмянских ЭС\r\nТрус Михаил Петрович\r\nЦените и уважайте чужой труд!"; }
         }
 
-        #endregion | Public Properties |
+#endregion | Public Properties |
     }
 }

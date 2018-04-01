@@ -1,4 +1,7 @@
-﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:local="clr-namespace:TMP.Work.DocxReportGenerator.CustomDataGrid">
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:TMP.Work.DocxReportGenerator.CustomDataGrid">
 
     <!--  Generic brushes  -->
     <SolidColorBrush x:Key="DefaultControlBorderBrush" Color="#FF688CAF" />
@@ -63,9 +66,15 @@
                                 <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
 
-                            <DataGridCellsPresenter Grid.Column="1" ItemsPanel="{TemplateBinding ItemsPanel}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                            <DataGridCellsPresenter
+                                Grid.Column="1"
+                                ItemsPanel="{TemplateBinding ItemsPanel}"
+                                SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
 
-                            <DataGridDetailsPresenter Grid.Row="1" Grid.Column="1" Visibility="{TemplateBinding DetailsVisibility}" />
+                            <DataGridDetailsPresenter
+                                Grid.Row="1"
+                                Grid.Column="1"
+                                Visibility="{TemplateBinding DetailsVisibility}" />
 
                             <DataGridRowHeader Grid.RowSpan="2" SelectiveScrollingGrid.SelectiveScrollingOrientation="Vertical" />
                         </SelectiveScrollingGrid>
