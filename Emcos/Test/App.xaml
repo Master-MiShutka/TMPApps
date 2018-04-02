@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="clr-namespace:Test"
     xmlns:tmp="clr-namespace:TMPApplication;assembly=TMPApplication"
+    Startup="TMPApp_Startup"
     StartupUri="EmcosWebServiceTestWindow.xaml">
     <tmp:TMPApp.Resources>
         <ResourceDictionary>

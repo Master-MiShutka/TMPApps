@@ -39,10 +39,6 @@ namespace TMP.Work.Emcos.Model.Balans
         double? DailyEminusValuesMin { get; }
         double? DailyEminusValuesMax { get; }
 
-
-        [DataMember()]
-        ElementTypes Type { get; }
-
         DataStatus Status { get; set; }
 
         bool NotFullData { get; }
@@ -50,8 +46,7 @@ namespace TMP.Work.Emcos.Model.Balans
         bool NotFullDataMinus { get; }
         string DataPlusStatus { get; }
         string DataMinusStatus { get; }
-        [DataMember()]
-        string Description { get; set; }
+
         Substation Substation { get; }
         void SetSubstation(Substation substation);
 

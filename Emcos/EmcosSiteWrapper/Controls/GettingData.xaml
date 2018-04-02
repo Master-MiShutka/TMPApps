@@ -6,6 +6,7 @@
     xmlns:dat="clr-namespace:System.Windows.Data;assembly=PresentationFramework"
     xmlns:local="clr-namespace:TMP.Work.Emcos"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:model="clr-namespace:TMP.Work.Emcos.Model.Balans"
     xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
     HorizontalAlignment="Stretch"
     VerticalAlignment="Stretch"
@@ -17,7 +18,7 @@
         <CollectionViewSource x:Key="substations" Source="{Binding Substations}">
             <!-- CollectionViewSource.SortDescriptions>
                 <scm:SortDescription PropertyName="Departament" />
-                <scm:SortDescription PropertyName="Title" />
+                <scm:SortDescription PropertyName="Name" />
             </CollectionViewSource.SortDescriptions-->
             <CollectionViewSource.GroupDescriptions>
                 <dat:PropertyGroupDescription PropertyName="Departament" />
@@ -119,10 +120,10 @@
                         <GridView>
                             <GridViewColumn Header="Наименование">
                                 <GridViewColumn.CellTemplate>
-                                    <DataTemplate>
+                                    <DataTemplate DataType="{x:Type model:Substation}">
                                         <StackPanel Orientation="Horizontal">
                                             <Image Source="{StaticResource Substation}" />
-                                            <TextBlock Padding="0" Text="{Binding Title}" />
+                                            <TextBlock Padding="0" Text="{Binding Name}" />
                                         </StackPanel>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>

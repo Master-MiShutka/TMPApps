@@ -38,13 +38,20 @@ namespace TMP.Common.RepositoryCommon
         }
         public static T XmlDeSerialize(string fileName, Action<Exception> toLog = null)
         {
-            T result = null;
+            T result = new T();
+
 
             //DataContractJsonSerializer json = new DataContractJsonSerializer(typeof(DataModel));
 
             try
             {
-                XmlSerializer deserializer = new XmlSerializer(typeof(T));
+                Type t = typeof(T);
+                Type[] extraTypes = t.GetProperties()
+                    .Where(p => p.PropertyType.IsInterface)
+                    .Select(p => p.GetValue(result, null).GetType())
+                    .ToArray();
+
+                XmlSerializer deserializer = new XmlSerializer(typeof(T), extraTypes);
                 string xmlData = File.ReadAllText(fileName);
                 using (MemoryStream stream = new MemoryStream(System.Text.Encoding.UTF8.GetBytes(xmlData)))
                 {
@@ -57,6 +64,42 @@ namespace TMP.Common.RepositoryCommon
             {
                 toLog(ex); return null;
             }
+            return result;
+        }
+
+        public static bool XmlDataContractSerialize(T model, string fileName, Type[] types, Action<Exception> toLog = null)
+        {
+            try
+            {
+                DataContractSerializer serializer = new DataContractSerializer(typeof(T), types);
+                XmlWriterSettings settings = new XmlWriterSettings() { Indent = true, Encoding = new System.Text.UTF8Encoding(false, false) }; // no BOM in a .NET string
+                using (System.IO.FileStream fs = System.IO.File.Open(fileName, System.IO.FileMode.Create))
+                using (System.Xml.XmlWriter xmlWriter = System.Xml.XmlWriter.Create(fs, settings))
+                {
+                    serializer.WriteObject(xmlWriter, model);
+                }
+            }
+            catch (Exception e)
+            {
+                if (toLog != null) toLog(e);
+                return false;
+            }
+            return true;
+        }
+        public static T XmlDataContractDeSerialize(string fileName, Type[] types, Action<Exception> toLog = null)
+        {
+            T result = null;
+            try
+            {
+                DataContractSerializer ser = new DataContractSerializer(typeof(T), types);
+
+                using (FileStream fs = new FileStream(fileName, FileMode.Open, FileAccess.Read))
+                using (System.Xml.XmlReader xmlReader = System.Xml.XmlReader.Create(fs))
+                {
+                    result = (T)ser.ReadObject(xmlReader, true);
+                }
+            }
+            catch (Exception ex) { toLog(ex); return null; }
             return result;
         }
 

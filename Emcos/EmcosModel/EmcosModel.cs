@@ -8,54 +8,72 @@ namespace TMP.Work.Emcos.Model
 {
     public interface IEmcosPoint
     {
-        [DataMember()]
+        [DataMember]
         int Id { get; set; }
-        [DataMember()]
+        [DataMember]
         string Name { get; set; }
-        [DataMember()]
+        [DataMember]
         string Code { get; set; }
-        [DataMember()]
+        [DataMember]
         string TypeCode { get; set; }
-        [DataMember()]
+        [DataMember]
         ElementTypes Type { get; set; }
-        [DataMember()]
+        [DataMember]
         string EcpName { get; set; }
-        [DataMember()]
+        [DataMember]
         string Description { get; set; }
     }
 
     public interface IHierarchicalEmcosPoint : IEmcosPoint
     {
-        [DataMember()]
+        [DataMember]
         string ParentTypeCode { get; set; }
-        [DataMember()]
+        [DataMember]
         bool IsGroup { get; set; }
 
-        [DataMember()]
+        [DataMember]
         IList<IHierarchicalEmcosPoint> Children { get; set; }
     }
 
     [Serializable]
+    [DataContract]
     public class EmcosPointBase : PropertyChangedBase, IEmcosPoint
     {
         [XmlAttribute]
+        [DataMember]
         public int Id { get; set; }
 
         [XmlAttribute]
+        [DataMember]
         public string Name { get; set; }
         [XmlAttribute]
+        [DataMember]
         public string Code { get; set; }
         [XmlAttribute]
+        [DataMember]
         public string TypeCode { get; set; }
         [XmlAttribute]
+        [DataMember]
         public string EcpName { get; set; }
         [XmlAttribute]
+        [DataMember]
         public ElementTypes Type { get; set; }
 
         [XmlAttribute]
+        [DataMember]
         public string Description { get; set; }
 
         public EmcosPointBase() { }
+
+        public override int GetHashCode()
+        {
+            return (Type.GetHashCode() % 0x8000) | (int)((uint)Id.GetHashCode() & 0xFFFF0000);
+        }
+
+        public override string ToString()
+        {
+            return String.Format("Id:[{0}], Code:[{1}], TypeCode:[{2}], Type:[[3}]", Id, Code, TypeCode, Type);
+        }
     }
     [Serializable]
     public class EmcosPointWithValue : EmcosPointBase
@@ -100,6 +118,7 @@ namespace TMP.Work.Emcos.Model
     }
 
     [Serializable]
+    [DataContract]
     public class EmcosPoint : EmcosPointBase, IHierarchicalEmcosPoint
     {
         public EmcosPoint() { }
@@ -119,24 +138,23 @@ namespace TMP.Work.Emcos.Model
         }
 
         [XmlAttribute]
+        [DataMember]
         public string ParentTypeCode { get; set; }
         [XmlAttribute]
+        [DataMember]
         public bool IsGroup { get; set; }
 
-        [XmlIgnore]
+        [XmlArray]
+        [DataMember]
         public IList<IHierarchicalEmcosPoint> Children { get; set; }
 
-        [XmlElement("Children")]
-        public object ChildrenSerializable
-        {
-            get { return Children; }
-            set { ChildrenSerializable = value; Children = value as IList<IHierarchicalEmcosPoint>; }
-        }
 
         [XmlIgnore]
+        [IgnoreDataMember]
         public int ChildCount { get { return Children != null ? Children.Count : 0; } }
 
         [XmlIgnore]
+        [IgnoreDataMember]
         public EmcosPoint Parent { get; set; }
 
         public void Initialize()

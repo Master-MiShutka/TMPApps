@@ -50,14 +50,16 @@ namespace TMP.Work.Emcos.ViewModel
 
         private bool SaveConfigPoints()
         {
-            return BaseRepository<EmcosPoint>.XmlSerialize(new EmcosPoint { Children = Points }, LIST_BALANS_POINTS_FILENAME, _callBackAction);
+            //return BaseRepository<EmcosPoint>.XmlSerialize(new EmcosPoint { Children = Points }, LIST_BALANS_POINTS_FILENAME, _callBackAction);
+            return BaseRepository<EmcosPoint>.GzJsonSerialize(new EmcosPoint { Children = Points }, LIST_BALANS_POINTS_FILENAME, _callBackAction);
         }
 
         private IList<IHierarchicalEmcosPoint> LoadConfigPoints()
         {
             if (File.Exists(LIST_BALANS_POINTS_FILENAME))
             {
-                var result = BaseRepository<EmcosPoint>.XmlDeSerialize(LIST_BALANS_POINTS_FILENAME, _callBackAction);
+                //var result = BaseRepository<EmcosPoint>.XmlDeSerialize(LIST_BALANS_POINTS_FILENAME, _callBackAction);
+                var result = BaseRepository<EmcosPoint>.GzJsonDeSerialize(LIST_BALANS_POINTS_FILENAME, null);
                 return result != null ? result.Children : null;
             }
             else
@@ -77,7 +79,7 @@ namespace TMP.Work.Emcos.ViewModel
         {
             _substationsCollectionView = CollectionViewSource.GetDefaultView(Substations);
 
-            _substationsCollectionView.SortDescriptions.Add(new SortDescription("Title", ListSortDirection.Ascending));
+            _substationsCollectionView.SortDescriptions.Add(new SortDescription("Name", ListSortDirection.Ascending));
             _substationsCollectionView.GroupDescriptions.Add(new PropertyGroupDescription("Type"));
             RaisePropertyChanged("SubstationsCollectionView");
         }
@@ -115,7 +117,7 @@ namespace TMP.Work.Emcos.ViewModel
                                 case "Code":
                                     point.Code = bi.Code;
                                     break;
-                                case "Title":
+                                case "Name":
                                     point.Name = bi.Name;
                                     break;
                             }

@@ -94,9 +94,9 @@ namespace TMP.Work.Emcos.Model
                         if (nameParts.Length < 3)
                             throw new System.ArgumentException(string.Format("Неверный формат названия подстанции - '{0}'", substationPoint.Name));
                         // выделяем название
-                        var title = "";
-                        for (int i = 2; i < nameParts.Length; i++) title += nameParts[i];
-                        substation.Name = title;
+                        var name = "";
+                        for (int i = 2; i < nameParts.Length; i++) name += nameParts[i];
+                        substation.Name = name;
                         // выделяем напряжение
                         substation.Voltage = nameParts[1];
 

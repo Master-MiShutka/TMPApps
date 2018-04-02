@@ -13,7 +13,7 @@ namespace TMP.Work.Emcos.Model.Balans
     {
         private int _id;
         private string _code;
-        private string _title;
+        private string _name;
 
         private string _description;
         private double? _maximumAllowableUnbalance = null;
@@ -57,11 +57,21 @@ namespace TMP.Work.Emcos.Model.Balans
             {
                 if (Items == null) return null;
                 var sb = new System.Text.StringBuilder();
-                foreach (IBalansItem item in Items)
+
+                var items = Items.Where(i => i.AddToEplus.HasValue || i.AddToEminus.HasValue);
+                if (items != null && items.Any())
                 {
-                    if (item.AddToEplus.HasValue || item.AddToEminus.HasValue)
+                    int maxTextWidth = items.Max(i => i.Name.Length);
+                    maxTextWidth = maxTextWidth == 0 ? 25 : maxTextWidth;
+
+                    string f = String.Format("{{0,-{0}}}\t{{1}}\n", maxTextWidth);
+
+                    foreach (IBalansItem item in Items)
                     {
-                        sb.AppendFormat("{0,-20}\t{1}\n", item.Name, item.Correction);
+                        if (item.AddToEplus.HasValue || item.AddToEminus.HasValue)
+                        {
+                            sb.AppendFormat(f, item.Name, item.Correction);
+                        }
                     }
                 }
                 if (sb.Length == 0)
@@ -71,7 +81,7 @@ namespace TMP.Work.Emcos.Model.Balans
             }
         }
         [DataMember()]
-        public string Name { get { return _title; } set { _title = value; RaisePropertyChanged("Title"); } }
+        public string Name { get { return _name; } set { _name = value; RaisePropertyChanged("Name"); } }
         [JsonIgnore]
         public virtual double? Eplus
         {

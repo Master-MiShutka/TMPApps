@@ -181,14 +181,14 @@ namespace TMP.Work.Emcos.View
             int headerIndex = 0;
             columns.Add(new TableViewColumn
             {
-                Title = _balansGroup.Headers[headerIndex++].Title,
+                Title = _balansGroup.Headers[headerIndex++].Name,
                 ContextBinding = new Binding("Date"),
                 CellTemplate = textCell
             });
             fixedColumnCount++;
             columns.Add(new TableViewColumn
             {
-                Title = _balansGroup.Headers[headerIndex].Title,
+                Title = _balansGroup.Headers[headerIndex].Name,
                 ContextBinding = new Binding("VvodaIn"),
                 Width = 110,
                 TotalInfo = new TableViewColumnTotal(
@@ -204,7 +204,7 @@ namespace TMP.Work.Emcos.View
             headerIndex++;
             columns.Add(new TableViewColumn
             {
-                Title = _balansGroup.Headers[headerIndex].Title,
+                Title = _balansGroup.Headers[headerIndex].Name,
                 ContextBinding = new Binding("VvodaOut"),
                 Width = 85,
                 TotalInfo = new TableViewColumnTotal(
@@ -222,7 +222,7 @@ namespace TMP.Work.Emcos.View
             {
                 columns.Add(new TableViewColumn
                 {
-                    Title = _balansGroup.Headers[headerIndex++].Title,
+                    Title = _balansGroup.Headers[headerIndex++].Name,
                     ContextBinding = new Binding("Tsn"),
                     Width = 70,
                     CellTemplate = numbersCell,
@@ -233,7 +233,7 @@ namespace TMP.Work.Emcos.View
             }
             columns.Add(new TableViewColumn
             {
-                Title = _balansGroup.Headers[headerIndex].Title,
+                Title = _balansGroup.Headers[headerIndex].Name,
                 ContextBinding = new Binding("FideraIn"),
                 Width = 105,
                 TotalInfo = new TableViewColumnTotal(
@@ -249,7 +249,7 @@ namespace TMP.Work.Emcos.View
             headerIndex++;
             columns.Add(new TableViewColumn
             {
-                Title = _balansGroup.Headers[headerIndex].Title,
+                Title = _balansGroup.Headers[headerIndex].Name,
                 ContextBinding = new Binding("FideraOut"),
                 Width = 85,
                 TotalInfo = new TableViewColumnTotal(
@@ -265,7 +265,7 @@ namespace TMP.Work.Emcos.View
             headerIndex++;
             columns.Add(new TableViewColumn
             {
-                Title = _balansGroup.Headers[headerIndex].Title,
+                Title = _balansGroup.Headers[headerIndex].Name,
                 ContextBinding = new Binding("Unbalance"),
                 Width = 85,
                 TotalInfo = new TableViewColumnTotal(
@@ -281,7 +281,7 @@ namespace TMP.Work.Emcos.View
             headerIndex++;
             columns.Add(new TableViewColumn
             {
-                Title = _balansGroup.Headers[headerIndex].Title,
+                Title = _balansGroup.Headers[headerIndex].Name,
                 ContextBinding = new Binding("PercentageOfUnbalance"),
                 Width = 85,
                 TotalInfo = new TableViewColumnTotal(
@@ -300,7 +300,7 @@ namespace TMP.Work.Emcos.View
             {
                 columns.Add(new TableViewColumn
                 {
-                    Title = _balansGroup.Headers[headerIndex].Title,
+                    Title = _balansGroup.Headers[headerIndex].Name,
                     ContextBinding = new Binding("Transformers[" + index + "]"),
                     TotalInfo = new TableViewColumnTotal(
                         _balansGroup.Min[headerIndex],
@@ -317,7 +317,7 @@ namespace TMP.Work.Emcos.View
             {
                 columns.Add(new TableViewColumn
                 {
-                    Title = _balansGroup.Headers[headerIndex].Title,
+                    Title = _balansGroup.Headers[headerIndex].Name,
                     ContextBinding = new Binding("Auxiliary[" + index + "]"),
                     TotalInfo = new TableViewColumnTotal(
                         _balansGroup.Min[headerIndex],
@@ -334,7 +334,7 @@ namespace TMP.Work.Emcos.View
             {
                 var column = new TableViewColumn
                 {
-                    Title = _balansGroup.Headers[index].Title,
+                    Title = _balansGroup.Headers[index].Name,
                     ContextBinding = new Binding("Fiders[" + (index - headerIndex) + "]"),
                     TotalInfo = new TableViewColumnTotal(
                         _balansGroup.Min[index],
@@ -391,7 +391,7 @@ namespace TMP.Work.Emcos.View
             wait.Message = "Пожалуйста, подождите..\nПодготовка отчёта...";
             var task = new System.Threading.Tasks.Task(() =>
             {
-                var reportFileName = System.IO.Path.Combine(System.IO.Path.GetTempPath(), _balansGroup.SubstationTitle + ".xlsx");
+                var reportFileName = System.IO.Path.Combine(System.IO.Path.GetTempPath(), _balansGroup.SubstationName + ".xlsx");
                 int index = 0;
                 while (System.IO.File.Exists(reportFileName) == true)
                 {
@@ -401,7 +401,7 @@ namespace TMP.Work.Emcos.View
                     }
                     catch (System.IO.IOException)
                     {
-                        reportFileName = System.IO.Path.Combine(System.IO.Path.GetTempPath(), _balansGroup.SubstationTitle + " " + ++index + ".xlsx");
+                        reportFileName = System.IO.Path.Combine(System.IO.Path.GetTempPath(), _balansGroup.SubstationName + " " + ++index + ".xlsx");
                     }
                 }
                 using (var sbe = new Export.SubstationExport(_balansGroup))

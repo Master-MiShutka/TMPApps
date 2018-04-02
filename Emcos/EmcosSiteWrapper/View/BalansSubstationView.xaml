@@ -15,7 +15,7 @@
     xmlns:model="clr-namespace:TMP.Work.Emcos.Model"
     xmlns:system="clr-namespace:System;assembly=mscorlib"
     x:Name="root"
-    Title="{Binding DataContext.SubstationTitle, ElementName=rootGrid, StringFormat={}Подстанция {0}}"
+    Title="{Binding DataContext.SubstationName, ElementName=rootGrid, StringFormat={}Подстанция {0}}"
     FontFamily="{DynamicResource ContentTextFontFamily}"
     FontSize="{DynamicResource SubHeaderFontSize}"
     Icon="/EmcosSiteWrapper;component/ImagesAndIcons/emcos.ico"
@@ -109,10 +109,10 @@
                                                     <Popup
                                                         x:Name="PART_Popup"
                                                         Margin="1"
+                                                        Effect="{DynamicResource dropShadow}"
                                                         IsOpen="{Binding IsChecked, RelativeSource={RelativeSource TemplatedParent}}"
                                                         Placement="Bottom"
                                                         PopupAnimation="{DynamicResource {x:Static SystemParameters.ComboBoxPopupAnimationKey}}"
-                                                        Effect="{DynamicResource dropShadow}"
                                                         StaysOpen="False">
                                                         <Microsoft_windows_themes:SystemDropShadowChrome
                                                             x:Name="Shdw"
@@ -148,11 +148,11 @@
                                                     <ToggleButton IsChecked="{Binding IsChecked, RelativeSource={RelativeSource TemplatedParent}}">
                                                         <StackPanel Orientation="Horizontal">
                                                             <icons:PackIconModern
-                                                            Width="{StaticResource iconSize}"
-                                                            Height="{StaticResource iconSize}"
-                                                            HorizontalAlignment="Center"
-                                                            VerticalAlignment="Center"
-                                                            Kind="Settings" />
+                                                                Width="{StaticResource iconSize}"
+                                                                Height="{StaticResource iconSize}"
+                                                                HorizontalAlignment="Center"
+                                                                VerticalAlignment="Center"
+                                                                Kind="Settings" />
                                                             <Label Content="Настройка" />
                                                         </StackPanel>
                                                     </ToggleButton>
@@ -174,57 +174,87 @@
                             </ToggleButton.Style>
                             <Grid Margin="2">
                                 <Grid.RowDefinitions>
-                                    <RowDefinition/>
-                                    <RowDefinition/>
-                                    <RowDefinition/>
-                                    <RowDefinition/>
-                                    <RowDefinition/>
-                                    <RowDefinition/>
-                                    <RowDefinition/>
+                                    <RowDefinition />
+                                    <RowDefinition />
+                                    <RowDefinition />
+                                    <RowDefinition />
+                                    <RowDefinition />
+                                    <RowDefinition />
+                                    <RowDefinition />
                                 </Grid.RowDefinitions>
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto"/>
-                                    <ColumnDefinition Width="*" MaxWidth="150" MinWidth="50"/>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition
+                                        Width="*"
+                                        MinWidth="50"
+                                        MaxWidth="150" />
                                 </Grid.ColumnDefinitions>
                                 <Grid.Resources>
                                     <Style TargetType="{x:Type TextBlock}">
-                                        <Setter Property="Padding" Value="0"/>
-                                        <Setter Property="Margin" Value="10 2 5 5"/>
+                                        <Setter Property="Padding" Value="0" />
+                                        <Setter Property="Margin" Value="10,2,5,5" />
                                     </Style>
                                 </Grid.Resources>
-                                <!-- 1 -->
-                                <TextBlock Text="Цвет выделения"/>
-                                <local_controls:ColorComboBox Grid.Column="1"
-                                          SelectedValue="{Binding ElementName=table, Path=MarkBrush,FallbackValue=White,TargetNullValue=White}"/>
+                                <!--  1  -->
+                                <TextBlock Text="Цвет выделения" />
+                                <local_controls:ColorComboBox Grid.Column="1" SelectedValue="{Binding ElementName=table, Path=MarkBrush, FallbackValue=White, TargetNullValue=White}" />
 
-                                <!-- 2 -->
-                                <TextBlock Grid.Row="1" Text="Толщина оси гистограм"/>
-                                <Slider Grid.Row="1" Grid.Column="1" Minimum="0" Maximum="5" Value="{Binding ElementName=table, Path=HistogramAxisThickness}" LargeChange="0.5" TickFrequency="0.5"/>
-                                <!-- 3 -->
-                                <TextBlock Grid.Row="2" Text="Цвет оси гистограм"/>
-                                <local_controls:ColorComboBox Grid.Row="2" Grid.Column="1"
-                                          SelectedValue="{Binding ElementName=table, Path=HistogramAxisBrush}"/>
-                                <!-- 4 -->
-                                <TextBlock Grid.Row="3" Text="Толщина границ гистограм"/>
-                                <Slider Grid.Row="3" Grid.Column="1" Minimum="0" Maximum="5" Value="{Binding ElementName=table, Path=HistogramBarBorderThickness}" LargeChange="0.5" TickFrequency="0.5"/>
-                                <!-- 5 -->
-                                <TextBlock Grid.Row="4" Text="Цвет границ гистограм"/>
-                                <local_controls:ColorComboBox Grid.Row="4" Grid.Column="1"
-                                          SelectedValue="{Binding ElementName=table, Path=HistogramBarBorderBrush}"/>
-                                <!-- 6 -->
-                                <TextBlock Grid.Row="5" Text="Заливка положительных&#x0a;значений гистограм" LineHeight="12"
-                                    LineStackingStrategy="BlockLineHeight"/>
-                                <local_controls:ColorComboBox Grid.Row="5" Grid.Column="1"
-                                          SelectedValue="{Binding ElementName=table, Path=HistogramPositiveBarFillBrush}"/>
-                                <!-- 7 -->
-                                <TextBlock Grid.Row="6" Text="Заливка отрицательных&#x0a;значений гистограм" LineHeight="12"
-                                    LineStackingStrategy="BlockLineHeight"/>
-                                <local_controls:ColorComboBox Grid.Row="6" Grid.Column="1"
-                                          SelectedValue="{Binding ElementName=table, Path=HistogramNegativeBarFillBrush, Mode=TwoWay}"/>
+                                <!--  2  -->
+                                <TextBlock Grid.Row="1" Text="Толщина оси гистограм" />
+                                <Slider
+                                    Grid.Row="1"
+                                    Grid.Column="1"
+                                    LargeChange="0.5"
+                                    Maximum="5"
+                                    Minimum="0"
+                                    TickFrequency="0.5"
+                                    Value="{Binding ElementName=table, Path=HistogramAxisThickness}" />
+                                <!--  3  -->
+                                <TextBlock Grid.Row="2" Text="Цвет оси гистограм" />
+                                <local_controls:ColorComboBox
+                                    Grid.Row="2"
+                                    Grid.Column="1"
+                                    SelectedValue="{Binding ElementName=table, Path=HistogramAxisBrush}" />
+                                <!--  4  -->
+                                <TextBlock Grid.Row="3" Text="Толщина границ гистограм" />
+                                <Slider
+                                    Grid.Row="3"
+                                    Grid.Column="1"
+                                    LargeChange="0.5"
+                                    Maximum="5"
+                                    Minimum="0"
+                                    TickFrequency="0.5"
+                                    Value="{Binding ElementName=table, Path=HistogramBarBorderThickness}" />
+                                <!--  5  -->
+                                <TextBlock Grid.Row="4" Text="Цвет границ гистограм" />
+                                <local_controls:ColorComboBox
+                                    Grid.Row="4"
+                                    Grid.Column="1"
+                                    SelectedValue="{Binding ElementName=table, Path=HistogramBarBorderBrush}" />
+                                <!--  6  -->
+                                <TextBlock
+                                    Grid.Row="5"
+                                    LineHeight="12"
+                                    LineStackingStrategy="BlockLineHeight"
+                                    Text="Заливка положительных&#x0a;значений гистограм" />
+                                <local_controls:ColorComboBox
+                                    Grid.Row="5"
+                                    Grid.Column="1"
+                                    SelectedValue="{Binding ElementName=table, Path=HistogramPositiveBarFillBrush}" />
+                                <!--  7  -->
+                                <TextBlock
+                                    Grid.Row="6"
+                                    LineHeight="12"
+                                    LineStackingStrategy="BlockLineHeight"
+                                    Text="Заливка отрицательных&#x0a;значений гистограм" />
+                                <local_controls:ColorComboBox
+                                    Grid.Row="6"
+                                    Grid.Column="1"
+                                    SelectedValue="{Binding ElementName=table, Path=HistogramNegativeBarFillBrush, Mode=TwoWay}" />
                             </Grid>
                         </ToggleButton>
                         <Separator DockPanel.Dock="Right" />
-                        <TextBlock Text="{Binding SubstationTitle, StringFormat={}Подстанция {0}}" />
+                        <TextBlock Text="{Binding SubstationName, StringFormat={}Подстанция {0}}" />
                     </DockPanel>
                 </Expander.Header>
                 <Grid Margin="2,1,2,2">
@@ -373,7 +403,7 @@
                             Grid.Column="1"
                             Grid.ColumnSpan="3"
                             Style="{StaticResource textTextBox}"
-                            Text="{Binding Substation.Title, UpdateSourceTrigger=PropertyChanged}" />
+                            Text="{Binding Substation.Name, UpdateSourceTrigger=PropertyChanged}" />
                         <!--    -->
                         <Label
                             Grid.Row="3"
@@ -383,10 +413,10 @@
                             Grid.Row="3"
                             Grid.Column="1"
                             Grid.ColumnSpan="3"
-                            Style="{StaticResource textTextBox}"
                             AcceptsReturn="True"
                             AcceptsTab="True"
                             ScrollViewer.CanContentScroll="True"
+                            Style="{StaticResource textTextBox}"
                             Text="{Binding Substation.Description, UpdateSourceTrigger=PropertyChanged}" />
                     </Grid>
                 </Grid>
@@ -404,7 +434,8 @@
                 ItemsSource="{Binding Items, IsAsync=True}"
                 ShowHorizontalGridLines="True"
                 ShowVerticalGridLines="True"
-                VirtualizingStackPanel.IsVirtualizing="True" VirtualizingStackPanel.VirtualizationMode="Standard">
+                VirtualizingStackPanel.IsVirtualizing="True"
+                VirtualizingStackPanel.VirtualizationMode="Standard">
                 <controls_TableView:TableView.Style>
                     <Style TargetType="{x:Type controls_TableView:TableView}">
                         <Style.Triggers>

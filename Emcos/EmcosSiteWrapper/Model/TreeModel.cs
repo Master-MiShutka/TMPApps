@@ -37,7 +37,7 @@ namespace TMP.Work.Emcos.Model
                 RaisePropertyChanged("Icon");
             }
         }
-        public override bool IsCheckable
+        /*public override bool IsCheckable
         {
             get
             {
@@ -45,7 +45,10 @@ namespace TMP.Work.Emcos.Model
                     return true;
                 return false;
             }
-        }
+        }*/
+
+        public override bool ShowIcon => true;
+
         public override object Icon
         {
             get
@@ -54,7 +57,7 @@ namespace TMP.Work.Emcos.Model
                 if (Point.TypeCode == "ELECTRICITY" && Point.EcpName == "Линии" && Point.ParentTypeCode == "VOLTAGE")
                     return new BitmapImage(new Uri("pack://application:,,,/EmcosSiteWrapper;component/ImagesAndIcons/fider35.png", UriKind.Absolute));
                 // Transformer
-                if (Point.TypeCode == "ELECTRICITY" && Point.EcpName == "Трансформаторы")
+                if (Point.TypeCode == "ELECTRICITY" && Point.EcpName == "POWERTRANSFORMER")
                     return new BitmapImage(new Uri("pack://application:,,,/EmcosSiteWrapper;component/ImagesAndIcons/Transformer.png", UriKind.Absolute));
                 // Auxiliary
                 if (Point.TypeCode == "ELECTRICITY" && Point.EcpName == "Свои нужды")
@@ -71,6 +74,7 @@ namespace TMP.Work.Emcos.Model
                     case "SUBSTATION": return new BitmapImage(new Uri("pack://application:,,,/EmcosSiteWrapper;component/ImagesAndIcons/substation.png", UriKind.Absolute));
                     case "VOLTAGE": return new BitmapImage(new Uri("pack://application:,,,/EmcosSiteWrapper;component/ImagesAndIcons/Voltage.png", UriKind.Absolute));
                     case "AUXILIARY": return new BitmapImage(new Uri("pack://application:,,,/EmcosSiteWrapper;component/ImagesAndIcons/Auxiliary.png", UriKind.Absolute));
+                    case "SECTIONS":
                     case "SECTIONBUS": return new BitmapImage(new Uri("pack://application:,,,/EmcosSiteWrapper;component/ImagesAndIcons/section.png", UriKind.Absolute));
                     case "TRANSFORMER": return new BitmapImage(new Uri("pack://application:,,,/EmcosSiteWrapper;component/ImagesAndIcons/Group.png", UriKind.Absolute));
                     case "ENTERPRISE": return new BitmapImage(new Uri("pack://application:,,,/EmcosSiteWrapper;component/ImagesAndIcons/Prom.png", UriKind.Absolute));

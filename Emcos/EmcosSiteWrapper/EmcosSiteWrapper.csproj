@@ -297,10 +297,12 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Resource Include="Settings\DataModel.xml.gz" />
     <None Include="Connected Services\EmcosTestWebService\Service.wsdl" />
     <None Include="packages.config" />
     <None Include="Properties\DataSources\System.Data.DataTable.datasource" />
+    <None Include="Settings\DataModel.json.gz">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="Settings\sample-session.data" />
     <None Include="Windows\MainWindow.xaml">
       <SubType>Designer</SubType>
@@ -499,6 +501,21 @@
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ImagesAndIcons\Departament.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ImagesAndIcons\Auxiliary.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ImagesAndIcons\Voltage.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ImagesAndIcons\Fider10.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ImagesAndIcons\Transformer.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

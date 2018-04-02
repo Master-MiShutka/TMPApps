@@ -15,7 +15,7 @@
       <Value Profile="(Default)">1800</Value>
     </Setting>
     <Setting Name="BalansPointsFileName" Type="System.String" Scope="User">
-      <Value Profile="(Default)">DataModel.xml</Value>
+      <Value Profile="(Default)">DataModel.json.gz</Value>
     </Setting>
     <Setting Name="SessionFileName" Type="System.String" Scope="User">
       <Value Profile="(Default)">session</Value>

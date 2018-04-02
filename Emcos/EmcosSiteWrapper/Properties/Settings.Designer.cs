@@ -73,7 +73,7 @@ namespace TMP.Work.Emcos.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("DataModel.xml")]
+        [global::System.Configuration.DefaultSettingValueAttribute("DataModel.json.gz")]
         public string BalansPointsFileName {
             get {
                 return ((string)(this["BalansPointsFileName"]));

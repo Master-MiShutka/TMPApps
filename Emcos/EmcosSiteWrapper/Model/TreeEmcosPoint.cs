@@ -31,7 +31,7 @@ namespace TMP.Work.Emcos.Model
 
         public override string ToString()
         {
-            return string.Format("Id:{0}, Title:{1}, TypeCode:{2}",
+            return string.Format("Id:{0}, Name:{1}, TypeCode:{2}",
                 Id,
                 Name,
                 TypeCode);

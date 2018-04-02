@@ -40,29 +40,29 @@ namespace TMP.Work.Emcos.Model
 
                 #region | Заголовки |
                 Headers = new List<HeaderElement>();
-                Headers.Add(new HeaderElement { Title="Дата", Code = null });             
-                Headers.Add(new HeaderElement { Title = "Поступление по вводам", Code = null });
-                Headers.Add(new HeaderElement { Title = "Отдача по вводам", Code = null });
+                Headers.Add(new HeaderElement { Name="Дата", Code = null });             
+                Headers.Add(new HeaderElement { Name = "Поступление по вводам", Code = null });
+                Headers.Add(new HeaderElement { Name = "Отдача по вводам", Code = null });
                 if (AuxCount != 0)
-                    Headers.Add(new HeaderElement { Title = "ТСНш", Code = null });
-                Headers.Add(new HeaderElement { Title = "Поступление по фидерам", Code = null });
-                Headers.Add(new HeaderElement { Title = "Отдача по фидерам", Code = null });
-                Headers.Add(new HeaderElement { Title = "Небаланс, кВт∙ч", Code = null });
-                Headers.Add(new HeaderElement { Title = "Небаланс, %", Code = null });
+                    Headers.Add(new HeaderElement { Name = "ТСНш", Code = null });
+                Headers.Add(new HeaderElement { Name = "Поступление по фидерам", Code = null });
+                Headers.Add(new HeaderElement { Name = "Отдача по фидерам", Code = null });
+                Headers.Add(new HeaderElement { Name = "Небаланс, кВт∙ч", Code = null });
+                Headers.Add(new HeaderElement { Name = "Небаланс, %", Code = null });
                 foreach (var t in powerTransformers)
                 {
-                    Headers.Add(new HeaderElement { Title = GetTitle(t.Name) + "\nE+", Code = t.Code });
-                    Headers.Add(new HeaderElement { Title = GetTitle(t.Name) + "\nE-", Code = t.Code });
+                    Headers.Add(new HeaderElement { Name = GetTitle(t.Name) + "\nE+", Code = t.Code });
+                    Headers.Add(new HeaderElement { Name = GetTitle(t.Name) + "\nE-", Code = t.Code });
                 }
                 if (AuxCount != 0)
                     foreach (var a in auxiliary)
                     {
-                        Headers.Add(new HeaderElement { Title = GetTitle(a.Name) + "\nE+", Code = a.Code });
+                        Headers.Add(new HeaderElement { Name = GetTitle(a.Name) + "\nE+", Code = a.Code });
                     }
                 foreach (var f in fiders)
                 {
-                    Headers.Add(new HeaderElement { Title = GetTitle(f.Name) + "\nE+", Code = f.Code });
-                    Headers.Add(new HeaderElement { Title = GetTitle(f.Name) + "\nE-", Code = f.Code });
+                    Headers.Add(new HeaderElement { Name = GetTitle(f.Name) + "\nE+", Code = f.Code });
+                    Headers.Add(new HeaderElement { Name = GetTitle(f.Name) + "\nE-", Code = f.Code });
                 }
                 #endregion
                 #region | Данные |
@@ -198,7 +198,7 @@ namespace TMP.Work.Emcos.Model
 
         public void UpdateSubstationData()
         {
-            SubstationTitle = _group.Name;
+            SubstationName = _group.Name;
             SubstationVvodaIn = _group.VvodaIn;
             SubstationVvodaOut = _group.VvodaOut;
             SubstationFideraIn = _group.FideraIn;
@@ -215,7 +215,7 @@ namespace TMP.Work.Emcos.Model
             set { _period = value; RaisePropertyChanged("Period"); }
         }
         public Model.Balans.Substation Substation { get; private set; }
-        public string SubstationTitle { get; private set; }
+        public string SubstationName { get; private set; }
         public double? SubstationVvodaIn { get; private set; }
         public double? SubstationFideraIn { get; private set; }
         public double? SubstationVvodaOut { get; private set; }
@@ -249,7 +249,7 @@ namespace TMP.Work.Emcos.Model
 
         public struct HeaderElement
         {
-            public string Title;
+            public string Name;
             public string Code;
         }
     }

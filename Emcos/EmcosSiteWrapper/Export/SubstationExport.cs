@@ -77,7 +77,7 @@ namespace TMP.Work.Emcos.Export
         {
             CreateCell(1, 1, "Экспорт из");
             CreateCell(1, 2, "Архивов");
-            CreateCell(1, 3, "Баланс по ПС " + balansGroup.SubstationTitle);
+            CreateCell(1, 3, "Баланс по ПС " + balansGroup.SubstationName);
             Range(1, 1, 1, 3).Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Left;
             CreateCell(2, 1, "Экспортировано: " + DateTime.Now);
         }
@@ -89,7 +89,7 @@ namespace TMP.Work.Emcos.Export
             int rowIndex = startRowIndex;
             foreach (Model.BalansGrop.HeaderElement header in balansGroup.Headers)
             {
-                CreateCell(3, index++, header.Title, "style_table_header");
+                CreateCell(3, index++, header.Name, "style_table_header");
             }
 
             foreach (Model.BalansGroupItem item in balansGroup.Items)
@@ -218,7 +218,7 @@ namespace TMP.Work.Emcos.Export
         {
             // верхний колонтитул
             sheet.HeaderFooter.differentOddEven = false;
-            sheet.HeaderFooter.OddHeader.LeftAlignedText = "ПС " + balansGroup.SubstationTitle;
+            sheet.HeaderFooter.OddHeader.LeftAlignedText = "ПС " + balansGroup.SubstationName;
             sheet.HeaderFooter.OddHeader.RightAlignedText = string.Format("Экспортировано: {0}", DateTime.Now);
             // нижний колонтитул
             sheet.HeaderFooter.OddHeader.CenteredText = String.Format("Стр. {0} из {1}", ExcelHeaderFooter.PageNumber, ExcelHeaderFooter.NumberOfPages);

@@ -23,7 +23,7 @@ namespace TMP.Work.Emcos.Model.Balans
 
         private int _id;
         private DataStatus _status = DataStatus.Wait;
-        private string _title;
+        private string _name;
         public BalansItem()
         {
             UseMonthValue = false;
@@ -296,7 +296,7 @@ namespace TMP.Work.Emcos.Model.Balans
         }
 
         [DataMember(IsRequired = true)]
-        public string Name { get { return _title; } set { _title = value; RaisePropertyChanged("Title"); } }
+        public string Name { get { return _name; } set { _name = value; RaisePropertyChanged("Name"); } }
         public double? Tsn { get { return null; } }
         public virtual ElementTypes Type { get; set ; }
         public string TypeName

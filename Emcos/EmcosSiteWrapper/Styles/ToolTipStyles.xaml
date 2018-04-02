@@ -121,12 +121,12 @@
         </Border>
     </ControlTemplate>
     <Style TargetType="{x:Type ToolTip}">
-        <Setter Property="ToolTipService.ShowDuration" Value="5000" />
+        <Setter Property="ToolTipService.ShowDuration" Value="10000" />
         <Setter Property="ToolTipService.InitialShowDelay" Value="500" />
         <Setter Property="Template" Value="{StaticResource toolTipTemplate}" />
     </Style>
     <Style x:Key="errorToolTipStyle" TargetType="{x:Type ToolTip}">
-        <Setter Property="ToolTipService.ShowDuration" Value="5000" />
+        <Setter Property="ToolTipService.ShowDuration" Value="15000" />
         <Setter Property="ToolTipService.InitialShowDelay" Value="500" />
         <Setter Property="Template" Value="{StaticResource toolTipErrorTemplate}" />
     </Style>

@@ -11,7 +11,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:model="clr-namespace:TMP.Work.Emcos.Model.Balans"
     xmlns:system="clr-namespace:System;assembly=mscorlib"
-    Title="{Binding Title}"
+    Title="{Binding Name}"
     MinWidth="500"
     MinHeight="620"
     Activated="Window_Activated"
@@ -73,7 +73,7 @@
                             FontSize="{DynamicResource HeaderFontSize}"
                             FontWeight="Bold"
                             Foreground="{DynamicResource WhiteBrush}"
-                            Text="{Binding Path=Title, StringFormat={}Данные по подстанции {0}}"
+                            Text="{Binding Path=Name, StringFormat={}Данные по подстанции {0}}"
                             TextAlignment="Center" />
                     </Border>
                     <Border
@@ -440,7 +440,7 @@
                             Grid.Column="1"
                             Grid.ColumnSpan="3"
                             Style="{StaticResource textTextBox}"
-                            Text="{Binding Title, UpdateSourceTrigger=PropertyChanged}" />
+                            Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" />
                         <!--    -->
                         <Label
                             Grid.Row="3"

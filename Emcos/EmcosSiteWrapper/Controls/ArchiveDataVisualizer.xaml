@@ -174,7 +174,7 @@
                                 FontSize="{DynamicResource SubHeaderFontSize}"
                                 FontWeight="Bold"
                                 Foreground="{DynamicResource BlackBrush}"
-                                Text="{Binding SelectedBalansItem.Title, StringFormat=Значения данных по суткам по \{0\}}"
+                                Text="{Binding SelectedBalansItem.Name, StringFormat=Значения данных по суткам по \{0\}}"
                                 TextAlignment="Center" />
 
                             <ScrollContentPresenter
