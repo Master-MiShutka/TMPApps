@@ -62,13 +62,20 @@ namespace TMP.WORK.AramisChetchiki.Charts
         /// <param name="e"></param>
         private void DataContextChangedHandler(object sender, DependencyPropertyChangedEventArgs e)
         {
-            if (this.DataContext is INotifyCollectionChanged)
+            if (e.NewValue != null)
             {
-                INotifyCollectionChanged observable = (INotifyCollectionChanged)this.DataContext;
-                observable.CollectionChanged += new NotifyCollectionChangedEventHandler(BoundCollectionChanged);
-            }
+                if (this.DataContext is INotifyCollectionChanged)
+                {
+                    INotifyCollectionChanged observable = (INotifyCollectionChanged)this.DataContext;
+                    observable.CollectionChanged += new NotifyCollectionChangedEventHandler(BoundCollectionChanged);
+                }
 
-            ObserveBoundCollectionChanges();
+                ObserveBoundCollectionChanges();
+            }
+            else
+            {
+                ;
+            }
         }
 
         #endregion
@@ -105,9 +112,8 @@ namespace TMP.WORK.AramisChetchiki.Charts
 
             foreach (object item in myCollectionView)
             {
-                if (item is INotifyPropertyChanged)
+                if (item is INotifyPropertyChanged observable)
                 {
-                    INotifyPropertyChanged observable = (INotifyPropertyChanged)item;
                     if (observable != null)
                         observable.PropertyChanged += new PropertyChangedEventHandler(ItemPropertyChanged);
                 }

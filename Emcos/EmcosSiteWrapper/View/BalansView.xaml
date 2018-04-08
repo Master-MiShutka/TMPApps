@@ -330,7 +330,7 @@
                                     <TextBlock
                                         HorizontalAlignment="Left"
                                         Style="{StaticResource infoLabel}"
-                                        ToolTip="Сумма суточных значений не равна расходу за месяц"
+                                        ToolTip="{Binding Converter={StaticResource BalansItemValueConverter}, ConverterParameter=DifferenceBetweenDailySumAndMonthPlusToolTip}"
                                         Visibility="{Binding Converter={StaticResource BalansItemValueConverter}, ConverterParameter=PlusMonthAndSumDaysNotEqual}">
                                         <icons:PackIconModern
                                             Width="{Binding Path=FontSize, ElementName=tree}"
@@ -368,7 +368,7 @@
                                     <TextBlock
                                         HorizontalAlignment="Left"
                                         Style="{StaticResource infoLabel}"
-                                        ToolTip="Сумма суточных значений не равна расходу за месяц"
+                                        ToolTip="{Binding Converter={StaticResource BalansItemValueConverter}, ConverterParameter=DifferenceBetweenDailySumAndMonthMinusToolTip}"
                                         Visibility="{Binding Converter={StaticResource BalansItemValueConverter}, ConverterParameter=MinusMonthAndSumDaysNotEqual}">
                                         <icons:PackIconModern
                                             Width="{Binding Path=FontSize, ElementName=tree}"
@@ -382,7 +382,7 @@
                                     <StackPanel
                                         HorizontalAlignment="Right"
                                         Orientation="Horizontal"
-                                        ToolTip="{Binding Converter={StaticResource BalansItemValueConverter}, ConverterParameter=ValuePlusStatus}">
+                                        ToolTip="{Binding Converter={StaticResource BalansItemValueConverter}, ConverterParameter=ValueMinusStatus}">
                                         <TextBlock
                                             FontFamily="Wingdings"
                                             Style="{StaticResource infoLabel}"

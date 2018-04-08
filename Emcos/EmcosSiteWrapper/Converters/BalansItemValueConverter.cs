@@ -17,7 +17,7 @@ namespace TMP.Work.Emcos.Converters
             if (bi == null)
                 return DependencyProperty.UnsetValue;
 
-            switch (bi.Type)
+            switch (bi.ElementType)
             {
                 case Model.ElementTypes.POWERTRANSFORMER:
                     bi = value as PowerTransformer;
@@ -32,6 +32,7 @@ namespace TMP.Work.Emcos.Converters
                     bi = value as UnitTransformerBus;
                     break;
             }
+            bool flag = false;
             switch (param)
             {
                 case "ValuePlusStatus":
@@ -67,7 +68,17 @@ namespace TMP.Work.Emcos.Converters
                     else
                         return FontWeights.Normal;
                 case "PlusMonthAndSumDaysNotEqual":
-                    if ((bi.MonthEplus - bi.Eplus) > 1.0d)
+                    if (bi is IBalansGroup)
+                    {
+                        GroupItem item = bi as GroupItem;
+                        if (item != null)
+                            flag = item.DifferenceBetweenDailySumAndMonthPlus > 1.0d;
+                        else
+                            flag = false;
+                    }
+                    else
+                        flag = bi.DifferenceBetweenDailySumAndMonthPlus > 1.0d;
+                    if (flag)
                         return Visibility.Visible;
                     else
                         return Visibility.Collapsed;
@@ -76,6 +87,30 @@ namespace TMP.Work.Emcos.Converters
                         return Visibility.Visible;
                     else
                         return Visibility.Collapsed;
+
+                case "DifferenceBetweenDailySumAndMonthPlusToolTip":
+                    if (bi is IBalansGroup)
+                    {
+                        GroupItem item = bi as GroupItem;
+                        if (item != null)
+                            return item.DifferenceBetweenDailySumAndMonthPlusToolTip;
+                        else
+                            return "????";
+                    }
+                    else
+                        return "Сумма суточных значений не равна расходу за месяц";
+                case "DifferenceBetweenDailySumAndMonthMinusToolTip":
+                    if (bi is IBalansGroup)
+                    {
+                        GroupItem item = bi as GroupItem;
+                        if (item != null)
+                            return item.DifferenceBetweenDailySumAndMonthMinusToolTip;
+                        else
+                            return "????";
+                    }
+                    else
+                        return "Сумма суточных значений не равна расходу за месяц";
+
                 default: return DependencyProperty.UnsetValue;
             }
         }

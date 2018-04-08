@@ -124,7 +124,7 @@ namespace TMP.Work.Emcos.Export
                 rowIndex++;
                 #endregion                
                 #region * ТСН ввода *
-                IList<IBalansItem> auxilary = substation.Items.Where((c) => c.Type == Model.ElementTypes.UNITTRANSFORMER).ToList();
+                IList<IBalansItem> auxilary = substation.Items.Where((c) => c.ElementType == Model.ElementTypes.UNITTRANSFORMER).ToList();
                 foreach (UnitTransformer aux in auxilary)
                 {
                     CreateCell(rowIndex, 3, aux.Name);
@@ -174,7 +174,7 @@ namespace TMP.Work.Emcos.Export
                 #endregion
 
                 #region * Секции *
-                IList<IBalansItem> sections = substation.Children.Where((c) => c.Type == Model.ElementTypes.SECTION && (c as SubstationSection).IsLowVoltage).ToList();
+                IList<IBalansItem> sections = substation.Children.Where((c) => c.ElementType == Model.ElementTypes.SECTION && (c as SubstationSection).IsLowVoltage).ToList();
 
                 foreach (IBalansItem section in sections)
                 {
@@ -205,7 +205,7 @@ namespace TMP.Work.Emcos.Export
                     int topRowIndex = rowIndex;
 
                     #region * ТРАСНФОРМАТОРЫ *
-                    IList<IBalansItem> transformers = bss.Children.Where((c) => c.Type == Model.ElementTypes.POWERTRANSFORMER).ToList();
+                    IList<IBalansItem> transformers = bss.Children.Where((c) => c.ElementType == Model.ElementTypes.POWERTRANSFORMER).ToList();
                     foreach (PowerTransformer transformer in transformers)
                     {
                         CreateCell(rowIndex, 3, transformer.Name);
@@ -255,7 +255,7 @@ namespace TMP.Work.Emcos.Export
 
                     #endregion
                     #region * ТСН ш *
-                    IList<IBalansItem> auxilaryBus = bss.Children.Where((c) => c.Type == Model.ElementTypes.UNITTRANSFORMERBUS).ToList();
+                    IList<IBalansItem> auxilaryBus = bss.Children.Where((c) => c.ElementType == Model.ElementTypes.UNITTRANSFORMERBUS).ToList();
                     foreach (UnitTransformerBus aux in auxilaryBus)
                     {
                         CreateCell(rowIndex, 3, aux.Name);
@@ -351,7 +351,7 @@ namespace TMP.Work.Emcos.Export
 
                     #endregion
                     #region * ФИДЕРА *
-                    IList<IBalansItem> fiders = bss.Children.Where((c) => c.Type == Model.ElementTypes.FIDER).ToList();
+                    IList<IBalansItem> fiders = bss.Children.Where((c) => c.ElementType == Model.ElementTypes.FIDER).ToList();
                     foreach (Fider fider in fiders)
                     {
                         CreateCell(rowIndex, 3, fider.Name);

@@ -9,8 +9,10 @@ using System.Runtime.Serialization;
 namespace TMP.Work.Emcos.Model.Balans
 {
     [DataContract(Name = "BalansItem")]
-    public class BalansItem : PropertyChangedBase, IBalansItem, IDisposable
+    public abstract class BalansItem : PropertyChangedBase, IBalansItem
     {
+        #region Fields
+
         private double? _addToEminus;
         private double? _addToEplus;
         private string _code;
@@ -24,41 +26,94 @@ namespace TMP.Work.Emcos.Model.Balans
         private int _id;
         private DataStatus _status = DataStatus.Wait;
         private string _name;
+
+        private bool _useMonthValue = false;
+
+        #region Constructor
+
         public BalansItem()
         {
             UseMonthValue = false;
         }
-        ~BalansItem()
+
+        #endregion
+
+        #region Common Properties
+
+        [DataMember(IsRequired = true)]
+        public int Id
         {
-            Dispose(false);
+            get { return _id; }
+            set { _id = value; RaisePropertyChanged("Id"); }
         }
-        protected virtual void Dispose(bool disposing)
+
+        [DataMember(IsRequired = true)]
+        public string Name { get { return _name; } set { _name = value; RaisePropertyChanged("Name"); } }
+
+
+        public virtual ElementTypes ElementType { get; }
+        public string TypeName
         {
-            ;
+            get
+            {
+                var fieldInfo = ElementType.GetType().GetField(ElementType.ToString());
+                var attribArray = fieldInfo.GetCustomAttributes(false);
+                var attrib = attribArray[0] as DescriptionAttribute;
+                return attrib.Description;
+            }
         }
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
+
         [IgnoreDataMember]
         public string TypeCode { get; set; }
+
         [IgnoreDataMember]
         public string EcpName { get; set; }
 
-        [DataMember()]
-        public double? AddToEminus
+        [DataMember(IsRequired = true)]
+        public string Code
         {
-            get { return _addToEminus; }
+            get { return _code; }
+            set { _code = value; RaisePropertyChanged("Code"); }
+        }
+
+        [DataMember]
+        public string Description
+        {
+            get { return _description; }
+            set { _description = value; RaisePropertyChanged("Description"); }
+        }
+
+        [DataMember()]
+        public ObservableCollection<IBalansItem> Children { get; set; }
+
+        [DataMember(IsRequired = true)]
+        public DataStatus Status
+        {
+            get
+            {
+                return _status;
+            }
             set
             {
-                _addToEminus = value;
-                RaisePropertyChanged("AddToEminus");
-                RaisePropertyChanged("Eminus");
-                RaisePropertyChanged("EnergyOut");
-                RaisePropertyChanged("Correction");
+                _status = value;
+                RaisePropertyChanged("Status");
             }
         }
+
+        [DataMember()]
+        public bool UseMonthValue
+        {
+            get { return _useMonthValue; }
+            set
+            {
+                _useMonthValue = value;
+                RaisePropertiesChanged();
+            }
+        }
+
+        #endregion
+
+        #region E+
 
         [DataMember()]
         public double? AddToEplus
@@ -74,15 +129,35 @@ namespace TMP.Work.Emcos.Model.Balans
             }
         }
 
-        [DataMember()]
-        public ObservableCollection<IBalansItem> Children { get; set; }
+        #endregion
 
-        [DataMember(IsRequired = true)]
-        public string Code
+        #region E-
+
+        [DataMember()]
+        public double? AddToEminus
         {
-            get { return _code; }
-            set { _code = value; RaisePropertyChanged("Code"); }
+            get { return _addToEminus; }
+            set
+            {
+                _addToEminus = value;
+                RaisePropertyChanged("AddToEminus");
+                RaisePropertyChanged("Eminus");
+                RaisePropertyChanged("EnergyOut");
+                RaisePropertyChanged("Correction");
+            }
         }
+
+        #endregion
+
+
+
+
+
+
+
+
+
+
         public string Correction
         {
             get
@@ -172,18 +247,14 @@ namespace TMP.Work.Emcos.Model.Balans
             }
         }
 
-        [DataMember]
-        public string Description {
-            get { return _description; }
-            set { _description = value; RaisePropertyChanged("Description"); } }
 
-        [DataMember]
+
         public double? Eminus
         {
-            get { return UseMonthValue ? MonthEminus : DayEminusValue; }
+            get { return UseMonthValue ? MonthEminus : SummOfDaysEminusValue; }
             set
             {
-                DayEminusValue = value;
+                SummOfDaysEminusValue = value;
                 RaisePropertyChanged("Eminus");
                 RaisePropertyChanged("EnergyOut");
             }
@@ -202,10 +273,10 @@ namespace TMP.Work.Emcos.Model.Balans
         [DataMember]
         public double? Eplus
         {
-            get { return UseMonthValue ? MonthEplus : DayEplusValue; }
+            get { return UseMonthValue ? MonthEplus : SummOfDaysEplusValue; }
             set
             {
-                DayEplusValue = value;
+                SummOfDaysEplusValue = value;
                 RaisePropertyChanged("Eplus");
                 RaisePropertyChanged("EnergyIn");
             }
@@ -215,19 +286,7 @@ namespace TMP.Work.Emcos.Model.Balans
 
         public double? FideraOut { get { return null; } }
 
-        [DataMember(IsRequired = true)]
-        public int Id
-        {
-            get
-            {
-                return _id;
-            }
-            set
-            {
-                _id = value;
-                RaisePropertyChanged("Id"); 
-            }
-        }
+
 
         [DataMember()]
         public double? MonthEminus
@@ -237,6 +296,8 @@ namespace TMP.Work.Emcos.Model.Balans
             {
                 _monthEMinus = value;
                 RaisePropertyChanged("MonthEminus");
+                RaisePropertyChanged("Eminus");
+                RaisePropertyChanged("EnergyOut");
             }
         }
 
@@ -248,6 +309,8 @@ namespace TMP.Work.Emcos.Model.Balans
             {
                 _monthEPlus = value;
                 RaisePropertyChanged("MonthEplus");
+                RaisePropertyChanged("Eminus");
+                RaisePropertyChanged("EnergyOut");
             }
         }
 
@@ -275,19 +338,7 @@ namespace TMP.Work.Emcos.Model.Balans
 
         public double? PercentageOfUnbalance { get { return null; } }
 
-        [DataMember(IsRequired = true)]
-        public DataStatus Status
-        {
-            get
-            {
-                return _status;
-            }
-            set
-            {
-                _status = value;
-                RaisePropertyChanged("Status");
-            }
-        }
+
 
         public Substation Substation { get; private set; }
         public void SetSubstation(Substation substation)
@@ -295,20 +346,9 @@ namespace TMP.Work.Emcos.Model.Balans
             Substation = substation;
         }
 
-        [DataMember(IsRequired = true)]
-        public string Name { get { return _name; } set { _name = value; RaisePropertyChanged("Name"); } }
+
+
         public double? Tsn { get { return null; } }
-        public virtual ElementTypes Type { get; set ; }
-        public string TypeName
-        {
-            get
-            {
-                var fieldInfo = Type.GetType().GetField(Type.ToString());
-                var attribArray = fieldInfo.GetCustomAttributes(false);
-                var attrib = attribArray[0] as DescriptionAttribute;
-                return attrib.Description;
-            }
-        }
         public double? Unbalance { get { return null; } }
         public double? VvodaIn { get { return null; } }
         public double? VvodaOut { get { return null; } }
@@ -322,185 +362,13 @@ namespace TMP.Work.Emcos.Model.Balans
             MonthEminus = null;
             MonthEplus = null;
             UseMonthValue = false;
-            DayEminusValue = null;
-            DayEplusValue = null;
+            SummOfDaysEminusValue = null;
+            SummOfDaysEplusValue = null;
             GC.Collect();
             /*RaisePropertyChanged("EnergyIn");
             RaisePropertyChanged("EnergyOut");*/
         }
 
-        #region VALUES
-        public double? DifferenceBetweenDailySumAndMonthPlus
-        {
-            get { return MonthEplus - Eplus; }
-        }
-        public double? DifferenceBetweenDailySumAndMonthMinus
-        {
-            get { return MonthEminus - Eminus; }
-        }
-        public IList<Value> DailyEminusValues
-        {
-            get
-            {
-                if (UseMonthValue) return null;
-                if (DailyEminus == null) return null;
-                IList<Value> result = new List<Value>();
-                var max = DailyEminus.Max();
-                foreach (double? item in DailyEminus)
-                    result.Add((max == null || item == null)
-                        ? new Value
-                        { DoubleValue = 0, PercentValue = 0, Status = ValueStatus.Missing }
-                        : new Value
-                        { DoubleValue = item.Value, PercentValue = item.Value / max, Status = ValueStatus.Normal });
-                return result;
-            }
-        }
-
-        public double? DailyEminusValuesAverage
-        {
-            get
-            {
-                double? value;
-                if (DailyEminusValues == null)
-                    return null;
-                else
-                {
-                    IList<Value> values = DailyEminusValues.Where(i => i.Status != ValueStatus.Missing).ToList();
-                    value = values.Average((i) => i.DoubleValue.Value);
-                }
-                return value;
-            }
-        }
-
-        public double? DailyEminusValuesMax
-        {
-            get
-            {
-                double? value;
-                if (DailyEminusValues == null)
-                    return null;
-                else
-                {
-                    IList<Value> values = DailyEminusValues.Where(i => i.Status != ValueStatus.Missing).ToList();
-                    value = values.Max((i) => i.DoubleValue.Value);
-                }
-                return value;
-            }
-        }
-
-        public double? DailyEminusValuesMin
-        {
-            get
-            {
-                double? value;
-                if (DailyEminusValues == null)
-                    return null;
-                else
-                {
-                    IList<Value> values = DailyEminusValues.Where(i => i.Status != ValueStatus.Missing).ToList();
-                    value = values.Min((i) => i.DoubleValue.Value);
-                }
-                return value;
-            }
-        }
-
-        public double? DailyEminusValuesSum
-        {
-            get
-            {
-                double? value;
-                if (DailyEminusValues == null)
-                    return null;
-                else
-                {
-                    IList<Value> values = DailyEminusValues.Where(i => i.Status != ValueStatus.Missing).ToList();
-                    value = values.Sum((i) => i.DoubleValue.Value);
-                }
-                return value;
-            }
-        }
-
-        public IList<Value> DailyEplusValues
-        {
-            get
-            {
-                if (UseMonthValue) return null;
-                if (DailyEplus == null) return null;
-                IList<Value> result = new List<Value>();
-                var max = DailyEplus.Max();
-                foreach (double? item in DailyEplus)
-                    result.Add((max == null || item == null)
-                        ? new Value
-                        { DoubleValue = 0, PercentValue = 0, Status = ValueStatus.Missing }
-                        : new Value
-                        { DoubleValue = item.Value, PercentValue = item.Value / max, Status = ValueStatus.Normal });
-                return result;
-            }
-        }
-        public double? DailyEplusValuesAverage
-        {
-            get
-            {
-                double? value;
-                if (DailyEplusValues == null)
-                    return null;
-                else
-                {
-                    IList<Value> values = DailyEplusValues.Where(i => i.Status != ValueStatus.Missing).ToList();
-                    value = values.Average((i) =>i.DoubleValue.Value);
-                }
-                return value;
-            }
-        }
-
-        public double? DailyEplusValuesMax
-        {
-            get
-            {
-                double? value;
-                if (DailyEplusValues == null)
-                    return null;
-                else
-                {
-                    IList<Value> values = DailyEplusValues.Where(i => i.Status != ValueStatus.Missing).ToList();
-                    value = DailyEplusValues.Max((i) => i.DoubleValue.Value);
-                }
-                return value;
-            }
-        }
-
-        public double? DailyEplusValuesMin
-        {
-            get
-            {
-                double? value;
-                if (DailyEplusValues == null)
-                    return null;
-                else
-                {
-                    IList<Value> values = DailyEplusValues.Where(i => i.Status != ValueStatus.Missing).ToList();
-                    value = values.Min((i) => i.DoubleValue.Value);
-                }
-                return value;
-            }
-        }
-
-        public double? DailyEplusValuesSum
-        {
-            get
-            {
-                double? value;
-                if (DailyEplusValues == null)
-                    return null;
-                else
-                {
-                    IList<Value> values = DailyEplusValues.Where(i => i.Status != ValueStatus.Missing).ToList();
-                    value = DailyEplusValues.Sum((i) => i.DoubleValue.Value);
-                }
-                return value;
-            }
-        }
-        #endregion
 
         [OnDeserializing()]
         private void OnDeserializingMethod(StreamingContext context)
@@ -513,25 +381,18 @@ namespace TMP.Work.Emcos.Model.Balans
         {
             ;
         }
+
         public virtual IBalansItem Copy()
         {
             throw new NotImplementedException();
         }
-        private bool _useMonthValue = false;
+
+
+
         [DataMember()]
-        public bool UseMonthValue
-        {
-            get { return _useMonthValue; }
-            set
-            {
-                _useMonthValue = value;
-                RaisePropertiesChanged();
-            }
-        }
+        public double? SummOfDaysEminusValue { get; set; }
         [DataMember()]
-        public double? DayEminusValue { get; set; }
-        [DataMember()]
-        public double? DayEplusValue { get; set; }
+        public double? SummOfDaysEplusValue { get; set; }
 
         private void RaisePropertiesChanged()
         {

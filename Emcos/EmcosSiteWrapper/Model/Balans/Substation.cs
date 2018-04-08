@@ -11,7 +11,6 @@ namespace TMP.Work.Emcos.Model.Balans
         private double? _maximumAllowableUnbalance = null;
         public Substation()
         {
-            Type = ElementTypes.SUBSTATION;
             Children = new ObservableCollection<IBalansItem>();
 
             Status = DataStatus.Wait;
@@ -24,7 +23,6 @@ namespace TMP.Work.Emcos.Model.Balans
                 Code = this.Code,
                 Name = this.Name,
                 Description = this.Description,
-                Type = this.Type,
                 Departament = this.Departament,
                 Voltage = this.Voltage,
                 //Dates = this.Dates,
@@ -36,6 +34,8 @@ namespace TMP.Work.Emcos.Model.Balans
             s.UpdateChildren();
             return s;
         }
+
+        public override ElementTypes ElementType => ElementTypes.SUBSTATION;
 
         [DataMember()]
         public string Departament { get; set; }
@@ -188,13 +188,13 @@ namespace TMP.Work.Emcos.Model.Balans
                 double teta = 1.1 * Math.Sqrt(δсч* δсч + δтт * δтт + δтн * δтн);
 
                 var powertrans = Items
-                    .Where(i => i.Type == ElementTypes.POWERTRANSFORMER)
+                    .Where(i => i.ElementType == ElementTypes.POWERTRANSFORMER)
                     .Select(i => new { Name = i.Name, In = i.EnergyIn, Out = i.EnergyOut }).ToList();
                 var fiders = Items
-                    .Where(i => i.Type == ElementTypes.FIDER)
+                    .Where(i => i.ElementType == ElementTypes.FIDER)
                     .Select(i => new { Name = i.Name, In = i.EnergyIn, Out = i.EnergyOut }).ToList();
                 var tsn = Items
-                    .Where(i => (i.Type == ElementTypes.UNITTRANSFORMER || i.Type == ElementTypes.UNITTRANSFORMERBUS))
+                    .Where(i => (i.ElementType == ElementTypes.UNITTRANSFORMER || i.ElementType == ElementTypes.UNITTRANSFORMERBUS))
                     .Select(i => new { Name = i.Name, In = i.EnergyIn, Out = i.EnergyOut }).ToList();                
 
                 double energyInFiders = fiders

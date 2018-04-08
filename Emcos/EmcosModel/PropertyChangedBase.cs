@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Runtime.Serialization;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using System.Xml.Serialization;
 
 namespace TMP.Work.Emcos
@@ -17,13 +18,9 @@ namespace TMP.Work.Emcos
         /// <param name="propertyName">Property name to update. Is case-sensitive.</param>
         protected virtual void RaisePropertyChanged(string propertyName)
         {
-            checkIfPropertyNameExists(propertyName);
+            CheckIfPropertyNameExists(propertyName);
 
-            var e = PropertyChanged;
-            if (e != null)
-            {
-                e(this, new PropertyChangedEventArgs(propertyName));
-            }
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
         /// <summary>
         /// Raised when a property on this object has a new value.
@@ -31,7 +28,7 @@ namespace TMP.Work.Emcos
         public event PropertyChangedEventHandler PropertyChanged;
 
         #endregion
-        protected bool SetProp<T>(ref T variable, T value, string name)
+        protected bool SetProp<T>(ref T variable, T value, string name = null)
         {
             if (!EqualityComparer<T>.Default.Equals(variable, value))
             {
@@ -42,7 +39,7 @@ namespace TMP.Work.Emcos
             return false;
         }
         [Conditional("DEBUG")]
-        private void checkIfPropertyNameExists(String propertyName)
+        private void CheckIfPropertyNameExists(String propertyName)
         {
             var type = this.GetType();
             Debug.Assert(

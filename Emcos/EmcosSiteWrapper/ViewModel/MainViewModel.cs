@@ -114,7 +114,7 @@ namespace TMP.Work.Emcos.ViewModel
                     {
                         foreach (var subgroup in group.Children)
                         {
-                            var eltype = subgroup.Type;
+                            var eltype = subgroup.ElementType;
                             switch (eltype)
                             {
                                 case ElementTypes.VOLTAGE:

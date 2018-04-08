@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Xml.Serialization;
 using System.Runtime.Serialization;
+using System.Collections.ObjectModel;
 
 namespace TMP.Work.Emcos.Model
 {
@@ -16,8 +17,8 @@ namespace TMP.Work.Emcos.Model
         string Code { get; set; }
         [DataMember]
         string TypeCode { get; set; }
-        [DataMember]
-        ElementTypes Type { get; set; }
+
+        ElementTypes ElementType { get; }
         [DataMember]
         string EcpName { get; set; }
         [DataMember]
@@ -32,7 +33,7 @@ namespace TMP.Work.Emcos.Model
         bool IsGroup { get; set; }
 
         [DataMember]
-        IList<IHierarchicalEmcosPoint> Children { get; set; }
+        ObservableCollection<IHierarchicalEmcosPoint> Children { get; set; }
     }
 
     [Serializable]
@@ -45,6 +46,7 @@ namespace TMP.Work.Emcos.Model
 
         [XmlAttribute]
         [DataMember]
+        [Magic]
         public string Name { get; set; }
         [XmlAttribute]
         [DataMember]
@@ -57,22 +59,23 @@ namespace TMP.Work.Emcos.Model
         public string EcpName { get; set; }
         [XmlAttribute]
         [DataMember]
-        public ElementTypes Type { get; set; }
+        public ElementTypes ElementType { get; set; }
 
         [XmlAttribute]
         [DataMember]
+        [Magic]
         public string Description { get; set; }
 
         public EmcosPointBase() { }
 
         public override int GetHashCode()
         {
-            return (Type.GetHashCode() % 0x8000) | (int)((uint)Id.GetHashCode() & 0xFFFF0000);
+            return (ElementType.GetHashCode() % 0x8000) | (int)((uint)Id.GetHashCode() & 0xFFFF0000);
         }
 
         public override string ToString()
         {
-            return String.Format("Id:[{0}], Code:[{1}], TypeCode:[{2}], Type:[[3}]", Id, Code, TypeCode, Type);
+            return String.Format("Id:[{0}], Code:[{1}], TypeCode:[{2}], Type:[[3}]", Id, Code, TypeCode, ElementType);
         }
     }
     [Serializable]
@@ -91,10 +94,10 @@ namespace TMP.Work.Emcos.Model
             this.Code = point.Code;
             this.TypeCode = point.TypeCode;
             this.EcpName = point.EcpName;
-            this.Type = point.Type;
+            this.ElementType = point.ElementType;
         }
-
-        public List<EmcosPointWithValue> Children { get; set; }
+        [Magic]
+        public ObservableCollection<EmcosPointWithValue> Children { get; set; }
         [XmlIgnore]
         public int ChildCount { get { return Children != null ? Children.Count : 0; } }
         [XmlIgnore]
@@ -146,7 +149,8 @@ namespace TMP.Work.Emcos.Model
 
         [XmlArray]
         [DataMember]
-        public IList<IHierarchicalEmcosPoint> Children { get; set; }
+        [Magic]
+        public ObservableCollection<IHierarchicalEmcosPoint> Children { get; set; }
 
 
         [XmlIgnore]

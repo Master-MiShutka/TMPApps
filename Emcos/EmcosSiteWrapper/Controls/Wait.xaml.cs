@@ -28,7 +28,17 @@ namespace TMP.Work.Emcos.Controls
             progressBar.Value = 0d;
             progressBar.Minimum = 0d;
             progressBar.Maximum = 100d;
+
+            Unloaded += Wait_Unloaded;
         }
+
+        private void Wait_Unloaded(object sender, RoutedEventArgs e)
+        {
+            var stateObj = GetParentobject() as IStateObject;
+            if (stateObj != null)
+                stateObj.PropertyChanged -= Parent_PropertyChanged;
+        }
+
         public static readonly DependencyProperty LogProperty = DependencyProperty.Register("Log", typeof(string), typeof(Wait), new PropertyMetadata(String.Empty));
 
         [Bindable(true)]
@@ -64,7 +74,7 @@ namespace TMP.Work.Emcos.Controls
             set { SetValue(ProgressVisibleProperty, value); }
         }
         
-        private void UserControl_Loaded(object sender, RoutedEventArgs e)
+        private FrameworkElement GetParentobject()
         {
             var parentObj = this.Parent as FrameworkElement;
             while ((parentObj != null) && ((parentObj is IStateObject) == false))
@@ -72,7 +82,13 @@ namespace TMP.Work.Emcos.Controls
                 if ((parentObj is IStateObject) == false)
                     parentObj = parentObj.Parent as FrameworkElement;
             }
-            var stateObj = parentObj as IStateObject;
+            return parentObj;
+        }
+
+        private void UserControl_Loaded(object sender, RoutedEventArgs e)
+        {
+
+            var stateObj = GetParentobject() as IStateObject;
 
             if (stateObj == null)
                 this.Visibility = Visibility.Hidden;

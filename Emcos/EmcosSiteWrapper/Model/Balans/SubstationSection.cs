@@ -13,7 +13,6 @@ namespace TMP.Work.Emcos.Model.Balans
     {
         public SubstationSection()
         {
-            Type = ElementTypes.SECTION;
             Children = new ObservableCollection<IBalansItem>();
         }
         public override IBalansItem Copy()
@@ -24,7 +23,6 @@ namespace TMP.Work.Emcos.Model.Balans
                 Code = this.Code,
                 Name = this.Name,
                 Description = this.Description,
-                Type = this.Type,
                 Voltage = this.Voltage,
                 Children = new ObservableCollection<IBalansItem>()
             };
@@ -34,6 +32,9 @@ namespace TMP.Work.Emcos.Model.Balans
             s.UpdateChildren();
             return s;
         }
+
+        public override ElementTypes ElementType => ElementTypes.SECTION;
+
         [DataMember()]
         public String Voltage { get; set; }
         public bool IsLowVoltage

@@ -64,7 +64,7 @@ namespace TMP.Work.Emcos.Export
                 {
                     var substation = list[index];
 
-                    IList<IBalansItem> sections = substation.Children.Where((c) => c.Type == Model.ElementTypes.SECTION && (c as SubstationSection).IsLowVoltage).ToList();
+                    IList<IBalansItem> sections = substation.Children.Where((c) => c.ElementType == Model.ElementTypes.SECTION && (c as SubstationSection).IsLowVoltage).ToList();
                     foreach (IBalansItem section in sections)
                     {
                         var bss = section as SubstationSection;

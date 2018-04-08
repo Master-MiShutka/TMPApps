@@ -14,7 +14,6 @@ namespace TMP.Work.Emcos.Model.Balans
         public SubstationAuxiliary()
         {
             Name = "Собственные нужды";
-            Type = ElementTypes.AUXILIARY;
             Children = new ObservableCollection<IBalansItem>();
         }
         public override IBalansItem Copy()
@@ -25,7 +24,6 @@ namespace TMP.Work.Emcos.Model.Balans
                 Code = this.Code,
                 Name = this.Name,
                 Description = this.Description,
-                Type = this.Type,
                 Children = new ObservableCollection<IBalansItem>()
             };
             s.SetSubstation(this.Substation);
@@ -34,6 +32,7 @@ namespace TMP.Work.Emcos.Model.Balans
             s.UpdateChildren();
             return s;
         }
+        public override ElementTypes ElementType => ElementTypes.AUXILIARY;
         public override double? Tsn
         {
             get
@@ -45,7 +44,7 @@ namespace TMP.Work.Emcos.Model.Balans
                         {
                             var but = item as UnitTransformer;
                             if (but != null && but.EnergyIn.HasValue)
-                                if (but.Type == ElementTypes.UNITTRANSFORMERBUS)
+                                if (but.ElementType == ElementTypes.UNITTRANSFORMERBUS)
                                     result += but.EnergyIn;
                         }
                 return result == 0 ? null : result;

@@ -166,7 +166,7 @@ namespace TMP.Work.Emcos.View
                         summ = null;
                         foreach (Model.Balans.IBalansItem balansItem in substation.Items)
                         {
-                            if (balansItem.Type == ElementTypes.UNITTRANSFORMER || balansItem.Type == ElementTypes.UNITTRANSFORMERBUS)
+                            if (balansItem.ElementType == ElementTypes.UNITTRANSFORMER || balansItem.ElementType == ElementTypes.UNITTRANSFORMERBUS)
                                 sub.Children.Add(new AuxiliaryReportItem { Name = balansItem.Name, Value = balansItem.Eplus });
                         }
                         summ = sub.Children.Sum(i => i.Value.HasValue ? i.Value : 0d);
@@ -199,7 +199,7 @@ namespace TMP.Work.Emcos.View
             {
                 if (vm == null) return false;
                 if (vm.SelectedBalansItem == null) return false;
-                if (vm.SelectedBalansItem is Model.Balans.IBalansGroup && (vm.SelectedBalansItem as Model.Balans.IBalansGroup).Type == ElementTypes.SUBSTATION)
+                if (vm.SelectedBalansItem is Model.Balans.IBalansGroup && (vm.SelectedBalansItem as Model.Balans.IBalansGroup).ElementType == ElementTypes.SUBSTATION)
                     return true;
                 else
                     return false;
@@ -487,7 +487,7 @@ namespace TMP.Work.Emcos.View
             var item = o as Model.Balans.IBalansItem;
             if (item == null) return;
 
-            ShowItemDetails(item.Type);
+            ShowItemDetails(item.ElementType);
         }
 
         private void tree_MouseDoubleClick(object sender, MouseButtonEventArgs e)

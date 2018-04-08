@@ -327,6 +327,10 @@
     <Resource Include="MAINICON.ico" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Emcos\EmcosModel\EmcosModel.csproj">
+      <Project>{4EA193AE-23A4-411C-AEE6-0AFBAAC1C1CA}</Project>
+      <Name>EmcosModel</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ExtendedWPFToolkitSolution\Src\Xceed.Wpf.DataGrid\Xceed.Wpf.DataGrid.csproj">
       <Project>{63648392-6ce9-4a60-96d4-f9fd718d29b0}</Project>
       <Name>Xceed.Wpf.DataGrid</Name>

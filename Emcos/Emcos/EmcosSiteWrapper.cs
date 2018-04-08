@@ -678,7 +678,7 @@ namespace TMP.Work.Emcos
             int index = 0;
             foreach (var point in points)
             {
-                bool isGroup = point.Type == Model.ElementTypes.SECTION;// && (point as Model.Balans.SubstationSection).IsLowVoltage == true;
+                bool isGroup = point.ElementType == Model.ElementTypes.SECTION;// && (point as Model.Balans.SubstationSection).IsLowVoltage == true;
 
                 sb.AppendFormat("T1_TYPE_{0}={1}&", index, isGroup ? "GROUP" : "POINT");
                 if (isGroup)
@@ -712,7 +712,7 @@ namespace TMP.Work.Emcos
                     sb.AppendFormat("T1_GRP_BT_{0}=&", index);
                     sb.AppendFormat("T1_GRP_DESC_{0}=&", index);
                 }
-                switch (point.Type)
+                switch (point.ElementType)
                 {
                     case Model.ElementTypes.FIDER:
                         sb.AppendFormat("T1_ECP_NAME_{0}={1}&", index, "Линии");

@@ -11,7 +11,7 @@
     Orientation="Horizontal"
     mc:Ignorable="d">
     <treeListView:RowExpander />
-    <controls:BalansItemIcon Height="{Binding ElementName=text, Path=ActualHeight}" Effect="{DynamicResource dropShadowWhite}" />
+    <controls:BalansItemIcon Height="{Binding ElementName=text, Path=ActualHeight}" Effect="{StaticResource dropShadowWhite}" />
     <TextBlock
         x:Name="text"
         Margin="5,0,0,0"

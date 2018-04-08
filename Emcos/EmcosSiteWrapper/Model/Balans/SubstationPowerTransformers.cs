@@ -13,7 +13,6 @@ namespace TMP.Work.Emcos.Model.Balans
         public SubstationPowerTransformers()
         {
             Name = "Трансформаторы";
-            Type = ElementTypes.POWERTRANSFORMERS;
             Children = new ObservableCollection<IBalansItem>();
         }
         public override IBalansItem Copy()
@@ -24,7 +23,6 @@ namespace TMP.Work.Emcos.Model.Balans
                 Code = this.Code,
                 Name = this.Name,
                 Description = this.Description,
-                Type = this.Type,
                 Children = new ObservableCollection<IBalansItem>()
             };
             s.SetSubstation(this.Substation);
@@ -33,6 +31,7 @@ namespace TMP.Work.Emcos.Model.Balans
             s.UpdateChildren();
             return s;
         }
+        public override ElementTypes ElementType => ElementTypes.POWERTRANSFORMERS;
         public override double? VvodaIn
         {
             get

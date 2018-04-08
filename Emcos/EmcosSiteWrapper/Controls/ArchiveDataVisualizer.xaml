@@ -71,7 +71,7 @@
             </Setter>
             <Setter Property="ItemTemplate">
                 <Setter.Value>
-                    <DataTemplate DataType="{x:Type model:Value}">
+                    <DataTemplate DataType="{x:Type model:DataValue}">
                         <Grid MinWidth="{StaticResource minValueWidth}" Margin="1,2,1,0">
                             <Border
                                 Margin="5,0,5,1"
@@ -96,7 +96,7 @@
                             <DataTrigger Binding="{Binding DoubleValue}" Value="0">
                                 <Setter TargetName="text" Property="Foreground" Value="{DynamicResource BlackBrush}" />
                             </DataTrigger>
-                            <DataTrigger Binding="{Binding Status}" Value="{x:Static model:ValueStatus.Missing}">
+                            <DataTrigger Binding="{Binding Status}" Value="{x:Static model:DataValueStatus.Missing}">
                                 <Setter TargetName="text" Property="Foreground" Value="Red" />
                                 <Setter TargetName="text" Property="Text" Value="нет" />
                                 <Setter TargetName="text" Property="FontSize" Value="{DynamicResource ContentFontSize}" />

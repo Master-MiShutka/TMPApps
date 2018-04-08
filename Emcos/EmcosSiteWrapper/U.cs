@@ -258,11 +258,11 @@ namespace TMP.Work.Emcos
 
                         ParseData(out days_plus, out summ, ref data_days_plus, item.Name);
                         item.DailyEplus = days_plus;
-                        item.DayEplusValue = summ;
+                        item.SummOfDaysEplusValue = summ;
 
                         ParseData(out days_minus, out summ, ref data_days_minus, item.Name);
                         item.DailyEminus = days_minus;
-                        item.DayEminusValue = summ;
+                        item.SummOfDaysEminusValue = summ;
 
                         double? month_plus, month_minus;
                         if (hasMonthData)

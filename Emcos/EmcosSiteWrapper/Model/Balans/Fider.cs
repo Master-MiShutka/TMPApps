@@ -5,7 +5,7 @@ namespace TMP.Work.Emcos.Model.Balans
     [DataContract(Name = "Fider")]
     public class Fider : BalansItem
     {
-        public override ElementTypes Type { get { return ElementTypes.FIDER; } }
+        public override ElementTypes ElementType { get { return ElementTypes.FIDER; } }
         public override IBalansItem Copy()
         {
             IBalansItem obj = new Fider

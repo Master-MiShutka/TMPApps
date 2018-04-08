@@ -1,11 +1,11 @@
 ﻿namespace TMP.Work.Emcos.Model.Balans
 {
-    public enum ValueStatus
+    public enum DataValueStatus
     {
         Normal,
         Missing
     }
-    public class Value : TMP.Work.Emcos.PropertyChangedBase
+    public class DataValue : TMP.Work.Emcos.PropertyChangedBase
     {
         private double? _doubleValue = null;
         public double? DoubleValue
@@ -19,8 +19,8 @@
             get { return _percentValue; }
             set { _percentValue = value; RaisePropertyChanged("PercentValue"); }
         }
-        private ValueStatus _status = ValueStatus.Normal;
-        public ValueStatus Status
+        private DataValueStatus _status = DataValueStatus.Normal;
+        public DataValueStatus Status
         {
             get { return _status; }
             set { _status = value; RaisePropertyChanged("Status"); }

@@ -128,7 +128,7 @@ namespace TMP.Work.Emcos.ViewModel
                     // при десериализации обновление запускается автоматически
                     if (_hasSession == false)
                         s.UpdateChildren();
-                    // подпись на изменение свойств                    
+                    // подпись на изменение свойств
                     if (s.Items != null)
                         foreach (IBalansItem i in s.Items)
                         {
@@ -139,7 +139,7 @@ namespace TMP.Work.Emcos.ViewModel
                     //! TODO: удалить существующие группы 'трансформаторы' и 'собственные нужды' и создать их на основе ссылок на элементы из секций шин
 
                     // собственные нужды
-                    IList<IBalansItem> sectionAux = s.Children.Where((c) => c.Type == Model.ElementTypes.AUXILIARY && c.Name == "Собственные нужды").ToList();
+                    IList<IBalansItem> sectionAux = s.Children.Where((c) => c.ElementType == Model.ElementTypes.AUXILIARY && c.Name == "Собственные нужды").ToList();
 
                     foreach (IBalansGroup aux in sectionAux)
                     {

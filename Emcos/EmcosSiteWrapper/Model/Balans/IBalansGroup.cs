@@ -4,19 +4,17 @@ namespace TMP.Work.Emcos.Model.Balans
 {
     public interface IBalansGroup : IBalansItem
     {
-        double? VvodaIn { get; }
-        double? VvodaOut { get; }
-
-        double? Tsn { get; }
-
-        double? FideraIn { get; }
-        double? FideraOut { get; }
-
-        double? Unbalance { get; }
-        double? PercentageOfUnbalance { get; }
-
+        /// <summary>
+        /// Дочерние элементы группы
+        /// </summary>
         ICollection<IBalansItem> Children { get; set; }
-        IList<IBalansItem> Items { get; }
+        //
+        //IList<IBalansItem> Items { get; }
+        /// <summary>
+        /// Формула, задающая порядок расчета баланса
+        /// </summary>
+        BalanceFormula Formula { get; set; }
+
         void UpdateChildren();
     }
 }

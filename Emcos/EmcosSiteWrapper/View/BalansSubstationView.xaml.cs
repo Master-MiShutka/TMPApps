@@ -347,7 +347,7 @@ namespace TMP.Work.Emcos.View
                 };
                 if (_balansGroup != null && _balansGroup.Substation != null && _balansGroup.Substation.Items != null)
                 {
-                    var bi = _balansGroup.Substation.Items.Where(c => c.Type == Model.ElementTypes.FIDER && c.Code == _balansGroup.Headers[index].Code).FirstOrDefault();
+                    var bi = _balansGroup.Substation.Items.Where(c => c.ElementType == Model.ElementTypes.FIDER && c.Code == _balansGroup.Headers[index].Code).FirstOrDefault();
                     if (bi != null)
                     {
                         column.Tag = bi;

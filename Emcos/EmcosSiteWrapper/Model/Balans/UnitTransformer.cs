@@ -10,7 +10,7 @@ namespace TMP.Work.Emcos.Model.Balans
     [DataContract(Name = "UnitTransformer")]
     public class UnitTransformer : BalansItem
     {
-        public override ElementTypes Type { get { return ElementTypes.UNITTRANSFORMER; } }
+        public override ElementTypes ElementType { get { return ElementTypes.UNITTRANSFORMER; } }
         public override IBalansItem Copy()
         {
             IBalansItem obj = new UnitTransformer

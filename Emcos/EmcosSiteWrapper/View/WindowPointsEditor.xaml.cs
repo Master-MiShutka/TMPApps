@@ -186,7 +186,7 @@ namespace TMP.Work.Emcos.View
                 IsGroup = i.Type == Model.ElementTypes.GROUP,
                 TypeCode = i.TypeCode,
                 EcpName = i is Model.EmcosPointElement ? (i as Model.EmcosPointElement).EcpName : String.Empty,
-                Type = i.Type,
+                ElementType = i.Type,
                 IsChecked = false,
                 ParentId = parent.Id,
                 ParentTypeCode = parent.TypeCode,

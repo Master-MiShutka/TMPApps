@@ -7,11 +7,12 @@ using System.Windows;
 using System.Windows.Input;
 
 using TMP.UI.Controls.WPF;
+using TMP.Work.Emcos;
 
 namespace TMP.WORK.AramisChetchiki.ViewModel
 {
     [DataContract]
-    public abstract class BaseViewModel : IViewModel, INotifyPropertyChanged
+    public abstract class BaseViewModel : PropertyChangedBase, IViewModel
     {
         private string _status = null;
         public String Status
@@ -64,26 +65,6 @@ namespace TMP.WORK.AramisChetchiki.ViewModel
             }, "Закрыть");
         }
 
-        #region INotifyPropertyChanged implementation
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected bool SetProperty<T>(ref T field, T value, string propertyName = null)
-        {
-            if (Equals(field, value)) { return false; }
-
-            field = value;
-            RaisePropertyChanged(propertyName);
-            return true;
-        }
-        protected void RaisePropertyChanged(string propertyName = null)
-        {
-            OnPropertyChanged(new PropertyChangedEventArgs(propertyName));
-        }
-        protected virtual void OnPropertyChanged(PropertyChangedEventArgs e)
-
-        {
-            PropertyChanged?.Invoke(this, e);
-        }
-        #endregion
     }
 
     [DataContract]

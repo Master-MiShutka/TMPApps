@@ -117,7 +117,7 @@ namespace TMP.Work.Emcos.Model
                                         group = new SubstationAuxiliary();
                                             foreach (var subgroupPoint in groupPoint.Children)
                                             {
-                                                if (subgroupPoint.Type == ElementTypes.UNITTRANSFORMER)
+                                                if (subgroupPoint.ElementType == ElementTypes.UNITTRANSFORMER)
                                                     item = new UnitTransformer();
                                                 else
                                                     item = new UnitTransformerBus();
@@ -171,7 +171,7 @@ namespace TMP.Work.Emcos.Model
                                                                 foreach (var sectionChildPoint in sectionPoint.Children)
                                                                 {
                                                                     IBalansItem childItem = null;
-                                                                    switch (sectionChildPoint.Type)
+                                                                    switch (sectionChildPoint.ElementType)
                                                                     {
                                                                         case ElementTypes.FIDER:
                                                                             childItem = new Fider();
