@@ -13,6 +13,7 @@ namespace TMP.WORK.AramisChetchiki.ViewModel
     using TMP.Extensions;
     using TMP.UI.Controls.WPF;
     using TMP.WORK.AramisChetchiki.Model;
+    using TMP.UI.Controls.WPF.Reporting.Helpers;
     using TMP.UI.Controls.WPF.Reporting.MatrixGrid;
     using System.Collections.ObjectModel;
 
@@ -30,6 +31,83 @@ namespace TMP.WORK.AramisChetchiki.ViewModel
                {
                    this.PrepareData();
                }, () => this._data != null, "Обновление");
+
+            CommandPrint = new DelegateCommand(delegate
+            {
+                System.Windows.Documents.Section rootSection = new System.Windows.Documents.Section();
+                rootSection.Blocks.Add(new System.Windows.Documents.Paragraph(
+                    new System.Windows.Documents.Run(DateTime.Now.ToLongDateString()) { FontStyle = FontStyles.Italic }
+                    )
+                { TextAlignment = TextAlignment.Right }
+                );
+                rootSection.Blocks.Add(new System.Windows.Documents.Paragraph(
+                    new System.Windows.Documents.Run(_data.Departament.Name) { FontWeight = FontWeights.Bold }
+                    )
+                { TextAlignment = TextAlignment.Center }
+                );
+
+                foreach (var pivot in PivotCollection)
+                {
+                    var section = FormatHelper.MatrixToFlowDocumentSectionWithTable(pivot);
+                    rootSection.Blocks.Add(section);
+                }
+
+
+                var flowDocument = new System.Windows.Documents.FlowDocument(rootSection);
+                flowDocument.FontSize = 11d;
+
+                System.Windows.Controls.PrintDialog pd = new System.Windows.Controls.PrintDialog();
+                System.Printing.PrintTicket pt = new System.Printing.PrintTicket();
+                pt.PageOrientation = System.Printing.PageOrientation.Landscape;
+                pd.PrintTicket = pd.PrintQueue.MergeAndValidatePrintTicket(pd.PrintQueue.DefaultPrintTicket, pt).ValidatedPrintTicket;
+
+                System.Windows.Documents.IDocumentPaginatorSource fdd = flowDocument;
+                flowDocument.PageWidth = pd.PrintableAreaWidth;
+                flowDocument.PageHeight = pd.PrintableAreaHeight;
+                flowDocument.ColumnWidth = pd.PrintableAreaWidth;
+                flowDocument.PagePadding = new Thickness(30.0, 50.0, 20.0, 30.0);
+                flowDocument.IsOptimalParagraphEnabled = true;
+                flowDocument.IsHyphenationEnabled = true;
+
+                var ms = new System.IO.MemoryStream();
+                using (var pkg = System.IO.Packaging.Package.Open(ms, System.IO.FileMode.Create))
+                {
+                    using (System.Windows.Xps.Packaging.XpsDocument doc = new System.Windows.Xps.Packaging.XpsDocument(pkg))
+                    {
+                        System.Windows.Xps.XpsDocumentWriter writer = System.Windows.Xps.Packaging.XpsDocument.CreateXpsDocumentWriter(doc);
+                        writer.Write(fdd.DocumentPaginator);
+                    }
+                }
+                ms.Position = 0;
+                var pkg2 = System.IO.Packaging.Package.Open(ms);
+                // Read the XPS document into a dynamically generated
+                // preview Window 
+                var url = new Uri("memorystream://printstream");
+                System.IO.Packaging.PackageStore.AddPackage(url, pkg2);
+                try
+                {
+                    using (System.Windows.Xps.Packaging.XpsDocument doc = new System.Windows.Xps.Packaging.XpsDocument(pkg2, System.IO.Packaging.CompressionOption.SuperFast, url.AbsoluteUri))
+                    {
+                        System.Windows.Documents.FixedDocumentSequence fds = doc.GetFixedDocumentSequence();
+
+                        Window wnd = new Window();
+                        wnd.Title = "Предварительный просмотр: сводная информация по счётчикам";
+                        wnd.Owner = Application.Current.MainWindow;
+                        System.Windows.Media.TextOptions.SetTextFormattingMode(wnd, System.Windows.Media.TextFormattingMode.Display);
+                        wnd.Padding = new Thickness(2);
+                        wnd.Content = new System.Windows.Controls.DocumentViewer()
+                        {
+                            Document = fds as System.Windows.Documents.IDocumentPaginatorSource
+                        };
+                        wnd.ShowDialog();
+                    }
+                }
+                finally
+                {
+                    System.IO.Packaging.PackageStore.RemovePackage(url);
+                }
+
+            }, () => _data != null, "Печать");
         }
 
         public MetersInfoViewModel(Data data) : this()
@@ -49,6 +127,7 @@ namespace TMP.WORK.AramisChetchiki.ViewModel
         #region Propperties
 
         public ICommand CommandUpdate { get; private set; }
+        public ICommand CommandPrint { get; private set; }
 
         public ICollection<IMatrix> PivotCollection
         {
@@ -85,7 +164,7 @@ namespace TMP.WORK.AramisChetchiki.ViewModel
                     {
                         Header = "Свод по установке или замене счётчиков за последние три года помесячно",
                         Description = "* количество счётчиков",
-                        GetRowHeaderValuesFunc = () => Enumerable.Range(curYear - yearsCount, yearsCount).Reverse().Select(i => MatrixHeaderCell.CreateRowHeader(i.ToString())),
+                        GetRowHeaderValuesFunc = () => Enumerable.Range(curYear - yearsCount + 1, yearsCount).Reverse().Select(i => MatrixHeaderCell.CreateRowHeader(i.ToString())),
                         GetColumnHeaderValuesFunc = () => System.Globalization.DateTimeFormatInfo.CurrentInfo.MonthNames.Take(12)
                             .Select(i => MatrixHeaderCell.CreateColumnHeader(i)),
                         GetDataCellFunc = (row, column) =>
@@ -112,7 +191,7 @@ namespace TMP.WORK.AramisChetchiki.ViewModel
                     {
                         Header = "Свод по установке или замене на электронный счётчик за последние три года помесячно",
                         Description = "* количество электронных счётчиков",
-                        GetRowHeaderValuesFunc = () => Enumerable.Range(curYear - yearsCount, yearsCount).Reverse().Select(i => MatrixHeaderCell.CreateRowHeader(i.ToString())),
+                        GetRowHeaderValuesFunc = () => Enumerable.Range(curYear - yearsCount + 1, yearsCount).Reverse().Select(i => MatrixHeaderCell.CreateRowHeader(i.ToString())),
                         GetColumnHeaderValuesFunc = () => System.Globalization.DateTimeFormatInfo.CurrentInfo.MonthNames.Take(12)
                             .Select(i => MatrixHeaderCell.CreateColumnHeader(i)),
                         GetDataCellFunc = (row, column) =>
@@ -139,18 +218,19 @@ namespace TMP.WORK.AramisChetchiki.ViewModel
 
                     int metersCount = this._data.Meters.Count;
 
-                    IEnumerable<SummaryInfoGroupItem> meterTypes = SummaryInfoHelper.BuildFirst10LargeGroups(this._data.Meters, "Тип_счетчика");
+                    IEnumerable<SummaryInfoGroupItem> allMeterTypes = SummaryInfoHelper.BuildFirst10LargeGroups(this._data.Meters, "Тип_счетчика");
+                    IEnumerable<SummaryInfoGroupItem> electronicMeterTypes = SummaryInfoHelper.BuildFirst10LargeGroups(this._data.Meters.Where(meter => meter.Принцип == "Э").ToList(), "Тип_счетчика");
 
                     _pivotCollection.Add(new MatrixModelDelegate()
                     {
                         Header = "Свод по типам счётчиков",
                         Description = "* количество счётчиков",
                         ShowRowsTotal = false,
-                        GetRowHeaderValuesFunc = () => meterTypes.Select(i => MatrixHeaderCell.CreateRowHeader(i.Key.ToString())),
+                        GetRowHeaderValuesFunc = () => allMeterTypes.Select(i => MatrixHeaderCell.CreateRowHeader(i.Key.ToString())),
                         GetColumnHeaderValuesFunc = () => new string[] { "Количество", "%" }.Select(i => MatrixHeaderCell.CreateColumnHeader(i)),
                         GetDataCellFunc = (row, column) =>
                         {
-                            var group = meterTypes.Where(i => i.Key.ToString() == row.Header).FirstOrDefault();
+                            var group = allMeterTypes.Where(i => i.Key.ToString() == row.Header).FirstOrDefault();
                             if (column.Header == "%")
                                 return new MatrixDataCell(group.Percent);
                             else
@@ -163,11 +243,29 @@ namespace TMP.WORK.AramisChetchiki.ViewModel
                     {
                         Header = "Свод по типу счётчика и году поверки",
                         Description = "* количество счётчиков",
-                        GetRowHeaderValuesFunc = () => meterTypes.Select(i => MatrixHeaderCell.CreateRowHeader(i.Key.ToString())),
+                        GetRowHeaderValuesFunc = () => allMeterTypes.Select(i => MatrixHeaderCell.CreateRowHeader(i.Key.ToString())),
                         GetColumnHeaderValuesFunc = () => this._data.Meters.Select(i => i.Год_поверки_для_отчётов).Distinct().OrderBy(i => i).Select(i => MatrixHeaderCell.CreateColumnHeader(i)),
                         GetDataCellFunc = (row, column) =>
                         {
-                            var group = meterTypes.Where(i => i.Key.ToString() == row.Header).FirstOrDefault();
+                            var group = allMeterTypes.Where(i => i.Key.ToString() == row.Header).FirstOrDefault();
+                            var list = group.Value.Where(i => i.Год_поверки_для_отчётов == column.Header).ToList();
+                            if (list != null)
+                                return new MatrixDataCell(list.Count());
+                            else
+                                return new MatrixDataCell(0);
+                        }
+                    });
+
+                    // Свод по типу электронного счётчика и году поверки
+                    _pivotCollection.Add(new MatrixModelDelegate()
+                    {
+                        Header = "Свод по типам электронных счётчиков и году поверки",
+                        Description = "* количество электронных счётчиков",
+                        GetRowHeaderValuesFunc = () => electronicMeterTypes.Select(i => MatrixHeaderCell.CreateRowHeader(i.Key.ToString())),
+                        GetColumnHeaderValuesFunc = () => this._data.Meters.Select(i => i.Год_поверки_для_отчётов).Distinct().OrderBy(i => i).Select(i => MatrixHeaderCell.CreateColumnHeader(i)),
+                        GetDataCellFunc = (row, column) =>
+                        {
+                            var group = electronicMeterTypes.Where(i => i.Key.ToString() == row.Header).FirstOrDefault();
                             var list = group.Value.Where(i => i.Год_поверки_для_отчётов == column.Header).ToList();
                             if (list != null)
                                 return new MatrixDataCell(list.Count());
@@ -179,7 +277,7 @@ namespace TMP.WORK.AramisChetchiki.ViewModel
                     // Свод по категории счётчика и типу населённого пункта
                     _pivotCollection.Add(new MatrixModelDelegate()
                     {
-                        Header = "Свод по категории счётчика и\nтипу населённого пункта",
+                        Header = "Свод по категории счётчика и типу населённого пункта",
                         Description = "* количество счётчиков",
                         GetRowHeaderValuesFunc = () => this._data.Meters.Select(i => i.Группа_счётчика_для_отчётов).Distinct().Select(i => MatrixHeaderCell.CreateRowHeader(i)),
                         GetColumnHeaderValuesFunc = () => this._data.Meters.Select(i => i.Тип_населённого_пункта).Distinct().Select(i => MatrixHeaderCell.CreateColumnHeader(i)),
@@ -204,7 +302,7 @@ namespace TMP.WORK.AramisChetchiki.ViewModel
 
                     _pivotCollection.Add(new MatrixModelDelegate()
                     {
-                        Header = "Свод по населенному пункту и\nпринципу действия счётчика",
+                        Header = "Свод по населенному пункту и принципу действия счётчика",
                         Description = "* количество счётчиков",
                         GetRowHeaderValuesFunc = () => meterPerLocality.Select(i => MatrixHeaderCell.CreateRowHeader(i.Key.ToString())),
                         GetColumnHeaderValuesFunc = () => this._data.Meters.Select(i => i.Принцип).Distinct().Select(i => MatrixHeaderCell.CreateColumnHeader(i)),
@@ -224,7 +322,7 @@ namespace TMP.WORK.AramisChetchiki.ViewModel
 
                     _pivotCollection.Add(new MatrixModelDelegate()
                     {
-                        Header = "Свод по населенному пункту и\nколичеству просроченных",
+                        Header = "Свод по населенному пункту и количеству просроченных",
                         Description = "* количество счётчиков",
                         ShowRowsTotal = false,
                         GetRowHeaderValuesFunc = () => meterPerLocality.Select(i => MatrixHeaderCell.CreateRowHeader(i.Key.ToString())),
@@ -252,7 +350,7 @@ namespace TMP.WORK.AramisChetchiki.ViewModel
 
                     _pivotCollection.Add(new MatrixModelDelegate()
                     {
-                        Header = "Свод по подстанции и\nпринципу действия",
+                        Header = "Свод по подстанции и принципу действия",
                         Description = "* количество счётчиков",
                         GetRowHeaderValuesFunc = () => this._data.Meters.Select(i => i.Подстанция).Distinct().OrderBy(i => i).Select(i => MatrixHeaderCell.CreateRowHeader(i)),
                         GetColumnHeaderValuesFunc = () => this._data.Meters

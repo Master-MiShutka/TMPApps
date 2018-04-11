@@ -8,7 +8,6 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Padding="2"
     BorderBrush="{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}"
-    BorderThickness="1"
     ItemsSource="{Binding Path=Matrix.Items, RelativeSource={RelativeSource Mode=Self}}"
     SnapsToDevicePixels="True"
     UseLayoutRounding="True"
