@@ -1,14 +1,14 @@
 ﻿/*************************************************************************************
+   
+   Toolkit for WPF
 
-   Extended WPF Toolkit
-
-   Copyright (C) 2007-2013 Xceed Software Inc.
+   Copyright (C) 2007-2018 Xceed Software Inc.
 
    This program is provided to you under the terms of the Microsoft Public
    License (Ms-PL) as published at http://wpftoolkit.codeplex.com/license 
 
    For more features, controls, and fast professional support,
-   pick up the Plus Edition at http://xceed.com/wpf_toolkit
+   pick up the Plus Edition at https://xceed.com/xceed-toolkit-plus-for-wpf/
 
    Stay informed: follow @datagrid on Twitter or Like http://facebook.com/datagrids
 
@@ -18,6 +18,7 @@ using System;
 using System.Windows.Controls;
 using System.Windows;
 using System.ComponentModel;
+using System.Windows.Automation.Peers;
 
 namespace Xceed.Wpf.Toolkit.PropertyGrid
 {
@@ -28,6 +29,7 @@ namespace Xceed.Wpf.Toolkit.PropertyGrid
   /// </summary>
   public class PropertyItemsControl : ItemsControl
   {
+
     public PropertyItemsControl()
     {
       var propertyItemsControlProperties = TypeDescriptor.GetProperties( this, new Attribute[] { new PropertyFilterAttribute( PropertyFilterOptions.All ) } );
@@ -41,8 +43,14 @@ namespace Xceed.Wpf.Toolkit.PropertyGrid
       {
         prop2.SetValue( this, Enum.ToObject( prop2.PropertyType, 1 ) );
       }
+        //this.SetValue(VirtualizingStackPanel.IsVirtualizingProperty, true);
+        //this.SetValue(VirtualizingStackPanel.VirtualizationModeProperty, VirtualizationMode.Recycling);
+#if NET45
+        this.SetValue(VirtualizingStackPanel.ScrollUnitProperty, ScrollUnit.Item);
+        this.SetValue(VirtualizingStackPanel.IsVirtualizingWhenGroupingProperty, true);
+#endif
     }
-
+      
     #region PreparePropertyItemEvent Attached Routed Event
 
     internal static readonly RoutedEvent PreparePropertyItemEvent = EventManager.RegisterRoutedEvent( "PreparePropertyItem", RoutingStrategy.Bubble, typeof( PropertyItemEventHandler ), typeof( PropertyItemsControl ) );
@@ -104,5 +112,10 @@ namespace Xceed.Wpf.Toolkit.PropertyGrid
       this.RaiseClearPropertyItemEvent( ( PropertyItemBase )element, item );
       base.ClearContainerForItemOverride( element, item );
     }
-  }
+
+        protected override AutomationPeer OnCreateAutomationPeer()
+        {
+            return new PropertyItemsControlAutomationPeer(this);
+        }
+    }
 }

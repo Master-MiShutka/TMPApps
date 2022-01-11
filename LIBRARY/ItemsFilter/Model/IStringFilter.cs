@@ -1,6 +1,7 @@
-﻿using System;
-namespace ItemsFilter.Model
+﻿namespace ItemsFilter.Model
 {
+    using System;
+
     /// <summary>
     /// Defines the contract for a string filter.
     /// </summary>
@@ -10,6 +11,7 @@ namespace ItemsFilter.Model
         /// Get or set string filter compare mode.
         /// </summary>
         StringFilterMode Mode { get; set; }
+
         /// <summary>
         /// Gets or sets the value to look for.
         /// </summary>

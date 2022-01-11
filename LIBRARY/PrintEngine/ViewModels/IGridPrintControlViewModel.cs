@@ -1,7 +1,6 @@
 namespace TMP.PrintEngine.ViewModels
 {
-    public interface IGridPrintControlViewModel:IItemsPrintControlViewModel
+    public interface IGridPrintControlViewModel : IItemsPrintControlViewModel
     {
-        
     }
 }

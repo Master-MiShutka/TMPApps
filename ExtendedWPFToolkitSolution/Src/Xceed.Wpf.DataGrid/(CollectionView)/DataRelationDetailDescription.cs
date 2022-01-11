@@ -15,15 +15,12 @@
   ***********************************************************************************/
 
 using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Data;
-using System.Diagnostics;
 using System.Collections;
+using System.Data;
 
 namespace Xceed.Wpf.DataGrid
 {
-  public class DataRelationDetailDescription : DataGridDetailDescription
+  internal class DataRelationDetailDescription : DataGridDetailDescription
   {
     public DataRelationDetailDescription()
       : base()
@@ -39,6 +36,8 @@ namespace Xceed.Wpf.DataGrid
       this.DataRelation = relation;
       m_userAssignedDataRelation = true;
     }
+
+    #region DataRelation Property
 
     [System.Diagnostics.CodeAnalysis.SuppressMessage( "Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly" )]
     public DataRelation DataRelation
@@ -60,6 +59,8 @@ namespace Xceed.Wpf.DataGrid
         this.Seal();
       }
     }
+
+    #endregion
 
     protected internal override void Initialize( DataGridCollectionViewBase parentCollectionView )
     {

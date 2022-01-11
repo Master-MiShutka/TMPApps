@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace TMPApplication
+﻿namespace TMPApplication
 {
+    using System;
+
     /// <summary>
     /// Exception thrown by the BindingExceptionThrower each time a WPF binding error occurs
     /// </summary>
@@ -11,7 +11,6 @@ namespace TMPApplication
         public BindingException(string message)
             : base(message)
         {
-            ;            
         }
     }
 }

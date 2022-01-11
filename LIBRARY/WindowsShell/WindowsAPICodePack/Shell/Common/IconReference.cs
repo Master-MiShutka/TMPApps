@@ -1,13 +1,13 @@
-﻿//Copyright (c) Microsoft Corporation.  All rights reserved.
-
-using System;
-using Microsoft.WindowsAPICodePack.Resources;
+﻿// Copyright (c) Microsoft Corporation.  All rights reserved.
 
 namespace Microsoft.WindowsAPICodePack.Shell
 {
+    using System;
+    using Microsoft.WindowsAPICodePack.Resources;
+
     /// <summary>
-    /// A refence to an icon resource 
-    /// </summary>    
+    /// A refence to an icon resource
+    /// </summary>
     public struct IconReference
     {
         #region Private members
@@ -28,12 +28,12 @@ namespace Microsoft.WindowsAPICodePack.Shell
         {
             if (string.IsNullOrEmpty(moduleName))
             {
-                throw new ArgumentNullException("moduleName");
+                throw new ArgumentNullException(nameof(moduleName));
             }
 
             this.moduleName = moduleName;
-            ResourceId = resourceId;
-            referencePath = string.Format(System.Globalization.CultureInfo.InvariantCulture,
+            this.ResourceId = resourceId;
+            this.referencePath = string.Format(System.Globalization.CultureInfo.InvariantCulture,
                 "{0},{1}", moduleName, resourceId);
         }
 
@@ -46,18 +46,18 @@ namespace Microsoft.WindowsAPICodePack.Shell
         {
             if (string.IsNullOrEmpty(refPath))
             {
-                throw new ArgumentNullException("refPath");
+                throw new ArgumentNullException(nameof(refPath));
             }
 
             string[] refParams = refPath.Split(commaSeparator);
 
             if (refParams.Length != 2 || string.IsNullOrEmpty(refParams[0]) || string.IsNullOrEmpty(refParams[1]))
             {
-                throw new ArgumentException(LocalizedMessages.InvalidReferencePath, "refPath");
+                throw new ArgumentException(LocalizedMessages.InvalidReferencePath, nameof(refPath));
             }
 
-            moduleName = refParams[0];
-            ResourceId = int.Parse(refParams[1], System.Globalization.CultureInfo.InvariantCulture);
+            this.moduleName = refParams[0];
+            this.ResourceId = int.Parse(refParams[1], System.Globalization.CultureInfo.InvariantCulture);
 
             this.referencePath = refPath;
         }
@@ -67,17 +67,16 @@ namespace Microsoft.WindowsAPICodePack.Shell
         /// </summary>
         public string ModuleName
         {
-            get
-            {
-                return moduleName;
-            }
+            get => this.moduleName;
+
             set
             {
                 if (string.IsNullOrEmpty(value))
                 {
-                    throw new ArgumentNullException("value");
+                    throw new ArgumentNullException(nameof(value));
                 }
-                moduleName = value;
+
+                this.moduleName = value;
             }
         }
 
@@ -91,28 +90,26 @@ namespace Microsoft.WindowsAPICodePack.Shell
         /// </summary>
         public string ReferencePath
         {
-            get
-            {
-                return referencePath;
-            }
+            get => this.referencePath;
+
             set
             {
                 if (string.IsNullOrEmpty(value))
                 {
-                    throw new ArgumentNullException("value");
+                    throw new ArgumentNullException(nameof(value));
                 }
 
                 string[] refParams = value.Split(commaSeparator);
 
                 if (refParams.Length != 2 || string.IsNullOrEmpty(refParams[0]) || string.IsNullOrEmpty(refParams[1]))
                 {
-                    throw new ArgumentException(LocalizedMessages.InvalidReferencePath, "value");
+                    throw new ArgumentException(LocalizedMessages.InvalidReferencePath, nameof(value));
                 }
 
-                ModuleName = refParams[0];
-                ResourceId = int.Parse(refParams[1], System.Globalization.CultureInfo.InvariantCulture);
+                this.ModuleName = refParams[0];
+                this.ResourceId = int.Parse(refParams[1], System.Globalization.CultureInfo.InvariantCulture);
 
-                referencePath = value;
+                this.referencePath = value;
             }
         }
 
@@ -147,8 +144,12 @@ namespace Microsoft.WindowsAPICodePack.Shell
         /// <returns>Returns true if the objects are equal; false otherwise.</returns>
         public override bool Equals(object obj)
         {
-            if (obj == null || !(obj is IconReference)) { return false; }
-            return (this == (IconReference)obj);
+            if (obj == null || !(obj is IconReference))
+            {
+                return false;
+            }
+
+            return this == (IconReference)obj;
         }
 
         /// <summary>
@@ -158,11 +159,9 @@ namespace Microsoft.WindowsAPICodePack.Shell
         public override int GetHashCode()
         {
             int hash = this.moduleName.GetHashCode();
-            hash = hash * 31 + this.referencePath.GetHashCode();
-            hash = hash * 31 + this.ResourceId.GetHashCode();
+            hash = (hash * 31) + this.referencePath.GetHashCode();
+            hash = (hash * 31) + this.ResourceId.GetHashCode();
             return hash;
         }
-
     }
-
 }

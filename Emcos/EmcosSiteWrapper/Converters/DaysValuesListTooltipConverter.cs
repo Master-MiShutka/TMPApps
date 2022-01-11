@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
 using System.Linq;
+using TMP.Work.Emcos.Model.Balance;
 
 namespace TMP.Work.Emcos.Converters
 {
@@ -11,19 +12,24 @@ namespace TMP.Work.Emcos.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            var values = (IList<Model.Balans.DataValue>)value;
+            IDirectedEnergy energy = (IDirectedEnergy)value;
 
-            if (values == null)
+            if (energy == null)
                 return DependencyProperty.UnsetValue;
 
-            double sum = values.Sum((i) => i.DoubleValue == null ? 0 : i.DoubleValue.Value);
-            double av = values.Average((i) => i.DoubleValue == null ? 0 : i.DoubleValue.Value);
-            double min = values.Min((i) => i.DoubleValue == null ? 0 : i.DoubleValue.Value);
-            double max = values.Max((i) => i.DoubleValue == null ? 0 : i.DoubleValue.Value);
+            if (energy.SummOfDaysValue == null &&
+                energy.DaysValuesAverage == null &&
+                energy.DaysValuesMin == null &&
+                energy.DaysValuesMax == null &&
+                energy.DaysValuesWithStatus == null)
+                return DependencyProperty.UnsetValue;
 
-            int missing = values.Count((i) => i.Status == Model.Balans.DataValueStatus.Missing);
-
-            return string.Format("Сумма: {0:n2}\nСреднее: {1:n2}\nМинимальное: {2:n2}\nМаксимальное: {3:n2}\nОтсутствующих данных: {4}", sum, av, min, max, missing);
+            return string.Format("Сумма: {0:n2}\nСреднее: {1:n2}\nМинимальное: {2:n2}\nМаксимальное: {3:n2}\nОтсутствующих данных: {4}", 
+                energy.SummOfDaysValue ?? 0, 
+                energy.DaysValuesAverage ?? 0, 
+                energy.DaysValuesMin ?? 0, 
+                energy.DaysValuesMax ?? 0, 
+                energy.DaysValuesWithStatus.Count(day => day.Status == DataValueStatus.Missing));
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

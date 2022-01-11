@@ -1,10 +1,10 @@
-﻿using System;
-using System.Linq;
-using System.Windows;
-using System.Windows.Markup;
-
-namespace TMP.Extensions
+﻿namespace TMP.Extensions
 {
+    using System;
+    using System.Linq;
+    using System.Windows;
+    using System.Windows.Markup;
+
     public class ValueFromStyleExtension : MarkupExtension
     {
         public ValueFromStyleExtension()
@@ -12,17 +12,22 @@ namespace TMP.Extensions
         }
 
         public object StyleKey { get; set; }
+
         public DependencyProperty Property { get; set; }
 
         public override object ProvideValue(IServiceProvider serviceProvider)
         {
-            if (StyleKey == null || Property == null)
+            if (this.StyleKey == null || this.Property == null)
+            {
                 return null;
-            object value = GetValueFromStyle(StyleKey, Property);
+            }
+
+            object value = GetValueFromStyle(this.StyleKey, this.Property);
             if (value is MarkupExtension)
             {
                 return ((MarkupExtension)value).ProvideValue(serviceProvider);
             }
+
             return value;
         }
 
@@ -43,6 +48,7 @@ namespace TMP.Extensions
 
                 style = style.BasedOn;
             }
+
             return null;
         }
     }

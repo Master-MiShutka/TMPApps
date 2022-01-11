@@ -1,13 +1,13 @@
-﻿//Copyright (c) Microsoft Corporation.  All rights reserved.
-
-using System;
-using System.Collections.Generic;
-using Microsoft.WindowsAPICodePack.Shell.Resources;
+﻿// Copyright (c) Microsoft Corporation.  All rights reserved.
 
 namespace Microsoft.WindowsAPICodePack.Shell
 {
+    using System;
+    using System.Collections.Generic;
+    using Microsoft.WindowsAPICodePack.Shell.Resources;
+
     /// <summary>
-    /// The FolderTypes values represent a view template applied to a folder, 
+    /// The FolderTypes values represent a view template applied to a folder,
     /// usually based on its intended use and contents.
     /// </summary>
     internal static class FolderTypes
@@ -180,13 +180,13 @@ namespace Microsoft.WindowsAPICodePack.Shell
         internal static Guid Searches = new Guid(
             0x0b0ba2e3, 0x405f, 0x415e, 0xa6, 0xee, 0xca, 0xd6, 0x25, 0x20, 0x78, 0x53);
 
+        private static Dictionary<Guid, string> types;
 
-        static Dictionary<Guid, string> types;
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1810:InitializeReferenceTypeStaticFieldsInline")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1810:InitializeReferenceTypeStaticFieldsInline", Justification = "ToDo")]
         static FolderTypes()
         {
             types = new Dictionary<Guid, string>();
+
             // Review: These Localized messages could probably be a reflected value of the field's name.
             types.Add(NotSpecified, LocalizedMessages.FolderTypeNotSpecified);
             types.Add(Invalid, LocalizedMessages.FolderTypeInvalid);

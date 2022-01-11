@@ -1,12 +1,13 @@
-﻿using System.Collections.Generic;
-using System.Xml.Linq;
-
-namespace TemplateEngine.Docx.Processors
+﻿namespace TemplateEngine.Docx.Processors
 {
-	internal interface IProcessor
-	{
+    using System.Collections.Generic;
+    using System.Xml.Linq;
 
-		IProcessor SetRemoveContentControls(bool isNeedToRemove);
-		ProcessResult FillContent(XElement contentControl, IEnumerable<IContentItem> items);
-	}
-}
+    internal interface IProcessor
+    {
+
+        IProcessor SetRemoveContentControls(bool isNeedToRemove);
+
+        ProcessResult FillContent(XElement contentControl, IEnumerable<IContentItem> items);
+    }
+}

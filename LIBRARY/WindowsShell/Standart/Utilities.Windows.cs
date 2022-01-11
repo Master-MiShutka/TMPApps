@@ -6,9 +6,9 @@
 
     public static partial class Utility
     {
-        private static readonly Version _osVersion = Environment.OSVersion.Version;
+        private static readonly Version osVersion = Environment.OSVersion.Version;
 
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "ToDo")]
         public static void SafeDestroyIcon(ref IntPtr hicon)
         {
             IntPtr p = hicon;
@@ -20,7 +20,7 @@
         }
 
         /// <summary>GDI's DeleteObject</summary>
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "ToDo")]
         public static void SafeDeleteObject(ref IntPtr gdiObject)
         {
             IntPtr p = gdiObject;
@@ -31,7 +31,7 @@
             }
         }
 
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "ToDo")]
         public static void SafeDestroyWindow(ref IntPtr hwnd)
         {
             IntPtr p = hwnd;
@@ -44,7 +44,7 @@
 
         /// <summary>GDI+'s DisposeImage</summary>
         /// <param name="gdipImage"></param>
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "ToDo")]
         public static void SafeDisposeImage(ref IntPtr gdipImage)
         {
             IntPtr p = gdipImage;
@@ -55,8 +55,8 @@
             }
         }
 
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        [SuppressMessage("Microsoft.Security", "CA2122:DoNotIndirectlyExposeMethodsWithLinkDemands")]
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "ToDo")]
+        [SuppressMessage("Microsoft.Security", "CA2122:DoNotIndirectlyExposeMethodsWithLinkDemands", Justification = "ToDo")]
         public static void SafeCoTaskMemFree(ref IntPtr ptr)
         {
             IntPtr p = ptr;
@@ -67,8 +67,8 @@
             }
         }
 
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        [SuppressMessage("Microsoft.Security", "CA2122:DoNotIndirectlyExposeMethodsWithLinkDemands")]
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "ToDo")]
+        [SuppressMessage("Microsoft.Security", "CA2122:DoNotIndirectlyExposeMethodsWithLinkDemands", Justification = "ToDo")]
         public static void SafeFreeHGlobal(ref IntPtr hglobal)
         {
             IntPtr p = hglobal;
@@ -79,9 +79,10 @@
             }
         }
 
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        [SuppressMessage("Microsoft.Security", "CA2122:DoNotIndirectlyExposeMethodsWithLinkDemands")]
-        public static void SafeRelease<T>(ref T comObject) where T : class
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "ToDo")]
+        [SuppressMessage("Microsoft.Security", "CA2122:DoNotIndirectlyExposeMethodsWithLinkDemands", Justification = "ToDo")]
+        public static void SafeRelease<T>(ref T comObject)
+            where T : class
         {
             T t = comObject;
             comObject = default(T);
@@ -92,16 +93,10 @@
             }
         }
 
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        public static bool IsOSVistaOrNewer
-        {
-            get { return _osVersion >= new Version(6, 0); }
-        }
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "ToDo")]
+        public static bool IsOSVistaOrNewer => osVersion >= new Version(6, 0);
 
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        public static bool IsOSWindows7OrNewer
-        {
-            get { return _osVersion >= new Version(6, 1); }
-        }
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "ToDo")]
+        public static bool IsOSWindows7OrNewer => osVersion >= new Version(6, 1);
     }
 }

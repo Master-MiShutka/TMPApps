@@ -1,7 +1,7 @@
-﻿using System.Diagnostics;
-
-namespace TMP.Shared.ObjectsBuilder
+﻿namespace TMP.Shared.ObjectsBuilder
 {
+    using System.Diagnostics;
+
     [DebuggerDisplay("Name={FieldName}, Type={FieldType}")]
     public class Field
     {
@@ -10,7 +10,7 @@ namespace TMP.Shared.ObjectsBuilder
 
         public override string ToString()
         {
-            return FieldName + " - " + FieldType.Name;
+            return this.FieldName + " - " + this.FieldType.Name;
         }
     }
 }

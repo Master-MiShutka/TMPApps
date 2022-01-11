@@ -1,44 +1,49 @@
-﻿using System;
-
-namespace TemplateEngine.Docx
+﻿namespace TemplateEngine.Docx
 {
-	[ContentItemName("Field")]
-	public class FieldContent : HiddenContent<FieldContent>, IEquatable<FieldContent>
-	{
+    using System;
+
+    [ContentItemName("Field")]
+    public class FieldContent : HiddenContent<FieldContent>, IEquatable<FieldContent>
+    {
         public FieldContent()
         {
-            
         }
 
         public FieldContent(string name, string value)
         {
-            Name = name;
-            Value = value;
+            this.Name = name;
+            this.Value = value;
         }
-   
-	    public string Value { get; set; }
 
-	    #region Equals
+        public string Value { get; set; }
+
+        #region Equals
 
         public bool Equals(FieldContent other)
-		{
-			if (other == null) return false;
+        {
+            if (other == null)
+            {
+                return false;
+            }
 
-			return Name.Equals(other.Name) &&
-			       Value.Equals(other.Value);
-		}
+            return this.Name.Equals(other.Name) &&
+                   this.Value.Equals(other.Value);
+        }
 
-		public override bool Equals(IContentItem other)
-		{
-			if (!(other is FieldContent)) return false;
+        public override bool Equals(IContentItem other)
+        {
+            if (!(other is FieldContent))
+            {
+                return false;
+            }
 
-			return Equals((FieldContent)other);
-		}
+            return this.Equals((FieldContent)other);
+        }
 
-		public override int GetHashCode()
-		{
-			return new { Name, Value }.GetHashCode();
-		}
+        public override int GetHashCode()
+        {
+            return new { this.Name, this.Value }.GetHashCode();
+        }
 
         #endregion
     }

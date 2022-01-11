@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace TMP.Common.JsonUtils.JsonClassGenerator
+﻿namespace TMP.Common.JsonUtils.JsonClassGenerator
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+
     public enum JsonTypeEnum
     {
         Anything,
@@ -23,6 +23,6 @@ namespace TMP.Common.JsonUtils.JsonClassGenerator
         Array,
         Dictionary,
         NullableSomething,
-        NonConstrained
+        NonConstrained,
     }
 }

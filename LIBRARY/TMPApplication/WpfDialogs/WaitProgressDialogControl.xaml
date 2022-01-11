@@ -21,9 +21,11 @@
             Margin="0,5"
             HorizontalAlignment="Center"
             Text="{Binding DisplayText}"
+            TextAlignment="Center"
             TextWrapping="Wrap" />
         <ProgressBar
             MinHeight="20"
+            Margin="0,10,0,0"
             IsIndeterminate="{Binding IsIndeterminate}"
             Maximum="100"
             Minimum="0"

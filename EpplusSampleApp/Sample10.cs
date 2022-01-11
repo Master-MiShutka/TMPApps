@@ -1,67 +1,69 @@
 ﻿/*******************************************************************************
  * You may amend and distribute as you like, but don't remove this header!
- * 
+ *
  * All rights reserved.
- * 
- * EPPlus is an Open Source project provided under the 
- * GNU General Public License (GPL) as published by the 
+ *
+ * EPPlus is an Open Source project provided under the
+ * GNU General Public License (GPL) as published by the
  * Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
- * 
+ *
  * EPPlus provides server-side generation of Excel 2007 spreadsheets.
  * See http://www.codeplex.com/EPPlus for details.
  *
  *
- * 
+ *
  * The GNU General Public License can be viewed at http://www.opensource.org/licenses/gpl-license.php
  * If you unfamiliar with this license or have questions about it, here is an http://www.gnu.org/licenses/gpl-faq.html
- * 
- * The code for this project may be used and redistributed by any means PROVIDING it is 
- * not sold for profit without the author's written consent, and providing that this notice 
+ *
+ * The code for this project may be used and redistributed by any means PROVIDING it is
+ * not sold for profit without the author's written consent, and providing that this notice
  * and the author's name and all copyright notices remain intact.
- * 
- * All code and executables are provided "as is" with no warranty either express or implied. 
+ *
+ * All code and executables are provided "as is" with no warranty either express or implied.
  * The author accepts no liability for any damage or loss of business that this product may cause.
  *
  *
  * Code change notes:
- * 
+ *
  * Author							Change						Date
  *******************************************************************************
  * Jan Källman		Added		28 Oct 2010
  *******************************************************************************/
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
-using OfficeOpenXml;
-using System.Drawing;
-using OfficeOpenXml.Style;
-
 namespace EPPlusSamples
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Drawing;
+    using System.IO;
+    using System.Linq;
+    using System.Text;
+    using OfficeOpenXml;
+    using OfficeOpenXml.Style;
+
     public static class Sample10
     {
         public static void RunSample10(DirectoryInfo outputDir)
-        {            
-            //Create a Sample10 directory...
-            if(!Directory.Exists(outputDir.FullName + @"\Sample10"))
+        {
+            // Create a Sample10 directory...
+            if (!Directory.Exists(outputDir.FullName + @"\Sample10"))
             {
                 outputDir.CreateSubdirectory("Sample10");
             }
-            outputDir=new DirectoryInfo(outputDir + @"\Sample10");
 
-            //create the three FileInfo objects...
+            outputDir = new DirectoryInfo(outputDir + @"\Sample10");
+
+            // create the three FileInfo objects...
             FileInfo templateFile = new FileInfo(outputDir.FullName + @"\Template.xlsx");
             if (templateFile.Exists)
             {
-                templateFile.Delete(); 
+                templateFile.Delete();
                 templateFile = new FileInfo(outputDir.FullName + @"\Template.xlsx");
             }
+
             FileInfo answerFile = new FileInfo(outputDir.FullName + @"\Answers.xlsx");
             if (answerFile.Exists)
             {
-                answerFile.Delete();  
+                answerFile.Delete();
                 answerFile = new FileInfo(outputDir.FullName + @"\Answers.xlsx");
             }
 
@@ -72,11 +74,11 @@ namespace EPPlusSamples
                 JKAnswerFile = new FileInfo(outputDir.FullName + @"\JKAnswers.xlsx");
             }
 
-            //Create the template...
+            // Create the template...
             using (
             ExcelPackage package = new ExcelPackage(templateFile))
             {
-                //Lock the workbook totally
+                // Lock the workbook totally
                 var workbook = package.Workbook;
                 workbook.Protection.LockWindows = true;
                 workbook.Protection.LockStructure = true;
@@ -85,18 +87,18 @@ namespace EPPlusSamples
                 workbook.View.ShowVerticalScrollBar = false;
                 workbook.View.ShowSheetTabs = false;
 
-                //Set a password for the workbookprotection
+                // Set a password for the workbookprotection
                 workbook.Protection.SetPassword("EPPlus");
 
-                //Encrypt with no password
+                // Encrypt with no password
                 package.Encryption.IsEncrypted = true;
 
                 var sheet = package.Workbook.Worksheets.Add("Quiz");
                 sheet.View.ShowGridLines = false;
                 sheet.View.ShowHeaders = false;
-                using(var range=sheet.Cells["A:XFD"])
+                using (var range = sheet.Cells["A:XFD"])
                 {
-                    range.Style.Fill.PatternType=ExcelFillStyle.Solid;
+                    range.Style.Fill.PatternType = ExcelFillStyle.Solid;
                     range.Style.Fill.BackgroundColor.SetColor(Color.LightGray);
                     range.Style.Font.Name = "Broadway";
                     range.Style.Hidden = true;
@@ -130,11 +132,12 @@ namespace EPPlusSamples
                     r.Style.Hidden = false;
                     r.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
                 }
+
                 sheet.Select("B3");
                 sheet.Protection.SetPassword("EPPlus");
                 sheet.Protection.AllowSelectLockedCells = false;
 
-                //Options question 1
+                // Options question 1
                 var list1 = sheet.Cells["C7"].DataValidation.AddListDataValidation();
                 list1.Formula.Values.Add("Bern");
                 list1.Formula.Values.Add("Stockholm");
@@ -156,23 +159,22 @@ namespace EPPlusSamples
                 list3.ShowErrorMessage = true;
                 list3.Error = "Please select a value from the list";
 
-
-                //Save, and the template is ready for use
+                // Save, and the template is ready for use
                 package.Save();
 
-                //Quiz-template is done, now create the answer template and encrypt it...
-                using (var packageAnswers = new ExcelPackage(package.Stream))       //We use the stream from the template here to get a copy of it.
+                // Quiz-template is done, now create the answer template and encrypt it...
+                using (var packageAnswers = new ExcelPackage(package.Stream))       // We use the stream from the template here to get a copy of it.
                 {
                     var sheetAnswers = packageAnswers.Workbook.Worksheets[1];
                     sheetAnswers.Cells["C7"].Value = "Stockholm";
                     sheetAnswers.Cells["C9"].Value = "Third";
                     sheetAnswers.Cells["C11"].Value = "Alfred";
 
-                    packageAnswers.Encryption.Algorithm = EncryptionAlgorithm.AES192;   //For the answers we want a little bit stronger encryption
-                    packageAnswers.SaveAs(answerFile, "EPPlus");                        //Save and set the password to EPPlus. The password can also be set using packageAnswers.Encryption.Password property
+                    packageAnswers.Encryption.Algorithm = EncryptionAlgorithm.AES192;   // For the answers we want a little bit stronger encryption
+                    packageAnswers.SaveAs(answerFile, "EPPlus");                        // Save and set the password to EPPlus. The password can also be set using packageAnswers.Encryption.Password property
                 }
 
-                //Ok, Since this is     qan example we create one user answer...
+                // Ok, Since this is     qan example we create one user answer...
                 using (var packageAnswers = new ExcelPackage(package.Stream))
                 {
                     var sheetUser = packageAnswers.Workbook.Worksheets[1];
@@ -181,23 +183,22 @@ namespace EPPlusSamples
                     sheetUser.Cells["C9"].Value = "Third";
                     sheetUser.Cells["C11"].Value = "Alfred";
 
-                    packageAnswers.SaveAs(JKAnswerFile, "JK");  //We use default encryption here (AES128) and Password JK
+                    packageAnswers.SaveAs(JKAnswerFile, "JK");  // We use default encryption here (AES128) and Password JK
                 }
             }
 
-
-            //Now lets correct the user form...
-            var packAnswers = new ExcelPackage(answerFile, "EPPlus");    //Supply the password, so the file can be decrypted
-            var packUser =  new ExcelPackage(JKAnswerFile, "JK");        //Supply the password, so the file can be decrypted
+            // Now lets correct the user form...
+            var packAnswers = new ExcelPackage(answerFile, "EPPlus");    // Supply the password, so the file can be decrypted
+            var packUser = new ExcelPackage(JKAnswerFile, "JK");        // Supply the password, so the file can be decrypted
 
             var wsAnswers = packAnswers.Workbook.Worksheets[1];
             var wsUser = packUser.Workbook.Worksheets[1];
 
-            //Enumerate the three answers
+            // Enumerate the three answers
             foreach (var cell in wsAnswers.Cells["C7,C9,C11"])
             {
                 wsUser.Cells[cell.Address].Style.Fill.PatternType = ExcelFillStyle.Solid;
-                if (cell.Value.ToString().Equals(wsUser.Cells[cell.Address].Value.ToString(), StringComparison.InvariantCultureIgnoreCase)) //Correct Answer?
+                if (cell.Value.ToString().Equals(wsUser.Cells[cell.Address].Value.ToString(), StringComparison.InvariantCultureIgnoreCase)) // Correct Answer?
                 {
                     wsUser.Cells[cell.Address].Style.Fill.BackgroundColor.SetColor(Color.Green);
                 }
@@ -206,6 +207,7 @@ namespace EPPlusSamples
                     wsUser.Cells[cell.Address].Style.Fill.BackgroundColor.SetColor(Color.Red);
                 }
             }
+
             packUser.Save();
         }
     }

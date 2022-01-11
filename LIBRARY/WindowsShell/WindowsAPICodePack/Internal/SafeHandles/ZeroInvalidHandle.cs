@@ -1,11 +1,11 @@
-﻿//Copyright (c) Microsoft Corporation.  All rights reserved.
-
-using System;
-using System.Runtime.InteropServices;
-using System.Security.Permissions;
+﻿// Copyright (c) Microsoft Corporation.  All rights reserved.
 
 namespace MS.WindowsAPICodePack.Internal
 {
+    using System;
+    using System.Runtime.InteropServices;
+    using System.Security.Permissions;
+
     /// <summary>
     /// Base class for Safe handles with Null IntPtr as invalid
     /// </summary>
@@ -22,11 +22,7 @@ namespace MS.WindowsAPICodePack.Internal
         /// <summary>
         /// Determines if this is a valid handle
         /// </summary>
-        public override bool IsInvalid
-        {
-            get { return handle == IntPtr.Zero; }
-        }
-
+        public override bool IsInvalid => this.handle == IntPtr.Zero;
     }
 }
 

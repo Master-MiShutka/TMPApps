@@ -81,26 +81,14 @@ namespace TMP.Wpf.CommonControls
         //
         public double PositionX
         {
-            get
-            {
-                return positionX;
-            }
-            set
-            {
-                positionX = value;
-            }
+            get => positionX;
+            set => positionX = value;
         }
 
         public double PositionY
         {
-            get
-            {
-                return positionY;
-            }
-            set
-            {
-                positionY = value;
-            }
+            get => positionY;
+            set => positionY = value;
         }
 
         protected override Size MeasureOverride(Size constraint)

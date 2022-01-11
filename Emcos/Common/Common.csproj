@@ -1,270 +1,24 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{5B1710D2-5DC8-4754-91B2-19165DE49B3D}</ProjectGuid>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
     <OutputType>library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>TMP.Wpf.Common</RootNamespace>
     <AssemblyName>TMP.Wpf.Common</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <WarningLevel>4</WarningLevel>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <UseWindowsForms>true</UseWindowsForms>
+    <UseWPF>true</UseWPF>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
     <OutputPath>..\..\out\Debug\Emcos\Libs\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
     <OutputPath>..\..\out\Release\Emcos\Libs\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Xml" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Xaml">
-      <RequiredTargetFramework>4.0</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="WindowsBase" />
-    <Reference Include="PresentationCore" />
-    <Reference Include="PresentationFramework" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="AppName.cs" />
-    <Compile Include="Controls\AsyncObservableCollection.cs" />
-    <Compile Include="Controls\ButtonsAlignment.cs" />
-    <Compile Include="Controls\CustomValidationPopup.cs" />
-    <Compile Include="Controls\Glow.cs" />
-    <Compile Include="Controls\GlowDirection.cs" />
-    <Compile Include="Controls\Helper\ButtonHelper.cs" />
-    <Compile Include="Controls\Helper\ControlsHelper.cs" />
-    <Compile Include="Controls\Helper\DataGridCellHelper.cs" />
-    <Compile Include="Controls\Helper\DataGridRowHelper.cs" />
-    <Compile Include="Controls\Helper\InputBindingsManager.cs" />
-    <Compile Include="Controls\Helper\TextBoxHelper.cs" />
-    <Compile Include="Controls\HiddableGridSplitter.cs" />
-    <Compile Include="Controls\IconPacks\PackIconModern.cs" />
-    <Compile Include="Controls\IconPacks\PackIconModernDataFactory.cs" />
-    <Compile Include="Controls\IconPacks\PackIconModernKind.cs" />
-    <Compile Include="Controls\MetroProgressBar.cs" />
-    <Compile Include="Controls\NumericUpDown.cs" />
-    <Compile Include="Controls\NumericUpDownChangedRoutedEventArgs.cs" />
-    <Compile Include="Controls\NumericUpDownChangedRoutedEventHandler.cs" />
-    <Compile Include="Controls\TableView\TableCellCollection.cs" />
-    <Compile Include="Controls\TableView\TableView.cs" />
-    <Compile Include="Controls\TableView\TableViewCell.cs" />
-    <Compile Include="Controls\TableView\TableViewCellCollection.cs" />
-    <Compile Include="Controls\TableView\TableViewCellsPanel.cs" />
-    <Compile Include="Controls\TableView\TableViewCellsPresenter.cs" />
-    <Compile Include="Controls\TableView\TableViewColumn.cs" />
-    <Compile Include="Controls\TableView\TableViewColumnHeader.cs" />
-    <Compile Include="Controls\TableView\TableViewColumnTotal.cs" />
-    <Compile Include="Controls\TableView\TableViewEvents.cs" />
-    <Compile Include="Controls\TableView\TableViewHeaderPanel.cs" />
-    <Compile Include="Controls\TableView\TableViewHeaderPresenter.cs" />
-    <Compile Include="Controls\TableView\TableViewHeaderThumb.cs" />
-    <Compile Include="Controls\TableView\TableViewRowsPanel.cs" />
-    <Compile Include="Controls\TableView\TableViewRowsPresenter.cs" />
-    <Compile Include="Controls\TableView\TableViewUtils.cs" />
-    <Compile Include="Controls\TreeHelper.cs" />
-    <Compile Include="Converters\NullToUnsetValueConverter.cs" />
-    <Compile Include="Converters\FontSizeOffsetConverter.cs" />
-    <Compile Include="Converters\MarkupConverter.cs" />
-    <Compile Include="Converters\ThicknessToDoubleConverter.cs" />
-    <Compile Include="Converters\ToUpperConverter.cs" />
-    <Compile Include="Converters\TreeListViewConverters.cs" />
-    <Compile Include="Controls\DropDownButton.cs" />
-    <Compile Include="DelegateCommand.cs" />
-    <Compile Include="GridViewRowPresenterWithGridLines.cs" />
-    <Compile Include="Controls\SplitButton.cs" />
-    <Compile Include="Native\ABEdge.cs" />
-    <Compile Include="Native\ABMsg.cs" />
-    <Compile Include="Native\APPBARDATA.cs" />
-    <Compile Include="Native\Constants.cs" />
-    <Compile Include="Native\CREATESTRUCT.cs" />
-    <Compile Include="Native\IconUtilities.cs" />
-    <Compile Include="Native\MARGINS.cs" />
-    <Compile Include="Native\MINMAXINFO.cs" />
-    <Compile Include="Native\MONITORINFO.cs" />
-    <Compile Include="Native\POINT.cs" />
-    <Compile Include="Native\RECT.cs" />
-    <Compile Include="Native\SafeLibraryHandle.cs" />
-    <Compile Include="Native\SystemMenuHelper.cs" />
-    <Compile Include="Native\UnsafeNativeMethods.cs" />
-    <Compile Include="Native\WindowHelper.cs" />
-    <Compile Include="Native\WINDOWPLACEMENT.cs" />
-    <Compile Include="TreeListView\ITreeModel.cs" />
-    <Compile Include="TreeListView\ObservableCollectionAdv.cs" />
-    <Compile Include="TreeListView\RowExpander.cs" />
-    <Compile Include="TreeListView\TreeListView.cs" />
-    <Compile Include="TreeListView\TreeListViewItem.cs" />
-    <Compile Include="TreeListView\TreeNode.cs" />
-    <Page Include="Styles\Button.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Styles\Accents\BaseDark.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Styles\Accents\BaseLight.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Styles\Accents\Blue.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Styles\Buttons.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Styles\Calendar.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Styles\CheckBox.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Styles\Colors.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Styles\Controls.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Styles\DataGrid.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Styles\DatePicker.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Styles\Fonts.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Styles\Label.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Styles\ListBox.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Styles\ProgressBar.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Styles\RadioButton.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Styles\ScrollBars.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Styles\Shared.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Styles\TextBlock.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Styles\TextBox.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Styles\ToolTip.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Styles\ValidationErrorTemplate.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Themes\DropDownButton.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Resources\Icons.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Themes\Glow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Themes\SplitButton.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Styles\Sizes.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Styles\ContextMenu.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Themes\Generic.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Styles\ListViewStyles.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Themes\NumericUpDown.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Styles\TreeListView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Themes\TableView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Properties\AssemblyInfo.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <AppDesigner Include="Properties\" />
-    <Page Include="Styles\Shadows.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\ControlLeft.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="controls_TableView.dgml" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\substation.png" />
@@ -281,12 +35,22 @@
   <ItemGroup>
     <Resource Include="Resources\area.png" />
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+  <ItemGroup>
+    <ProjectReference Include="..\..\LIBRARY\Shared\Shared.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="MsgBox\MessageBoxViewModel.cs" />
+    <Compile Remove="MsgBox\WPFMessageBox.cs" />
+    <Compile Remove="MsgBox\WPFMessageBoxControl.cs" />
+    <Compile Remove="MsgBox\WPFMessageBoxControlAutomationPeer.cs" />
+    <Compile Remove="MsgBox\WPFMessageBoxWindow.xaml.cs" />
+    <Page Remove="MsgBox\WPFMessageBoxWindow.xaml" />
+    <Page Remove="Styles\DataGridStyles.xaml" />
+  </ItemGroup>
 </Project>

@@ -1,13 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using MS.WindowsAPICodePack.Internal;
-using System.Runtime.InteropServices;
-using System.Runtime.InteropServices.ComTypes;
-
-namespace Microsoft.WindowsAPICodePack.Shell.Interop
+﻿namespace Microsoft.WindowsAPICodePack.Shell.Interop
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Runtime.InteropServices;
+    using System.Runtime.InteropServices.ComTypes;
+    using System.Text;
+    using MS.WindowsAPICodePack.Internal;
 
     internal static class ShellObjectWatcherNativeMethods
     {
@@ -18,16 +17,15 @@ namespace Microsoft.WindowsAPICodePack.Shell.Interop
 
         [DllImport("User32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
         public static extern uint RegisterClassEx(
-            ref WindowClassEx windowClass
-            );
+            ref WindowClassEx windowClass);
 
         [DllImport("User32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
         public static extern IntPtr CreateWindowEx(
             int extendedStyle,
             [MarshalAs(UnmanagedType.LPWStr)]
-            string className, //string className, //optional
+            string className, // string className, //optional
             [MarshalAs(UnmanagedType.LPWStr)]
-            string windowName, //window name
+            string windowName, // window name
             int style,
             int x,
             int y,
@@ -64,19 +62,19 @@ namespace Microsoft.WindowsAPICodePack.Shell.Interop
     {
         internal uint Size;
         internal uint Style;
-        
+
         internal ShellObjectWatcherNativeMethods.WndProcDelegate WndProc;
-        
+
         internal int ExtraClassBytes;
         internal int ExtraWindowBytes;
         internal IntPtr InstanceHandle;
         internal IntPtr IconHandle;
         internal IntPtr CursorHandle;
         internal IntPtr BackgroundBrushHandle;
-        
+
         internal string MenuName;
         internal string ClassName;
-        
+
         internal IntPtr SmallIconHandle;
     }
 
@@ -95,32 +93,32 @@ namespace Microsoft.WindowsAPICodePack.Shell.Interop
         /// <summary>
         /// Gets the window handle
         /// </summary>
-        public IntPtr WindowHandle { get { return windowHandle; } }
+        public IntPtr WindowHandle => this.windowHandle;
 
         /// <summary>
         /// Gets the window message
         /// </summary>
-        public uint Msg { get { return msg; } }
+        public uint Msg => this.msg;
 
         /// <summary>
         /// Gets the WParam
         /// </summary>
-        public IntPtr WParam { get { return wparam; } }
+        public IntPtr WParam => this.wparam;
 
         /// <summary>
         /// Gets the LParam
         /// </summary>
-        public IntPtr LParam { get { return lparam; } }
+        public IntPtr LParam => this.lparam;
 
         /// <summary>
         /// Gets the time
         /// </summary>
-        public int Time { get { return time; } }
+        public int Time => this.time;
 
         /// <summary>
         /// Gets the point
         /// </summary>
-        public NativePoint Point { get { return point; } }
+        public NativePoint Point => this.point;
 
         /// <summary>
         /// Creates a new instance of the Message struct
@@ -185,14 +183,13 @@ namespace Microsoft.WindowsAPICodePack.Shell.Interop
         /// <returns>Hash code for this message.</returns>
         public override int GetHashCode()
         {
-            int hash = WindowHandle.GetHashCode();
-            hash = hash * 31 + Msg.GetHashCode();
-            hash = hash * 31 + WParam.GetHashCode();
-            hash = hash * 31 + LParam.GetHashCode();
-            hash = hash * 31 + Time.GetHashCode();
-            hash = hash * 31 + Point.GetHashCode();
+            int hash = this.WindowHandle.GetHashCode();
+            hash = (hash * 31) + this.Msg.GetHashCode();
+            hash = (hash * 31) + this.WParam.GetHashCode();
+            hash = (hash * 31) + this.LParam.GetHashCode();
+            hash = (hash * 31) + this.Time.GetHashCode();
+            hash = (hash * 31) + this.Point.GetHashCode();
             return hash;
         }
     }
-
 }

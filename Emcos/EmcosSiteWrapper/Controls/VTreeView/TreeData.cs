@@ -114,15 +114,11 @@ namespace TMP.Work.Emcos.Controls.VTreeView
 
         protected void OnExpanding(ITreeNode TN)
         {
-            var before_handler = BeforeNodeExpanded;
-            if (before_handler != null)
-                before_handler(this, new NodeExpandEventArgs(TN));
+            BeforeNodeExpanded?.Invoke(this, new NodeExpandEventArgs(TN));
         }
         protected void OnExpandet(ITreeNode TN)
         {
-            var after_handler = AfterNodeExpanded;
-            if (after_handler != null)
-                after_handler(this, new NodeExpandEventArgs(TN));
+            AfterNodeExpanded?.Invoke(this, new NodeExpandEventArgs(TN));
         }
 
         #region INotifyPropertyChanged implementation

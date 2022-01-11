@@ -2,6 +2,6 @@
 {
     public enum ReportCreationMode
     {
-        One, Multiple
+        One, Multiple,
     }
 }

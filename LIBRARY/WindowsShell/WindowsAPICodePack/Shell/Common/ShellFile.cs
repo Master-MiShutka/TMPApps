@@ -1,10 +1,10 @@
-﻿//Copyright (c) Microsoft Corporation.  All rights reserved.
-
-using System.IO;
-using Microsoft.WindowsAPICodePack.Shell.Resources;
+﻿// Copyright (c) Microsoft Corporation.  All rights reserved.
 
 namespace Microsoft.WindowsAPICodePack.Shell
 {
+    using System.IO;
+    using Microsoft.WindowsAPICodePack.Shell.Resources;
+
     /// <summary>
     /// A file in the Shell Namespace
     /// </summary>
@@ -12,7 +12,7 @@ namespace Microsoft.WindowsAPICodePack.Shell
     {
         #region Internal Constructor
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors", Justification = "ToDo")]
         internal ShellFile(string path)
         {
             // Get the absolute path
@@ -26,17 +26,18 @@ namespace Microsoft.WindowsAPICodePack.Shell
                     LocalizedMessages.FilePathNotExist, path));
             }
 
-            ParsingName = absPath;
+            this.ParsingName = absPath;
         }
 
         internal ShellFile(IShellItem2 shellItem)
         {
-            nativeShellItem = shellItem;
+            this.nativeShellItem = shellItem;
         }
 
         #endregion
 
         #region Public Methods
+
         /// <summary>
         /// Constructs a new ShellFile object given a file path
         /// </summary>
@@ -54,10 +55,7 @@ namespace Microsoft.WindowsAPICodePack.Shell
         /// <summary>
         /// The path for this file
         /// </summary>
-        virtual public string Path
-        {
-            get { return this.ParsingName; }
-        }
+        virtual public string Path => this.ParsingName;
 
         #endregion
     }

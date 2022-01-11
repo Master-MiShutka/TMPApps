@@ -17,7 +17,7 @@ namespace TMP.ARMTES.Controls.DataViews
     /// <summary>
     /// Элемент управления для представления данных
     /// </summary>
-    public class DataViewer : Control, INotifyPropertyChanged
+    public class DataViewer : UserControl, INotifyPropertyChanged
     {
         static DataViewer()
         {
@@ -53,7 +53,7 @@ namespace TMP.ARMTES.Controls.DataViews
                 });
                 task.ContinueWith(t =>
                 {
-                    MessageBox.Show(SmallEngineViewerApp.GetExceptionDetails(t.Exception), "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show(App.GetExceptionDetails(t.Exception), "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                 }, TaskContinuationOptions.OnlyOnFaulted);
             });
 

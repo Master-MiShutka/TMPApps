@@ -1,14 +1,14 @@
 ﻿/*************************************************************************************
+   
+   Toolkit for WPF
 
-   Extended WPF Toolkit
-
-   Copyright (C) 2007-2013 Xceed Software Inc.
+   Copyright (C) 2007-2018 Xceed Software Inc.
 
    This program is provided to you under the terms of the Microsoft Public
    License (Ms-PL) as published at http://wpftoolkit.codeplex.com/license 
 
    For more features, controls, and fast professional support,
-   pick up the Plus Edition at http://xceed.com/wpf_toolkit
+   pick up the Plus Edition at https://xceed.com/xceed-toolkit-plus-for-wpf/
 
    Stay informed: follow @datagrid on Twitter or Like http://facebook.com/datagrids
 
@@ -18,6 +18,7 @@ using System;
 using System.Globalization;
 using System.Windows;
 using Xceed.Wpf.Toolkit.Primitives;
+
 
 namespace Xceed.Wpf.Toolkit
 {
@@ -144,7 +145,29 @@ namespace Xceed.Wpf.Toolkit
 
     #endregion
 
+    #region MaxLength
+
+    public static readonly DependencyProperty MaxLengthProperty = DependencyProperty.Register( "MaxLength", typeof( int ), typeof( NumericUpDown<T> ), new UIPropertyMetadata( 0 ) );
+    public int MaxLength
+    {
+      get
+      {
+        return ( int )GetValue( MaxLengthProperty );
+      }
+      set
+      {
+        SetValue( MaxLengthProperty, value );
+      }
+    }
+
+    #endregion //MaxLength
+
     #endregion //Properties
+
+    #region Overrides
+
+
+    #endregion
 
     #region Methods
 

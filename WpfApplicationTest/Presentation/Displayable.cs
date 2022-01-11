@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace WpfApplicationTest.Presentation
+﻿namespace WpfApplicationTest.Presentation
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+
     /// <summary>
     /// Provides a base implementation for objects that are displayed in the UI.
     /// </summary>
@@ -20,16 +20,16 @@ namespace WpfApplicationTest.Presentation
         /// <value>The display name.</value>
         public string DisplayName
         {
-            get { return this.displayName; }
+            get => this.displayName;
+
             set
             {
                 if (this.displayName != value)
                 {
                     this.displayName = value;
-                    OnPropertyChanged("DisplayName");
+                    this.OnPropertyChanged(nameof(this.DisplayName));
                 }
             }
         }
     }
-
 }

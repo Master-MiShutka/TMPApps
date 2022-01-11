@@ -1,18 +1,18 @@
-//Copyright (c) Microsoft Corporation.  All rights reserved.
-
-using System.Collections;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.Runtime.InteropServices;
-using Microsoft.WindowsAPICodePack.Shell;
+// Copyright (c) Microsoft Corporation.  All rights reserved.
 
 namespace Microsoft.WindowsAPICodePack.Dialogs
 {
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+    using System.Diagnostics;
+    using System.Runtime.InteropServices;
+    using Microsoft.WindowsAPICodePack.Shell;
+
     /// <summary>
     /// Creates a Vista or Windows 7 Common File Dialog, allowing the user to select one or more files.
     /// </summary>
-    /// 
+    ///
     public sealed class CommonOpenFileDialog : CommonFileDialog
     {
         private NativeFileOpenDialog openDialogCoClass;
@@ -50,7 +50,7 @@ namespace Microsoft.WindowsAPICodePack.Dialogs
         {
             get
             {
-                CheckFileNamesAvailable();
+                this.CheckFileNamesAvailable();
                 return base.FileNameCollection;
             }
         }
@@ -65,15 +65,15 @@ namespace Microsoft.WindowsAPICodePack.Dialogs
         {
             get
             {
-                // Check if we have selected files from the user.              
-                CheckFileItemsAvailable();
+                // Check if we have selected files from the user.
+                this.CheckFileItemsAvailable();
 
                 // temp collection to hold our shellobjects
                 ICollection<ShellObject> resultItems = new Collection<ShellObject>();
 
                 // Loop through our existing list of filenames, and try to create a concrete type of
                 // ShellObject (e.g. ShellLibrary, FileSystemFolder, ShellFile, etc)
-                foreach (IShellItem si in items)
+                foreach (IShellItem si in this.items)
                 {
                     resultItems.Add(ShellObjectFactory.Create(si));
                 }
@@ -82,60 +82,62 @@ namespace Microsoft.WindowsAPICodePack.Dialogs
             }
         }
 
-
         private bool multiselect;
+
         /// <summary>
         /// Gets or sets a value that determines whether the user can select more than one file.
         /// </summary>
         public bool Multiselect
         {
-            get { return multiselect; }
-            set { multiselect = value; }
+            get => this.multiselect;
+            set => this.multiselect = value;
         }
 
         private bool isFolderPicker;
+
         /// <summary>
         /// Gets or sets a value that determines whether the user can select folders or files.
         /// Default value is false.
         /// </summary>
         public bool IsFolderPicker
         {
-            get { return isFolderPicker; }
-            set { isFolderPicker = value; }
+            get => this.isFolderPicker;
+            set => this.isFolderPicker = value;
         }
 
         private bool allowNonFileSystem;
+
         /// <summary>
-        /// Gets or sets a value that determines whether the user can select non-filesystem items, 
+        /// Gets or sets a value that determines whether the user can select non-filesystem items,
         /// such as <b>Library</b>, <b>Search Connectors</b>, or <b>Known Folders</b>.
         /// </summary>
         public bool AllowNonFileSystemItems
         {
-            get { return allowNonFileSystem; }
-            set { allowNonFileSystem = value; }
+            get => this.allowNonFileSystem;
+            set => this.allowNonFileSystem = value;
         }
         #endregion
 
         internal override IFileDialog GetNativeFileDialog()
         {
-            Debug.Assert(openDialogCoClass != null, "Must call Initialize() before fetching dialog interface");
+            Debug.Assert(this.openDialogCoClass != null, "Must call Initialize() before fetching dialog interface");
 
-            return (IFileDialog)openDialogCoClass;
+            return (IFileDialog)this.openDialogCoClass;
         }
 
         internal override void InitializeNativeFileDialog()
         {
-            if (openDialogCoClass == null)
+            if (this.openDialogCoClass == null)
             {
-                openDialogCoClass = new NativeFileOpenDialog();
+                this.openDialogCoClass = new NativeFileOpenDialog();
             }
         }
 
         internal override void CleanUpNativeFileDialog()
         {
-            if (openDialogCoClass != null)
+            if (this.openDialogCoClass != null)
             {
-                Marshal.ReleaseComObject(openDialogCoClass);
+                Marshal.ReleaseComObject(this.openDialogCoClass);
             }
         }
 
@@ -144,7 +146,7 @@ namespace Microsoft.WindowsAPICodePack.Dialogs
             IShellItemArray resultsArray;
             uint count;
 
-            openDialogCoClass.GetResults(out resultsArray);
+            this.openDialogCoClass.GetResults(out resultsArray);
             resultsArray.GetCount(out count);
             names.Clear();
             for (int i = 0; i < count; i++)
@@ -158,7 +160,7 @@ namespace Microsoft.WindowsAPICodePack.Dialogs
             IShellItemArray resultsArray;
             uint count;
 
-            openDialogCoClass.GetResults(out resultsArray);
+            this.openDialogCoClass.GetResults(out resultsArray);
             resultsArray.GetCount(out count);
             items.Clear();
             for (int i = 0; i < count; i++)
@@ -169,20 +171,21 @@ namespace Microsoft.WindowsAPICodePack.Dialogs
 
         internal override ShellNativeMethods.FileOpenOptions GetDerivedOptionFlags(ShellNativeMethods.FileOpenOptions flags)
         {
-            if (multiselect)
+            if (this.multiselect)
             {
                 flags |= ShellNativeMethods.FileOpenOptions.AllowMultiSelect;
             }
-            if (isFolderPicker)
+
+            if (this.isFolderPicker)
             {
                 flags |= ShellNativeMethods.FileOpenOptions.PickFolders;
             }
-            
-            if (!allowNonFileSystem)
+
+            if (!this.allowNonFileSystem)
             {
                 flags |= ShellNativeMethods.FileOpenOptions.ForceFilesystem;
             }
-            else if (allowNonFileSystem)
+            else if (this.allowNonFileSystem)
             {
                 flags |= ShellNativeMethods.FileOpenOptions.AllNonStorageItems;
             }

@@ -1,0 +1,56 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <SuppressNETCoreSdkPreviewMessage>true</SuppressNETCoreSdkPreviewMessage>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <IsBuildingWpfTempProj Condition="$(MSBuildProjectName.Contains('_wpftmp')) != 'true'">false</IsBuildingWpfTempProj>
+        <IsBuildingWpfTempProj Condition="$(MSBuildProjectName.Contains('_wpftmp')) == 'true'">true</IsBuildingWpfTempProj>
+    </PropertyGroup>
+
+    <!-- Project properties -->
+    <PropertyGroup>
+        <TargetFrameworks>net6.0-windows</TargetFrameworks>
+        <AppendTargetFrameworkToOutputPath>true</AppendTargetFrameworkToOutputPath>
+        <GenerateDocumentationFile>false</GenerateDocumentationFile>
+        <AutoGenerateBindingRedirects Condition=" $(TargetFramework.StartsWith('net4')) ">true</AutoGenerateBindingRedirects>
+        
+        <AnalysisLevel>latest</AnalysisLevel>
+        <LangVersion>latest</LangVersion>
+        
+        <NoWarn>$(NoWarn);CS1591;SA1201;SA1202;SA1203;SA1214;SA1402;WPF0041;WPF1010;SA1623;SA1629;SA1124;SA1600;SA1602;SA1611;SA1614;SA1615;SA1616;SA1633;SA1642;SA1117;SA1310;SA1116;SA1503 </NoWarn>
+        <NoError>$(NoError);CS1591</NoError>
+        <UseWPF>true</UseWPF>
+
+        <OutputPath Condition="$(IsBuildingWpfTempProj) != 'true'">$(MSBuildThisFileDirectory)\out\$(Configuration)\$(MSBuildProjectName)</OutputPath>
+
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <DefineConstants Condition="'$(TargetFramework)' == 'net5.0-windows'">$(DefineConstants);NET5_0_OR_GREATER</DefineConstants>
+    </PropertyGroup>
+
+    <!-- Add the references for all projects and targets -->
+    <ItemGroup>
+	<PackageReference Include="WpfAnalyzers"  PrivateAssets="all" IncludeAssets="build;analyzers" />
+	<PackageReference Include="StyleCop.Analyzers" PrivateAssets="all" IncludeAssets="build;analyzers" />
+	<!-- PackageReference Include="Microsoft.CodeAnalysis.CSharp" PrivateAssets="all" IncludeAssets="build;analyzers" Condition="$(DefineConstants.Contains(NETCOREAPP))" / -->
+	<PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Remove="**\*.png;**\*.jpg;**\*.ico;**\*.ttf" />
+        <Resource Include="**\*.png;**\*.jpg;**\*.ico;**\*.ttf" />
+    </ItemGroup>
+
+    <!-- ItemGroup>
+        <Compile Include="$(MSBuildThisFileDirectory)\GlobalAssemblyInfo.cs">
+            <Link>Properties\GlobalAssemblyInfo.cs</Link>
+        </Compile>
+    </ItemGroup -->
+
+    <ItemGroup>
+        <SourceRoot Include="$(MSBuildThisFileDirectory)/" />
+    </ItemGroup>
+
+</Project>

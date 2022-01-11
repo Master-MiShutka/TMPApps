@@ -1,6 +1,5 @@
 // Copyright (c) Microsoft Corporation.  All rights reserved.
 
-
 namespace Microsoft.WindowsAPICodePack.Shell
 {
     /// <summary>
@@ -32,7 +31,6 @@ namespace Microsoft.WindowsAPICodePack.Shell
         /// The maximum size for a Shell Icon, 256x256 pixels.
         /// </summary>
         public static readonly System.Windows.Size Maximum = new System.Windows.Size(256, 256);
-
     }
 
     /// <summary>

@@ -1,14 +1,14 @@
 ﻿/*************************************************************************************
+   
+   Toolkit for WPF
 
-   Extended WPF Toolkit
-
-   Copyright (C) 2007-2013 Xceed Software Inc.
+   Copyright (C) 2007-2018 Xceed Software Inc.
 
    This program is provided to you under the terms of the Microsoft Public
    License (Ms-PL) as published at http://wpftoolkit.codeplex.com/license 
 
    For more features, controls, and fast professional support,
-   pick up the Plus Edition at http://xceed.com/wpf_toolkit
+   pick up the Plus Edition at https://xceed.com/xceed-toolkit-plus-for-wpf/
 
    Stay informed: follow @datagrid on Twitter or Like http://facebook.com/datagrids
 
@@ -39,7 +39,6 @@ namespace Xceed.Wpf.Toolkit
     public RichTextBox( System.Windows.Documents.FlowDocument document )
       : base( document )
     {
-
     }
 
     #endregion //Constructors
@@ -109,7 +108,7 @@ namespace Xceed.Wpf.Toolkit
     protected override void OnTextChanged( System.Windows.Controls.TextChangedEventArgs e )
     {
       base.OnTextChanged( e );
-      UpdateTextFromDocument();
+      this.UpdateTextFromDocument();
     }
 
     private void UpdateTextFromDocument()
@@ -118,7 +117,11 @@ namespace Xceed.Wpf.Toolkit
         return;
 
       _preventDocumentUpdate = true;
-      Text = TextFormatter.GetText( Document );
+#if VS2008
+      Text = this.TextFormatter.GetText( this.Document );
+#else
+      this.SetCurrentValue( RichTextBox.TextProperty, this.TextFormatter.GetText( this.Document ) );
+#endif
       _preventDocumentUpdate = false;
     }
 
@@ -128,7 +131,7 @@ namespace Xceed.Wpf.Toolkit
         return;
 
       _preventTextUpdate = true;
-      TextFormatter.SetText( Document, Text );
+      this.TextFormatter.SetText( this.Document, Text );
       _preventTextUpdate = false;
     }
 
@@ -137,7 +140,7 @@ namespace Xceed.Wpf.Toolkit
     /// </summary>
     public void Clear()
     {
-      Document.Blocks.Clear();
+      this.Document.Blocks.Clear();
     }
 
     public override void BeginInit()
@@ -157,9 +160,13 @@ namespace Xceed.Wpf.Toolkit
       // the document AND the text at the same time 
       // in XAML. Text has priority.
       if( !string.IsNullOrEmpty( Text ) )
-        UpdateDocumentFromText();
+      {
+        this.UpdateDocumentFromText();
+      }
       else
-        UpdateTextFromDocument();
+      {
+        this.UpdateTextFromDocument();
+      }
     }
 
     #endregion //Methods

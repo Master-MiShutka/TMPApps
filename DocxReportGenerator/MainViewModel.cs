@@ -1,27 +1,28 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
-using System.Runtime.Serialization;
-using System.Windows;
-using System.Windows.Input;
-using System.Linq;
-using System.IO;
-using System.IO.Packaging;
-using TemplateEngine.Docx;
-using System.Data;
-using TMP.UI.Controls.WPF;
-using System.Windows.Controls;
-
-namespace TMP.Work.DocxReportGenerator
+﻿namespace TMP.Work.DocxReportGenerator
 {
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.ComponentModel;
+    using System.Data;
+    using System.IO;
+    using System.IO.Packaging;
+    using System.Linq;
+    using System.Runtime.CompilerServices;
+    using System.Runtime.Serialization;
+    using System.Windows;
+    using System.Windows.Controls;
+    using System.Windows.Input;
+    using TemplateEngine.Docx;
+    using TMP.Shared.Commands;
+    using TMP.UI.Controls.WPF;
+
     public class MainViewModel : INotifyPropertyChanged
     {
         #region Fields
 
-        private IEnumerable _sourceTable = null;
-        public string _templateFileName = "Шаблон.docx";
+        private IEnumerable sourceTable = null;
+        public string templateFileName = "Шаблон.docx";
         private string _resultFileName = "Отчёт";
         private string _resultFileNameFieldsDecription;
         private ReportCreationMode _selectedReportCreationMode = ReportCreationMode.One;
@@ -35,104 +36,118 @@ namespace TMP.Work.DocxReportGenerator
 
         public MainViewModel()
         {
-            CommandPasteSourceFromClipboard = new DelegateCommand(() =>
+            this.CommandPasteSourceFromClipboard = new DelegateCommand(() =>
             {
-                ;
             });
 
-            CommandClearSource = new DelegateCommand(() =>
+            this.CommandClearSource = new DelegateCommand(() =>
             {
-                SourceTable = null;
-            }, () => SourceTable != null);
+                this.SourceTable = null;
+            }, (o) => this.SourceTable != null);
 
-            CommandOpenTemplate = new DelegateCommand(() =>
+            this.CommandOpenTemplate = new DelegateCommand(() =>
             {
-                System.Diagnostics.Process.Start(TemplateFileName);
+                System.Diagnostics.Process.Start(this.TemplateFileName);
             },
-            () => File.Exists(_templateFileName),
+            (o) => File.Exists(this.templateFileName),
             "Открыть");
-            CommandOpenReport = new DelegateCommand(() =>
+            this.CommandOpenReport = new DelegateCommand(() =>
             {
-                System.Diagnostics.Process.Start(ResultFileName);
+                System.Diagnostics.Process.Start(this.ResultFileName);
             },
-            () => File.Exists(_resultFileName),
+            (o) => File.Exists(this._resultFileName),
             "Открыть");
 
-            CommandClearReportStructure = new DelegateCommand(() =>
+            this.CommandClearReportStructure = new DelegateCommand(() =>
             {
-                SourceTable = null;
-                TemplateHasHierarchicalStructure = false;
-                ListOfFieldsInTemplate = null;
+                this.SourceTable = null;
+                this.TemplateHasHierarchicalStructure = false;
+                this.ListOfFieldsInTemplate = null;
             },
-            () => true,
+            (o) => true,
             "очистить всё");
 
-            CommandParseTemplateStructure = new DelegateCommand(ParseTemplateStructure,
-            () => true,
+            this.CommandParseTemplateStructure = new DelegateCommand(this.ParseTemplateStructure,
+            (o) => true,
             "определить из шаблона");
 
-            CommandStart = new DelegateCommand(Start,
-            () => File.Exists(_resultFileName),
+            this.CommandStart = new DelegateCommand(this.Start,
+            (o) => File.Exists(this._resultFileName),
             "Запуск");
 
-            CommandCreateSourceWithFieldsFromTemplate = new DelegateCommand(CreateSourceWithFieldsFromTemplate,
-                () => ListOfFieldsInTemplate != null && ListOfFieldsInTemplate.Count() > 0);
+            this.CommandCreateSourceWithFieldsFromTemplate = new DelegateCommand(this.CreateSourceWithFieldsFromTemplate,
+                (o) => this.ListOfFieldsInTemplate != null && this.ListOfFieldsInTemplate.Count() > 0);
 
-            //SourceTable = System.Linq.Enumerable.Range(0, 10).Select(o => new { A = o, B = "" });
-
+            // SourceTable = System.Linq.Enumerable.Range(0, 10).Select(o => new { A = o, B = "" });
             if (System.ComponentModel.DesignerProperties.GetIsInDesignMode(new DependencyObject()))
             {
                 return;
             }
 
-            TemplateFileName = "template.docx";
+            this.TemplateFileName = "template.docx";
         }
 
         #endregion
 
-
         #region Properties
 
         public IEnumerable<DataGridColumn> SourceTableColumns { get; private set; }
-        
+
         public IEnumerable SourceTable
         {
-            get { return _sourceTable; }
-            set { _sourceTable = value; RaisePropertyChanged("SourceTable"); }
+            get => this.sourceTable;
+
+            set
+            {
+                this.sourceTable = value;
+                this.RaisePropertyChanged(nameof(this.SourceTable));
+            }
         }
+
         public string TemplateFileName
         {
-            get { return _templateFileName; }
+            get => this.templateFileName;
+
             set
             {
-                CommandClearReportStructure.Execute(null);
+                this.CommandClearReportStructure.Execute(null);
 
-                _templateFileName = value;
-                RaisePropertyChanged("TemplateFileName");
+                this.templateFileName = value;
+                this.RaisePropertyChanged(nameof(this.TemplateFileName));
             }
         }
+
         public string ResultFileName
         {
-            get { return _resultFileName; }
+            get => this._resultFileName;
+
             set
             {
-                _resultFileName = value;
-                RaisePropertyChanged("ResultFileName");
+                this._resultFileName = value;
+                this.RaisePropertyChanged(nameof(this.ResultFileName));
             }
         }
+
         public string ResultFileNameFieldsDecription
         {
-            get { return _resultFileNameFieldsDecription; }
-            private set { _resultFileName = value; RaisePropertyChanged("ResultFileNameFieldsDecription"); }
+            get => this._resultFileNameFieldsDecription;
+
+            private set
+            {
+                this._resultFileName = value;
+                this.RaisePropertyChanged(nameof(this.ResultFileNameFieldsDecription));
+            }
         }
+
         public ReportCreationMode SelectedReportCreationMode
         {
-            get { return _selectedReportCreationMode; }
+            get => this._selectedReportCreationMode;
+
             set
             {
-                _selectedReportCreationMode = value;
-                RaisePropertyChanged("SelectedReportCreationMode");
-                RaisePropertyChanged("ReportCreationModeDescription");
+                this._selectedReportCreationMode = value;
+                this.RaisePropertyChanged(nameof(this.SelectedReportCreationMode));
+                this.RaisePropertyChanged(nameof(this.ReportCreationModeDescription));
             }
         }
 
@@ -140,40 +155,60 @@ namespace TMP.Work.DocxReportGenerator
         {
             get
             {
-                if (SelectedReportCreationMode == ReportCreationMode.One)
+                if (this.SelectedReportCreationMode == ReportCreationMode.One)
+                {
                     return "т.е. формируется один документ, в котором будет список или таблица,\nкаждый элемент которого(ой) будет содержать одно или\n несколько полей таблицы или списка";
+                }
                 else
+                {
                     return "т.е. для каждой строки таблицы, заданной в первом пункте,\nформируется документ, в котором будут одно или\n несколько полей таблицы или списка";
+                }
             }
         }
 
         public bool TemplateHasHierarchicalStructure { get; private set; }
 
         public ICommand CommandPasteSourceFromClipboard { get; private set; }
+
         public ICommand CommandClearSource { get; private set; }
 
         public ICommand CommandOpenTemplate { get; private set; }
+
         public ICommand CommandClearReportStructure { get; private set; }
+
         public ICommand CommandParseTemplateStructure { get; private set; }
+
         public ICommand CommandOpenReport { get; private set; }
+
         public ICommand CommandStart { get; private set; }
+
         public ICommand CommandCreateSourceWithFieldsFromTemplate { get; private set; }
 
         public IEnumerable<Field> ListOfFieldsInTemplate
         {
-            get { return _listOfFieldsInTemplate == null ? null : _listOfFieldsInTemplate.Where(f => f.HasChildren); }
-            private set { _listOfFieldsInTemplate = value; RaisePropertyChanged("ListOfFieldsInTemplate"); }
+            get => this._listOfFieldsInTemplate == null ? null : this._listOfFieldsInTemplate.Where(f => f.HasChildren);
+
+            private set
+            {
+                this._listOfFieldsInTemplate = value;
+                this.RaisePropertyChanged(nameof(this.ListOfFieldsInTemplate));
+            }
         }
+
         public Field SelectedField
         {
-            get { return _selectedField; }
-            set { _selectedField = value; RaisePropertyChanged("SelectedField"); }
+            get => this._selectedField;
+
+            set
+            {
+                this._selectedField = value;
+                this.RaisePropertyChanged(nameof(this.SelectedField));
+            }
         }
 
         #endregion
 
         #region Public Methods
-
 
         #endregion
 
@@ -181,76 +216,79 @@ namespace TMP.Work.DocxReportGenerator
 
         private void ParseTemplateStructure()
         {
-            using (var tp = new TemplateProcessor(TemplateFileName))
+            using (var tp = new TemplateProcessor(this.TemplateFileName))
             {
-                ListOfFieldsInTemplate = tp.GetAllFields();
+                this.ListOfFieldsInTemplate = tp.GetAllFields();
             }
-            TemplateHasHierarchicalStructure = ListOfFieldsInTemplate != null && ListOfFieldsInTemplate.Count() > 0;
-            RaisePropertyChanged("TemplateHasHierarchicalStructure");
+
+            this.TemplateHasHierarchicalStructure = this.ListOfFieldsInTemplate != null && this.ListOfFieldsInTemplate.Count() > 0;
+            this.RaisePropertyChanged(nameof(this.TemplateHasHierarchicalStructure));
         }
 
         private void CreateSourceWithFieldsFromTemplate()
         {
-            if (SelectedReportCreationMode == ReportCreationMode.One)
+            if (this.SelectedReportCreationMode == ReportCreationMode.One)
             {
-                SourceTableColumns = new List<DataGridTextColumn>(new DataGridTextColumn[] {
+                this.SourceTableColumns = new List<DataGridTextColumn>(new DataGridTextColumn[]
+                {
                     new DataGridTextColumn() { Header = "Название поля", Binding = new System.Windows.Data.Binding("FieldName") },
-                    new DataGridTextColumn() { Header = "Значение поля", Binding = new System.Windows.Data.Binding("FieldValue") }
+                    new DataGridTextColumn() { Header = "Значение поля", Binding = new System.Windows.Data.Binding("FieldValue") },
                 });
 
-                SourceTable = from field in _listOfFieldsInTemplate
-                              where field.HasChildren == false
-                              orderby field.Name
-                              select new { FieldName = field.Name, FieldValue = String.Empty };
+                this.SourceTable = from field in this._listOfFieldsInTemplate
+                                   where field.HasChildren == false
+                                   orderby field.Name
+                                   select new { FieldName = field.Name, FieldValue = string.Empty };
             }
             else
-                if (SelectedReportCreationMode == ReportCreationMode.Multiple)
+                if (this.SelectedReportCreationMode == ReportCreationMode.Multiple)
             {
-                var list = _listOfFieldsInTemplate
+                var list = this._listOfFieldsInTemplate
                            .Where(field => field.HasChildren == false)
                            .OrderBy(field => field.Name);
 
-                SourceTableColumns = from field in list
-                                     select new DataGridTextColumn() { Header = field.Name };
+                this.SourceTableColumns = from field in list
+                                          select new DataGridTextColumn() { Header = field.Name };
 
                 var columns = from field in list
                               select new DataColumn(field.Name, typeof(string));
 
-
-
                 DataTable table = new DataTable("source");
                 table.Columns.AddRange(columns.ToArray());
                 table.NewRow();
-                SourceTable = table.AsEnumerable();
+                this.SourceTable = table.AsEnumerable();
             }
         }
 
         private void Start()
         {
-
         }
 
         #endregion
 
-
         #region INotifyPropertyChanged implementation
         public event PropertyChangedEventHandler PropertyChanged;
+
         protected bool SetProperty<T>(ref T field, T value, string propertyName = null)
         {
-            if (Equals(field, value)) { return false; }
+            if (Equals(field, value))
+            {
+                return false;
+            }
 
             field = value;
-            RaisePropertyChanged(propertyName);
+            this.RaisePropertyChanged(propertyName);
             return true;
         }
+
         protected void RaisePropertyChanged(string propertyName = null)
         {
-            OnPropertyChanged(new PropertyChangedEventArgs(propertyName));
+            this.OnPropertyChanged(new PropertyChangedEventArgs(propertyName));
         }
-        protected virtual void OnPropertyChanged(PropertyChangedEventArgs e)
 
+        protected virtual void OnPropertyChanged(PropertyChangedEventArgs e)
         {
-            PropertyChanged?.Invoke(this, e);
+            this.PropertyChanged?.Invoke(this, e);
         }
         #endregion
     }

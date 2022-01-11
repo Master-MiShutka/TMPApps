@@ -1,14 +1,14 @@
 ﻿/*************************************************************************************
+   
+   Toolkit for WPF
 
-   Extended WPF Toolkit
-
-   Copyright (C) 2007-2013 Xceed Software Inc.
+   Copyright (C) 2007-2018 Xceed Software Inc.
 
    This program is provided to you under the terms of the Microsoft Public
    License (Ms-PL) as published at http://wpftoolkit.codeplex.com/license 
 
    For more features, controls, and fast professional support,
-   pick up the Plus Edition at http://xceed.com/wpf_toolkit
+   pick up the Plus Edition at https://xceed.com/xceed-toolkit-plus-for-wpf/
 
    Stay informed: follow @datagrid on Twitter or Like http://facebook.com/datagrids
 
@@ -190,10 +190,14 @@ namespace Xceed.Wpf.Toolkit
 
     public PrimitiveTypeCollectionControl()
     {
-
     }
 
     #endregion //Constructors
+
+    #region Overrides
+
+
+#endregion
 
     #region Methods
 
@@ -208,9 +212,17 @@ namespace Xceed.Wpf.Toolkit
       //the easiest way to persist changes to the source is to just clear the source list and then add all items to it.
       list.Clear();
 
+      int counter = 0;
       foreach( var item in items )
       {
-        list.Add( item );
+        if( list is Array )
+        {
+           ( ( Array )list ).SetValue( item, counter++);
+        }
+        else
+        {
+          list.Add( item );
+        }
       };
 
       // if something went wrong during conversion we want to reload the text to show only valid entries

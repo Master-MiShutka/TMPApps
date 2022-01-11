@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TMP.ARMTES.Model
 {
@@ -25,7 +22,23 @@ namespace TMP.ARMTES.Model
         {
             get
             {
-                return String.IsNullOrEmpty(DataReliability) == true ? true : DataReliability != "+";
+                return String.IsNullOrEmpty(DataReliability) == true || DataReliability != "+";
+            }
+        }
+
+        public double? this[int index] 
+        { 
+            get
+            {
+                return index switch
+                {
+                    0 => Tarriff0,
+                    1 => Tarriff1,
+                    2 => Tarriff2,
+                    3 => Tarriff3,
+                    4 => Tarriff4,
+                    _ => throw new ArgumentOutOfRangeException(),
+                };
             }
         }
 
@@ -63,20 +76,20 @@ namespace TMP.ARMTES.Model
     {
         public string Interval { get; set; }
         public PointQualityIndicationsType Type { get; set; }
-        public System.Windows.Media.Brush Brush
+        public string Brush
         {
             get
             {
                 switch (Type)
                 {
                     case PointQualityIndicationsType.Reliable:
-                        return System.Windows.Media.Brushes.Green;
+                        return "System.Windows.Media.Brushes.Green";
                     case PointQualityIndicationsType.Unreliable:
-                        return System.Windows.Media.Brushes.Red;
+                        return "System.Windows.Media.Brushes.Red";
                     case PointQualityIndicationsType.NotRead:
-                        return System.Windows.Media.Brushes.White;
+                        return "System.Windows.Media.Brushes.White";
                     default:
-                        return System.Windows.Media.Brushes.Black;
+                        return "System.Windows.Media.Brushes.Black";
                 }
             }
         }

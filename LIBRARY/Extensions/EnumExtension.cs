@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Reflection;
-
-namespace TMP.Extensions
+﻿namespace TMP.Extensions
 {
+    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel;
+    using System.ComponentModel.DataAnnotations;
+    using System.Linq;
+    using System.Reflection;
+
     public static class EnumHelper<T>
     {
         public static IList<T> GetValues()
@@ -18,6 +18,7 @@ namespace TMP.Extensions
             {
                 enumValues.Add((T)Enum.Parse(type, fi.Name, false));
             }
+
             return enumValues;
         }
 
@@ -60,11 +61,18 @@ namespace TMP.Extensions
                 typeof(DisplayAttribute), false) as DisplayAttribute[];
 
             if (displayAttributes[0].ResourceType != null)
+            {
                 return lookupResource(displayAttributes[0].ResourceType, displayAttributes[0].Name);
+            }
 
-            if (displayAttributes == null) return string.Empty;
+            if (displayAttributes == null)
+            {
+                return string.Empty;
+            }
+
             return (displayAttributes.Length > 0) ? displayAttributes[0].Name : value.ToString();
         }
+
         public static string GetDescriptionValue(T value)
         {
             var fieldInfo = value.GetType().GetField(value.ToString());
@@ -72,9 +80,12 @@ namespace TMP.Extensions
             var descriptionAttributes = fieldInfo.GetCustomAttributes(
                 typeof(DescriptionAttribute), false) as DescriptionAttribute[];
 
-            if (descriptionAttributes == null || descriptionAttributes.Length == 0) return string.Empty;
+            if (descriptionAttributes == null || descriptionAttributes.Length == 0)
+            {
+                return string.Empty;
+            }
+
             return descriptionAttributes[0].Description;
         }
-
     }
 }

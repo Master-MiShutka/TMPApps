@@ -46,20 +46,20 @@ namespace TMP.Wpf.CommonControls
 
         public string AppVersion
         {
-            get { return (string)GetValue(AppVersionProperty); }
-            set { SetValue(AppVersionProperty, value); }
+            get => (string)GetValue(AppVersionProperty);
+            set => SetValue(AppVersionProperty, value);
         }
 
         public string AppDescription
         {
-            get { return (string)GetValue(AppDescriptionProperty); }
-            set { SetValue(AppDescriptionProperty, value); }
+            get => (string)GetValue(AppDescriptionProperty);
+            set => SetValue(AppDescriptionProperty, value);
         }
 
         public string AppCopyright
         {
-            get { return (string)GetValue(AppCopyrightProperty); }
-            set { SetValue(AppCopyrightProperty, value); }
+            get => (string)GetValue(AppCopyrightProperty);
+            set => SetValue(AppCopyrightProperty, value);
         }
 
         #endregion Properties

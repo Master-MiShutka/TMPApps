@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace TMP.ExcelOutput
+﻿namespace TMP.ExcelOutput
 {
+    using System;
+
     /// <summary>
     /// An attribute that can be applied to a field or property which sets the column header in generated CSV or Excel export.
     /// </summary>
@@ -10,7 +10,7 @@ namespace TMP.ExcelOutput
     {
         public ColumnHeaderAttribute(string header)
         {
-            Header = header;
+            this.Header = header;
         }
 
         public string Header { get; }

@@ -13,18 +13,19 @@ namespace TMP.Wpf.CommonControls.ItemsFilter.Model {
         internal bool ContainsKey(Type filterKey) {
             return dictionary.Contains(filterKey);
         }
-        internal Filter this[Type key] {
-            get {
-                return (Filter)dictionary[key];
-            }
-            set {
+        internal Filter this[Type key]
+        {
+            get => (Filter)dictionary[key];
+            set
+            {
                 var defer = parent.DeferRefresh();
                 Filter filter;
-                if (dictionary.Contains(key)) {
-                     filter= (Filter)dictionary[key];
-                     filter.Detach(parent);
+                if (dictionary.Contains(key))
+                {
+                    filter = (Filter)dictionary[key];
+                    filter.Detach(parent);
                 }
-                dictionary[key]=filter = value;
+                dictionary[key] = filter = value;
                 filter.Attach(parent);
                 defer.Dispose();
             }

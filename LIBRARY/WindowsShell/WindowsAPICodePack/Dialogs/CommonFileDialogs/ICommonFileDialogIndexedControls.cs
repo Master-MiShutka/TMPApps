@@ -1,18 +1,18 @@
-﻿//Copyright (c) Microsoft Corporation.  All rights reserved.
-
-using System;
+﻿// Copyright (c) Microsoft Corporation.  All rights reserved.
 
 namespace Microsoft.WindowsAPICodePack.Dialogs.Controls
 {
+    using System;
+
     /// <summary>
     /// Specifies a property, event and method that indexed controls need
     /// to implement.
     /// </summary>
-    /// 
+    ///
     /// <remarks>
     /// not sure where else to put this, so leaving here for now.
     /// </remarks>
-    interface ICommonFileDialogIndexedControls
+    internal interface ICommonFileDialogIndexedControls
     {
         int SelectedIndex { get; set; }
 

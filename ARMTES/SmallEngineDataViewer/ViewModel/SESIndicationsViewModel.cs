@@ -60,7 +60,7 @@ namespace TMP.ARMTES.ViewModel
                 });
                 task.ContinueWith(t =>
                 {
-                    MessageBox.Show(SmallEngineViewerApp.GetExceptionDetails(t.Exception), "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show(App.GetExceptionDetails(t.Exception), "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                 }, TaskContinuationOptions.OnlyOnFaulted);
 
             });
@@ -92,7 +92,14 @@ namespace TMP.ARMTES.ViewModel
                 watch.Stop();
                 System.Diagnostics.Trace.TraceInformation("Save -> {0} ms", watch.ElapsedMilliseconds);
 
-                System.Diagnostics.Process.Start(fileName);
+                var p = new System.Diagnostics.Process
+                {
+                    StartInfo = new System.Diagnostics.ProcessStartInfo(fileName)
+                    {
+                        UseShellExecute = true
+                    }
+                };
+                p.Start();
 
                 /*if (grid != null)
                     Xceed.Wpf.DataGrid.Export.*/

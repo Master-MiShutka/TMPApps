@@ -19,8 +19,8 @@ namespace TMP.Wpf.CommonControls
         /// </summary>
         public bool ShowSeparators
         {
-            get { return (bool)this.GetValue(ShowSeparatorsProperty); }
-            set { this.SetValue(ShowSeparatorsProperty, value); }
+            get => (bool)this.GetValue(ShowSeparatorsProperty);
+            set => this.SetValue(ShowSeparatorsProperty, value);
         }
 
         static WindowCommands()
@@ -38,7 +38,7 @@ namespace TMP.Wpf.CommonControls
 
         public Window ParentWindow
         {
-            get { return _parentWindow; }
+            get => _parentWindow;
             set
             {
                 if (Equals(_parentWindow, value))
@@ -46,7 +46,7 @@ namespace TMP.Wpf.CommonControls
                     return;
                 }
                 _parentWindow = value;
-                this.RaisePropertyChanged("ParentWindow");
+                this.RaisePropertyChanged(nameof(ParentWindow));
             }
         }
 

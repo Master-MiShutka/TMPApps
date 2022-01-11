@@ -1,12 +1,12 @@
-﻿//Copyright (c) Microsoft Corporation.  All rights reserved.
-
-using System;
-using System.Collections.Generic;
-using System.Runtime.InteropServices;
-using MS.WindowsAPICodePack.Internal;
+﻿// Copyright (c) Microsoft Corporation.  All rights reserved.
 
 namespace Microsoft.WindowsAPICodePack.Shell
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Runtime.InteropServices;
+    using MS.WindowsAPICodePack.Internal;
+
     /// <summary>
     /// Represents the base class for all types of Shell "containers". Any class deriving from this class
     /// can contain other ShellObjects (e.g. ShellFolder, FileSystemKnownFolder, ShellLibrary, etc)
@@ -28,17 +28,17 @@ namespace Microsoft.WindowsAPICodePack.Shell
         {
             get
             {
-                if (nativeShellFolder == null)
+                if (this.nativeShellFolder == null)
                 {
                     Guid guid = new Guid(ShellIIDGuid.IShellFolder);
                     Guid handler = new Guid(ShellBHIDGuid.ShellFolderObject);
 
-                    HResult hr = NativeShellItem.BindToHandler(
-                        IntPtr.Zero, ref handler, ref guid, out nativeShellFolder);
+                    HResult hr = this.NativeShellItem.BindToHandler(
+                        IntPtr.Zero, ref handler, ref guid, out this.nativeShellFolder);
 
                     if (CoreErrorHelper.Failed(hr))
                     {
-                        string str = ShellHelper.GetParsingName(NativeShellItem);
+                        string str = ShellHelper.GetParsingName(this.NativeShellItem);
                         if (str != null && str != Environment.GetFolderPath(Environment.SpecialFolder.Desktop))
                         {
                             throw new ShellException(hr);
@@ -46,7 +46,7 @@ namespace Microsoft.WindowsAPICodePack.Shell
                     }
                 }
 
-                return nativeShellFolder;
+                return this.nativeShellFolder;
             }
         }
 
@@ -54,9 +54,13 @@ namespace Microsoft.WindowsAPICodePack.Shell
 
         #region Internal Constructor
 
-        internal ShellContainer() { }
+        internal ShellContainer()
+        {
+        }
 
-        internal ShellContainer(IShellItem2 shellItem) : base(shellItem) { }
+        internal ShellContainer(IShellItem2 shellItem) : base(shellItem)
+        {
+        }
 
         #endregion
 
@@ -68,16 +72,16 @@ namespace Microsoft.WindowsAPICodePack.Shell
         /// <param name="disposing"><B>True</B> indicates that this is being called from Dispose(), rather than the finalizer.</param>
         protected override void Dispose(bool disposing)
         {
-            if (nativeShellFolder != null)
+            if (this.nativeShellFolder != null)
             {
-                Marshal.ReleaseComObject(nativeShellFolder);
-                nativeShellFolder = null;
+                Marshal.ReleaseComObject(this.nativeShellFolder);
+                this.nativeShellFolder = null;
             }
 
-            if (desktopFolderEnumeration != null)
+            if (this.desktopFolderEnumeration != null)
             {
-                Marshal.ReleaseComObject(desktopFolderEnumeration);
-                desktopFolderEnumeration = null;
+                Marshal.ReleaseComObject(this.desktopFolderEnumeration);
+                this.desktopFolderEnumeration = null;
             }
 
             base.Dispose(disposing);
@@ -93,14 +97,14 @@ namespace Microsoft.WindowsAPICodePack.Shell
         /// <returns>Enumerated contents</returns>
         public IEnumerator<ShellObject> GetEnumerator()
         {
-            if (NativeShellFolder == null)
+            if (this.NativeShellFolder == null)
             {
-                if (desktopFolderEnumeration == null)
+                if (this.desktopFolderEnumeration == null)
                 {
-                    ShellNativeMethods.SHGetDesktopFolder(out desktopFolderEnumeration);
+                    ShellNativeMethods.SHGetDesktopFolder(out this.desktopFolderEnumeration);
                 }
 
-                nativeShellFolder = desktopFolderEnumeration;
+                this.nativeShellFolder = this.desktopFolderEnumeration;
             }
 
             return new ShellFolderItems(this);

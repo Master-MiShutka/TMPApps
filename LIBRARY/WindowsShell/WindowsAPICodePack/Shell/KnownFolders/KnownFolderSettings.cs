@@ -1,12 +1,12 @@
-﻿//Copyright (c) Microsoft Corporation.  All rights reserved.
-
-using System;
-using System.Diagnostics;
-using System.Runtime.InteropServices;
-using MS.WindowsAPICodePack.Internal;
+﻿// Copyright (c) Microsoft Corporation.  All rights reserved.
 
 namespace Microsoft.WindowsAPICodePack.Shell
 {
+    using System;
+    using System.Diagnostics;
+    using System.Runtime.InteropServices;
+    using MS.WindowsAPICodePack.Internal;
+
     /// <summary>
     /// Internal class to represent the KnownFolder settings/properties
     /// </summary>
@@ -16,13 +16,13 @@ namespace Microsoft.WindowsAPICodePack.Shell
 
         internal KnownFolderSettings(IKnownFolderNative knownFolderNative)
         {
-            GetFolderProperties(knownFolderNative);
+            this.GetFolderProperties(knownFolderNative);
         }
 
         #region Private Methods
 
         /// <summary>
-        /// Populates a structure that contains 
+        /// Populates a structure that contains
         /// this known folder's properties.
         /// </summary>
         private void GetFolderProperties(IKnownFolderNative knownFolderNative)
@@ -34,38 +34,37 @@ namespace Microsoft.WindowsAPICodePack.Shell
 
             try
             {
-                knownFolderProperties.category = nativeFolderDefinition.category;
-                knownFolderProperties.canonicalName = Marshal.PtrToStringUni(nativeFolderDefinition.name);
-                knownFolderProperties.description = Marshal.PtrToStringUni(nativeFolderDefinition.description);
-                knownFolderProperties.parentId = nativeFolderDefinition.parentId;
-                knownFolderProperties.relativePath = Marshal.PtrToStringUni(nativeFolderDefinition.relativePath);
-                knownFolderProperties.parsingName = Marshal.PtrToStringUni(nativeFolderDefinition.parsingName);
-                knownFolderProperties.tooltipResourceId = Marshal.PtrToStringUni(nativeFolderDefinition.tooltip);
-                knownFolderProperties.localizedNameResourceId = Marshal.PtrToStringUni(nativeFolderDefinition.localizedName);
-                knownFolderProperties.iconResourceId = Marshal.PtrToStringUni(nativeFolderDefinition.icon);
-                knownFolderProperties.security = Marshal.PtrToStringUni(nativeFolderDefinition.security);
-                knownFolderProperties.fileAttributes = (System.IO.FileAttributes)nativeFolderDefinition.attributes;
-                knownFolderProperties.definitionOptions = nativeFolderDefinition.definitionOptions;
-                knownFolderProperties.folderTypeId = nativeFolderDefinition.folderTypeId;
-                knownFolderProperties.folderType = FolderTypes.GetFolderType(knownFolderProperties.folderTypeId);
+                this.knownFolderProperties.category = nativeFolderDefinition.category;
+                this.knownFolderProperties.canonicalName = Marshal.PtrToStringUni(nativeFolderDefinition.name);
+                this.knownFolderProperties.description = Marshal.PtrToStringUni(nativeFolderDefinition.description);
+                this.knownFolderProperties.parentId = nativeFolderDefinition.parentId;
+                this.knownFolderProperties.relativePath = Marshal.PtrToStringUni(nativeFolderDefinition.relativePath);
+                this.knownFolderProperties.parsingName = Marshal.PtrToStringUni(nativeFolderDefinition.parsingName);
+                this.knownFolderProperties.tooltipResourceId = Marshal.PtrToStringUni(nativeFolderDefinition.tooltip);
+                this.knownFolderProperties.localizedNameResourceId = Marshal.PtrToStringUni(nativeFolderDefinition.localizedName);
+                this.knownFolderProperties.iconResourceId = Marshal.PtrToStringUni(nativeFolderDefinition.icon);
+                this.knownFolderProperties.security = Marshal.PtrToStringUni(nativeFolderDefinition.security);
+                this.knownFolderProperties.fileAttributes = (System.IO.FileAttributes)nativeFolderDefinition.attributes;
+                this.knownFolderProperties.definitionOptions = nativeFolderDefinition.definitionOptions;
+                this.knownFolderProperties.folderTypeId = nativeFolderDefinition.folderTypeId;
+                this.knownFolderProperties.folderType = FolderTypes.GetFolderType(this.knownFolderProperties.folderTypeId);
 
                 bool pathExists;
-                knownFolderProperties.path = GetPath(out pathExists, knownFolderNative);
-                knownFolderProperties.pathExists = pathExists;
+                this.knownFolderProperties.path = this.GetPath(out pathExists, knownFolderNative);
+                this.knownFolderProperties.pathExists = pathExists;
 
-                knownFolderProperties.redirection = knownFolderNative.GetRedirectionCapabilities();
+                this.knownFolderProperties.redirection = knownFolderNative.GetRedirectionCapabilities();
 
-                // Turn tooltip, localized name and icon resource IDs 
+                // Turn tooltip, localized name and icon resource IDs
                 // into the actual resources.
-                knownFolderProperties.tooltip = CoreHelpers.GetStringResource(knownFolderProperties.tooltipResourceId);
-                knownFolderProperties.localizedName = CoreHelpers.GetStringResource(knownFolderProperties.localizedNameResourceId);
+                this.knownFolderProperties.tooltip = CoreHelpers.GetStringResource(this.knownFolderProperties.tooltipResourceId);
+                this.knownFolderProperties.localizedName = CoreHelpers.GetStringResource(this.knownFolderProperties.localizedNameResourceId);
 
-                knownFolderProperties.folderId = knownFolderNative.GetId();
-
+                this.knownFolderProperties.folderId = knownFolderNative.GetId();
             }
             finally
             {
-                // Clean up memory. 
+                // Clean up memory.
                 Marshal.FreeCoTaskMem(nativeFolderDefinition.name);
                 Marshal.FreeCoTaskMem(nativeFolderDefinition.description);
                 Marshal.FreeCoTaskMem(nativeFolderDefinition.relativePath);
@@ -86,7 +85,7 @@ namespace Microsoft.WindowsAPICodePack.Shell
         /// </param>
         /// <param name="knownFolderNative">Native IKnownFolder reference</param>
         /// <returns>
-        /// A <see cref="System.String"/> containing the path, or <see cref="System.String.Empty"/> if this known folder does not exist.
+        /// A <see cref="string"/> containing the path, or <see cref="string.Empty"/> if this known folder does not exist.
         /// </returns>
         private string GetPath(out bool fileExists, IKnownFolderNative knownFolderNative)
         {
@@ -96,7 +95,7 @@ namespace Microsoft.WindowsAPICodePack.Shell
             fileExists = true;
 
             // Virtual folders do not have path.
-            if (knownFolderProperties.category == FolderCategory.Virtual)
+            if (this.knownFolderProperties.category == FolderCategory.Virtual)
             {
                 fileExists = false;
                 return kfPath;
@@ -125,170 +124,118 @@ namespace Microsoft.WindowsAPICodePack.Shell
         /// <summary>
         /// Gets the path for this known folder.
         /// </summary>
-        /// <value>A <see cref="System.String"/> object.</value>
-        public string Path
-        {
-            get { return knownFolderProperties.path; }
-        }
-
+        /// <value>A <see cref="string"/> object.</value>
+        public string Path => this.knownFolderProperties.path;
 
         /// <summary>
         /// Gets the category designation for this known folder.
         /// </summary>
         /// <value>A <see cref="FolderCategory"/> value.</value>
-        public FolderCategory Category
-        {
-            get { return knownFolderProperties.category; }
-        }
+        public FolderCategory Category => this.knownFolderProperties.category;
 
         /// <summary>
         /// Gets this known folder's canonical name.
         /// </summary>
-        /// <value>A <see cref="System.String"/> object.</value>
-        public string CanonicalName
-        {
-            get { return knownFolderProperties.canonicalName; }
-        }
+        /// <value>A <see cref="string"/> object.</value>
+        public string CanonicalName => this.knownFolderProperties.canonicalName;
 
         /// <summary>
         /// Gets this known folder's description.
         /// </summary>
-        /// <value>A <see cref="System.String"/> object.</value>
-        public string Description
-        {
-            get { return knownFolderProperties.description; }
-        }
+        /// <value>A <see cref="string"/> object.</value>
+        public string Description => this.knownFolderProperties.description;
 
         /// <summary>
         /// Gets the unique identifier for this known folder's parent folder.
         /// </summary>
         /// <value>A <see cref="System.Guid"/> value.</value>
-        public Guid ParentId
-        {
-            get { return knownFolderProperties.parentId; }
-        }
+        public Guid ParentId => this.knownFolderProperties.parentId;
 
         /// <summary>
         /// Gets this known folder's relative path.
         /// </summary>
-        /// <value>A <see cref="System.String"/> object.</value>
-        public string RelativePath
-        {
-            get { return knownFolderProperties.relativePath; }
-        }
+        /// <value>A <see cref="string"/> object.</value>
+        public string RelativePath => this.knownFolderProperties.relativePath;
 
         /// <summary>
         /// Gets this known folder's tool tip text.
         /// </summary>
-        /// <value>A <see cref="System.String"/> object.</value>
-        public string Tooltip
-        {
-            get { return knownFolderProperties.tooltip; }
-        }
+        /// <value>A <see cref="string"/> object.</value>
+        public string Tooltip => this.knownFolderProperties.tooltip;
+
         /// <summary>
-        /// Gets the resource identifier for this 
+        /// Gets the resource identifier for this
         /// known folder's tool tip text.
         /// </summary>
-        /// <value>A <see cref="System.String"/> object.</value>
-        public string TooltipResourceId
-        {
-            get { return knownFolderProperties.tooltipResourceId; }
-        }
+        /// <value>A <see cref="string"/> object.</value>
+        public string TooltipResourceId => this.knownFolderProperties.tooltipResourceId;
 
         /// <summary>
         /// Gets this known folder's localized name.
         /// </summary>
-        /// <value>A <see cref="System.String"/> object.</value>
-        public string LocalizedName
-        {
-            get { return knownFolderProperties.localizedName; }
-        }
+        /// <value>A <see cref="string"/> object.</value>
+        public string LocalizedName => this.knownFolderProperties.localizedName;
+
         /// <summary>
-        /// Gets the resource identifier for this 
+        /// Gets the resource identifier for this
         /// known folder's localized name.
         /// </summary>
-        /// <value>A <see cref="System.String"/> object.</value>
-        public string LocalizedNameResourceId
-        {
-            get { return knownFolderProperties.localizedNameResourceId; }
-        }
+        /// <value>A <see cref="string"/> object.</value>
+        public string LocalizedNameResourceId => this.knownFolderProperties.localizedNameResourceId;
 
         /// <summary>
         /// Gets this known folder's security attributes.
         /// </summary>
-        /// <value>A <see cref="System.String"/> object.</value>
-        public string Security
-        {
-            get { return knownFolderProperties.security; }
-        }
+        /// <value>A <see cref="string"/> object.</value>
+        public string Security => this.knownFolderProperties.security;
 
         /// <summary>
-        /// Gets this known folder's file attributes, 
+        /// Gets this known folder's file attributes,
         /// such as "read-only".
         /// </summary>
         /// <value>A <see cref="System.IO.FileAttributes"/> value.</value>
-        public System.IO.FileAttributes FileAttributes
-        {
-            get { return knownFolderProperties.fileAttributes; }
-        }
+        public System.IO.FileAttributes FileAttributes => this.knownFolderProperties.fileAttributes;
 
         /// <summary>
         /// Gets an value that describes this known folder's behaviors.
         /// </summary>
         /// <value>A <see cref="DefinitionOptions"/> value.</value>
-        public DefinitionOptions DefinitionOptions
-        {
-            get { return knownFolderProperties.definitionOptions; }
-        }
+        public DefinitionOptions DefinitionOptions => this.knownFolderProperties.definitionOptions;
 
         /// <summary>
         /// Gets the unique identifier for this known folder's type.
         /// </summary>
         /// <value>A <see cref="System.Guid"/> value.</value>
-        public Guid FolderTypeId
-        {
-            get { return knownFolderProperties.folderTypeId; }
-        }
+        public Guid FolderTypeId => this.knownFolderProperties.folderTypeId;
 
         /// <summary>
         /// Gets a string representation of this known folder's type.
         /// </summary>
-        /// <value>A <see cref="System.String"/> object.</value>
-        public string FolderType
-        {
-            get { return knownFolderProperties.folderType; }
-        }
+        /// <value>A <see cref="string"/> object.</value>
+        public string FolderType => this.knownFolderProperties.folderType;
+
         /// <summary>
         /// Gets the unique identifier for this known folder.
         /// </summary>
         /// <value>A <see cref="System.Guid"/> value.</value>
-        public Guid FolderId
-        {
-            get { return knownFolderProperties.folderId; }
-        }
+        public Guid FolderId => this.knownFolderProperties.folderId;
 
         /// <summary>
-        /// Gets a value that indicates whether this known folder's path exists on the computer. 
+        /// Gets a value that indicates whether this known folder's path exists on the computer.
         /// </summary>
-        /// <value>A bool<see cref="System.Boolean"/> value.</value>
-        /// <remarks>If this property value is <b>false</b>, 
+        /// <value>A bool<see cref="bool"/> value.</value>
+        /// <remarks>If this property value is <b>false</b>,
         /// the folder might be a virtual folder (<see cref="Category"/> property will
         /// be <see cref="FolderCategory.Virtual"/> for virtual folders)</remarks>
-        public bool PathExists
-        {
-            get { return knownFolderProperties.pathExists; }
-        }
+        public bool PathExists => this.knownFolderProperties.pathExists;
 
         /// <summary>
-        /// Gets a value that states whether this known folder 
-        /// can have its path set to a new value, 
+        /// Gets a value that states whether this known folder
+        /// can have its path set to a new value,
         /// including any restrictions on the redirection.
         /// </summary>
         /// <value>A <see cref="RedirectionCapability"/> value.</value>
-        public RedirectionCapability Redirection
-        {
-            get { return knownFolderProperties.redirection; }
-        }
+        public RedirectionCapability Redirection => this.knownFolderProperties.redirection;
 
         #endregion
     }

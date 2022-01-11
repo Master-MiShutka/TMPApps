@@ -1,14 +1,14 @@
 ﻿/*************************************************************************************
+   
+   Toolkit for WPF
 
-   Extended WPF Toolkit
-
-   Copyright (C) 2007-2013 Xceed Software Inc.
+   Copyright (C) 2007-2018 Xceed Software Inc.
 
    This program is provided to you under the terms of the Microsoft Public
    License (Ms-PL) as published at http://wpftoolkit.codeplex.com/license 
 
    For more features, controls, and fast professional support,
-   pick up the Plus Edition at http://xceed.com/wpf_toolkit
+   pick up the Plus Edition at https://xceed.com/xceed-toolkit-plus-for-wpf/
 
    Stay informed: follow @datagrid on Twitter or Like http://facebook.com/datagrids
 
@@ -39,7 +39,7 @@ namespace Xceed.Wpf.Toolkit.Core.Utilities
 
     public static string FormatColorString( string stringToFormat, bool isUsingAlphaChannel )
     {
-      if( !isUsingAlphaChannel && ( stringToFormat.Length == 9 ) )
+      if( !isUsingAlphaChannel && ( stringToFormat.Length == 9 ) && ( stringToFormat[0] == '#' ) )
         return stringToFormat.Remove( 1, 2 );
       return stringToFormat;
     }
@@ -54,10 +54,10 @@ namespace Xceed.Wpf.Toolkit.Core.Utilities
     /// Converts an RGB color to an HSV color.
     /// </summary>
     /// <param name="r"></param>
-    /// <param name="b"></param>
     /// <param name="g"></param>
+    /// <param name="b"></param>
     /// <returns></returns>
-    public static HsvColor ConvertRgbToHsv( int r, int b, int g )
+    public static HsvColor ConvertRgbToHsv( int r, int g, int b )
     {
       double delta, min;
       double h = 0, s, v;
@@ -190,11 +190,12 @@ namespace Xceed.Wpf.Toolkit.Core.Utilities
     /// <returns></returns>
     public static List<Color> GenerateHsvSpectrum()
     {
-      List<Color> colorsList = new List<Color>( 8 );
+      var colorsList = new List<Color>();
+      int hStep = 60;
 
-      for( int i = 0; i < 29; i++ )
+      for( int h = 0; h < 360; h+= hStep )
       {
-        colorsList.Add( ColorUtilities.ConvertHsvToRgb( i * 12, 1, 1 ) );
+        colorsList.Add( ColorUtilities.ConvertHsvToRgb( h, 1, 1 ) );
       }
 
       colorsList.Add( ColorUtilities.ConvertHsvToRgb( 0, 1, 1 ) );

@@ -1,21 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
-using System.Windows.Media;
-
-namespace TMP.ElectricMeterComm
+﻿namespace TMP.ElectricMeterComm
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Text.RegularExpressions;
+    using System.Windows;
+    using System.Windows.Controls;
+    using System.Windows.Input;
+    using System.Windows.Media;
+
     /// <summary>
     /// Provides masking behavior for any <see cref="TextBox"/>.
     /// </summary>
     public static class Masking
     {
-        private static readonly DependencyPropertyKey _maskExpressionPropertyKey = DependencyProperty.RegisterAttachedReadOnly("MaskExpression",
+        private static readonly DependencyPropertyKey maskExpressionPropertyKey = DependencyProperty.RegisterAttachedReadOnly("MaskExpression",
             typeof(Regex),
             typeof(Masking),
             new FrameworkPropertyMetadata());
@@ -33,11 +33,10 @@ namespace TMP.ElectricMeterComm
             typeof(Masking),
             new FrameworkPropertyMetadata());
 
-
         /// <summary>
         /// Identifies the <see cref="MaskExpression"/> dependency property.
         /// </summary>
-        public static readonly DependencyProperty MaskExpressionProperty = _maskExpressionPropertyKey.DependencyProperty;
+        public static readonly DependencyProperty MaskExpressionProperty = maskExpressionPropertyKey.DependencyProperty;
 
         /// <summary>
         /// Gets the mask for a given <see cref="TextBox"/>.
@@ -52,7 +51,7 @@ namespace TMP.ElectricMeterComm
         {
             if (textBox == null)
             {
-                throw new ArgumentNullException("textBox");
+                throw new ArgumentNullException(nameof(textBox));
             }
 
             return textBox.GetValue(MaskProperty) as string;
@@ -71,7 +70,7 @@ namespace TMP.ElectricMeterComm
         {
             if (textBox == null)
             {
-                throw new ArgumentNullException("textBox");
+                throw new ArgumentNullException(nameof(textBox));
             }
 
             textBox.SetValue(MaskProperty, mask);
@@ -93,7 +92,7 @@ namespace TMP.ElectricMeterComm
         {
             if (textBox == null)
             {
-                throw new ArgumentNullException("textBox");
+                throw new ArgumentNullException(nameof(textBox));
             }
 
             return textBox.GetValue(MaskExpressionProperty) as Regex;
@@ -101,7 +100,7 @@ namespace TMP.ElectricMeterComm
 
         private static void SetMaskExpression(TextBox textBox, Regex regex)
         {
-            textBox.SetValue(_maskExpressionPropertyKey, regex);
+            textBox.SetValue(maskExpressionPropertyKey, regex);
         }
 
         private static void OnMaskChanged(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs e)
@@ -143,7 +142,6 @@ namespace TMP.ElectricMeterComm
             {
                 e.Handled = true;
             }
-
         }
 
         private static void textBox_PreviewKeyDown(object sender, KeyEventArgs e)
@@ -156,8 +154,8 @@ namespace TMP.ElectricMeterComm
                 return;
             }
 
-            //pressing space doesn't raise PreviewTextInput - no idea why, but we need to handle
-            //explicitly here
+            // pressing space doesn't raise PreviewTextInput - no idea why, but we need to handle
+            // explicitly here
             if (e.Key == Key.Space)
             {
                 var proposedText = GetProposedText(textBox, " ");

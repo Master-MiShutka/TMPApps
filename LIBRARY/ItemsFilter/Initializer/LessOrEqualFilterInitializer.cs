@@ -1,35 +1,40 @@
-﻿using System;
-using System.Linq;
-using System.ComponentModel;
-using ItemsFilter.Model;
-using System.Diagnostics;
+﻿namespace ItemsFilter.Initializer
+{
+    using System;
+    using System.ComponentModel;
+    using System.Diagnostics;
+    using System.Linq;
+    using ItemsFilter.Model;
 
-namespace ItemsFilter.Initializer {
     /// <summary>
     /// Define LessOrEqualFilter initializer.
     /// </summary>
-    public class LessOrEqualFilterInitializer : PropertyFilterInitializer {
+    public class LessOrEqualFilterInitializer : PropertyFilterInitializer
+    {
         /// <summary>
         /// Create LessOrEqualFilter for instance of FilterPresenter, if it is possible.
         /// </summary>
         /// <param name="filterPresenter">FilterPresenter, which can be attached Filter</param>
         /// <param name="key">ItemPropertyInfo for binding to property.</param>
         /// <returns>Instance of LessOrEqualFilter class or null</returns>
-        protected override PropertyFilter NewFilter(FilterPresenter filterPresenter, ItemPropertyInfo propertyInfo) {
+        protected override PropertyFilter NewFilter(FilterPresenter filterPresenter, ItemPropertyInfo propertyInfo)
+        {
             Debug.Assert(filterPresenter != null);
             Debug.Assert(propertyInfo != null);
 
-            //ItemPropertyInfo propertyInfo = (ItemPropertyInfo)key;
+            // ItemPropertyInfo propertyInfo = (ItemPropertyInfo)key;
             Type propertyType = propertyInfo.PropertyType;
             if (filterPresenter.ItemProperties.Contains(propertyInfo)
                 && typeof(IComparable).IsAssignableFrom(propertyInfo.PropertyType)
-                && propertyInfo.PropertyType != typeof(String)
-                && propertyInfo.PropertyType!= typeof(bool)
-                && !propertyType.IsEnum
-                )
+                && propertyInfo.PropertyType != typeof(string)
+                && propertyInfo.PropertyType != typeof(bool)
+                && !propertyType.IsEnum)
             {
-                return (PropertyFilter)Activator.CreateInstance(typeof(LessOrEqualFilter<>).MakeGenericType(propertyInfo.PropertyType), propertyInfo);
+                var gt = typeof(LessOrEqualFilter<>).MakeGenericType(propertyInfo.PropertyType);
+
+                return (PropertyFilter)Activator.CreateInstance(gt, propertyInfo);
             }
+
             return null;
         }
     }

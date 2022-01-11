@@ -1,12 +1,12 @@
-﻿using System;
-using System.ComponentModel;
-using System.Diagnostics.CodeAnalysis;
-using System.Runtime.InteropServices;
-using System.Security;
-using System.Text;
-
-namespace Native
+﻿namespace Native
 {
+    using System;
+    using System.ComponentModel;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Runtime.InteropServices;
+    using System.Security;
+    using System.Text;
+
     /// <devdoc>http://msdn.microsoft.com/en-us/library/ms182161.aspx</devdoc>
     [SuppressUnmanagedCodeSecurity]
     public static class UnsafeNativeMethods
@@ -48,11 +48,11 @@ namespace Native
 
         /// <devdoc>http://msdn.microsoft.com/en-us/library/windows/desktop/ms647486%28v=vs.85%29.aspx</devdoc>
         [DllImport("user32", CharSet = CharSet.Unicode, ExactSpelling = true, EntryPoint = "LoadStringW", SetLastError = true, CallingConvention = CallingConvention.Winapi)]
-        public static extern int LoadString([In] [Optional] SafeLibraryHandle hInstance, [In] uint uID, [Out] StringBuilder lpBuffer, [In] int nBufferMax);
+        public static extern int LoadString([In][Optional] SafeLibraryHandle hInstance, [In] uint uID, [Out] StringBuilder lpBuffer, [In] int nBufferMax);
 
         /// <devdoc>http://msdn.microsoft.com/en-us/library/windows/desktop/ms633528(v=vs.85).aspx</devdoc>
         [DllImport("user32", CharSet = CharSet.Auto, ExactSpelling = true)]
-        public static extern bool IsWindow([In] [Optional] IntPtr hWnd);
+        public static extern bool IsWindow([In][Optional] IntPtr hWnd);
 
         /// <devdoc>http://msdn.microsoft.com/en-us/library/windows/desktop/ms647985(v=vs.85).aspx</devdoc>
         [DllImport("user32")]
@@ -60,11 +60,11 @@ namespace Native
 
         /// <devdoc>http://msdn.microsoft.com/en-us/library/windows/desktop/ms648003(v=vs.85).aspx</devdoc>
         [DllImport("user32")]
-        public static extern uint TrackPopupMenuEx([In] IntPtr hmenu, [In] uint fuFlags, [In] int x, [In] int y, [In] IntPtr hwnd, [In] [Optional] IntPtr lptpm);
+        public static extern uint TrackPopupMenuEx([In] IntPtr hmenu, [In] uint fuFlags, [In] int x, [In] int y, [In] IntPtr hwnd, [In][Optional] IntPtr lptpm);
 
         /// <devdoc>http://msdn.microsoft.com/en-us/library/windows/desktop/ms644944(v=vs.85).aspx</devdoc>
         [DllImport("user32", EntryPoint = "PostMessage", SetLastError = true)]
-        private static extern bool _PostMessage([In] [Optional] IntPtr hWnd, [In] uint Msg, [In] IntPtr wParam, [In] IntPtr lParam);
+        private static extern bool _PostMessage([In][Optional] IntPtr hWnd, [In] uint Msg, [In] IntPtr wParam, [In] IntPtr lParam);
 
         /// <devdoc>http://msdn.microsoft.com/en-us/library/windows/desktop/ms648390(v=vs.85).aspx</devdoc>
         [DllImport("user32")]
@@ -76,7 +76,7 @@ namespace Native
 
         /// <devdoc>http://msdn.microsoft.com/en-us/library/windows/desktop/ms684175%28v=vs.85%29.aspx</devdoc>
         [DllImport("kernel32", CharSet = CharSet.Unicode, ExactSpelling = true, EntryPoint = "LoadLibraryW", SetLastError = true, CallingConvention = CallingConvention.Winapi)]
-        public static extern SafeLibraryHandle LoadLibrary([In] [MarshalAs(UnmanagedType.LPWStr)] string lpFileName);
+        public static extern SafeLibraryHandle LoadLibrary([In][MarshalAs(UnmanagedType.LPWStr)] string lpFileName);
 
         /// <devdoc>http://msdn.microsoft.com/en-us/library/windows/desktop/ms683152%28v=vs.85%29.aspx</devdoc>
         [DllImport("kernel32", CallingConvention = CallingConvention.Winapi)]
@@ -166,9 +166,9 @@ namespace Native
         [StructLayout(LayoutKind.Sequential)]
         public struct Win32Point
         {
-            public readonly Int32 X;
-            public readonly Int32 Y;
-        };
+            public readonly int X;
+            public readonly int Y;
+        }
 
         // See: http://stackoverflow.com/questions/7913325/win-api-in-c-get-hi-and-low-word-from-intptr/7913393#7913393
         public static POINT GetPoint(IntPtr ptr)
@@ -179,26 +179,25 @@ namespace Native
             return new POINT(x, y);
         }
 
-        //public static int GET_X_LPARAM(IntPtr lParam)
-        //{
+        // public static int GET_X_LPARAM(IntPtr lParam)
+        // {
         //    return LOWORD(lParam.ToInt32());
-        //}
+        // }
 
-        //public static int GET_Y_LPARAM(IntPtr lParam)
-        //{
+        // public static int GET_Y_LPARAM(IntPtr lParam)
+        // {
         //    return HIWORD(lParam.ToInt32());
-        //}
+        // }
 
-        //private static int HIWORD(long i)
-        //{
+        // private static int HIWORD(long i)
+        // {
         //    return (short)(i >> 16);
-        //}
+        // }
 
-        //private static int LOWORD(long i)
-        //{
+        // private static int LOWORD(long i)
+        // {
         //    return (short)(i & 0xFFFF);
-        //}
-
+        // }
         public const int GWL_STYLE = -16;
         public const int WS_SYSMENU = 0x80000;
 
@@ -210,7 +209,7 @@ namespace Native
 
         [DllImport("user32.dll", SetLastError = true)]
         public static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
-        
+
         [DllImport("shell32.dll", CallingConvention = CallingConvention.StdCall)]
         public static extern int SHAppBarMessage(int dwMessage, ref APPBARDATA pData);
 
@@ -218,11 +217,11 @@ namespace Native
         [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool GetWindowRect(IntPtr hWnd, out RECT lpRect);
 
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "ToDo")]
         [DllImport("user32.dll", SetLastError = true)]
         public static extern bool RedrawWindow(IntPtr hWnd, [In] ref RECT lprcUpdate, IntPtr hrgnUpdate, Constants.RedrawWindowFlags flags);
 
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "ToDo")]
         [DllImport("user32.dll", SetLastError = true)]
         public static extern bool RedrawWindow(IntPtr hWnd, IntPtr lprcUpdate, IntPtr hrgnUpdate, Constants.RedrawWindowFlags flags);
     }

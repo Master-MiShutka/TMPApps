@@ -80,7 +80,7 @@ namespace TMP.ARMTES
                     }
                     catch (Exception e)
                     {
-                        System.Diagnostics.Debugger.Log(0, "WARNING", SmallEngineViewerApp.GetExceptionDetails(e));
+                        System.Diagnostics.Debugger.Log(0, "WARNING", App.GetExceptionDetails(e));
                         return null;
                     }
                 }
@@ -102,7 +102,7 @@ namespace TMP.ARMTES
                     }
                     catch (Exception e)
                     {
-                        System.Diagnostics.Debugger.Log(0, "WARNING", SmallEngineViewerApp.GetExceptionDetails(e));
+                        System.Diagnostics.Debugger.Log(0, "WARNING", App.GetExceptionDetails(e));
                         return null;
                     }
                     return model;

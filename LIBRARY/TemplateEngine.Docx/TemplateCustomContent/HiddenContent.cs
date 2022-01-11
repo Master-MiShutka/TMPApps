@@ -1,33 +1,37 @@
-﻿using System;
-
-namespace TemplateEngine.Docx
+﻿namespace TemplateEngine.Docx
 {
+    using System;
+
     public abstract class HiddenContent<TBuilder> : IContentItem
         where TBuilder : HiddenContent<TBuilder>
     {
         protected HiddenContent()
         {
-            _instance = (TBuilder) this;
+            this.instance = (TBuilder)this;
         }
 
-        private readonly TBuilder _instance;
+        private readonly TBuilder instance;
 
         public TBuilder Hide()
         {
-            IsHidden = true;
-            return _instance;
+            this.IsHidden = true;
+            return this.instance;
         }
 
         public TBuilder Hide(Func<TBuilder, bool> predicate)
         {
-            if (predicate(_instance)) IsHidden = true;
+            if (predicate(this.instance))
+            {
+                this.IsHidden = true;
+            }
 
-            return _instance;
+            return this.instance;
         }
 
         public abstract bool Equals(IContentItem other);
 
         public string Name { get; set; }
+
         public bool IsHidden { get; set; }
     }
 }

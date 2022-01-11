@@ -1,8 +1,8 @@
-﻿using System.Windows.Controls.Primitives;
-using System.Windows.Input;
-
-namespace TMPApplication.CustomWpfWindow
+﻿namespace TMPApplication.CustomWpfWindow
 {
+    using System.Windows.Controls.Primitives;
+    using System.Windows.Input;
+
     public class MetroThumb : Thumb
     {
         private TouchDevice currentDevice = null;
@@ -11,6 +11,7 @@ namespace TMPApplication.CustomWpfWindow
         {
             // Release any previous capture
             this.ReleaseCurrentDevice();
+
             // Capture the new touch
             this.CaptureCurrentDevice(e);
         }

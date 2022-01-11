@@ -1,16 +1,16 @@
-﻿using System.Linq;
-
-namespace TemplateEngine.Docx
+﻿namespace TemplateEngine.Docx
 {
-	internal static class AttributesExtensions
-	{
-		public static string GetContentItemName(this IContentItem value)
-		{
-			var contentItemNameAttribute = value.GetType()
-				.GetCustomAttributes(typeof(ContentItemNameAttribute), true)
-				   .FirstOrDefault() as ContentItemNameAttribute;
+    using System.Linq;
 
-			return contentItemNameAttribute?.Name;
-		}
-	}
+    internal static class AttributesExtensions
+    {
+        public static string GetContentItemName(this IContentItem value)
+        {
+            var contentItemNameAttribute = value.GetType()
+                .GetCustomAttributes(typeof(ContentItemNameAttribute), true)
+                   .FirstOrDefault() as ContentItemNameAttribute;
+
+            return contentItemNameAttribute?.Name;
+        }
+    }
 }

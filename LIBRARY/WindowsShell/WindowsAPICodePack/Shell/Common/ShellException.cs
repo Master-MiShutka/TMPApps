@@ -1,13 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Runtime.InteropServices;
-using Microsoft.WindowsAPICodePack.Shell.Resources;
-using MS.WindowsAPICodePack.Internal;
-
-namespace Microsoft.WindowsAPICodePack.Shell
+﻿namespace Microsoft.WindowsAPICodePack.Shell
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Runtime.InteropServices;
+    using System.Text;
+    using Microsoft.WindowsAPICodePack.Shell.Resources;
+    using MS.WindowsAPICodePack.Internal;
 
     /// <summary>
     /// An exception thrown when an error occurs while dealing with ShellObjects.
@@ -18,19 +17,25 @@ namespace Microsoft.WindowsAPICodePack.Shell
         /// <summary>
         /// Default constructor.
         /// </summary>
-        public ShellException() { }
+        public ShellException()
+        {
+        }
 
         /// <summary>
         /// Initializes a new exception using an HResult
         /// </summary>
         /// <param name="result">HResult error</param>
-        internal ShellException(HResult result) : this((int)result) { }
+        internal ShellException(HResult result) : this((int)result)
+        {
+        }
 
         /// <summary>
         /// Initializes an excpetion with a custom message.
         /// </summary>
         /// <param name="message">Custom message</param>
-        public ShellException(string message) : base(message) { }
+        public ShellException(string message) : base(message)
+        {
+        }
 
         /// <summary>
         /// Initializes an exception with custom message and inner exception.
@@ -47,19 +52,23 @@ namespace Microsoft.WindowsAPICodePack.Shell
         /// </summary>
         /// <param name="message">Custom message</param>
         /// <param name="errorCode">HResult error code</param>
-        public ShellException(string message, int errorCode) : base(message, errorCode) { }
+        public ShellException(string message, int errorCode) : base(message, errorCode)
+        {
+        }
 
         /// <summary>
         /// Initializes an exception with custom message and error code.
         /// </summary>
         /// <param name="message"></param>
         /// <param name="errorCode"></param>
-        internal ShellException(string message, HResult errorCode) : this(message, (int)errorCode) { }
+        internal ShellException(string message, HResult errorCode) : this(message, (int)errorCode)
+        {
+        }
 
         /// <summary>
         /// Initializes an exception with custom message and inner exception.
         /// </summary>
-        /// <param name="errorCode">HRESULT of an operation</param>        
+        /// <param name="errorCode">HRESULT of an operation</param>
         public ShellException(int errorCode)
             : base(LocalizedMessages.ShellExceptionDefaultText, errorCode)
         {
@@ -76,6 +85,5 @@ namespace Microsoft.WindowsAPICodePack.Shell
             : base(info, context)
         {
         }
-
     }
 }

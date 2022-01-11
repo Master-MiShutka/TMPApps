@@ -1,59 +1,73 @@
-﻿using System;
-using System.IO;
-using System.Net;
-using System.Text;
-using System.Threading;
-
-namespace TMP.Common.NetHelper
+﻿namespace TMP.Common.NetHelper
 {
+    using System;
+    using System.IO;
+    using System.Net;
+    using System.Text;
+    using System.Threading;
+
     public class BufferedAsyncNetClient : IDisposable
     {
         private ManualResetEvent allDone = new ManualResetEvent(false);
+
         ~BufferedAsyncNetClient()
         {
-            Dispose(false);
+            this.Dispose(false);
         }
+
         protected virtual void Dispose(bool disposing)
         {
-            if (allDone != null)
-                allDone.Dispose();
+            if (this.allDone != null)
+            {
+                this.allDone.Dispose();
+            }
         }
+
         public void Dispose()
         {
-            Dispose(true);
+            this.Dispose(true);
             GC.SuppressFinalize(this);
         }
-        private string _address = String.Empty;
+
+        private string address = string.Empty;
 
         public delegate void ConfigureRequest(ref HttpWebRequest request);
 
         public ConfigureRequest Configure { get; set; }
+
         public Action<int, string> UpdateCallback { get; set; }
 
         public BufferedAsyncNetClient(string address)
         {
-            if (String.IsNullOrWhiteSpace(address))
+            if (string.IsNullOrWhiteSpace(address))
+            {
                 throw new ArgumentException("Site address");
-            _address = address;
+            }
+
+            this.address = address;
         }
-        
+
         public string Get(string sendParam)
         {
-            allDone = new ManualResetEvent(false);
+            this.allDone = new ManualResetEvent(false);
 
             // Create the request object.
-            var httpWebRequest = WebRequest.Create(_address) as HttpWebRequest;
+            var httpWebRequest = WebRequest.Create(this.address) as HttpWebRequest;
 
             // Create the state object.
             var requestState = new RequestState();
             httpWebRequest.ContentType = "application/x-www-form-urlencoded";
 
-            if (UpdateCallback != null)
-                UpdateCallback(requestState.Progress, "Подготовка запроса");
+            if (this.UpdateCallback != null)
+            {
+                this.UpdateCallback(requestState.Progress, "Подготовка запроса");
+            }
 
             // дополнительная настройка
-            if (Configure != null)
-                Configure(ref httpWebRequest);
+            if (this.Configure != null)
+            {
+                this.Configure(ref httpWebRequest);
+            }
 
             /*httpWebRequest.Timeout = Timeout.Infinite;
             httpWebRequest.ReadWriteTimeout = Timeout.Infinite;*/
@@ -68,18 +82,20 @@ namespace TMP.Common.NetHelper
             // Put the request into the state object so it can be passed around.
             requestState.Request = httpWebRequest;
 
-            if (UpdateCallback != null)
-                UpdateCallback(requestState.Progress, "Отправка запроса");
+            if (this.UpdateCallback != null)
+            {
+                this.UpdateCallback(requestState.Progress, "Отправка запроса");
+            }
 
             // Issue the async request.
             var asyncResult = (IAsyncResult)httpWebRequest.BeginGetResponse(
-               new AsyncCallback(ResponseCallback), requestState);
+               new AsyncCallback(this.ResponseCallback), requestState);
 
-            // Wait until the ManualResetEvent is set so that the application 
+            // Wait until the ManualResetEvent is set so that the application
             // does not exit until after the callback is called.
-            allDone.WaitOne();
+            this.allDone.WaitOne();
 
-            //**************
+            // **************
             int bufsize = 0;
             requestState.ListOfBuffers.ForEach((i) => bufsize += i.Length);
 
@@ -92,17 +108,18 @@ namespace TMP.Common.NetHelper
             }
 
             // Prepare a Char array buffer for converting to Unicode.
-            var charBuffer = new Char[bufsize];
+            var charBuffer = new char[bufsize];
 
             // Convert byte stream to Char array and then to String.
             // len contains the number of characters converted to Unicode.
             int len = requestState.StreamDecode.GetChars(resultbuffer, 0, bufsize, charBuffer, 0);
 
             var str = System.Web.HttpUtility.UrlDecode(resultbuffer, 0, bufsize, Encoding.UTF8);
-            //**************
 
+            // **************
             return str;
         }
+
         private void ResponseCallback(IAsyncResult asyncResult)
         {
             // Get the RequestState object from the async result.
@@ -118,30 +135,31 @@ namespace TMP.Common.NetHelper
             System.Diagnostics.Debug.WriteLine("[ResponseCallback] ContentLength=" + webResponse.ContentLength);
             requestState.BytesToRead = webResponse.ContentLength;
 
-            //  Start reading data from the response stream.
+            // Start reading data from the response stream.
             var responseStream = webResponse.GetResponseStream();
 
-            // Store the response stream in RequestState to read 
+            // Store the response stream in RequestState to read
             // the stream asynchronously.
             requestState.ResponseStream = responseStream;
 
-            if (UpdateCallback != null)
-                UpdateCallback(requestState.Progress, "Получение данных");
+            if (this.UpdateCallback != null)
+            {
+                this.UpdateCallback(requestState.Progress, "Получение данных");
+            }
 
-            //  Pass rs.BufferRead to BeginRead. Read data into rs.BufferRead
-            var asyncResultRead = responseStream.BeginRead(requestState.BufferRead, 0, requestState.BUFFER_SIZE, new AsyncCallback(ReadCallBack), requestState);
+            // Pass rs.BufferRead to BeginRead. Read data into rs.BufferRead
+            var asyncResultRead = responseStream.BeginRead(requestState.BufferRead, 0, requestState.BUFFER_SIZE, new AsyncCallback(this.ReadCallBack), requestState);
         }
-
 
         private void ReadCallBack(IAsyncResult asyncResult)
         {
             // Get the RequestState object from AsyncResult.
             var requestState = (RequestState)asyncResult.AsyncState;
 
-            // Retrieve the ResponseStream that was set in RespCallback. 
+            // Retrieve the ResponseStream that was set in RespCallback.
             var responseStream = requestState.ResponseStream;
 
-            // Read requestState.BufferRead to verify that it contains data. 
+            // Read requestState.BufferRead to verify that it contains data.
             int read = responseStream.EndRead(asyncResult);
             if (read > 0)
             {
@@ -153,11 +171,13 @@ namespace TMP.Common.NetHelper
                 requestState.BytesReaded += read;
 
                 System.Diagnostics.Debug.WriteLine("[ReadCallBack] read=" + requestState.Progress);
-                if (UpdateCallback != null)
-                    UpdateCallback(requestState.Progress, String.Empty);
+                if (this.UpdateCallback != null)
+                {
+                    this.UpdateCallback(requestState.Progress, string.Empty);
+                }
 
                 // Continue reading data until responseStream.EndRead returns –1.
-                var ar = responseStream.BeginRead(requestState.BufferRead, 0, requestState.BUFFER_SIZE, new AsyncCallback(ReadCallBack), requestState);
+                var ar = responseStream.BeginRead(requestState.BufferRead, 0, requestState.BUFFER_SIZE, new AsyncCallback(this.ReadCallBack), requestState);
             }
             else
             {
@@ -165,12 +185,15 @@ namespace TMP.Common.NetHelper
                 responseStream.Close();
 
                 System.Diagnostics.Debug.WriteLine("[ReadCallBack] Ended");
-                if (UpdateCallback != null)
-                    UpdateCallback(requestState.Progress, null);
+                if (this.UpdateCallback != null)
+                {
+                    this.UpdateCallback(requestState.Progress, null);
+                }
 
                 // Set the ManualResetEvent so the main thread can exit.
-                allDone.Set();
+                this.allDone.Set();
             }
+
             return;
         }
     }

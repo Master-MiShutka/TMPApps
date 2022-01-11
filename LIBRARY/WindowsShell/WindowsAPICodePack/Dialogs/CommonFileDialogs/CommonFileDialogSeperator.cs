@@ -1,9 +1,9 @@
-﻿//Copyright (c) Microsoft Corporation.  All rights reserved.
-
-using System.Diagnostics;
+﻿// Copyright (c) Microsoft Corporation.  All rights reserved.
 
 namespace Microsoft.WindowsAPICodePack.Dialogs.Controls
 {
+    using System.Diagnostics;
+
     /// <summary>
     /// Defines the class for the simplest separator controls.
     /// </summary>
@@ -21,7 +21,7 @@ namespace Microsoft.WindowsAPICodePack.Dialogs.Controls
             dialog.AddSeparator(this.Id);
 
             // Sync unmanaged properties with managed properties
-            SyncUnmanagedProperties();
+            this.SyncUnmanagedProperties();
         }
     }
 }

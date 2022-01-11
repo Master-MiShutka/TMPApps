@@ -1,114 +1,112 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using TemplateEngine.Docx.Errors;
-
-namespace TemplateEngine.Docx.Processors
+﻿namespace TemplateEngine.Docx.Processors
 {
-	internal class ProcessResult
-	{
-		protected ProcessResult(bool handled=true)
-		{
-			_errors = new List<IError>();
-			HandledItems = new Collection<IContentItem>();
-			Handled = handled;
-		}
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+    using System.Linq;
+    using TemplateEngine.Docx.Errors;
 
-		public static ProcessResult SuccessResult
-		{
-			get
-			{
-				return new ProcessResult
-				{
-					Handled = true
-				};
-			}
-		}
-		public static ProcessResult ErrorResult(IEnumerable<IError> errors)
-		{
-			return new ProcessResult
-			{
-				Handled = true,
-				_errors = errors.ToList()
-			};
-		}
+    internal class ProcessResult
+    {
+        protected ProcessResult(bool handled = true)
+        {
+            this.errors = new List<IError>();
+            this.HandledItems = new Collection<IContentItem>();
+            this.Handled = handled;
+        }
 
-		public static ProcessResult NotHandledResult
-		{
-			get
-			{
-				return new ProcessResult
-				{
-					Handled = false
-				};
-			}
-		}
+        public static ProcessResult SuccessResult => new ProcessResult
+        {
+            Handled = true,
+        };
 
-		private List<IError> _errors; 
-		public ReadOnlyCollection<IError> Errors { get{return new ReadOnlyCollection<IError>(_errors);}}
-		public bool Success { get { return Handled && !Errors.Any(); } }
-		public bool Handled { get; private set; }
+        public static ProcessResult ErrorResult(IEnumerable<IError> errors)
+        {
+            return new ProcessResult
+            {
+                Handled = true,
+                errors = errors.ToList(),
+            };
+        }
 
-		public ICollection<IContentItem> HandledItems { get; private set; }
+        public static ProcessResult NotHandledResult => new ProcessResult
+        {
+            Handled = false,
+        };
 
-		public ProcessResult AddItemToHandled(IContentItem handledItem)
-		{
-			if (!HandledItems.Contains(handledItem))
-				HandledItems.Add(handledItem);
+        private List<IError> errors;
 
-			var contentControlNotFoundErrors = Errors.OfType<ContentControlNotFoundError>()
-				.Where(x => x.ContentItem.Equals(handledItem))
-				.ToList();
+        public ReadOnlyCollection<IError> Errors => new ReadOnlyCollection<IError>(this.errors);
 
-			foreach (var error in contentControlNotFoundErrors)
-			{
-				_errors.Remove(error);
-			}
-			
-			Handled = true;
+        public bool Success => this.Handled && !this.Errors.Any();
 
-			return this;
-		}
+        public bool Handled { get; private set; }
 
-		public ProcessResult AddError(IError error)
-		{
-			if (_errors.Contains(error))
-				return this;
+        public ICollection<IContentItem> HandledItems { get; private set; }
 
-			var foundError = error as ContentControlNotFoundError;
-			if (foundError != null)
-			{
-				if (HandledItems.Contains(foundError.ContentItem))
-					return this;
-			}
+        public ProcessResult AddItemToHandled(IContentItem handledItem)
+        {
+            if (!this.HandledItems.Contains(handledItem))
+            {
+                this.HandledItems.Add(handledItem);
+            }
 
-			_errors.Add(error);
-			return this;
-		}
+            var contentControlNotFoundErrors = this.Errors.OfType<ContentControlNotFoundError>()
+                .Where(x => x.ContentItem.Equals(handledItem))
+                .ToList();
 
-		public ProcessResult Merge(ProcessResult another)
-		{
-			if (another == null)
-			{
-				return this;
-			}
+            foreach (var error in contentControlNotFoundErrors)
+            {
+                this.errors.Remove(error);
+            }
 
-			if (!another.Success)
-			{
-				foreach (var error in another.Errors)
-				{
-					AddError(error);
-				}
-			}
+            this.Handled = true;
 
-			foreach (var handledItem in another.HandledItems)
-			{
-				AddItemToHandled(handledItem);
-			}
+            return this;
+        }
 
-			Handled = Handled || another.Handled;
+        public ProcessResult AddError(IError error)
+        {
+            if (this.errors.Contains(error))
+            {
+                return this;
+            }
 
-			return this;
-		}
-	}
+            var foundError = error as ContentControlNotFoundError;
+            if (foundError != null)
+            {
+                if (this.HandledItems.Contains(foundError.ContentItem))
+                {
+                    return this;
+                }
+            }
+
+            this.errors.Add(error);
+            return this;
+        }
+
+        public ProcessResult Merge(ProcessResult another)
+        {
+            if (another == null)
+            {
+                return this;
+            }
+
+            if (!another.Success)
+            {
+                foreach (var error in another.Errors)
+                {
+                    this.AddError(error);
+                }
+            }
+
+            foreach (var handledItem in another.HandledItems)
+            {
+                this.AddItemToHandled(handledItem);
+            }
+
+            this.Handled = this.Handled || another.Handled;
+
+            return this;
+        }
+    }
 }

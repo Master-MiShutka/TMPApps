@@ -1,9 +1,9 @@
-﻿using System.ComponentModel;
-using System.Windows;
-using System.Windows.Controls;
-
-namespace TMPApplication.CustomWpfWindow
+﻿namespace TMPApplication.CustomWpfWindow
 {
+    using System.ComponentModel;
+    using System.Windows;
+    using System.Windows.Controls;
+
     public class WindowCommands : ItemsControl, INotifyPropertyChanged
     {
         public static readonly DependencyProperty ShowSeparatorsProperty
@@ -19,8 +19,8 @@ namespace TMPApplication.CustomWpfWindow
         /// </summary>
         public bool ShowSeparators
         {
-            get { return (bool)this.GetValue(ShowSeparatorsProperty); }
-            set { this.SetValue(ShowSeparatorsProperty, value); }
+            get => (bool)this.GetValue(ShowSeparatorsProperty);
+            set => this.SetValue(ShowSeparatorsProperty, value);
         }
 
         static WindowCommands()
@@ -34,19 +34,20 @@ namespace TMPApplication.CustomWpfWindow
             this.ParentWindow = this.TryFindParent<Window>();
         }
 
-        private Window _parentWindow;
+        private Window parentWindow;
 
         public Window ParentWindow
         {
-            get { return _parentWindow; }
+            get => this.parentWindow;
             set
             {
-                if (Equals(_parentWindow, value))
+                if (Equals(this.parentWindow, value))
                 {
                     return;
                 }
-                _parentWindow = value;
-                this.RaisePropertyChanged("ParentWindow");
+
+                this.parentWindow = value;
+                this.RaisePropertyChanged(nameof(this.ParentWindow));
             }
         }
 
@@ -54,9 +55,11 @@ namespace TMPApplication.CustomWpfWindow
 
         protected virtual void RaisePropertyChanged(string propertyName = null)
         {
-            var handler = PropertyChanged;
-            if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
+            var handler = this.PropertyChanged;
+            if (handler != null)
+            {
+                handler(this, new PropertyChangedEventArgs(propertyName));
+            }
         }
     }
-
 }

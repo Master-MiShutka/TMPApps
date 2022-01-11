@@ -1,221 +1,245 @@
-using System;
-using System.IO;
-using System.Xml;
-using System.Security;
-using TMP.Extensions;
-
 namespace TMP.ExcelXml
 {
-	partial class ExcelXmlWorkbook
-	{
-		#region Import Work book
-		/// <summary>
-		/// Imports a excel xml workbook into a ExcelXmlWorkbook instance
-		/// </summary>
-		/// <param name="importFile">File to import</param>
-		/// <returns>If import was successful, the ExcelXmlWorkbook instance, null otherwise</returns>
-		public static ExcelXmlWorkbook Import(string importFile)
-		{
-			if (!File.Exists(importFile))
-				return null;
+    using System;
+    using System.IO;
+    using System.Security;
+    using System.Xml;
+    using TMP.Extensions;
 
-			Stream stream;
+    partial class ExcelXmlWorkbook
+    {
+        #region Import Work book
 
-			try
-			{
-				stream = new FileStream(importFile, FileMode.Open, FileAccess.Read);
-			}
-			catch (IOException)
-			{
-				return null;
-			}
-			catch (SecurityException)
-			{
-				return null;
-			}
-			catch (UnauthorizedAccessException)
-			{
-				return null;
-			}
+        /// <summary>
+        /// Imports a excel xml workbook into a ExcelXmlWorkbook instance
+        /// </summary>
+        /// <param name="importFile">File to import</param>
+        /// <returns>If import was successful, the ExcelXmlWorkbook instance, null otherwise</returns>
+        public static ExcelXmlWorkbook Import(string importFile)
+        {
+            if (!File.Exists(importFile))
+            {
+                return null;
+            }
 
-			ExcelXmlWorkbook book = Import(stream);
+            Stream stream;
 
-			stream.Close();
-			stream.Dispose();
+            try
+            {
+                stream = new FileStream(importFile, FileMode.Open, FileAccess.Read);
+            }
+            catch (IOException)
+            {
+                return null;
+            }
+            catch (SecurityException)
+            {
+                return null;
+            }
+            catch (UnauthorizedAccessException)
+            {
+                return null;
+            }
 
-			return book;
-		}
+            ExcelXmlWorkbook book = Import(stream);
 
-		/// <summary>
-		/// Imports a excel xml workbook into a ExcelXmlWorkbook instance
-		/// </summary>
-		/// <param name="stream">Stream to import</param>
-		/// <returns>If import was successful, the ExcelXmlWorkbook instance, null otherwise</returns>
-		public static ExcelXmlWorkbook Import(Stream stream)
-		{
-			XmlReaderSettings settings = new XmlReaderSettings();
-			settings.CloseInput = false;
-			settings.IgnoreComments = true;
-			settings.IgnoreProcessingInstructions = true;
-			settings.IgnoreWhitespace = true;
+            stream.Close();
+            stream.Dispose();
 
-			if (!stream.CanRead)
-				return null;
+            return book;
+        }
 
-			XmlReader reader = XmlReader.Create(stream, settings);
+        /// <summary>
+        /// Imports a excel xml workbook into a ExcelXmlWorkbook instance
+        /// </summary>
+        /// <param name="stream">Stream to import</param>
+        /// <returns>If import was successful, the ExcelXmlWorkbook instance, null otherwise</returns>
+        public static ExcelXmlWorkbook Import(Stream stream)
+        {
+            XmlReaderSettings settings = new XmlReaderSettings();
+            settings.CloseInput = false;
+            settings.IgnoreComments = true;
+            settings.IgnoreProcessingInstructions = true;
+            settings.IgnoreWhitespace = true;
 
-			ExcelXmlWorkbook book = new ExcelXmlWorkbook();
-			book.Styles.Clear();
+            if (!stream.CanRead)
+            {
+                return null;
+            }
 
-			int workSheet = 0;
+            XmlReader reader = XmlReader.Create(stream, settings);
 
-			while (reader.Read())
-			{
-				if (reader.NodeType == XmlNodeType.Element)
-				{
-					switch (reader.Name)
-					{
-						// Document Properties
-						case "DocumentProperties":
-							{
-								if (!reader.IsEmptyElement)
-									book.Properties.Import(reader);
-								break;
-							}
+            ExcelXmlWorkbook book = new ExcelXmlWorkbook();
+            book.Styles.Clear();
 
-						case "Styles":
-							{
-								if (!reader.IsEmptyElement)
-									book.ImportStyles(reader);
+            int workSheet = 0;
 
-								break;
-							}
+            while (reader.Read())
+            {
+                if (reader.NodeType == XmlNodeType.Element)
+                {
+                    switch (reader.Name)
+                    {
+                        // Document Properties
+                        case "DocumentProperties":
+                            {
+                                if (!reader.IsEmptyElement)
+                                {
+                                    book.Properties.Import(reader);
+                                }
 
-						case "Names":
-							{
-								ImportNamedRanges(reader, book, null);
+                                break;
+                            }
 
-								break;
-							}
+                        case "Styles":
+                            {
+                                if (!reader.IsEmptyElement)
+                                {
+                                    book.ImportStyles(reader);
+                                }
 
-						case "Worksheet":
-							{
-								if (!reader.IsEmptyElement)
-									book[workSheet++].Import(reader);
+                                break;
+                            }
 
-								break;
-							}
-					}
-				}
-			}
+                        case "Names":
+                            {
+                                ImportNamedRanges(reader, book, null);
 
-			book.ResolveNamedRangeReferences();
+                                break;
+                            }
 
-			book.ResolveCellReferences();
+                        case "Worksheet":
+                            {
+                                if (!reader.IsEmptyElement)
+                                {
+                                    book[workSheet++].Import(reader);
+                                }
 
-			reader.Close();
+                                break;
+                            }
+                    }
+                }
+            }
 
-			stream.Close();
-			stream.Dispose();
+            book.ResolveNamedRangeReferences();
 
-			return book;
-		}
-		#endregion
+            book.ResolveCellReferences();
 
-		#region Import Named Ranges
-		internal static void ImportNamedRanges(XmlReader reader, ExcelXmlWorkbook book, Worksheet ws)
-		{
-			if (!reader.IsEmptyElement)
-			{
-				while (reader.Read() && !(reader.Name == "Names" && reader.NodeType == XmlNodeType.EndElement))
-				{
-					if (reader.NodeType == XmlNodeType.Element)
-					{
-						if (reader.Name == "NamedRange")
-						{
-							Range range = null;
-							string name = "";
+            reader.Close();
 
-							foreach (XmlReaderAttributeItem xa in reader.GetAttributes())
-							{
-								if (xa.LocalName == "Name" && xa.HasValue)
-									name = xa.Value;
+            stream.Close();
+            stream.Dispose();
 
-								if (xa.LocalName == "RefersTo" && xa.HasValue)
-									range = new Range(xa.Value);
-							}
+            return book;
+        }
+        #endregion
 
-							NamedRange nr = new NamedRange(range, name, ws);
-							book.NamedRanges.Add(nr);
-						}
-					}
-				}
-			}
-		}
-		#endregion
+        #region Import Named Ranges
+        internal static void ImportNamedRanges(XmlReader reader, ExcelXmlWorkbook book, Worksheet ws)
+        {
+            if (!reader.IsEmptyElement)
+            {
+                while (reader.Read() && !(reader.Name == "Names" && reader.NodeType == XmlNodeType.EndElement))
+                {
+                    if (reader.NodeType == XmlNodeType.Element)
+                    {
+                        if (reader.Name == "NamedRange")
+                        {
+                            Range range = null;
+                            string name = string.Empty;
 
-		#region Import Styles
-		private void ImportStyles(XmlReader reader)
-		{
-			while (reader.Read() && !(reader.Name == "Styles" && reader.NodeType == XmlNodeType.EndElement))
-			{
-				XmlStyle style = XmlStyle.Import(reader);
+                            foreach (XmlReaderAttributeItem xa in reader.GetAttributes())
+                            {
+                                if (xa.LocalName == "Name" && xa.HasValue)
+                                {
+                                    name = xa.Value;
+                                }
 
-				if (style != null)
-					Styles.Add(style);
-			}
-		}
-		#endregion
+                                if (xa.LocalName == "RefersTo" && xa.HasValue)
+                                {
+                                    range = new Range(xa.Value);
+                                }
+                            }
 
-		#region Resolve Ranges
-		private void ResolveNamedRangeReferences()
-		{
-			int printTitleIndex = -1;
-			int i = -1;
+                            NamedRange nr = new NamedRange(range, name, ws);
+                            book.NamedRanges.Add(nr);
+                        }
+                    }
+                }
+            }
+        }
+        #endregion
 
-			foreach (NamedRange nr in NamedRanges)
-			{
-				i++;
+        #region Import Styles
+        private void ImportStyles(XmlReader reader)
+        {
+            while (reader.Read() && !(reader.Name == "Styles" && reader.NodeType == XmlNodeType.EndElement))
+            {
+                XmlStyle style = XmlStyle.Import(reader);
 
-				if (nr.Name == "Print_Titles")
-				{
-					FormulaParser.ParsePrintHeaders(nr.Worksheet, nr.Range.UnresolvedRangeReference);
+                if (style != null)
+                {
+                    this.Styles.Add(style);
+                }
+            }
+        }
+        #endregion
 
-					printTitleIndex = i;
-				}
-				else
-				{
-					Worksheet ws = nr.Worksheet ?? this[0];
+        #region Resolve Ranges
+        private void ResolveNamedRangeReferences()
+        {
+            int printTitleIndex = -1;
+            int i = -1;
 
-					nr.Range.ParseUnresolvedReference(ws[0, 0]);
+            foreach (NamedRange nr in this.NamedRanges)
+            {
+                i++;
 
-					if (nr.Name == "_FilterDatabase")
-						ws.AutoFilter = true;
+                if (nr.Name == "Print_Titles")
+                {
+                    FormulaParser.ParsePrintHeaders(nr.Worksheet, nr.Range.UnresolvedRangeReference);
 
-					if (nr.Name == "Print_Area")
-						ws.PrintArea = true;
-				}
-			}
+                    printTitleIndex = i;
+                }
+                else
+                {
+                    Worksheet ws = nr.Worksheet ?? this[0];
 
-			if (printTitleIndex != -1)
-				NamedRanges.RemoveAt(printTitleIndex);
-		}
+                    nr.Range.ParseUnresolvedReference(ws[0, 0]);
 
-		private void ResolveCellReferences()
-		{
-			for (int sheetIndex = 0; sheetIndex < _Worksheets.Count; sheetIndex++)
-			{
-				Worksheet sheet = this[sheetIndex];
+                    if (nr.Name == "_FilterDatabase")
+                    {
+                        ws.AutoFilter = true;
+                    }
 
-				foreach (Row row in sheet._Rows)
-				{
-					foreach (Cell cell in row._Cells)
-					{
-						cell.ResolveReferences();
-					}
-				}
-			}
-		}
-		#endregion
-	}
+                    if (nr.Name == "Print_Area")
+                    {
+                        ws.PrintArea = true;
+                    }
+                }
+            }
+
+            if (printTitleIndex != -1)
+            {
+                this.NamedRanges.RemoveAt(printTitleIndex);
+            }
+        }
+
+        private void ResolveCellReferences()
+        {
+            for (int sheetIndex = 0; sheetIndex < this.Worksheets.Count; sheetIndex++)
+            {
+                Worksheet sheet = this[sheetIndex];
+
+                foreach (Row row in sheet.Rows)
+                {
+                    foreach (Cell cell in row.Cells)
+                    {
+                        cell.ResolveReferences();
+                    }
+                }
+            }
+        }
+        #endregion
+    }
 }

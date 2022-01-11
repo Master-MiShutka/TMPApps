@@ -104,12 +104,13 @@ namespace TMP.Wpf.CommonControls.ItemsFilter.Model {
         /// <summary>
         /// Set of available values that can be include in filter.
         /// </summary>
-        public override IEnumerable AvailableValues {
-            get {
-                return availableValues;
-            }
-            set {
-                if (availableValues != value) {
+        public override IEnumerable AvailableValues
+        {
+            get => availableValues;
+            set
+            {
+                if (availableValues != value)
+                {
                     availableValues = value;
                 }
             }

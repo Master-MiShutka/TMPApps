@@ -1,15 +1,14 @@
-﻿//Copyright (c) Microsoft Corporation.  All rights reserved.
-
-using System;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
-using Microsoft.WindowsAPICodePack.Shell;
-using MS.WindowsAPICodePack.Internal;
-using System.Text;
-using Microsoft.WindowsAPICodePack.Shell.Interop;
+﻿// Copyright (c) Microsoft Corporation.  All rights reserved.
 
 namespace Microsoft.WindowsAPICodePack.Controls
 {
+    using System;
+    using System.Runtime.CompilerServices;
+    using System.Runtime.InteropServices;
+    using System.Text;
+    using Microsoft.WindowsAPICodePack.Shell;
+    using Microsoft.WindowsAPICodePack.Shell.Interop;
+    using MS.WindowsAPICodePack.Internal;
 
     internal enum ShellViewGetItemObject
     {
@@ -18,7 +17,7 @@ namespace Microsoft.WindowsAPICodePack.Controls
         AllView = 0x00000002,
         Checked = 0x00000003,
         TypeMask = 0x0000000F,
-        ViewOrderFlag = unchecked((int)0x80000000)
+        ViewOrderFlag = unchecked((int)0x80000000),
     }
 
     [Flags]
@@ -55,7 +54,7 @@ namespace Microsoft.WindowsAPICodePack.Controls
         NoBrowserViewState = 0x10000000,
         SubsetGroups = 0x20000000,
         UseSearchFolders = 0x40000000,
-        AllowRightToLeftReading = unchecked((int)0x80000000)
+        AllowRightToLeftReading = unchecked((int)0x80000000),
     }
 
     internal enum FolderViewMode
@@ -70,7 +69,7 @@ namespace Microsoft.WindowsAPICodePack.Controls
         Tile = 6,
         Thumbstrip = 7,
         Content = 8,
-        Last = 8
+        Last = 8,
     }
 
     internal enum ExplorerPaneState
@@ -80,7 +79,7 @@ namespace Microsoft.WindowsAPICodePack.Controls
         DefaultOff = 0x00000002,
         StateMask = 0x0000ffff,
         InitialState = 0x00010000,
-        Force = 0x00020000
+        Force = 0x00020000,
     }
 
     [StructLayout(LayoutKind.Sequential, Pack = 4)]
@@ -98,7 +97,7 @@ namespace Microsoft.WindowsAPICodePack.Controls
         AlwaysNavigate = 0x00000004,
         NoTravelLog = 0x00000008,
         NoWrapperWindow = 0x00000010,
-        HtmlSharepointView = 0x00000020
+        HtmlSharepointView = 0x00000020,
     }
 
     internal enum CommDlgBrowserStateChange
@@ -107,13 +106,13 @@ namespace Microsoft.WindowsAPICodePack.Controls
         KillFocus = 1,
         SelectionChange = 2,
         Rename = 3,
-        StateChange = 4
+        StateChange = 4,
     }
 
     internal enum CommDlgBrowserNotifyType
     {
         Done = 1,
-        Start = 2
+        Start = 2,
     }
 
     internal enum CommDlgBrowser2ViewFlags
@@ -123,23 +122,22 @@ namespace Microsoft.WindowsAPICodePack.Controls
         AllowPreviewPane = 0x00000004,
         NoSelectVerb = 0x00000008,
         NoIncludeItem = 0x00000010,
-        IsFolderPicker = 0x00000020
+        IsFolderPicker = 0x00000020,
     }
 
     // Disable warning if a method declaration hides another inherited from a parent COM interface
-    // To successfully import a COM interface, all inherited methods need to be declared again with 
+    // To successfully import a COM interface, all inherited methods need to be declared again with
     // the exception of those already declared in "IUnknown"
 #pragma warning disable 108
 
-
-    [ComImport,
-     TypeLibType(TypeLibTypeFlags.FCanCreate),
-     ClassInterface(ClassInterfaceType.None),
-     Guid(ExplorerBrowserCLSIDGuid.ExplorerBrowser)]
+    [ComImport]
+    [TypeLibType(TypeLibTypeFlags.FCanCreate)]
+    [ClassInterface(ClassInterfaceType.None)]
+    [Guid(ExplorerBrowserCLSIDGuid.ExplorerBrowser)]
     internal class ExplorerBrowserClass : IExplorerBrowser
     {
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
-        public virtual extern void Initialize(IntPtr hwndParent, [In]ref NativeRect prc, [In] FolderSettings pfs);
+        public virtual extern void Initialize(IntPtr hwndParent, [In] ref NativeRect prc, [In] FolderSettings pfs);
 
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         public virtual extern void Destroy();
@@ -166,7 +164,7 @@ namespace Microsoft.WindowsAPICodePack.Controls
         public virtual extern HResult Unadvise(uint dwCookie);
 
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
-        public virtual extern void SetOptions([In]ExplorerBrowserOptions dwFlag);
+        public virtual extern void SetOptions([In] ExplorerBrowserOptions dwFlag);
 
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         public virtual extern void GetOptions(out ExplorerBrowserOptions pdwFlag);
@@ -189,17 +187,16 @@ namespace Microsoft.WindowsAPICodePack.Controls
         public virtual extern HResult GetCurrentView(ref Guid riid, out IntPtr ppv);
     }
 
-
-    [ComImport,
-     InterfaceType(ComInterfaceType.InterfaceIsIUnknown),
-     Guid(ExplorerBrowserIIDGuid.IExplorerBrowser)]
+    [ComImport]
+    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+    [Guid(ExplorerBrowserIIDGuid.IExplorerBrowser)]
     internal interface IExplorerBrowser
     {
         /// <summary>
         /// Prepares the browser to be navigated.
         /// </summary>
         /// <param name="hwndParent">A handle to the owner window or control.</param>
-        /// <param name="prc">A pointer to a RECT containing the coordinates of the bounding rectangle 
+        /// <param name="prc">A pointer to a RECT containing the coordinates of the bounding rectangle
         /// the browser will occupy. The coordinates are relative to hwndParent. If this parameter is NULL,
         /// then method IExplorerBrowser::SetRect should subsequently be called.</param>
         /// <param name="pfs">A pointer to a FOLDERSETTINGS structure that determines how the folder will be
@@ -229,7 +226,7 @@ namespace Microsoft.WindowsAPICodePack.Controls
         /// Sets the name of the property bag.
         /// </summary>
         /// <param name="pszPropertyBag">A pointer to a constant, null-terminated, Unicode string that contains
-        /// the name of the property bag. View state information that is specific to the application of the 
+        /// the name of the property bag. View state information that is specific to the application of the
         /// client is stored (persisted) using this name.</param>
         /// <returns></returns>
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
@@ -238,7 +235,7 @@ namespace Microsoft.WindowsAPICodePack.Controls
         /// <summary>
         /// Sets the default empty text.
         /// </summary>
-        /// <param name="pszEmptyText">A pointer to a constant, null-terminated, Unicode string that contains 
+        /// <param name="pszEmptyText">A pointer to a constant, null-terminated, Unicode string that contains
         /// the empty text.</param>
         /// <returns></returns>
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
@@ -247,7 +244,7 @@ namespace Microsoft.WindowsAPICodePack.Controls
         /// <summary>
         /// Sets the folder settings for the current view.
         /// </summary>
-        /// <param name="pfs">A pointer to a FOLDERSETTINGS structure that contains the folder settings 
+        /// <param name="pfs">A pointer to a FOLDERSETTINGS structure that contains the folder settings
         /// to be applied.</param>
         /// <returns></returns>
         [PreserveSig]
@@ -257,9 +254,9 @@ namespace Microsoft.WindowsAPICodePack.Controls
         /// <summary>
         /// Initiates a connection with IExplorerBrowser for event callbacks.
         /// </summary>
-        /// <param name="psbe">A pointer to the IExplorerBrowserEvents interface of the object to be 
+        /// <param name="psbe">A pointer to the IExplorerBrowserEvents interface of the object to be
         /// advised of IExplorerBrowser events</param>
-        /// <param name="pdwCookie">When this method returns, contains a token that uniquely identifies 
+        /// <param name="pdwCookie">When this method returns, contains a token that uniquely identifies
         /// the event listener. This allows several event listeners to be subscribed at a time.</param>
         /// <returns></returns>
         [PreserveSig]
@@ -282,12 +279,12 @@ namespace Microsoft.WindowsAPICodePack.Controls
         /// <param name="dwFlag">One or more EXPLORER_BROWSER_OPTIONS flags to be set.</param>
         /// <returns></returns>
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
-        void SetOptions([In]ExplorerBrowserOptions dwFlag);
+        void SetOptions([In] ExplorerBrowserOptions dwFlag);
 
         /// <summary>
         /// Gets the current browser options.
         /// </summary>
-        /// <param name="pdwFlag">When this method returns, contains the current EXPLORER_BROWSER_OPTIONS 
+        /// <param name="pdwFlag">When this method returns, contains the current EXPLORER_BROWSER_OPTIONS
         /// for the browser.</param>
         /// <returns></returns>
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
@@ -296,9 +293,9 @@ namespace Microsoft.WindowsAPICodePack.Controls
         /// <summary>
         /// Browses to a pointer to an item identifier list (PIDL)
         /// </summary>
-        /// <param name="pidl">A pointer to a const ITEMIDLIST (item identifier list) that specifies an object's 
+        /// <param name="pidl">A pointer to a const ITEMIDLIST (item identifier list) that specifies an object's
         /// location as the destination to navigate to. This parameter can be NULL.</param>
-        /// <param name="uFlags">A flag that specifies the category of the pidl. This affects how 
+        /// <param name="uFlags">A flag that specifies the category of the pidl. This affects how
         /// navigation is accomplished</param>
         /// <returns></returns>
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
@@ -307,9 +304,9 @@ namespace Microsoft.WindowsAPICodePack.Controls
         /// <summary>
         /// Browse to an object
         /// </summary>
-        /// <param name="punk">A pointer to an object to browse to. If the object cannot be browsed, 
+        /// <param name="punk">A pointer to an object to browse to. If the object cannot be browsed,
         /// an error value is returned.</param>
-        /// <param name="uFlags">A flag that specifies the category of the pidl. This affects how 
+        /// <param name="uFlags">A flag that specifies the category of the pidl. This affects how
         /// navigation is accomplished. </param>
         /// <returns></returns>
         [PreserveSig]
@@ -336,7 +333,7 @@ namespace Microsoft.WindowsAPICodePack.Controls
         /// Gets an interface for the current view of the browser.
         /// </summary>
         /// <param name="riid">A reference to the desired interface ID.</param>
-        /// <param name="ppv">When this method returns, contains the interface pointer requested in riid. 
+        /// <param name="ppv">When this method returns, contains the interface pointer requested in riid.
         /// This will typically be IShellView or IShellView2. </param>
         /// <returns></returns>
         [PreserveSig]
@@ -344,26 +341,26 @@ namespace Microsoft.WindowsAPICodePack.Controls
         HResult GetCurrentView(ref Guid riid, out IntPtr ppv);
     }
 
-    [ComImport,
-     Guid(ExplorerBrowserIIDGuid.IServiceProvider),
-     InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+    [ComImport]
+    [Guid(ExplorerBrowserIIDGuid.IServiceProvider)]
+    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     internal interface IServiceProvider
     {
         [PreserveSig]
         [MethodImpl(MethodImplOptions.InternalCall)]
         HResult QueryService(ref Guid guidService, ref Guid riid, out IntPtr ppvObject);
-    };
+    }
 
-    [ComImport,
-     Guid(ExplorerBrowserIIDGuid.IFolderView),
-     InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+    [ComImport]
+    [Guid(ExplorerBrowserIIDGuid.IFolderView)]
+    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     internal interface IFolderView
     {
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         void GetCurrentViewMode([Out] out uint pViewMode);
 
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
-        void SetCurrentViewMode(uint ViewMode);
+        void SetCurrentViewMode(uint viewMode);
 
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         void GetFolder(ref Guid riid, [MarshalAs(UnmanagedType.IUnknown)] out object ppv);
@@ -402,9 +399,9 @@ namespace Microsoft.WindowsAPICodePack.Controls
         void SelectAndPositionItems(uint cidl, IntPtr apidl, ref NativePoint apt, uint dwFlags);
     }
 
-    [ComImport,
-     Guid(ExplorerBrowserIIDGuid.IFolderView2),
-     InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+    [ComImport]
+    [Guid(ExplorerBrowserIIDGuid.IFolderView2)]
+    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     internal interface IFolderView2 : IFolderView
     {
         // IFolderView
@@ -413,7 +410,7 @@ namespace Microsoft.WindowsAPICodePack.Controls
         HResult GetCurrentViewMode(out uint pViewMode);
 
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
-        void SetCurrentViewMode(uint ViewMode);
+        void SetCurrentViewMode(uint viewMode);
 
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         void GetFolder(ref Guid riid, [MarshalAs(UnmanagedType.IUnknown)] out object ppv);
@@ -532,19 +529,19 @@ namespace Microsoft.WindowsAPICodePack.Controls
         void DoRename();
     }
 
-    [ComImport,
-     Guid(ExplorerBrowserIIDGuid.IExplorerPaneVisibility),
-     InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+    [ComImport]
+    [Guid(ExplorerBrowserIIDGuid.IExplorerPaneVisibility)]
+    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     internal interface IExplorerPaneVisibility
     {
         [PreserveSig]
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         HResult GetPaneState(ref Guid explorerPane, out ExplorerPaneState peps);
-    };
+    }
 
-    [ComImport,
-     Guid(ExplorerBrowserIIDGuid.IExplorerBrowserEvents),
-     InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+    [ComImport]
+    [Guid(ExplorerBrowserIIDGuid.IExplorerBrowserEvents)]
+    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     internal interface IExplorerBrowserEvents
     {
         [PreserveSig]
@@ -553,7 +550,7 @@ namespace Microsoft.WindowsAPICodePack.Controls
 
         [PreserveSig]
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
-        HResult OnViewCreated([MarshalAs(UnmanagedType.IUnknown)]  object psv);
+        HResult OnViewCreated([MarshalAs(UnmanagedType.IUnknown)] object psv);
 
         [PreserveSig]
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
@@ -566,77 +563,75 @@ namespace Microsoft.WindowsAPICodePack.Controls
 
     #region Unused - Keeping for debugging bug #885228
 
-    //[ComImport,
+    // [ComImport,
     // Guid(ExplorerBrowserIIDGuid.ICommDlgBrowser),
     // InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-    //internal interface ICommDlgBrowser
-    //{
+    // internal interface ICommDlgBrowser
+    // {
     //    [PreserveSig]
     //    [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
     //    HResult OnDefaultCommand(IntPtr ppshv);
 
-    //    [PreserveSig]
+    // [PreserveSig]
     //    [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
     //    HResult OnStateChange(
     //        IntPtr ppshv,
     //        CommDlgBrowserStateChange uChange);
 
-    //    [PreserveSig]
+    // [PreserveSig]
     //    [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
     //    HResult IncludeObject(
     //        IntPtr ppshv,
     //        IntPtr pidl);
-    //}
+    // }
 
-    //[ComImport,
+    // [ComImport,
     // Guid(ExplorerBrowserIIDGuid.ICommDlgBrowser2),
     // InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-    //internal interface ICommDlgBrowser2
-    //{
+    // internal interface ICommDlgBrowser2
+    // {
     //    // dlg
 
-    //    [PreserveSig]
+    // [PreserveSig]
     //    [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
     //    HResult OnDefaultCommand(IntPtr ppshv);
 
-    //    [PreserveSig]
+    // [PreserveSig]
     //    [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
     //    HResult OnStateChange(
     //        IntPtr ppshv,
     //        CommDlgBrowserStateChange uChange);
 
-    //    [PreserveSig]
+    // [PreserveSig]
     //    [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
     //    HResult IncludeObject(
     //        IntPtr ppshv,
     //        IntPtr pidl);
 
-    //    // dlg2
+    // // dlg2
 
-    //    [PreserveSig]
+    // [PreserveSig]
     //    [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
     //    HResult GetDefaultMenuText(
     //        [In] IShellView shellView,
     //        StringBuilder buffer, //A pointer to a buffer that is used by the Shell browser to return the default shortcut menu text.
     //        [In] int bufferMaxLength); //should be max size = 260?
 
-    //    [PreserveSig]
+    // [PreserveSig]
     //    [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
     //    HResult GetViewFlags(CommDlgBrowser2ViewFlags pdwFlags);
 
-
-    //    [PreserveSig]
+    // [PreserveSig]
     //    [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
     //    HResult Notify(
     //        IntPtr pshv,
     //        CommDlgBrowserNotifyType notifyType);
-    //}
-
+    // }
     #endregion
 
-    [ComImport,
-     Guid(ExplorerBrowserIIDGuid.ICommDlgBrowser3),
-     InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+    [ComImport]
+    [Guid(ExplorerBrowserIIDGuid.ICommDlgBrowser3)]
+    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     internal interface ICommDlgBrowser3
     {
         // dlg1
@@ -661,14 +656,13 @@ namespace Microsoft.WindowsAPICodePack.Controls
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         HResult GetDefaultMenuText(
             IShellView shellView,
-            IntPtr buffer, //A pointer to a buffer that is used by the Shell browser to return the default shortcut menu text.
-            int bufferMaxLength); //should be max size = 260?
+            IntPtr buffer, // A pointer to a buffer that is used by the Shell browser to return the default shortcut menu text.
+            int bufferMaxLength); // should be max size = 260?
 
         [PreserveSig]
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         HResult GetViewFlags(
-            [Out] out uint pdwFlags); // CommDlgBrowser2ViewFlags 
-
+            [Out] out uint pdwFlags); // CommDlgBrowser2ViewFlags
 
         [PreserveSig]
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
@@ -693,9 +687,9 @@ namespace Microsoft.WindowsAPICodePack.Controls
         HResult OnPreViewCreated(IShellView ppshv);
     }
 
-    [ComImport,
-   Guid(ExplorerBrowserIIDGuid.IInputObject),
-   InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+    [ComImport]
+    [Guid(ExplorerBrowserIIDGuid.IInputObject)]
+    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     internal interface IInputObject
     {
         [PreserveSig]
@@ -709,12 +703,11 @@ namespace Microsoft.WindowsAPICodePack.Controls
         [PreserveSig]
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         HResult TranslateAcceleratorIO(ref System.Windows.Forms.Message pMsg);
+    }
 
-    };
-
-    [ComImport,
-     Guid(ExplorerBrowserIIDGuid.IShellView),
-     InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+    [ComImport]
+    [Guid(ExplorerBrowserIIDGuid.IShellView)]
+    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     internal interface IShellView
     {
         // IOleWindow

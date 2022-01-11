@@ -1,27 +1,20 @@
-﻿using System;
-using System.ComponentModel;
-using System.Text;
-using System.Windows;
-using System.Windows.Controls;
-
-using Native;
-
-namespace TMPApplication.CustomWpfWindow
+﻿namespace TMPApplication.CustomWpfWindow
 {
+    using System;
+    using System.ComponentModel;
+    using System.Text;
+    using System.Windows;
+    using System.Windows.Controls;
+    using Native;
+
     [TemplatePart(Name = "PART_Max", Type = typeof(Button))]
     [TemplatePart(Name = "PART_Close", Type = typeof(Button))]
     [TemplatePart(Name = "PART_Min", Type = typeof(Button))]
     public class WindowButtonCommands : ContentControl, INotifyPropertyChanged
     {
-        public string Settings
-        {
-            get { return "Настройки программы"; }
-        }
-        public string About
-        {
-            get { return "О программе"; }
-        }
+        public string Settings => "Настройки программы";
 
+        public string About => "О программе";
 
         public event ClosingWindowEventHandler ClosingWindow;
 
@@ -33,8 +26,9 @@ namespace TMPApplication.CustomWpfWindow
             {
                 if (string.IsNullOrEmpty(minimize))
                 {
-                    minimize = GetCaption(900);
+                    minimize = this.GetCaption(900);
                 }
+
                 return minimize;
             }
         }
@@ -45,8 +39,9 @@ namespace TMPApplication.CustomWpfWindow
             {
                 if (string.IsNullOrEmpty(maximize))
                 {
-                    maximize = GetCaption(901);
+                    maximize = this.GetCaption(901);
                 }
+
                 return maximize;
             }
         }
@@ -57,8 +52,9 @@ namespace TMPApplication.CustomWpfWindow
             {
                 if (string.IsNullOrEmpty(closeText))
                 {
-                    closeText = GetCaption(905);
+                    closeText = this.GetCaption(905);
                 }
+
                 return closeText;
             }
         }
@@ -69,8 +65,9 @@ namespace TMPApplication.CustomWpfWindow
             {
                 if (string.IsNullOrEmpty(restore))
                 {
-                    restore = GetCaption(903);
+                    restore = this.GetCaption(903);
                 }
+
                 return restore;
             }
         }
@@ -91,14 +88,14 @@ namespace TMPApplication.CustomWpfWindow
 
         private string GetCaption(int id)
         {
-            if (user32 == null)
+            if (this.user32 == null)
             {
-                user32 = UnsafeNativeMethods.LoadLibrary(Environment.SystemDirectory + "\\User32.dll");
+                this.user32 = UnsafeNativeMethods.LoadLibrary(Environment.SystemDirectory + "\\User32.dll");
             }
 
             var sb = new StringBuilder(256);
-            UnsafeNativeMethods.LoadString(user32, (uint)id, sb, sb.Capacity);
-            return sb.ToString().Replace("&", "");
+            UnsafeNativeMethods.LoadString(this.user32, (uint)id, sb, sb.Capacity);
+            return sb.ToString().Replace("&", string.Empty);
         }
 
         public override void OnApplyTemplate()
@@ -108,29 +105,29 @@ namespace TMPApplication.CustomWpfWindow
             this.ParentWindow = this.TryFindParent<WindowWithDialogs>();
             if (this.ParentWindow != null)
             {
-                close = Template.FindName("PART_Close", this) as Button;
-                if (close != null)
+                this.close = this.Template.FindName("PART_Close", this) as Button;
+                if (this.close != null)
                 {
-                    close.Click += CloseClick;
+                    this.close.Click += this.CloseClick;
                 }
 
-                max = Template.FindName("PART_Max", this) as Button;
-                if (max != null)
+                this.max = this.Template.FindName("PART_Max", this) as Button;
+                if (this.max != null)
                 {
-                    max.Click += MaximizeClick;
+                    this.max.Click += this.MaximizeClick;
                 }
 
-                min = Template.FindName("PART_Min", this) as Button;
-                if (min != null)
+                this.min = this.Template.FindName("PART_Min", this) as Button;
+                if (this.min != null)
                 {
-                    min.Click += MinimizeClick;
+                    this.min.Click += this.MinimizeClick;
                 }
             }
         }
 
         protected void OnClosingWindow(ClosingWindowEventHandlerArgs args)
         {
-            var handler = ClosingWindow;
+            var handler = this.ClosingWindow;
             if (handler != null)
             {
                 handler(this, args);
@@ -157,7 +154,7 @@ namespace TMPApplication.CustomWpfWindow
         private void CloseClick(object sender, RoutedEventArgs e)
         {
             var closingWindowEventHandlerArgs = new ClosingWindowEventHandlerArgs();
-            OnClosingWindow(closingWindowEventHandlerArgs);
+            this.OnClosingWindow(closingWindowEventHandlerArgs);
 
             if (closingWindowEventHandlerArgs.Cancelled)
             {
@@ -167,19 +164,20 @@ namespace TMPApplication.CustomWpfWindow
             this.ParentWindow.Close();
         }
 
-        private WindowWithDialogs _parentWindow;
+        private WindowWithDialogs parentWindow;
 
         public WindowWithDialogs ParentWindow
         {
-            get { return _parentWindow; }
+            get => this.parentWindow;
             set
             {
-                if (Equals(_parentWindow, value))
+                if (Equals(this.parentWindow, value))
                 {
                     return;
                 }
-                _parentWindow = value;
-                this.RaisePropertyChanged("ParentWindow");
+
+                this.parentWindow = value;
+                this.RaisePropertyChanged(nameof(this.ParentWindow));
             }
         }
 
@@ -187,9 +185,11 @@ namespace TMPApplication.CustomWpfWindow
 
         protected virtual void RaisePropertyChanged(string propertyName = null)
         {
-            var handler = PropertyChanged;
-            if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
+            var handler = this.PropertyChanged;
+            if (handler != null)
+            {
+                handler(this, new PropertyChangedEventArgs(propertyName));
+            }
         }
-
     }
 }

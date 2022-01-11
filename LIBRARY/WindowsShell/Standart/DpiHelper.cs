@@ -6,10 +6,10 @@
 
     public static class DpiHelper
     {
-        private static Matrix _transformToDevice;
-        private static Matrix _transformToDip;
+        private static Matrix transformToDevice;
+        private static Matrix transformToDip;
 
-        [SuppressMessage("Microsoft.Performance", "CA1810:InitializeReferenceTypeStaticFieldsInline")]
+        [SuppressMessage("Microsoft.Performance", "CA1810:InitializeReferenceTypeStaticFieldsInline", Justification = "ToDo")]
         static DpiHelper()
         {
             using (SafeDC desktop = SafeDC.GetDesktop())
@@ -19,10 +19,10 @@
                 int pixelsPerInchX = NativeMethods.GetDeviceCaps(desktop, DeviceCap.LOGPIXELSX);
                 int pixelsPerInchY = NativeMethods.GetDeviceCaps(desktop, DeviceCap.LOGPIXELSY);
 
-                _transformToDip = Matrix.Identity;
-                _transformToDip.Scale(96d / (double)pixelsPerInchX, 96d / (double)pixelsPerInchY);
-                _transformToDevice = Matrix.Identity;
-                _transformToDevice.Scale((double)pixelsPerInchX / 96d, (double)pixelsPerInchY / 96d);
+                transformToDip = Matrix.Identity;
+                transformToDip.Scale(96d / (double)pixelsPerInchX, 96d / (double)pixelsPerInchY);
+                transformToDevice = Matrix.Identity;
+                transformToDevice.Scale((double)pixelsPerInchX / 96d, (double)pixelsPerInchY / 96d);
             }
         }
 
@@ -31,10 +31,10 @@
         /// </summary>
         /// <param name="logicalPoint">A point in the logical coordinate system.</param>
         /// <returns>Returns the parameter converted to the system's coordinates.</returns>
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "ToDo")]
         public static Point LogicalPixelsToDevice(Point logicalPoint)
         {
-            return _transformToDevice.Transform(logicalPoint);
+            return transformToDevice.Transform(logicalPoint);
         }
 
         /// <summary>
@@ -42,13 +42,13 @@
         /// </summary>
         /// <param name="devicePoint">A point in the physical coordinate system.</param>
         /// <returns>Returns the parameter converted to the device independent coordinate system.</returns>
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "ToDo")]
         public static Point DevicePixelsToLogical(Point devicePoint)
         {
-            return _transformToDip.Transform(devicePoint);
+            return transformToDip.Transform(devicePoint);
         }
 
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "ToDo")]
         public static Rect LogicalRectToDevice(Rect logicalRectangle)
         {
             Point topLeft = LogicalPixelsToDevice(new Point(logicalRectangle.Left, logicalRectangle.Top));
@@ -57,7 +57,7 @@
             return new Rect(topLeft, bottomRight);
         }
 
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "ToDo")]
         public static Rect DeviceRectToLogical(Rect deviceRectangle)
         {
             Point topLeft = DevicePixelsToLogical(new Point(deviceRectangle.Left, deviceRectangle.Top));
@@ -66,7 +66,7 @@
             return new Rect(topLeft, bottomRight);
         }
 
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "ToDo")]
         public static Size LogicalSizeToDevice(Size logicalSize)
         {
             Point pt = LogicalPixelsToDevice(new Point(logicalSize.Width, logicalSize.Height));
@@ -74,7 +74,7 @@
             return new Size { Width = pt.X, Height = pt.Y };
         }
 
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "ToDo")]
         public static Size DeviceSizeToLogical(Size deviceSize)
         {
             Point pt = DevicePixelsToLogical(new Point(deviceSize.Width, deviceSize.Height));
@@ -82,7 +82,7 @@
             return new Size(pt.X, pt.Y);
         }
 
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "ToDo")]
         public static Thickness LogicalThicknessToDevice(Thickness logicalThickness)
         {
             Point topLeft = LogicalPixelsToDevice(new Point(logicalThickness.Left, logicalThickness.Top));

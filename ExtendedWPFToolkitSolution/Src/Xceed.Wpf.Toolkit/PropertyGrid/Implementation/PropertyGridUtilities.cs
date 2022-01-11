@@ -1,14 +1,14 @@
 ﻿/*************************************************************************************
+   
+   Toolkit for WPF
 
-   Extended WPF Toolkit
-
-   Copyright (C) 2007-2013 Xceed Software Inc.
+   Copyright (C) 2007-2018 Xceed Software Inc.
 
    This program is provided to you under the terms of the Microsoft Public
    License (Ms-PL) as published at http://wpftoolkit.codeplex.com/license 
 
    For more features, controls, and fast professional support,
-   pick up the Plus Edition at http://xceed.com/wpf_toolkit
+   pick up the Plus Edition at https://xceed.com/xceed-toolkit-plus-for-wpf/
 
    Stay informed: follow @datagrid on Twitter or Like http://facebook.com/datagrids
 
@@ -19,6 +19,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Net;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Media;
@@ -89,6 +90,8 @@ namespace Xceed.Wpf.Toolkit.PropertyGrid
         editor = new DateTimeUpDownEditor();
       else if( ( propertyType == typeof( Color ) ) || ( propertyType == typeof( Color? ) ) )
         editor = new ColorEditor();
+      else if ((propertyType == typeof(Brush)))
+        editor = new BrushEditor();
       else if( propertyType.IsEnum )
         editor = new EnumComboBoxEditor();
       else if( propertyType == typeof( TimeSpan ) || propertyType == typeof( TimeSpan? ) )
@@ -99,6 +102,8 @@ namespace Xceed.Wpf.Toolkit.PropertyGrid
         editor = new MaskedTextBoxEditor() { ValueDataType = propertyType, Mask = "AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA" };
       else if (propertyType == typeof(char) || propertyType == typeof(char?))
         editor = new MaskedTextBoxEditor() { ValueDataType = propertyType, Mask = "&" };
+      else if (propertyType == typeof(IPAddress))
+          editor = new IpTextBoxEditor() { };
       else if( propertyType == typeof( object ) )
         // If any type of object is possible in the property, default to the TextBoxEditor.
         // Useful in some case (e.g., Button.Content).

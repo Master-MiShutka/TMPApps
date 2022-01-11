@@ -1,31 +1,31 @@
-﻿//Copyright (c) Microsoft Corporation.  All rights reserved.
-
-using System;
-using System.Collections.Generic;
-using System.Runtime.InteropServices;
-using MS.WindowsAPICodePack.Internal;
+﻿// Copyright (c) Microsoft Corporation.  All rights reserved.
 
 namespace Microsoft.WindowsAPICodePack.Shell
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Runtime.InteropServices;
+    using MS.WindowsAPICodePack.Internal;
+
     internal class EnumUnknownClass : IEnumUnknown
     {
-        List<ICondition> conditionList = new List<ICondition>();
-        int current = -1;
+        private List<ICondition> conditionList = new List<ICondition>();
+        private int current = -1;
 
         internal EnumUnknownClass(ICondition[] conditions)
         {
-            conditionList.AddRange(conditions);
+            this.conditionList.AddRange(conditions);
         }
 
         #region IEnumUnknown Members
 
         public HResult Next(uint requestedNumber, ref IntPtr buffer, ref uint fetchedNumber)
         {
-            current++;
+            this.current++;
 
-            if (current < conditionList.Count)
+            if (this.current < this.conditionList.Count)
             {
-                buffer = Marshal.GetIUnknownForObject(conditionList[current]);
+                buffer = Marshal.GetIUnknownForObject(this.conditionList[this.current]);
                 fetchedNumber = 1;
                 return HResult.Ok;
             }
@@ -35,20 +35,20 @@ namespace Microsoft.WindowsAPICodePack.Shell
 
         public HResult Skip(uint number)
         {
-            int temp = current + (int)number;
+            int temp = this.current + (int)number;
 
-            if (temp > (conditionList.Count - 1))
+            if (temp > (this.conditionList.Count - 1))
             {
                 return HResult.False;
             }
 
-            current = temp;
+            this.current = temp;
             return HResult.Ok;
         }
 
         public HResult Reset()
         {
-            current = -1;
+            this.current = -1;
             return HResult.Ok;
         }
 

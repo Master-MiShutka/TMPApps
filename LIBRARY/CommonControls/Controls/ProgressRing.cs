@@ -60,38 +60,38 @@ namespace TMP.Wpf.CommonControls
 
         public double MaxSideLength
         {
-            get { return (double)GetValue(MaxSideLengthProperty); }
-            private set { SetValue(MaxSideLengthProperty, value); }
+            get => (double)GetValue(MaxSideLengthProperty);
+            private set => SetValue(MaxSideLengthProperty, value);
         }
 
         public double EllipseDiameter
         {
-            get { return (double)GetValue(EllipseDiameterProperty); }
-            private set { SetValue(EllipseDiameterProperty, value); }
+            get => (double)GetValue(EllipseDiameterProperty);
+            private set => SetValue(EllipseDiameterProperty, value);
         }
 
         public Thickness EllipseOffset
         {
-            get { return (Thickness)GetValue(EllipseOffsetProperty); }
-            private set { SetValue(EllipseOffsetProperty, value); }
+            get => (Thickness)GetValue(EllipseOffsetProperty);
+            private set => SetValue(EllipseOffsetProperty, value);
         }
 
         public double BindableWidth
         {
-            get { return (double)GetValue(BindableWidthProperty); }
-            private set { SetValue(BindableWidthProperty, value); }
+            get => (double)GetValue(BindableWidthProperty);
+            private set => SetValue(BindableWidthProperty, value);
         }
 
         public bool IsActive
         {
-            get { return (bool)GetValue(IsActiveProperty); }
-            set { SetValue(IsActiveProperty, value); }
+            get => (bool)GetValue(IsActiveProperty);
+            set => SetValue(IsActiveProperty, value);
         }
 
         public bool IsLarge
         {
-            get { return (bool)GetValue(IsLargeProperty); }
-            set { SetValue(IsLargeProperty, value); }
+            get => (bool)GetValue(IsLargeProperty);
+            set => SetValue(IsLargeProperty, value);
         }
 
         private static void BindableWidthCallback(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs dependencyPropertyChangedEventArgs)

@@ -1,13 +1,11 @@
-﻿using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-
-using TMP.Extensions;
-
-namespace TMP.ExcelOutput
+﻿namespace TMP.ExcelOutput
 {
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+    using System.Reflection;
+    using System.Text;
+
     public static class CsvOutputExtensions
     {
         /// <summary>
@@ -126,8 +124,9 @@ namespace TMP.ExcelOutput
             if (trim)
             {
                 if (type.IsSimpleType())
+                {
                     output = string.Join(separator.ToTrimmedString(), input);
-
+                }
                 else
                 {
                     var properties = type.GetProperties();
@@ -138,9 +137,7 @@ namespace TMP.ExcelOutput
                                              string.Concat(
                                                            string.Join(separator.ToString(), properties.Where(p => p.PropertyType.IsSimpleType()).Select(p => p.GetCustomAttribute<ColumnHeaderAttribute>() != null ? p.GetCustomAttribute<ColumnHeaderAttribute>().Header : p.Name.ToTrimmedString()).ToArray()),
                                                            fields.Any(f => f.FieldType.IsSimpleType()) ? separator.ToString() : string.Empty,
-                                                           string.Join(separator.ToString(), fields.Where(f => f.FieldType.IsSimpleType()).Select(f => f.Name.ToTrimmedString()).ToArray())
-                                                 )
-                        );
+                                                           string.Join(separator.ToString(), fields.Where(f => f.FieldType.IsSimpleType()).Select(f => f.Name.ToTrimmedString()).ToArray())));
 
                     foreach (var element in input)
                     {
@@ -148,9 +145,7 @@ namespace TMP.ExcelOutput
                                                  string.Concat(
                                                                string.Join(separator.ToString(), properties.Where(p => p.PropertyType.IsSimpleType()).Select(p => p.GetValue(element, null).ToTrimmedString()).ToArray()),
                                                                fields.Any(f => f.FieldType.IsSimpleType()) ? separator.ToString() : string.Empty,
-                                                               string.Join(separator.ToString(), fields.Where(f => f.FieldType.IsSimpleType()).Select(f => f.GetValue(element).ToTrimmedString()).ToArray())
-                                                     )
-                            );
+                                                               string.Join(separator.ToString(), fields.Where(f => f.FieldType.IsSimpleType()).Select(f => f.GetValue(element).ToTrimmedString()).ToArray())));
                     }
 
                     output = stringBuilder.ToString();
@@ -159,8 +154,9 @@ namespace TMP.ExcelOutput
             else
             {
                 if (type.IsSimpleType())
+                {
                     output = string.Join(separator.ToString(), input);
-
+                }
                 else
                 {
                     var properties = type.GetProperties();
@@ -171,9 +167,7 @@ namespace TMP.ExcelOutput
                                              string.Concat(
                                                            string.Join(separator.ToString(), properties.Where(p => p.PropertyType.IsSimpleType()).Select(p => p.GetCustomAttribute<ColumnHeaderAttribute>() != null ? p.GetCustomAttribute<ColumnHeaderAttribute>().Header : p.Name).ToArray()),
                                                            fields.Any(f => f.FieldType.IsSimpleType()) ? separator.ToString() : string.Empty,
-                                                           string.Join(separator.ToString(), fields.Where(f => f.FieldType.IsSimpleType()).Select(f => f.Name).ToArray())
-                                                 )
-                        );
+                                                           string.Join(separator.ToString(), fields.Where(f => f.FieldType.IsSimpleType()).Select(f => f.Name).ToArray())));
 
                     foreach (var element in input)
                     {
@@ -181,9 +175,7 @@ namespace TMP.ExcelOutput
                                                  string.Concat(
                                                                string.Join(separator.ToString(), properties.Where(p => p.PropertyType.IsSimpleType()).Select(p => p.GetValue(element, null)).ToArray()),
                                                                fields.Any(f => f.FieldType.IsSimpleType()) ? separator.ToString() : string.Empty,
-                                                               string.Join(separator.ToString(), fields.Where(f => f.FieldType.IsSimpleType()).Select(f => f.GetValue(element)).ToArray())
-                                                     )
-                            );
+                                                               string.Join(separator.ToString(), fields.Where(f => f.FieldType.IsSimpleType()).Select(f => f.GetValue(element)).ToArray())));
                     }
 
                     output = stringBuilder.ToString();
@@ -191,7 +183,9 @@ namespace TMP.ExcelOutput
             }
 
             if (!string.IsNullOrEmpty(path))
+            {
                 WriteToPath(output, path);
+            }
 
             return output;
         }

@@ -1,12 +1,12 @@
-﻿//Copyright (c) Microsoft Corporation.  All rights reserved.
-
-using System;
-using System.Runtime.InteropServices;
-using MS.WindowsAPICodePack.Internal;
-using Microsoft.WindowsAPICodePack.Shell.Resources;
+﻿// Copyright (c) Microsoft Corporation.  All rights reserved.
 
 namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 {
+    using System;
+    using System.Runtime.InteropServices;
+    using Microsoft.WindowsAPICodePack.Shell.Resources;
+    using MS.WindowsAPICodePack.Internal;
+
     /// <summary>
     /// Creates a property writer capable of setting multiple properties for a given ShellObject.
     /// </summary>
@@ -20,17 +20,17 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
         internal ShellPropertyWriter(ShellObject parent)
         {
-            ParentShellObject = parent;
+            this.ParentShellObject = parent;
 
             // Open the property store for this shell object...
             Guid guid = new Guid(ShellIIDGuid.IPropertyStore);
 
             try
             {
-                int hr = ParentShellObject.NativeShellItem2.GetPropertyStore(
+                int hr = this.ParentShellObject.NativeShellItem2.GetPropertyStore(
                         ShellNativeMethods.GetPropertyStoreOptions.ReadWrite,
                         ref guid,
-                        out writablePropStore);
+                        out this.writablePropStore);
 
                 if (!CoreErrorHelper.Succeeded(hr))
                 {
@@ -41,13 +41,12 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
                 {
                     // If we succeed in creating a valid property store for this ShellObject,
                     // then set it on the parent shell object for others to use.
-                    // Once this writer is closed/commited, we will set the 
-                    if (ParentShellObject.NativePropertyStore == null)
+                    // Once this writer is closed/commited, we will set the
+                    if (this.ParentShellObject.NativePropertyStore == null)
                     {
-                        ParentShellObject.NativePropertyStore = writablePropStore;
+                        this.ParentShellObject.NativePropertyStore = this.writablePropStore;
                     }
                 }
-
             }
             catch (InvalidComObjectException e)
             {
@@ -64,8 +63,8 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
         /// </summary>
         protected ShellObject ParentShellObject
         {
-            get { return parentShellObject; }
-            private set { parentShellObject = value; }
+            get => this.parentShellObject;
+            private set => this.parentShellObject = value;
         }
 
         /// <summary>
@@ -75,7 +74,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
         /// <param name="value">The value associated with the key.</param>
         public void WriteProperty(PropertyKey key, object value)
         {
-            WriteProperty(key, value, true);
+            this.WriteProperty(key, value, true);
         }
 
         /// <summary>
@@ -85,29 +84,31 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
         /// <param name="key">The property key.</param>
         /// <param name="value">The value associated with the key.</param>
         /// <param name="allowTruncatedValue">True to allow truncation (default); otherwise False.</param>
-        /// <exception cref="System.InvalidOperationException">If the writable property store is already 
+        /// <exception cref="System.InvalidOperationException">If the writable property store is already
         /// closed.</exception>
-        /// <exception cref="System.ArgumentOutOfRangeException">If AllowTruncatedValue is set to false 
-        /// and while setting the value on the property it had to be truncated in a string or rounded in 
+        /// <exception cref="System.ArgumentOutOfRangeException">If AllowTruncatedValue is set to false
+        /// and while setting the value on the property it had to be truncated in a string or rounded in
         /// a numeric value.</exception>
         public void WriteProperty(PropertyKey key, object value, bool allowTruncatedValue)
         {
-            if (writablePropStore == null)
+            if (this.writablePropStore == null)
+            {
                 throw new InvalidOperationException("Writeable store has been closed.");
+            }
 
             using (PropVariant propVar = PropVariant.FromObject(value))
             {
-                HResult result = writablePropStore.SetValue(ref key, propVar);
+                HResult result = this.writablePropStore.SetValue(ref key, propVar);
 
                 if (!allowTruncatedValue && ((int)result == ShellNativeMethods.InPlaceStringTruncated))
                 {
                     // At this point we can't revert back the commit
                     // so don't commit, close the property store and throw an exception
                     // to let the user know.
-                    Marshal.ReleaseComObject(writablePropStore);
-                    writablePropStore = null;
+                    Marshal.ReleaseComObject(this.writablePropStore);
+                    this.writablePropStore = null;
 
-                    throw new ArgumentOutOfRangeException("value", LocalizedMessages.ShellPropertyValueTruncated);
+                    throw new ArgumentOutOfRangeException(nameof(value), LocalizedMessages.ShellPropertyValueTruncated);
                 }
 
                 if (!CoreErrorHelper.Succeeded(result))
@@ -124,7 +125,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
         /// <param name="value">The property value.</param>
         public void WriteProperty(string canonicalName, object value)
         {
-            WriteProperty(canonicalName, value, true);
+            this.WriteProperty(canonicalName, value, true);
         }
 
         /// <summary>
@@ -149,7 +150,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
                     Marshal.GetExceptionForHR(result));
             }
 
-            WriteProperty(propKey, value, allowTruncatedValue);
+            this.WriteProperty(propKey, value, allowTruncatedValue);
         }
 
         /// <summary>
@@ -159,7 +160,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
         /// <param name="value">The property value.</param>
         public void WriteProperty(IShellProperty shellProperty, object value)
         {
-            WriteProperty(shellProperty, value, true);
+            this.WriteProperty(shellProperty, value, true);
         }
 
         /// <summary>
@@ -171,8 +172,12 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
         /// <param name="allowTruncatedValue">True to allow truncation (default); otherwise False.</param>
         public void WriteProperty(IShellProperty shellProperty, object value, bool allowTruncatedValue)
         {
-            if (shellProperty == null) { throw new ArgumentNullException("shellProperty"); }
-            WriteProperty(shellProperty.PropertyKey, value, allowTruncatedValue);
+            if (shellProperty == null)
+            {
+                throw new ArgumentNullException(nameof(shellProperty));
+            }
+
+            this.WriteProperty(shellProperty.PropertyKey, value, allowTruncatedValue);
         }
 
         /// <summary>
@@ -183,8 +188,9 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
         /// <param name="value">The property value.</param>
         public void WriteProperty<T>(ShellProperty<T> shellProperty, T value)
         {
-            WriteProperty<T>(shellProperty, value, true);
+            this.WriteProperty<T>(shellProperty, value, true);
         }
+
         /// <summary>
         /// Writes the specified property given a strongly-typed ShellProperty and a value. To allow truncation of the given value, set allowTruncatedValue
         /// to true.
@@ -195,8 +201,12 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
         /// <param name="allowTruncatedValue">True to allow truncation (default); otherwise False.</param>
         public void WriteProperty<T>(ShellProperty<T> shellProperty, T value, bool allowTruncatedValue)
         {
-            if (shellProperty == null) { throw new ArgumentNullException("shellProperty"); }
-            WriteProperty(shellProperty.PropertyKey, value, allowTruncatedValue);
+            if (shellProperty == null)
+            {
+                throw new ArgumentNullException(nameof(shellProperty));
+            }
+
+            this.WriteProperty(shellProperty.PropertyKey, value, allowTruncatedValue);
         }
 
         #region IDisposable Members
@@ -206,16 +216,16 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
         /// </summary>
         public void Dispose()
         {
-            Dispose(true);
+            this.Dispose(true);
             GC.SuppressFinalize(this);
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         ~ShellPropertyWriter()
         {
-            Dispose(false);
+            this.Dispose(false);
         }
 
         /// <summary>
@@ -225,7 +235,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
         /// </param>
         protected virtual void Dispose(bool disposing)
         {
-            Close();
+            this.Close();
         }
 
         /// <summary>
@@ -235,15 +245,15 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
         public void Close()
         {
             // Close the property writer (commit, etc)
-            if (writablePropStore != null)
+            if (this.writablePropStore != null)
             {
-                writablePropStore.Commit();
+                this.writablePropStore.Commit();
 
-                Marshal.ReleaseComObject(writablePropStore);
-                writablePropStore = null;
+                Marshal.ReleaseComObject(this.writablePropStore);
+                this.writablePropStore = null;
             }
 
-            ParentShellObject.NativePropertyStore = null;
+            this.ParentShellObject.NativePropertyStore = null;
         }
 
         #endregion

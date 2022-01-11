@@ -178,8 +178,8 @@
         [Category("Behavior")]
         public int Delay
         {
-            get { return (int)GetValue(DelayProperty); }
-            set { SetValue(DelayProperty, value); }
+            get => (int)GetValue(DelayProperty);
+            set => SetValue(DelayProperty, value);
         }
 
         /// <summary>
@@ -190,8 +190,8 @@
         [DefaultValue(true)]
         public bool InterceptArrowKeys
         {
-            get { return (bool)GetValue(InterceptArrowKeysProperty); }
-            set { SetValue(InterceptArrowKeysProperty, value); }
+            get => (bool)GetValue(InterceptArrowKeysProperty);
+            set => SetValue(InterceptArrowKeysProperty, value);
         }
 
         /// <summary>
@@ -201,8 +201,8 @@
         [DefaultValue(true)]
         public bool InterceptMouseWheel
         {
-            get { return (bool)GetValue(InterceptMouseWheelProperty); }
-            set { SetValue(InterceptMouseWheelProperty, value); }
+            get => (bool)GetValue(InterceptMouseWheelProperty);
+            set => SetValue(InterceptMouseWheelProperty, value);
         }
 
         /// <summary>
@@ -215,8 +215,8 @@
         [DefaultValue(false)]
         public bool TrackMouseWheelWhenMouseOver
         {
-            get { return (bool)GetValue(TrackMouseWheelWhenMouseOverProperty); }
-            set { SetValue(TrackMouseWheelWhenMouseOverProperty, value); }
+            get => (bool)GetValue(TrackMouseWheelWhenMouseOverProperty);
+            set => SetValue(TrackMouseWheelWhenMouseOverProperty, value);
         }
 
         /// <summary>
@@ -226,8 +226,8 @@
         [DefaultValue(true)]
         public bool InterceptManualEnter
         {
-            get { return (bool)GetValue(InterceptManualEnterProperty); }
-            set { SetValue(InterceptManualEnterProperty, value); }
+            get => (bool)GetValue(InterceptManualEnterProperty);
+            set => SetValue(InterceptManualEnterProperty, value);
         }
 
         /// <summary>
@@ -252,8 +252,8 @@
         [DefaultValue(false)]
         public bool HideUpDownButtons
         {
-            get { return (bool)GetValue(HideUpDownButtonsProperty); }
-            set { SetValue(HideUpDownButtonsProperty, value); }
+            get => (bool)GetValue(HideUpDownButtonsProperty);
+            set => SetValue(HideUpDownButtonsProperty, value);
         }
 
         [Bindable(true)]
@@ -261,8 +261,8 @@
         [DefaultValue(DefaultInterval)]
         public double Interval
         {
-            get { return (double)GetValue(IntervalProperty); }
-            set { SetValue(IntervalProperty, value); }
+            get => (double)GetValue(IntervalProperty);
+            set => SetValue(IntervalProperty, value);
         }
 
         /// <summary>
@@ -274,8 +274,8 @@
         [DefaultValue(false)]
         public bool IsReadOnly
         {
-            get { return (bool)GetValue(IsReadOnlyProperty); }
-            set { SetValue(IsReadOnlyProperty, value); }
+            get => (bool)GetValue(IsReadOnlyProperty);
+            set => SetValue(IsReadOnlyProperty, value);
         }
 
         [Bindable(true)]
@@ -283,8 +283,8 @@
         [DefaultValue(double.MaxValue)]
         public double Maximum
         {
-            get { return (double)GetValue(MaximumProperty); }
-            set { SetValue(MaximumProperty, value); }
+            get => (double)GetValue(MaximumProperty);
+            set => SetValue(MaximumProperty, value);
         }
 
         [Bindable(true)]
@@ -292,8 +292,8 @@
         [DefaultValue(double.MinValue)]
         public double Minimum
         {
-            get { return (double)GetValue(MinimumProperty); }
-            set { SetValue(MinimumProperty, value); }
+            get => (double)GetValue(MinimumProperty);
+            set => SetValue(MinimumProperty, value);
         }
 
         /// <summary>
@@ -305,8 +305,8 @@
         [DefaultValue(true)]
         public bool Speedup
         {
-            get { return (bool)GetValue(SpeedupProperty); }
-            set { SetValue(SpeedupProperty, value); }
+            get => (bool)GetValue(SpeedupProperty);
+            set => SetValue(SpeedupProperty, value);
         }
 
         /// <summary>
@@ -318,8 +318,8 @@
         [Category("Common")]
         public string StringFormat
         {
-            get { return (string)GetValue(StringFormatProperty); }
-            set { SetValue(StringFormatProperty, value); }
+            get => (string)GetValue(StringFormatProperty);
+            set => SetValue(StringFormatProperty, value);
         }
 
         /// <summary>
@@ -330,8 +330,8 @@
         [DefaultValue(TextAlignment.Right)]
         public TextAlignment TextAlignment
         {
-            get { return (TextAlignment)GetValue(TextAlignmentProperty); }
-            set { SetValue(TextAlignmentProperty, value); }
+            get => (TextAlignment)GetValue(TextAlignmentProperty);
+            set => SetValue(TextAlignmentProperty, value);
         }
 
         [Bindable(true)]
@@ -339,8 +339,8 @@
         [DefaultValue(null)]
         public double? Value
         {
-            get { return (double?)GetValue(ValueProperty); }
-            set { SetValue(ValueProperty, value); }
+            get => (double?)GetValue(ValueProperty);
+            set => SetValue(ValueProperty, value);
         }
 
         private CultureInfo SpecificCultureInfo

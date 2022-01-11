@@ -10,6 +10,6 @@ namespace TMP.Work.Emcos.Export
         public string Title;
         public DateTime StartDate;
         public DateTime EndDate;
-        public ICollection<Model.Balans.Substation> Substations;
+        public ICollection<Model.Balance.Substation> Substations;
     }
 }

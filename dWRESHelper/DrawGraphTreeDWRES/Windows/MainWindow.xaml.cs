@@ -11,6 +11,8 @@ using TMP.DWRES.DB;
 using TMP.DWRES.ViewModel;
 
 using TMP.Common.Logger;
+using TMPApplication.Logger;
+using TMP.Shared.Commands;
 
 namespace TMP.DWRES.GUI
 {
@@ -31,7 +33,6 @@ namespace TMP.DWRES.GUI
             }
             catch (Exception ex)
             {
-                ConsoleLogger.Conlog("DWRESGraph", "MainWindow_InitializeComponent", ex.GetType(), ex.Message);
                 MessageBoxResult mresult = MessageBox.Show(
                     String.Format("Возникла ошибка!\nОписание:\n{0}.", ex.Message,
                     App.ResourceAssembly.GetName().Name, MessageBoxButton.OK, MessageBoxImage.Error));
@@ -54,7 +55,7 @@ namespace TMP.DWRES.GUI
             vm.MainWindow = this;
 
             #region CommandRelayoutGraph
-            vm.CommandRelayoutGraph = new GUI.DelegateCommand(() =>
+            vm.CommandRelayoutGraph = new DelegateCommand(() =>
             {
                 TMP.DWRES.Graph.FiderGraphLayout fgl = WPFControls.Controls.VisualTreeHelperEx.FindDescendantByType<TMP.DWRES.Graph.FiderGraphLayout>(this);
                 fgl.Relayout();
@@ -62,7 +63,7 @@ namespace TMP.DWRES.GUI
             );
             #endregion 
             #region CommandSelectLayoutAlgorithmType
-            vm.CommandSelectLayoutAlgorithmType = new GUI.DelegateCommand<Object>((sender) =>
+            vm.CommandSelectLayoutAlgorithmType = new DelegateCommand<Object>((sender) =>
             {
                 if (sender == null) return;
                 MenuItem mi = sender as MenuItem;
@@ -83,7 +84,7 @@ namespace TMP.DWRES.GUI
             );
             #endregion
             #region CommandCopyGraph
-            vm.CommandCopyGraph = new GUI.DelegateCommand(() =>
+            vm.CommandCopyGraph = new DelegateCommand(() =>
             {
                 TMP.DWRES.Graph.FiderGraphLayout fgl = WPFControls.Controls.VisualTreeHelperEx.FindDescendantByType<TMP.DWRES.Graph.FiderGraphLayout>(this);
 
@@ -94,7 +95,7 @@ namespace TMP.DWRES.GUI
             );
             #endregion
             #region CommandSaveGraph
-            vm.CommandSaveGraph = new GUI.DelegateCommand(() =>
+            vm.CommandSaveGraph = new DelegateCommand(() =>
             {
                 string name = String.Format("фидера {0}-{1}", vm.SelectedSubstation.Name, vm.SelectedFider.Name);
 
@@ -133,7 +134,7 @@ namespace TMP.DWRES.GUI
             );
             #endregion
             #region CommandPrintGraph
-            vm.CommandPrintGraph = new GUI.DelegateCommand(() =>
+            vm.CommandPrintGraph = new DelegateCommand(() =>
             {
                 TMP.DWRES.Graph.FiderGraphLayout fgl = WPFControls.Controls.VisualTreeHelperEx.FindDescendantByType<TMP.DWRES.Graph.FiderGraphLayout>(this);
 

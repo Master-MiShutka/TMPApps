@@ -1,13 +1,13 @@
-using System.Collections.Generic;
-using System.Globalization;
-using System.Windows;
-using System.Windows.Documents;
-using System.Windows.Markup;
-using System.Windows.Media;
-using TMP.PrintEngine.Utils;
-
 namespace TMP.PrintEngine.Paginators
 {
+    using System.Collections.Generic;
+    using System.Globalization;
+    using System.Windows;
+    using System.Windows.Documents;
+    using System.Windows.Markup;
+    using System.Windows.Media;
+    using TMP.PrintEngine.Utils;
+
     public class ItemsPaginator : VisualPaginator
     {
         protected PrintTableDefination PrintTableDefination;
@@ -16,16 +16,16 @@ namespace TMP.PrintEngine.Paginators
         public ItemsPaginator(DrawingVisual source, Size printSize, Thickness pageMargins, PrintTableDefination printTableDefination)
             : base(source, printSize, pageMargins, pageMargins)
         {
-            PrintTableDefination = printTableDefination;
-            ColumnCount = new List<int>();
-            CalculateHeaderHeight();
+            this.PrintTableDefination = printTableDefination;
+            this.ColumnCount = new List<int>();
+            this.CalculateHeaderHeight();
         }
 
         private void CalculateHeaderHeight()
         {
-            var header = XamlReader.Parse(PrintTableDefination.HeaderTemplate) as FrameworkElement;
-            UiUtil.UpdateSize(header, PrintablePageWidth);
-            HeaderHeight = header.ActualHeight + PageMargins.Top+PrintTableDefination.ColumnHeaderHeight;
+            var header = XamlReader.Parse(this.PrintTableDefination.HeaderTemplate) as FrameworkElement;
+            UiUtil.UpdateSize(header, this.PrintablePageWidth);
+            this.HeaderHeight = header.ActualHeight + this.PageMargins.Top + this.PrintTableDefination.ColumnHeaderHeight;
         }
 
         protected override int GetVerticalPageCount()
@@ -33,23 +33,23 @@ namespace TMP.PrintEngine.Paginators
             var pageCountY = 0;
             double totalHeight = 0;
             double lastTotalHeight = 0;
-            for (var i = 0; i < PrintTableDefination.RowHeights.Count; i++)
+            for (var i = 0; i < this.PrintTableDefination.RowHeights.Count; i++)
             {
-                lastTotalHeight = totalHeight + PrintTableDefination.RowHeights[i];
-                if (totalHeight + PrintTableDefination.RowHeights[i] <= PrintablePageHeight - HeaderHeight)
+                lastTotalHeight = totalHeight + this.PrintTableDefination.RowHeights[i];
+                if (totalHeight + this.PrintTableDefination.RowHeights[i] <= this.PrintablePageHeight - this.HeaderHeight)
                 {
-                    totalHeight += PrintTableDefination.RowHeights[i];
+                    totalHeight += this.PrintTableDefination.RowHeights[i];
                 }
                 else
                 {
                     pageCountY++;
-                    AdjustedPageHeights.Add(totalHeight);
+                    this.AdjustedPageHeights.Add(totalHeight);
                     totalHeight = 0;
                     i--;
                 }
-
             }
-            AdjustedPageHeights.Add(lastTotalHeight);
+
+            this.AdjustedPageHeights.Add(lastTotalHeight);
             return pageCountY + 1;
         }
 
@@ -58,24 +58,26 @@ namespace TMP.PrintEngine.Paginators
             verticalOffset = 0;
             for (var i = 0; i < horizontalPageNumber; i++)
             {
-                horizontalOffset += (float)GetPageWidth(i);
+                horizontalOffset += (float)this.GetPageWidth(i);
             }
+
             for (var j = 0; j < verticalPageNumber; j++)
             {
-                verticalOffset += (float)AdjustedPageHeights[j];
+                verticalOffset += (float)this.AdjustedPageHeights[j];
             }
+
             var pageBounds = new Rect
-                                 {
-                                     X = horizontalOffset,
-                                     Y = verticalOffset,
-                                     Size = new Size(GetPageWidth(horizontalPageNumber)+ 2, AdjustedPageHeights[verticalPageNumber] + 2)
-                                 };
+            {
+                X = horizontalOffset,
+                Y = verticalOffset,
+                Size = new Size(this.GetPageWidth(horizontalPageNumber) + 2, this.AdjustedPageHeights[verticalPageNumber] + 2),
+            };
             return pageBounds;
         }
 
         protected virtual double GetPageWidth(int pageNumber)
         {
-            return PrintablePageWidth;            
+            return this.PrintablePageWidth;
         }
 
         public override DocumentPage GetPage(int pageNumber)
@@ -84,110 +86,114 @@ namespace TMP.PrintEngine.Paginators
             var headerVisual = new DrawingVisual();
             using (var drawingContext = headerVisual.RenderOpen())
             {
-                var rowNumber = pageNumber % HorizontalPageCount;
-                var contentWidth = GetPageWidth(rowNumber);
+                var rowNumber = pageNumber % this.HorizontalPageCount;
+                var contentWidth = this.GetPageWidth(rowNumber);
 
-                CreateHeader(rowNumber,drawingContext,pageNumber+1);
-                if (PrintTableDefination.HasFooter)
+                this.CreateHeader(rowNumber, drawingContext, pageNumber + 1);
+                if (this.PrintTableDefination.HasFooter)
                 {
-                    var text3 = new FormattedText(PrintTableDefination.FooterText, CultureInfo.CurrentCulture, FlowDirection.LeftToRight, new Typeface("Arial"), 12, Brushes.Black);
-                    drawingContext.DrawText(text3, new Point(PageMargins.Left, PageSize.Height - PageMargins.Bottom - text3.Height));
+                    var text3 = new FormattedText(this.PrintTableDefination.FooterText, CultureInfo.CurrentCulture, FlowDirection.LeftToRight, new Typeface("Arial"), 12, Brushes.Black);
+                    drawingContext.DrawText(text3, new Point(this.PageMargins.Left, this.PageSize.Height - this.PageMargins.Bottom - text3.Height));
                 }
 
-                var contentTop = PageMargins.Top + HeaderHeight;
+                var contentTop = this.PageMargins.Top + this.HeaderHeight;
                 var gridLineBrush = Brushes.Gray;
                 const double gridLineThickness = 0.5;
                 var gridLinePen = new Pen(gridLineBrush, gridLineThickness);
 
-                if (PrintTableDefination.ColumnNames != null)
-                {                    
-                    drawingContext.DrawRectangle(Brushes.Transparent, gridLinePen, new Rect(PageMargins.Left - 1, contentTop - PrintTableDefination.ColumnHeaderHeight, contentWidth, PrintTableDefination.ColumnHeaderHeight));
-                    drawingContext.DrawRectangle(gridLineBrush, gridLinePen, new Rect(PageMargins.Left - 1, contentTop - 2, contentWidth, 2));
+                if (this.PrintTableDefination.ColumnNames != null)
+                {
+                    drawingContext.DrawRectangle(Brushes.Transparent, gridLinePen, new Rect(this.PageMargins.Left - 1, contentTop - this.PrintTableDefination.ColumnHeaderHeight, contentWidth, this.PrintTableDefination.ColumnHeaderHeight));
+                    drawingContext.DrawRectangle(gridLineBrush, gridLinePen, new Rect(this.PageMargins.Left - 1, contentTop - 2, contentWidth, 2));
 
                     var cumilativeColumnNumber = 0;
-                    var columnLeft = PageMargins.Left - 1;
-                    var currentPageColumns = rowNumber == HorizontalPageCount - 1 ? ColumnCount[rowNumber] - 1 : ColumnCount[rowNumber];
+                    var columnLeft = this.PageMargins.Left - 1;
+                    var currentPageColumns = rowNumber == this.HorizontalPageCount - 1 ? this.ColumnCount[rowNumber] - 1 : this.ColumnCount[rowNumber];
                     for (int j = 0; j < rowNumber; j++)
                     {
-                        cumilativeColumnNumber += ColumnCount[j];
+                        cumilativeColumnNumber += this.ColumnCount[j];
                     }
+
                     for (int i = cumilativeColumnNumber; i < cumilativeColumnNumber + currentPageColumns; i++)
                     {
-                        var columnWidth = PrintTableDefination.ColumnWidths[i];
-                        var colName = PrintTableDefination.ColumnNames[i];
+                        var columnWidth = this.PrintTableDefination.ColumnWidths[i];
+                        var colName = this.PrintTableDefination.ColumnNames[i];
                         if (colName == string.Empty)
                         {
-                            drawingContext.DrawRectangle(gridLineBrush, gridLinePen, new Rect(columnLeft, contentTop - PrintTableDefination.ColumnHeaderHeight, columnWidth, PrintTableDefination.ColumnHeaderHeight));
+                            drawingContext.DrawRectangle(gridLineBrush, gridLinePen, new Rect(columnLeft, contentTop - this.PrintTableDefination.ColumnHeaderHeight, columnWidth, this.PrintTableDefination.ColumnHeaderHeight));
                         }
                         else
                         {
-                            var columnName = new FormattedText(colName, CultureInfo.CurrentCulture, FlowDirection.LeftToRight, new Typeface("Arial"), PrintTableDefination.ColumnHeaderFontSize, PrintTableDefination.ColumnHeaderBrush)
-                                                 {
-                                                     MaxTextWidth = columnWidth,
-                                                     MaxLineCount = 1,
-                                                     Trimming = TextTrimming.CharacterEllipsis
-                                                 };
-                            drawingContext.DrawText(columnName, new Point(columnLeft + 5, contentTop - PrintTableDefination.ColumnHeaderHeight));
+                            var columnName = new FormattedText(colName, CultureInfo.CurrentCulture, FlowDirection.LeftToRight, new Typeface("Arial"), this.PrintTableDefination.ColumnHeaderFontSize, this.PrintTableDefination.ColumnHeaderBrush)
+                            {
+                                MaxTextWidth = columnWidth,
+                                MaxLineCount = 1,
+                                Trimming = TextTrimming.CharacterEllipsis,
+                            };
+                            drawingContext.DrawText(columnName, new Point(columnLeft + 5, contentTop - this.PrintTableDefination.ColumnHeaderHeight));
                         }
-                        columnLeft += columnWidth;
-                        drawingContext.DrawRectangle(gridLineBrush, gridLinePen, new Rect(columnLeft, contentTop - PrintTableDefination.ColumnHeaderHeight, gridLineThickness, PrintTableDefination.ColumnHeaderHeight));
 
+                        columnLeft += columnWidth;
+                        drawingContext.DrawRectangle(gridLineBrush, gridLinePen, new Rect(columnLeft, contentTop - this.PrintTableDefination.ColumnHeaderHeight, gridLineThickness, this.PrintTableDefination.ColumnHeaderHeight));
                     }
-                    if (rowNumber == HorizontalPageCount - 1)
+
+                    if (rowNumber == this.HorizontalPageCount - 1)
                     {
                         var columnWidth =
-                            PrintTableDefination.ColumnWidths[cumilativeColumnNumber + ColumnCount[rowNumber] - 1];
+                            this.PrintTableDefination.ColumnWidths[cumilativeColumnNumber + this.ColumnCount[rowNumber] - 1];
                         var colName =
-                            PrintTableDefination.ColumnNames[cumilativeColumnNumber + ColumnCount[rowNumber] - 1];
+                            this.PrintTableDefination.ColumnNames[cumilativeColumnNumber + this.ColumnCount[rowNumber] - 1];
                         if (colName == string.Empty)
                         {
-                            drawingContext.DrawRectangle(gridLineBrush, gridLinePen, new Rect(columnLeft, contentTop - PrintTableDefination.ColumnHeaderHeight - 2, columnWidth, PrintTableDefination.ColumnHeaderHeight));
+                            drawingContext.DrawRectangle(gridLineBrush, gridLinePen, new Rect(columnLeft, contentTop - this.PrintTableDefination.ColumnHeaderHeight - 2, columnWidth, this.PrintTableDefination.ColumnHeaderHeight));
                         }
                         else
                         {
-                            var columnName = new FormattedText(colName, CultureInfo.CurrentCulture, FlowDirection.LeftToRight, new Typeface("Arial"), PrintTableDefination.ColumnHeaderFontSize, Brushes.Black)
-                                                 {
-                                                     MaxTextWidth = columnWidth,
-                                                     MaxLineCount = 1,
-                                                     Trimming = TextTrimming.CharacterEllipsis
-                                                 };
-                            drawingContext.DrawText(columnName, new Point(columnLeft + 5, contentTop - PrintTableDefination.ColumnHeaderHeight));
+                            var columnName = new FormattedText(colName, CultureInfo.CurrentCulture, FlowDirection.LeftToRight, new Typeface("Arial"), this.PrintTableDefination.ColumnHeaderFontSize, Brushes.Black)
+                            {
+                                MaxTextWidth = columnWidth,
+                                MaxLineCount = 1,
+                                Trimming = TextTrimming.CharacterEllipsis,
+                            };
+                            drawingContext.DrawText(columnName, new Point(columnLeft + 5, contentTop - this.PrintTableDefination.ColumnHeaderHeight));
                         }
                     }
                 }
-                if (ShowPageMarkers)
+
+                if (this.ShowPageMarkers)
                 {
                     var pageNumberText = new FormattedText(string.Format("{0}", pageNumber + 1), CultureInfo.CurrentCulture, FlowDirection.LeftToRight, new Typeface("Arial"), 12, gridLineBrush);
-                    drawingContext.DrawText(pageNumberText, new Point(PageMargins.Left + 5, PrintablePageHeight - pageNumberText.Height + 15));
+                    drawingContext.DrawText(pageNumberText, new Point(this.PageMargins.Left + 5, this.PrintablePageHeight - pageNumberText.Height + 15));
                 }
+
                 drawingContext.PushOpacityMask(Brushes.White);
             }
 
             var drawingGroup = new DrawingGroup();
             drawingGroup.Children.Add(((DrawingVisual)page.Visual).Drawing);
             drawingGroup.Children.Add(headerVisual.Drawing);
-            
+
             var currentDrawingVisual = (DrawingVisual)page.Visual;
-            currentDrawingVisual.Transform = new TranslateTransform(PageMargins.Left, PageMargins.Top);
-            
+            currentDrawingVisual.Transform = new TranslateTransform(this.PageMargins.Left, this.PageMargins.Top);
+
             var currentDrawingContext = currentDrawingVisual.RenderOpen();
             currentDrawingContext.DrawDrawing(drawingGroup);
             currentDrawingContext.PushOpacityMask(Brushes.White);
             currentDrawingContext.Close();
-            var documentPage = new DocumentPage(currentDrawingVisual, PageSize, FrameRect, FrameRect);
-            OnGetPageCompleted(new GetPageCompletedEventArgs(documentPage, pageNumber, null, false, null));
+            var documentPage = new DocumentPage(currentDrawingVisual, this.PageSize, this.FrameRect, this.FrameRect);
+            this.OnGetPageCompleted(new GetPageCompletedEventArgs(documentPage, pageNumber, null, false, null));
             return documentPage;
         }
 
         private void CreateHeader(int index, DrawingContext drawingContext, int pageNumber)
         {
-            if (!string.IsNullOrEmpty(PrintTableDefination.HeaderTemplate) && index==0)
+            if (!string.IsNullOrEmpty(this.PrintTableDefination.HeaderTemplate) && index == 0)
             {
-                var headerTemplate = PrintTableDefination.HeaderTemplate.Replace("@PageNumber", pageNumber.ToString());
+                var headerTemplate = this.PrintTableDefination.HeaderTemplate.Replace("@PageNumber", pageNumber.ToString());
                 var header = XamlReader.Parse(headerTemplate) as FrameworkElement;
-                header.Width = PrintablePageWidth;
-                UiUtil.UpdateSize(header, PrintablePageWidth);
-                drawingContext.DrawRectangle(new VisualBrush(header) { Stretch = Stretch.None }, null, new Rect(PageMargins.Left, PageMargins.Top, PrintablePageWidth, header.ActualHeight));
+                header.Width = this.PrintablePageWidth;
+                UiUtil.UpdateSize(header, this.PrintablePageWidth);
+                drawingContext.DrawRectangle(new VisualBrush(header) { Stretch = Stretch.None }, null, new Rect(this.PageMargins.Left, this.PageMargins.Top, this.PrintablePageWidth, header.ActualHeight));
             }
         }
 

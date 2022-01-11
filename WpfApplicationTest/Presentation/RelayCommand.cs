@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace WpfApplicationTest.Presentation
+﻿namespace WpfApplicationTest.Presentation
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+
     /// <summary>
     /// The command that relays its functionality by invoking delegates.
     /// </summary>
@@ -24,13 +24,15 @@ namespace WpfApplicationTest.Presentation
         {
             if (execute == null)
             {
-                throw new ArgumentNullException("execute");
+                throw new ArgumentNullException(nameof(execute));
             }
+
             if (canExecute == null)
             {
                 // no can execute provided, then always executable
                 canExecute = (o) => true;
             }
+
             this.execute = execute;
             this.canExecute = canExecute;
         }
@@ -44,7 +46,7 @@ namespace WpfApplicationTest.Presentation
         /// </returns>
         public override bool CanExecute(object parameter)
         {
-            return canExecute(parameter);
+            return this.canExecute(parameter);
         }
 
         /// <summary>
@@ -53,8 +55,7 @@ namespace WpfApplicationTest.Presentation
         /// <param name="parameter">The parameter.</param>
         protected override void OnExecute(object parameter)
         {
-            execute(parameter);
+            this.execute(parameter);
         }
     }
-
 }

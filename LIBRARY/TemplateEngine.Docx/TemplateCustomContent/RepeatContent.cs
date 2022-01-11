@@ -1,24 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-
-namespace TemplateEngine.Docx
+﻿namespace TemplateEngine.Docx
 {
-	[ContentItemName("Repeat")]
-	public class RepeatContent : HiddenContent<RepeatContent>, IEquatable<RepeatContent>
-	{
-        #region properties
-	    
-	    public ICollection<Content> Items { get; set; }
+    using System;
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+    using System.Linq;
 
-        public IEnumerable<string> FieldNames
-        {
-            get
-            {
-                return Items?.SelectMany(r => r.FieldNames).Distinct().ToList() ?? new List<string>();
-            }
-        }
+    [ContentItemName("Repeat")]
+    public class RepeatContent : HiddenContent<RepeatContent>, IEquatable<RepeatContent>
+    {
+        #region properties
+
+        public ICollection<Content> Items { get; set; }
+
+        public IEnumerable<string> FieldNames => this.Items?.SelectMany(r => r.FieldNames).Distinct().ToList() ?? new List<string>();
 
         #endregion properties
 
@@ -26,82 +20,97 @@ namespace TemplateEngine.Docx
 
         public RepeatContent()
         {
-            
         }
 
         public RepeatContent(string name)
         {
-            Name = name;
+            this.Name = name;
         }
 
-		public RepeatContent(string name, IEnumerable<Content> items)
+        public RepeatContent(string name, IEnumerable<Content> items)
             : this(name)
         {
-            Items = items.ToList();
+            this.Items = items.ToList();
         }
 
-		public RepeatContent(string name, params Content[] items)
+        public RepeatContent(string name, params Content[] items)
             : this(name)
         {
-			Items = items.ToList();
+            this.Items = items.ToList();
         }
 
-		#endregion
+        #endregion
 
-		#region Fluent
+        #region Fluent
 
-		public static RepeatContent Create(string name, params Content[] items)
+        public static RepeatContent Create(string name, params Content[] items)
         {
-			return new RepeatContent(name, items);
+            return new RepeatContent(name, items);
         }
 
-		public static RepeatContent Create(string name, IEnumerable<Content> items)
+        public static RepeatContent Create(string name, IEnumerable<Content> items)
         {
-			return new RepeatContent(name, items);
+            return new RepeatContent(name, items);
         }
 
-		public RepeatContent AddItem(Content item)
-		{
-			if (Items == null) Items = new Collection<Content>();
-			Items.Add(item);
-			return this;
-		}
+        public RepeatContent AddItem(Content item)
+        {
+            if (this.Items == null)
+            {
+                this.Items = new Collection<Content>();
+            }
 
-		public RepeatContent AddItem(params IContentItem[] contentItems)
-		{
-			if (Items == null) Items = new Collection<Content>();
-			Items.Add(new Content(contentItems));
-			return this;
-		}
+            this.Items.Add(item);
+            return this;
+        }
+
+        public RepeatContent AddItem(params IContentItem[] contentItems)
+        {
+            if (this.Items == null)
+            {
+                this.Items = new Collection<Content>();
+            }
+
+            this.Items.Add(new Content(contentItems));
+            return this;
+        }
 
         #endregion
 
         #region Equals
 
         public bool Equals(RepeatContent other)
-		{
-			if (other == null) return false;
-			return Name.Equals(other.Name) &&
-			       Items.SequenceEqual(other.Items);
-		}
+        {
+            if (other == null)
+            {
+                return false;
+            }
 
-		public override bool Equals(IContentItem other)
-		{
-			if (!(other is RepeatContent)) return false;
+            return this.Name.Equals(other.Name) &&
+                   this.Items.SequenceEqual(other.Items);
+        }
 
-			return Equals((RepeatContent)other);
-		}
+        public override bool Equals(IContentItem other)
+        {
+            if (!(other is RepeatContent))
+            {
+                return false;
+            }
 
+            return this.Equals((RepeatContent)other);
+        }
 
-		public override int GetHashCode()
-		{
-			var hc = 0;
-			if (Items != null)
-				hc = Items.Aggregate(hc, (current, p) => current ^ p.GetHashCode());
-			
-			return new { Name, hc }.GetHashCode();
-		}
+        public override int GetHashCode()
+        {
+            var hc = 0;
+            if (this.Items != null)
+            {
+                hc = this.Items.Aggregate(hc, (current, p) => current ^ p.GetHashCode());
+            }
 
-		#endregion
-	}
+            return new { this.Name, hc }.GetHashCode();
+        }
+
+        #endregion
+    }
 }

@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace TMP.ElectricMeterComm
+﻿namespace TMP.ElectricMeterComm
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+
     public static class Utils
     {
         public static byte[] HexToBytes(string input)
@@ -14,6 +14,7 @@ namespace TMP.ElectricMeterComm
             {
                 result[i] = Convert.ToByte(input.Substring(2 * i, 2), 16);
             }
+
             return result;
         }
 
@@ -21,10 +22,12 @@ namespace TMP.ElectricMeterComm
         {
             return value.ToString("X2");
         }
+
         public static string ToHex(this int value)
         {
             return value.ToString("X2");
         }
+
         public static string ToHex(this string value)
         {
             return Convert.ToByte(value).ToString("X2");

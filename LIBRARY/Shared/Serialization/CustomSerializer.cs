@@ -1,23 +1,20 @@
-﻿using System.IO;
-using System.IO.Compression;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.Security.Cryptography;
-using System.Text;
-
-namespace TMP.Shared.Serialization
+﻿namespace TMP.Shared.Serialization
 {
+    using System.IO;
+    using System.IO.Compression;
+    using System.Security.Cryptography;
+    using System.Text;
+
     public class CustomSerializer
     {
         private static T DecryptAndDeserialize<T>(string fileName, SymmetricAlgorithm key)
         {
             T obj;
-
             using (FileStream fs = File.Open(fileName, FileMode.Open))
             using (CryptoStream cs = new CryptoStream(fs, key.CreateDecryptor(), CryptoStreamMode.Read))
             using (GZipStream gzip = new GZipStream(cs, CompressionMode.Decompress, false))
             {
-                BinaryFormatter formatter = new BinaryFormatter();
-                obj = (T)formatter.Deserialize(gzip);
+                obj = Binaron.Serializer.BinaronConvert.Deserialize<T>(gzip);
             }
 
             return obj;
@@ -40,8 +37,7 @@ namespace TMP.Shared.Serialization
             using (CryptoStream cs = new CryptoStream(fs, key.CreateEncryptor(), CryptoStreamMode.Write))
             using (GZipStream gzip = new GZipStream(cs, CompressionMode.Compress, false))
             {
-                BinaryFormatter formatter = new BinaryFormatter();
-                formatter.Serialize(gzip, obj);
+                Binaron.Serializer.BinaronConvert.Serialize(obj, gzip);
             }
         }
 

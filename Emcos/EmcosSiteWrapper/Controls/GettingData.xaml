@@ -6,13 +6,11 @@
     xmlns:dat="clr-namespace:System.Windows.Data;assembly=PresentationFramework"
     xmlns:local="clr-namespace:TMP.Work.Emcos"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:model="clr-namespace:TMP.Work.Emcos.Model.Balans"
+    xmlns:model="clr-namespace:TMP.Work.Emcos.Model.Balance;assembly=EmcosModel"
     xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
     HorizontalAlignment="Stretch"
     VerticalAlignment="Stretch"
     Panel.ZIndex="1000"
-    d:DesignHeight="500"
-    d:DesignWidth="800"
     mc:Ignorable="d">
     <UserControl.Resources>
         <CollectionViewSource x:Key="substations" Source="{Binding Substations}">
@@ -55,7 +53,10 @@
                     Grid.Row="0"
                     Margin="0,0,0,5"
                     TextAlignment="Center">
-                    Пожалуйста, подождите...
+                    <Run>Пожалуйста, подождите ...</Run>
+                    <LineBreak />
+                    <Run>Осталось</Run>
+                    <Run FontStyle="Italic" Text="{Binding Path=RemainingTime, Mode=OneWay, FallbackValue=(идёт подсчёт)}" />
                 </TextBlock>
                 <Separator
                     Grid.Row="0"
@@ -118,7 +119,7 @@
                     </ListView.Resources>
                     <ListView.View>
                         <GridView>
-                            <GridViewColumn Header="Наименование">
+                            <GridViewColumn Width="250" Header="Наименование">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate DataType="{x:Type model:Substation}">
                                         <StackPanel Orientation="Horizontal">

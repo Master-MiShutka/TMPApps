@@ -1,14 +1,7 @@
 ﻿<ResourceDictionary
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:Controls="clr-namespace:TMP.Wpf.Common.Controls;assembly=TMP.Wpf.Common">
-
-    <FontFamily x:Key="DefaultFont">Segoe UI, Lucida Sans Unicode, Verdana</FontFamily>
-    <FontFamily x:Key="HeaderFontFamily">Segoe UI, Lucida Sans Unicode, Verdana</FontFamily>
-    <FontFamily x:Key="ContentFontFamily">Segoe UI, Lucida Sans Unicode, Verdana</FontFamily>
-
-    <FontFamily x:Key="ContentTextFontFamily">Segoe UI, Lucida Sans Unicode, Verdana</FontFamily>
-    <FontFamily x:Key="ContentNumbersFontFamily">Century Gothic, Segoe UI, Trebuchet MS</FontFamily>
+    xmlns:uihelpers="clr-namespace:TMP.UI.Controls.WPF.Helpers;assembly=ui.controls.wpf">
 
     <Style x:Key="BaseCellStyle" TargetType="{x:Type TextBlock}">
         <Setter Property="FontFamily" Value="{DynamicResource ContentTextFontFamily}" />
@@ -40,22 +33,21 @@
 
     <Style
         x:Key="numberTextBox"
-        BasedOn="{StaticResource MetroTextBox}"
+        BasedOn="{StaticResource {x:Type TextBox}}"
         TargetType="{x:Type TextBox}">
         <Setter Property="FontFamily" Value="{DynamicResource ContentNumbersFontFamily}" />
         <Setter Property="FontSize" Value="{DynamicResource SubHeaderFontSize}" />
         <Setter Property="Padding" Value="0" />
         <Setter Property="Margin" Value="0,0,0,1" />
         <Setter Property="TextAlignment" Value="Right" />
-        <Setter Property="Controls:TextBoxHelper.IsWaitingForData" Value="False" />
-        <Setter Property="Controls:TextBoxHelper.UseFloatingWatermark" Value="False" />
+        <Setter Property="uihelpers:TextBoxHelper.IsWaitingForData" Value="False" />
         <Style.Triggers>
-            <Trigger Property="Controls:TextBoxHelper.HasText" Value="False">
-                <Setter Property="Controls:TextBoxHelper.ClearTextButton" Value="False" />
-                <Setter Property="Controls:TextBoxHelper.Watermark" Value="&lt;нет данных&gt;" />
+            <Trigger Property="uihelpers:TextBoxHelper.HasText" Value="False">
+                <Setter Property="uihelpers:TextBoxHelper.ClearTextButton" Value="False" />
+                <Setter Property="uihelpers:TextBoxHelper.Watermark" Value="&lt;нет данных&gt;" />
             </Trigger>
-            <Trigger Property="Controls:TextBoxHelper.HasText" Value="True">
-                <Setter Property="Controls:TextBoxHelper.ClearTextButton" Value="True" />
+            <Trigger Property="uihelpers:TextBoxHelper.HasText" Value="True">
+                <Setter Property="uihelpers:TextBoxHelper.ClearTextButton" Value="True" />
             </Trigger>
         </Style.Triggers>
     </Style>
@@ -66,11 +58,11 @@
         <Setter Property="IsReadOnly" Value="True" />
         <Setter Property="IsReadOnlyCaretVisible" Value="True" />
         <Setter Property="Background" Value="{DynamicResource GrayBrush8}" />
-        <Setter Property="Controls:TextBoxHelper.ClearTextButton" Value="False" />
+        <Setter Property="uihelpers:TextBoxHelper.ClearTextButton" Value="False" />
     </Style>
     <Style
         x:Key="textTextBox"
-        BasedOn="{StaticResource MetroTextBox}"
+        BasedOn="{StaticResource {x:Type TextBox}}"
         TargetType="{x:Type TextBox}">
         <Setter Property="FontFamily" Value="{DynamicResource ContentTextFontFamily}" />
         <Setter Property="FontSize" Value="{DynamicResource SubHeaderFontSize}" />
@@ -78,19 +70,18 @@
         <Setter Property="Margin" Value="0,0,0,1" />
         <Setter Property="TextAlignment" Value="Left" />
         <Setter Property="TextWrapping" Value="Wrap" />
-        <Setter Property="Controls:TextBoxHelper.IsWaitingForData" Value="False" />
-        <Setter Property="Controls:TextBoxHelper.UseFloatingWatermark" Value="False" />
+        <Setter Property="uihelpers:TextBoxHelper.IsWaitingForData" Value="False" />
         <Style.Triggers>
             <Trigger Property="Validation.HasError" Value="true">
                 <Setter Property="ToolTip.Template" Value="{StaticResource toolTipErrorTemplate}" />
                 <Setter Property="ToolTip" Value="{Binding RelativeSource={RelativeSource Self}, Path=(Validation.Errors).CurrentItem.ErrorContent}" />
             </Trigger>
-            <Trigger Property="Controls:TextBoxHelper.HasText" Value="False">
-                <Setter Property="Controls:TextBoxHelper.ClearTextButton" Value="False" />
-                <Setter Property="Controls:TextBoxHelper.Watermark" Value="&lt;нет данных&gt;" />
+            <Trigger Property="uihelpers:TextBoxHelper.HasText" Value="False">
+                <Setter Property="uihelpers:TextBoxHelper.ClearTextButton" Value="False" />
+                <Setter Property="uihelpers:TextBoxHelper.Watermark" Value="&lt;нет данных&gt;" />
             </Trigger>
-            <Trigger Property="Controls:TextBoxHelper.HasText" Value="True">
-                <Setter Property="Controls:TextBoxHelper.ClearTextButton" Value="True" />
+            <Trigger Property="uihelpers:TextBoxHelper.HasText" Value="True">
+                <Setter Property="uihelpers:TextBoxHelper.ClearTextButton" Value="True" />
             </Trigger>
         </Style.Triggers>
     </Style>
@@ -101,7 +92,7 @@
         <Setter Property="IsReadOnly" Value="True" />
         <Setter Property="IsReadOnlyCaretVisible" Value="True" />
         <Setter Property="Background" Value="{DynamicResource GrayBrush8}" />
-        <Setter Property="Controls:TextBoxHelper.ClearTextButton" Value="False" />
+        <Setter Property="uihelpers:TextBoxHelper.ClearTextButton" Value="False" />
     </Style>
     <Style BasedOn="{StaticResource textTextBox}" TargetType="{x:Type TextBox}" />
 

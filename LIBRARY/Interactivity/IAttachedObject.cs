@@ -1,8 +1,8 @@
-﻿using System;
-using System.Windows;
-
-namespace Interactivity
+﻿namespace Interactivity
 {
+    using System;
+    using System.Windows;
+
     /// <summary>
     /// An interface for an object that can be attached to another object.
     /// </summary>

@@ -1,47 +1,47 @@
-﻿using System;
-using System.ComponentModel;
-using System.Diagnostics.CodeAnalysis;
-using System.Runtime.InteropServices;
-
-namespace Native
+﻿namespace Native
 {
+    using System;
+    using System.ComponentModel;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Runtime.InteropServices;
+
     /// <summary>
     /// GetWindowLongPtr values, GWL_*
     /// </summary>
     public enum GWL
     {
-        WNDPROC = (-4),
-        HINSTANCE = (-6),
-        HWNDPARENT = (-8),
-        STYLE = (-16),
-        EXSTYLE = (-20),
-        USERDATA = (-21),
-        ID = (-12)
+        WNDPROC = -4,
+        HINSTANCE = -6,
+        HWNDPARENT = -8,
+        STYLE = -16,
+        EXSTYLE = -20,
+        USERDATA = -21,
+        ID = -12,
     }
 
     [Serializable]
     [StructLayout(LayoutKind.Sequential)]
     public struct POINT
     {
-        private int _x;
-        private int _y;
+        private int x;
+        private int y;
 
         public POINT(int x, int y)
         {
-            _x = x;
-            _y = y;
+            this.x = x;
+            this.y = y;
         }
 
         public int X
         {
-            get { return _x; }
-            set { _x = value; }
+            get => this.x;
+            set => this.x = value;
         }
 
         public int Y
         {
-            get { return _y; }
-            set { _y = value; }
+            get => this.y;
+            set => this.y = value;
         }
 
         public override bool Equals(object obj)
@@ -50,19 +50,20 @@ namespace Native
             {
                 var point = (POINT)obj;
 
-                return point._x == _x && point._y == _y;
+                return point.x == this.x && point.y == this.y;
             }
+
             return base.Equals(obj);
         }
 
         public override int GetHashCode()
         {
-            return _x.GetHashCode() ^ _y.GetHashCode();
+            return this.x.GetHashCode() ^ this.y.GetHashCode();
         }
 
         public static bool operator ==(POINT a, POINT b)
         {
-            return a._x == b._x && a._y == b._y;
+            return a.x == b.x && a.y == b.y;
         }
 
         public static bool operator !=(POINT a, POINT b)
@@ -190,8 +191,8 @@ namespace Native
         NCMOUSELEAVE = 0x02A2,
 
         TABLET_DEFBASE = 0x02C0,
-        //WM_TABLET_MAXOFFSET = 0x20,
 
+        // WM_TABLET_MAXOFFSET = 0x20,
         TABLET_ADDED = TABLET_DEFBASE + 8,
         TABLET_DELETED = TABLET_DEFBASE + 9,
         TABLET_FLICK = TABLET_DEFBASE + 11,
@@ -237,7 +238,7 @@ namespace Native
 
         // This is the hard-coded message value used by WinForms for Shell_NotifyIcon.
         // It's relatively safe to reuse.
-        TRAYMOUSEMESSAGE = 0x800, //WM_USER + 1024
+        TRAYMOUSEMESSAGE = 0x800, // WM_USER + 1024
         APP = 0x8000,
     }
 
@@ -264,6 +265,7 @@ namespace Native
         MONITORPOWER = 0xF170,
         CONTEXTHELP = 0xF180,
         SEPARATOR = 0xF00F,
+
         /// <summary>
         /// SCF_ISSECURE
         /// </summary>
@@ -278,10 +280,12 @@ namespace Native
         {
             return (WS)NativeMethods.GetWindowLong(hWnd, (int)GWL.STYLE);
         }
+
         public static WSEX GetWindowLongEx(this IntPtr hWnd)
         {
             return (WSEX)NativeMethods.GetWindowLong(hWnd, (int)GWL.EXSTYLE);
         }
+
         [DllImport("user32.dll", EntryPoint = "GetWindowLongA", SetLastError = true)]
         public static extern int GetWindowLong(IntPtr hWnd, int nIndex);
 
@@ -289,33 +293,34 @@ namespace Native
         {
             return (WS)NativeMethods.SetWindowLongPtr32(hWnd, GWL.STYLE, (int)dwNewLong);
         }
+
         public static WSEX SetWindowLongEx(this IntPtr hWnd, WSEX dwNewLong)
         {
             return (WSEX)NativeMethods.SetWindowLongPtr32(hWnd, GWL.EXSTYLE, (int)dwNewLong);
         }
 
-        [SuppressMessage("Microsoft.Interoperability", "CA1400:PInvokeEntryPointsShouldExist")]
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        [SuppressMessage("Microsoft.Interoperability", "CA1400:PInvokeEntryPointsShouldExist", Justification = "ToDo")]
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "ToDo")]
         [DllImport("user32.dll", EntryPoint = "GetWindowLong", SetLastError = true)]
         private static extern int GetWindowLongPtr32(IntPtr hWnd, GWL nIndex);
 
-        [SuppressMessage("Microsoft.Interoperability", "CA1400:PInvokeEntryPointsShouldExist")]
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        [SuppressMessage("Microsoft.Interoperability", "CA1400:PInvokeEntryPointsShouldExist", Justification = "ToDo")]
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "ToDo")]
         [DllImport("user32.dll", EntryPoint = "GetWindowLongPtr", SetLastError = true)]
         private static extern IntPtr GetWindowLongPtr64(IntPtr hWnd, GWL nIndex);
 
-        [SuppressMessage("Microsoft.Interoperability", "CA1400:PInvokeEntryPointsShouldExist")]
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        [SuppressMessage("Microsoft.Interoperability", "CA1400:PInvokeEntryPointsShouldExist", Justification = "ToDo")]
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "ToDo")]
         [DllImport("user32.dll", EntryPoint = "SetWindowLong", SetLastError = true)]
         private static extern int SetWindowLongPtr32(IntPtr hWnd, GWL nIndex, int dwNewLong);
 
-        [SuppressMessage("Microsoft.Interoperability", "CA1400:PInvokeEntryPointsShouldExist")]
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        [SuppressMessage("Microsoft.Interoperability", "CA1400:PInvokeEntryPointsShouldExist", Justification = "ToDo")]
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "ToDo")]
         [DllImport("user32.dll", EntryPoint = "SetWindowLongPtr", SetLastError = true)]
         private static extern IntPtr SetWindowLongPtr64(IntPtr hWnd, GWL nIndex, IntPtr dwNewLong);
 
         // This is aliased as a macro in 32bit Windows.
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "ToDo")]
         public static IntPtr GetWindowLongPtr(IntPtr hwnd, GWL nIndex)
         {
             IntPtr ret = IntPtr.Zero;
@@ -327,21 +332,24 @@ namespace Native
             {
                 ret = new IntPtr(GetWindowLongPtr32(hwnd, nIndex));
             }
+
             if (IntPtr.Zero == ret)
             {
                 throw new Win32Exception();
             }
+
             return ret;
         }
 
         // This is aliased as a macro in 32bit Windows.
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "ToDo")]
         public static IntPtr SetWindowLongPtr(IntPtr hwnd, GWL nIndex, IntPtr dwNewLong)
         {
             if (8 == IntPtr.Size)
             {
                 return SetWindowLongPtr64(hwnd, nIndex, dwNewLong);
             }
+
             return new IntPtr(SetWindowLongPtr32(hwnd, nIndex, dwNewLong.ToInt32()));
         }
 
@@ -352,13 +360,12 @@ namespace Native
         [DllImport("user32.dll", SetLastError = true)]
         public static extern bool PostMessage(IntPtr hwnd, uint Msg, IntPtr wParam, IntPtr lParam);
 
-
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "ToDo")]
         [DllImport("user32.dll", EntryPoint = "GetCursorPos", SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
         private static extern bool _GetCursorPos(out POINT lpPoint);
 
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "ToDo")]
         public static POINT GetCursorPos()
         {
             POINT pt;
@@ -371,15 +378,13 @@ namespace Native
         }
 
         // Depending on the message, callers may want to call GetLastError based on the return value.
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "ToDo")]
         [DllImport("user32.dll", SetLastError = true)]
         public static extern IntPtr SendMessage(IntPtr hWnd, WM Msg, IntPtr wParam, IntPtr lParam);
 
-
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "ToDo")]
         [DllImport("user32.dll", SetLastError = true)]
         public static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
-
 
         // Get Accent color of window
         [DllImport("dwmapi.dll", EntryPoint = "#127")]

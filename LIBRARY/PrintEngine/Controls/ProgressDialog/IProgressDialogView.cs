@@ -1,7 +1,7 @@
-﻿using TMP.PrintEngine.Controls.WaitScreen;
-
-namespace TMP.PrintEngine.Controls.ProgressDialog
+﻿namespace TMP.PrintEngine.Controls.ProgressDialog
 {
+    using TMP.PrintEngine.Controls.WaitScreen;
+
     public interface IProgressDialogView : IWaitScreenView
     {
     }

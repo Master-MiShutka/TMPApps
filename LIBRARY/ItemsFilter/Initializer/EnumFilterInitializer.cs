@@ -1,17 +1,17 @@
-﻿using ItemsFilter.Model;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-
-namespace ItemsFilter.Initializer
+﻿namespace ItemsFilter.Initializer
 {
+    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel;
+    using System.Diagnostics;
+    using System.Linq;
+    using System.Text;
+    using ItemsFilter.Model;
+
     /// <summary>
     /// Filter initializer for EnumFilter.
     /// </summary>
-    public class EnumFilterInitializer:PropertyFilterInitializer
+    public class EnumFilterInitializer : PropertyFilterInitializer
     {
         /// <summary>
         /// Generate new instance of EnumFilter class, if it is possible for a pair of filterPresenter and propertyInfo.
@@ -25,11 +25,11 @@ namespace ItemsFilter.Initializer
             Debug.Assert(propertyInfo != null);
             Type propertyType = propertyInfo.PropertyType;
             if (filterPresenter.ItemProperties.Contains(propertyInfo)
-                && propertyType.IsEnum
-                )
+                && propertyType.IsEnum)
             {
                 return (PropertyFilter)Activator.CreateInstance(typeof(EnumFilter<>).MakeGenericType(propertyInfo.PropertyType), propertyInfo);
             }
+
             return null;
         }
     }

@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+  <PropertyGroup>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Shared\Shared.csproj" />
+    <ProjectReference Include="..\ui.controls.wpf\ui.controls.wpf.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="DataGridExtensions" Version="2.5.13" />
+    <PackageReference Include="PropertyChangedAnalyzers" Version="4.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Update="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
+    <PackageReference Update="StyleCop.Analyzers" Version="1.1.118">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>build; analyzers</IncludeAssets>
+    </PackageReference>
+    <PackageReference Update="WpfAnalyzers" Version="4.0.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>build; analyzers</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+</Project>

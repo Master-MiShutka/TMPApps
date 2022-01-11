@@ -1,14 +1,14 @@
 ﻿/*************************************************************************************
+   
+   Toolkit for WPF
 
-   Extended WPF Toolkit
-
-   Copyright (C) 2007-2013 Xceed Software Inc.
+   Copyright (C) 2007-2018 Xceed Software Inc.
 
    This program is provided to you under the terms of the Microsoft Public
    License (Ms-PL) as published at http://wpftoolkit.codeplex.com/license 
 
    For more features, controls, and fast professional support,
-   pick up the Plus Edition at http://xceed.com/wpf_toolkit
+   pick up the Plus Edition at https://xceed.com/xceed-toolkit-plus-for-wpf/
 
    Stay informed: follow @datagrid on Twitter or Like http://facebook.com/datagrids
 
@@ -30,6 +30,21 @@ namespace Xceed.Wpf.Toolkit.PropertyGrid.Editors
       ValueProperty = CollectionControlButton.ItemsSourceProperty;
     }
 
+    protected override CollectionControlButton CreateEditor()
+    {
+      return new PropertyGridEditorCollectionControl();
+    }
+
+    protected override void SetControlProperties( PropertyItem propertyItem )
+    {
+
+      var propertyGrid = propertyItem.ParentElement as PropertyGrid;
+      if( propertyGrid != null )
+      {
+        // Use the PropertyGrid.EditorDefinitions for the CollectionControl's propertyGrid.
+        this.Editor.EditorDefinitions = propertyGrid.EditorDefinitions;
+      }
+    }
 
     protected override void ResolveValueBinding( PropertyItem propertyItem )
     {
@@ -37,11 +52,17 @@ namespace Xceed.Wpf.Toolkit.PropertyGrid.Editors
 
       Editor.ItemsSourceType = type;
 
-      if( type.BaseType == typeof( System.Array ) )
+      if (propertyItem.DescriptorDefinition != null 
+          && propertyItem.DescriptorDefinition.NewItemTypes != null 
+          && propertyItem.DescriptorDefinition.NewItemTypes.Count > 0)
       {
-        Editor.NewItemTypes = new List<Type>() { type.GetElementType() };
+          Editor.NewItemTypes = propertyItem.DescriptorDefinition.NewItemTypes;
       }
-      else 
+      else if (type.BaseType == typeof(System.Array))
+      {
+          Editor.NewItemTypes = new List<Type>() { type.GetElementType() };
+      }
+      else
       {
         if( (propertyItem.DescriptorDefinition != null)
             && (propertyItem.DescriptorDefinition.NewItemTypes != null)

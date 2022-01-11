@@ -1,13 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows.Data;
-using System.Windows;
-
-
-namespace WpfApplicationTest.Windows.Converters
+﻿namespace WpfApplicationTest.Windows.Converters
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Windows;
+    using System.Windows.Data;
+
     /// <summary>
     /// Converts a boolean value to a font weight (false: normal, true: bold)
     /// </summary>
@@ -33,6 +32,7 @@ namespace WpfApplicationTest.Windows.Converters
             {
                 return inverse ? FontWeights.Normal : FontWeights.Bold;
             }
+
             return inverse ? FontWeights.Bold : FontWeights.Normal;
         }
 
@@ -51,5 +51,4 @@ namespace WpfApplicationTest.Windows.Converters
             throw new NotSupportedException();
         }
     }
-
 }

@@ -15,14 +15,10 @@
   ***********************************************************************************/
 
 using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Windows.Data;
-using System.Windows.Controls;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows;
 using System.ComponentModel;
+using System.Windows.Data;
+using System.Windows.Media;
+using System.Drawing;
 
 namespace Xceed.Wpf.DataGrid.Converters
 {
@@ -36,7 +32,7 @@ namespace Xceed.Wpf.DataGrid.Converters
     public object Convert( object value, Type targetType, object parameter, System.Globalization.CultureInfo culture )
     {
       if( !targetType.IsAssignableFrom( typeof( ImageSource ) ) )
-        return DependencyProperty.UnsetValue;
+        return System.Windows.DependencyProperty.UnsetValue;
 
       if( ( value == null ) || ( value is ImageSource ) )
         return value;

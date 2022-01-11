@@ -1,89 +1,88 @@
-using System;
-using System.Timers;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Media;
-using System.Windows.Threading;
-using TMP.PrintEngine.Extensions;
-using TMP.PrintEngine.Resources;
-using TMP.PrintEngine.ViewModels;
-
 namespace TMP.PrintEngine.Controls.WaitScreen
 {
+    using System;
+    using System.Timers;
+    using System.Windows;
+    using System.Windows.Controls;
+    using System.Windows.Media;
+    using System.Windows.Threading;
+    using TMP.PrintEngine.Extensions;
+    using TMP.PrintEngine.Resources;
+    using TMP.PrintEngine.ViewModels;
+
     public class WaitScreenViewModel : AViewModel, IWaitScreenViewModel
     {
-        private Window _waitScreenWindow;
+        private Window waitScreenWindow;
 
         protected Window WaitScreenWindow
         {
             get
             {
-                if (_waitScreenWindow == null)
+                if (this.waitScreenWindow == null)
                 {
-                    if (((UserControl)View).Parent != null)
+                    if (((UserControl)this.View).Parent != null)
                     {
-                        ((Window)((UserControl)View).Parent).Content = null;
+                        ((Window)((UserControl)this.View).Parent).Content = null;
                     }
-                    _waitScreenWindow = new Window
-                                            {
-                                                AllowsTransparency = true,
-                                                Content = View as UIElement,
-                                                WindowStyle = WindowStyle.None,
-                                                ShowInTaskbar = false,
-                                                Background = new SolidColorBrush(Colors.Transparent),
-                                                Padding = new Thickness(0),
-                                                Margin = new Thickness(0),
-                                                WindowState = WindowState.Normal,
-                                                WindowStartupLocation = WindowStartupLocation.CenterOwner,
-                                                SizeToContent = SizeToContent.WidthAndHeight,
-                                            };
+
+                    this.waitScreenWindow = new Window
+                    {
+                        AllowsTransparency = true,
+                        Content = this.View as UIElement,
+                        WindowStyle = WindowStyle.None,
+                        ShowInTaskbar = false,
+                        Background = new SolidColorBrush(Colors.Transparent),
+                        Padding = new Thickness(0),
+                        Margin = new Thickness(0),
+                        WindowState = WindowState.Normal,
+                        WindowStartupLocation = WindowStartupLocation.CenterOwner,
+                        SizeToContent = SizeToContent.WidthAndHeight,
+                    };
                 }
-                return _waitScreenWindow;
+
+                return this.waitScreenWindow;
             }
         }
 
-        private readonly Dispatcher _dispatcher;
+        private readonly Dispatcher dispatcher;
+
         public WaitScreenViewModel(IWaitScreenView view)
             : base(view)
         {
             if (Application.Current != null)
             {
-                _dispatcher = Application.Current.Dispatcher;
+                this.dispatcher = Application.Current.Dispatcher;
             }
-            _hideTimer = new Timer();
-            _hideTimer.Elapsed += HideTimerElapsed;
-            _hideTimer.Interval = 300;
-            _hideTimer.Enabled = false;
 
-            Enabled = true;
+            this._hideTimer = new Timer();
+            this._hideTimer.Elapsed += this.HideTimerElapsed;
+            this._hideTimer.Interval = 300;
+            this._hideTimer.Enabled = false;
 
-            ((UserControl)view).Loaded += WaitScreenPresenterLoaded;
+            this.Enabled = true;
+
+            ((UserControl)view).Loaded += this.WaitScreenPresenterLoaded;
         }
 
-
-        void WaitScreenPresenterLoaded(object sender, RoutedEventArgs e)
+        private void WaitScreenPresenterLoaded(object sender, RoutedEventArgs e)
         {
-            _isLoaded = true;
+            this._isLoaded = true;
         }
+
         public bool Enabled { get; set; }
 
         #region IWaitScreenViewModel Members
 
         public string Message
         {
-            get
-            {
-                return (string)GetValue(MessageProperty);
-            }
-            set
-            {
-                SetValue(MessageProperty, value);
-            }
+            get => (string)this.GetValue(MessageProperty);
+
+            set => this.SetValue(MessageProperty, value);
         }
 
         public void HideNow()
         {
-            HideWaitScreenHandler();
+            this.HideWaitScreenHandler();
         }
 
         #endregion
@@ -93,22 +92,25 @@ namespace TMP.PrintEngine.Controls.WaitScreen
                 typeof(string),
                 typeof(WaitScreenViewModel));
 
-        void HideTimerElapsed(object sender, ElapsedEventArgs e)
+        private void HideTimerElapsed(object sender, ElapsedEventArgs e)
         {
-            _hideTimer.Stop();
-            if (_dispatcher != null)
-                _dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(HideWaitScreenHandler));
+            this._hideTimer.Stop();
+            if (this.dispatcher != null)
+            {
+                this.dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(this.HideWaitScreenHandler));
+            }
         }
 
         private void HideWaitScreenHandler()
         {
-            if (((UserControl)View).Parent != null)
+            if (((UserControl)this.View).Parent != null)
             {
-                ((Window)((UserControl)View).Parent).Content = null;
+                ((Window)((UserControl)this.View).Parent).Content = null;
             }
-            _isShown = false;
-            WaitScreenWindow.Close();
-            if (DisableParent && Application.Current != null)
+
+            this._isShown = false;
+            this.WaitScreenWindow.Close();
+            if (this.DisableParent && Application.Current != null)
             {
                 if (Application.Current != null && Application.Current.MainWindow != null)
                 {
@@ -116,41 +118,54 @@ namespace TMP.PrintEngine.Controls.WaitScreen
                     ////Application.Current.MainWindow.Focus();
                 }
             }
-            _waitScreenWindow = null;
+
+            this.waitScreenWindow = null;
         }
+
         private bool _isShown;
         private bool _isLoaded;
         private readonly Timer _hideTimer;
+
         public bool Show()
         {
-            return Show(Strings.WaitMessage, true);
+            return this.Show(Strings.WaitMessage, true);
         }
+
         public bool Show(string message)
         {
-            return Show(message, true);
+            return this.Show(message, true);
         }
 
         private void ShowWaitScreenHandler()
         {
-            if (_isShown)
+            if (this._isShown)
             {
-                _hideTimer.Stop();
+                this._hideTimer.Stop();
                 return;
             }
-            _isShown = true;
-            WaitScreenWindow.Owner = ApplicationExtention.MainWindow;
-            WaitScreenWindow.Show();
-            if (DisableParent && Application.Current != null)
+
+            this._isShown = true;
+            this.WaitScreenWindow.Owner = ApplicationExtention.MainWindow;
+            this.WaitScreenWindow.Show();
+            if (this.DisableParent && Application.Current != null)
+            {
                 Application.Current.DisableWindow(0.90);
+            }
         }
 
         public bool Hide()
         {
-            if (_isShown == false)
+            if (this._isShown == false)
+            {
                 return false;
-            if (Initiator != null)
+            }
+
+            if (this.Initiator != null)
+            {
                 return false;
-            _hideTimer.Start();            
+            }
+
+            this._hideTimer.Start();
             return true;
         }
 
@@ -158,27 +173,38 @@ namespace TMP.PrintEngine.Controls.WaitScreen
 
         public bool Show(string message, bool disableParent)
         {
-            if (_isShown)
-                return false;
-            Message = message;
-            DisableParent = disableParent;
-            if (Enabled && _dispatcher != null)
+            if (this._isShown)
             {
-                _dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(ShowWaitScreenHandler));
-                Block(true);
+                return false;
             }
+
+            this.Message = message;
+            this.DisableParent = disableParent;
+            if (this.Enabled && this.dispatcher != null)
+            {
+                this.dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(this.ShowWaitScreenHandler));
+                this.Block(true);
+            }
+
             return true;
         }
+
         private void Block(bool loaded)
         {
             if (Application.Current == null)
+            {
                 return;
+            }
+
             while (true)
             {
                 Application.Current.DoEvents();
                 System.Threading.Thread.Sleep(5);
-                if (_isLoaded != loaded)
+                if (this._isLoaded != loaded)
+                {
                     continue;
+                }
+
                 break;
             }
         }
@@ -186,7 +212,6 @@ namespace TMP.PrintEngine.Controls.WaitScreen
         #endregion
 
         public bool DisableParent { get; set; }
-
 
         #region IWaitScreenViewModel Members
 

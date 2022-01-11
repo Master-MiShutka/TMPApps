@@ -1,18 +1,17 @@
-using System;
-using System.Data;
-using System.Drawing.Printing;
-using System.Printing;
-using System.Windows;
-using System.Windows.Input;
-using System.Windows.Media;
-
-using TMP.PrintEngine.Extensions;
-using TMP.PrintEngine.Paginators;
-using TMP.PrintEngine.Utils;
-using TMP.PrintEngine.Views;
-
 namespace TMP.PrintEngine.ViewModels
 {
+    using System;
+    using System.Data;
+    using System.Drawing.Printing;
+    using System.Printing;
+    using System.Windows;
+    using System.Windows.Input;
+    using System.Windows.Media;
+    using TMP.PrintEngine.Extensions;
+    using TMP.PrintEngine.Paginators;
+    using TMP.PrintEngine.Utils;
+    using TMP.PrintEngine.Views;
+
     public class PrintControlViewModel : APrintControlViewModel, IPrintControlViewModel
     {
         #region Commands
@@ -20,21 +19,18 @@ namespace TMP.PrintEngine.ViewModels
         public DrawingVisual DrawingVisual { get; set; }
 
         public ICommand ResizeCommand { get; set; }
+
         public ICommand ApplyScaleCommand { get; set; }
+
         public ICommand CancelScaleCommand { get; set; }
         #endregion
 
         #region Dependency Properties
         public double Scale
         {
-            get
-            {
-                return (double)GetValue(ScaleProperty);
-            }
-            set
-            {
-                SetValue(ScaleProperty, value);
-            }
+            get => (double)this.GetValue(ScaleProperty);
+
+            set => this.SetValue(ScaleProperty, value);
         }
 
         public static readonly DependencyProperty ScaleProperty = DependencyProperty.Register(
@@ -43,7 +39,7 @@ namespace TMP.PrintEngine.ViewModels
             typeof(PrintControlViewModel),
             new FrameworkPropertyMetadata(new PropertyChangedCallback(OnPropertyChanged)));
 
-        private bool _isCancelPrint;
+        private bool isCancelPrint;
 
         #endregion
 
@@ -58,91 +54,99 @@ namespace TMP.PrintEngine.ViewModels
             : base(view)
         {
 
-            ResizeCommand = new DelegateCommand<object>(ExecuteResize);
-            ApplyScaleCommand = new DelegateCommand<object>(ExecuteApplyScale);
-            CancelScaleCommand = new DelegateCommand<object>(ExecuteCancelScale);
-            PrintControlView.ResizeButtonVisibility(true);
-            PrintControlView.SetPageNumberVisibility(Visibility.Visible);
+            this.ResizeCommand = new DelegateCommand<object>(this.ExecuteResize);
+            this.ApplyScaleCommand = new DelegateCommand<object>(this.ExecuteApplyScale);
+            this.CancelScaleCommand = new DelegateCommand<object>(this.ExecuteCancelScale);
+            this.PrintControlView.ResizeButtonVisibility(true);
+            this.PrintControlView.SetPageNumberVisibility(Visibility.Visible);
         }
 
         public void ExecuteResize(object parameter)
         {
-            PrintControlView.ScalePreviewPaneVisibility(true);
+            this.PrintControlView.ScalePreviewPaneVisibility(true);
         }
+
         private void ExecuteCancelScale(object parameter)
         {
-            ScaleCanceling = true;
-            Scale = OldScale;
-            PrintControlView.ScalePreviewPaneVisibility(false);
-            ScaleCanceling = false;
+            this.ScaleCanceling = true;
+            this.Scale = this.OldScale;
+            this.PrintControlView.ScalePreviewPaneVisibility(false);
+            this.ScaleCanceling = false;
         }
 
         private void ExecuteApplyScale(object parameter)
         {
-            OldScale = Scale;
-            PrintControlView.ScalePreviewPaneVisibility(false);
-            ReloadPreview();
+            this.OldScale = this.Scale;
+            this.PrintControlView.ScalePreviewPaneVisibility(false);
+            this.ReloadPreview();
         }
 
         public override void InitializeProperties()
         {
-            ResetScale();
+            this.ResetScale();
             base.InitializeProperties();
         }
 
         private void ResetScale()
         {
-            OldScale = 1;
-            Scale = 1;
-            PrintControlView.ScalePreviewPaneVisibility(false);
+            this.OldScale = 1;
+            this.Scale = 1;
+            this.PrintControlView.ScalePreviewPaneVisibility(false);
         }
 
         public override void ReloadPreview()
         {
-            if (CurrentPaper != null)
-                ReloadPreview(Scale, new Thickness(), PageOrientation, CurrentPaper);
+            if (this.CurrentPaper != null)
+            {
+                this.ReloadPreview(this.Scale, new Thickness(), this.PageOrientation, this.CurrentPaper);
+            }
         }
 
         public void ReloadPreview(double scale, Thickness margin, PageOrientation pageOrientation, PaperSize paperSize)
         {
             try
             {
-                ReloadingPreview = true;
-                ShowWaitScreen();
+                this.ReloadingPreview = true;
+                this.ShowWaitScreen();
                 var printSize = GetPrintSize(paperSize, pageOrientation);
-                var visual = GetScaledVisual(scale);
-                CreatePaginator(visual, printSize, margin);
-                var visualPaginator = ((VisualPaginator)Paginator);
-                visualPaginator.Initialize(IsMarkPageNumbers);
-                PagesAcross = visualPaginator.HorizontalPageCount;
+                var visual = this.GetScaledVisual(scale);
+                this.CreatePaginator(visual, printSize, margin);
+                var visualPaginator = (VisualPaginator)this.Paginator;
+                visualPaginator.Initialize(this.IsMarkPageNumbers);
+                this.PagesAcross = visualPaginator.HorizontalPageCount;
 
-                ApproaxNumberOfPages = MaxCopies = Paginator.PageCount;
-                if (Scale == 1)
-                    NumberOfPages = ApproaxNumberOfPages;
+                this.ApproaxNumberOfPages = this.MaxCopies = this.Paginator.PageCount;
+                if (this.Scale == 1)
+                {
+                    this.NumberOfPages = this.ApproaxNumberOfPages;
+                }
 
-                DisplayPagePreviewsAll(visualPaginator);
-                ReloadingPreview = false;
+                this.DisplayPagePreviewsAll(visualPaginator);
+                this.ReloadingPreview = false;
             }
             catch
             {
             }
             finally
             {
-                WaitScreen.Hide();
+                this.WaitScreen.Hide();
             }
-
         }
 
         private DrawingVisual GetScaledVisual(double scale)
         {
             if (scale == 1)
-                return DrawingVisual;
+            {
+                return this.DrawingVisual;
+            }
+
             var visual = new DrawingVisual();
             using (var dc = visual.RenderOpen())
             {
                 dc.PushTransform(new ScaleTransform(scale, scale));
-                dc.DrawDrawing(DrawingVisual.Drawing);
+                dc.DrawDrawing(this.DrawingVisual.Drawing);
             }
+
             return visual;
         }
 
@@ -153,20 +157,21 @@ namespace TMP.PrintEngine.ViewModels
             {
                 printSize = new Size(paperSize.Height, paperSize.Width);
             }
+
             return printSize;
         }
 
         private void ShowWaitScreen()
         {
-            if (FullScreenPrintWindow != null)
+            if (this.FullScreenPrintWindow != null)
             {
-                WaitScreen.Show(TMP.PrintEngine.Resources.Strings.WaitMessage);
+                this.WaitScreen.Show(TMP.PrintEngine.Resources.Strings.WaitMessage);
             }
         }
 
-        protected  virtual void CreatePaginator(DrawingVisual visual, Size printSize, Thickness margin)
+        protected virtual void CreatePaginator(DrawingVisual visual, Size printSize, Thickness margin)
         {
-            Paginator = new VisualPaginator(visual, printSize, margin, PrintUtility.GetPageMargin(CurrentPrinterName));
+            this.Paginator = new VisualPaginator(visual, printSize, margin, this.PrintUtility.GetPageMargin(this.CurrentPrinterName));
         }
 
         public override void HandlePropertyChanged(DependencyObject o, DependencyPropertyChangedEventArgs e)
@@ -176,11 +181,15 @@ namespace TMP.PrintEngine.ViewModels
             {
                 case "Scale":
                     if (presenter.ScaleCanceling)
+                    {
                         return;
+                    }
+
                     ((IPrintControlView)presenter.View).ScalePreviewNode(new ScaleTransform(presenter.Scale, presenter.Scale));
                     presenter.ApproaxNumberOfPages = Convert.ToInt32(Math.Ceiling(presenter.NumberOfPages * presenter.Scale));
                     break;
             }
+
             base.HandlePropertyChanged(o, e);
         }
 
@@ -189,51 +198,55 @@ namespace TMP.PrintEngine.ViewModels
             try
             {
                 var printDialog = new System.Windows.Controls.PrintDialog();
-                printDialog.PrintQueue = CurrentPrinter;
-                printDialog.PrintTicket = CurrentPrinter.UserPrintTicket;
-                ShowProgressDialog();
-                ((VisualPaginator)Paginator).PageCreated += PrintControlPresenterPageCreated;
-                printDialog.PrintDocument(Paginator, "");
+                printDialog.PrintQueue = this.CurrentPrinter;
+                printDialog.PrintTicket = this.CurrentPrinter.UserPrintTicket;
+                this.ShowProgressDialog();
+                ((VisualPaginator)this.Paginator).PageCreated += this.PrintControlPresenterPageCreated;
+                printDialog.PrintDocument(this.Paginator, string.Empty);
             }
             catch (Exception)
             {
             }
             finally
             {
-                ProgressDialog.Hide();
+                this.ProgressDialog.Hide();
             }
         }
 
         private void PrintControlPresenterPageCreated(object sender, PageEventArgs e)
         {
-            ProgressDialog.CurrentProgressValue = e.PageNumber;
-            ProgressDialog.Message = GetStatusMessage();
+            this.ProgressDialog.CurrentProgressValue = e.PageNumber;
+            this.ProgressDialog.Message = this.GetStatusMessage();
             Application.Current.DoEvents();
         }
 
         public override void SetProgressDialogCancelButtonVisibility()
         {
-            ProgressDialog.CancelButtonVisibility = Visibility.Visible;
+            this.ProgressDialog.CancelButtonVisibility = Visibility.Visible;
         }
 
         public void ShowPrintPreview()
         {
-            if (FullScreenPrintWindow != null)
+            if (this.FullScreenPrintWindow != null)
             {
-                FullScreenPrintWindow.Content = null;
+                this.FullScreenPrintWindow.Content = null;
             }
-            CreatePrintPreviewWindow();
-            Loading = true;
-            IsSetPrintingOptionsEnabled = false;
-            IsCancelPrintingOptionsEnabled = false;
-            if (FullScreenPrintWindow != null) FullScreenPrintWindow.ShowDialog();
+
+            this.CreatePrintPreviewWindow();
+            this.Loading = true;
+            this.IsSetPrintingOptionsEnabled = false;
+            this.IsCancelPrintingOptionsEnabled = false;
+            if (this.FullScreenPrintWindow != null)
+            {
+                this.FullScreenPrintWindow.ShowDialog();
+            }
+
             ApplicationExtention.MainWindow = null;
         }
 
         public void ShowPrintPreview(DataTable dataTable)
         {
             DataTableUtil.Validate(dataTable);
-        }       
-        
+        }
     }
 }

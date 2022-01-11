@@ -1,8 +1,8 @@
-﻿using System.Windows.Controls;
-using TMP.PrintEngine.ViewModels;
-
-namespace TMP.PrintEngine.Controls.ProgressDialog
+﻿namespace TMP.PrintEngine.Controls.ProgressDialog
 {
+    using System.Windows.Controls;
+    using TMP.PrintEngine.ViewModels;
+
     /// <summary>
     /// Interaction logic for ProgressDialogView.xaml
     /// </summary>
@@ -10,16 +10,17 @@ namespace TMP.PrintEngine.Controls.ProgressDialog
     {
         public ProgressDialogView()
         {
-            InitializeComponent();
+            this.InitializeComponent();
         }
 
-        private IProgressDialogViewModel _presenter;
+        private IProgressDialogViewModel presenter;
+
         public IViewModel ViewModel
         {
             set
             {
-                _presenter = value as IProgressDialogViewModel;
-                DataContext = _presenter;
+                this.presenter = value as IProgressDialogViewModel;
+                this.DataContext = this.presenter;
             }
         }
     }

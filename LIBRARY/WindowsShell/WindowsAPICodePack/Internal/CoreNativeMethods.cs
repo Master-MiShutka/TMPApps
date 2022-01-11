@@ -1,15 +1,15 @@
-﻿//Copyright (c) Microsoft Corporation.  All rights reserved.
-
-using System;
-using System.Runtime.InteropServices;
-using System.Text;
+﻿// Copyright (c) Microsoft Corporation.  All rights reserved.
 
 namespace MS.WindowsAPICodePack.Internal
 {
+    using System;
+    using System.Runtime.InteropServices;
+    using System.Text;
+
     /// <summary>
     /// Wrappers for Native Methods and Structs.
     /// This type is intended for internal use only
-    /// </summary>    
+    /// </summary>
     internal static class CoreNativeMethods
     {
         #region General Definitions
@@ -18,75 +18,72 @@ namespace MS.WindowsAPICodePack.Internal
         /// Places (posts) a message in the message queue associated with the thread that created
         /// the specified window and returns without waiting for the thread to process the message.
         /// </summary>
-        /// <param name="windowHandle">Handle to the window whose window procedure will receive the message. 
-        /// If this parameter is HWND_BROADCAST, the message is sent to all top-level windows in the system, 
-        /// including disabled or invisible unowned windows, overlapped windows, and pop-up windows; 
+        /// <param name="windowHandle">Handle to the window whose window procedure will receive the message.
+        /// If this parameter is HWND_BROADCAST, the message is sent to all top-level windows in the system,
+        /// including disabled or invisible unowned windows, overlapped windows, and pop-up windows;
         /// but the message is not sent to child windows.
         /// </param>
         /// <param name="message">Specifies the message to be sent.</param>
         /// <param name="wparam">Specifies additional message-specific information.</param>
         /// <param name="lparam">Specifies additional message-specific information.</param>
-        /// <returns>A return code specific to the message being sent.</returns>     
-        [DllImport("user32.dll", CharSet = CharSet.Auto, PreserveSig=false, SetLastError = true)]
+        /// <returns>A return code specific to the message being sent.</returns>
+        [DllImport("user32.dll", CharSet = CharSet.Auto, PreserveSig = false, SetLastError = true)]
         public static extern void PostMessage(
             IntPtr windowHandle,
             WindowMessage message,
             IntPtr wparam,
-            IntPtr lparam
-        );
+            IntPtr lparam);
 
         /// <summary>
-        /// Sends the specified message to a window or windows. The SendMessage function calls 
-        /// the window procedure for the specified window and does not return until the window 
-        /// procedure has processed the message. 
+        /// Sends the specified message to a window or windows. The SendMessage function calls
+        /// the window procedure for the specified window and does not return until the window
+        /// procedure has processed the message.
         /// </summary>
-        /// <param name="windowHandle">Handle to the window whose window procedure will receive the message. 
-        /// If this parameter is HWND_BROADCAST, the message is sent to all top-level windows in the system, 
-        /// including disabled or invisible unowned windows, overlapped windows, and pop-up windows; 
+        /// <param name="windowHandle">Handle to the window whose window procedure will receive the message.
+        /// If this parameter is HWND_BROADCAST, the message is sent to all top-level windows in the system,
+        /// including disabled or invisible unowned windows, overlapped windows, and pop-up windows;
         /// but the message is not sent to child windows.
         /// </param>
         /// <param name="message">Specifies the message to be sent.</param>
         /// <param name="wparam">Specifies additional message-specific information.</param>
         /// <param name="lparam">Specifies additional message-specific information.</param>
-        /// <returns>A return code specific to the message being sent.</returns>     
+        /// <returns>A return code specific to the message being sent.</returns>
         [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
         public static extern IntPtr SendMessage(
             IntPtr windowHandle,
             WindowMessage message,
             IntPtr wparam,
-            IntPtr lparam
-        );
+            IntPtr lparam);
 
         /// <summary>
-        /// Sends the specified message to a window or windows. The SendMessage function calls 
-        /// the window procedure for the specified window and does not return until the window 
-        /// procedure has processed the message. 
+        /// Sends the specified message to a window or windows. The SendMessage function calls
+        /// the window procedure for the specified window and does not return until the window
+        /// procedure has processed the message.
         /// </summary>
-        /// <param name="windowHandle">Handle to the window whose window procedure will receive the message. 
-        /// If this parameter is HWND_BROADCAST, the message is sent to all top-level windows in the system, 
-        /// including disabled or invisible unowned windows, overlapped windows, and pop-up windows; 
+        /// <param name="windowHandle">Handle to the window whose window procedure will receive the message.
+        /// If this parameter is HWND_BROADCAST, the message is sent to all top-level windows in the system,
+        /// including disabled or invisible unowned windows, overlapped windows, and pop-up windows;
         /// but the message is not sent to child windows.
         /// </param>
         /// <param name="message">Specifies the message to be sent.</param>
         /// <param name="wparam">Specifies additional message-specific information.</param>
         /// <param name="lparam">Specifies additional message-specific information.</param>
-        /// <returns>A return code specific to the message being sent.</returns>        
+        /// <returns>A return code specific to the message being sent.</returns>
         [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
         public static extern IntPtr SendMessage(
             IntPtr windowHandle,
             uint message,
             IntPtr wparam,
-            IntPtr lparam
-        );
+            IntPtr lparam);
 
         /// <summary>
-        /// Sends the specified message to a window or windows. The SendMessage function calls 
-        /// the window procedure for the specified window and does not return until the window 
-        /// procedure has processed the message. 
+        /// Sends the specified message to a window or windows. The SendMessage function calls
+        /// the window procedure for the specified window and does not return until the window
+        /// procedure has processed the message.
         /// </summary>
-        /// <param name="windowHandle">Handle to the window whose window procedure will receive the message. 
-        /// If this parameter is HWND_BROADCAST, the message is sent to all top-level windows in the system, 
-        /// including disabled or invisible unowned windows, overlapped windows, and pop-up windows; 
+        /// <param name="windowHandle">Handle to the window whose window procedure will receive the message.
+        /// If this parameter is HWND_BROADCAST, the message is sent to all top-level windows in the system,
+        /// including disabled or invisible unowned windows, overlapped windows, and pop-up windows;
         /// but the message is not sent to child windows.
         /// </param>
         /// <param name="message">Specifies the message to be sent.</param>
@@ -101,13 +98,13 @@ namespace MS.WindowsAPICodePack.Internal
            [MarshalAs(UnmanagedType.LPWStr)] string lparam);
 
         /// <summary>
-        /// Sends the specified message to a window or windows. The SendMessage function calls 
-        /// the window procedure for the specified window and does not return until the window 
-        /// procedure has processed the message. 
+        /// Sends the specified message to a window or windows. The SendMessage function calls
+        /// the window procedure for the specified window and does not return until the window
+        /// procedure has processed the message.
         /// </summary>
-        /// <param name="windowHandle">Handle to the window whose window procedure will receive the message. 
-        /// If this parameter is HWND_BROADCAST, the message is sent to all top-level windows in the system, 
-        /// including disabled or invisible unowned windows, overlapped windows, and pop-up windows; 
+        /// <param name="windowHandle">Handle to the window whose window procedure will receive the message.
+        /// If this parameter is HWND_BROADCAST, the message is sent to all top-level windows in the system,
+        /// including disabled or invisible unowned windows, overlapped windows, and pop-up windows;
         /// but the message is not sent to child windows.
         /// </param>
         /// <param name="message">Specifies the message to be sent.</param>
@@ -124,13 +121,13 @@ namespace MS.WindowsAPICodePack.Internal
         }
 
         /// <summary>
-        /// Sends the specified message to a window or windows. The SendMessage function calls 
-        /// the window procedure for the specified window and does not return until the window 
-        /// procedure has processed the message. 
+        /// Sends the specified message to a window or windows. The SendMessage function calls
+        /// the window procedure for the specified window and does not return until the window
+        /// procedure has processed the message.
         /// </summary>
-        /// <param name="windowHandle">Handle to the window whose window procedure will receive the message. 
-        /// If this parameter is HWND_BROADCAST, the message is sent to all top-level windows in the system, 
-        /// including disabled or invisible unowned windows, overlapped windows, and pop-up windows; 
+        /// <param name="windowHandle">Handle to the window whose window procedure will receive the message.
+        /// If this parameter is HWND_BROADCAST, the message is sent to all top-level windows in the system,
+        /// including disabled or invisible unowned windows, overlapped windows, and pop-up windows;
         /// but the message is not sent to child windows.
         /// </param>
         /// <param name="message">Specifies the message to be sent.</param>
@@ -145,7 +142,7 @@ namespace MS.WindowsAPICodePack.Internal
             ref int wparam,
             [MarshalAs(UnmanagedType.LPWStr)] StringBuilder lparam);
 
-        // Various helpers for forcing binding to proper 
+        // Various helpers for forcing binding to proper
         // version of Comctl32 (v6).
         [DllImport("kernel32.dll", SetLastError = true, ThrowOnUnmappableChar = true, BestFitMapping = false)]
         internal static extern IntPtr LoadLibrary([MarshalAs(UnmanagedType.LPStr)] string fileName);
@@ -202,7 +199,7 @@ namespace MS.WindowsAPICodePack.Internal
         /// </summary>
         /// <param name="value">The value to get the hi word from.</param>
         /// <param name="size">Size</param>
-        /// <returns>The upper half of the dword.</returns>        
+        /// <returns>The upper half of the dword.</returns>
         public static int GetHiWord(long value, int size)
         {
             return (short)(value >> size);
@@ -234,13 +231,19 @@ namespace MS.WindowsAPICodePack.Internal
             /// <summary>
             /// Width
             /// </summary>
-            public int Width { get { return width; } set { width = value; } }
+            public int Width
+            {
+                get => this.width; set => this.width = value;
+            }
 
             /// <summary>
             /// Height
             /// </summary>
-            public int Height { get { return height; } set { height = value; } }
-        };
+            public int Height
+            {
+                get => this.height; set => this.height = value;
+            }
+        }
 
         // Enable/disable non-client rendering based on window style.
         internal const int DWMNCRP_USEWINDOWSTYLE = 0;
@@ -266,8 +269,6 @@ namespace MS.WindowsAPICodePack.Internal
 
         internal const uint StatusAccessDenied = 0xC0000022;
 
-
-
         public delegate int WNDPROC(IntPtr hWnd,
             uint uMessage,
             IntPtr wParam,
@@ -275,6 +276,4 @@ namespace MS.WindowsAPICodePack.Internal
 
         #endregion
     }
-
-    
 }

@@ -1,14 +1,14 @@
 ﻿/*************************************************************************************
+   
+   Toolkit for WPF
 
-   Extended WPF Toolkit
-
-   Copyright (C) 2007-2013 Xceed Software Inc.
+   Copyright (C) 2007-2018 Xceed Software Inc.
 
    This program is provided to you under the terms of the Microsoft Public
    License (Ms-PL) as published at http://wpftoolkit.codeplex.com/license 
 
    For more features, controls, and fast professional support,
-   pick up the Plus Edition at http://xceed.com/wpf_toolkit
+   pick up the Plus Edition at https://xceed.com/xceed-toolkit-plus-for-wpf/
 
    Stay informed: follow @datagrid on Twitter or Like http://facebook.com/datagrids
 
@@ -16,9 +16,7 @@
 
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -26,7 +24,6 @@ using System.Windows.Media;
 using System.Windows.Data;
 using System.Collections;
 using Xceed.Wpf.Toolkit.Core.Utilities;
-using System.Reflection;
 using System.Linq.Expressions;
 
 namespace Xceed.Wpf.Toolkit.PropertyGrid
@@ -129,6 +126,24 @@ namespace Xceed.Wpf.Toolkit.PropertyGrid
     }
 
     #endregion //Editor
+
+    #region HighlightedText
+
+    public static readonly DependencyProperty HighlightedTextProperty = DependencyProperty.Register( "HighlightedText", typeof( string ), typeof( PropertyItemBase ), new UIPropertyMetadata( null ) );
+
+    public string HighlightedText
+    {
+      get
+      {
+        return ( string )GetValue( HighlightedTextProperty );
+      }
+      set
+      {
+        SetValue( HighlightedTextProperty, value );
+      }
+    }
+
+    #endregion //HighlightedText
 
     #region IsExpanded
 
@@ -429,6 +444,7 @@ namespace Xceed.Wpf.Toolkit.PropertyGrid
       e.Handled = true;
     }
 
+
     private void PropertyItemBase_GotFocus( object sender, RoutedEventArgs e )
     { 
       IsSelected = true;
@@ -578,7 +594,9 @@ namespace Xceed.Wpf.Toolkit.PropertyGrid
       return null;
     }
 
-    #endregion
+
+
+#endregion
 
   }
 }

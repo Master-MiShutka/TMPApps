@@ -1,10 +1,10 @@
-﻿//Copyright (c) Microsoft Corporation.  All rights reserved.
-
-using System.IO;
-using Microsoft.WindowsAPICodePack.Shell.Resources;
+﻿// Copyright (c) Microsoft Corporation.  All rights reserved.
 
 namespace Microsoft.WindowsAPICodePack.Shell
 {
+    using System.IO;
+    using Microsoft.WindowsAPICodePack.Shell.Resources;
+
     /// <summary>
     /// A folder in the Shell Namespace
     /// </summary>
@@ -19,12 +19,13 @@ namespace Microsoft.WindowsAPICodePack.Shell
 
         internal ShellFileSystemFolder(IShellItem2 shellItem)
         {
-            nativeShellItem = shellItem;
+            this.nativeShellItem = shellItem;
         }
 
         #endregion
 
         #region Public Methods
+
         /// <summary>
         /// Constructs a new ShellFileSystemFolder object given a folder path
         /// </summary>
@@ -54,7 +55,6 @@ namespace Microsoft.WindowsAPICodePack.Shell
                 folder.Dispose();
                 throw;
             }
-
         }
 
         #endregion
@@ -64,10 +64,7 @@ namespace Microsoft.WindowsAPICodePack.Shell
         /// <summary>
         /// The path for this Folder
         /// </summary>
-        public virtual string Path
-        {
-            get { return this.ParsingName; }
-        }
+        public virtual string Path => this.ParsingName;
 
         #endregion
 

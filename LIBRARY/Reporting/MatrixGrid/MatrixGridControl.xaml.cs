@@ -1,17 +1,17 @@
-﻿using System;
-using System.Collections;
-using System.Windows;
-using System.Windows.Controls;
-
-namespace TMP.UI.Controls.WPF.Reporting.MatrixGrid
+﻿namespace TMP.UI.Controls.WPF.Reporting.MatrixGrid
 {
+    using System;
+    using System.Collections;
+    using System.Windows;
+    using System.Windows.Controls;
+
     /// <summary>
     /// Interaction logic for MatrixGridControl.xaml
     /// </summary>
     [TemplateVisualState(GroupName = "Common", Name = "Ready")]
     [TemplateVisualState(GroupName = "Common", Name = "NoData")]
     [TemplateVisualState(GroupName = "Common", Name = "Building")]
-    public partial class MatrixGridControl : ItemsControl
+    public class MatrixGridControl : ItemsControl
     {
         [Flags]
         public enum State
@@ -20,96 +20,137 @@ namespace TMP.UI.Controls.WPF.Reporting.MatrixGrid
             /// Готово
             /// </summary>
             Ready = 0,
+
             /// <summary>
             /// Нет данных
             /// </summary>
             NoData = 1,
+
             /// <summary>
             /// Осуществляется построение матрицы
             /// </summary>
-            Building = 2
+            Building = 2,
         }
 
-        State state = State.NoData;
+        private State state = State.NoData;
 
         static MatrixGridControl()
         {
-            DefaultStyleKeyProperty.OverrideMetadata(typeof(MatrixGridControl),
-                new FrameworkPropertyMetadata(typeof(MatrixGridControl)));
+            DefaultStyleKeyProperty.OverrideMetadata(typeof(MatrixGridControl), new FrameworkPropertyMetadata(typeof(MatrixGridControl)));
         }
-
 
         public MatrixGridControl()
         {
-            InitializeComponent();
+            ;
         }
 
         public override void OnApplyTemplate()
         {
             base.OnApplyTemplate();
 
-            UpdateStates(false);
+            this.UpdateStates(false);
         }
 
         #region Dependency properties
 
         public bool ShowRowsTotal
         {
-            get { return (bool)GetValue(ShowRowsTotalProperty); }
-            set { SetValue(ShowRowsTotalProperty, value); }
+            get => (bool)this.GetValue(ShowRowsTotalProperty);
+            set => this.SetValue(ShowRowsTotalProperty, value);
         }
+
         public static readonly DependencyProperty ShowRowsTotalProperty =
-            DependencyProperty.Register("ShowRowsTotal", typeof(bool), typeof(MatrixGridControl), new PropertyMetadata(true));
+            DependencyProperty.Register(nameof(ShowRowsTotal), typeof(bool), typeof(MatrixGridControl), new PropertyMetadata(true));
 
         public bool ShowColumnsTotal
         {
-            get { return (bool)GetValue(ShowColumnsTotalProperty); }
-            set { SetValue(ShowColumnsTotalProperty, value); }
+            get => (bool)this.GetValue(ShowColumnsTotalProperty);
+            set => this.SetValue(ShowColumnsTotalProperty, value);
         }
+
         public static readonly DependencyProperty ShowColumnsTotalProperty =
-            DependencyProperty.Register("ShowColumnsTotal", typeof(bool), typeof(MatrixGridControl), new PropertyMetadata(true));
+            DependencyProperty.Register(nameof(ShowColumnsTotal), typeof(bool), typeof(MatrixGridControl), new PropertyMetadata(true));
 
         public DataTemplate EmptyHeaderTemplate
         {
-            get { return (DataTemplate)GetValue(EmptyHeaderTemplateProperty); }
-            set { SetValue(EmptyHeaderTemplateProperty, value); }
+            get => (DataTemplate)this.GetValue(EmptyHeaderTemplateProperty);
+            set => this.SetValue(EmptyHeaderTemplateProperty, value);
         }
+
         public static readonly DependencyProperty EmptyHeaderTemplateProperty =
-            DependencyProperty.Register("EmptyHeaderTemplate", typeof(DataTemplate), typeof(MatrixGridControl), new PropertyMetadata(null));
+            DependencyProperty.Register(nameof(EmptyHeaderTemplate), typeof(DataTemplate), typeof(MatrixGridControl), new PropertyMetadata(null));
+
+        public UIElement LeftContent
+        {
+            get => (UIElement)this.GetValue(LeftContentProperty);
+            set => this.SetValue(LeftContentProperty, value);
+        }
+
+        public static readonly DependencyProperty LeftContentProperty =
+            DependencyProperty.Register(nameof(LeftContent), typeof(UIElement), typeof(MatrixGridControl), new PropertyMetadata(null));
 
         public IMatrix Matrix
         {
-            get { return (IMatrix)GetValue(MatrixProperty); }
-            set { SetValue(MatrixProperty, value); }
+            get => (IMatrix)this.GetValue(MatrixProperty);
+            set => this.SetValue(MatrixProperty, value);
         }
+
         public static readonly DependencyProperty MatrixProperty =
-            DependencyProperty.Register("Matrix", typeof(IMatrix), typeof(MatrixGridControl), new FrameworkPropertyMetadata(null, new PropertyChangedCallback(OnMatrixChanged)));
+            DependencyProperty.Register(nameof(Matrix), typeof(IMatrix), typeof(MatrixGridControl), new FrameworkPropertyMetadata(null, new PropertyChangedCallback(OnMatrixChanged)));
 
         private static void OnMatrixChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             MatrixGridControl target = (MatrixGridControl)d;
 
-            System.ComponentModel.PropertyChangedEventHandler handler = (s, pcea) => { target.state = State.Ready; target.UpdateStates(true); };
+            void handlerReady(object s, System.ComponentModel.PropertyChangedEventArgs pcea)
+            {
+                target.state = State.Ready;
+                target.UpdateStates(true);
+            }
+
+            void handlerBuilding(object s, System.ComponentModel.PropertyChangedEventArgs pcea)
+            {
+                target.state = State.Building;
+                target.UpdateStates(true);
+            }
 
             if (e.OldValue != null && e.OldValue is IMatrix oldmatrix)
-                oldmatrix.Builded -= handler;
+            {
+                oldmatrix.Builded -= handlerReady;
+                oldmatrix.Building -= handlerBuilding;
+            }
+
             if (e.NewValue != null && e.NewValue is IMatrix newmatrix)
             {
                 if (newmatrix.ShowRowsTotal.HasValue == false)
+                {
                     newmatrix.ShowRowsTotal = target.ShowRowsTotal;
-                if (newmatrix.ShowColumnsTotal.HasValue == false)
-                    newmatrix.ShowColumnsTotal = target.ShowColumnsTotal;
+                }
 
-                newmatrix.Builded += handler;
-                target.state = State.Building;
+                if (newmatrix.ShowColumnsTotal.HasValue == false)
+                {
+                    newmatrix.ShowColumnsTotal = target.ShowColumnsTotal;
+                }
+
+                newmatrix.Builded += handlerReady;
+                newmatrix.Building += handlerBuilding;
+
+                if (newmatrix.IsBuilded == false)
+                {
+                    target.state = State.Building;
+                }
+                else
+                {
+                    target.state = State.Ready;
+                }
             }
             else
             {
                 target.state = State.NoData;
             }
+
             target.UpdateStates(true);
         }
-
 
         #endregion
 
@@ -117,9 +158,9 @@ namespace TMP.UI.Controls.WPF.Reporting.MatrixGrid
 
         private void UpdateStates(bool useTransitions)
         {
-            Dispatcher.BeginInvoke(new Action(delegate
+            this.Dispatcher.BeginInvoke(new Action(delegate
                 {
-                    switch (state)
+                    switch (this.state)
                     {
                         case State.Ready:
                             VisualStateManager.GoToState(this, State.Ready.ToString(), false);
@@ -131,7 +172,7 @@ namespace TMP.UI.Controls.WPF.Reporting.MatrixGrid
                             VisualStateManager.GoToState(this, State.Building.ToString(), false);
                             break;
                         default:
-                            VisualStateManager.GoToState(this, state.ToString(), false);
+                            VisualStateManager.GoToState(this, this.state.ToString(), false);
                             break;
                     }
                 }));

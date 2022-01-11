@@ -1,54 +1,54 @@
-﻿using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Threading;
-using TMPApplication.WpfDialogs.Contracts;
-
-namespace TMPApplication.WpfDialogs
+﻿namespace TMPApplication.WpfDialogs
 {
-	class MessageDialog : DialogBase, IMessageDialog
-	{
-		public MessageDialog(
-			IDialogHost dialogHost, 
-			DialogMode dialogMode,
-			string message,
-			Dispatcher dispatcher,
+    using System.Windows;
+    using System.Windows.Controls;
+    using System.Windows.Threading;
+    using TMPApplication.WpfDialogs.Contracts;
+
+    internal class MessageDialog : DialogBase, IMessageDialog
+    {
+        public MessageDialog(
+            IDialogHost dialogHost,
+            DialogMode dialogMode,
+            string message,
+            Dispatcher dispatcher,
             System.Windows.MessageBoxImage image = MessageBoxImage.None)
-			: base(dialogHost, dialogMode, dispatcher, image)
-		{
-			InvokeUICall(() =>
-				{
-					_messageTextBlock = new TextBlock
-					{
-						Text = message,
+            : base(dialogHost, dialogMode, dispatcher, image)
+        {
+            this.HorizontalDialogAlignment = HorizontalAlignment.Center;
+            this.VerticalDialogAlignment = VerticalAlignment.Center;
+
+            this.InvokeUICall(() =>
+                {
+                    this.messageTextBlock = new TextBlock
+                    {
+                        Text = message,
                         TextAlignment = TextAlignment.Center,
-						HorizontalAlignment = HorizontalAlignment.Center,
-						VerticalAlignment = VerticalAlignment.Center,
-						TextWrapping = TextWrapping.Wrap,
-					};
-					SetContent(_messageTextBlock);
-				});
-		}
+                        HorizontalAlignment = HorizontalAlignment.Center,
+                        VerticalAlignment = VerticalAlignment.Center,
+                        TextWrapping = TextWrapping.Wrap,
+                    };
+                    this.SetContent(this.messageTextBlock);
+                });
+        }
 
-		private TextBlock _messageTextBlock;
+        private TextBlock messageTextBlock;
 
-		#region Implementation of IMessageDialog
+        #region Implementation of IMessageDialog
 
-		public string Message
-		{
-			get
-			{
-				var text = string.Empty;
-				InvokeUICall(
-					() => text = _messageTextBlock.Text);
-				return text;
-			}
-			set
-			{
-				InvokeUICall(
-					() => _messageTextBlock.Text = value);
-			}
-		}
+        public string Message
+        {
+            get
+            {
+                var text = string.Empty;
+                this.InvokeUICall(
+                    () => text = this.messageTextBlock.Text);
+                return text;
+            }
+            set => this.InvokeUICall(
+                    () => this.messageTextBlock.Text = value);
+        }
 
-		#endregion
-	}
+        #endregion
+    }
 }

@@ -1,10 +1,10 @@
-﻿using System;
-using System.ComponentModel;
-using ItemsFilter.Model;
-using System.Diagnostics;
-
-namespace ItemsFilter.Initializer
+﻿namespace ItemsFilter.Initializer
 {
+    using System;
+    using System.ComponentModel;
+    using System.Diagnostics;
+    using ItemsFilter.Model;
+
     /// <summary>
     /// Represent initializer for StringFilter.
     /// </summary>
@@ -19,12 +19,13 @@ namespace ItemsFilter.Initializer
             Debug.Assert(propertyInfo != null);
             Type propertyType = propertyInfo.PropertyType;
             if (filterPresenter.ItemProperties.Contains(propertyInfo)
-                && typeof(String).IsAssignableFrom(propertyInfo.PropertyType)
-                && !propertyType.IsEnum
-                )
+
+                // && typeof(String).IsAssignableFrom(propertyInfo.PropertyType)
+                && !propertyType.IsEnum)
             {
                 return new StringFilter(propertyInfo);
             }
+
             return null;
         }
     }

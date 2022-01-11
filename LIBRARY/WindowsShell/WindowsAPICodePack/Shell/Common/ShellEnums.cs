@@ -1,9 +1,9 @@
-﻿//Copyright (c) Microsoft Corporation.  All rights reserved.
-
-using System;
+﻿// Copyright (c) Microsoft Corporation.  All rights reserved.
 
 namespace Microsoft.WindowsAPICodePack.Shell
 {
+    using System;
+
     /// <summary>
     /// CommonFileDialog AddPlace locations
     /// </summary>
@@ -36,7 +36,7 @@ namespace Microsoft.WindowsAPICodePack.Shell
         RelativeToParent = unchecked((int)0x80018001),
 
         /// <summary>
-        /// Returns the path relative to the parent folder in a 
+        /// Returns the path relative to the parent folder in a
         /// friendly format as displayed in an address bar.
         /// </summary>
         RelativeToParentAddressBar = unchecked((int)0x8007c001),
@@ -66,6 +66,7 @@ namespace Microsoft.WindowsAPICodePack.Shell
         /// </summary>
         Url = unchecked((int)0x80068000),
     }
+
     /// <summary>
     /// Available Library folder types
     /// </summary>
@@ -94,8 +95,7 @@ namespace Microsoft.WindowsAPICodePack.Shell
         /// <summary>
         /// Videos
         /// </summary>
-        Videos
-
+        Videos,
     }
 
     /// <summary>
@@ -169,11 +169,11 @@ namespace Microsoft.WindowsAPICodePack.Shell
         /// responding.  Use this only to minimize windows from a different
         /// thread.
         /// </summary>
-        ForceMinimize = 11
+        ForceMinimize = 11,
     }
 
     /// <summary>
-    /// Provides a set of flags to be used with <see cref="Microsoft.WindowsAPICodePack.Shell.SearchCondition"/> 
+    /// Provides a set of flags to be used with <see cref="Microsoft.WindowsAPICodePack.Shell.SearchCondition"/>
     /// to indicate the operation in <see cref="Microsoft.WindowsAPICodePack.Shell.SearchConditionFactory"/> methods.
     /// </summary>
     public enum SearchConditionOperation
@@ -234,7 +234,7 @@ namespace Microsoft.WindowsAPICodePack.Shell
         ValueNotContains = 10,
 
         /// <summary>
-        /// The value of the property must match the value of the constant, where '?' 
+        /// The value of the property must match the value of the constant, where '?'
         /// matches any single character and '*' matches any sequence of characters.
         /// </summary>
         DosWildcards = 11,
@@ -252,7 +252,7 @@ namespace Microsoft.WindowsAPICodePack.Shell
         /// <summary>
         /// The application is free to interpret this in any suitable way.
         /// </summary>
-        ApplicationSpecific = 14
+        ApplicationSpecific = 14,
     }
 
     /// <summary>
@@ -276,7 +276,7 @@ namespace Microsoft.WindowsAPICodePack.Shell
         Not = 2,
 
         /// <summary>
-        /// Indicates that the node is a comparison between a property and a 
+        /// Indicates that the node is a comparison between a property and a
         /// constant value using a <see cref="Microsoft.WindowsAPICodePack.Shell.SearchConditionOperation"/>.
         /// </summary>
         Leaf = 3,
@@ -330,7 +330,7 @@ namespace Microsoft.WindowsAPICodePack.Shell
         /// <summary>
         /// The maximum valid enumeration value. Used for validation purposes only.
         /// </summary>
-        Last = 5
+        Last = 5,
     }
 
     /// <summary>
@@ -345,20 +345,20 @@ namespace Microsoft.WindowsAPICodePack.Shell
         Default = 0,
 
         /// <summary>
-        /// The items are sorted in descending order. Whether the sort is alphabetical, numerical, 
+        /// The items are sorted in descending order. Whether the sort is alphabetical, numerical,
         /// and so on, is determined by the data type of the column indicated in propkey.
         /// </summary>
         Descending = -1,
 
         /// <summary>
-        /// The items are sorted in ascending order. Whether the sort is alphabetical, numerical, 
+        /// The items are sorted in ascending order. Whether the sort is alphabetical, numerical,
         /// and so on, is determined by the data type of the column indicated in propkey.
         /// </summary>
         Ascending = 1,
     }
 
     /// <summary>
-    /// Provides a set of flags to be used with IQueryParser::SetOption and 
+    /// Provides a set of flags to be used with IQueryParser::SetOption and
     /// IQueryParser::GetOption to indicate individual options.
     /// </summary>
     public enum StructuredQuerySingleOption
@@ -440,11 +440,10 @@ namespace Microsoft.WindowsAPICodePack.Shell
         /// It defaults to CASE_REQUIREMENT_UPPER_IF_AQS.
         /// </summary>
         ConnectorCase,
-
     }
 
     /// <summary>
-    /// Provides a set of flags to be used with IQueryParser::SetMultiOption 
+    /// Provides a set of flags to be used with IQueryParser::SetMultiOption
     /// to indicate individual options.
     /// </summary>
     public enum StructuredQueryMultipleOption
@@ -484,52 +483,52 @@ namespace Microsoft.WindowsAPICodePack.Shell
     }
 
     /// <summary>
-    /// Used by IQueryParserManager::SetOption to set parsing options. 
+    /// Used by IQueryParserManager::SetOption to set parsing options.
     /// This can be used to specify schemas and localization options.
     /// </summary>
     public enum QueryParserManagerOption
     {
         /// <summary>
-        /// A VT_LPWSTR containing the name of the file that contains the schema binary. 
-        /// The default value is StructuredQuerySchema.bin for the SystemIndex catalog 
+        /// A VT_LPWSTR containing the name of the file that contains the schema binary.
+        /// The default value is StructuredQuerySchema.bin for the SystemIndex catalog
         /// and StructuredQuerySchemaTrivial.bin for the trivial catalog.
         /// </summary>
         SchemaBinaryName = 0,
 
         /// <summary>
-        /// Either a VT_BOOL or a VT_LPWSTR. If the value is a VT_BOOL and is FALSE, 
-        /// a pre-localized schema will not be used. If the value is a VT_BOOL and is TRUE, 
-        /// IQueryParserManager will use the pre-localized schema binary in 
-        /// "%ALLUSERSPROFILE%\Microsoft\Windows". If the value is a VT_LPWSTR, the value should 
-        /// contain the full path of the folder in which the pre-localized schema binary can be found. 
+        /// Either a VT_BOOL or a VT_LPWSTR. If the value is a VT_BOOL and is FALSE,
+        /// a pre-localized schema will not be used. If the value is a VT_BOOL and is TRUE,
+        /// IQueryParserManager will use the pre-localized schema binary in
+        /// "%ALLUSERSPROFILE%\Microsoft\Windows". If the value is a VT_LPWSTR, the value should
+        /// contain the full path of the folder in which the pre-localized schema binary can be found.
         /// The default value is VT_BOOL with TRUE.
         /// </summary>
         PreLocalizedSchemaBinaryPath = 1,
 
         /// <summary>
-        /// A VT_LPWSTR containing the full path to the folder that contains the 
+        /// A VT_LPWSTR containing the full path to the folder that contains the
         /// unlocalized schema binary. The default value is "%SYSTEMROOT%\System32".
         /// </summary>
         UnlocalizedSchemaBinaryPath = 2,
 
         /// <summary>
-        /// A VT_LPWSTR containing the full path to the folder that contains the 
-        /// localized schema binary that can be read and written to as needed. 
+        /// A VT_LPWSTR containing the full path to the folder that contains the
+        /// localized schema binary that can be read and written to as needed.
         /// The default value is "%LOCALAPPDATA%\Microsoft\Windows".
         /// </summary>
         LocalizedSchemaBinaryPath = 3,
 
         /// <summary>
-        /// A VT_BOOL. If TRUE, then the paths for pre-localized and localized binaries 
-        /// have "\(LCID)" appended to them, where language code identifier (LCID) is 
+        /// A VT_BOOL. If TRUE, then the paths for pre-localized and localized binaries
+        /// have "\(LCID)" appended to them, where language code identifier (LCID) is
         /// the decimal locale ID for the localized language. The default is TRUE.
         /// </summary>
         AppendLCIDToLocalizedPath = 4,
 
         /// <summary>
-        /// A VT_UNKNOWN with an object supporting ISchemaLocalizerSupport. 
+        /// A VT_UNKNOWN with an object supporting ISchemaLocalizerSupport.
         /// This object will be used instead of the default localizer support object.
         /// </summary>
-        LocalizerSupport = 5
+        LocalizerSupport = 5,
     }
 }

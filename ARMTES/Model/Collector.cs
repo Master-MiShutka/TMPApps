@@ -19,8 +19,6 @@ namespace TMP.ARMTES.Model
         private List<AccountingObject> _objects;
 
         private string _description;
-        private ViewDeviceModel _viewModel;
-
         public DateTime CreationDate
         {
             get { return _creationDate; }

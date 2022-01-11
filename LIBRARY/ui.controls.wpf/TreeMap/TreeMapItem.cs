@@ -1,14 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Windows.Controls;
-using System.Windows;
-using System.ComponentModel;
-using System.Reflection;
-using System.Windows.Data;
-
-namespace TMP.UI.Controls.WPF.TreeMap
+﻿namespace TMP.UI.Controls.WPF.TreeMap
 {
+    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel;
+    using System.Reflection;
+    using System.Text;
+    using System.Windows;
+    using System.Windows.Controls;
+    using System.Windows.Data;
+
     [TemplatePart(Name = TreeMapItem.HeaderPartName, Type = typeof(FrameworkElement))]
     public class TreeMapItem : HeaderedItemsControl
     {
@@ -20,33 +20,32 @@ namespace TMP.UI.Controls.WPF.TreeMap
 
         #region fields
 
-        private double _area;
-        private TreeMaps _parentTreeMaps;
+        private double area;
+        private TreeMaps parentTreeMaps;
 
         #endregion
 
         #region dependency properties
 
         public static DependencyProperty TreeMapModeProperty
-          = DependencyProperty.Register("TreeMapMode", typeof(TreeMapAlgo), typeof(TreeMapItem), new FrameworkPropertyMetadata(TreeMapAlgo.Squarified, FrameworkPropertyMetadataOptions.AffectsMeasure | FrameworkPropertyMetadataOptions.AffectsArrange));
+          = DependencyProperty.Register(nameof(TreeMapMode), typeof(TreeMapAlgo), typeof(TreeMapItem), new FrameworkPropertyMetadata(TreeMapAlgo.Squarified, FrameworkPropertyMetadataOptions.AffectsMeasure | FrameworkPropertyMetadataOptions.AffectsArrange));
 
         public static readonly DependencyProperty ValuePropertyNameProperty
-          = DependencyProperty.Register("ValuePropertyName", typeof(string), typeof(TreeMapItem), new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.AffectsParentArrange | FrameworkPropertyMetadataOptions.AffectsParentMeasure));
+          = DependencyProperty.Register(nameof(ValuePropertyName), typeof(string), typeof(TreeMapItem), new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.AffectsParentArrange | FrameworkPropertyMetadataOptions.AffectsParentMeasure));
 
         public static readonly DependencyProperty LevelProperty
-          = DependencyProperty.Register("Level", typeof(int), typeof(TreeMapItem), new FrameworkPropertyMetadata(0, FrameworkPropertyMetadataOptions.AffectsRender));
+          = DependencyProperty.Register(nameof(Level), typeof(int), typeof(TreeMapItem), new FrameworkPropertyMetadata(0, FrameworkPropertyMetadataOptions.AffectsRender));
 
         public static readonly DependencyProperty MaxDepthProperty
-          = DependencyProperty.Register("MaxDepth", typeof(int), typeof(TreeMapItem), new FrameworkPropertyMetadata(0, FrameworkPropertyMetadataOptions.AffectsRender));
+          = DependencyProperty.Register(nameof(MaxDepth), typeof(int), typeof(TreeMapItem), new FrameworkPropertyMetadata(0, FrameworkPropertyMetadataOptions.AffectsRender));
 
         public static readonly DependencyProperty MinAreaProperty
-          = DependencyProperty.Register("MinArea", typeof(int), typeof(TreeMapItem), new FrameworkPropertyMetadata(0, FrameworkPropertyMetadataOptions.AffectsRender));
+          = DependencyProperty.Register(nameof(MinArea), typeof(int), typeof(TreeMapItem), new FrameworkPropertyMetadata(0, FrameworkPropertyMetadataOptions.AffectsRender));
 
         public static readonly DependencyProperty ShouldRecurseProperty
-          = DependencyProperty.Register("ShouldRecurse", typeof(bool), typeof(TreeMapItem), new FrameworkPropertyMetadata(true, FrameworkPropertyMetadataOptions.AffectsRender));
+          = DependencyProperty.Register(nameof(ShouldRecurse), typeof(bool), typeof(TreeMapItem), new FrameworkPropertyMetadata(true, FrameworkPropertyMetadataOptions.AffectsRender));
 
         #endregion
-
 
         #region ctors
 
@@ -79,49 +78,43 @@ namespace TMP.UI.Controls.WPF.TreeMap
 
         public TreeMapAlgo TreeMapMode
         {
-            get { return (TreeMapAlgo)this.GetValue(TreeMapItem.TreeMapModeProperty); }
-            set { this.SetValue(TreeMapItem.TreeMapModeProperty, value); }
+            get => (TreeMapAlgo)this.GetValue(TreeMapItem.TreeMapModeProperty);
+            set => this.SetValue(TreeMapItem.TreeMapModeProperty, value);
         }
 
         public string ValuePropertyName
         {
-            get { return (string)this.GetValue(TreeMapItem.ValuePropertyNameProperty); }
-            set { this.SetValue(TreeMapItem.ValuePropertyNameProperty, value); }
+            get => (string)this.GetValue(TreeMapItem.ValuePropertyNameProperty);
+            set => this.SetValue(TreeMapItem.ValuePropertyNameProperty, value);
         }
 
         public int MaxDepth
         {
-            get { return (int)this.GetValue(TreeMapItem.MaxDepthProperty); }
-            internal set { this.SetValue(TreeMapItem.MaxDepthProperty, value); }
+            get => (int)this.GetValue(TreeMapItem.MaxDepthProperty);
+            internal set => this.SetValue(TreeMapItem.MaxDepthProperty, value);
         }
 
         public int MinArea
         {
-            get { return (int)this.GetValue(TreeMapItem.MinAreaProperty); }
-            internal set { this.SetValue(TreeMapItem.MinAreaProperty, value); }
+            get => (int)this.GetValue(TreeMapItem.MinAreaProperty);
+            internal set => this.SetValue(TreeMapItem.MinAreaProperty, value);
         }
 
         public bool ShouldRecurse
         {
-            get { return (bool)this.GetValue(TreeMapItem.ShouldRecurseProperty); }
-            internal set { this.SetValue(TreeMapItem.ShouldRecurseProperty, value); }
+            get => (bool)this.GetValue(TreeMapItem.ShouldRecurseProperty);
+            internal set => this.SetValue(TreeMapItem.ShouldRecurseProperty, value);
         }
 
         public int Level
         {
-            get { return (int)this.GetValue(TreeMapItem.LevelProperty); }
-            set { this.SetValue(TreeMapItem.LevelProperty, value); }
+            get => (int)this.GetValue(TreeMapItem.LevelProperty);
+            set => this.SetValue(TreeMapItem.LevelProperty, value);
         }
 
-        internal double Area
-        {
-            get { return _area; }
-        }
+        internal double Area => this.area;
 
-        internal ItemsControl ParentItemsControl
-        {
-            get { return ItemsControl.ItemsControlFromItemContainer(this); }
-        }
+        internal ItemsControl ParentItemsControl => ItemsControl.ItemsControlFromItemContainer(this);
 
         internal TreeMaps ParentTreeMap
         {
@@ -131,16 +124,16 @@ namespace TMP.UI.Controls.WPF.TreeMap
                 {
                     TreeMaps view = control as TreeMaps;
                     if (view != null)
+                    {
                         return view;
+                    }
                 }
+
                 return null;
             }
         }
 
-        internal TreeMapItem ParentTreeMapItem
-        {
-            get { return (this.ParentItemsControl as TreeMapItem); }
-        }
+        internal TreeMapItem ParentTreeMapItem => this.ParentItemsControl as TreeMapItem;
 
         #endregion
 
@@ -150,9 +143,14 @@ namespace TMP.UI.Controls.WPF.TreeMap
         {
             Size size = base.ArrangeOverride(arrangeBounds);
             if (this.IsValidSize(size))
-                _area = size.Width * size.Height;
+            {
+                this.area = size.Width * size.Height;
+            }
             else
-                _area = 0;
+            {
+                this.area = 0;
+            }
+
             this.UpdateShouldRecurse();
 
             return size;
@@ -161,29 +159,28 @@ namespace TMP.UI.Controls.WPF.TreeMap
         protected override DependencyObject GetContainerForItemOverride()
         {
             return new TreeMapItem(this.Level + 1, this.MaxDepth, this.MinArea, this.ValuePropertyName);
-
         }
 
         protected override void OnVisualParentChanged(DependencyObject oldParent)
         {
             base.OnVisualParentChanged(oldParent);
-            _parentTreeMaps = this.ParentTreeMap;
-            if (_parentTreeMaps != null)
+            this.parentTreeMaps = this.ParentTreeMap;
+            if (this.parentTreeMaps != null)
             {
                 Binding bindingMode = new Binding(TreeMaps.TreeMapModeProperty.Name);
-                bindingMode.Source = _parentTreeMaps;
+                bindingMode.Source = this.parentTreeMaps;
                 BindingOperations.SetBinding(this, TreeMapItem.TreeMapModeProperty, bindingMode);
 
                 Binding bindingValue = new Binding(TreeMaps.ValuePropertyNameProperty.Name);
-                bindingValue.Source = _parentTreeMaps;
+                bindingValue.Source = this.parentTreeMaps;
                 BindingOperations.SetBinding(this, TreeMapItem.ValuePropertyNameProperty, bindingValue);
 
                 Binding bindingMinArea = new Binding(TreeMaps.MinAreaProperty.Name);
-                bindingMinArea.Source = _parentTreeMaps;
+                bindingMinArea.Source = this.parentTreeMaps;
                 BindingOperations.SetBinding(this, TreeMapItem.MinAreaProperty, bindingMinArea);
 
                 Binding bindingMaxDepth = new Binding(TreeMaps.MaxDepthProperty.Name);
-                bindingMaxDepth.Source = _parentTreeMaps;
+                bindingMaxDepth.Source = this.parentTreeMaps;
                 BindingOperations.SetBinding(this, TreeMapItem.MaxDepthProperty, bindingMaxDepth);
             }
         }
@@ -201,16 +198,22 @@ namespace TMP.UI.Controls.WPF.TreeMap
                 }
             }
             else if (e.Property == TreeMapItem.MaxDepthProperty)
+            {
                 this.UpdateShouldRecurse();
+            }
             else if (e.Property == TreeMapItem.MinAreaProperty)
+            {
                 this.UpdateShouldRecurse();
+            }
             else if (e.Property == TreeMapItem.LevelProperty)
+            {
                 this.UpdateShouldRecurse();
+            }
         }
 
         protected override bool IsItemItsOwnContainerOverride(object item)
         {
-            return (item is TreeMapItem);
+            return item is TreeMapItem;
         }
 
         #endregion
@@ -219,7 +222,7 @@ namespace TMP.UI.Controls.WPF.TreeMap
 
         private bool IsValidSize(Size size)
         {
-            return (!size.IsEmpty && size.Width > 0 && size.Width != double.NaN && size.Height > 0 && size.Height != double.NaN);
+            return !size.IsEmpty && size.Width > 0 && size.Width != double.NaN && size.Height > 0 && size.Height != double.NaN;
         }
 
         private void UpdateShouldRecurse()

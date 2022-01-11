@@ -1,8 +1,8 @@
-﻿using System;
-using System.Reflection;
-
-namespace TMP.ExcelOutput
+﻿namespace TMP.ExcelOutput
 {
+    using System;
+    using System.Reflection;
+
     public static class SimpleTypes
     {
         private static readonly Func<Type, bool> SimpleTypesPredicate;

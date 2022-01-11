@@ -1,111 +1,149 @@
-﻿using ItemsFilter.Model;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
+﻿namespace ItemsFilter.ViewModel
+{
+    using System;
+    using System.Collections.ObjectModel;
+    using System.ComponentModel;
+    using ItemsFilter.Model;
 
-namespace ItemsFilter.ViewModel {
     public delegate void FilterControlStateChangedEventHandler(FilterControlVm sender, FilterControl.State newValue);
+
+    public delegate void FilterControlFilterEventHandler(FilterControlVm sender, IFilter filter);
+
     /// <summary>
     /// View model for <c>FilterControl</c>.
-    /// FilterControlVm is IEnumerable&lt;Filter&gt;. 
+    /// FilterControlVm is IEnumerable&lt;Filter&gt;.
     /// An instance of FilterControlVm not created directly. Instead, the procedure FilterPresenter.TryGetFilterControlVm(string viewKey, IEnumerable&lt;FilterInitializer&gt; filterInitializers)
     /// prepares a model for FilterControl, as IEnumerable&lt;Filter&gt;, where each Filter instance bound to FilterControlVm for the transmission of changes.
     /// Usually, instance of FilterControlVm created by FilterControl when it need this and disposed on raise Unload event.
     /// </summary>
-    public class FilterControlVm:ObservableCollection<Filter>,IDisposable {
-        private readonly object lockFlag=new Object();
+    public class FilterControlVm : ObservableCollection<IFilter>, IDisposable
+    {
+        private readonly object lockFlag = new object();
         private bool isDisposed = false;
         private bool isActive;
         private bool isOpen;
         private bool isEnable;
         private FilterControl.State state;
-        internal FilterControlVm() { }
+
+        internal FilterControlVm()
+        {
+        }
+
         /// <summary>
         /// Get FilterControl state.
         /// </summary>
         public FilterControl.State State
         {
-            get { return state; }
+            get => this.state;
+
             private set
             {
-                if (state != value)
+                if (this.state != value)
                 {
-                    state = value;
-                    if (StateChanged!=null)
+                    this.state = value;
+                    if (this.StateChanged != null)
                     {
-                        lock (StateChanged)
+                        lock (this.StateChanged)
                         {
-                            StateChanged(this, state);
+                            this.StateChanged(this, this.state);
                         }
-                    };
-                    OnPropertyChanged(new PropertyChangedEventArgs("State"));
+                    }
+
+                    this.OnPropertyChanged(new PropertyChangedEventArgs(nameof(this.State)));
                 }
             }
         }
+
         /// <summary>
-        /// Provede FilterControlStateChanged event.
+        /// Provide FilterControlStateChanged event.
         /// </summary>
         public event FilterControlStateChangedEventHandler StateChanged;
+
+        public event FilterControlFilterEventHandler FilterChanged;
+
         /// <summary>
         /// Get or set FilterControl.IsEnabled.
         /// </summary>
-        public bool IsEnable {
-            get { return isEnable; }
-            set {
-                if (isEnable != value) {
-                    isEnable = value;
+        public bool IsEnable
+        {
+            get => this.isEnable;
+
+            set
+            {
+                if (this.isEnable != value)
+                {
+                    this.isEnable = value;
                     if (value)
-                        State |= FilterControl.State.Enable;
+                    {
+                        this.State |= FilterControl.State.Enable;
+                    }
                     else
-                        State &= ~FilterControl.State.Enable;
-                    OnPropertyChanged(new PropertyChangedEventArgs("IsEnable"));
+                    {
+                        this.State &= ~FilterControl.State.Enable;
+                    }
+
+                    this.OnPropertyChanged(new PropertyChangedEventArgs(nameof(this.IsEnable)));
                 }
             }
         }
+
         /// <summary>
         /// Gets or sets whether the popup is currently displaying on the screen.
         /// </summary>
-        public bool IsOpen {
-            get { return isOpen; }
-            set {
-                if (isOpen != value) {
-                    isOpen = value;
+        public bool IsOpen
+        {
+            get => this.isOpen;
+
+            set
+            {
+                if (this.isOpen != value)
+                {
+                    this.isOpen = value;
                     if (value)
-                        State |= FilterControl.State.Open;
+                    {
+                        this.State |= FilterControl.State.Open;
+                    }
                     else
-                        State &= ~FilterControl.State.Open;
-                    OnPropertyChanged(new PropertyChangedEventArgs("IsOpen"));
+                    {
+                        this.State &= ~FilterControl.State.Open;
+                    }
+
+                    this.OnPropertyChanged(new PropertyChangedEventArgs(nameof(this.IsOpen)));
                 }
             }
         }
+
         /// <summary>
         /// Get or set whether filter is active.
         /// </summary>
-        public bool IsActive {
-            get { return isActive; }
-            set {
-                if (isActive != value) {
-                    isActive = value;
-                     if (value)
-                         State |= FilterControl.State.Active;
+        public bool IsActive
+        {
+            get => this.isActive;
+
+            set
+            {
+                if (this.isActive != value)
+                {
+                    this.isActive = value;
+                    if (value)
+                    {
+                        this.State |= FilterControl.State.Active;
+                    }
                     else
-                         State &= ~FilterControl.State.Active;
-                   OnPropertyChanged(new PropertyChangedEventArgs("IsActive"));
+                    {
+                        this.State &= ~FilterControl.State.Active;
+                    }
+
+                    this.OnPropertyChanged(new PropertyChangedEventArgs(nameof(this.IsActive)));
                 }
             }
         }
+
         /// <summary>
         /// Gets whether Dispose has been called.
         /// </summary>
-        public bool IsDisposed {
-            get { return isDisposed; }
+        public bool IsDisposed => this.isDisposed;
 
-        }
-
-        //
         // Summary:
         //     Inserts a filter into the collection at the specified index and attach filter to FilterControlVm.
         //
@@ -115,15 +153,16 @@ namespace ItemsFilter.ViewModel {
         //
         //   item:
         //     The object to insert.
-        protected override void InsertItem(int index, Filter filter)
+        protected override void InsertItem(int index, IFilter filter)
         {
-            if (!isDisposed) {
+            if (!this.isDisposed)
+            {
                 base.InsertItem(index, filter);
                 filter.Attach(this);
-                FilterChanged(filter);
+                this.OnFilterStateChanged();
             }
         }
-        //
+
         // Summary:
         //    Detach FilterControlVm from all filters and remove all filters from collection.
         protected override void ClearItems()
@@ -132,12 +171,13 @@ namespace ItemsFilter.ViewModel {
             {
                 item.Detach(this);
             }
-            FilterChanged(null);
+
+            this.OnFilterStateChanged();
             base.ClearItems();
         }
-        //
+
         // Summary:
-        //     Replaces the filter at the specified index. 
+        //     Replaces the filter at the specified index.
         //     Detach FilterControlVm from removed filter and attach FilterControlVm to new filter.
         //
         // Parameters:
@@ -146,16 +186,17 @@ namespace ItemsFilter.ViewModel {
         //
         //   item:
         //     The new value for the element at the specified index.
-        protected override void SetItem(int index, Filter filter)
+        protected override void SetItem(int index, IFilter filter)
         {
-            if (!isDisposed) {
+            if (!this.isDisposed)
+            {
                 base[index].Detach(this);
                 base.SetItem(index, filter);
                 filter.Attach(this);
-                FilterChanged(filter);
+                this.OnFilterStateChanged();
             }
         }
-        //
+
         // Summary:
         //     Moves the filter at the specified index to a new location in the collection.
         //
@@ -167,11 +208,12 @@ namespace ItemsFilter.ViewModel {
         //     The zero-based index specifying the new location of the item.
         protected override void MoveItem(int oldIndex, int newIndex)
         {
-            if (!isDisposed) {
-                base.MoveItem(oldIndex, newIndex); 
+            if (!this.isDisposed)
+            {
+                base.MoveItem(oldIndex, newIndex);
             }
         }
-        //
+
         // Summary:
         //     Detach FilterControlVm from filter at the specified index of the collection and removes filter.
         //
@@ -180,29 +222,49 @@ namespace ItemsFilter.ViewModel {
         //     The zero-based index of the element to remove.
         protected override void RemoveItem(int index)
         {
-            if (!isDisposed) {
+            if (!this.isDisposed)
+            {
                 base[index].Detach(this);
                 base.RemoveItem(index);
-                FilterChanged(null);
+                this.OnFilterStateChanged();
             }
         }
+
         /// <summary>
         /// Detach FilterControlVm from all filters and remove all filters from collection.
         /// </summary>
-        public void Dispose() {
-            lock (lockFlag) {
-                if (!isDisposed) {
-                    isDisposed = true;
-                    Clear();
+        public void Dispose()
+        {
+            lock (this.lockFlag)
+            {
+                if (!this.isDisposed)
+                {
+                    this.isDisposed = true;
+                    this.Clear();
                 }
             }
         }
-        internal void FilterChanged(Filter filter) {
+
+        internal void OnFilterStateChanged()
+        {
             bool active = false;
-            foreach (var item in base.Items) {
+            foreach (var item in base.Items)
+            {
                 active |= item.IsActive;
             }
-            IsActive = active;
+
+            this.IsActive = active;
+        }
+
+        internal void OnFilterChanged(IFilter filter)
+        {
+            if (filter != null && this.FilterChanged != null)
+            {
+                lock (this.FilterChanged)
+                {
+                    this.FilterChanged(this, filter);
+                }
+            }
         }
     }
 }

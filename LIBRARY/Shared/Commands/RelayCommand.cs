@@ -1,15 +1,15 @@
-﻿using System;
-using System.Windows.Input;
-using System.Diagnostics;
-
-namespace TMP.Shared.Commands
+﻿namespace TMP.Shared.Commands
 {
+    using System;
+    using System.Diagnostics;
+    using System.Windows.Input;
+
     public class RelayCommand : ICommand
     {
         #region Fields
 
-        readonly Action<object> _execute;
-        readonly Predicate<object> _canExecute;
+        private readonly Action<object> execute;
+        private readonly Predicate<object> canExecute;
 
         #endregion // Fields
 
@@ -32,10 +32,12 @@ namespace TMP.Shared.Commands
         public RelayCommand(Action<object> execute, Predicate<object> canExecute)
         {
             if (execute == null)
-                throw new ArgumentNullException("execute");
+            {
+                throw new ArgumentNullException(nameof(execute));
+            }
 
-            _execute = execute;
-            _canExecute = canExecute;
+            this.execute = execute;
+            this.canExecute = canExecute;
         }
 
         #endregion // Constructors
@@ -45,7 +47,7 @@ namespace TMP.Shared.Commands
         [DebuggerStepThrough]
         public bool CanExecute(object parameter)
         {
-            return _canExecute == null ? true : _canExecute(parameter);
+            return this.canExecute == null ? true : this.canExecute(parameter);
         }
 
         public event EventHandler CanExecuteChanged
@@ -56,7 +58,7 @@ namespace TMP.Shared.Commands
 
         public void Execute(object parameter)
         {
-            _execute(parameter);
+            this.execute(parameter);
         }
 
         #endregion // ICommand Members

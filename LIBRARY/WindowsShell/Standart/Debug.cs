@@ -17,11 +17,10 @@ namespace Standard
     public static class Assert
     {
         // Blend and VS don't like Debugger.Break being called on their design surfaces.  Badness will happen.
-        //private static readonly bool _isNotAtRuntime = (bool)System.ComponentModel.DesignerProperties.IsInDesignModeProperty.GetMetadata(typeof(System.Windows.DependencyObject)).DefaultValue;
-
+        // private static readonly bool _isNotAtRuntime = (bool)System.ComponentModel.DesignerProperties.IsInDesignModeProperty.GetMetadata(typeof(System.Windows.DependencyObject)).DefaultValue;
         private static void _Break()
         {
-            //if (!_isNotAtRuntime)
+            // if (!_isNotAtRuntime)
             {
 #if DEV_DEBUG
                 Debugger.Break();
@@ -53,10 +52,8 @@ namespace Standard
         /// <typeparam name="T">The generic type to compare for equality.</typeparam>
         /// <param name="expected">The first generic type data to compare.  This is is the expected value.</param>
         /// <param name="actual">The second generic type data to compare.  This is the actual value.</param>
-        [
-            Obsolete("Use Assert.AreEqual instead of Assert.Equals", false),
-            Conditional("DEBUG")
-        ]
+        [Obsolete("Use Assert.AreEqual instead of Assert.Equals", false)]
+        [Conditional("DEBUG")]
         public static void Equals<T>(T expected, T actual)
         {
             AreEqual(expected, actual);
@@ -204,7 +201,8 @@ namespace Standard
         /// <param name="value">The value to check for nullness.</param>
         /// <remarks>This breaks into the debugger in the case of a failed assertion.</remarks>
         [Conditional("DEBUG")]
-        public static void IsNotNull<T>(T value) where T : class
+        public static void IsNotNull<T>(T value)
+            where T : class
         {
             if (null == value)
             {
@@ -213,7 +211,8 @@ namespace Standard
         }
 
         [Conditional("DEBUG")]
-        public static void IsDefault<T>(T value) where T : struct
+        public static void IsDefault<T>(T value)
+            where T : struct
         {
             if (!value.Equals(default(T)))
             {
@@ -222,7 +221,8 @@ namespace Standard
         }
 
         [Conditional("DEBUG")]
-        public static void IsNotDefault<T>(T value) where T : struct
+        public static void IsNotDefault<T>(T value)
+            where T : struct
         {
             if (value.Equals(default(T)))
             {
@@ -323,7 +323,8 @@ namespace Standard
         /// </summary>
         /// <param name="item">The item to verify is null.</param>
         [Conditional("DEBUG")]
-        public static void IsNull<T>(T item) where T : class
+        public static void IsNull<T>(T item)
+            where T : class
         {
             if (null != item)
             {
@@ -378,7 +379,8 @@ namespace Standard
         }
 
         [Conditional("DEBUG")]
-        public static void NullableIsNotNull<T>(T? value) where T : struct
+        public static void NullableIsNotNull<T>(T? value)
+            where T : struct
         {
             if (null == value)
             {
@@ -387,7 +389,8 @@ namespace Standard
         }
 
         [Conditional("DEBUG")]
-        public static void NullableIsNull<T>(T? value) where T : struct
+        public static void NullableIsNull<T>(T? value)
+            where T : struct
         {
             if (null != value)
             {

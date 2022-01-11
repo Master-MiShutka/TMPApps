@@ -1,60 +1,62 @@
-﻿using System.Collections.Generic;
-using System.Xml.Linq;
-using DocumentFormat.OpenXml.Wordprocessing;
-using TemplateEngine.Docx.Errors;
-
-namespace TemplateEngine.Docx.Processors
+﻿namespace TemplateEngine.Docx.Processors
 {
-	internal class FieldsProcessor:IProcessor
-	{
-		private bool _isNeedToRemoveContentControls;
+    using System.Collections.Generic;
+    using System.Xml.Linq;
+    using DocumentFormat.OpenXml.Wordprocessing;
+    using TemplateEngine.Docx.Errors;
 
-		public IProcessor SetRemoveContentControls(bool isNeedToRemove)
-		{
-			_isNeedToRemoveContentControls = isNeedToRemove;
-			return this;
-		}
+    internal class FieldsProcessor : IProcessor
+    {
+        private bool isNeedToRemoveContentControls;
 
-		public ProcessResult FillContent(XElement contentControl, IEnumerable<IContentItem> items)
-		{
-			var processResult = ProcessResult.NotHandledResult;
+        public IProcessor SetRemoveContentControls(bool isNeedToRemove)
+        {
+            this.isNeedToRemoveContentControls = isNeedToRemove;
+            return this;
+        }
 
-			foreach (var contentItem in items)
-			{
-				processResult.Merge(FillContent(contentControl, contentItem));
-			}
+        public ProcessResult FillContent(XElement contentControl, IEnumerable<IContentItem> items)
+        {
+            var processResult = ProcessResult.NotHandledResult;
 
-			if (processResult.Success && _isNeedToRemoveContentControls)
-				contentControl.RemoveContentControl();
+            foreach (var contentItem in items)
+            {
+                processResult.Merge(this.FillContent(contentControl, contentItem));
+            }
 
-			return processResult;
-		}
+            if (processResult.Success && this.isNeedToRemoveContentControls)
+            {
+                contentControl.RemoveContentControl();
+            }
 
-		public ProcessResult FillContent(XElement contentControl, IContentItem item)
-		{
-			var processResult = ProcessResult.NotHandledResult; 
-			if (!(item is FieldContent))
-			{
-				processResult = ProcessResult.NotHandledResult;
-				return processResult;
-			}
+            return processResult;
+        }
 
-			var field = item as FieldContent;
+        public ProcessResult FillContent(XElement contentControl, IContentItem item)
+        {
+            var processResult = ProcessResult.NotHandledResult;
+            if (!(item is FieldContent))
+            {
+                processResult = ProcessResult.NotHandledResult;
+                return processResult;
+            }
 
-			// If there isn't a field with that name, add an error to the error string,
-			// and continue with next field.
-			if (contentControl == null)
-			{
-				processResult.AddError(new ContentControlNotFoundError(field));
-				return processResult;
-			}
+            var field = item as FieldContent;
 
-            var newValue = field.IsHidden ? "" : field.Value;
-			contentControl.ReplaceContentControlWithNewValue(newValue);
+            // If there isn't a field with that name, add an error to the error string,
+            // and continue with next field.
+            if (contentControl == null)
+            {
+                processResult.AddError(new ContentControlNotFoundError(field));
+                return processResult;
+            }
 
-			processResult.AddItemToHandled(item);
+            var newValue = field.IsHidden ? string.Empty : field.Value;
+            contentControl.ReplaceContentControlWithNewValue(newValue);
 
-			return processResult;
-		}
-	}
+            processResult.AddItemToHandled(item);
+
+            return processResult;
+        }
+    }
 }

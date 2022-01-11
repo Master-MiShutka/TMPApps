@@ -9,12 +9,12 @@ namespace TMP.Work.Emcos.View
 {
     public class MaximumAllowedUnbalanceColumnTemplateSelector : DataTemplateSelector
     {
-        public DataTemplate BalansGroupTemplate { get; set; }
-        public DataTemplate BalansItemTemplate { get; set; }
+        public DataTemplate BalanceGroupTemplate { get; set; }
+        public DataTemplate BalanceItemTemplate { get; set; }
 
         public override DataTemplate SelectTemplate(object item, DependencyObject container)
         {
-            return (item is Model.Balans.IBalansGroup) ? BalansGroupTemplate: BalansItemTemplate;
+            return (item is Model.Balance.IBalanceGroupItem) ? BalanceGroupTemplate: BalanceItemTemplate;
         }
     }
 }

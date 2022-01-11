@@ -10,7 +10,7 @@ namespace TMP.MessageStructure.Utilities
     using System.Collections.Generic;
     using System.Linq;
     using System.Text;
-    using Model;
+    using TMP.MessageStructure.Model;
 
     /// <summary>
     /// The field helper.
@@ -93,7 +93,7 @@ namespace TMP.MessageStructure.Utilities
                     else
                     {
                         var lastByte = field.Data[len - 1];
-                        var x = lastByte >> (8 - (wrem + rem)) & ((byte)Math.Pow(2, rem) - 1);
+                        var x = (lastByte >> (8 - (wrem + rem))) & ((byte)Math.Pow(2, rem) - 1);
                         field.Data[len - 1] = (byte)x;
                     }
                 }

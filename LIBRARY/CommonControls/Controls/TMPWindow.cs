@@ -561,32 +561,32 @@ namespace TMP.Wpf.CommonControls
 
         public SolidColorBrush OverrideDefaultWindowCommandsBrush
         {
-            get { return (SolidColorBrush)this.GetValue(OverrideDefaultWindowCommandsBrushProperty); }
-            set { this.SetValue(OverrideDefaultWindowCommandsBrushProperty, value); }
+            get => (SolidColorBrush)this.GetValue(OverrideDefaultWindowCommandsBrushProperty);
+            set => this.SetValue(OverrideDefaultWindowCommandsBrushProperty, value);
         }
 
         public bool EnableDWMDropShadow
         {
-            get { return (bool)GetValue(EnableDWMDropShadowProperty); }
-            set { SetValue(EnableDWMDropShadowProperty, value); }
+            get => (bool)GetValue(EnableDWMDropShadowProperty);
+            set => SetValue(EnableDWMDropShadowProperty, value);
         }
 
         public bool IsWindowDraggable
         {
-            get { return (bool)GetValue(IsWindowDraggableProperty); }
-            set { SetValue(IsWindowDraggableProperty, value); }
+            get => (bool)GetValue(IsWindowDraggableProperty);
+            set => SetValue(IsWindowDraggableProperty, value);
         }
 
         public TMPDialogSettings TMPDialogOptions
         {
-            get { return (TMPDialogSettings)GetValue(TMPDialogOptionsProperty); }
-            set { SetValue(TMPDialogOptionsProperty, value); }
+            get => (TMPDialogSettings)GetValue(TMPDialogOptionsProperty);
+            set => SetValue(TMPDialogOptionsProperty, value);
         }
 
         public WindowCommandsOverlayBehavior IconOverlayBehavior
         {
-            get { return (WindowCommandsOverlayBehavior)this.GetValue(IconOverlayBehaviorProperty); }
-            set { SetValue(IconOverlayBehaviorProperty, value); }
+            get => (WindowCommandsOverlayBehavior)this.GetValue(IconOverlayBehaviorProperty);
+            set => SetValue(IconOverlayBehaviorProperty, value);
         }
 
         /// <summary>
@@ -594,8 +594,8 @@ namespace TMP.Wpf.CommonControls
         /// </summary>
         public Style WindowMinButtonStyle
         {
-            get { return (Style)this.GetValue(WindowMinButtonStyleProperty); }
-            set { SetValue(WindowMinButtonStyleProperty, value); }
+            get => (Style)this.GetValue(WindowMinButtonStyleProperty);
+            set => SetValue(WindowMinButtonStyleProperty, value);
         }
 
         /// <summary>
@@ -603,8 +603,8 @@ namespace TMP.Wpf.CommonControls
         /// </summary>
         public Style WindowMaxButtonStyle
         {
-            get { return (Style)this.GetValue(WindowMaxButtonStyleProperty); }
-            set { SetValue(WindowMaxButtonStyleProperty, value); }
+            get => (Style)this.GetValue(WindowMaxButtonStyleProperty);
+            set => SetValue(WindowMaxButtonStyleProperty, value);
         }
 
         /// <summary>
@@ -612,14 +612,14 @@ namespace TMP.Wpf.CommonControls
         /// </summary>
         public Style WindowCloseButtonStyle
         {
-            get { return (Style)this.GetValue(WindowCloseButtonStyleProperty); }
-            set { SetValue(WindowCloseButtonStyleProperty, value); }
+            get => (Style)this.GetValue(WindowCloseButtonStyleProperty);
+            set => SetValue(WindowCloseButtonStyleProperty, value);
         }
 
         public WindowCommandsOverlayBehavior WindowButtonCommandsOverlayBehavior
         {
-            get { return (WindowCommandsOverlayBehavior)this.GetValue(WindowButtonCommandsOverlayBehaviorProperty); }
-            set { SetValue(WindowButtonCommandsOverlayBehaviorProperty, value); }
+            get => (WindowCommandsOverlayBehavior)this.GetValue(WindowButtonCommandsOverlayBehaviorProperty);
+            set => SetValue(WindowButtonCommandsOverlayBehaviorProperty, value);
         }
 
         /// <summary>
@@ -627,14 +627,14 @@ namespace TMP.Wpf.CommonControls
         /// </summary>
         public bool ShowSystemMenuOnRightClick
         {
-            get { return (bool)GetValue(ShowSystemMenuOnRightClickProperty); }
-            set { SetValue(ShowSystemMenuOnRightClickProperty, value); }
+            get => (bool)GetValue(ShowSystemMenuOnRightClickProperty);
+            set => SetValue(ShowSystemMenuOnRightClickProperty, value);
         }
 
         public bool ShowIconOnTitleBar
         {
-            get { return (bool)GetValue(ShowIconOnTitleBarProperty); }
-            set { SetValue(ShowIconOnTitleBarProperty, value); }
+            get => (bool)GetValue(ShowIconOnTitleBarProperty);
+            set => SetValue(ShowIconOnTitleBarProperty, value);
         }
 
         /// <summary>
@@ -642,8 +642,8 @@ namespace TMP.Wpf.CommonControls
         /// </summary>
         public DataTemplate IconTemplate
         {
-            get { return (DataTemplate)GetValue(IconTemplateProperty); }
-            set { SetValue(IconTemplateProperty, value); }
+            get => (DataTemplate)GetValue(IconTemplateProperty);
+            set => SetValue(IconTemplateProperty, value);
         }
 
         /// <summary>
@@ -651,8 +651,8 @@ namespace TMP.Wpf.CommonControls
         /// </summary>
         public DataTemplate TitleTemplate
         {
-            get { return (DataTemplate)GetValue(TitleTemplateProperty); }
-            set { SetValue(TitleTemplateProperty, value); }
+            get => (DataTemplate)GetValue(TitleTemplateProperty);
+            set => SetValue(TitleTemplateProperty, value);
         }
 
         /// <summary>
@@ -660,8 +660,8 @@ namespace TMP.Wpf.CommonControls
         /// </summary>
         public bool IgnoreTaskbarOnMaximize
         {
-            get { return (bool)this.GetValue(IgnoreTaskbarOnMaximizeProperty); }
-            set { SetValue(IgnoreTaskbarOnMaximizeProperty, value); }
+            get => (bool)this.GetValue(IgnoreTaskbarOnMaximizeProperty);
+            set => SetValue(IgnoreTaskbarOnMaximizeProperty, value);
         }
 
         /// <summary>
@@ -669,8 +669,8 @@ namespace TMP.Wpf.CommonControls
         /// </summary>
         public Brush TitleForeground
         {
-            get { return (Brush)GetValue(TitleForegroundProperty); }
-            set { SetValue(TitleForegroundProperty, value); }
+            get => (Brush)GetValue(TitleForegroundProperty);
+            set => SetValue(TitleForegroundProperty, value);
         }
 
         /// <summary>
@@ -678,8 +678,8 @@ namespace TMP.Wpf.CommonControls
         /// </summary>
         public EdgeMode IconEdgeMode
         {
-            get { return (EdgeMode)this.GetValue(IconEdgeModeProperty); }
-            set { SetValue(IconEdgeModeProperty, value); }
+            get => (EdgeMode)this.GetValue(IconEdgeModeProperty);
+            set => SetValue(IconEdgeModeProperty, value);
         }
 
         /// <summary>
@@ -687,14 +687,14 @@ namespace TMP.Wpf.CommonControls
         /// </summary>
         public BitmapScalingMode IconBitmapScalingMode
         {
-            get { return (BitmapScalingMode)this.GetValue(IconBitmapScalingModeProperty); }
-            set { SetValue(IconBitmapScalingModeProperty, value); }
+            get => (BitmapScalingMode)this.GetValue(IconBitmapScalingModeProperty);
+            set => SetValue(IconBitmapScalingModeProperty, value);
         }
 
         public bool ShowTitleBar
         {
-            get { return (bool)GetValue(ShowTitleBarProperty); }
-            set { SetValue(ShowTitleBarProperty, value); }
+            get => (bool)GetValue(ShowTitleBarProperty);
+            set => SetValue(ShowTitleBarProperty, value);
         }
 
         /// <summary>
@@ -702,8 +702,8 @@ namespace TMP.Wpf.CommonControls
         /// </summary>
         public int TitlebarHeight
         {
-            get { return (int)GetValue(TitlebarHeightProperty); }
-            set { SetValue(TitlebarHeightProperty, value); }
+            get => (int)GetValue(TitlebarHeightProperty);
+            set => SetValue(TitlebarHeightProperty, value);
         }
 
         /// <summary>
@@ -711,8 +711,8 @@ namespace TMP.Wpf.CommonControls
         /// </summary>
         public bool UseNoneWindowStyle
         {
-            get { return (bool)GetValue(UseNoneWindowStyleProperty); }
-            set { SetValue(UseNoneWindowStyleProperty, value); }
+            get => (bool)GetValue(UseNoneWindowStyleProperty);
+            set => SetValue(UseNoneWindowStyleProperty, value);
         }
 
         /// <summary>
@@ -720,8 +720,8 @@ namespace TMP.Wpf.CommonControls
         /// </summary>
         public bool ShowMinButton
         {
-            get { return (bool)GetValue(ShowMinButtonProperty); }
-            set { SetValue(ShowMinButtonProperty, value); }
+            get => (bool)GetValue(ShowMinButtonProperty);
+            set => SetValue(ShowMinButtonProperty, value);
         }
 
         /// <summary>
@@ -729,8 +729,8 @@ namespace TMP.Wpf.CommonControls
         /// </summary>
         public bool ShowMaxRestoreButton
         {
-            get { return (bool)GetValue(ShowMaxRestoreButtonProperty); }
-            set { SetValue(ShowMaxRestoreButtonProperty, value); }
+            get => (bool)GetValue(ShowMaxRestoreButtonProperty);
+            set => SetValue(ShowMaxRestoreButtonProperty, value);
         }
 
         /// <summary>
@@ -738,8 +738,8 @@ namespace TMP.Wpf.CommonControls
         /// </summary>
         public bool ShowCloseButton
         {
-            get { return (bool)GetValue(ShowCloseButtonProperty); }
-            set { SetValue(ShowCloseButtonProperty, value); }
+            get => (bool)GetValue(ShowCloseButtonProperty);
+            set => SetValue(ShowCloseButtonProperty, value);
         }
 
         /// <summary>
@@ -747,8 +747,8 @@ namespace TMP.Wpf.CommonControls
         /// </summary>
         public bool IsMinButtonEnabled
         {
-            get { return (bool)GetValue(IsMinButtonEnabledProperty); }
-            set { SetValue(IsMinButtonEnabledProperty, value); }
+            get => (bool)GetValue(IsMinButtonEnabledProperty);
+            set => SetValue(IsMinButtonEnabledProperty, value);
         }
 
         /// <summary>
@@ -756,8 +756,8 @@ namespace TMP.Wpf.CommonControls
         /// </summary>
         public bool IsMaxRestoreButtonEnabled
         {
-            get { return (bool)GetValue(IsMaxRestoreButtonEnabledProperty); }
-            set { SetValue(IsMaxRestoreButtonEnabledProperty, value); }
+            get => (bool)GetValue(IsMaxRestoreButtonEnabledProperty);
+            set => SetValue(IsMaxRestoreButtonEnabledProperty, value);
         }
 
         /// <summary>
@@ -765,8 +765,8 @@ namespace TMP.Wpf.CommonControls
         /// </summary>
         public bool IsCloseButtonEnabled
         {
-            get { return (bool)GetValue(IsCloseButtonEnabledProperty); }
-            set { SetValue(IsCloseButtonEnabledProperty, value); }
+            get => (bool)GetValue(IsCloseButtonEnabledProperty);
+            set => SetValue(IsCloseButtonEnabledProperty, value);
         }
 
         /// <summary>
@@ -774,8 +774,8 @@ namespace TMP.Wpf.CommonControls
         /// </summary>
         public bool TitleCaps
         {
-            get { return (bool)GetValue(TitleCapsProperty); }
-            set { SetValue(TitleCapsProperty, value); }
+            get => (bool)GetValue(TitleCapsProperty);
+            set => SetValue(TitleCapsProperty, value);
         }
 
         /// <summary>
@@ -783,8 +783,8 @@ namespace TMP.Wpf.CommonControls
         /// </summary>
         public Brush WindowTitleBrush
         {
-            get { return (Brush)GetValue(WindowTitleBrushProperty); }
-            set { SetValue(WindowTitleBrushProperty, value); }
+            get => (Brush)GetValue(WindowTitleBrushProperty);
+            set => SetValue(WindowTitleBrushProperty, value);
         }
 
         /// <summary>
@@ -792,8 +792,8 @@ namespace TMP.Wpf.CommonControls
         /// </summary>
         public SolidColorBrush GlowBrush
         {
-            get { return (SolidColorBrush)GetValue(GlowBrushProperty); }
-            set { SetValue(GlowBrushProperty, value); }
+            get => (SolidColorBrush)GetValue(GlowBrushProperty);
+            set => SetValue(GlowBrushProperty, value);
         }
 
         /// <summary>
@@ -801,8 +801,8 @@ namespace TMP.Wpf.CommonControls
         /// </summary>
         public SolidColorBrush NonActiveGlowBrush
         {
-            get { return (SolidColorBrush)GetValue(NonActiveGlowBrushProperty); }
-            set { SetValue(NonActiveGlowBrushProperty, value); }
+            get => (SolidColorBrush)GetValue(NonActiveGlowBrushProperty);
+            set => SetValue(NonActiveGlowBrushProperty, value);
         }
 
         /// <summary>
@@ -810,8 +810,8 @@ namespace TMP.Wpf.CommonControls
         /// </summary>
         public Brush NonActiveBorderBrush
         {
-            get { return (Brush)GetValue(NonActiveBorderBrushProperty); }
-            set { SetValue(NonActiveBorderBrushProperty, value); }
+            get => (Brush)GetValue(NonActiveBorderBrushProperty);
+            set => SetValue(NonActiveBorderBrushProperty, value);
         }
 
         /// <summary>
@@ -819,8 +819,8 @@ namespace TMP.Wpf.CommonControls
         /// </summary>
         public Brush NonActiveWindowTitleBrush
         {
-            get { return (Brush)GetValue(NonActiveWindowTitleBrushProperty); }
-            set { SetValue(NonActiveWindowTitleBrushProperty, value); }
+            get => (Brush)GetValue(NonActiveWindowTitleBrushProperty);
+            set => SetValue(NonActiveWindowTitleBrushProperty, value);
         }
 
         /// <summary>
@@ -833,8 +833,8 @@ namespace TMP.Wpf.CommonControls
 
         public bool ToggleFullScreen
         {
-            get { return (bool)GetValue(ToggleFullScreenProperty); }
-            set { SetValue(ToggleFullScreenProperty, value); }
+            get => (bool)GetValue(ToggleFullScreenProperty);
+            set => SetValue(ToggleFullScreenProperty, value);
         }
 
         #endregion Properties

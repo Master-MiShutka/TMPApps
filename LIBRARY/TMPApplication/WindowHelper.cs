@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-
-namespace TMP.Work.Emcos.DataForCalculateNormativ
+﻿namespace TMP.Work.Emcos.DataForCalculateNormativ
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Runtime.InteropServices;
+    using System.Text;
+    using System.Threading.Tasks;
+    using System.Windows;
+
     public static class WindowHelper
     {
         public static bool Flash(this Window wnd)
@@ -27,18 +27,22 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
             /// The size of the structure in bytes.
             /// </summary>
             public uint cbSize;
+
             /// <summary>
             /// A Handle to the Window to be Flashed. The window can be either opened or minimized.
             /// </summary>
             public IntPtr hwnd;
+
             /// <summary>
             /// The Flash Status.
             /// </summary>
             public uint dwFlags;
+
             /// <summary>
             /// The number of times to Flash the window.
             /// </summary>
             public uint uCount;
+
             /// <summary>
             /// The rate at which the Window is to be flashed, in milliseconds. If Zero, the function uses the default cursor blink rate.
             /// </summary>
@@ -95,6 +99,7 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
 
                 return FlashWindowEx(ref fi);
             }
+
             return false;
         }
 
@@ -130,9 +135,6 @@ namespace TMP.Work.Emcos.DataForCalculateNormativ
         /// <summary>
         /// A boolean value indicating whether the application is running on Windows 2000 or later.
         /// </summary>
-        private static bool Win2000OrLater
-        {
-            get { return Environment.OSVersion.Version.Major >= 5; }
-        }
+        private static bool Win2000OrLater => Environment.OSVersion.Version.Major >= 5;
     }
 }

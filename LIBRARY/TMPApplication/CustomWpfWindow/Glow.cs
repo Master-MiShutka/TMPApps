@@ -1,9 +1,9 @@
-﻿using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Media;
-
-namespace TMPApplication.CustomWpfWindow
+﻿namespace TMPApplication.CustomWpfWindow
 {
+    using System.Windows;
+    using System.Windows.Controls;
+    using System.Windows.Media;
+
     public class Glow : Control
     {
         public static readonly DependencyProperty GlowBrushProperty = DependencyProperty.Register("GlowBrush", typeof(SolidColorBrush), typeof(Glow), new UIPropertyMetadata(Brushes.Transparent));
@@ -18,26 +18,26 @@ namespace TMPApplication.CustomWpfWindow
 
         public SolidColorBrush GlowBrush
         {
-            get { return (SolidColorBrush)this.GetValue(GlowBrushProperty); }
-            set { this.SetValue(GlowBrushProperty, value); }
+            get => (SolidColorBrush)this.GetValue(GlowBrushProperty);
+            set => this.SetValue(GlowBrushProperty, value);
         }
 
         public SolidColorBrush NonActiveGlowBrush
         {
-            get { return (SolidColorBrush)this.GetValue(NonActiveGlowBrushProperty); }
-            set { this.SetValue(NonActiveGlowBrushProperty, value); }
+            get => (SolidColorBrush)this.GetValue(NonActiveGlowBrushProperty);
+            set => this.SetValue(NonActiveGlowBrushProperty, value);
         }
 
         public bool IsGlow
         {
-            get { return (bool)this.GetValue(IsGlowProperty); }
-            set { this.SetValue(IsGlowProperty, value); }
+            get => (bool)this.GetValue(IsGlowProperty);
+            set => this.SetValue(IsGlowProperty, value);
         }
 
         public Orientation Orientation
         {
-            get { return (Orientation)this.GetValue(OrientationProperty); }
-            set { this.SetValue(OrientationProperty, value); }
+            get => (Orientation)this.GetValue(OrientationProperty);
+            set => this.SetValue(OrientationProperty, value);
         }
     }
 }

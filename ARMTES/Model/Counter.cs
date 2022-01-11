@@ -18,7 +18,6 @@ namespace TMP.ARMTES.Model
         private string _serialNumber;
         private Indications _previousIndications;
         private Indications _nextIndications;
-        private long? _difference;
         private string _description;
 
         public string CounterLink { get; set; }

@@ -1,26 +1,35 @@
-﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace TMP.Common.JsonUtils.JsonClassGenerator
+﻿namespace TMP.Common.JsonUtils.JsonClassGenerator
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using Newtonsoft.Json;
+
     public class FieldInfo
     {
-        public FieldInfo(IJsonClassGeneratorConfig generator, string jsonMemberName, JsonType type, bool usePascalCase, IList<object> Examples)
+        public FieldInfo(IJsonClassGeneratorConfig generator, string jsonMemberName, JsonType type, bool usePascalCase, IList<object> examples)
         {
             this.generator = generator;
             this.JsonMemberName = jsonMemberName;
             this.MemberName = jsonMemberName;
-            if (usePascalCase) MemberName = JsonClassGenerator.ToTitleCase(MemberName);
+            if (usePascalCase)
+            {
+                this.MemberName = JsonClassGenerator.ToTitleCase(this.MemberName);
+            }
+
             this.Type = type;
-            this.Examples = Examples;
+            this.Examples = examples;
         }
+
         private IJsonClassGeneratorConfig generator;
+
         public string MemberName { get; private set; }
+
         public string JsonMemberName { get; private set; }
+
         public JsonType Type { get; private set; }
+
         public IList<object> Examples { get; private set; }
 
         public string GetGenerationCode(string jobject)
@@ -36,8 +45,7 @@ namespace TMP.Common.JsonUtils.JsonClassGenerator
                     innermost.GetReaderName(),
                     -1,
                     innermost.GetTypeName(),
-                    field.Type.GetTypeName()
-                    );
+                    field.Type.GetTypeName());
             }
             else if (field.Type.Type == JsonTypeEnum.Dictionary)
             {
@@ -46,8 +54,7 @@ namespace TMP.Common.JsonUtils.JsonClassGenerator
                     field.Type.GetTypeName(),
                     field.Type.InternalType.GetTypeName(),
                     field.JsonMemberName,
-                    field.Type.GetTypeName()
-                    );
+                    field.Type.GetTypeName());
             }
             else
             {
@@ -61,7 +68,7 @@ namespace TMP.Common.JsonUtils.JsonClassGenerator
 
         public string GetExamplesText()
         {
-            return string.Join(", ", Examples.Take(5).Select(x => JsonConvert.SerializeObject(x)).ToArray());
+            return string.Join(", ", this.Examples.Take(5).Select(x => JsonConvert.SerializeObject(x)).ToArray());
         }
     }
 }

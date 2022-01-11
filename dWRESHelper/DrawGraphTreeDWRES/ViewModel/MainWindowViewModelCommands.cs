@@ -9,6 +9,7 @@ using System.Windows.Input;
 using Model = TMP.DWRES.Objects;
 
 using TMP.DWRES.DB;
+using TMP.Shared.Commands;
 
 namespace TMP.DWRES.ViewModel
 {
@@ -20,7 +21,7 @@ namespace TMP.DWRES.ViewModel
         {
             get
             {
-                return new GUI.DelegateCommand(() =>
+                return new DelegateCommand(() =>
                 {
                     SelectDBAndConnect();
                 });
@@ -31,7 +32,7 @@ namespace TMP.DWRES.ViewModel
         {
             get
             {
-                return new GUI.DelegateCommand(() =>
+                return new DelegateCommand(() =>
                 {
                     DBFileName = string.Empty;
                     SelectDBAndConnect();
@@ -43,7 +44,7 @@ namespace TMP.DWRES.ViewModel
         {
             get
             {
-                return new GUI.DelegateCommand(() =>
+                return new DelegateCommand(() =>
                 {
                     GUI.AboutWindow about = new GUI.AboutWindow();
                     if (this.MainWindow == null)
@@ -55,15 +56,15 @@ namespace TMP.DWRES.ViewModel
             }
         }
 
-        public ICommand CommandIncreaseFontSize { get { return new GUI.DelegateCommand<Window>((w) => w.FontSize++); } }
-        public ICommand CommandDecreaseFontSize { get { return new GUI.DelegateCommand<Window>((w) => w.FontSize--); } }
-        public ICommand CommandClose { get { return new GUI.DelegateCommand<Window>((w) => w.Close()); } }
+        public ICommand CommandIncreaseFontSize { get { return new DelegateCommand<Window>((w) => w.FontSize++); } }
+        public ICommand CommandDecreaseFontSize { get { return new DelegateCommand<Window>((w) => w.FontSize--); } }
+        public ICommand CommandClose { get { return new DelegateCommand<Window>((w) => w.Close()); } }
 
         public ICommand CommandConnectToServer
         {
             get
             {
-                return new GUI.DelegateCommand(() =>
+                return new DelegateCommand(() =>
                 {
                     Window w = null;
                     if (this.MainWindow == null)
@@ -80,10 +81,10 @@ namespace TMP.DWRES.ViewModel
             }
         }
 
-        public ICommand CommandShowFiderSchemeTable { get { return new GUI.DelegateCommand(() => ShowFiderSchemeTable()); } }
-        public ICommand CommandShowSubstationScheme { get { return new GUI.DelegateCommand(() => BuildSubstationGraph()); } }
+        public ICommand CommandShowFiderSchemeTable { get { return new DelegateCommand(() => ShowFiderSchemeTable()); } }
+        public ICommand CommandShowSubstationScheme { get { return new DelegateCommand(() => BuildSubstationGraph()); } }
 
-        public ICommand CommandRefreshGraph { get { return new GUI.DelegateCommand(() => BuildGraph());} }
+        public ICommand CommandRefreshGraph { get { return new DelegateCommand(() => BuildGraph());} }
 
         private ICommand _commandRelayoutGraph;
         public ICommand CommandRelayoutGraph { get { return _commandRelayoutGraph; } set { _commandRelayoutGraph = value; RaisePropertyChanged("CommandRelayoutGraph"); } }

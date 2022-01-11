@@ -1,23 +1,24 @@
-//Copyright (c) Microsoft Corporation.  All rights reserved.
-
-using System;
-using System.Collections.ObjectModel;
-using System.Linq;
-using Microsoft.WindowsAPICodePack.Resources;
+// Copyright (c) Microsoft Corporation.  All rights reserved.
 
 namespace Microsoft.WindowsAPICodePack.Dialogs
 {
+    using System;
+    using System.Collections.ObjectModel;
+    using System.Linq;
+    using Microsoft.WindowsAPICodePack.Resources;
+
     /// <summary>
     /// Strongly typed collection for dialog controls.
     /// </summary>
     /// <typeparam name="T">DialogControl</typeparam>
-    public sealed class DialogControlCollection<T> : Collection<T> where T : DialogControl
+    public sealed class DialogControlCollection<T> : Collection<T>
+        where T : DialogControl
     {
         private IDialogControlHost hostingDialog;
 
         internal DialogControlCollection(IDialogControlHost host)
         {
-            hostingDialog = host;
+            this.hostingDialog = host;
         }
 
         /// <summary>
@@ -25,33 +26,35 @@ namespace Microsoft.WindowsAPICodePack.Dialogs
         /// </summary>
         /// <param name="index">The location to insert the control.</param>
         /// <param name="control">The item to insert.</param>
-        /// <permission cref="System.InvalidOperationException">A control with 
-        /// the same name already exists in this collection -or- 
-        /// the control is being hosted by another dialog -or- the associated dialog is 
+        /// <permission cref="System.InvalidOperationException">A control with
+        /// the same name already exists in this collection -or-
+        /// the control is being hosted by another dialog -or- the associated dialog is
         /// showing and cannot be modified.</permission>
         protected override void InsertItem(int index, T control)
         {
-            // Check for duplicates, lack of host, 
+            // Check for duplicates, lack of host,
             // and during-show adds.
-            if (Items.Contains(control))
+            if (this.Items.Contains(control))
             {
                 throw new InvalidOperationException(LocalizedMessages.DialogCollectionCannotHaveDuplicateNames);
             }
+
             if (control.HostingDialog != null)
             {
                 throw new InvalidOperationException(LocalizedMessages.DialogCollectionControlAlreadyHosted);
             }
-            if (!hostingDialog.IsCollectionChangeAllowed())
+
+            if (!this.hostingDialog.IsCollectionChangeAllowed())
             {
                 throw new InvalidOperationException(LocalizedMessages.DialogCollectionModifyShowingDialog);
             }
 
             // Reparent, add control.
-            control.HostingDialog = hostingDialog;
+            control.HostingDialog = this.hostingDialog;
             base.InsertItem(index, control);
 
             // Notify that we've added a control.
-            hostingDialog.ApplyCollectionChanged();
+            this.hostingDialog.ApplyCollectionChanged();
         }
 
         /// <summary>
@@ -59,28 +62,28 @@ namespace Microsoft.WindowsAPICodePack.Dialogs
         /// </summary>
         /// <param name="index">The location of the control to remove.</param>
         /// <permission cref="System.InvalidOperationException">
-        /// The associated dialog is 
+        /// The associated dialog is
         /// showing and cannot be modified.</permission>
         protected override void RemoveItem(int index)
         {
             // Notify that we're about to remove a control.
             // Throw if dialog showing.
-            if (!hostingDialog.IsCollectionChangeAllowed())
+            if (!this.hostingDialog.IsCollectionChangeAllowed())
             {
                 throw new InvalidOperationException(LocalizedMessages.DialogCollectionModifyShowingDialog);
             }
 
-            DialogControl control = (DialogControl)Items[index];
+            DialogControl control = (DialogControl)this.Items[index];
 
             // Unparent and remove.
             control.HostingDialog = null;
             base.RemoveItem(index);
 
-            hostingDialog.ApplyCollectionChanged();
+            this.hostingDialog.ApplyCollectionChanged();
         }
 
         /// <summary>
-        /// Defines the indexer that supports accessing controls by name. 
+        /// Defines the indexer that supports accessing controls by name.
         /// </summary>
         /// <remarks>
         /// <para>Control names are case sensitive.</para>
@@ -95,10 +98,10 @@ namespace Microsoft.WindowsAPICodePack.Dialogs
             {
                 if (string.IsNullOrEmpty(name))
                 {
-                    throw new ArgumentException(LocalizedMessages.DialogCollectionControlNameNull, "name");
+                    throw new ArgumentException(LocalizedMessages.DialogCollectionControlNameNull, nameof(name));
                 }
 
-                return Items.FirstOrDefault(x => x.Name == name);
+                return this.Items.FirstOrDefault(x => x.Name == name);
             }
         }
 
@@ -106,15 +109,15 @@ namespace Microsoft.WindowsAPICodePack.Dialogs
         /// Searches for the control who's id matches the value
         /// passed in the <paramref name="id"/> parameter.
         /// </summary>
-        /// 
-        /// <param name="id">An integer containing the identifier of the 
+        ///
+        /// <param name="id">An integer containing the identifier of the
         /// control being searched for.</param>
-        /// 
+        ///
         /// <returns>A DialogControl who's id matches the value of the
-        /// <paramref name="id"/> parameter.</returns>        
+        /// <paramref name="id"/> parameter.</returns>
         internal DialogControl GetControlbyId(int id)
         {
-            return Items.FirstOrDefault(x => x.Id == id);
+            return this.Items.FirstOrDefault(x => x.Id == id);
         }
     }
 }

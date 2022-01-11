@@ -1,9 +1,9 @@
-﻿//Copyright (c) Microsoft Corporation.  All rights reserved.
-
-using System.Diagnostics;
+﻿// Copyright (c) Microsoft Corporation.  All rights reserved.
 
 namespace Microsoft.WindowsAPICodePack.Dialogs.Controls
 {
+    using System.Diagnostics;
+
     /// <summary>
     /// Defines the label controls in the Common File Dialog.
     /// </summary>
@@ -12,20 +12,26 @@ namespace Microsoft.WindowsAPICodePack.Dialogs.Controls
         /// <summary>
         /// Creates a new instance of this class.
         /// </summary>
-        public CommonFileDialogLabel() { }
+        public CommonFileDialogLabel()
+        {
+        }
 
         /// <summary>
         /// Creates a new instance of this class with the specified text.
         /// </summary>
         /// <param name="text">The text to display for this control.</param>
-        public CommonFileDialogLabel(string text) : base(text) { }
+        public CommonFileDialogLabel(string text) : base(text)
+        {
+        }
 
         /// <summary>
         /// Creates a new instance of this class with the specified name and text.
         /// </summary>
         /// <param name="name">The name of this control.</param>
         /// <param name="text">The text to display for this control.</param>
-        public CommonFileDialogLabel(string name, string text) : base(name, text) { }
+        public CommonFileDialogLabel(string name, string text) : base(name, text)
+        {
+        }
 
         /// <summary>
         /// Attach this control to the dialog object
@@ -39,7 +45,7 @@ namespace Microsoft.WindowsAPICodePack.Dialogs.Controls
             dialog.AddText(this.Id, this.Text);
 
             // Sync unmanaged properties with managed properties
-            SyncUnmanagedProperties();
+            this.SyncUnmanagedProperties();
         }
     }
 }

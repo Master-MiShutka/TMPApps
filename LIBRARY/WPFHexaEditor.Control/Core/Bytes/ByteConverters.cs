@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Text;
-
-namespace WPFHexaEditor.Core.Bytes
+﻿namespace WPFHexaEditor.Core.Bytes
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Globalization;
+    using System.Text;
+
     /// <summary>
     /// ByteCharConverter for convert data
     /// </summary>
@@ -19,7 +19,7 @@ namespace WPFHexaEditor.Core.Bytes
         }
 
         /// <summary>
-        /// Convert Char to Byte 
+        /// Convert Char to Byte
         /// </summary>
         public static byte CharToByte(char c)
         {
@@ -41,19 +41,24 @@ namespace WPFHexaEditor.Core.Bytes
             }
 
             if (sb.Length > 0)
+            {
                 sb.Remove(sb.Length - 1, 1);
-            
+            }
+
             return sb.ToString();
         }
+
         /// <summary>
         /// Converts the byte to a hex string. For example: "10" = "0A";
         /// </summary>
         public static string ByteToHex(byte b)
         {
-            string sB = b.ToString(ConstantReadOnly.HexStringFormat, CultureInfo.InvariantCulture );//System.Threading.Thread.CurrentThread.CurrentCulture);
+            string sB = b.ToString(ConstantReadOnly.HexStringFormat, CultureInfo.InvariantCulture); // System.Threading.Thread.CurrentThread.CurrentCulture);
 
             if (sB.Length == 1)
+            {
                 sB = "0" + sB;
+            }
 
             return sB;
         }
@@ -70,13 +75,15 @@ namespace WPFHexaEditor.Core.Bytes
                 case ByteToString.ByteToCharProcess:
                     StringBuilder builder = new StringBuilder();
 
-                    foreach (byte @byte in buffer)                    
-                        builder.Append(ByteToChar(@byte));                    
+                    foreach (byte @byte in buffer)
+                    {
+                        builder.Append(ByteToChar(@byte));
+                    }
 
                     return builder.ToString();
             }
 
-            return "";         
+            return string.Empty;
         }
 
         /// <summary>
@@ -85,7 +92,10 @@ namespace WPFHexaEditor.Core.Bytes
         public static byte[] HexToByte(string hex)
         {
             if (string.IsNullOrEmpty(hex))
+            {
                 return null;
+            }
+
             hex = hex.Trim();
             var hexArray = hex.Split(' ');
             var byteArray = new byte[hexArray.Length];
@@ -97,7 +107,10 @@ namespace WPFHexaEditor.Core.Bytes
                 byte b;
                 var isByte = HexToByte(hexValue, out b);
                 if (!isByte)
+                {
                     return null;
+                }
+
                 byteArray[i] = b;
             }
 
@@ -111,7 +124,10 @@ namespace WPFHexaEditor.Core.Bytes
 
         public static long HexLiteralToLong(string hex)
         {
-            if (string.IsNullOrEmpty(hex)) throw new ArgumentException("hex");
+            if (string.IsNullOrEmpty(hex))
+            {
+                throw new ArgumentException("hex");
+            }
 
             int i = hex.Length > 1 && hex[0] == '0' && (hex[1] == 'x' || hex[1] == 'X') ? 2 : 0;
             long value = 0;
@@ -121,16 +137,26 @@ namespace WPFHexaEditor.Core.Bytes
                 int x = hex[i++];
 
                 if
-                    (x >= '0' && x <= '9') x = x - '0';
+                    (x >= '0' && x <= '9')
+                {
+                    x = x - '0';
+                }
                 else if
-                    (x >= 'A' && x <= 'F') x = (x - 'A') + 10;
+                    (x >= 'A' && x <= 'F')
+                {
+                    x = x - 'A' + 10;
+                }
                 else if
-                    (x >= 'a' && x <= 'f') x = (x - 'a') + 10;
+                    (x >= 'a' && x <= 'f')
+                {
+                    x = x - 'a' + 10;
+                }
                 else
-                    throw new ArgumentOutOfRangeException("hex");
+                {
+                    throw new ArgumentOutOfRangeException(nameof(hex));
+                }
 
-                value = 16 * value + x;
-
+                value = (16 * value) + x;
             }
 
             return value;
@@ -162,8 +188,10 @@ namespace WPFHexaEditor.Core.Bytes
         {
             List<byte> byteList = new List<byte>();
 
-            foreach (char c in str)            
-                byteList.Add(CharToByte(c));            
+            foreach (char c in str)
+            {
+                byteList.Add(CharToByte(c));
+            }
 
             return byteList.ToArray();
         }

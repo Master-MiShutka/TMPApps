@@ -1,12 +1,12 @@
 ﻿// Copyright (c) Microsoft Corporation.  All rights reserved.
 
-using System;
-using System.Diagnostics;
-using Microsoft.WindowsAPICodePack.Shell.Resources;
-using MS.WindowsAPICodePack.Internal;
-
 namespace Microsoft.WindowsAPICodePack.Shell
 {
+    using System;
+    using System.Diagnostics;
+    using Microsoft.WindowsAPICodePack.Shell.Resources;
+    using MS.WindowsAPICodePack.Internal;
+
     /// <summary>
     /// Creates the helper class for known folders.
     /// </summary>
@@ -18,9 +18,9 @@ namespace Microsoft.WindowsAPICodePack.Shell
         /// <param name="pidl"></param>
         /// <returns></returns>
         internal static IKnownFolderNative FromPIDL(IntPtr pidl)
-        {            
+        {
             KnownFolderManagerClass knownFolderManager = new KnownFolderManagerClass();
-            
+
             IKnownFolderNative knownFolder;
             HResult hr = knownFolderManager.FindFolderFromIDList(pidl, out knownFolder);
 
@@ -39,13 +39,17 @@ namespace Microsoft.WindowsAPICodePack.Shell
             KnownFolderManagerClass knownFolderManager = new KnownFolderManagerClass();
 
             HResult hr = knownFolderManager.GetFolder(knownFolderId, out knownFolderNative);
-            if (hr != HResult.Ok) { throw new ShellException(hr); }
+            if (hr != HResult.Ok)
+            {
+                throw new ShellException(hr);
+            }
 
             IKnownFolder kf = GetKnownFolder(knownFolderNative);
             if (kf == null)
             {
-                throw new ArgumentException(LocalizedMessages.KnownFolderInvalidGuid, "knownFolderId");
+                throw new ArgumentException(LocalizedMessages.KnownFolderInvalidGuid, nameof(knownFolderId));
             }
+
             return kf;
         }
 
@@ -79,7 +83,10 @@ namespace Microsoft.WindowsAPICodePack.Shell
             Guid guid = new Guid(ShellIIDGuid.IShellItem2);
             HResult hr = knownFolderNative.GetShellItem(0, ref guid, out shellItem);
 
-            if (!CoreErrorHelper.Succeeded(hr)) { return null; }
+            if (!CoreErrorHelper.Succeeded(hr))
+            {
+                return null;
+            }
 
             bool isFileSystem = false;
 
@@ -120,13 +127,14 @@ namespace Microsoft.WindowsAPICodePack.Shell
 
             if (kf == null)
             {
-                throw new ArgumentException(LocalizedMessages.ShellInvalidCanonicalName, "canonicalName");
+                throw new ArgumentException(LocalizedMessages.ShellInvalidCanonicalName, nameof(canonicalName));
             }
+
             return kf;
         }
 
         /// <summary>
-        /// Returns a known folder given its shell path, such as <c>C:\users\public\documents</c> or 
+        /// Returns a known folder given its shell path, such as <c>C:\users\public\documents</c> or
         /// <c>::{645FF040-5081-101B-9F08-00AA002F954E}</c> for the Recycle Bin.
         /// </summary>
         /// <param name="path">The path for the requested known folder; either a physical path or a virtual path.</param>
@@ -137,7 +145,7 @@ namespace Microsoft.WindowsAPICodePack.Shell
         }
 
         /// <summary>
-        /// Returns a known folder given its shell namespace parsing name, such as 
+        /// Returns a known folder given its shell namespace parsing name, such as
         /// <c>::{645FF040-5081-101B-9F08-00AA002F954E}</c> for the Recycle Bin.
         /// </summary>
         /// <param name="parsingName">The parsing name (or path) for the requested known folder.</param>
@@ -147,7 +155,7 @@ namespace Microsoft.WindowsAPICodePack.Shell
         {
             if (parsingName == null)
             {
-                throw new ArgumentNullException("parsingName");
+                throw new ArgumentNullException(nameof(parsingName));
             }
 
             IntPtr pidl = IntPtr.Zero;
@@ -159,18 +167,19 @@ namespace Microsoft.WindowsAPICodePack.Shell
 
                 if (pidl == IntPtr.Zero)
                 {
-                    throw new ArgumentException(LocalizedMessages.KnownFolderParsingName, "parsingName");
+                    throw new ArgumentException(LocalizedMessages.KnownFolderParsingName, nameof(parsingName));
                 }
 
-                // It's probably a special folder, try to get it                
+                // It's probably a special folder, try to get it
                 IKnownFolderNative knownFolderNative = KnownFolderHelper.FromPIDL(pidl);
                 if (knownFolderNative != null)
                 {
                     IKnownFolder kf = KnownFolderHelper.GetKnownFolder(knownFolderNative);
                     if (kf == null)
                     {
-                        throw new ArgumentException(LocalizedMessages.KnownFolderParsingName, "parsingName");
+                        throw new ArgumentException(LocalizedMessages.KnownFolderParsingName, nameof(parsingName));
                     }
+
                     return kf;
                 }
 
@@ -182,13 +191,13 @@ namespace Microsoft.WindowsAPICodePack.Shell
 
                 if (pidl2 == IntPtr.Zero)
                 {
-                    throw new ArgumentException(LocalizedMessages.KnownFolderParsingName, "parsingName");
+                    throw new ArgumentException(LocalizedMessages.KnownFolderParsingName, nameof(parsingName));
                 }
 
                 IKnownFolder kf2 = KnownFolderHelper.GetKnownFolder(KnownFolderHelper.FromPIDL(pidl));
                 if (kf2 == null)
                 {
-                    throw new ArgumentException(LocalizedMessages.KnownFolderParsingName, "parsingName");
+                    throw new ArgumentException(LocalizedMessages.KnownFolderParsingName, nameof(parsingName));
                 }
 
                 return kf2;
@@ -198,7 +207,6 @@ namespace Microsoft.WindowsAPICodePack.Shell
                 ShellNativeMethods.ILFree(pidl);
                 ShellNativeMethods.ILFree(pidl2);
             }
-
         }
     }
 }

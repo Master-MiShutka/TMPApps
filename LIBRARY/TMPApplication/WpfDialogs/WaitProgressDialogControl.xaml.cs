@@ -1,99 +1,113 @@
-﻿using System.ComponentModel;
-using System.Windows;
-
-namespace TMPApplication.WpfDialogs
+﻿namespace TMPApplication.WpfDialogs
 {
-	partial class WaitProgressDialogControl : INotifyPropertyChanged
-	{
-		internal WaitProgressDialogControl(bool isIndeterminate)
-		{
-            AnimationVisibility = isIndeterminate == false
+    using System.ComponentModel;
+    using System.Windows;
+
+    partial class WaitProgressDialogControl : INotifyPropertyChanged
+    {
+        internal WaitProgressDialogControl(bool isIndeterminate)
+        {
+            this.AnimationVisibility = isIndeterminate == false
                 ? Visibility.Visible : Visibility.Collapsed;
-			ProgressVisibility = isIndeterminate 
-				? Visibility.Visible : Visibility.Collapsed;
+            this.ProgressVisibility = isIndeterminate
+                ? Visibility.Visible : Visibility.Collapsed;
 
-			IsIndeterminate = isIndeterminate;
+            this.IsIndeterminate = isIndeterminate;
 
-			InitializeComponent();
-		}
+            this.InitializeComponent();
+        }
 
-		private Visibility _animationVisibility;
-		public Visibility AnimationVisibility
-		{
-			get { return _animationVisibility; }
-			private set
-			{
-				_animationVisibility = value;
-				OnPropertyChanged("AnimationVisibility");
-			}
-		}
+        private Visibility animationVisibility;
 
-		private Visibility _progressVisibility;
-		public Visibility ProgressVisibility
-		{
-			get { return _progressVisibility; }
-			private set
-			{
-				_progressVisibility = value;
-				OnPropertyChanged("ProgressVisibility");
-			}
-		}
+        public Visibility AnimationVisibility
+        {
+            get => this.animationVisibility;
+            private set
+            {
+                this.animationVisibility = value;
+                this.OnPropertyChanged(nameof(this.AnimationVisibility));
+            }
+        }
 
-		private string _displayText;
-		public string DisplayText
-		{
-			get { return _displayText; }
-			set
-			{
-				_displayText = Strings.PleaseWait +" (" + value + ")";
-				_displayText = value;
-				OnPropertyChanged("DisplayText");
-			}
-		}
+        private Visibility progressVisibility;
 
-		private int _progress;
-		public int Progress
-		{
-			get { return _progress; }
-			set
-			{
-				_progress = value;
-				if (_progress < 0)
-					_progress = 0;
-				else if (_progress > 100)
-					_progress = 100;
+        public Visibility ProgressVisibility
+        {
+            get => this.progressVisibility;
+            private set
+            {
+                this.progressVisibility = value;
+                this.OnPropertyChanged(nameof(this.ProgressVisibility));
+            }
+        }
 
-				OnPropertyChanged("Progress");
-			}
-		}
+        private string displayText;
 
-		private bool _isIndeterminate = true;
-		public bool IsIndeterminate
-		{
-			get { return _isIndeterminate; }
-			set
-			{
-				_isIndeterminate = value;
-				OnPropertyChanged("IsIndeterminate");
-			}
-		}
+        public string DisplayText
+        {
+            get => this.displayText;
+            set
+            {
+                this.displayText = Strings.PleaseWait + " (" + value + ")";
+                this.displayText = value;
+                this.OnPropertyChanged(nameof(this.DisplayText));
+            }
+        }
 
+        private double progress;
 
-		public void Finish()
-		{
-			AnimationVisibility = Visibility.Collapsed;
-			ProgressVisibility = Visibility.Collapsed;
-		}
+        public double Progress
+        {
+            get => this.progress;
+            set
+            {
+                this.progress = value;
+                if (this.progress < 0)
+                {
+                    this.progress = 0;
+                    this.IsIndeterminate = true;
+                }
+                else
+                {
+                    if (this.progress > 100d)
+                    {
+                        this.progress = 100d;
+                    }
 
-		#region INotifyPropertyChanged Member
+                    this.IsIndeterminate = false;
+                }
 
-		public event PropertyChangedEventHandler PropertyChanged;
-		private void OnPropertyChanged(string propertyName)
-		{
-			if (PropertyChanged != null)
-				PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-		}
+                this.OnPropertyChanged(nameof(this.Progress));
+            }
+        }
 
-		#endregion
-	}
+        private bool isIndeterminate = true;
+
+        public bool IsIndeterminate
+        {
+            get => this.isIndeterminate;
+            set
+            {
+                this.isIndeterminate = value;
+                this.OnPropertyChanged(nameof(this.IsIndeterminate));
+            }
+        }
+
+        public void Finish()
+        {
+            this.AnimationVisibility = Visibility.Collapsed;
+            this.ProgressVisibility = Visibility.Collapsed;
+        }
+
+        #region INotifyPropertyChanged Member
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void OnPropertyChanged(string propertyName)
+        {
+            this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        #endregion
+    }
 }

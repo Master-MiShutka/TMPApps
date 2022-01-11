@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using TMP.ExcelXml;
+using Range = TMP.ExcelXml.Range;
 
 namespace TMP.ARMTES
 {

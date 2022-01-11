@@ -58,21 +58,21 @@ namespace TMP.Wpf.CommonControls.Dialogs
 
         public string Text
         {
-            get { return _text; }
+            get => _text;
             set
             {
                 _text = value;
-                OnPropertyChanged("Text");
+                OnPropertyChanged(nameof(Text));
             }
         }
 
         public bool IsVisible
         {
-            get { return _isVisible; }
+            get => _isVisible;
             set
             {
                 _isVisible = value;
-                OnPropertyChanged("IsVisible");
+                OnPropertyChanged(nameof(IsVisible));
             }
         }
 

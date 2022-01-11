@@ -1,12 +1,12 @@
-﻿//Copyright (c) Microsoft Corporation.  All rights reserved.
-
-using System;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.Windows.Markup;
+﻿// Copyright (c) Microsoft Corporation.  All rights reserved.
 
 namespace Microsoft.WindowsAPICodePack.Dialogs.Controls
 {
+    using System;
+    using System.Collections.ObjectModel;
+    using System.Diagnostics;
+    using System.Windows.Markup;
+
     /// <summary>
     /// Represents a group box control for the Common File Dialog.
     /// </summary>note
@@ -14,13 +14,11 @@ namespace Microsoft.WindowsAPICodePack.Dialogs.Controls
     public class CommonFileDialogGroupBox : CommonFileDialogProminentControl
     {
         private Collection<DialogControl> items;
+
         /// <summary>
         /// Gets the collection of controls for this group box.
         /// </summary>
-        public Collection<DialogControl> Items
-        {
-            get { return items; }
-        }
+        public Collection<DialogControl> Items => this.items;
 
         /// <summary>
         /// Creates a new instance of this class.
@@ -28,7 +26,7 @@ namespace Microsoft.WindowsAPICodePack.Dialogs.Controls
         public CommonFileDialogGroupBox()
             : base(string.Empty)
         {
-            Initialize();
+            this.Initialize();
         }
 
         /// <summary>
@@ -38,7 +36,7 @@ namespace Microsoft.WindowsAPICodePack.Dialogs.Controls
         public CommonFileDialogGroupBox(string text)
             : base(text)
         {
-            Initialize();
+            this.Initialize();
         }
 
         /// <summary>
@@ -49,7 +47,7 @@ namespace Microsoft.WindowsAPICodePack.Dialogs.Controls
         public CommonFileDialogGroupBox(string name, string text)
             : base(name, text)
         {
-            Initialize();
+            this.Initialize();
         }
 
         /// <summary>
@@ -57,7 +55,7 @@ namespace Microsoft.WindowsAPICodePack.Dialogs.Controls
         /// </summary>
         private void Initialize()
         {
-            items = new Collection<DialogControl>();
+            this.items = new Collection<DialogControl>();
         }
 
         /// <summary>
@@ -74,7 +72,7 @@ namespace Microsoft.WindowsAPICodePack.Dialogs.Controls
             // Add child controls
             foreach (CommonFileDialogControl item in this.items)
             {
-                item.HostingDialog = HostingDialog;
+                item.HostingDialog = this.HostingDialog;
                 item.Attach(dialog);
             }
 
@@ -82,12 +80,13 @@ namespace Microsoft.WindowsAPICodePack.Dialogs.Controls
             dialog.EndVisualGroup();
 
             // Make this control prominent if needed
-            if (IsProminent)
+            if (this.IsProminent)
+            {
                 dialog.MakeProminent(this.Id);
+            }
 
             // Sync unmanaged properties with managed properties
-            SyncUnmanagedProperties();
+            this.SyncUnmanagedProperties();
         }
-
     }
 }

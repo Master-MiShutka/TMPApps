@@ -1,0 +1,219 @@
+﻿<UserControl
+    x:Class="TMP.WORK.AramisChetchiki.Views.StartView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="clr-namespace:TMP.UI.Controls.WPF;assembly=ui.controls.wpf"
+    xmlns:converters="clr-namespace:TMP.UI.Controls.WPF.Converters;assembly=ui.controls.wpf"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:extensions="clr-namespace:TMP.Extensions;assembly=TMP.Extensions"
+    xmlns:helpers="clr-namespace:TMP.UI.Controls.WPF.Helpers;assembly=ui.controls.wpf"
+    xmlns:interactivity="clr-namespace:Interactivity;assembly=Interactivity"
+    xmlns:local_controls="clr-namespace:TMP.WORK.AramisChetchiki.Controls"
+    xmlns:local_converters="clr-namespace:TMP.WORK.AramisChetchiki.Converters"
+    xmlns:local_extensions="clr-namespace:TMP.WORK.AramisChetchiki.Extensions"
+    xmlns:matrix="clr-namespace:TMP.UI.Controls.WPF.Reporting.MatrixGrid;assembly=ui.controls.wpf.reporting"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:model="clr-namespace:TMP.WORK.AramisChetchiki.Model"
+    xmlns:view="clr-namespace:TMP.WORK.AramisChetchiki.Views"
+    xmlns:vm="clr-namespace:TMP.WORK.AramisChetchiki.ViewModel"
+    d:DataContext="{d:DesignInstance {x:Type vm:StartViewModel},
+                                     IsDesignTimeCreatable=True}"
+    Background="Transparent"
+    Focusable="False"
+    FontSize="{local_extensions:SettingBinding Path=FontSize,
+                                               FallbackValue=13.0}"
+    TextOptions.TextFormattingMode="Ideal"
+    mc:Ignorable="d">
+    <Border
+        Margin="50"
+        HorizontalAlignment="Center"
+        VerticalAlignment="Center"
+        Background="{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}"
+        CornerRadius="5"
+        Effect="{StaticResource dropShadowAccent}">
+        <StackPanel
+            Margin="5"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center">
+            <controls:ContentWithDescription
+                Margin="10"
+                ContentDock="Bottom"
+                Description="Выберите базу данных Арамис">
+                <local_controls:AramisDbSelector DbPath="{Binding AramisDbPath, Mode=TwoWay, NotifyOnSourceUpdated=True}" IsOk="{Binding AramisDbSelected, Mode=TwoWay}" />
+            </controls:ContentWithDescription>
+            <Separator Margin="5" />
+            <controls:ContentWithDescription
+                Margin="10"
+                HorizontalAlignment="Stretch"
+                ContentDock="Bottom"
+                Description="Выберите необходимый файл данных"
+                Visibility="{Binding Path=HasDataFiles, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <ListBox
+                    Margin="5"
+                    Background="Transparent"
+                    BorderThickness="0"
+                    ItemsSource="{Binding DataFileInfos}"
+                    SelectedIndex="2"
+                    SelectedItem="{Binding SelectedDataInfo}">
+                    <ListBox.Resources>
+                        <Style
+                            x:Key="deleteBtn"
+                            BasedOn="{StaticResource {x:Type Button}}"
+                            TargetType="Button">
+                            <Setter Property="HorizontalAlignment" Value="Right" />
+                            <Setter Property="Visibility" Value="Collapsed" />
+                            <Setter Property="helpers:RelativeFontSize.RelativeFontSize" Value="1.5" />
+                            <Setter Property="CommandParameter" Value="{Binding}" />
+                            <Setter Property="Command" Value="{Binding Path=DataContext.CommandDeleteDataFile, RelativeSource={RelativeSource AncestorType={x:Type view:StartView}}}" />
+                            <Setter Property="Content" Value="удалить" />
+                            <Setter Property="Cursor" Value="Hand" />
+                            <Setter Property="Padding" Value="5,2" />
+                            <Setter Property="Margin" Value="0,2" />
+                            <Setter Property="VerticalAlignment" Value="Center" />
+                            <Setter Property="ToolTip" Value="Удалить файл данных" />
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type Button}">
+                                        <Border>
+                                            <TextBlock
+                                                FontFamily="Webdings"
+                                                Foreground="DarkRed"
+                                                Text="r" />
+                                        </Border>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                        <Style
+                            x:Key="dddd"
+                            BasedOn="{StaticResource {x:Type controls:ContentWithDescription}}"
+                            TargetType="{x:Type controls:ContentWithDescription}">
+                            <Setter Property="DescriptionFontSize" Value="{DynamicResource NormalFontSize}" />
+                            <Setter Property="DescriptionFontFamily" Value="{DynamicResource DefaultFont}" />
+                        </Style>
+                    </ListBox.Resources>
+                    <ListBox.ItemTemplate>
+                        <DataTemplate DataType="{x:Type model:AramisDataInfo}">
+                            <Grid Margin="5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <Button
+                                    x:Name="btnDelete"
+                                    Grid.Column="1"
+                                    Style="{StaticResource deleteBtn}" />
+                                <StackPanel Grid.Column="0">
+                                    <controls:ContentWithDescription
+                                        x:Name="departament"
+                                        ContentDock="Right"
+                                        Description="Подразделение:"
+                                        Style="{StaticResource dddd}">
+                                        <TextBlock FontWeight="ExtraBold" Text="{Binding Path=DepartamentName}" />
+                                    </controls:ContentWithDescription>
+                                    <Separator Style="{StaticResource dotedSeparator}" />
+                                    <controls:ContentWithDescription
+                                        x:Name="fileName"
+                                        ContentDock="Right"
+                                        Description="имя файла:"
+                                        Style="{StaticResource dddd}">
+                                        <TextBlock
+                                            FontWeight="Medium"
+                                            Text="{Binding Path=FileName}"
+                                            TextTrimming="CharacterEllipsis" />
+                                    </controls:ContentWithDescription>
+                                    <controls:ContentWithDescription
+                                        x:Name="dbPath"
+                                        ContentDock="Right"
+                                        Description="путь к базе данных:"
+                                        Style="{StaticResource dddd}">
+                                        <TextBlock
+                                            FontWeight="Medium"
+                                            Text="{Binding Path=AramisDbPath}"
+                                            TextTrimming="CharacterEllipsis" />
+                                    </controls:ContentWithDescription>
+                                    <StackPanel
+                                        x:Name="additionalInfo"
+                                        Orientation="Horizontal"
+                                        TextBlock.FontSize="{DynamicResource SmallFontSize}"
+                                        TextBlock.Foreground="DarkGray">
+                                        <TextBlock Text="{Binding Path=FileSize, Converter={StaticResource FileSizeToHumanReadableConverter}, StringFormat={}Размер файла: {0}}" />
+                                        <Separator Margin="10,0" />
+                                        <TextBlock Text="{Binding Path=LastModifiedDate, Converter={StaticResource DateTimeHumanizerConverter}, StringFormat={}Изменен: {0}}" ToolTip="{Binding Path=LastModifiedDate, StringFormat=dd.MM.yyyy}" />
+                                    </StackPanel>
+                                </StackPanel>
+                            </Grid>
+                            <DataTemplate.Triggers>
+                                <DataTrigger Binding="{Binding Path=IsMouseOver, RelativeSource={RelativeSource AncestorType=ListBoxItem}}" Value="True">
+                                    <Setter TargetName="btnDelete" Property="Visibility" Value="Visible" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Path=IsSelected, RelativeSource={RelativeSource AncestorType=ListBoxItem}}" Value="True">
+                                    <Setter TargetName="additionalInfo" Property="TextBlock.Foreground" Value="{DynamicResource {x:Static SystemColors.ControlLightLightBrushKey}}" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Path=IsSelected, RelativeSource={RelativeSource AncestorType=ListBoxItem}}" Value="True">
+                                    <Setter TargetName="departament" Property="DescriptionForeground" Value="{DynamicResource {x:Static SystemColors.ControlLightLightBrushKey}}" />
+                                    <Setter TargetName="fileName" Property="DescriptionForeground" Value="{DynamicResource {x:Static SystemColors.ControlLightLightBrushKey}}" />
+                                    <Setter TargetName="dbPath" Property="DescriptionForeground" Value="{DynamicResource {x:Static SystemColors.ControlLightLightBrushKey}}" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Path=IsSelected, RelativeSource={RelativeSource AncestorType=ListBoxItem}}" Value="False">
+                                    <Setter TargetName="departament" Property="DescriptionForeground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" />
+                                    <Setter TargetName="fileName" Property="DescriptionForeground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" />
+                                    <Setter TargetName="dbPath" Property="DescriptionForeground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" />
+                                </DataTrigger>
+                            </DataTemplate.Triggers>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                    <ListBox.ItemContainerStyle>
+                        <Style TargetType="ListBoxItem">
+                            <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.ControlLightLightBrushKey}}" />
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                            <Setter Property="VerticalContentAlignment" Value="Stretch" />
+                            <Setter Property="interactivity:MouseDoubleClick.Command" Value="{Binding Path=DataContext.CommandSelectAndLoad, RelativeSource={RelativeSource AncestorType={x:Type view:StartView}}}" />
+                            <Setter Property="interactivity:MouseDoubleClick.CommandParameter" Value="{Binding}" />
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="ListBoxItem">
+                                        <Border
+                                            Name="Border"
+                                            Margin="{TemplateBinding Margin}"
+                                            Padding="{TemplateBinding Padding}"
+                                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                            Background="{TemplateBinding Background}"
+                                            BorderBrush="Transparent"
+                                            BorderThickness="1"
+                                            CornerRadius="3">
+                                            <ContentPresenter
+                                                Margin="{TemplateBinding Padding}"
+                                                HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                VerticalAlignment="Center"
+                                                RecognizesAccessKey="True"
+                                                SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                                        </Border>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsSelected" Value="true">
+                                                <Setter TargetName="Border" Property="Background" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
+                                                <Setter TargetName="Border" Property="BorderBrush" Value="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}" />
+                                                <Setter TargetName="Border" Property="TextBlock.Foreground" Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}" />
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </ListBox.ItemContainerStyle>
+                </ListBox>
+            </controls:ContentWithDescription>
+            <StackPanel
+                Margin="5"
+                HorizontalAlignment="Center"
+                Orientation="Horizontal">
+                <Button
+                    Margin="5,0" TextBlock.TextAlignment="Center"
+                    Padding="10,2"
+                    Command="{Binding Path=CommandSelectAndLoad}"
+                    Content="{Binding Path=CommandSelectAndLoad.Header}" />
+            </StackPanel>
+        </StackPanel>
+    </Border>
+</UserControl>

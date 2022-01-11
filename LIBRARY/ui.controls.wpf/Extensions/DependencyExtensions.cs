@@ -1,7 +1,7 @@
-﻿using System.Windows;
-
-namespace TMP.UI.Controls.WPF.Extensions
+﻿namespace TMP.UI.Controls.WPF.Extensions
 {
+    using System.Windows;
+
     public static class DependencyExtensions
     {
         /// <summary>

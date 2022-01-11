@@ -1,14 +1,14 @@
 ﻿/*************************************************************************************
+   
+   Toolkit for WPF
 
-   Extended WPF Toolkit
-
-   Copyright (C) 2007-2013 Xceed Software Inc.
+   Copyright (C) 2007-2018 Xceed Software Inc.
 
    This program is provided to you under the terms of the Microsoft Public
    License (Ms-PL) as published at http://wpftoolkit.codeplex.com/license 
 
    For more features, controls, and fast professional support,
-   pick up the Plus Edition at http://xceed.com/wpf_toolkit
+   pick up the Plus Edition at https://xceed.com/xceed-toolkit-plus-for-wpf/
 
    Stay informed: follow @datagrid on Twitter or Like http://facebook.com/datagrids
 
@@ -55,8 +55,6 @@ namespace Xceed.Wpf.Toolkit
     {
       Keyboard.AddKeyDownHandler( this, OnKeyDown );
       Mouse.AddPreviewMouseDownOutsideCapturedElementHandler( this, OnMouseDownOutsideCapturedElement );
-      //case 166525 : Do no inherit an implicit style of Button
-      this.InheritanceBehavior = InheritanceBehavior.SkipToThemeNow;
     }
 
     #endregion //Constructors
@@ -110,6 +108,23 @@ namespace Xceed.Wpf.Toolkit
     }
 
     #endregion //DropDownContent
+
+    #region DropDownContentBackground
+
+    public static readonly DependencyProperty DropDownContentBackgroundProperty = DependencyProperty.Register( "DropDownContentBackground", typeof( Brush ), typeof( DropDownButton ), new UIPropertyMetadata( null ) );
+    public Brush DropDownContentBackground
+    {
+      get
+      {
+        return ( Brush )GetValue( DropDownContentBackgroundProperty );
+      }
+      set
+      {
+        SetValue( DropDownContentBackgroundProperty, value );
+      }
+    }
+
+    #endregion //DropDownContentBackground
 
     #region DropDownPosition
 
@@ -360,7 +375,8 @@ namespace Xceed.Wpf.Toolkit
 
     private void OnMouseDownOutsideCapturedElement( object sender, MouseButtonEventArgs e )
     {
-      CloseDropDown( true );
+      if (!IsMouseOver)
+        CloseDropDown(true);
     }
 
     private void DropDownButton_Click( object sender, RoutedEventArgs e )

@@ -19,8 +19,8 @@ namespace TMP.Wpf.CommonControls.Dialogs
         /// </summary>
         public string Title
         {
-            get { return (string)GetValue(TitleProperty); }
-            set { SetValue(TitleProperty, value); }
+            get => (string)GetValue(TitleProperty);
+            set => SetValue(TitleProperty, value);
         }
 
         /// <summary>
@@ -28,8 +28,8 @@ namespace TMP.Wpf.CommonControls.Dialogs
         /// </summary>
         public object DialogTop
         {
-            get { return GetValue(DialogTopProperty); }
-            set { SetValue(DialogTopProperty, value); }
+            get => GetValue(DialogTopProperty);
+            set => SetValue(DialogTopProperty, value);
         }
 
         /// <summary>
@@ -37,8 +37,8 @@ namespace TMP.Wpf.CommonControls.Dialogs
         /// </summary>
         public object DialogBottom
         {
-            get { return GetValue(DialogBottomProperty); }
-            set { SetValue(DialogBottomProperty, value); }
+            get => GetValue(DialogBottomProperty);
+            set => SetValue(DialogBottomProperty, value);
         }
 
         internal SizeChangedEventHandler SizeChangedHandler { get; set; }

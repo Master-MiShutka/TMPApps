@@ -1,9 +1,9 @@
-//Copyright (c) Microsoft Corporation.  All rights reserved.
+// Copyright (c) Microsoft Corporation.  All rights reserved.
 
 namespace Microsoft.WindowsAPICodePack.Dialogs.Controls
 {
     /// <summary>
-    /// Defines an abstract class that supports shared functionality for the 
+    /// Defines an abstract class that supports shared functionality for the
     /// common file dialog controls.
     /// </summary>
     public abstract class CommonFileDialogControl : DialogControl
@@ -18,67 +18,81 @@ namespace Microsoft.WindowsAPICodePack.Dialogs.Controls
         /// </summary>
         public virtual string Text
         {
-            get { return textValue; }
+            get => this.textValue;
+
             set
             {
                 // Don't update this property if it hasn't changed
-                if (value != textValue)
+                if (value != this.textValue)
                 {
-                    textValue = value;
-                    ApplyPropertyChange("Text");
+                    this.textValue = value;
+                    this.ApplyPropertyChange("Text");
                 }
             }
         }
 
         private bool enabled = true;
+
         /// <summary>
-        /// Gets or sets a value that determines if this control is enabled.  
+        /// Gets or sets a value that determines if this control is enabled.
         /// </summary>
         public bool Enabled
         {
-            get { return enabled; }
+            get => this.enabled;
+
             set
             {
                 // Don't update this property if it hasn't changed
-                if (value == enabled) { return; }
+                if (value == this.enabled)
+                {
+                    return;
+                }
 
-                enabled = value;
-                ApplyPropertyChange("Enabled");
+                this.enabled = value;
+                this.ApplyPropertyChange("Enabled");
             }
         }
 
         private bool visible = true;
+
         /// <summary>
-        /// Gets or sets a boolean value that indicates whether  
+        /// Gets or sets a boolean value that indicates whether
         /// this control is visible.
         /// </summary>
         public bool Visible
         {
-            get { return visible; }
+            get => this.visible;
+
             set
             {
                 // Don't update this property if it hasn't changed
-                if (value == visible) { return; }
+                if (value == this.visible)
+                {
+                    return;
+                }
 
-                visible = value;
-                ApplyPropertyChange("Visible");
+                this.visible = value;
+                this.ApplyPropertyChange("Visible");
             }
         }
 
         private bool isAdded;
+
         /// <summary>
         /// Has this control been added to the dialog
         /// </summary>
         internal bool IsAdded
         {
-            get { return isAdded; }
-            set { isAdded = value; }
+            get => this.isAdded;
+            set => this.isAdded = value;
         }
 
         /// <summary>
         /// Creates a new instance of this class.
         /// </summary>
-        protected CommonFileDialogControl() { }
+        protected CommonFileDialogControl()
+        {
+        }
 
         /// <summary>
         /// Creates a new instance of this class with the text.
@@ -109,8 +123,8 @@ namespace Microsoft.WindowsAPICodePack.Dialogs.Controls
 
         internal virtual void SyncUnmanagedProperties()
         {
-            ApplyPropertyChange("Enabled");
-            ApplyPropertyChange("Visible");
+            this.ApplyPropertyChange("Enabled");
+            this.ApplyPropertyChange("Visible");
         }
     }
 }

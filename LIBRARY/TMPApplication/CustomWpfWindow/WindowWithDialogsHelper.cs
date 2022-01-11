@@ -1,9 +1,9 @@
-﻿using MS.Windows.Shell;
-using System;
-using System.Windows;
-
-namespace TMPApplication.CustomWpfWindow
+﻿namespace TMPApplication.CustomWpfWindow
 {
+    using System;
+    using System.Windows;
+    using MS.Windows.Shell;
+
     internal static class WindowWithDialogsHelper
     {
         /// <summary>
@@ -11,12 +11,14 @@ namespace TMPApplication.CustomWpfWindow
         /// </summary>
         /// <param name="window">The TMPWindow</param>
         /// <param name="name">The name of the template child</param>
-        public static void SetIsHitTestVisibleInChromeProperty<T>(this WindowWithDialogs window, string name) where T : DependencyObject
+        public static void SetIsHitTestVisibleInChromeProperty<T>(this WindowWithDialogs window, string name)
+            where T : DependencyObject
         {
             if (window == null)
             {
                 return;
             }
+
             var elementPart = window.GetPart<T>(name);
             if (elementPart != null)
             {
@@ -36,6 +38,7 @@ namespace TMPApplication.CustomWpfWindow
             {
                 throw new ArgumentNullException(nameof(window));
             }
+
             var inputElement = window.GetPart(name) as IInputElement;
             System.Diagnostics.Debug.Assert(inputElement != null, $"{name} is not a IInputElement");
             if (WindowChrome.GetResizeGripDirection(inputElement) != direction)

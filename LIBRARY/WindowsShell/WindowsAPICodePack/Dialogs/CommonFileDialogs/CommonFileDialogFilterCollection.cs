@@ -1,18 +1,20 @@
-//Copyright (c) Microsoft Corporation.  All rights reserved.
-
-using System.Collections.ObjectModel;
-using Microsoft.WindowsAPICodePack.Shell;
+// Copyright (c) Microsoft Corporation.  All rights reserved.
 
 namespace Microsoft.WindowsAPICodePack.Dialogs
 {
+    using System.Collections.ObjectModel;
+    using Microsoft.WindowsAPICodePack.Shell;
+
     /// <summary>
     /// Provides a strongly typed collection for file dialog filters.
     /// </summary>
     public class CommonFileDialogFilterCollection : Collection<CommonFileDialogFilter>
     {
-        // Make the default constructor internal so users can't instantiate this 
+        // Make the default constructor internal so users can't instantiate this
         // collection by themselves.
-        internal CommonFileDialogFilterCollection() { }
+        internal CommonFileDialogFilterCollection()
+        {
+        }
 
         internal ShellNativeMethods.FilterSpec[] GetAllFilterSpecs()
         {

@@ -6,11 +6,15 @@
     public abstract class MatrixCellBase : IMatrixCell
     {
         public int GridRow { get; internal set; }
+
         public int GridRowSpan { get; internal set; } = 1;
+
         public int GridColumn { get; internal set; }
+
         public int GridColumnSpan { get; internal set; } = 1;
 
         public string ToolTip { get; set; }
+
         /// <summary>
         /// Тип ячейки
         /// </summary>
@@ -23,9 +27,9 @@
             this.GridColumn = column;
             this.GridColumnSpan = columnSpan;
 
-#if DEBUG
-            this.ToolTip = string.IsNullOrWhiteSpace(this.ToolTip) ? ToString() : ToString() + "\n" + this.ToolTip;
-#endif
+            // #if DEBUG
+            //            this.ToolTip = string.IsNullOrWhiteSpace(this.ToolTip) ? ToString() : ToString() + "\n" + this.ToolTip;
+            // #endif
         }
     }
 }

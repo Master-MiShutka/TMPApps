@@ -1,53 +1,55 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Windows;
-using System.Windows.Controls;
-namespace TMP.Extensions
+﻿namespace TMP.Extensions
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Windows;
+    using System.Windows.Controls;
+
     public class MenuItemExtensions : DependencyObject
     {
-        public static Dictionary<MenuItem, String> ElementToGroupNames = new Dictionary<MenuItem, String>();
+        public static Dictionary<MenuItem, string> ElementToGroupNames = new Dictionary<MenuItem, string>();
 
         public static readonly DependencyProperty GroupNameProperty =
             DependencyProperty.RegisterAttached("GroupName",
-                                         typeof(String),
+                                         typeof(string),
                                          typeof(MenuItemExtensions),
-                                         new PropertyMetadata(String.Empty, OnGroupNameChanged));
+                                         new PropertyMetadata(string.Empty, OnGroupNameChanged));
 
-        public static void SetGroupName(MenuItem element, String value)
+        public static void SetGroupName(MenuItem element, string value)
         {
             element.SetValue(GroupNameProperty, value);
         }
 
-        public static String GetGroupName(MenuItem element)
+        public static string GetGroupName(MenuItem element)
         {
             return element.GetValue(GroupNameProperty).ToString();
         }
 
         private static void OnGroupNameChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            //Add an entry to the group name collection
+            // Add an entry to the group name collection
             var menuItem = d as MenuItem;
 
             if (menuItem != null)
             {
-                String newGroupName = e.NewValue.ToString();
-                String oldGroupName = e.OldValue.ToString();
-                if (String.IsNullOrEmpty(newGroupName))
+                string newGroupName = e.NewValue.ToString();
+                string oldGroupName = e.OldValue.ToString();
+                if (string.IsNullOrEmpty(newGroupName))
                 {
-                    //Removing the toggle button from grouping
+                    // Removing the toggle button from grouping
                     RemoveCheckboxFromGrouping(menuItem);
                 }
                 else
                 {
-                    //Switching to a new group
+                    // Switching to a new group
                     if (newGroupName != oldGroupName)
                     {
-                        if (!String.IsNullOrEmpty(oldGroupName))
+                        if (!string.IsNullOrEmpty(oldGroupName))
                         {
-                            //Remove the old group mapping
+                            // Remove the old group mapping
                             RemoveCheckboxFromGrouping(menuItem);
                         }
+
                         ElementToGroupNames.Add(menuItem, e.NewValue.ToString());
                         menuItem.Checked += MenuItemChecked;
                     }
@@ -61,8 +63,7 @@ namespace TMP.Extensions
             checkBox.Checked -= MenuItemChecked;
         }
 
-
-        static void MenuItemChecked(object sender, RoutedEventArgs e)
+        private static void MenuItemChecked(object sender, RoutedEventArgs e)
         {
             var menuItem = e.OriginalSource as MenuItem;
             foreach (var item in ElementToGroupNames)

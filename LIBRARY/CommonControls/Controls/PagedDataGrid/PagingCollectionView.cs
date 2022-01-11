@@ -99,18 +99,18 @@ namespace TMP.Wpf.CommonControls
             switch (e.PropertyName)
             {
                 case "CurrentPosition":
-                    this.OnPropertyChanged(new PropertyChangedEventArgs("UICurrentItemPositionOnPage"));
+                    this.OnPropertyChanged(new PropertyChangedEventArgs(nameof(UICurrentItemPositionOnPage)));
                     break;
                 case "Count":
-                    this.OnPropertyChanged(new PropertyChangedEventArgs("IsFitering"));
-                    this.OnPropertyChanged(new PropertyChangedEventArgs("TotalItemsCountIncludingFilter"));
-                    this.OnPropertyChanged(new PropertyChangedEventArgs("TotalItemsCountExcludingFilter"));
+                    this.OnPropertyChanged(new PropertyChangedEventArgs(nameof(IsFitering)));
+                    this.OnPropertyChanged(new PropertyChangedEventArgs(nameof(TotalItemsCountIncludingFilter)));
+                    this.OnPropertyChanged(new PropertyChangedEventArgs(nameof(TotalItemsCountExcludingFilter)));
 
-                    this.OnPropertyChanged(new PropertyChangedEventArgs("UIStartIndex"));
-                    this.OnPropertyChanged(new PropertyChangedEventArgs("UIEndIndex"));
+                    this.OnPropertyChanged(new PropertyChangedEventArgs(nameof(UIStartIndex)));
+                    this.OnPropertyChanged(new PropertyChangedEventArgs(nameof(UIEndIndex)));
 
-                    this.OnPropertyChanged(new PropertyChangedEventArgs("CurrentPage"));
-                    this.OnPropertyChanged(new PropertyChangedEventArgs("PageCount"));
+                    this.OnPropertyChanged(new PropertyChangedEventArgs(nameof(CurrentPage)));
+                    this.OnPropertyChanged(new PropertyChangedEventArgs(nameof(PageCount)));
                     break;
                 default:
                     break;
@@ -125,14 +125,14 @@ namespace TMP.Wpf.CommonControls
 
         public int ItemsPerPage
         {
-            get { return _itemsPerPage; }
+            get => _itemsPerPage;
             set
             {
                 _itemsPerPage = value;
-                this.OnPropertyChanged(new PropertyChangedEventArgs("ItemsPerPage"));
-                this.OnPropertyChanged(new PropertyChangedEventArgs("UIItemsCountOnPage"));
-                this.OnPropertyChanged(new PropertyChangedEventArgs("CurrentPage"));
-                this.OnPropertyChanged(new PropertyChangedEventArgs("PageCount"));
+                this.OnPropertyChanged(new PropertyChangedEventArgs(nameof(ItemsPerPage)));
+                this.OnPropertyChanged(new PropertyChangedEventArgs(nameof(UIItemsCountOnPage)));
+                this.OnPropertyChanged(new PropertyChangedEventArgs(nameof(CurrentPage)));
+                this.OnPropertyChanged(new PropertyChangedEventArgs(nameof(PageCount)));
                 NotifyToUpdateProperties();
                 this.Refresh();
             }
@@ -196,7 +196,7 @@ namespace TMP.Wpf.CommonControls
             set
             {
                 this._currentPage = value;
-                this.OnPropertyChanged(new PropertyChangedEventArgs("CurrentPage"));
+                this.OnPropertyChanged(new PropertyChangedEventArgs(nameof(CurrentPage)));
             }
         }
 
@@ -313,8 +313,8 @@ namespace TMP.Wpf.CommonControls
 
         private void NotifyToUpdateProperties()
         {
-            this.OnPropertyChanged(new PropertyChangedEventArgs("UIStartIndex"));
-            this.OnPropertyChanged(new PropertyChangedEventArgs("UIEndIndex"));
+            this.OnPropertyChanged(new PropertyChangedEventArgs(nameof(UIStartIndex)));
+            this.OnPropertyChanged(new PropertyChangedEventArgs(nameof(UIEndIndex)));
         }
     }
 }

@@ -46,7 +46,7 @@ namespace TMP.ARMTES.Controls.DataViews
                 });
                 task.ContinueWith(t =>
                 {
-                    MessageBox.Show(SmallEngineViewerApp.GetExceptionDetails(t.Exception), "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show(App.GetExceptionDetails(t.Exception), "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                 }, TaskContinuationOptions.OnlyOnFaulted);
             });
 
@@ -151,18 +151,7 @@ namespace TMP.ARMTES.Controls.DataViews
         #endregion
     }
 
-    public class ColumnDescriptor
-    {
-        public string HeaderText { get; set; }
-        public string DisplayMember { get; set; }
-
-        public ColumnDescriptor(string header, string displayMember)
-        {
-            HeaderText = header;
-            DisplayMember = displayMember;
-        }
-    }
-    public class DataItem
+    public class DataItem : IDataView
     {
         public string Header { get; set; }
         public IEnumerable<object> Items { get; set; }

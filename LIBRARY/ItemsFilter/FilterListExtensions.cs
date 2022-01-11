@@ -1,85 +1,147 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Windows;
-using ItemsFilter;
-using System.ComponentModel;
-
-namespace ItemsFilter
+﻿namespace ItemsFilter
 {
+    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel;
+    using System.Windows;
+    using System.Windows.Controls;
+    using ItemsFilter;
+    using ItemsFilter.View;
+
     public class FilterListExtensions : DependencyObject
     {
-        public static IList<FilterControl> Filters = new List<FilterControl>();
+        public static IList<FilterControl> FilterControls = new List<FilterControl>();
+
+        public static IList<FilterPresenter> FilterPresenters = new List<FilterPresenter>();
+
         public static readonly DependencyProperty IsActiveProperty =
             DependencyProperty.RegisterAttached("IsActive",
                                          typeof(bool),
                                          typeof(FilterListExtensions),
                                          new PropertyMetadata(false, OnIsActiveChanged));
 
-        public static void SetIsActive(FilterControl element, bool value)
+        public static void SetIsActive(Control element, bool value)
         {
             element.SetValue(IsActiveProperty, value);
         }
 
-        public static bool GetIsActive(FilterControl element)
+        public static bool GetIsActive(Control element)
         {
             return (bool)element.GetValue(IsActiveProperty);
         }
 
         private static void OnIsActiveChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            var filter = d as FilterControl;
-
-            if (filter != null)
+            if (d is FilterControl filterControl)
             {
                 bool newValue = Convert.ToBoolean(e.NewValue);
                 bool oldValue = Convert.ToBoolean(e.OldValue);
                 if (newValue == false)
                 {
-                    Filters.Remove(filter);
-                    filter.Unloaded -= Filter_Unloaded;
-                    if (filter.Model != null)
-                        filter.Model.StateChanged -= Model_StateChanged;
+                    FilterControls.Remove(filterControl);
+                    filterControl.Unloaded -= FilterUnloaded;
+                    if (filterControl.ViewModel != null)
+                    {
+                        filterControl.ViewModel.StateChanged -= ViewModelStateChanged;
+                        filterControl.ViewModel.FilterChanged -= ViewModelFilterChanged;
+                    }
                 }
                 else
                 {
-                    Filters.Add(filter);
+                    FilterControls.Add(filterControl);
+                    filterControl.Loaded += FilterLoaded;
+                    filterControl.Unloaded += FilterUnloaded;
+                }
 
-                    filter.Loaded += Filter_Loaded;
+                return;
+            }
 
-                    filter.Unloaded += Filter_Unloaded;
+            if (d is IFilterView filterView)
+            {
+                bool newValue = Convert.ToBoolean(e.NewValue);
+                bool oldValue = Convert.ToBoolean(e.OldValue);
+                if (newValue == false)
+                {
+                    filterView.ViewModelChanged -= FilterView_ViewModelChanged;
+                    if (filterView.ViewModel != null)
+                    {
+                        FilterPresenter filterPresenter = filterView.ViewModel.FilterPresenter;
+                        FilterPresenters.Remove(filterPresenter);
+                        filterPresenter.Filtered -= FilterPresenter_Filter;
+                    }
+                }
+                else
+                {
+                    filterView.ViewModelChanged += FilterView_ViewModelChanged;
+                    if (filterView.ViewModel != null)
+                    {
+                        FilterPresenter filterPresenter = filterView.ViewModel.FilterPresenter;
+                        FilterPresenters.Add(filterPresenter);
+                        filterPresenter.Filtered += FilterPresenter_Filter;
+                    }
                 }
             }
         }
 
-        private static void Filter_Loaded(object sender, RoutedEventArgs e)
+        private static void FilterView_ViewModelChanged(object sender, ViewModelChangedEventArgs e)
         {
-            var filter = sender as FilterControl;
-
-            if (filter.Model != null)
-                filter.Model.StateChanged += Model_StateChanged;
-
-        }
-
-        private static void Filter_Unloaded(object sender, RoutedEventArgs e)
-        {
-            FilterControl filter = sender as FilterControl;
-            if (filter != null)
+            var oldViewModel = e.OldViewModel;
+            if (oldViewModel != null)
             {
-                filter.Unloaded -= Filter_Unloaded;
-                if (filter.Model != null)
-                    filter.Model.StateChanged -= Model_StateChanged;
+                FilterPresenter filterPresenter = oldViewModel.FilterPresenter;
+                FilterPresenters.Remove(filterPresenter);
+                filterPresenter.Filtered -= FilterPresenter_Filter;
+            }
+            var newViewModel = e.NewViewModel;
+            if (newViewModel != null)
+            {
+                FilterPresenter filterPresenter = newViewModel.FilterPresenter;
+                FilterPresenters.Add(filterPresenter);
+                filterPresenter.Filtered += FilterPresenter_Filter;
             }
         }
 
-        private static void Model_StateChanged(ItemsFilter.ViewModel.FilterControlVm sender, FilterControl.State newValue)
+        private static void FilterPresenter_Filter(object sender, FilteredEventArgs e)
         {
-            var handler = FiltersChanged;
-            if (handler != null)
+            //throw new NotImplementedException();
+        }
+
+        private static void FilterLoaded(object sender, RoutedEventArgs e)
+        {
+            var filterControl = sender as FilterControl;
+
+            if (filterControl.ViewModel != null)
             {
-                handler(sender, new PropertyChangedEventArgs("State"));
+                filterControl.ViewModel.StateChanged += ViewModelStateChanged;
+                filterControl.ViewModel.FilterChanged += ViewModelFilterChanged;
             }
         }
 
-        public static event PropertyChangedEventHandler FiltersChanged;
+        private static void FilterUnloaded(object sender, RoutedEventArgs e)
+        {
+            if (sender is FilterControl filterControl)
+            {
+                filterControl.Unloaded -= FilterUnloaded;
+                if (filterControl.ViewModel != null)
+                {
+                    filterControl.ViewModel.StateChanged -= ViewModelStateChanged;
+                    filterControl.ViewModel.FilterChanged -= ViewModelFilterChanged;
+                }
+            }
+        }
+
+        private static void ViewModelStateChanged(ItemsFilter.ViewModel.FilterControlVm sender, FilterControl.State newValue)
+        {
+            FiltersStateChanged?.Invoke(sender, new PropertyChangedEventArgs("State"));
+        }
+
+        private static void ViewModelFilterChanged(ViewModel.FilterControlVm sender, Model.IFilter filter)
+        {
+            FiltersChanged?.Invoke(sender, filter);
+        }
+
+        public static event PropertyChangedEventHandler FiltersStateChanged;
+
+        public static event ViewModel.FilterControlFilterEventHandler FiltersChanged;
     }
 }

@@ -1,10 +1,10 @@
 ﻿namespace MS.Windows.Shell
 {
-    using Standard;
     using System;
     using System.Windows;
     using System.Windows.Input;
     using System.Windows.Interop;
+    using Standard;
 
     public static class SystemCommands
     {

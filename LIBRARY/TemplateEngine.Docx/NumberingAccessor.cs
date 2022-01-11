@@ -1,88 +1,92 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Xml.Linq;
-
-namespace TemplateEngine.Docx
+﻿namespace TemplateEngine.Docx
 {
-	internal class NumberingAccessor
-	{
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Xml.Linq;
 
-		private readonly XDocument _numberingPart;
-		
-		private readonly Dictionary<int, int> _lastNumIds;
+    internal class NumberingAccessor
+    {
 
-		private static readonly Random Random = new Random();
-		internal NumberingAccessor(XDocument numberingPart, Dictionary<int, int> lastNumIds)
-		{
-			_numberingPart = numberingPart;
+        private readonly XDocument numberingPart;
 
-			_lastNumIds = lastNumIds;
-		}
+        private readonly Dictionary<int, int> lastNumIds;
 
+        private static readonly Random Random = new Random();
 
+        internal NumberingAccessor(XDocument numberingPart, Dictionary<int, int> lastNumIds)
+        {
+            this.numberingPart = numberingPart;
 
-		public void ResetNumbering(IEnumerable<XElement> elements)
-		{
-			var numPrs = elements.Descendants(W.numPr).Where(d=>d.Element(W.numId) != null);
+            this.lastNumIds = lastNumIds;
+        }
 
-			foreach (var numPr in numPrs.GroupBy(e => (int)e.Element(W.numId).Attribute(W.val)))
-			{
-				var numId = numPr.Key;
-				var numIds = numPrs.Elements(W.numId).Attributes(W.val).Where(e => (int)e == numId);
-				var ilvl = int.Parse(numPr.First().Element(W.ilvl).Attribute(W.val).Value);
+        public void ResetNumbering(IEnumerable<XElement> elements)
+        {
+            var numPrs = elements.Descendants(W.numPr).Where(d => d.Element(W.numId) != null);
 
-				if (_lastNumIds.ContainsKey(ilvl))
-				{
+            foreach (var numPr in numPrs.GroupBy(e => (int)e.Element(W.numId).Attribute(W.val)))
+            {
+                var numId = numPr.Key;
+                var numIds = numPrs.Elements(W.numId).Attributes(W.val).Where(e => (int)e == numId);
+                var ilvl = int.Parse(numPr.First().Element(W.ilvl).Attribute(W.val).Value);
 
-					var numElementPrototype = _numberingPart
-					.Descendants(W.num)
-					.FirstOrDefault(n => (int)n.Attribute(W.numId) == numId);
+                if (this.lastNumIds.ContainsKey(ilvl))
+                {
 
-					var abstractNumElementPrototype = _numberingPart
-						.Descendants(W.abstractNum)
-						.FirstOrDefault(e => e.Attribute(W.abstractNumId).Value ==
-								numElementPrototype
-								.Element(W.abstractNumId)
-								.Attribute(W.val).Value);
-					var lastNumElement = _numberingPart
-						.Descendants(W.num)
-						.OrderBy(n => (int)n.Attribute(W.numId))
-						.LastOrDefault();
-					if (lastNumElement == null) break;
+                    var numElementPrototype = this.numberingPart
+                    .Descendants(W.num)
+                    .FirstOrDefault(n => (int)n.Attribute(W.numId) == numId);
 
-					var nextNumId = (int)lastNumElement.Attribute(W.numId) + 1;
+                    var abstractNumElementPrototype = this.numberingPart
+                        .Descendants(W.abstractNum)
+                        .FirstOrDefault(e => e.Attribute(W.abstractNumId).Value ==
+                                numElementPrototype
+                                .Element(W.abstractNumId)
+                                .Attribute(W.val).Value);
+                    var lastNumElement = this.numberingPart
+                        .Descendants(W.num)
+                        .OrderBy(n => (int)n.Attribute(W.numId))
+                        .LastOrDefault();
+                    if (lastNumElement == null)
+                    {
+                        break;
+                    }
 
-					var lastAbstractNumElement = _numberingPart.Descendants(W.abstractNum).Last();
-					var lastAbstractNumId = (int)lastAbstractNumElement.Attribute(W.abstractNumId);
+                    var nextNumId = (int)lastNumElement.Attribute(W.numId) + 1;
 
-					var newAbstractNumElement = new XElement(abstractNumElementPrototype);
-					newAbstractNumElement.Attribute(W.abstractNumId).SetValue(lastAbstractNumId + 1);
+                    var lastAbstractNumElement = this.numberingPart.Descendants(W.abstractNum).Last();
+                    var lastAbstractNumId = (int)lastAbstractNumElement.Attribute(W.abstractNumId);
 
-					var next = Random.Next(int.MaxValue);
-					var nsid = newAbstractNumElement.Element(W.nsid);
-					if (nsid != null)
-						nsid.Attribute(W.val).SetValue(next.ToString("X"));
+                    var newAbstractNumElement = new XElement(abstractNumElementPrototype);
+                    newAbstractNumElement.Attribute(W.abstractNumId).SetValue(lastAbstractNumId + 1);
 
-					lastAbstractNumElement.AddAfterSelf(newAbstractNumElement);
+                    var next = Random.Next(int.MaxValue);
+                    var nsid = newAbstractNumElement.Element(W.nsid);
+                    if (nsid != null)
+                    {
+                        nsid.Attribute(W.val).SetValue(next.ToString("X"));
+                    }
 
-					var newNumElement = new XElement(numElementPrototype);
-					newNumElement.Attribute(W.numId).SetValue(nextNumId);
-					newNumElement.Element(W.abstractNumId).Attribute(W.val).SetValue(lastAbstractNumId + 1);
-					lastNumElement.AddAfterSelf(newNumElement);
+                    lastAbstractNumElement.AddAfterSelf(newAbstractNumElement);
 
-					foreach (var xElement in numIds)
-					{
-						xElement.SetValue(nextNumId);
-					}
+                    var newNumElement = new XElement(numElementPrototype);
+                    newNumElement.Attribute(W.numId).SetValue(nextNumId);
+                    newNumElement.Element(W.abstractNumId).Attribute(W.val).SetValue(lastAbstractNumId + 1);
+                    lastNumElement.AddAfterSelf(newNumElement);
 
-					_lastNumIds[ilvl] = nextNumId;
-				}
-				else
-				{
-					_lastNumIds.Add(ilvl, numId);
-				}
-			}
-		}
-	}
+                    foreach (var xElement in numIds)
+                    {
+                        xElement.SetValue(nextNumId);
+                    }
+
+                    this.lastNumIds[ilvl] = nextNumId;
+                }
+                else
+                {
+                    this.lastNumIds.Add(ilvl, numId);
+                }
+            }
+        }
+    }
 }

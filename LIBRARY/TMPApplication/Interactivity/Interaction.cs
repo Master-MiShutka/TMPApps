@@ -1,8 +1,8 @@
-﻿using System;
-using System.Windows;
-
-namespace Interactivity
+﻿namespace Interactivity
 {
+    using System;
+    using System.Windows;
+
     /// <summary>
     /// Static class that owns the Triggers and Behaviors attached properties. Handles propagation of AssociatedObject change notifications.
     /// </summary>
@@ -21,6 +21,7 @@ namespace Interactivity
                 behaviorCollection = new BehaviorCollection();
                 obj.SetValue(Interaction.BehaviorsProperty, behaviorCollection);
             }
+
             return behaviorCollection;
         }
 
@@ -44,12 +45,14 @@ namespace Interactivity
                 {
                     behaviorCollection.Detach();
                 }
+
                 if (behaviorCollection2 != null && obj != null)
                 {
                     if (((IAttachedObject)behaviorCollection2).AssociatedObject != null)
                     {
                         throw new InvalidOperationException("Cannot set the same BehaviorCollection on multiple objects.");
                     }
+
                     behaviorCollection2.Attach(obj);
                 }
             }

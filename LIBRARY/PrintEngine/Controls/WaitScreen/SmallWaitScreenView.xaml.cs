@@ -1,58 +1,60 @@
-﻿using System;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Shapes;
-using System.Windows.Threading;
-using TMP.PrintEngine.ViewModels;
-
-namespace TMP.PrintEngine.Controls.WaitScreen
+﻿namespace TMP.PrintEngine.Controls.WaitScreen
 {
+    using System;
+    using System.Windows;
+    using System.Windows.Controls;
+    using System.Windows.Shapes;
+    using System.Windows.Threading;
+    using TMP.PrintEngine.ViewModels;
+
     /// <summary>
     /// Interaction logic for WaitScreenView.xaml
     /// </summary>
-    public partial class SmallWaitScreenView : UserControl,IWaitScreenView
+    public partial class SmallWaitScreenView : UserControl, IWaitScreenView
     {
         public SmallWaitScreenView()
         {
-            InitializeComponent();
-            _animationTimer = new DispatcherTimer(
-                DispatcherPriority.Input, Dispatcher) {Interval = new TimeSpan(0, 0, 0, 0, 75)};
+            this.InitializeComponent();
+            this.animationTimer = new DispatcherTimer(
+                DispatcherPriority.Input, this.Dispatcher)
+            { Interval = new TimeSpan(0, 0, 0, 0, 75) };
         }
 
         #region IView Members
 
         public IWaitScreenViewModel WaitScreenViewModel;
+
         public IViewModel ViewModel
         {
-            set 
+            set
             {
-                WaitScreenViewModel = value as IWaitScreenViewModel;
-                DataContext = value;
+                this.WaitScreenViewModel = value as IWaitScreenViewModel;
+                this.DataContext = value;
             }
         }
 
         #endregion
 
-         #region Data
-        private readonly DispatcherTimer _animationTimer;
+        #region Data
+        private readonly DispatcherTimer animationTimer;
         #endregion
 
         #region Private Methods
         private void Start()
         {
-            _animationTimer.Tick += HandleAnimationTick;
-            _animationTimer.Start();
+            this.animationTimer.Tick += this.HandleAnimationTick;
+            this.animationTimer.Start();
         }
 
         private void Stop()
         {
-            _animationTimer.Stop();
-            _animationTimer.Tick -= HandleAnimationTick;
+            this.animationTimer.Stop();
+            this.animationTimer.Tick -= this.HandleAnimationTick;
         }
 
         private void HandleAnimationTick(object sender, EventArgs e)
         {
-            SpinnerRotate.Angle = (SpinnerRotate.Angle + 36) % 360;
+            this.SpinnerRotate.Angle = (this.SpinnerRotate.Angle + 36) % 360;
         }
 
         private void HandleLoaded(object sender, RoutedEventArgs e)
@@ -60,15 +62,15 @@ namespace TMP.PrintEngine.Controls.WaitScreen
             const double offset = Math.PI;
             const double step = Math.PI * 2 / 10.0;
 
-            SetPosition(C0, offset, 0.0, step);
-            SetPosition(C1, offset, 1.0, step);
-            SetPosition(C2, offset, 2.0, step);
-            SetPosition(C3, offset, 3.0, step);
-            SetPosition(C4, offset, 4.0, step);
-            SetPosition(C5, offset, 5.0, step);
-            SetPosition(C6, offset, 6.0, step);
-            SetPosition(C7, offset, 7.0, step);
-            SetPosition(C8, offset, 8.0, step);
+            SetPosition(this.C0, offset, 0.0, step);
+            SetPosition(this.C1, offset, 1.0, step);
+            SetPosition(this.C2, offset, 2.0, step);
+            SetPosition(this.C3, offset, 3.0, step);
+            SetPosition(this.C4, offset, 4.0, step);
+            SetPosition(this.C5, offset, 5.0, step);
+            SetPosition(this.C6, offset, 6.0, step);
+            SetPosition(this.C7, offset, 7.0, step);
+            SetPosition(this.C8, offset, 8.0, step);
         }
 
         private static void SetPosition(Ellipse ellipse, double offset,
@@ -76,15 +78,15 @@ namespace TMP.PrintEngine.Controls.WaitScreen
         {
             const double diff = 10.0;
             ellipse.SetValue(Canvas.LeftProperty, diff
-                + Math.Sin(offset + posOffSet * step) * diff);
+                + (Math.Sin(offset + (posOffSet * step)) * diff));
 
             ellipse.SetValue(Canvas.TopProperty, diff
-                + Math.Cos(offset + posOffSet * step) * diff);
+                + (Math.Cos(offset + (posOffSet * step)) * diff));
         }
 
         private void HandleUnloaded(object sender, RoutedEventArgs e)
         {
-            Stop();
+            this.Stop();
         }
 
         private void HandleVisibleChanged(object sender,
@@ -93,9 +95,13 @@ namespace TMP.PrintEngine.Controls.WaitScreen
             var isVisible = (bool)e.NewValue;
 
             if (isVisible)
-                Start();
+            {
+                this.Start();
+            }
             else
-                Stop();
+            {
+                this.Stop();
+            }
         }
         #endregion
 

@@ -1,16 +1,15 @@
-﻿using System;
-using System.Windows;
-using System.Windows.Controls;
-using Interactivity;
-using System.Windows.Interop;
-using System.Management;
-using System.Linq;
-using MS.Windows.Shell;
-
-namespace TMPApplication.Behaviours
+﻿namespace TMPApplication.Behaviours
 {
-    using TMPApplication.Utils;
+    using System;
+    using System.Linq;
+    using System.Management;
+    using System.Windows;
+    using System.Windows.Controls;
+    using System.Windows.Interop;
+    using Interactivity;
+    using MS.Windows.Shell;
     using TMPApplication.CustomWpfWindow;
+    using TMPApplication.Utils;
 
     /// <summary>
     /// Создание произвольного стиля окна
@@ -38,10 +37,12 @@ namespace TMPApplication.Behaviours
                 using (var mos = new ManagementObjectSearcher("SELECT Caption, Version FROM Win32_OperatingSystem"))
                 {
                     var attribs = mos.Get().OfType<ManagementObject>();
-                    //caption = attribs.FirstOrDefault().GetPropertyValue("Caption").ToString() ?? "Unknown";
+
+                    // caption = attribs.FirstOrDefault().GetPropertyValue("Caption").ToString() ?? "Unknown";
                     version = new Version((attribs.FirstOrDefault()?.GetPropertyValue("Version") ?? "0.0.0.0").ToString());
                 }
             }
+
             return version >= new Version(10, 0);
         }
 
@@ -60,7 +61,7 @@ namespace TMPApplication.Behaviours
                 CornerRadius = new CornerRadius(0),
                 GlassFrameThickness = new Thickness(0),
                 IgnoreTaskbarOnMaximize = true,
-                UseAeroCaptionButtons = false
+                UseAeroCaptionButtons = false,
             };
             var window = this.AssociatedObject as WindowWithDialogs;
             if (window != null)
@@ -72,6 +73,7 @@ namespace TMPApplication.Behaviours
                 System.ComponentModel.DependencyPropertyDescriptor.FromProperty(WindowWithDialogs.UseNoneWindowStyleProperty, typeof(WindowWithDialogs))
                       .AddValueChanged(this.AssociatedObject, this.UseNoneWindowStylePropertyChangedCallback);
             }
+
             this.AssociatedObject.SetValue(WindowChrome.WindowChromeProperty, this.windowChrome);
 
             // no transparency, because it hase more then one unwanted issues
@@ -84,9 +86,10 @@ namespace TMPApplication.Behaviours
                 }
                 catch (Exception)
                 {
-                    //For some reason, we can't determine if the window has loaded or not, so we swallow the exception.
+                    // For some reason, we can't determine if the window has loaded or not, so we swallow the exception.
                 }
             }
+
             this.AssociatedObject.WindowStyle = WindowStyle.None;
 
             this.savedBorderThickness = this.AssociatedObject.BorderThickness;
@@ -180,6 +183,7 @@ namespace TMPApplication.Behaviours
                     {
                         this._ModifyStyle(0, Native.WS.MAXIMIZEBOX | Native.WS.MINIMIZEBOX | Native.WS.THICKFRAME);
                     }
+
                     this.ForceRedrawWindowFromPropertyChanged();
                 }
             }
@@ -199,6 +203,7 @@ namespace TMPApplication.Behaviours
             {
                 return false;
             }
+
             var intPtr = Native.NativeMethods.GetWindowLongPtr(this.handle, Native.GWL.STYLE);
             var dwStyle = (Native.WS)(Environment.Is64BitProcess ? intPtr.ToInt64() : intPtr.ToInt32());
             var dwNewStyle = (dwStyle & ~removeStyle) | addStyle;
@@ -232,6 +237,7 @@ namespace TMPApplication.Behaviours
                 {
                     this.DeactivateTaskbarFix();
                 }
+
                 // clean up events
                 if (this.AssociatedObject is WindowWithDialogs)
                 {
@@ -240,6 +246,7 @@ namespace TMPApplication.Behaviours
                     System.ComponentModel.DependencyPropertyDescriptor.FromProperty(WindowWithDialogs.UseNoneWindowStyleProperty, typeof(WindowWithDialogs))
                           .RemoveValueChanged(this.AssociatedObject, this.UseNoneWindowStylePropertyChangedCallback);
                 }
+
                 this.AssociatedObject.Loaded -= this.AssociatedObject_Loaded;
                 this.AssociatedObject.Unloaded -= this.AssociatedObject_Unloaded;
                 this.AssociatedObject.Closed -= this.AssociatedObjectClosed;
@@ -249,6 +256,7 @@ namespace TMPApplication.Behaviours
                 {
                     this.hwndSource.RemoveHook(this.WindowProc);
                 }
+
                 this.windowChrome = null;
             }
         }
@@ -268,6 +276,7 @@ namespace TMPApplication.Behaviours
         {
             this.Cleanup();
         }
+
         private IntPtr WindowProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
         {
             var returnval = IntPtr.Zero;
@@ -303,13 +312,31 @@ namespace TMPApplication.Behaviours
 
                         var minWidth = wnd.MinWidth * matrix.M11;
                         var minHeight = wnd.MinHeight * matrix.M22;
-                        if (pos.cx < minWidth) { pos.cx = (int)minWidth; changedPos = true; }
-                        if (pos.cy < minHeight) { pos.cy = (int)minHeight; changedPos = true; }
+                        if (pos.cx < minWidth)
+                        {
+                            pos.cx = (int)minWidth;
+                            changedPos = true;
+                        }
+
+                        if (pos.cy < minHeight)
+                        {
+                            pos.cy = (int)minHeight;
+                            changedPos = true;
+                        }
 
                         var maxWidth = wnd.MaxWidth * matrix.M11;
                         var maxHeight = wnd.MaxHeight * matrix.M22;
-                        if (pos.cx > maxWidth && maxWidth > 0) { pos.cx = (int)Math.Round(maxWidth); changedPos = true; }
-                        if (pos.cy > maxHeight && maxHeight > 0) { pos.cy = (int)Math.Round(maxHeight); changedPos = true; }
+                        if (pos.cx > maxWidth && maxWidth > 0)
+                        {
+                            pos.cx = (int)Math.Round(maxWidth);
+                            changedPos = true;
+                        }
+
+                        if (pos.cy > maxHeight && maxHeight > 0)
+                        {
+                            pos.cy = (int)Math.Round(maxHeight);
+                            changedPos = true;
+                        }
 
                         if (!changedPos)
                         {
@@ -319,6 +346,7 @@ namespace TMPApplication.Behaviours
                         System.Runtime.InteropServices.Marshal.StructureToPtr(pos, lParam, true);
                         handled = true;
                     }
+
                     break;
             }
 
@@ -356,7 +384,7 @@ namespace TMPApplication.Behaviours
                         var monitorInfo = new Native.MONITORINFO();
                         Native.UnsafeNativeMethods.GetMonitorInfo(monitor, monitorInfo);
 
-                        var desktopRect = ignoreTaskBar ? monitorInfo.rcMonitor :  monitorInfo.rcWork;
+                        var desktopRect = ignoreTaskBar ? monitorInfo.rcMonitor : monitorInfo.rcWork;
                         var x = desktopRect.left;
                         var y = desktopRect.top;
                         var cx = Math.Abs(desktopRect.right - x);
@@ -366,6 +394,7 @@ namespace TMPApplication.Behaviours
                         {
                             this.ActivateTaskbarFix();
                         }
+
                         Native.UnsafeNativeMethods.SetWindowPos(this.handle, new IntPtr(-2), x, y, cx, cy, 0x0040);
                     }
                 }
@@ -377,6 +406,7 @@ namespace TMPApplication.Behaviours
                 {
                     this.windowChrome.ResizeBorderThickness = resizeBorderThickness;
                 }
+
                 // #2694 make sure the window is not on top after restoring window
                 // this issue was introduced after fixing the windows 10 bug with the taskbar and a maximized window that ignores the taskbar
                 if (GetHandleTaskbar(this.AssociatedObject) && this.isWindwos10OrHigher)
@@ -405,6 +435,7 @@ namespace TMPApplication.Behaviours
             this.borderThicknessChangeNotifier.RaiseValueChanged = true;
             this.topMostChangeNotifier.RaiseValueChanged = raiseValueChanged;
         }
+
         private void ActivateTaskbarFix()
         {
             var trayWndHandle = Standard.NativeMethods.FindWindow("Shell_TrayWnd", null);
@@ -467,6 +498,7 @@ namespace TMPApplication.Behaviours
                         }
                     });
             }
+
             this.hwndSource = HwndSource.FromHwnd(this.handle);
             if (this.hwndSource != null)
             {

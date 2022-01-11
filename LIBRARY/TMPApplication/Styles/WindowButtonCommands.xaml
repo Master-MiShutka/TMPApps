@@ -22,28 +22,20 @@
                         <StackPanel Orientation="Horizontal">
                             <Button
                                 Command="{Binding AboutCommand, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:WindowWithDialogs}}}"
+                                Content="s"
+                                FontFamily="Webdings"
                                 IsEnabled="{Binding IsAboutButtonEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:WindowWithDialogs}}}"
                                 Style="{Binding WindowButtonStyle, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:WindowWithDialogs}}}"
                                 ToolTip="{Binding About, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:WindowButtonCommands}}}"
-                                Visibility="{Binding IsAboutButtonVisible, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:WindowWithDialogs}}, Converter={StaticResource booleanToVisibilityConverter}}">
-                                <Button.Content>
-                                    <Grid>
-                                        <TextBlock FontFamily="Webdings" Text="@" />
-                                    </Grid>
-                                </Button.Content>
-                            </Button>
+                                Visibility="{Binding IsAboutButtonVisible, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:WindowWithDialogs}}, Converter={StaticResource booleanToVisibilityConverter}}" />
                             <Button
                                 Command="{Binding SettingsCommand, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:WindowWithDialogs}}}"
+                                Content="@"
+                                FontFamily="Webdings"
                                 IsEnabled="{Binding IsSettingsButtonEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:WindowWithDialogs}}}"
                                 Style="{Binding WindowButtonStyle, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:WindowWithDialogs}}}"
                                 ToolTip="{Binding Settings, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:WindowButtonCommands}}}"
-                                Visibility="{Binding IsSettingsButtonVisible, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:WindowWithDialogs}}, Converter={StaticResource booleanToVisibilityConverter}}">
-                                <Button.Content>
-                                    <Grid>
-                                        <TextBlock FontFamily="Webdings" Text="s" />
-                                    </Grid>
-                                </Button.Content>
-                            </Button>
+                                Visibility="{Binding IsSettingsButtonVisible, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:WindowWithDialogs}}, Converter={StaticResource booleanToVisibilityConverter}}" />
                         </StackPanel>
 
                         <Button

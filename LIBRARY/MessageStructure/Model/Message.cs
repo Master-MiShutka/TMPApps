@@ -9,7 +9,7 @@ namespace TMP.MessageStructure.Model
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using Utilities;
+    using TMP.MessageStructure.Utilities;
 
     /// <summary>
     /// The message.
@@ -133,7 +133,7 @@ namespace TMP.MessageStructure.Model
             var fieldProperties =
                 this.GetType()
                     .GetProperties()
-                    .Where(p => p.PropertyType == typeof (Field))
+                    .Where(p => p.PropertyType == typeof(Field))
                     .ToList();
 
             foreach (var a in fieldProperties)
@@ -188,14 +188,13 @@ namespace TMP.MessageStructure.Model
         /// </summary>
         private void GatherFields()
         {
-            //this.fields =
+            // this.fields =
             //    this.GetType()
             //        .GetProperties()
             //        .Where(p => p.PropertyType == typeof(Field))
             //        .Select(p => p.GetValue(this, null))
             //        .Cast<Field>()
             //        .ToList();
-
             var fieldProperties = this.GetType().GetProperties().ToList();
             this.fields = new List<Field>();
 
@@ -209,12 +208,12 @@ namespace TMP.MessageStructure.Model
 
                 if (o is Field)
                 {
-                    fields.Add(o as Field);
+                    this.fields.Add(o as Field);
                 }
                 else if (o is IEnumerable<Message>)
                 {
                     var y = o as IEnumerable<Message>;
-                    fields.AddRange(y.SelectMany(p => p.Fields));
+                    this.fields.AddRange(y.SelectMany(p => p.Fields));
                 }
             }
 

@@ -1,16 +1,18 @@
-﻿using System;
-using System.Windows;
-using System.Windows.Threading;
-using Interactivity;
-
-using TMPApplication.CustomWpfWindow;
-
-namespace TMPApplication.Behaviours
+﻿namespace TMPApplication.Behaviours
 {
+    using System;
+    using System.Windows;
+    using System.Windows.Threading;
+    using Interactivity;
+    using TMPApplication.CustomWpfWindow;
+
     public class GlowWindowBehavior : Behavior<Window>
     {
-        private static readonly TimeSpan GlowTimerDelay = TimeSpan.FromMilliseconds(200); //200 ms delay, the same as VS2013
-        private GlowWindow left, right, top, bottom;
+        private static readonly TimeSpan GlowTimerDelay = TimeSpan.FromMilliseconds(200); // 200 ms delay, the same as VS2013
+        private GlowWindow left;
+        private GlowWindow right;
+        private GlowWindow top;
+        private GlowWindow bottom;
         private DispatcherTimer makeGlowVisibleTimer;
         private bool prevTopmost;
 
@@ -18,79 +20,82 @@ namespace TMPApplication.Behaviours
         {
             base.OnAttached();
 
-            this.AssociatedObject.Loaded += AssociatedObjectOnLoaded;
-            this.AssociatedObject.Unloaded += AssociatedObjectUnloaded;
-            this.AssociatedObject.StateChanged += AssociatedObjectStateChanged;
+            this.AssociatedObject.Loaded += this.AssociatedObjectOnLoaded;
+            this.AssociatedObject.Unloaded += this.AssociatedObjectUnloaded;
+            this.AssociatedObject.StateChanged += this.AssociatedObjectStateChanged;
         }
 
         private void AssociatedObjectStateChanged(object sender, EventArgs e)
         {
-            if (AssociatedObject.WindowState == WindowState.Minimized)
+            if (this.AssociatedObject.WindowState == WindowState.Minimized)
             {
-                prevTopmost = AssociatedObject.Topmost;
-                AssociatedObject.Topmost = true;
+                this.prevTopmost = this.AssociatedObject.Topmost;
+                this.AssociatedObject.Topmost = true;
             }
             else
             {
-                AssociatedObject.Topmost = prevTopmost;
+                this.AssociatedObject.Topmost = this.prevTopmost;
             }
-            if (makeGlowVisibleTimer != null)
+
+            if (this.makeGlowVisibleTimer != null)
             {
-                makeGlowVisibleTimer.Stop();
+                this.makeGlowVisibleTimer.Stop();
             }
-            if (AssociatedObject.WindowState != WindowState.Minimized)
+
+            if (this.AssociatedObject.WindowState != WindowState.Minimized)
             {
                 var tmpWindow = this.AssociatedObject as WindowWithDialogs;
                 var ignoreTaskBar = tmpWindow != null && tmpWindow.IgnoreTaskbarOnMaximize;
-                if (makeGlowVisibleTimer != null && SystemParameters.MinimizeAnimation && !ignoreTaskBar)
+                if (this.makeGlowVisibleTimer != null && SystemParameters.MinimizeAnimation && !ignoreTaskBar)
                 {
-                    makeGlowVisibleTimer.Start();
+                    this.makeGlowVisibleTimer.Start();
                 }
                 else
                 {
-                    RestoreGlow();
+                    this.RestoreGlow();
                 }
             }
             else
             {
-                HideGlow();
+                this.HideGlow();
             }
         }
 
         private void AssociatedObjectUnloaded(object sender, RoutedEventArgs e)
         {
-            if (makeGlowVisibleTimer != null)
+            if (this.makeGlowVisibleTimer != null)
             {
-                makeGlowVisibleTimer.Stop();
-                makeGlowVisibleTimer.Tick -= makeGlowVisibleTimer_Tick;
-                makeGlowVisibleTimer = null;
+                this.makeGlowVisibleTimer.Stop();
+                this.makeGlowVisibleTimer.Tick -= this.makeGlowVisibleTimer_Tick;
+                this.makeGlowVisibleTimer = null;
             }
         }
 
         private void makeGlowVisibleTimer_Tick(object sender, EventArgs e)
         {
-            if (makeGlowVisibleTimer != null)
+            if (this.makeGlowVisibleTimer != null)
             {
-                makeGlowVisibleTimer.Stop();
+                this.makeGlowVisibleTimer.Stop();
             }
-            RestoreGlow();
+
+            this.RestoreGlow();
         }
 
         private void RestoreGlow()
         {
-            if (left != null && top != null && right != null && bottom != null)
+            if (this.left != null && this.top != null && this.right != null && this.bottom != null)
             {
-                left.IsGlowing = top.IsGlowing = right.IsGlowing = bottom.IsGlowing = true;
-                Update();
+                this.left.IsGlowing = this.top.IsGlowing = this.right.IsGlowing = this.bottom.IsGlowing = true;
+                this.Update();
             }
         }
 
         private void HideGlow()
         {
-            if (left != null && top != null && right != null && bottom != null)
+            if (this.left != null && this.top != null && this.right != null && this.bottom != null)
             {
-                left.IsGlowing = top.IsGlowing = right.IsGlowing = bottom.IsGlowing = false;
-                Update();
+                this.left.IsGlowing = this.top.IsGlowing = this.right.IsGlowing = this.bottom.IsGlowing = false;
+                this.Update();
             }
         }
 
@@ -103,10 +108,10 @@ namespace TMPApplication.Behaviours
                 return;
             }
 
-            if (makeGlowVisibleTimer == null)
+            if (this.makeGlowVisibleTimer == null)
             {
-                makeGlowVisibleTimer = new DispatcherTimer { Interval = GlowTimerDelay };
-                makeGlowVisibleTimer.Tick += makeGlowVisibleTimer_Tick;
+                this.makeGlowVisibleTimer = new DispatcherTimer { Interval = GlowTimerDelay };
+                this.makeGlowVisibleTimer.Tick += this.makeGlowVisibleTimer_Tick;
             }
 
             this.left = new GlowWindow(this.AssociatedObject, GlowDirection.Left);
@@ -127,8 +132,10 @@ namespace TMPApplication.Behaviours
             {
                 // start the opacity storyboard 0->1
                 this.StartOpacityStoryboard();
+
                 // hide the glows if window get invisible state
                 this.AssociatedObject.IsVisibleChanged += this.AssociatedObjectIsVisibleChanged;
+
                 // closing always handled
                 this.AssociatedObject.Closing += (o, args) =>
                 {
@@ -209,10 +216,10 @@ namespace TMPApplication.Behaviours
         /// </summary>
         private void Show()
         {
-            left.Show();
-            right.Show();
-            top.Show();
-            bottom.Show();
+            this.left.Show();
+            this.right.Show();
+            this.top.Show();
+            this.bottom.Show();
         }
     }
 }

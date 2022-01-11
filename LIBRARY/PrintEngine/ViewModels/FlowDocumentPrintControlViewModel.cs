@@ -1,96 +1,116 @@
-using System;
-using System.Drawing.Printing;
-using System.IO;
-using System.IO.Packaging;
-using System.Printing;
-using System.Windows.Documents;
-using System.Windows.Xps.Packaging;
-
-
-using TMP.PrintEngine.Extensions;
-using TMP.PrintEngine.Views;
-
 namespace TMP.PrintEngine.ViewModels
 {
+    using System;
+    using System.Drawing.Printing;
+    using System.IO;
+    using System.IO.Packaging;
+    using System.Printing;
+    using System.Windows.Documents;
+    using System.Windows.Xps.Packaging;
+    using TMP.PrintEngine.Extensions;
+    using TMP.PrintEngine.Views;
+
     public sealed class FlowDocumentPrintControlViewModel : APrintControlViewModel, IFlowDocumentPrintControlViewModel
     {
         public FlowDocument FlowDocument { get; set; }
+
         public FlowDocumentPrintControlViewModel(PrintControlView view)
             : base(view)
         {
-
         }
-        
+
         public override void ReloadPreview()
         {
-            if (CurrentPaper != null)
-                ReloadPreview(PageOrientation, CurrentPaper);
+            if (this.CurrentPaper != null)
+            {
+                this.ReloadPreview(this.PageOrientation, this.CurrentPaper);
+            }
         }
-        MemoryStream _ms;
-        Package _pkg;
-        XpsDocument _xpsDocument;
+
+        private MemoryStream ms;
+        private Package pkg;
+        private XpsDocument xpsDocument;
+
         public void ReloadPreview(PageOrientation pageOrientation, PaperSize currentPaper)
         {
-            ReloadingPreview = true;
-            if (FullScreenPrintWindow != null)
+            this.ReloadingPreview = true;
+            if (this.FullScreenPrintWindow != null)
             {
-                WaitScreen.Show(TMP.PrintEngine.Resources.Strings.WaitMessage);
+                this.WaitScreen.Show(TMP.PrintEngine.Resources.Strings.WaitMessage);
             }
-            
-            if (PageOrientation == PageOrientation.Portrait)
+
+            if (this.PageOrientation == PageOrientation.Portrait)
             {
-                FlowDocument.PageHeight = currentPaper.Height;
-                FlowDocument.PageWidth = currentPaper.Width;
+                this.FlowDocument.PageHeight = currentPaper.Height;
+                this.FlowDocument.PageWidth = currentPaper.Width;
             }
             else
             {
-                FlowDocument.PageHeight = currentPaper.Width;
-                FlowDocument.PageWidth = currentPaper.Height;
+                this.FlowDocument.PageHeight = currentPaper.Width;
+                this.FlowDocument.PageWidth = currentPaper.Height;
             }
 
-            _ms = new MemoryStream();
-            _pkg = Package.Open(_ms, FileMode.Create, FileAccess.ReadWrite);
+            this.ms = new MemoryStream();
+            this.pkg = Package.Open(this.ms, FileMode.Create, FileAccess.ReadWrite);
             const string pack = "pack://temp.xps";
             var oldPackage = PackageStore.GetPackage(new Uri(pack));
             if (oldPackage == null)
-                PackageStore.AddPackage(new Uri(pack), _pkg);
+            {
+                PackageStore.AddPackage(new Uri(pack), this.pkg);
+            }
             else
             {
                 PackageStore.RemovePackage(new Uri(pack));
-                PackageStore.AddPackage(new Uri(pack), _pkg);
+                PackageStore.AddPackage(new Uri(pack), this.pkg);
             }
-            _xpsDocument = new XpsDocument(_pkg, CompressionOption.SuperFast, pack);
-            var xpsWriter = XpsDocument.CreateXpsDocumentWriter(_xpsDocument);
 
-            var documentPaginator = ((IDocumentPaginatorSource)FlowDocument).DocumentPaginator;
+            this.xpsDocument = new XpsDocument(this.pkg, CompressionOption.SuperFast, pack);
+            var xpsWriter = XpsDocument.CreateXpsDocumentWriter(this.xpsDocument);
+
+            var documentPaginator = ((IDocumentPaginatorSource)this.FlowDocument).DocumentPaginator;
             xpsWriter.Write(documentPaginator);
-            Paginator = documentPaginator;
-            MaxCopies = NumberOfPages = ApproaxNumberOfPages = Paginator.PageCount;
-            PagesAcross = 2;
-            DisplayPagePreviewsAll(documentPaginator);
-            WaitScreen.Hide();
-            ReloadingPreview = false;
+            this.Paginator = documentPaginator;
+            this.MaxCopies = this.NumberOfPages = this.ApproaxNumberOfPages = this.Paginator.PageCount;
+            this.PagesAcross = 2;
+            this.DisplayPagePreviewsAll(documentPaginator);
+            this.WaitScreen.Hide();
+            this.ReloadingPreview = false;
         }
-        
 
         public void ShowPrintPreview(FlowDocument flowDocument)
         {
-            FlowDocument = flowDocument;
-            if (FullScreenPrintWindow == null)
-                CreatePrintPreviewWindow();
-            Loading = true;
-            if (FullScreenPrintWindow != null) FullScreenPrintWindow.ShowDialog();
+            this.FlowDocument = flowDocument;
+            if (this.FullScreenPrintWindow == null)
+            {
+                this.CreatePrintPreviewWindow();
+            }
+
+            this.Loading = true;
+            if (this.FullScreenPrintWindow != null)
+            {
+                this.FullScreenPrintWindow.ShowDialog();
+            }
+
             ApplicationExtention.MainWindow = null;
         }
 
         public override void FullScreenPrintWindowClosing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            if (_xpsDocument != null)
-                _xpsDocument.Close();
-            if (_pkg != null)
-                _pkg.Close();
-            if (_ms != null)
-                _ms.Close();
+            if (this.xpsDocument != null)
+            {
+                this.xpsDocument.Close();
+            }
+
+            if (this.pkg != null)
+            {
+                this.pkg.Close();
+            }
+
+            if (this.ms != null)
+            {
+                this.ms.Close();
+            }
+
             base.FullScreenPrintWindowClosing(sender, e);
         }
     }

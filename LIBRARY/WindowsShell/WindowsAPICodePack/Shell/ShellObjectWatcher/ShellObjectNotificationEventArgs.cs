@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace Microsoft.WindowsAPICodePack.Shell
+﻿namespace Microsoft.WindowsAPICodePack.Shell
 {
+    using System;
+
     /// <summary>
     /// Base class for the Event Args for change notifications raised by <see cref="ShellObjectWatcher"/>.
     /// </summary>
@@ -19,8 +19,8 @@ namespace Microsoft.WindowsAPICodePack.Shell
 
         internal ShellObjectNotificationEventArgs(ChangeNotifyLock notifyLock)
         {
-            ChangeType = notifyLock.ChangeType;
-            FromSystemInterrupt = notifyLock.FromSystemInterrupt;
+            this.ChangeType = notifyLock.ChangeType;
+            this.FromSystemInterrupt = notifyLock.FromSystemInterrupt;
         }
     }
 
@@ -37,7 +37,7 @@ namespace Microsoft.WindowsAPICodePack.Shell
         internal ShellObjectChangedEventArgs(ChangeNotifyLock notifyLock)
             : base(notifyLock)
         {
-            Path = notifyLock.ItemName;
+            this.Path = notifyLock.ItemName;
         }
     }
 
@@ -54,7 +54,7 @@ namespace Microsoft.WindowsAPICodePack.Shell
         internal ShellObjectRenamedEventArgs(ChangeNotifyLock notifyLock)
             : base(notifyLock)
         {
-            NewPath = notifyLock.ItemName2;
+            this.NewPath = notifyLock.ItemName2;
         }
     }
 
@@ -71,9 +71,7 @@ namespace Microsoft.WindowsAPICodePack.Shell
         internal SystemImageUpdatedEventArgs(ChangeNotifyLock notifyLock)
             : base(notifyLock)
         {
-            ImageIndex = notifyLock.ImageIndex;
+            this.ImageIndex = notifyLock.ImageIndex;
         }
     }
-
-
 }

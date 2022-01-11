@@ -1,0 +1,36 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
+                    xmlns:local="clr-namespace:TMP.WORK.AramisChetchiki"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <CollectionViewSource x:Key="MeterPropertiesNamesList" 
+                          Source="{x:Static local:ModelHelper.MeterPropertyDescriptors}">
+        <CollectionViewSource.GroupDescriptions>
+            <PropertyGroupDescription PropertyName="GroupName" />
+        </CollectionViewSource.GroupDescriptions>
+        <CollectionViewSource.SortDescriptions>
+            <scm:SortDescription PropertyName="DisplayName" />
+        </CollectionViewSource.SortDescriptions>
+    </CollectionViewSource>
+
+    <CollectionViewSource x:Key="ChangesOfMeterPropertiesNamesList" 
+                          Source="{x:Static local:ModelHelper.ChangesOfMetersDescriptors}">
+        <CollectionViewSource.GroupDescriptions>
+            <PropertyGroupDescription PropertyName="GroupName" />
+        </CollectionViewSource.GroupDescriptions>
+        <CollectionViewSource.SortDescriptions>
+            <scm:SortDescription PropertyName="DisplayName" />
+        </CollectionViewSource.SortDescriptions>
+    </CollectionViewSource>
+
+    <CollectionViewSource x:Key="SummaryInfoItemPropertiesNamesList" 
+                          Source="{x:Static local:ModelHelper.MeterSummaryInfoItemDescriptors}">
+        <CollectionViewSource.GroupDescriptions>
+            <PropertyGroupDescription PropertyName="GroupName" />
+        </CollectionViewSource.GroupDescriptions>
+        <CollectionViewSource.SortDescriptions>
+            <scm:SortDescription PropertyName="DisplayName" />
+        </CollectionViewSource.SortDescriptions>
+    </CollectionViewSource>
+
+</ResourceDictionary>

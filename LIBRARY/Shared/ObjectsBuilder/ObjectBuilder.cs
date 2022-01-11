@@ -1,26 +1,29 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Reflection;
-using System.Reflection.Emit;
-
-namespace TMP.Shared.ObjectsBuilder
+﻿namespace TMP.Shared.ObjectsBuilder
 {
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Reflection;
+    using System.Reflection.Emit;
+
     public static class ObjectBuilder
     {
         public static object CreateObjectInstance(Type type)
         {
             return Activator.CreateInstance(type);
         }
+
         public static Type CreateNewObject(IEnumerable<Field> fields)
         {
             return CompileResultType(fields);
         }
+
         public static IList GetObjectsList(Type type)
         {
             Type listType = typeof(List<>).MakeGenericType(type);
             return (IList)Activator.CreateInstance(listType);
         }
+
         public static void SetMemberValue(MemberInfo member, object target, object value)
         {
             switch (member.MemberType)
@@ -32,7 +35,7 @@ namespace TMP.Shared.ObjectsBuilder
                     ((PropertyInfo)member).SetValue(target, value, null);
                     break;
                 default:
-                    throw new ArgumentException("MemberInfo must be of type FieldInfo or PropertyInfo", "member");
+                    throw new ArgumentException("MemberInfo must be of type FieldInfo or PropertyInfo", nameof(member));
             }
         }
 
@@ -43,7 +46,9 @@ namespace TMP.Shared.ObjectsBuilder
 
             // NOTE: assuming your list contains Field objects with fields FieldName(string) and FieldType(Type)
             foreach (var field in fields)
+            {
                 CreateProperty(tb, field.FieldName, field.FieldType);
+            }
 
             Type objectType = tb.CreateType();
             return objectType;
@@ -53,7 +58,7 @@ namespace TMP.Shared.ObjectsBuilder
         {
             var typeSignature = "TMPDynamicType";
             var an = new AssemblyName(typeSignature);
-            AssemblyBuilder assemblyBuilder = AppDomain.CurrentDomain.DefineDynamicAssembly(an, AssemblyBuilderAccess.Run);
+            AssemblyBuilder assemblyBuilder = AssemblyBuilder.DefineDynamicAssembly(an, AssemblyBuilderAccess.Run);
             ModuleBuilder moduleBuilder = assemblyBuilder.DefineDynamicModule("MainModule");
             TypeBuilder tb = moduleBuilder.DefineType(typeSignature,
                     TypeAttributes.Public |

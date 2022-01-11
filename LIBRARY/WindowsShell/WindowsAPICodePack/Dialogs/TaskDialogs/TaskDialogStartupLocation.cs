@@ -1,9 +1,9 @@
-//Copyright (c) Microsoft Corporation.  All rights reserved.
+// Copyright (c) Microsoft Corporation.  All rights reserved.
 
 namespace Microsoft.WindowsAPICodePack.Dialogs
 {
     /// <summary>
-    /// Specifies the initial display location for a task dialog. 
+    /// Specifies the initial display location for a task dialog.
     /// </summary>
     public enum TaskDialogStartupLocation
     {
@@ -15,6 +15,6 @@ namespace Microsoft.WindowsAPICodePack.Dialogs
         /// <summary>
         /// The window centered relative to the window that launched the dialog.
         /// </summary>
-        CenterOwner
+        CenterOwner,
     }
 }

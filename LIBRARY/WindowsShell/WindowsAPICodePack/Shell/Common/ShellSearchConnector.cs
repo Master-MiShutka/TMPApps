@@ -1,9 +1,9 @@
-﻿//Copyright (c) Microsoft Corporation.  All rights reserved.
-
-using MS.WindowsAPICodePack.Internal;
+﻿// Copyright (c) Microsoft Corporation.  All rights reserved.
 
 namespace Microsoft.WindowsAPICodePack.Shell
 {
+    using MS.WindowsAPICodePack.Internal;
+
     /// <summary>
     /// A Serch Connector folder in the Shell Namespace
     /// </summary>
@@ -19,8 +19,8 @@ namespace Microsoft.WindowsAPICodePack.Shell
 
         internal ShellSearchConnector(IShellItem2 shellItem)
             : this()
-        {            
-            nativeShellItem = shellItem;
+        {
+            this.nativeShellItem = shellItem;
         }
 
         #endregion
@@ -28,13 +28,8 @@ namespace Microsoft.WindowsAPICodePack.Shell
         /// <summary>
         /// Indicates whether this feature is supported on the current platform.
         /// </summary>
-        new public static bool IsPlatformSupported
-        {
-            get
-            {
+        new public static bool IsPlatformSupported =>
                 // We need Windows 7 onwards ...
-                return CoreHelpers.RunningOnWin7;
-            }
-        }
+                CoreHelpers.RunningOnWin7;
     }
 }

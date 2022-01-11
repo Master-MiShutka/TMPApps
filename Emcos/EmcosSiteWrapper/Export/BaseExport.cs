@@ -63,9 +63,8 @@ namespace TMP.Work.Emcos.Export
             }
             catch (Exception e)
             {
-                MessageBox.Show(String.Format("Ошибка экспорта данных.\n{0}", e.Message), 
-                    "Экспорт", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Warning);
-                App.LogException(e);
+                EmcosSiteWrapperApp.ShowError(e, "Ошибка экспорта данных.\n{0}");
+                EmcosSiteWrapperApp.LogException(e);
                 return false;
             }
         }

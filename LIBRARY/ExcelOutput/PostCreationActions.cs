@@ -9,13 +9,15 @@
         /// Open Excel and display the generated table.
         /// </summary>
         Open,
+
         /// <summary>
         /// Save the file to the specified location, then open Excel and display the generated table.
         /// </summary>
         SaveAndView,
+
         /// <summary>
         /// Save the file to the specified location
         /// </summary>
-        SaveAndClose
+        SaveAndClose,
     }
 }

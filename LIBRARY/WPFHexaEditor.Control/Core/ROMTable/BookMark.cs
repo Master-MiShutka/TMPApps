@@ -1,10 +1,10 @@
-using System;
-
 namespace WPFHexaEditor.Core.ROMTable
 {
+    using System;
+
     /// <summary>
     /// Represente une adresse favorite dans une ROM
-    /// 
+    ///
     /// Derek Tremblay 2003-2017
     /// </summary>
     public sealed class Bookmark
@@ -16,14 +16,13 @@ namespace WPFHexaEditor.Core.ROMTable
 
         public Bookmark()
         {
-
         }
 
-        public Bookmark(string Name, string Position, string File, string key)
+        public Bookmark(string name, string position, string file, string key)
         {
-            this.Position = Position;
-            this.Name = Name;
-            this.File = File;
+            this.Position = position;
+            this.Name = name;
+            this.File = file;
             this.Key = key;
         }
     }

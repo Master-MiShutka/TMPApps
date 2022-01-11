@@ -131,26 +131,26 @@ namespace TMP.Wpf.CommonControls.Dialogs
 
         public string Message
         {
-            get { return (string)GetValue(MessageProperty); }
-            set { SetValue(MessageProperty, value); }
+            get => (string)GetValue(MessageProperty);
+            set => SetValue(MessageProperty, value);
         }
 
         public string Input
         {
-            get { return (string)GetValue(InputProperty); }
-            set { SetValue(InputProperty, value); }
+            get => (string)GetValue(InputProperty);
+            set => SetValue(InputProperty, value);
         }
 
         public string AffirmativeButtonText
         {
-            get { return (string)GetValue(AffirmativeButtonTextProperty); }
-            set { SetValue(AffirmativeButtonTextProperty, value); }
+            get => (string)GetValue(AffirmativeButtonTextProperty);
+            set => SetValue(AffirmativeButtonTextProperty, value);
         }
 
         public string NegativeButtonText
         {
-            get { return (string)GetValue(NegativeButtonTextProperty); }
-            set { SetValue(NegativeButtonTextProperty, value); }
+            get => (string)GetValue(NegativeButtonTextProperty);
+            set => SetValue(NegativeButtonTextProperty, value);
         }
     }
 }

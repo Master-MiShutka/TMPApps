@@ -1,209 +1,240 @@
-﻿using System;
-using System.ComponentModel;
-using System.Windows;
-using System.Windows.Threading;
-using TMPApplication.WpfDialogs.Contracts;
-
-namespace TMPApplication.WpfDialogs
+﻿namespace TMPApplication.WpfDialogs
 {
-	abstract class DialogBase : IDialog, INotifyPropertyChanged
-	{
-		protected DialogBase(
-			IDialogHost dialogHost,
-			DialogMode dialogMode,
-			Dispatcher dispatcher,
+    using System;
+    using System.ComponentModel;
+    using System.Windows;
+    using System.Windows.Threading;
+    using TMPApplication.WpfDialogs.Contracts;
+
+    internal abstract class DialogBase : IDialog, INotifyPropertyChanged
+    {
+        protected DialogBase(
+            IDialogHost dialogHost,
+            DialogMode dialogMode,
+            Dispatcher dispatcher,
             System.Windows.MessageBoxImage image = MessageBoxImage.None)
-		{
-			_dialogHost = dialogHost;
-			_dispatcher = dispatcher;
-			Mode = dialogMode;
-            Image = image;
-			CloseBehavior = DialogCloseBehavior.AutoCloseOnButtonClick;
+        {
+            this.dialogHost = dialogHost;
+            this.dispatcher = dispatcher;
+            this.Mode = dialogMode;
+            this.Image = image;
+            this.CloseBehavior = DialogCloseBehavior.AutoCloseOnButtonClick;
 
-			OkText = Strings.OK_Button_Label;
-			CancelText = Strings.Cancel_Button_Label;
-			YesText = Strings.Yes_Button_Label;
-			NoText = Strings.No_Button_Label;
+            this.OkText = Strings.OK_Button_Label;
+            this.CancelText = Strings.Cancel_Button_Label;
+            this.YesText = Strings.Yes_Button_Label;
+            this.NoText = Strings.No_Button_Label;
 
-			switch (dialogMode)
-			{
-				case DialogMode.None:
-					break;
-				case DialogMode.Ok:
-					CanOk = true;
-					break;
-				case DialogMode.Cancel:
-					CanCancel = true;
-					break;
-				case DialogMode.OkCancel:
-					CanOk = true;
-					CanCancel = true;
-					break;
-				case DialogMode.YesNo:
-					CanYes = true;
-					CanNo = true;
-					break;
-				case DialogMode.YesNoCancel:
-					CanYes = true;
-					CanNo = true;
-					CanCancel = true;
-					break;
-				default:
-					throw new ArgumentOutOfRangeException("dialogMode");
-			}
+            switch (dialogMode)
+            {
+                case DialogMode.None:
+                    break;
+                case DialogMode.Ok:
+                    this.CanOk = true;
+                    break;
+                case DialogMode.Cancel:
+                    this.CanCancel = true;
+                    break;
+                case DialogMode.OkCancel:
+                    this.CanOk = true;
+                    this.CanCancel = true;
+                    break;
+                case DialogMode.YesNo:
+                    this.CanYes = true;
+                    this.CanNo = true;
+                    break;
+                case DialogMode.YesNoCancel:
+                    this.CanYes = true;
+                    this.CanNo = true;
+                    this.CanCancel = true;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(dialogMode));
+            }
+        }
 
-		}
+        private readonly IDialogHost dialogHost;
+        private readonly Dispatcher dispatcher;
+        private object _content;
 
-		private readonly IDialogHost _dialogHost;
-		private readonly Dispatcher _dispatcher;
-		private object _content;
+        protected DialogBaseControl DialogBaseControl { get; private set; }
 
-		protected DialogBaseControl DialogBaseControl { get; private set; }
+        protected void SetContent(object content)
+        {
+            this._content = content;
+        }
 
-		protected void SetContent(object content)
-		{
-			_content = content;
-		}
+        protected void InvokeUICall(Action del)
+        {
+            this.dispatcher.Invoke(del, DispatcherPriority.DataBind);
+        }
 
-		protected void InvokeUICall(Action del)
-		{
-			_dispatcher.Invoke(del, DispatcherPriority.DataBind);
-		}
+        #region Implementation of IDialog
 
-		#region Implementation of IDialog
+        public DialogMode Mode { get; private set; }
 
-		public DialogMode Mode { get; private set; }
-		public DialogResultState Result { get; set; }
-		public DialogCloseBehavior CloseBehavior { get; set; }
+        public DialogResultState Result { get; set; }
 
-		public Action Ok { get; set; }
-		public Action Cancel { get; set; }
-		public Action Yes { get; set; }
-		public Action No { get; set; }
+        public DialogCloseBehavior CloseBehavior { get; set; }
 
-		private bool _canOk;
-		public bool CanOk
-		{
-			get { return _canOk; }
-			set
-			{
-				_canOk = value;
-				OnPropertyChanged("CanOk");
-			}
-		}
+        public Action Ok { get; set; }
 
-		private bool _canCancel;
-		public bool CanCancel
-		{
-			get { return _canCancel; }
-			set
-			{
-				_canCancel = value;
-				OnPropertyChanged("CanCancel");
-			}
-		}
+        public Action Cancel { get; set; }
 
-		private bool _canYes;
-		public bool CanYes
-		{
-			get { return _canYes; }
-			set
-			{
-				_canYes = value;
-				OnPropertyChanged("CanYes");
-			}
-		}
+        public Action Yes { get; set; }
 
-		private bool _canNo;
-		public bool CanNo
-		{
-			get { return _canNo; }
-			set
-			{
-				_canNo = value;
-				OnPropertyChanged("CanNo");
-			}
-		}
+        public Action No { get; set; }
 
-		public string OkText { get; set; }
-		public string CancelText { get; set; }
-		public string YesText { get; set; }
-		public string NoText { get; set; }
+        private bool canOk;
 
-		public string Caption { get; set; }
+        public bool CanOk
+        {
+            get => this.canOk;
+            set
+            {
+                this.canOk = value;
+                this.OnPropertyChanged(nameof(this.CanOk));
+            }
+        }
 
-		private VerticalAlignment? _verticalDialogAlignment;
-		public VerticalAlignment VerticalDialogAlignment
-		{
-			set
-			{
-				if (DialogBaseControl == null)
-					_verticalDialogAlignment = value;
-				else
-					DialogBaseControl.VerticalDialogAlignment = value;
-			}
-		}
+        private bool canCancel;
 
-		private HorizontalAlignment? _horizontalDialogAlignment;
-		public HorizontalAlignment HorizontalDialogAlignment
-		{
-			set
-			{
-				if (DialogBaseControl == null)
-					_horizontalDialogAlignment = value;
-				else
-					DialogBaseControl.HorizontalDialogAlignment = value;
-			}
-		}
+        public bool CanCancel
+        {
+            get => this.canCancel;
+            set
+            {
+                this.canCancel = value;
+                this.OnPropertyChanged(nameof(this.CanCancel));
+            }
+        }
 
-		public System.Windows.Controls.Control Background { get; set; }
+        private bool canYes;
+
+        public bool CanYes
+        {
+            get => this.canYes;
+            set
+            {
+                this.canYes = value;
+                this.OnPropertyChanged(nameof(this.CanYes));
+            }
+        }
+
+        private bool canNo;
+
+        public bool CanNo
+        {
+            get => this.canNo;
+            set
+            {
+                this.canNo = value;
+                this.OnPropertyChanged(nameof(this.CanNo));
+            }
+        }
+
+        public string OkText { get; set; }
+
+        public string CancelText { get; set; }
+
+        public string YesText { get; set; }
+
+        public string NoText { get; set; }
+
+        public string Caption { get; set; }
+
+        private VerticalAlignment? verticalDialogAlignment;
+
+        public VerticalAlignment VerticalDialogAlignment
+        {
+            set
+            {
+                if (this.DialogBaseControl == null)
+                {
+                    this.verticalDialogAlignment = value;
+                }
+                else
+                {
+                    this.DialogBaseControl.VerticalDialogAlignment = value;
+                }
+            }
+        }
+
+        private HorizontalAlignment? _horizontalDialogAlignment;
+
+        public HorizontalAlignment HorizontalDialogAlignment
+        {
+            set
+            {
+                if (this.DialogBaseControl == null)
+                {
+                    this._horizontalDialogAlignment = value;
+                }
+                else
+                {
+                    this.DialogBaseControl.HorizontalDialogAlignment = value;
+                }
+            }
+        }
+
+        public System.Windows.Controls.Control Background { get; set; }
 
         public System.Windows.MessageBoxImage Image { get; set; } = MessageBoxImage.None;
 
         public void Show()
-		{
-			if (DialogBaseControl != null)
-				throw new Exception("The dialog can only be shown once.");
+        {
+            if (this.DialogBaseControl != null)
+            {
+                throw new Exception("The dialog can only be shown once.");
+            }
 
-			InvokeUICall(() =>
-				{
-					DialogBaseControl = new DialogBaseControl(_dialogHost.GetCurrentContent(), this, Background);
-					DialogBaseControl.SetCustomContent(_content);
-					if (_verticalDialogAlignment.HasValue)
-						DialogBaseControl.VerticalDialogAlignment = _verticalDialogAlignment.Value;
-					if (_horizontalDialogAlignment.HasValue)
-						DialogBaseControl.HorizontalDialogAlignment = _horizontalDialogAlignment.Value;
-					_dialogHost.ShowDialog(DialogBaseControl);
-				});
-		}
+            this.InvokeUICall(() =>
+                {
+                    this.DialogBaseControl = new DialogBaseControl(this, this.Background);
+                    this.DialogBaseControl.SetCustomContent(this._content);
+                    if (this.verticalDialogAlignment.HasValue)
+                    {
+                        this.DialogBaseControl.VerticalDialogAlignment = this.verticalDialogAlignment.Value;
+                    }
 
-		public void Close()
-		{
-			// Dialog wird angezeigt?
-			if (DialogBaseControl == null)
-				return;
+                    if (this._horizontalDialogAlignment.HasValue)
+                    {
+                        this.DialogBaseControl.HorizontalDialogAlignment = this._horizontalDialogAlignment.Value;
+                    }
 
-			// Callbacks abhängen
-			Ok = null;
-			Cancel = null;
-			Yes = null;
-			No = null;
+                    this.dialogHost.ShowDialog(this.DialogBaseControl);
+                });
+        }
 
-			InvokeUICall(
-				() =>
-				{
-					_dialogHost.HideDialog(DialogBaseControl);
-					DialogBaseControl.SetCustomContent(null);
-				});
-		}
+        public void Close()
+        {
+            // Dialog wird angezeigt?
+            if (this.DialogBaseControl == null)
+            {
+                return;
+            }
 
-		#endregion
+            // Callbacks abhängen
+            this.Ok = null;
+            this.Cancel = null;
+            this.Yes = null;
+            this.No = null;
 
-		public event PropertyChangedEventHandler PropertyChanged;
-		private void OnPropertyChanged(string propertyName)
-		{
-			if (PropertyChanged != null)
-				PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-		}
-	}
+            this.InvokeUICall(
+                () =>
+                {
+                    this.dialogHost.HideDialog(this.DialogBaseControl);
+                    this.DialogBaseControl.SetCustomContent(null);
+                });
+        }
+
+        #endregion
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void OnPropertyChanged(string propertyName)
+        {
+            this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+    }
 }

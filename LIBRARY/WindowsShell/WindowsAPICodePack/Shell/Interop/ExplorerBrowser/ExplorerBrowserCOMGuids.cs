@@ -1,4 +1,4 @@
-﻿//Copyright (c) Microsoft Corporation.  All rights reserved.
+﻿// Copyright (c) Microsoft Corporation.  All rights reserved.
 
 namespace Microsoft.WindowsAPICodePack.Controls
 {
@@ -20,7 +20,6 @@ namespace Microsoft.WindowsAPICodePack.Controls
         internal const string ICommDlgBrowser = "000214F1-0000-0000-C000-000000000046";
         internal const string ICommDlgBrowser2 = "10339516-2894-11d2-9039-00C04F8EEB3E";
         internal const string ICommDlgBrowser3 = "c8ad25a1-3294-41ee-8165-71174bd01c57";
-
     }
 
     internal static class ExplorerBrowserViewPanes

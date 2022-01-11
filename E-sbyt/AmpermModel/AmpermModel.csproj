@@ -1,93 +1,20 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{883365DC-5976-43F0-A089-44EE52740EFC}</ProjectGuid>
+    <TargetFramework>net45</TargetFramework>
     <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>TMP.Work.ESbyt.AmpermModel</RootNamespace>
-    <AssemblyName>AmpermModel</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
     <OutputPath>..\..\out\Debug\Amper-M\Libs\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
     <OutputPath>..\..\out\Release\Amper-M\Libs\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
+    <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Abonent.cs" />
-    <Compile Include="Dogovor.cs" />
-    <Compile Include="Object.cs" />
-    <Compile Include="Osnovanie.cs" />
-    <Compile Include="Point.cs" />
-    <Compile Include="Pribor.cs" />
-    <Compile Include="PriborTip.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Адрес.cs" />
-    <Compile Include="ВидАбонента.cs" />
-    <Compile Include="ВидИзмерения.cs" />
-    <Compile Include="ВидЭнергии.cs" />
-    <Compile Include="ВысоковольтноеНапряжение.cs" />
-    <Compile Include="ГруппаМинистерств.cs" />
-    <Compile Include="ГруппаПотребления.cs" />
-    <Compile Include="ДиапазонПоверки.cs" />
-    <Compile Include="Договор.cs" />
-    <Compile Include="ДоговорОснование.cs" />
-    <Compile Include="ДоговорСтатус.cs" />
-    <Compile Include="ДоговорТип.cs" />
-    <Compile Include="ДокументыТипы.cs" />
-    <Compile Include="ДолжностноеЛицо.cs" />
-    <Compile Include="Должность.cs" />
-    <Compile Include="ИзмерительныйТрансформатор.cs" />
-    <Compile Include="ИзмерительныйТрансформаторМарка.cs" />
-    <Compile Include="ИзмерительныйТрансформаторТип.cs" />
-    <Compile Include="ИндексПотерь.cs" />
-    <Compile Include="КлассТочности.cs" />
-    <Compile Include="ЛинииКабельныеТип.cs" />
-    <Compile Include="НоминальноеНапряжение.cs" />
-    <Compile Include="ОбъектУчёта.cs" />
-    <Compile Include="ОтчётныйПериод.cs" />
-    <Compile Include="Подстанция.cs" />
-    <Compile Include="Расчёт.cs" />
-    <Compile Include="РасчётныеТочки.cs" />
-    <Compile Include="РасчётныйПериод.cs" />
-    <Compile Include="СпособРасчёта.cs" />
-    <Compile Include="Счётчики.cs" />
-    <Compile Include="СчётчикиПринципыДействия.cs" />
-    <Compile Include="СчётчикиУстановленные.cs" />
-    <Compile Include="СчётчикТип.cs" />
-    <Compile Include="Фазность.cs" />
+    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>

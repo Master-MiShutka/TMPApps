@@ -85,12 +85,8 @@ namespace TMP.Wpf.CommonControls.ItemsFilter {
         /// otherwise, FilterControl bind to default collection view for the given source collection.
         /// </summary>
         public IEnumerable ParentCollection {
-            get {
-                return (IEnumerable)GetValue(ParentCollectionProperty);
-            }
-            set {
-                SetValue(ParentCollectionProperty, value);
-            }
+            get => (IEnumerable)GetValue(ParentCollectionProperty);
+            set => SetValue(ParentCollectionProperty, value);
         }
 
         /// <summary>
@@ -132,12 +128,8 @@ namespace TMP.Wpf.CommonControls.ItemsFilter {
         /// For example, the class ColumnFilter uses key value as name of the item property.
         /// </summary>
         public string Key {
-            get {
-                return (string)GetValue(KeyProperty);
-            }
-            set {
-                SetValue(KeyProperty, value);
-            }
+            get => (string)GetValue(KeyProperty);
+            set => SetValue(KeyProperty, value);
         }
 
         /// <summary>
@@ -176,13 +168,8 @@ namespace TMP.Wpf.CommonControls.ItemsFilter {
         ///                                         RangeFilterInitializer(), StringFilterInitializer(), EnumFilterInitializer().
         /// </summary>
         public FilterInitializersManager FilterInitializersManager {
-            get {
-                return (FilterInitializersManager)GetValue(FilterInitializersManagerProperty);
-            }
-            set {
-                SetValue(FilterInitializersManagerProperty, value);
-                
-            }
+            get => (FilterInitializersManager)GetValue(FilterInitializersManagerProperty);
+            set => SetValue(FilterInitializersManagerProperty, value);
         }
 
         /// <summary>

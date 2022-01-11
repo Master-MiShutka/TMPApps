@@ -1,1735 +1,1865 @@
-﻿<!--
-    ***********************************************************************************
-    
-    Extended WPF Toolkit
-    
-    Copyright (C) 2007-2013 Xceed Software Inc.
-    
-    This program is provided to you under the terms of the Microsoft Public
-    License (Ms-PL) as published at http://wpftoolkit.codeplex.com/license
-    
-    For more features, controls, and fast professional support,
-    pick up the Plus Edition at http://xceed.com/wpf_toolkit
-    
-    Stay informed: follow @datagrid on Twitter or Like http://facebook.com/datagrids
-    
-    **********************************************************************************
--->
+﻿<!--***********************************************************************************
 
-<ResourceDictionary
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:conv="clr-namespace:Xceed.Wpf.DataGrid.Converters"
-    xmlns:local="clr-namespace:Xceed.Wpf.DataGrid"
-    xmlns:markup="clr-namespace:Xceed.Wpf.DataGrid.Markup"
-    xmlns:views="clr-namespace:Xceed.Wpf.DataGrid.Views">
+   Extended WPF Toolkit
 
-    <ResourceDictionary.MergedDictionaries>
+   Copyright (C) 2007-2013 Xceed Software Inc.
 
-        <!--  Include the view independant and color-scheme independant theme resources  -->
-        <markup:DataGridThemeResourceDictionary Source="Resources/Classic.Resources.xaml" />
+   This program is provided to you under the terms of the Microsoft Public
+   License (Ms-PL) as published at http://wpftoolkit.codeplex.com/license 
 
-        <!--  Include the view independant and color-scheme dependant theme resources  -->
-        <markup:DataGridThemeResourceDictionary Source="Resources/Classic.systemcolor.Resources.xaml" />
+   For more features, controls, and fast professional support,
+   pick up the Plus Edition at http://xceed.com/wpf_toolkit
 
-        <!--  Include the standard grid element templates  -->
-        <markup:DataGridThemeResourceDictionary Source="../Common/TableflowView.GridElementTemplates.xaml" />
+   Stay informed: follow @datagrid on Twitter or Like http://facebook.com/datagrids
 
-    </ResourceDictionary.MergedDictionaries>
+  **********************************************************************************-->
 
-    <SolidColorBrush x:Key="warningBackgroundBrush" Color="#FFC400" />
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:Xceed.Wpf.DataGrid"
+                    xmlns:conv="clr-namespace:Xceed.Wpf.DataGrid.Converters"
+                    xmlns:markup="clr-namespace:Xceed.Wpf.DataGrid.Markup"
+                    xmlns:views="clr-namespace:Xceed.Wpf.DataGrid.Views">
 
-    <SolidColorBrush x:Key="warningForegroundBrush" Color="Black" />
+   <ResourceDictionary.MergedDictionaries>
 
-    <!--  ===================================================================  -->
-    <!--  Templates specific to this View/Theme/ColorScheme  -->
-    <!--  ===================================================================  -->
+      <!-- Include the view independant and color-scheme independant theme resources -->
+      <markup:DataGridThemeResourceDictionary Source="Resources/Classic.Resources.xaml" />
 
-    <!--
-        **************************
-        * TEMPLATE: GroupNavigationControl
-        **************************
-    -->
-    <ControlTemplate x:Key="tableflowViewGroupNavigationControlTemplate" TargetType="{x:Type local:GroupNavigationControl}">
+      <!-- Include the view independant and color-scheme dependant theme resources -->
+      <markup:DataGridThemeResourceDictionary Source="Resources/Classic.systemcolor.Resources.xaml" />
 
-        <Grid>
-            <Border
-                x:Name="outlineBorder"
-                Background="Transparent"
-                BorderBrush="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}"
-                BorderThickness="1"
-                CornerRadius="1"
-                Opacity="0" />
+      <!-- Include the standard grid element templates -->
+      <markup:DataGridThemeResourceDictionary Source="../Common/TableflowView.GridElementTemplates.xaml" />
 
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <!--  Button part  -->
-                    <ColumnDefinition Width="*" />
+   </ResourceDictionary.MergedDictionaries>
 
-                    <!--  Seperator part  -->
-                    <ColumnDefinition Width="Auto" />
+   <SolidColorBrush x:Key="warningBackgroundBrush"
+                    Color="#FFC400" />
 
-                    <!--  Toggle button part  -->
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
+   <SolidColorBrush x:Key="warningForegroundBrush"
+                    Color="Black" />
 
-                <Button
-                    x:Name="PART_Button"
-                    Grid.Column="0"
+   <!-- =================================================================== -->
+   <!-- Templates specific to this View/Theme/ColorScheme                   -->
+   <!-- =================================================================== -->
+
+   <!--**************************
+    * TEMPLATE: GroupNavigationControl
+    ************************** -->
+   <ControlTemplate x:Key="tableflowViewGroupNavigationControlTemplate"
+                    TargetType="{x:Type local:GroupNavigationControl}">
+
+      <Grid>
+         <Border x:Name="outlineBorder"
+                 Background="Transparent"
+                 BorderBrush="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}"
+                 BorderThickness="1"
+                 CornerRadius="1"
+                 Opacity="0" />
+
+         <Grid>
+            <Grid.ColumnDefinitions>
+               <!-- Button part -->
+               <ColumnDefinition Width="*" />
+
+               <!-- Seperator part -->
+               <ColumnDefinition Width="Auto" />
+
+               <!-- Toggle button part -->
+               <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <Button x:Name="PART_Button"
                     Command="local:GroupNavigationButton.NavigateToGroup"
                     CommandParameter="{TemplateBinding Group}"
                     Content="{TemplateBinding Group}"
                     ContentTemplate="{TemplateBinding MainItemTemplate}"
                     ContentTemplateSelector="{TemplateBinding MainItemTemplateSelector}"
+                    Foreground="{TemplateBinding Foreground}"
                     Focusable="False"
-                    Foreground="{TemplateBinding Foreground}">
-                    <Button.Template>
-                        <ControlTemplate TargetType="{x:Type Button}">
-                            <Border Background="Transparent">
-                                <ContentPresenter Margin="4,2,4,2" />
-                            </Border>
-                        </ControlTemplate>
-                    </Button.Template>
-                </Button>
+                    Grid.Column="0">
+               <Button.Template>
+                  <ControlTemplate TargetType="{x:Type Button}">
+                     <Border Background="Transparent">
+                        <ContentPresenter Margin="4,2,4,2" />
+                     </Border>
+                  </ControlTemplate>
+               </Button.Template>
+            </Button>
 
-                <Border
-                    x:Name="seperator"
+            <Border x:Name="seperator"
                     Grid.Column="1"
-                    Margin="0,4,0,4"
-                    BorderBrush="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}"
                     BorderThickness="0,0,1,0"
+                    BorderBrush="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}"
+                    Margin="0,4,0,4"
                     Visibility="Hidden" />
 
-                <ToggleButton
-                    x:Name="PART_ToggleButton"
-                    Grid.Column="2"
-                    Focusable="False"
-                    Foreground="{TemplateBinding Foreground}"
-                    IsChecked="{Binding Path=IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}">
-                    <ToggleButton.Template>
-                        <ControlTemplate>
-                            <Border
-                                x:Name="toggleButtonBackground"
-                                Background="Transparent"
-                                CornerRadius="0,6,6,0">
-                                <Path
-                                    x:Name="Arrow"
-                                    Margin="7,1,7,1"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"
-                                    Data="M 0 0 L 4 4 L 0 8 Z"
-                                    Fill="{TemplateBinding Foreground}"
-                                    Opacity="0.3" />
-                            </Border>
+            <ToggleButton x:Name="PART_ToggleButton"
+                          Focusable="False"
+                          IsChecked="{Binding Path=IsDropDownOpen,Mode=TwoWay,RelativeSource={RelativeSource TemplatedParent}}"
+                          Grid.Column="2"
+                          Foreground="{TemplateBinding Foreground}">
+               <ToggleButton.Template>
+                  <ControlTemplate>
+                     <Border x:Name="toggleButtonBackground"
+                             CornerRadius="0,6,6,0"
+                             Background="Transparent">
+                        <Path x:Name="Arrow"
+                              Fill="{TemplateBinding Foreground}"
+                              Margin="7,1,7,1"
+                              HorizontalAlignment="Center"
+                              VerticalAlignment="Center"
+                              Data="M 0 0 L 4 4 L 0 8 Z"
+                              Opacity="0.3" />
+                     </Border>
 
-                            <ControlTemplate.Triggers>
-                                <Trigger Property="ToggleButton.IsMouseOver" Value="True">
-                                    <Setter TargetName="Arrow" Property="Opacity" Value="1" />
-                                </Trigger>
-                                <Trigger Property="ToggleButton.IsChecked" Value="True">
-                                    <Setter TargetName="Arrow" Property="Opacity" Value="1" />
-                                    <Setter TargetName="Arrow" Property="Margin" Value="5,1,5,1" />
-                                    <Setter TargetName="Arrow" Property="Data" Value="M 0 0 L 4 4 L 8 0 Z" />
-                                </Trigger>
-                            </ControlTemplate.Triggers>
-                        </ControlTemplate>
-                    </ToggleButton.Template>
-                </ToggleButton>
-            </Grid>
+                     <ControlTemplate.Triggers>
+                        <Trigger Property="ToggleButton.IsMouseOver"
+                                 Value="True">
+                           <Setter TargetName="Arrow"
+                                   Property="Opacity"
+                                   Value="1" />
+                        </Trigger>
+                        <Trigger Property="ToggleButton.IsChecked"
+                                 Value="True">
+                           <Setter TargetName="Arrow"
+                                   Property="Opacity"
+                                   Value="1" />
+                           <Setter TargetName="Arrow"
+                                   Property="Margin"
+                                   Value="5,1,5,1" />
+                           <Setter TargetName="Arrow"
+                                   Property="Data"
+                                   Value="M 0 0 L 4 4 L 8 0 Z" />
+                        </Trigger>
+                     </ControlTemplate.Triggers>
+                  </ControlTemplate>
+               </ToggleButton.Template>
+            </ToggleButton>
+         </Grid>
 
-            <Popup
-                x:Name="PART_Popup"
+         <Popup x:Name="PART_Popup"
+                Placement="Bottom"
+                IsOpen="{TemplateBinding IsDropDownOpen}"
                 AllowsTransparency="True"
                 Focusable="False"
-                IsOpen="{TemplateBinding IsDropDownOpen}"
-                Placement="Bottom"
                 PopupAnimation="Slide">
-                <Grid
-                    MinWidth="{TemplateBinding ActualWidth}"
-                    MaxHeight="{TemplateBinding MaxDropDownHeight}"
-                    SnapsToDevicePixels="True">
-                    <Border
-                        Background="White"
-                        BorderBrush="Black"
-                        BorderThickness="1"
-                        TextElement.Foreground="Black">
-                        <ScrollViewer
-                            CanContentScroll="True"
-                            HorizontalScrollBarVisibility="Hidden"
-                            VerticalScrollBarVisibility="Auto">
-                            <!--<ItemsPresenter />-->
-                            <VirtualizingStackPanel IsItemsHost="True" />
-                        </ScrollViewer>
-                    </Border>
-                </Grid>
-            </Popup>
-        </Grid>
+            <Grid SnapsToDevicePixels="True"
+                  MinWidth="{TemplateBinding ActualWidth}"
+                  MaxHeight="{TemplateBinding MaxDropDownHeight}">
+               <Border Background="White"
+                       BorderBrush="Black"
+                       BorderThickness="1"
+                       TextElement.Foreground="Black">
+                  <ScrollViewer CanContentScroll="True"
+                                HorizontalScrollBarVisibility="Hidden"
+                                VerticalScrollBarVisibility="Auto">
+                     <!--<ItemsPresenter />-->
+                     <VirtualizingStackPanel IsItemsHost="True" />
+                  </ScrollViewer>
+               </Border>
+            </Grid>
+         </Popup>
+      </Grid>
 
-        <ControlTemplate.Triggers>
-            <Trigger Property="IsMouseOver" Value="True">
-                <Setter TargetName="outlineBorder" Property="Opacity" Value="1" />
-                <Setter TargetName="seperator" Property="Visibility" Value="Visible" />
-            </Trigger>
+      <ControlTemplate.Triggers>
+         <Trigger Property="IsMouseOver"
+                  Value="True">
+            <Setter TargetName="outlineBorder"
+                    Property="Opacity"
+                    Value="1" />
+            <Setter TargetName="seperator"
+                    Property="Visibility"
+                    Value="Visible" />
+         </Trigger>
 
-            <Trigger Property="IsDropDownOpen" Value="True">
-                <Setter TargetName="outlineBorder" Property="Opacity" Value="1" />
-                <Setter TargetName="seperator" Property="Visibility" Value="Visible" />
-            </Trigger>
-            <Trigger Property="IsEnabled" Value="False">
-                <Setter TargetName="outlineBorder" Property="Opacity" Value="0" />
-            </Trigger>
-        </ControlTemplate.Triggers>
-    </ControlTemplate>
+         <Trigger Property="IsDropDownOpen"
+                  Value="True">
+            <Setter TargetName="outlineBorder"
+                    Property="Opacity"
+                    Value="1" />
+            <Setter TargetName="seperator"
+                    Property="Visibility"
+                    Value="Visible" />
+         </Trigger>
+         <Trigger Property="IsEnabled"
+                  Value="False">
+            <Setter Property="Opacity"
+                    TargetName="outlineBorder"
+                    Value="0" />
+         </Trigger>
+      </ControlTemplate.Triggers>
+   </ControlTemplate>
 
-    <!--
-        **************************
-        * TEMPLATE: GroupNavigationButton
-        **************************
-    -->
-    <ControlTemplate x:Key="tableflowViewGroupNavigationButtonTemplate" TargetType="{x:Type local:GroupNavigationButton}">
-        <Grid>
-            <Border
-                x:Name="outerBorder"
-                BorderBrush="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}"
-                BorderThickness="1"
-                CornerRadius="1"
-                Opacity="0" />
+   <!--**************************
+    * TEMPLATE: GroupNavigationButton
+    ************************** -->
+   <ControlTemplate x:Key="tableflowViewGroupNavigationButtonTemplate"
+                    TargetType="{x:Type local:GroupNavigationButton}">
+      <Grid>
+         <Border x:Name="outerBorder"
+                 BorderBrush="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}"
+                 BorderThickness="1"
+                 CornerRadius="1"
+                 Opacity="0" />
 
-            <ContentPresenter Margin="4,2,4,2" />
-        </Grid>
-        <ControlTemplate.Triggers>
-            <Trigger Property="IsMouseOver" Value="True">
-                <Setter TargetName="outerBorder" Property="Opacity" Value="1" />
-            </Trigger>
-            <Trigger Property="IsEnabled" Value="False">
-                <Setter TargetName="outerBorder" Property="Opacity" Value="0" />
-            </Trigger>
-        </ControlTemplate.Triggers>
-    </ControlTemplate>
+         <ContentPresenter Margin="4,2,4,2" />
+      </Grid>
+      <ControlTemplate.Triggers>
+         <Trigger Property="IsMouseOver"
+                  Value="True">
+            <Setter Property="Opacity"
+                    TargetName="outerBorder"
+                    Value="1" />
+         </Trigger>
+         <Trigger Property="IsEnabled"
+                  Value="False">
+            <Setter Property="Opacity"
+                    TargetName="outerBorder"
+                    Value="0" />
+         </Trigger>
+      </ControlTemplate.Triggers>
+   </ControlTemplate>
 
-    <!--
-        **************************
-        * TEMPLATE: RowSelector
-        **************************
-    -->
-    <ControlTemplate x:Key="tableflowViewRowSelectorTemplate" TargetType="local:RowSelector">
+   <!--**************************
+    * TEMPLATE: RowSelector 
+    ************************** -->
+   <ControlTemplate x:Key="tableflowViewRowSelectorTemplate"
+                    TargetType="local:RowSelector">
 
-        <!--  This Grid is used to position the resizer Thumb over the RowSelector  -->
-        <Grid>
+      <!-- This Grid is used to position the resizer Thumb over the RowSelector -->
+      <Grid>
 
-            <Border
-                Background="{TemplateBinding Background}"
-                BorderBrush="{TemplateBinding BorderBrush}"
-                BorderThickness="{TemplateBinding BorderThickness}">
+         <Border Background="{TemplateBinding Background}"
+                 BorderBrush="{TemplateBinding BorderBrush}"
+                 BorderThickness="{TemplateBinding BorderThickness}">
 
-                <!--  This Grid is used to layout the delimiter lines on top of the ContentPresenter  -->
-                <Grid>
+            <!-- This Grid is used to layout the delimiter lines on top of the ContentPresenter -->
+            <Grid>
 
-                    <!--
-                        This Border is used to apply the Padding around the ContentPresenter.
-                        We cannot use the ContentPresenter's Margin for this purpose because
-                        the Margin is used to represent the Pressed state.
-                    -->
-                    <Border Padding="{TemplateBinding Padding}">
+               <!-- This Border is used to apply the Padding around the ContentPresenter.
+                    We cannot use the ContentPresenter's Margin for this purpose because
+                    the Margin is used to represent the Pressed state. -->
+               <Border Padding="{TemplateBinding Padding}">
 
-                        <ContentPresenter
-                            x:Name="contentPresenter"
-                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                            Content="{TemplateBinding Content}"
-                            ContentTemplate="{TemplateBinding ContentTemplate}"
-                            ContentTemplateSelector="{TemplateBinding ContentTemplateSelector}" />
+                  <ContentPresenter x:Name="contentPresenter"
+                                    Content="{TemplateBinding Content}"
+                                    ContentTemplate="{TemplateBinding ContentTemplate}"
+                                    ContentTemplateSelector="{TemplateBinding ContentTemplateSelector}"
+                                    HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                    VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
 
-                    </Border>
+               </Border>
 
-                    <Rectangle
-                        Height="1"
-                        Margin="2,0,2,0"
-                        HorizontalAlignment="Stretch"
-                        VerticalAlignment="Top"
-                        Fill="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}" />
+               <Rectangle Fill="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}"
+                          HorizontalAlignment="Stretch"
+                          VerticalAlignment="Top"
+                          Height="1"
+                          Margin="2,0,2,0" />
 
-                    <Rectangle
-                        x:Name="bottomBorder"
-                        Height="1"
-                        Margin="2,0,2,0"
-                        HorizontalAlignment="Stretch"
-                        VerticalAlignment="Bottom"
-                        Fill="{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}" />
-                </Grid>
-            </Border>
+               <Rectangle x:Name="bottomBorder"
+                          Fill="{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}"
+                          HorizontalAlignment="Stretch"
+                          VerticalAlignment="Bottom"
+                          Height="1"
+                          Margin="2,0,2,0" />
+            </Grid>
+         </Border>
 
-            <!--  Thumb that is used to resize the Row.  -->
-            <Thumb
-                x:Name="PART_RowResizerThumb"
-                VerticalAlignment="Bottom"
-                Style="{StaticResource invisibleThumbStyle}" />
+         <!-- Thumb that is used to resize the Row. -->
+         <Thumb x:Name="PART_RowResizerThumb"
+                Style="{StaticResource invisibleThumbStyle}"
+                VerticalAlignment="Bottom" />
 
-        </Grid>
+      </Grid>
 
-        <ControlTemplate.Triggers>
+      <ControlTemplate.Triggers>
 
-            <Trigger Property="IsPressed" Value="True">
+         <Trigger Property="IsPressed"
+                  Value="True">
 
-                <Setter TargetName="contentPresenter" Property="Margin" Value="1,1,-1,-1" />
+            <Setter TargetName="contentPresenter"
+                    Property="Margin"
+                    Value="1,1,-1,-1" />
 
-            </Trigger>
+         </Trigger>
 
-            <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=(views:ViewBase.IsLastItem)}" Value="True">
+         <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=(views:ViewBase.IsLastItem)}"
+                      Value="True">
 
-                <Setter TargetName="bottomBorder" Property="Fill" Value="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}" />
+            <Setter TargetName="bottomBorder"
+                    Property="Fill"
+                    Value="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}" />
 
-            </DataTrigger>
+         </DataTrigger>
 
-        </ControlTemplate.Triggers>
+      </ControlTemplate.Triggers>
 
-    </ControlTemplate>
+   </ControlTemplate>
 
-    <!--
-        **************************
-        * TEMPLATE: ColumnManagerCell
-        **************************
-    -->
-    <conv:SortingDirectionToBooleanConverter x:Key="SortingDirectionToBooleanConverter" />
+   <!--**************************
+    * TEMPLATE: ColumnManagerCell 
+    ************************** -->
+   <conv:SortingDirectionToBooleanConverter x:Key="SortingDirectionToBooleanConverter" />
 
-    <ControlTemplate x:Key="tableflowViewColumnManagerCellTemplate" TargetType="local:ColumnManagerCell">
-        <!--  This Grid is used to position the resizer Thumb over the ColumnManagerCell  -->
-        <Grid>
+   <ControlTemplate x:Key="tableflowViewColumnManagerCellTemplate"
+                    TargetType="local:ColumnManagerCell">
+      <!-- This Grid is used to position the resizer Thumb over the ColumnManagerCell -->
+      <Grid>
 
-            <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
+         <Border  BorderBrush="{TemplateBinding BorderBrush}"
+                  BorderThickness="{TemplateBinding BorderThickness}">
 
-                <Grid>
+            <Grid>
 
-                    <Rectangle
-                        Width="1"
-                        Margin="0,2,0,2"
-                        HorizontalAlignment="Left"
-                        VerticalAlignment="Stretch"
-                        Fill="{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}" />
+               <Rectangle Fill="{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}"
+                          HorizontalAlignment="Left"
+                          VerticalAlignment="Stretch"
+                          Width="1"
+                          Margin="0,2,0,2" />
 
-                    <Rectangle
-                        Width="1"
-                        Margin="0,2,0,2"
-                        HorizontalAlignment="Right"
-                        VerticalAlignment="Stretch"
-                        Fill="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}" />
+               <Rectangle Fill="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}"
+                          HorizontalAlignment="Right"
+                          VerticalAlignment="Stretch"
+                          Width="1"
+                          Margin="0,2,0,2" />
 
-                    <DockPanel>
-                        <Border x:Name="thumbToggleBackgroundBorder" DockPanel.Dock="Right">
+               <DockPanel>
+                  <Border x:Name="thumbToggleBackgroundBorder"
+                          DockPanel.Dock="Right">
 
-                            <Grid>
+                     <Grid>
 
-                                <Border
-                                    x:Name="toggleDelimeterBorder"
-                                    Margin="0,4,0,4"
-                                    Background="Transparent"
-                                    BorderBrush="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}"
-                                    BorderThickness="1,0,0,0"
-                                    Visibility="Collapsed">
+                        <Border x:Name="toggleDelimeterBorder"
+                                BorderBrush="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}"
+                                BorderThickness="1,0,0,0"
+                                Margin="0,4,0,4"
+                                Background="Transparent"
+                                Visibility="Collapsed">
 
-                                    <Border
-                                        x:Name="toggleDelimeterBorder2"
-                                        Margin="0,0,0,0"
-                                        Background="Transparent"
-                                        BorderBrush="{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}"
-                                        BorderThickness="1,0,0,0"
-                                        Visibility="Collapsed" />
+                           <Border x:Name="toggleDelimeterBorder2"
+                                   BorderBrush="{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}"
+                                   BorderThickness="1,0,0,0"
+                                   Margin="0,0,0,0"
+                                   Background="Transparent"
+                                   Visibility="Collapsed">
 
-                                </Border>
-
-                                <Border
-                                    x:Name="borderToggleBackground"
-                                    Margin="1,0,1,0"
-                                    Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" />
-
-                                <ToggleButton
-                                    x:Name="toggleButton"
-                                    Margin="2,0,0,0"
-                                    VerticalAlignment="Stretch"
-                                    Focusable="False"
-                                    Opacity="0.5"
-                                    Visibility="Collapsed" />
-                            </Grid>
+                           </Border>
 
                         </Border>
 
-                        <Border Background="{TemplateBinding Background}">
+                        <Border x:Name="borderToggleBackground"
+                                Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"
+                                Margin="1,0,1,0" />
 
-                            <!--  This Grid is used to layout the delimiter lines on top of the ContentPresenter  -->
-                            <Grid>
+                        <ToggleButton x:Name="toggleButton"
+                                      Focusable="False"
+                                      VerticalAlignment="Stretch"
+                                      Visibility="Collapsed"
+                                      Margin="2,0,0,0"
+                                      Opacity="0.5" />
+                     </Grid>
 
-                                <Border Padding="{TemplateBinding Padding}">
+                  </Border>
 
-                                    <Grid
-                                        x:Name="contentPanel"
-                                        HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                        VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="*" />
-                                            <ColumnDefinition Width="Auto" />
-                                            <ColumnDefinition Width="Auto" />
-                                        </Grid.ColumnDefinitions>
+                  <Border Background="{TemplateBinding Background}">
 
-                                        <!--  Same ContentPresenter as in the base Cell Template.  -->
-                                        <local:CellContentPresenter x:Name="PART_CellContentPresenter" Grid.Column="0" />
+                     <!-- This Grid is used to layout the delimiter lines on top of the ContentPresenter -->
+                     <Grid>
 
-                                        <!--
-                                            ContentPresenter that is used to display the sort glyph.
-                                            We explicitely set its Content property to Null to prevent the XAML parser
-                                            from implicitely setting it to its TemplatedParent's Content.
-                                        -->
-                                        <ContentPresenter
-                                            x:Name="sortGlyphPresenter"
-                                            Grid.Column="1"
-                                            Content="{x:Null}"
-                                            ContentTemplate="{x:Null}" />
-                                    </Grid>
+                        <Border Padding="{TemplateBinding Padding}">
 
-                                </Border>
+                           <Grid x:Name="contentPanel"
+                                 HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                 VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
+                              <Grid.ColumnDefinitions>
+                                 <ColumnDefinition Width="*" />
+                                 <ColumnDefinition Width="Auto" />
+                                 <ColumnDefinition Width="Auto" />
+                              </Grid.ColumnDefinitions>
 
-                            </Grid>
+                              <!-- Same ContentPresenter as in the base Cell Template. -->
+                              <local:CellContentPresenter x:Name="PART_CellContentPresenter"
+                                                          Grid.Column="0" />
+
+                              <!-- ContentPresenter that is used to display the sort glyph.
+                                      We explicitely set its Content property to Null to prevent the XAML parser
+                                      from implicitely setting it to its TemplatedParent's Content. -->
+                              <ContentPresenter x:Name="sortGlyphPresenter"
+                                                Content="{x:Null}"
+                                                ContentTemplate="{x:Null}"
+                                                Grid.Column="1" />
+                           </Grid>
 
                         </Border>
 
-                    </DockPanel>
+                     </Grid>
 
-                </Grid>
+                  </Border>
 
-            </Border>
+               </DockPanel>
 
-            <!--  Thumb that is used to resize the Column.  -->
-            <Thumb
-                x:Name="PART_ColumnResizerThumbLeft"
+            </Grid>
+
+         </Border>
+
+         <!-- Thumb that is used to resize the Column. -->
+         <Thumb x:Name="PART_ColumnResizerThumbLeft"
+                Style="{StaticResource invisibleThumbStyle}"
                 Width="6"
-                HorizontalAlignment="Left"
-                Style="{StaticResource invisibleThumbStyle}" />
+                HorizontalAlignment="Left" />
 
-            <!--  Thumb that is used to resize the Column.  -->
-            <Thumb
-                x:Name="PART_ColumnResizerThumb"
+         <!-- Thumb that is used to resize the Column. -->
+         <Thumb x:Name="PART_ColumnResizerThumb"
+                Style="{StaticResource invisibleThumbStyle}"
                 Width="6"
-                HorizontalAlignment="Right"
-                Style="{StaticResource invisibleThumbStyle}" />
+                HorizontalAlignment="Right" />
+
+      </Grid>
+
+      <ControlTemplate.Triggers>
+         <!-- The following triggers allows the content to correctly align to the center when the mouse is over the ColumnManagerCell and the HorizontalContentAlignment is Center -->
+         <MultiDataTrigger>
+            <MultiDataTrigger.Conditions>
+               <Condition Value="Visible"
+                          Binding="{Binding ElementName=toggleButton, Path=Visibility}" />
+               <Condition Value="Center"
+                          Binding="{Binding RelativeSource={RelativeSource Self},
+                        Path=HorizontalContentAlignment}" />
+            </MultiDataTrigger.Conditions>
+
+            <Setter TargetName="PART_CellContentPresenter"
+                    Property="Margin"
+                    Value="16,0,0,0" />
+         </MultiDataTrigger>
+
+         <Trigger Property="IsBeingDragged"
+                  Value="True">
+
+            <Setter TargetName="borderToggleBackground"
+                    Property="Margin"
+                    Value="0,0,1,0" />
+
+         </Trigger>
+
+         <Trigger Property="IsPressed"
+                  Value="True">
+
+            <Setter TargetName="contentPanel"
+                    Property="Margin"
+                    Value="1,1,-1,-1" />
+
+         </Trigger>
+
+         <!-- The following 2 triggers allow the appropriate Sort Glyph to be displayed
+              depending on the ParentColumn's SortDirection. -->
+
+         <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=ParentColumn.SortDirection}"
+                      Value="Ascending">
+
+            <Setter TargetName="sortGlyphPresenter"
+                    Property="ContentPresenter.ContentTemplate"
+                    Value="{Binding RelativeSource={RelativeSource Self}, Path=(local:DataGridControl.DataGridContext).AscendingSortGlyph}" />
+
+            <Setter TargetName="sortGlyphPresenter"
+                    Property="Margin"
+                    Value="6,0,0,0" />
+
+         </DataTrigger>
+
+         <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=ParentColumn.SortDirection}"
+                      Value="Descending">
+
+            <Setter TargetName="sortGlyphPresenter"
+                    Property="ContentPresenter.ContentTemplate"
+                    Value="{Binding RelativeSource={RelativeSource Self}, Path=(local:DataGridControl.DataGridContext).DescendingSortGlyph}" />
+
+            <Setter TargetName="sortGlyphPresenter"
+                    Property="Margin"
+                    Value="6,0,0,0" />
+
+         </DataTrigger>
+
+         <MultiDataTrigger>
+            <MultiDataTrigger.Conditions>
+               <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=ParentColumn.HasFixedWidth}"
+                          Value="True" />
+
+               <!-- Don't disable resizing if ColumnStretching can be disabled by an 
+                    end-user resize. -->
+               <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=(local:DataGridControl.DataGridContext).RemoveColumnStretchingOnResize}"
+                          Value="False" />
+            </MultiDataTrigger.Conditions>
+
+            <Setter TargetName="PART_ColumnResizerThumb"
+                    Property="IsEnabled"
+                    Value="False" />
+         </MultiDataTrigger>
+
+         <MultiDataTrigger>
+            <MultiDataTrigger.Conditions>
+               <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=ParentColumn.PreviousVisibleColumn.HasFixedWidth}"
+                          Value="True" />
+
+               <!-- Don't disable resizing if ColumnStretching can be disabled by an 
+                    end-user resize. -->
+               <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=(local:DataGridControl.DataGridContext).RemoveColumnStretchingOnResize}"
+                          Value="False" />
+            </MultiDataTrigger.Conditions>
+
+            <Setter TargetName="PART_ColumnResizerThumbLeft"
+                    Property="IsEnabled"
+                    Value="False" />
+         </MultiDataTrigger>
+
+         <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=ParentRow.AllowColumnResize}"
+                      Value="False">
+            <Setter TargetName="PART_ColumnResizerThumb"
+                    Property="IsEnabled"
+                    Value="False" />
+            <Setter TargetName="PART_ColumnResizerThumbLeft"
+                    Property="IsEnabled"
+                    Value="False" />
+         </DataTrigger>
+
+      </ControlTemplate.Triggers>
+
+   </ControlTemplate>
+
+   <!--**************************
+    * TEMPLATE: GroupByItem
+    ************************** -->
+   <ControlTemplate x:Key="tableflowViewGroupByItemTemplate"
+                    TargetType="local:GroupByItem">
+
+      <Border x:Name="outerBorder"
+              BorderBrush="{DynamicResource {x:Static SystemColors.ControlDarkDarkBrushKey}}"
+              Background="{DynamicResource {x:Static SystemColors.ControlLightLightBrushKey}}"
+              BorderThickness="0,0,1,1"
+              Padding="1,1,0,0">
+
+         <Border x:Name="innerBorder"
+                 BorderBrush="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}"
+                 BorderThickness="0,0,1,1"
+                 Margin="1,1,0,0"
+                 Background="{TemplateBinding Background}"
+                 Padding="{TemplateBinding Padding}">
+
+            <!-- This StackPanel is used to layout the ContentPresenter and the Sort Glyph (when present). -->
+            <StackPanel x:Name="contentPanel"
+                        Orientation="Horizontal">
+
+               <!-- Same ContentPresenter as in the base Cell Template. -->
+               <ContentPresenter Content="{TemplateBinding Content}"
+                                 ContentTemplate="{TemplateBinding ContentTemplate}"
+                                 ContentTemplateSelector="{TemplateBinding ContentTemplateSelector}"
+                                 HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                 VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+
+               <!-- ContentPresenter that is used to display the sort glyph.
+                    We explicitly set its Content property to Null to prevent the XAML parser
+                    from implicitly setting it to its TemplatedParent's Content. -->
+               <ContentPresenter x:Name="sortGlyphPresenter"
+                                 Content="{x:Null}"
+                                 ContentTemplate="{Binding RelativeSource={RelativeSource Self}, Path=(local:DataGridControl.DataGridContext).AscendingSortGlyph}"
+                                 Margin="6,0,0,0"
+                                 Visibility="Hidden" />
 
-        </Grid>
+            </StackPanel>
+
+         </Border>
 
-        <ControlTemplate.Triggers>
-            <!--  The following triggers allows the content to correctly align to the center when the mouse is over the ColumnManagerCell and the HorizontalContentAlignment is Center  -->
-            <MultiDataTrigger>
-                <MultiDataTrigger.Conditions>
-                    <Condition Binding="{Binding ElementName=toggleButton, Path=Visibility}" Value="Visible" />
-                    <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=HorizontalContentAlignment}" Value="Center" />
-                </MultiDataTrigger.Conditions>
-
-                <Setter TargetName="PART_CellContentPresenter" Property="Margin" Value="16,0,0,0" />
-            </MultiDataTrigger>
-            <!--  Trigger related to the filteringToggleButton  -->
-            <Trigger SourceName="toggleButton" Property="IsMouseOver" Value="True">
-
-                <Setter TargetName="toggleButton" Property="Opacity" Value="1" />
-            </Trigger>
-
-            <Trigger Property="IsBeingDragged" Value="True">
-
-                <Setter TargetName="borderToggleBackground" Property="Margin" Value="0,0,1,0" />
-
-            </Trigger>
-
-            <Trigger Property="IsPressed" Value="True">
-
-                <Setter TargetName="contentPanel" Property="Margin" Value="1,1,-1,-1" />
-
-            </Trigger>
-
-            <!--
-                The following 2 triggers allow the appropriate Sort Glyph to be displayed
-                depending on the ParentColumn's SortDirection.
-            -->
-
-            <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=ParentColumn.SortDirection}" Value="Ascending">
-
-                <Setter TargetName="sortGlyphPresenter" Property="ContentPresenter.ContentTemplate" Value="{Binding RelativeSource={RelativeSource Self}, Path=(local:DataGridControl.DataGridContext).AscendingSortGlyph}" />
-
-                <Setter TargetName="sortGlyphPresenter" Property="Margin" Value="6,0,0,0" />
-
-            </DataTrigger>
-
-            <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=ParentColumn.SortDirection}" Value="Descending">
-
-                <Setter TargetName="sortGlyphPresenter" Property="ContentPresenter.ContentTemplate" Value="{Binding RelativeSource={RelativeSource Self}, Path=(local:DataGridControl.DataGridContext).DescendingSortGlyph}" />
-
-                <Setter TargetName="sortGlyphPresenter" Property="Margin" Value="6,0,0,0" />
-
-            </DataTrigger>
-
-            <MultiDataTrigger>
-                <MultiDataTrigger.Conditions>
-                    <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=ParentColumn.HasFixedWidth}" Value="True" />
-
-                    <!--
-                        Don't disable resizing if ColumnStretching can be disabled by an
-                        end-user resize.
-                    -->
-                    <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=(local:DataGridControl.DataGridContext).RemoveColumnStretchingOnResize}" Value="False" />
-                </MultiDataTrigger.Conditions>
-
-                <Setter TargetName="PART_ColumnResizerThumb" Property="IsEnabled" Value="False" />
-            </MultiDataTrigger>
-
-            <MultiDataTrigger>
-                <MultiDataTrigger.Conditions>
-                    <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=ParentColumn.PreviousVisibleColumn.HasFixedWidth}" Value="True" />
-
-                    <!--
-                        Don't disable resizing if ColumnStretching can be disabled by an
-                        end-user resize.
-                    -->
-                    <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=(local:DataGridControl.DataGridContext).RemoveColumnStretchingOnResize}" Value="False" />
-                </MultiDataTrigger.Conditions>
-
-                <Setter TargetName="PART_ColumnResizerThumbLeft" Property="IsEnabled" Value="False" />
-            </MultiDataTrigger>
-
-            <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=ParentRow.AllowColumnResize}" Value="False">
-                <Setter TargetName="PART_ColumnResizerThumb" Property="IsEnabled" Value="False" />
-                <Setter TargetName="PART_ColumnResizerThumbLeft" Property="IsEnabled" Value="False" />
-            </DataTrigger>
-
-            <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=ParentColumn.Visible}" Value="False">
-                <Setter Property="Visibility" Value="Collapsed" />
-            </DataTrigger>
-
-        </ControlTemplate.Triggers>
-
-    </ControlTemplate>
-
-    <!--
-        **************************
-        * TEMPLATE: GroupByItem
-        **************************
-    -->
-    <ControlTemplate x:Key="tableflowViewGroupByItemTemplate" TargetType="local:GroupByItem">
-
-        <Border
-            x:Name="outerBorder"
-            Padding="1,1,0,0"
-            Background="{DynamicResource {x:Static SystemColors.ControlLightLightBrushKey}}"
-            BorderBrush="{DynamicResource {x:Static SystemColors.ControlDarkDarkBrushKey}}"
-            BorderThickness="0,0,1,1">
-
-            <Border
-                x:Name="innerBorder"
-                Margin="1,1,0,0"
-                Padding="{TemplateBinding Padding}"
-                Background="{TemplateBinding Background}"
-                BorderBrush="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}"
-                BorderThickness="0,0,1,1">
-
-                <!--  This StackPanel is used to layout the ContentPresenter and the Sort Glyph (when present).  -->
-                <StackPanel x:Name="contentPanel" Orientation="Horizontal">
-
-                    <!--  Same ContentPresenter as in the base Cell Template.  -->
-                    <ContentPresenter
-                        HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                        VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                        Content="{TemplateBinding Content}"
-                        ContentTemplate="{TemplateBinding ContentTemplate}"
-                        ContentTemplateSelector="{TemplateBinding ContentTemplateSelector}" />
-
-                    <!--
-                        ContentPresenter that is used to display the sort glyph.
-                        We explicitly set its Content property to Null to prevent the XAML parser
-                        from implicitly setting it to its TemplatedParent's Content.
-                    -->
-                    <ContentPresenter
-                        x:Name="sortGlyphPresenter"
-                        Margin="6,0,0,0"
-                        Content="{x:Null}"
-                        ContentTemplate="{Binding RelativeSource={RelativeSource Self}, Path=(local:DataGridControl.DataGridContext).AscendingSortGlyph}"
-                        Visibility="Hidden" />
-
-                </StackPanel>
-
-            </Border>
-
-        </Border>
-
-        <ControlTemplate.Triggers>
-
-            <Trigger Property="IsPressed" Value="True">
-
-                <Setter TargetName="outerBorder" Property="BorderBrush" Value="{DynamicResource {x:Static SystemColors.ControlDarkDarkBrushKey}}" />
-
-                <Setter TargetName="outerBorder" Property="BorderThickness" Value="1" />
-
-                <Setter TargetName="outerBorder" Property="Padding" Value="0" />
-
-                <Setter TargetName="innerBorder" Property="BorderThickness" Value="1" />
-
-                <Setter TargetName="innerBorder" Property="Margin" Value="0" />
-
-                <Setter TargetName="contentPanel" Property="Margin" Value="1,1,-1,-1" />
-
-            </Trigger>
-
-            <!--
-                The following 2 triggers allow the appropriate Sort Glyph to be displayed
-                depending on the ParentColumn's SortDirection.
-            -->
-            <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=SortDirection}" Value="Ascending">
-
-                <Setter TargetName="sortGlyphPresenter" Property="ContentPresenter.ContentTemplate" Value="{Binding RelativeSource={RelativeSource Self}, Path=(local:DataGridControl.DataGridContext).AscendingSortGlyph}" />
-
-                <Setter TargetName="sortGlyphPresenter" Property="Visibility" Value="Visible" />
-
-            </DataTrigger>
-
-            <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=SortDirection}" Value="Descending">
-
-                <Setter TargetName="sortGlyphPresenter" Property="ContentPresenter.ContentTemplate" Value="{Binding RelativeSource={RelativeSource Self}, Path=(local:DataGridControl.DataGridContext).DescendingSortGlyph}" />
-
-                <Setter TargetName="sortGlyphPresenter" Property="Visibility" Value="Visible" />
-
-            </DataTrigger>
-        </ControlTemplate.Triggers>
-
-    </ControlTemplate>
-
-    <!--
-        **************************
-        * TEMPLATE: HierarchicalGroupByControlNode
-        **************************
-    -->
-    <ControlTemplate x:Key="tableflowViewHierarchicalGroupByControlNodeTemplate" TargetType="local:HierarchicalGroupByControlNode">
-
-        <StackPanel Background="{TemplateBinding Background}" Orientation="Horizontal">
-
-            <Border
-                HorizontalAlignment="Center"
-                VerticalAlignment="Top"
-                Background="#55FFFFFF"
-                BorderBrush="{StaticResource gridLineBrush}"
-                BorderThickness="1">
-
-                <TextBlock
-                    x:Name="titleTextBlock"
-                    Margin="3"
-                    Text="{TemplateBinding Title}" />
-
-            </Border>
-
-            <ItemsPresenter Margin="0,0,0,0" />
-
-        </StackPanel>
-
-    </ControlTemplate>
-
-    <!--
-        **************************
-        * TEMPLATE: HierarchicalGroupByItem
-        **************************
-    -->
-    <ControlTemplate x:Key="tableflowViewHierarchicalGroupByItemTemplate" TargetType="local:HierarchicalGroupByItem">
-        <Grid>
-
-            <Border
-                x:Name="outerBorder"
-                Padding="1,1,0,0"
-                Background="{DynamicResource {x:Static SystemColors.ControlLightLightBrushKey}}"
-                BorderBrush="{DynamicResource {x:Static SystemColors.ControlDarkDarkBrushKey}}"
-                BorderThickness="0,0,1,1">
-
-                <Border
-                    x:Name="innerBorder"
-                    Margin="1,1,0,0"
-                    Padding="{TemplateBinding Padding}"
-                    Background="{TemplateBinding Background}"
+      </Border>
+
+      <ControlTemplate.Triggers>
+
+         <Trigger Property="IsPressed"
+                  Value="True">
+
+            <Setter TargetName="outerBorder"
+                    Property="BorderBrush"
+                    Value="{DynamicResource {x:Static SystemColors.ControlDarkDarkBrushKey}}" />
+
+            <Setter TargetName="outerBorder"
+                    Property="BorderThickness"
+                    Value="1" />
+
+            <Setter TargetName="outerBorder"
+                    Property="Padding"
+                    Value="0" />
+
+            <Setter TargetName="innerBorder"
+                    Property="BorderThickness"
+                    Value="1" />
+
+            <Setter TargetName="innerBorder"
+                    Property="Margin"
+                    Value="0" />
+
+            <Setter TargetName="contentPanel"
+                    Property="Margin"
+                    Value="1,1,-1,-1" />
+
+         </Trigger>
+
+         <!-- The following 2 triggers allow the appropriate Sort Glyph to be displayed
+              depending on the ParentColumn's SortDirection. -->
+         <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=SortDirection}"
+                      Value="Ascending">
+
+            <Setter TargetName="sortGlyphPresenter"
+                    Property="ContentPresenter.ContentTemplate"
+                    Value="{Binding RelativeSource={RelativeSource Self}, Path=(local:DataGridControl.DataGridContext).AscendingSortGlyph}" />
+
+            <Setter TargetName="sortGlyphPresenter"
+                    Property="Visibility"
+                    Value="Visible" />
+
+         </DataTrigger>
+
+         <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=SortDirection}"
+                      Value="Descending">
+
+            <Setter TargetName="sortGlyphPresenter"
+                    Property="ContentPresenter.ContentTemplate"
+                    Value="{Binding RelativeSource={RelativeSource Self}, Path=(local:DataGridControl.DataGridContext).DescendingSortGlyph}" />
+
+            <Setter TargetName="sortGlyphPresenter"
+                    Property="Visibility"
+                    Value="Visible" />
+
+         </DataTrigger>
+      </ControlTemplate.Triggers>
+
+   </ControlTemplate>
+
+   <!--**************************
+    * TEMPLATE: HierarchicalGroupByControlNode
+    ************************** -->
+   <ControlTemplate x:Key="tableflowViewHierarchicalGroupByControlNodeTemplate"
+                    TargetType="local:HierarchicalGroupByControlNode">
+
+      <StackPanel Orientation="Horizontal"
+                  Background="{TemplateBinding Background}">
+
+         <Border BorderBrush="{StaticResource gridLineBrush}"
+                 Background="#55FFFFFF"
+                 BorderThickness="1"
+                 VerticalAlignment="Top"
+                 HorizontalAlignment="Center">
+
+            <TextBlock x:Name="titleTextBlock"
+                       Text="{TemplateBinding Title}"
+                       Margin="3" />
+
+         </Border>
+
+         <ItemsPresenter Margin="0,0,0,0" />
+
+      </StackPanel>
+
+   </ControlTemplate>
+
+   <!--**************************
+    * TEMPLATE: HierarchicalGroupByItem
+    ************************** -->
+   <ControlTemplate x:Key="tableflowViewHierarchicalGroupByItemTemplate"
+                    TargetType="local:HierarchicalGroupByItem">
+      <Grid>
+
+         <Border x:Name="outerBorder"
+                 BorderBrush="{DynamicResource {x:Static SystemColors.ControlDarkDarkBrushKey}}"
+                 Background="{DynamicResource {x:Static SystemColors.ControlLightLightBrushKey}}"
+                 BorderThickness="0,0,1,1"
+                 Padding="1,1,0,0">
+
+            <Border x:Name="innerBorder"
                     BorderBrush="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}"
-                    BorderThickness="0,0,1,1">
+                    BorderThickness="0,0,1,1"
+                    Margin="1,1,0,0"
+                    Background="{TemplateBinding Background}"
+                    Padding="{TemplateBinding Padding}">
 
-                    <!--  This StackPanel is used to layout the ContentPresenter and the Sort Glyph (when present).  -->
-                    <StackPanel x:Name="contentPanel" Orientation="Horizontal">
+               <!-- This StackPanel is used to layout the ContentPresenter and the Sort Glyph (when present). -->
+               <StackPanel x:Name="contentPanel"
+                           Orientation="Horizontal">
 
-                        <!--  Same ContentPresenter as in the base Cell Template.  -->
-                        <ContentPresenter
-                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                            Content="{TemplateBinding Content}"
-                            ContentTemplate="{TemplateBinding ContentTemplate}"
-                            ContentTemplateSelector="{TemplateBinding ContentTemplateSelector}" />
+                  <!-- Same ContentPresenter as in the base Cell Template. -->
+                  <ContentPresenter Content="{TemplateBinding Content}"
+                                    ContentTemplate="{TemplateBinding ContentTemplate}"
+                                    ContentTemplateSelector="{TemplateBinding ContentTemplateSelector}"
+                                    HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                    VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
 
-                        <!--
-                            ContentPresenter that is used to display the sort glyph.
-                            We explicitly set its Content property to Null to prevent the XAML parser
-                            from implicitly setting it to its TemplatedParent's Content.
-                        -->
-                        <ContentPresenter
-                            x:Name="sortGlyphPresenter"
-                            Margin="6,0,0,0"
-                            Content="{x:Null}"
-                            ContentTemplate="{Binding RelativeSource={RelativeSource Self}, Path=(local:DataGridControl.DataGridContext).AscendingSortGlyph}"
-                            Visibility="Hidden" />
+                  <!-- ContentPresenter that is used to display the sort glyph.
+                    We explicitly set its Content property to Null to prevent the XAML parser
+                    from implicitly setting it to its TemplatedParent's Content. -->
+                  <ContentPresenter x:Name="sortGlyphPresenter"
+                                    Content="{x:Null}"
+                                    ContentTemplate="{Binding RelativeSource={RelativeSource Self}, Path=(local:DataGridControl.DataGridContext).AscendingSortGlyph}"
+                                    Margin="6,0,0,0"
+                                    Visibility="Hidden" />
 
-                    </StackPanel>
-
-                </Border>
+               </StackPanel>
 
             </Border>
 
-        </Grid>
-        <ControlTemplate.Triggers>
+         </Border>
+
+      </Grid>
+      <ControlTemplate.Triggers>
 
-            <Trigger Property="IsPressed" Value="True">
+         <Trigger Property="IsPressed"
+                  Value="True">
 
-                <Setter TargetName="outerBorder" Property="BorderBrush" Value="{DynamicResource {x:Static SystemColors.ControlDarkDarkBrushKey}}" />
+            <Setter TargetName="outerBorder"
+                    Property="BorderBrush"
+                    Value="{DynamicResource {x:Static SystemColors.ControlDarkDarkBrushKey}}" />
 
-                <Setter TargetName="outerBorder" Property="BorderThickness" Value="1" />
+            <Setter TargetName="outerBorder"
+                    Property="BorderThickness"
+                    Value="1" />
 
-                <Setter TargetName="outerBorder" Property="Padding" Value="0" />
+            <Setter TargetName="outerBorder"
+                    Property="Padding"
+                    Value="0" />
 
-                <Setter TargetName="innerBorder" Property="BorderThickness" Value="1" />
+            <Setter TargetName="innerBorder"
+                    Property="BorderThickness"
+                    Value="1" />
 
-                <Setter TargetName="innerBorder" Property="Margin" Value="0" />
+            <Setter TargetName="innerBorder"
+                    Property="Margin"
+                    Value="0" />
 
-                <Setter TargetName="contentPanel" Property="Margin" Value="1,1,-1,-1" />
+            <Setter TargetName="contentPanel"
+                    Property="Margin"
+                    Value="1,1,-1,-1" />
 
-            </Trigger>
+         </Trigger>
+
+         <!-- The following 2 triggers allow the appropriate Sort Glyph to be displayed
+              depending on the ParentColumn's SortDirection. -->
+         <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=SortDirection}"
+                      Value="Ascending">
+
+            <Setter TargetName="sortGlyphPresenter"
+                    Property="ContentPresenter.ContentTemplate"
+                    Value="{Binding RelativeSource={RelativeSource Self}, Path=(local:DataGridControl.DataGridContext).AscendingSortGlyph}" />
+
+            <Setter TargetName="sortGlyphPresenter"
+                    Property="Visibility"
+                    Value="Visible" />
+
+         </DataTrigger>
+
+         <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=SortDirection}"
+                      Value="Descending">
+
+            <Setter TargetName="sortGlyphPresenter"
+                    Property="ContentPresenter.ContentTemplate"
+                    Value="{Binding RelativeSource={RelativeSource Self}, Path=(local:DataGridControl.DataGridContext).DescendingSortGlyph}" />
+
+            <Setter TargetName="sortGlyphPresenter"
+                    Property="Visibility"
+                    Value="Visible" />
+
+         </DataTrigger>
+      </ControlTemplate.Triggers>
+
+   </ControlTemplate>
+
+   <!--**************************
+    * TEMPLATE: GroupHeaderControl (When top level sticky)
+    ************************** -->
+   <ControlTemplate x:Key="tableflowViewGroupHeaderTopLevelStickyControlTemplate"
+                    TargetType="local:GroupHeaderControl">
+
+      <!-- Using this decorator will prevent the GroupHeaderControl of exceeding the width 
+           defined by the grid's column. -->
+      <views:PassiveLayoutDecorator Axis="Horizontal">
+         <!-- This DockPanel is used to layout the GroupLevelIndicatorPane placeholder and the GroupHeaderControl Content. -->
+         <DockPanel>
+
+            <!-- GroupLevelIndicatorPane is a placeholder for individual GroupLevelIndicator elements that are added
+              whenever this GroupHeaderControl is part of a group. -->
+            <local:HierarchicalGroupLevelIndicatorPane DockPanel.Dock="Left" />
+            <local:GroupLevelIndicatorPane DockPanel.Dock="Left"
+                                           Indented="False"
+                                           local:GroupLevelIndicatorPane.GroupLevel="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(local:GroupLevelIndicatorPane.GroupLevel), Converter={StaticResource intAdditionConverter}, ConverterParameter=-1}" />
+
+            <Grid>
+               <Border Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" />
+
+               <!-- Main Border for the GroupHeaderControl. It is Focusable to make the InputBindings work. -->
+               <Border x:Name="mainBorder"
+                       Background="Transparent"
+                       BorderBrush="{TemplateBinding BorderBrush}"
+                       BorderThickness="{TemplateBinding BorderThickness}"
+                       Padding="{TemplateBinding Padding}"
+                       Focusable="True"
+                       FocusVisualStyle="{TemplateBinding FocusVisualStyle}">
+
+                  <!-- Define all the standard InputBindings for a GroupHeaderControl. -->
+                  <Border.InputBindings>
+                     <KeyBinding Command="{x:Static local:DataGridCommands.ToggleGroupExpansion}"
+                                 Key="Space" />
+
+                     <KeyBinding Command="{x:Static local:DataGridCommands.ExpandGroup}"
+                                 Key="Right" />
+
+                     <KeyBinding Command="{x:Static local:DataGridCommands.ExpandGroup}"
+                                 Key="Add" />
+
+                     <KeyBinding Command="{x:Static local:DataGridCommands.CollapseGroup}"
+                                 Key="Left" />
+
+                     <KeyBinding Command="{x:Static local:DataGridCommands.CollapseGroup}"
+                                 Key="Subtract" />
 
-            <!--
-                The following 2 triggers allow the appropriate Sort Glyph to be displayed
-                depending on the ParentColumn's SortDirection.
-            -->
-            <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=SortDirection}" Value="Ascending">
+                     <MouseBinding Command="{x:Static local:DataGridCommands.ToggleGroupExpansion}"
+                                   MouseAction="LeftDoubleClick" />
 
-                <Setter TargetName="sortGlyphPresenter" Property="ContentPresenter.ContentTemplate" Value="{Binding RelativeSource={RelativeSource Self}, Path=(local:DataGridControl.DataGridContext).AscendingSortGlyph}" />
+                  </Border.InputBindings>
 
-                <Setter TargetName="sortGlyphPresenter" Property="Visibility" Value="Visible" />
+                  <DockPanel>
 
-            </DataTrigger>
+                     <!-- ToggleButton that is used to expand/collapse the group. -->
+                     <ToggleButton DockPanel.Dock="Left"
+                                   OverridesDefaultStyle="True"
+                                   Template="{StaticResource groupExpanderToggleButtonTemplate}"
+                                   VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                   Focusable="False"
+                                   IsChecked="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Group.IsExpanded}" />
 
-            <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=SortDirection}" Value="Descending">
+                     <!-- ContentPresenter in charge of displaying this GroupHeaderControl's Content, which is
+                    a Group by default. -->
+                     <ContentPresenter DockPanel.Dock="Left"
+                                       Margin="3,0,0,0"
+                                       Content="{TemplateBinding Content}"
+                                       ContentTemplate="{TemplateBinding ContentTemplate}"
+                                       ContentTemplateSelector="{TemplateBinding ContentTemplateSelector}"
+                                       VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                  </DockPanel>
+               </Border>
+            </Grid>
+         </DockPanel>
+      </views:PassiveLayoutDecorator>
+
+      <ControlTemplate.Triggers>
+         <Trigger Property="local:DataGridControl.NavigationBehavior"
+                  Value="None">
+            <Setter TargetName="mainBorder"
+                    Property="Focusable"
+                    Value="False" />
+         </Trigger>
+      </ControlTemplate.Triggers>
+
+   </ControlTemplate>
 
-                <Setter TargetName="sortGlyphPresenter" Property="ContentPresenter.ContentTemplate" Value="{Binding RelativeSource={RelativeSource Self}, Path=(local:DataGridControl.DataGridContext).DescendingSortGlyph}" />
+   <!-- =================================================================== -->
+   <!-- Styles required by some grid elements                               -->
+   <!-- =================================================================== -->
 
-                <Setter TargetName="sortGlyphPresenter" Property="Visibility" Value="Visible" />
+   <!--**************************
+    * STYLE: CellErrorStyle 
+    ************************** -->
+   <Style x:Key="cellErrorStyle"
+          TargetType="local:Cell">
 
-            </DataTrigger>
-        </ControlTemplate.Triggers>
+      <Setter Property="Background"
+              Value="{StaticResource errorBackgroundBrush}" />
+
+      <Setter Property="Foreground"
+              Value="{StaticResource errorForegroundBrush}" />
 
-    </ControlTemplate>
+      <Setter Property="ToolTip"
+              Value="{Binding RelativeSource={RelativeSource Self},Path=ValidationError.ErrorContent}" />
 
-    <!--
-        **************************
-        * TEMPLATE: GroupHeaderControl (When top level sticky)
-        **************************
-    -->
-    <ControlTemplate x:Key="tableflowViewGroupHeaderTopLevelStickyControlTemplate" TargetType="local:GroupHeaderControl">
+      <Style.Triggers>
+         <Trigger Property="IsValidationErrorRestrictive"
+                  Value="True">
+            <Setter Property="Background"
+                    Value="{StaticResource errorBackgroundBrush}" />
 
-        <!--
-            Using this decorator will prevent the GroupHeaderControl of exceeding the width
-            defined by the grid's column.
-        -->
-        <views:PassiveLayoutDecorator Axis="Horizontal">
-            <!--  This DockPanel is used to layout the GroupLevelIndicatorPane placeholder and the GroupHeaderControl Content.  -->
-            <DockPanel>
+         </Trigger>
 
-                <!--
-                    GroupLevelIndicatorPane is a placeholder for individual GroupLevelIndicator elements that are added
-                    whenever this GroupHeaderControl is part of a group.
-                -->
-                <local:HierarchicalGroupLevelIndicatorPane DockPanel.Dock="Left" />
-                <local:GroupLevelIndicatorPane
-                    local:GroupLevelIndicatorPane.GroupLevel="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(local:GroupLevelIndicatorPane.GroupLevel), Converter={StaticResource groupHeaderControlGroupLevelConverter}, ConverterParameter=-1}"
-                    DockPanel.Dock="Left"
-                    Indented="False" />
+         <Trigger Property="IsValidationErrorRestrictive"
+                  Value="False">
 
-                <Grid>
-                    <Border Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" />
+            <Setter Property="Foreground"
+                    Value="{StaticResource warningForegroundBrush}" />
 
-                    <!--  Main Border for the GroupHeaderControl. It is Focusable to make the InputBindings work.  -->
-                    <Border
-                        x:Name="mainBorder"
-                        Padding="{TemplateBinding Padding}"
-                        Background="Transparent"
-                        BorderBrush="{TemplateBinding BorderBrush}"
-                        BorderThickness="{TemplateBinding BorderThickness}"
-                        FocusVisualStyle="{TemplateBinding FocusVisualStyle}"
-                        Focusable="True">
+            <Setter Property="Background"
+                    Value="{StaticResource warningBackgroundBrush}" />
 
-                        <!--  Define all the standard InputBindings for a GroupHeaderControl.  -->
-                        <Border.InputBindings>
-                            <KeyBinding Key="Space" Command="{x:Static local:DataGridCommands.ToggleGroupExpansion}" />
+         </Trigger>
+      </Style.Triggers>
 
-                            <KeyBinding Key="Right" Command="{x:Static local:DataGridCommands.ExpandGroup}" />
+   </Style>
 
-                            <KeyBinding Key="Add" Command="{x:Static local:DataGridCommands.ExpandGroup}" />
+   <!-- =================================================================== -->
+   <!-- Keyed Styles of grid elements                                       -->
+   <!-- =================================================================== -->
+
+   <!--**************************
+    * STYLE: DataGridControl 
+    ************************** -->
+   <Style x:Key="tableflowViewClassicSystemColorGridControlStyle"
+          TargetType="local:DataGridControl">
+
+      <Setter Property="BorderBrush"
+              Value="{DynamicResource {x:Static SystemColors.WindowFrameBrushKey}}" />
+
+      <Setter Property="BorderThickness"
+              Value="1" />
+
+      <Setter Property="Background"
+              Value="{DynamicResource {x:Static SystemColors.WindowBrushKey}}" />
+
+      <Setter Property="Foreground"
+              Value="{DynamicResource {x:Static SystemColors.WindowTextBrushKey}}" />
+
+      <!-- This is required to display gridlines of uniform thickness -->
+      <Setter Property="SnapsToDevicePixels"
+              Value="True" />
+
+      <Setter Property="CellErrorStyle"
+              Value="{StaticResource cellErrorStyle}" />
+
+      <Setter Property="Template"
+              Value="{StaticResource tableflowViewDataGridControlTemplate}" />
+
+   </Style>
+
+   <!--**************************
+    * STYLE: DataGridControl (with hosted controls theming)
+    ************************** -->
+   <Style x:Key="tableflowViewForcedClassicSystemColorGridControlStyle"
+          BasedOn="{StaticResource tableflowViewClassicSystemColorGridControlStyle}"
+          TargetType="local:DataGridControl">
+
+      <Style.Resources>
+         <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+               <markup:FrameworkThemeResourceDictionary Source="/PresentationFramework.Classic;V4.0.0.0;31bf3856ad364e35;component\themes/classic.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+         </ResourceDictionary>
+      </Style.Resources>
+
+   </Style>
 
-                            <KeyBinding Key="Left" Command="{x:Static local:DataGridCommands.CollapseGroup}" />
+   <!--**************************
+    * STYLE: RowSelectorPane
+    ************************** -->
+   <Style x:Key="tableflowViewClassicSystemColorRowSelectorPaneStyle"
+          TargetType="local:RowSelectorPane">
 
-                            <KeyBinding Key="Subtract" Command="{x:Static local:DataGridCommands.CollapseGroup}" />
+      <Setter Property="Background"
+              Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" />
 
-                            <MouseBinding Command="{x:Static local:DataGridCommands.ToggleGroupExpansion}" MouseAction="LeftDoubleClick" />
+      <Setter Property="TextElement.Foreground"
+              Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" />
 
-                        </Border.InputBindings>
+   </Style>
 
-                        <DockPanel>
+   <!--**************************
+    * STYLE: RowSelector 
+    ************************** -->
+   <conv:TypeToBooleanConverter x:Key="rowTypeConverter" />
+   <Style x:Key="tableflowViewClassicSystemColorRowSelectorStyle"
+          TargetType="local:RowSelector">
+
+      <!-- Set the RowSelector's background to Transparent to make it hit-testable
+           while preserving the background drawn by the underlying RowSelectorPane. -->
+      <Setter Property="Background"
+              Value="Transparent" />
+
+      <Setter Property="HorizontalContentAlignment"
+              Value="Center" />
+
+      <Setter Property="VerticalContentAlignment"
+              Value="Top" />
 
-                            <!--  ToggleButton that is used to expand/collapse the group.  -->
-                            <ToggleButton
-                                VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                DockPanel.Dock="Left"
-                                Focusable="False"
-                                IsChecked="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Group.IsExpanded}"
-                                OverridesDefaultStyle="True"
-                                Template="{StaticResource groupExpanderToggleButtonTemplate}" />
+      <Setter Property="Padding"
+              Value="2" />
+
+      <Setter Property="Template"
+              Value="{StaticResource tableflowViewRowSelectorTemplate}" />
+
+      <Style.Triggers>
+
+         <!-- We have to use triggers on the type of the Row associated with this 
+              RowSelector instead of assigning a value to RowSelector.RowSelectorStyle 
+              on each row type. This is to avoid a custom RowSelector.RowSelectorStyle
+              set by a client of the DataGridControl to completely override the 
+              RowSelector style (DefaultStyleKey). -->
+
+         <!-- When the Row is Current, display the current glyph in the RowSelector -->
+         <MultiDataTrigger>
+            <MultiDataTrigger.Conditions>
+               <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsCurrent}"
+                          Value="True" />
+            </MultiDataTrigger.Conditions>
+            <Setter Property="ContentTemplate"
+                    Value="{Binding RelativeSource={RelativeSource Self}, Path=(local:DataGridControl.DataGridContext).CurrentItemGlyph}" />
+         </MultiDataTrigger>
+
+         <!-- When the Row is being edited, display the appropriate glyph in the RowSelector. -->
+         <Trigger Property="IsBeingEdited"
+                  Value="True">
+            <Setter Property="ContentTemplate"
+                    Value="{Binding RelativeSource={RelativeSource Self}, Path=(local:DataGridControl.DataGridContext).EditingRowGlyph}" />
+
+         </Trigger>
+
+         <!-- When the Row has a validation error, display the appropriate glyph in the RowSelector. -->
+         <Trigger Property="HasValidationError"
+                  Value="True">
+            <Setter Property="ContentTemplate"
+                    Value="{Binding RelativeSource={RelativeSource Self}, Path=(local:DataGridControl.DataGridContext).ValidationErrorGlyph}" />
+         </Trigger>
+
+      </Style.Triggers>
+   </Style>
+
+   <!--**************************
+    * STYLE: Row Style
+    ************************** -->
+   <Style x:Key="tableflowViewClassicSystemColorRowStyle"
+          TargetType="local:Row">
+
+      <Setter Property="FocusVisualStyle"
+              Value="{StaticResource tableflowViewRowFocusVisualStyle}" />
+
+      <Setter Property="SelectionBackground"
+              Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
+
+      <Setter Property="SelectionForeground"
+              Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}" />
+
+      <Setter Property="InactiveSelectionBackground"
+              Value="{DynamicResource {x:Static SystemColors.InactiveCaptionBrushKey}}" />
+
+      <Setter Property="InactiveSelectionForeground"
+              Value="{DynamicResource {x:Static SystemColors.InactiveCaptionTextBrushKey}}" />
+
+      <!-- The Row is responsible for drawing the horizontal gridlines. It draws only its top gridline,
+           assuming that the bottom gridline will be drawn by its following row/element -->
+
+      <Setter Property="BorderThickness"
+              Value="{Binding RelativeSource={RelativeSource Self}, Path=(local:DataGridControl.DataGridContext).HorizontalGridLineThickness, Converter={StaticResource thicknessConverter}, ConverterParameter='Top'}" />
+
+      <Setter Property="BorderBrush"
+              Value="{Binding RelativeSource={RelativeSource Self}, Path=(local:DataGridControl.DataGridContext).HorizontalGridLineBrush}" />
+
+      <Setter Property="Template"
+              Value="{StaticResource tableflowViewRowTemplate}" />
+
+      <Setter Property="Background"
+              Value="Transparent" />
+
+      <!-- case 150388: The foreground property set in a user implicit style may not always be applied.  We noticed that
+                         the issue doesn't occur when we assign a value for the foreground property in the default style.
+                         Since we don't want to stop an inherited value to be propagated, we bind the property to the
+                         parent's property.-->
+      <Setter Property="Foreground"
+              Value="{Binding RelativeSource={RelativeSource Self}, Path=ParentForeground}" />
 
-                            <!--
-                                ContentPresenter in charge of displaying this GroupHeaderControl's Content, which is
-                                a Group by default.
-                            -->
-                            <ContentPresenter
-                                Margin="3,0,0,0"
-                                VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                Content="{TemplateBinding Content}"
-                                ContentTemplate="{TemplateBinding ContentTemplate}"
-                                ContentTemplateSelector="{TemplateBinding ContentTemplateSelector}"
-                                DockPanel.Dock="Left" />
-                        </DockPanel>
-                    </Border>
-                </Grid>
-            </DockPanel>
-        </views:PassiveLayoutDecorator>
+      <Style.Triggers>
+         <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=(views:ViewBase.IsLastItem)}"
+                      Value="True">
+            <Setter Property="BorderThickness"
+                    Value="{Binding RelativeSource={RelativeSource Self}, Path=(local:DataGridControl.DataGridContext).HorizontalGridLineThickness, Converter={StaticResource thicknessConverter}, ConverterParameter='Top, Bottom'}" />
+         </DataTrigger>
 
-        <ControlTemplate.Triggers>
-            <Trigger Property="local:DataGridControl.NavigationBehavior" Value="None">
-                <Setter TargetName="mainBorder" Property="Focusable" Value="False" />
-            </Trigger>
-        </ControlTemplate.Triggers>
+         <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=(local:DataGridControl.HasExpandedDetails)}"
+                      Value="True">
+            <Setter Property="BorderThickness"
+                    Value="{Binding RelativeSource={RelativeSource Self}, Path=(local:DataGridControl.DataGridContext).HorizontalGridLineThickness, Converter={StaticResource thicknessConverter}, ConverterParameter='Top, Bottom'}" />
+
+         </DataTrigger>
+
+         <!-- Enabled/Disabled Odd datarow style alternation -->
+         <MultiDataTrigger>
+            <MultiDataTrigger.Conditions>
+               <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=(local:DataGridControl.DataGridContext).IsAlternatingRowStyleEnabled}"
+                          Value="True" />
+               <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=(local:DataGridVirtualizingPanel.ItemIndex), Converter={x:Static conv:IndexToOddConverter.Singleton}}"
+                          Value="True" />
+            </MultiDataTrigger.Conditions>
 
-    </ControlTemplate>
+            <Setter Property="Background"
+                    Value="#EDEDED" />
 
-    <!--  ===================================================================  -->
-    <!--  Styles required by some grid elements  -->
-    <!--  ===================================================================  -->
+         </MultiDataTrigger>
+      </Style.Triggers>
 
-    <!--
-        **************************
-        * STYLE: CellErrorStyle
-        **************************
-    -->
-    <Style x:Key="cellErrorStyle" TargetType="local:Cell">
-
-        <Setter Property="Background" Value="{StaticResource errorBackgroundBrush}" />
+   </Style>
 
-        <Setter Property="Foreground" Value="{StaticResource errorForegroundBrush}" />
+   <!--**************************
+    * STYLE: DataRow 
+    ************************** -->
+   <Style x:Key="tableflowViewClassicSystemColorDataRowStyle"
+          TargetType="local:DataRow"
+          BasedOn="{StaticResource tableflowViewClassicSystemColorRowStyle}">
 
-        <Setter Property="ToolTip" Value="{Binding RelativeSource={RelativeSource Self}, Path=ValidationError.ErrorContent}" />
+      <Setter Property="Template"
+              Value="{StaticResource tableflowViewDataRowTemplate}" />
 
-        <Style.Triggers>
-            <Trigger Property="IsValidationErrorRestrictive" Value="True">
-                <Setter Property="Background" Value="{StaticResource errorBackgroundBrush}" />
+   </Style>
 
-            </Trigger>
+   <!--**************************
+    * STYLE: ColumnManagerRow 
+    ************************** -->
+   <Style x:Key="tableflowViewClassicSystemColorColumnManagerRowStyle"
+          TargetType="local:ColumnManagerRow"
+          BasedOn="{StaticResource tableflowViewClassicSystemColorRowStyle}">
 
-            <Trigger Property="IsValidationErrorRestrictive" Value="False">
+      <!-- Use a different background and foreground than the base Row style. -->
+      <Setter Property="Background"
+              Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" />
 
-                <Setter Property="Foreground" Value="{StaticResource warningForegroundBrush}" />
+      <Setter Property="Foreground"
+              Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" />
 
-                <Setter Property="Background" Value="{StaticResource warningBackgroundBrush}" />
+      <Setter Property="local:RowSelector.Visible"
+              Value="False" />
 
-            </Trigger>
-        </Style.Triggers>
+      <Setter Property="Template"
+              Value="{StaticResource tableflowViewColumnManagerRowTemplate}" />
 
-    </Style>
-
-    <!--  ===================================================================  -->
-    <!--  Keyed Styles of grid elements  -->
-    <!--  ===================================================================  -->
-
-    <!--
-        **************************
-        * STYLE: DataGridControl
-        **************************
-    -->
-    <Style x:Key="tableflowViewClassicSystemColorGridControlStyle" TargetType="local:DataGridControl">
+      <Style.Triggers>
+         <Trigger Property="local:GroupLevelIndicatorPane.GroupLevel"
+                  Value="-1">
+            <!-- We don't want to display the Group Margins for the ColumnManagerRow. -->
+            <Setter Property="local:GroupLevelIndicatorPane.ShowIndicators"
+                    Value="False" />
+         </Trigger>
 
-        <Setter Property="BorderBrush" Value="{DynamicResource {x:Static SystemColors.WindowFrameBrushKey}}" />
+      </Style.Triggers>
 
-        <Setter Property="BorderThickness" Value="1" />
+   </Style>
 
-        <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.WindowBrushKey}}" />
+   <!--**************************
+    * STYLE: Cell Style
+    ************************** -->
+   <Style x:Key="tableflowViewClassicSystemColorCellStyle"
+          TargetType="local:Cell">
 
-        <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.WindowTextBrushKey}}" />
+      <Setter Property="CurrentBackground"
+              Value="{DynamicResource {x:Static SystemColors.WindowBrushKey}}" />
 
-        <!--  This is required to display gridlines of uniform thickness  -->
-        <Setter Property="SnapsToDevicePixels" Value="True" />
-
-        <Setter Property="CellErrorStyle" Value="{StaticResource cellErrorStyle}" />
-
-        <Setter Property="Template" Value="{StaticResource tableflowViewDataGridControlTemplate}" />
+      <Setter Property="CurrentForeground"
+              Value="{DynamicResource {x:Static SystemColors.WindowTextBrushKey}}" />
 
-    </Style>
+      <Setter Property="SelectionBackground"
+              Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
 
-    <!--
-        **************************
-        * STYLE: DataGridControl (with hosted controls theming)
-        **************************
-    -->
-    <Style
-        x:Key="tableflowViewForcedClassicSystemColorGridControlStyle"
-        BasedOn="{StaticResource tableflowViewClassicSystemColorGridControlStyle}"
-        TargetType="local:DataGridControl">
+      <Setter Property="SelectionForeground"
+              Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}" />
 
-        <Style.Resources>
-            <ResourceDictionary>
-                <ResourceDictionary.MergedDictionaries>
-                    <markup:FrameworkThemeResourceDictionary Source="/PresentationFramework.Classic;V4.0.0.0;31bf3856ad364e35;component\themes/classic.xaml" />
-                </ResourceDictionary.MergedDictionaries>
-            </ResourceDictionary>
-        </Style.Resources>
+      <Setter Property="InactiveSelectionBackground"
+              Value="{DynamicResource {x:Static SystemColors.InactiveCaptionBrushKey}}" />
 
-    </Style>
+      <Setter Property="InactiveSelectionForeground"
+              Value="{DynamicResource {x:Static SystemColors.InactiveCaptionTextBrushKey}}" />
 
-    <!--
-        **************************
-        * STYLE: RowSelectorPane
-        **************************
-    -->
-    <Style x:Key="tableflowViewClassicSystemColorRowSelectorPaneStyle" TargetType="local:RowSelectorPane">
+      <!-- Set the Cell's background to Transparent to make it hit-testable
+           while preserving the background drawn by the underlying Row. -->
+      <Setter Property="Background"
+              Value="Transparent" />
 
-        <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" />
+      <!-- case 150388: The foreground property set in a user implicit style may not always be applied.  We noticed that
+                         the issue doesn't occur when we assign a value for the foreground property in the default style.
+                         Since we don't want to stop an inherited value to be propagated, we bind the property to the
+                         parent's property. -->
+      <Setter Property="Foreground"
+              Value="{Binding RelativeSource={RelativeSource Self}, Path=ParentForeground}" />
 
-        <Setter Property="TextElement.Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" />
+      <!-- In TableflowView, each Cell has the same width as its ParentColum's ActualWidth -->
+      <Setter Property="Width"
+              Value="{Binding RelativeSource={RelativeSource Self}, Path=ParentColumn.ActualWidth}" />
 
-    </Style>
+      <Setter Property="Padding"
+              Value="{StaticResource cellPadding}" />
 
-    <!--
-        **************************
-        * STYLE: RowSelector
-        **************************
-    -->
-    <conv:TypeToBooleanConverter x:Key="rowTypeConverter" />
-    <Style x:Key="tableflowViewClassicSystemColorRowSelectorStyle" TargetType="local:RowSelector">
+      <Setter Property="HorizontalContentAlignment"
+              Value="{Binding RelativeSource={RelativeSource Self}, Path=ParentColumn.CellHorizontalContentAlignment, FallbackValue=Stretch}" />
 
-        <!--
-            Set the RowSelector's background to Transparent to make it hit-testable
-            while preserving the background drawn by the underlying RowSelectorPane.
-        -->
-        <Setter Property="Background" Value="Transparent" />
+      <Setter Property="VerticalContentAlignment"
+              Value="{Binding RelativeSource={RelativeSource Self}, Path=ParentColumn.CellVerticalContentAlignment, FallbackValue=Stretch}" />
 
-        <Setter Property="HorizontalContentAlignment" Value="Center" />
+      <!-- The Cell is responsible for drawing the vertical gridlines. It draws only its right gridline, 
+           assuming that the left gridline will have been drawn by its preceding cell -->
 
-        <Setter Property="VerticalContentAlignment" Value="Top" />
+      <Setter Property="BorderThickness"
+              Value="{Binding RelativeSource={RelativeSource Self}, Path=(local:DataGridControl.DataGridContext).VerticalGridLineThickness, Converter={StaticResource thicknessConverter}, ConverterParameter='Right'}" />
 
-        <Setter Property="Padding" Value="2" />
+      <Setter Property="BorderBrush"
+              Value="{Binding RelativeSource={RelativeSource Self}, Path=(local:DataGridControl.DataGridContext).VerticalGridLineBrush}" />
 
-        <Setter Property="Template" Value="{StaticResource tableflowViewRowSelectorTemplate}" />
+      <Setter Property="Template"
+              Value="{StaticResource tableflowViewCellTemplate}" />
 
-        <Style.Triggers>
+   </Style>
 
-            <!--
-                We have to use triggers on the type of the Row associated with this
-                RowSelector instead of assigning a value to RowSelector.RowSelectorStyle
-                on each row type. This is to avoid a custom RowSelector.RowSelectorStyle
-                set by a client of the DataGridControl to completely override the
-                RowSelector style (DefaultStyleKey).
-            -->
+   <!--**************************
+    * STYLE: DataCell
+    ************************** -->
+   <Style x:Key="tableflowViewClassicSystemColorDataCellStyle"
+          TargetType="local:DataCell"
+          BasedOn="{StaticResource tableflowViewClassicSystemColorCellStyle}" />
 
-            <!--  When the Row is Current, display the current glyph in the RowSelector  -->
-            <MultiDataTrigger>
-                <MultiDataTrigger.Conditions>
-                    <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsCurrent}" Value="True" />
-                </MultiDataTrigger.Conditions>
-                <Setter Property="ContentTemplate" Value="{Binding RelativeSource={RelativeSource Self}, Path=(local:DataGridControl.DataGridContext).CurrentItemGlyph}" />
-            </MultiDataTrigger>
+   <!--**************************
+    * STYLE: ColumnManagerCell 
+    ************************** -->
+   <Style x:Key="tableflowViewClassicSystemColorColumnManagerCellStyle"
+          TargetType="local:ColumnManagerCell">
 
-            <!--  When the Row is being edited, display the appropriate glyph in the RowSelector.  -->
-            <Trigger Property="IsBeingEdited" Value="True">
-                <Setter Property="ContentTemplate" Value="{Binding RelativeSource={RelativeSource Self}, Path=(local:DataGridControl.DataGridContext).EditingRowGlyph}" />
+      <!-- Set the Cell's background to Transparent to make it hit-testable
+           while preserving the background drawn by the underlying Row. -->
+      <Setter Property="Background"
+              Value="Transparent" />
 
-            </Trigger>
+      <Setter Property="ToolTip"
+              Value="{Binding RelativeSource={RelativeSource Self}, Path=ParentColumn.Description}" />
 
-            <!--  When the Row has a validation error, display the appropriate glyph in the RowSelector.  -->
-            <Trigger Property="HasValidationError" Value="True">
-                <Setter Property="ContentTemplate" Value="{Binding RelativeSource={RelativeSource Self}, Path=(local:DataGridControl.DataGridContext).ValidationErrorGlyph}" />
-            </Trigger>
+      <!-- In TableflowView, each Cell has the same width as its ParentColum's ActualWidth -->
+      <Setter Property="Width"
+              Value="{Binding RelativeSource={RelativeSource Self},Path=ParentColumn.ActualWidth}" />
 
-        </Style.Triggers>
-    </Style>
+      <Setter Property="Padding"
+              Value="{StaticResource cellPadding}" />
 
-    <!--
-        **************************
-        * STYLE: Row Style
-        **************************
-    -->
-    <Style x:Key="tableflowViewClassicSystemColorRowStyle" TargetType="local:Row">
+      <Setter Property="HorizontalContentAlignment"
+              Value="{Binding RelativeSource={RelativeSource Self}, Path=ParentColumn.CellHorizontalContentAlignment, FallbackValue=Left}" />
 
-        <Setter Property="FocusVisualStyle" Value="{StaticResource tableflowViewRowFocusVisualStyle}" />
+      <Setter Property="VerticalContentAlignment"
+              Value="{Binding RelativeSource={RelativeSource Self}, Path=ParentColumn.CellVerticalContentAlignment, FallbackValue=Stretch}" />
 
-        <Setter Property="SelectionBackground" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
+      <Setter Property="Template"
+              Value="{StaticResource tableflowViewColumnManagerCellTemplate}" />
 
-        <Setter Property="SelectionForeground" Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}" />
+      <Style.Triggers>
 
-        <Setter Property="InactiveSelectionBackground" Value="{DynamicResource {x:Static SystemColors.InactiveCaptionBrushKey}}" />
+         <Trigger Property="IsBeingDragged"
+                  Value="True">
+            <Setter Property="Background"
+                    Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" />
+         </Trigger>
 
-        <Setter Property="InactiveSelectionForeground" Value="{DynamicResource {x:Static SystemColors.InactiveCaptionTextBrushKey}}" />
+         <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=(local:DataGridControl.DataGridContext).AreColumnsBeingReordered}"
+                      Value="True">
+            <Setter Property="Background"
+                    Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" />
+         </DataTrigger>
 
-        <!--
-            The Row is responsible for drawing the horizontal gridlines. It draws only its top gridline,
-            assuming that the bottom gridline will be drawn by its following row/element
-        -->
+      </Style.Triggers>
 
-        <Setter Property="BorderThickness" Value="{Binding RelativeSource={RelativeSource Self}, Path=(local:DataGridControl.DataGridContext).HorizontalGridLineThickness, Converter={StaticResource thicknessConverter}, ConverterParameter='Top'}" />
+   </Style>
 
-        <Setter Property="BorderBrush" Value="{Binding RelativeSource={RelativeSource Self}, Path=(local:DataGridControl.DataGridContext).HorizontalGridLineBrush}" />
+   <!--**************************
+    * STYLE: GroupByControl 
+    ************************** -->
+   <Style x:Key="tableflowViewClassicSystemColorGroupByControlStyle"
+          TargetType="local:GroupByControl">
 
-        <Setter Property="Template" Value="{StaticResource tableflowViewRowTemplate}" />
+      <!-- If we don't specify a MinHeight, the default "size-to-content" behavior will arrange 
+           the control with a Height of 0, which makes it invisible and unusable.
+           In a typical TableflowView, a height of at least 25 is appropriate for the GroupByControl. -->
+      <Setter Property="MinHeight"
+              Value="25" />
 
-        <Setter Property="Background" Value="Transparent" />
+      <Setter Property="Background"
+              Value="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}" />
 
-        <Setter Property="Foreground" Value="{Binding RelativeSource={RelativeSource Self}, Path=ParentForeground}" />
+      <Setter Property="Foreground"
+              Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" />
 
-        <Style.Triggers>
-            <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=(views:ViewBase.IsLastItem)}" Value="True">
-                <Setter Property="BorderThickness" Value="{Binding RelativeSource={RelativeSource Self}, Path=(local:DataGridControl.DataGridContext).HorizontalGridLineThickness, Converter={StaticResource thicknessConverter}, ConverterParameter='Top, Bottom'}" />
-            </DataTrigger>
+      <Setter Property="Padding"
+              Value="8" />
 
-            <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=(local:DataGridControl.HasExpandedDetails)}" Value="True">
-                <Setter Property="BorderThickness" Value="{Binding RelativeSource={RelativeSource Self}, Path=(local:DataGridControl.DataGridContext).HorizontalGridLineThickness, Converter={StaticResource thicknessConverter}, ConverterParameter='Top, Bottom'}" />
+      <Setter Property="BorderBrush"
+              Value="{StaticResource gridLineBrush}" />
 
-            </DataTrigger>
+      <Setter Property="BorderThickness"
+              Value="1,1,1,0" />
 
-            <!--  Enabled/Disabled Odd datarow style alternation  -->
-            <MultiDataTrigger>
-                <MultiDataTrigger.Conditions>
-                    <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=(local:DataGridControl.DataGridContext).IsAlternatingRowStyleEnabled}" Value="True" />
-                    <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=(local:DataGridVirtualizingPanel.ItemIndex), Converter={x:Static conv:IndexToOddConverter.Singleton}}" Value="True" />
-                </MultiDataTrigger.Conditions>
+      <Setter Property="local:RowSelector.Visible"
+              Value="False" />
 
-                <Setter Property="Background" Value="#EDEDED" />
+      <Setter Property="views:TableView.CanScrollHorizontally"
+              Value="False" />
 
-            </MultiDataTrigger>
-        </Style.Triggers>
+      <Setter Property="Template"
+              Value="{StaticResource tableflowViewGroupByControlTemplate}" />
 
-    </Style>
+   </Style>
 
-    <!--
-        **************************
-        * STYLE: DataRow
-        **************************
-    -->
-    <Style
-        x:Key="tableflowViewClassicSystemColorDataRowStyle"
-        BasedOn="{StaticResource tableflowViewClassicSystemColorRowStyle}"
-        TargetType="local:DataRow" />
+   <!--**************************
+    * STYLE: GroupByItem
+    ************************** -->
+   <Style x:Key="tableflowViewClassicSystemColorGroupByItemStyle"
+          TargetType="local:GroupByItem">
 
-    <!--
-        **************************
-        * STYLE: ColumnManagerRow
-        **************************
-    -->
-    <Style
-        x:Key="tableflowViewClassicSystemColorColumnManagerRowStyle"
-        BasedOn="{StaticResource tableflowViewClassicSystemColorRowStyle}"
-        TargetType="local:ColumnManagerRow">
+      <Setter Property="Background"
+              Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" />
 
-        <!--  Use a different background and foreground than the base Row style.  -->
-        <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" />
+      <Setter Property="Foreground"
+              Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" />
 
-        <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" />
+      <Setter Property="Padding"
+              Value="{StaticResource cellPadding}" />
 
-        <Setter Property="local:RowSelector.Visible" Value="False" />
+      <Setter Property="Template"
+              Value="{StaticResource tableflowViewGroupByItemTemplate}" />
 
-        <Setter Property="Template" Value="{StaticResource tableflowViewColumnManagerRowTemplate}" />
+   </Style>
 
-        <Style.Triggers>
-            <Trigger Property="local:GroupLevelIndicatorPane.GroupLevel" Value="-1">
-                <!--  We don't want to display the Group Margins for the ColumnManagerRow.  -->
-                <Setter Property="local:GroupLevelIndicatorPane.ShowIndicators" Value="False" />
-            </Trigger>
+   <!--**************************
+    * STYLE: GroupHeaderControl 
+    ************************** -->
+   <Style x:Key="tableflowViewClassicSystemColorGroupHeaderControlStyle"
+          TargetType="local:GroupHeaderControl">
 
-        </Style.Triggers>
+      <Setter Property="Background"
+              Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" />
 
-    </Style>
+      <Setter Property="Foreground"
+              Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" />
 
-    <!--
-        **************************
-        * STYLE: Cell Style
-        **************************
-    -->
-    <Style x:Key="tableflowViewClassicSystemColorCellStyle" TargetType="local:Cell">
+      <Setter Property="SelectionBackground"
+              Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
 
-        <Setter Property="CurrentBackground" Value="{DynamicResource {x:Static SystemColors.WindowBrushKey}}" />
+      <Setter Property="SelectionForeground"
+              Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}" />
 
-        <Setter Property="CurrentForeground" Value="{DynamicResource {x:Static SystemColors.WindowTextBrushKey}}" />
+      <Setter Property="InactiveSelectionBackground"
+              Value="{DynamicResource {x:Static SystemColors.InactiveCaptionBrushKey}}" />
 
-        <Setter Property="SelectionBackground" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
+      <Setter Property="InactiveSelectionForeground"
+              Value="{DynamicResource {x:Static SystemColors.InactiveCaptionTextBrushKey}}" />
 
-        <Setter Property="SelectionForeground" Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}" />
+      <Setter Property="BorderBrush"
+              Value="{StaticResource gridLineBrush}" />
 
-        <Setter Property="InactiveSelectionBackground" Value="{DynamicResource {x:Static SystemColors.InactiveCaptionBrushKey}}" />
+      <Setter Property="views:TableView.CanScrollHorizontally"
+              Value="False" />
 
-        <Setter Property="InactiveSelectionForeground" Value="{DynamicResource {x:Static SystemColors.InactiveCaptionTextBrushKey}}" />
+      <Setter Property="BorderThickness"
+              Value="0,1,1,0" />
 
-        <!--
-            Set the Cell's background to Transparent to make it hit-testable
-            while preserving the background drawn by the underlying Row.
-        -->
-        <Setter Property="Background" Value="Transparent" />
+      <Setter Property="Padding"
+              Value="{StaticResource cellPadding}" />
 
-        <Setter Property="Foreground" Value="{Binding RelativeSource={RelativeSource Self}, Path=ParentForeground}" />
+      <Setter Property="VerticalContentAlignment"
+              Value="Center" />
 
-        <!--  In TableflowView, each Cell has the same width as its ParentColum's ActualWidth  -->
-        <Setter Property="Width" Value="{Binding RelativeSource={RelativeSource Self}, Path=ParentColumn.ActualWidth}" />
+      <!-- The GroupHeaderControl itself must not be focusable. The main Border inside its Template will
+           be made Focusable because it is holding the various InputBindings that make the
+           GroupHeaderControl work. -->
+      <Setter Property="Focusable"
+              Value="False" />
 
-        <Setter Property="Padding" Value="{StaticResource cellPadding}" />
+      <Setter Property="Template"
+              Value="{StaticResource tableflowViewGroupHeaderControlTemplate}" />
 
-        <Setter Property="HorizontalContentAlignment" Value="{Binding RelativeSource={RelativeSource Self}, Path=ParentColumn.CellHorizontalContentAlignment, FallbackValue=Stretch}" />
+      <Style.Triggers>
+         <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=(views:ViewBase.IsLastItem)}"
+                      Value="True">
 
-        <Setter Property="VerticalContentAlignment" Value="{Binding RelativeSource={RelativeSource Self}, Path=ParentColumn.CellVerticalContentAlignment, FallbackValue=Stretch}" />
+            <Setter Property="BorderThickness"
+                    Value="0,1,1,1" />
+         </DataTrigger>
 
-        <!--
-            The Cell is responsible for drawing the vertical gridlines. It draws only its right gridline,
-            assuming that the left gridline will have been drawn by its preceding cell
-        -->
+         <MultiDataTrigger>
+            <MultiDataTrigger.Conditions>
+               <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=Content.IsBottomLevel}"
+                          Value="False" />
+               <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=Content.Level}"
+                          Value="0" />
+               <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=(local:DataGridControl.DataGridContext).AreGroupHeadersSticky}"
+                          Value="True" />
+               <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=(local:DataGridControl.DataGridContext).AreGroupsFlattened}"
+                          Value="True" />
+            </MultiDataTrigger.Conditions>
 
-        <Setter Property="BorderThickness" Value="{Binding RelativeSource={RelativeSource Self}, Path=(local:DataGridControl.DataGridContext).VerticalGridLineThickness, Converter={StaticResource thicknessConverter}, ConverterParameter='Right'}" />
+            <Setter Property="Template"
+                    Value="{StaticResource tableflowViewGroupHeaderTopLevelStickyControlTemplate}" />
 
-        <Setter Property="BorderBrush" Value="{Binding RelativeSource={RelativeSource Self}, Path=(local:DataGridControl.DataGridContext).VerticalGridLineBrush}" />
+         </MultiDataTrigger>
 
-        <Setter Property="Template" Value="{StaticResource tableflowViewCellTemplate}" />
+      </Style.Triggers>
 
-    </Style>
+   </Style>
 
-    <!--
-        **************************
-        * STYLE: DataCell
-        **************************
-    -->
-    <Style
-        x:Key="tableflowViewClassicSystemColorDataCellStyle"
-        BasedOn="{StaticResource tableflowViewClassicSystemColorCellStyle}"
-        TargetType="local:DataCell" />
+   <!--**************************
+    * STYLE: GroupLevelIndicator
+    ************************** -->
+   <Style x:Key="tableflowViewClassicSystemColorGroupLevelIndicatorStyle"
+          TargetType="local:GroupLevelIndicator">
 
-    <!--
-        **************************
-        * STYLE: ColumnManagerCell
-        **************************
-    -->
-    <Style x:Key="tableflowViewClassicSystemColorColumnManagerCellStyle" TargetType="local:ColumnManagerCell">
+      <Setter Property="Background"
+              Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" />
 
-        <!--
-            Set the Cell's background to Transparent to make it hit-testable
-            while preserving the background drawn by the underlying Row.
-        -->
-        <Setter Property="Background" Value="Transparent" />
+      <Setter Property="Foreground"
+              Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" />
 
-        <!--  In TableflowView, each Cell has the same width as its ParentColum's ActualWidth  -->
-        <Setter Property="Width" Value="{Binding RelativeSource={RelativeSource Self}, Path=ParentColumn.ActualWidth}" />
+      <Setter Property="BorderBrush"
+              Value="{StaticResource gridLineBrush}" />
 
-        <Setter Property="Padding" Value="{StaticResource cellPadding}" />
+      <Setter Property="BorderThickness"
+              Value="0,0,1,0" />
 
-        <Setter Property="HorizontalContentAlignment" Value="{Binding RelativeSource={RelativeSource Self}, Path=ParentColumn.CellHorizontalContentAlignment, FallbackValue=Left}" />
+      <Setter Property="Width"
+              Value="{Binding RelativeSource={RelativeSource Self}, Path=(local:DataGridControl.DataGridContext).GroupLevelIndicatorWidth}" />
 
-        <Setter Property="VerticalContentAlignment" Value="{Binding RelativeSource={RelativeSource Self}, Path=ParentColumn.CellVerticalContentAlignment, FallbackValue=Stretch}" />
+      <Setter Property="Template"
+              Value="{StaticResource tableflowViewGroupLevelIndicatorTemplate}" />
 
-        <Setter Property="Template" Value="{StaticResource tableflowViewColumnManagerCellTemplate}" />
+   </Style>
 
-        <Style.Triggers>
+   <!--**************************
+    * STYLE: DetailIndicator
+    ************************** -->
+   <Style x:Key="tableflowViewClassicSystemColorDetailIndicatorStyle"
+          TargetType="local:DetailIndicator">
 
-            <Trigger Property="IsBeingDragged" Value="True">
-                <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" />
-            </Trigger>
+      <Setter Property="Background"
+              Value="{x:Null}" />
 
-            <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=(local:DataGridControl.DataGridContext).AreColumnsBeingReordered}" Value="True">
-                <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" />
-            </DataTrigger>
+      <Setter Property="Width"
+              Value="{Binding RelativeSource={RelativeSource Self}, Path=(local:DataGridControl.DataGridContext).DetailIndicatorWidth}" />
 
-        </Style.Triggers>
+      <Setter Property="Template"
+              Value="{StaticResource tableflowViewDetailIndicatorTemplate}" />
 
-    </Style>
+   </Style>
 
-    <!--
-        **************************
-        * STYLE: GroupByControl
-        **************************
-    -->
-    <Style x:Key="tableflowViewClassicSystemColorGroupByControlStyle" TargetType="local:GroupByControl">
+   <!--**************************
+    * STYLE: GroupLevelIndicatorPane
+    ************************** -->
+   <Style x:Key="tableflowViewClassicSystemColorGroupLevelIndicatorPaneStyle"
+          TargetType="local:GroupLevelIndicatorPane">
 
-        <!--
-            If we don't specify a MinHeight, the default "size-to-content" behavior will arrange
-            the control with a Height of 0, which makes it invisible and unusable.
-            In a typical TableflowView, a height of at least 25 is appropriate for the GroupByControl.
-        -->
-        <Setter Property="MinHeight" Value="25" />
+      <Setter Property="Template"
+              Value="{StaticResource tableflowViewGroupLevelIndicatorPaneTemplate}" />
 
-        <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}" />
+      <Setter Property="BorderBrush"
+              Value="{StaticResource gridLineBrush}" />
 
-        <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" />
+      <Style.Triggers>
+         <MultiTrigger>
+            <MultiTrigger.Conditions>
+               <Condition Property="IsLeaf"
+                          Value="False" />
+               <Condition Property="views:ViewBase.IsLastItem"
+                          Value="True" />
+            </MultiTrigger.Conditions>
 
-        <Setter Property="Padding" Value="8" />
+            <Setter Property="Margin"
+                    Value="0,0,0,-5" />
+         </MultiTrigger>
 
-        <Setter Property="BorderBrush" Value="{StaticResource gridLineBrush}" />
+      </Style.Triggers>
+   </Style>
 
-        <Setter Property="BorderThickness" Value="1,1,1,0" />
+   <!--**************************
+    * STYLE: HierarchicalGroupLevelIndicatorPane
+    ************************** -->
+   <Style x:Key="tableflowViewClassicSystemColorHierarchicalGroupLevelIndicatorPaneStyle"
+          TargetType="local:HierarchicalGroupLevelIndicatorPane">
 
-        <Setter Property="local:RowSelector.Visible" Value="False" />
+      <Setter Property="Template"
+              Value="{StaticResource tableflowViewHierarchicalGroupLevelIndicatorPaneTemplate}" />
 
-        <Setter Property="views:TableView.CanScrollHorizontally" Value="False" />
+      <Setter Property="local:GroupLevelIndicatorPane.ShowIndicators"
+              Value="True" />
 
-        <Setter Property="Template" Value="{StaticResource tableflowViewGroupByControlTemplate}" />
+      <Setter Property="local:GroupLevelIndicatorPane.ShowVerticalBorder"
+              Value="True" />
 
-    </Style>
+      <Style.Triggers>
+         <Trigger Property="local:GroupLevelIndicatorPane.GroupLevel"
+                  Value="-1">
 
-    <!--
-        **************************
-        * STYLE: GroupByItem
-        **************************
-    -->
-    <Style x:Key="tableflowViewClassicSystemColorGroupByItemStyle" TargetType="local:GroupByItem">
+            <!-- Stop the propagation of the value set by the default style trigger of
+                 the ColumnManagerRow -->
+            <Setter Property="local:GroupLevelIndicatorPane.ShowIndicators"
+                    Value="True" />
 
-        <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" />
+         </Trigger>
+      </Style.Triggers>
+   </Style>
 
-        <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" />
+   <!--**************************
+    * STYLE: HierarchicalGroupByControlNode
+    ************************** -->
+   <Style x:Key="tableflowViewClassicSystemColorHierarchicalGroupByControlNodeStyle"
+          TargetType="local:HierarchicalGroupByControlNode">
 
-        <Setter Property="Padding" Value="{StaticResource cellPadding}" />
+      <Setter Property="StairHeight"
+              Value="0" />
 
-        <Setter Property="Template" Value="{StaticResource tableflowViewGroupByItemTemplate}" />
+      <Setter Property="ConnectionLineOffset"
+              Value="0" />
 
-    </Style>
+      <Setter Property="ConnectionLineAlignment"
+              Value="CenterToCenter" />
 
-    <!--
-        **************************
-        * STYLE: GroupHeaderControl
-        **************************
-    -->
-    <Style x:Key="tableflowViewClassicSystemColorGroupHeaderControlStyle" TargetType="local:GroupHeaderControl">
+      <Setter Property="Focusable"
+              Value="False" />
 
-        <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" />
+      <Setter Property="Margin"
+              Value="4" />
 
-        <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" />
+      <Setter Property="Template"
+              Value="{StaticResource tableflowViewHierarchicalGroupByControlNodeTemplate}" />
 
-        <Setter Property="SelectionBackground" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
+   </Style>
 
-        <Setter Property="SelectionForeground" Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}" />
+   <!--**************************
+    * STYLE: HierarchicalGroupByControl
+    ************************** -->
+   <Style x:Key="tableflowViewClassicSystemColorHierarchicalGroupByControlStyle"
+          TargetType="local:HierarchicalGroupByControl">
 
-        <Setter Property="InactiveSelectionBackground" Value="{DynamicResource {x:Static SystemColors.InactiveCaptionBrushKey}}" />
+      <!-- If we don't specify a MinHeight, the default "size-to-content" behavior will arrange 
+           the control with a Height of 0, which makes it invisible and unusable.
+           In a typical TableflowView, a height of at least 25 is appropriate for the GroupByControl. -->
+      <Setter Property="MinHeight"
+              Value="25" />
 
-        <Setter Property="InactiveSelectionForeground" Value="{DynamicResource {x:Static SystemColors.InactiveCaptionTextBrushKey}}" />
+      <Setter Property="Background"
+              Value="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}" />
 
-        <Setter Property="BorderBrush" Value="{StaticResource gridLineBrush}" />
+      <Setter Property="Foreground"
+              Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" />
 
-        <Setter Property="views:TableView.CanScrollHorizontally" Value="False" />
+      <Setter Property="Padding"
+              Value="8" />
 
-        <Setter Property="BorderThickness" Value="0,1,1,0" />
+      <Setter Property="BorderBrush"
+              Value="{StaticResource gridLineBrush}" />
 
-        <Setter Property="Padding" Value="{StaticResource cellPadding}" />
+      <Setter Property="BorderThickness"
+              Value="1,1,1,0" />
 
-        <Setter Property="VerticalContentAlignment" Value="Center" />
+      <Setter Property="StairHeight"
+              Value="0" />
 
-        <!--
-            The GroupHeaderControl itself must not be focusable. The main Border inside its Template will
-            be made Focusable because it is holding the various InputBindings that make the
-            GroupHeaderControl work.
-        -->
-        <Setter Property="Focusable" Value="False" />
+      <Setter Property="ConnectionLineOffset"
+              Value="0" />
 
-        <Setter Property="Template" Value="{StaticResource tableflowViewGroupHeaderControlTemplate}" />
+      <Setter Property="ConnectionLineAlignment"
+              Value="CenterToCenter" />
 
-        <Style.Triggers>
-            <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=(views:ViewBase.IsLastItem)}" Value="True">
+      <Setter Property="local:RowSelector.Visible"
+              Value="False" />
 
-                <Setter Property="BorderThickness" Value="0,1,1,1" />
-            </DataTrigger>
+      <Setter Property="views:TableView.CanScrollHorizontally"
+              Value="False" />
 
-            <MultiDataTrigger>
-                <MultiDataTrigger.Conditions>
-                    <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=Content.IsBottomLevel}" Value="False" />
-                    <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=Content.Level}" Value="0" />
-                    <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=(local:DataGridControl.DataGridContext).AreGroupHeadersSticky}" Value="True" />
-                    <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=(local:DataGridControl.DataGridContext).AreGroupsFlattened}" Value="True" />
-                </MultiDataTrigger.Conditions>
+      <Setter Property="Template"
+              Value="{StaticResource tableflowViewCommonHierarchicalGroupByControlTemplate}" />
 
-                <Setter Property="Template" Value="{StaticResource tableflowViewGroupHeaderTopLevelStickyControlTemplate}" />
+      <Style.Triggers>
 
-            </MultiDataTrigger>
+         <!-- We use the old GroupByControl Template if there are no Details in the DataGridControl.ItemsSource -->
+         <MultiDataTrigger>
+            <MultiDataTrigger.Conditions>
 
-        </Style.Triggers>
+               <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=(local:DataGridControl.DataGridContext).HasDetails}"
+                          Value="False" />
 
-    </Style>
+               <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=(local:DataGridControl.DataGridContext).ParentDataGridContext, Converter={StaticResource nullToBooleanConverter}}"
+                          Value="True" />
 
-    <!--
-        **************************
-        * STYLE: GroupLevelIndicator
-        **************************
-    -->
-    <Style x:Key="tableflowViewClassicSystemColorGroupLevelIndicatorStyle" TargetType="local:GroupLevelIndicator">
+            </MultiDataTrigger.Conditions>
 
-        <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" />
+            <Setter Property="Template"
+                    Value="{StaticResource tableflowViewCommonHierarchicalGroupByControlOldGroupByControlTemplate}" />
 
-        <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" />
+         </MultiDataTrigger>
 
-        <Setter Property="BorderBrush" Value="{StaticResource gridLineBrush}" />
+      </Style.Triggers>
 
-        <Setter Property="BorderThickness" Value="0,0,1,0" />
+   </Style>
 
-        <Setter Property="Width" Value="{Binding RelativeSource={RelativeSource Self}, Path=(local:DataGridControl.DataGridContext).GroupLevelIndicatorWidth}" />
+   <!--**************************
+    * STYLE: HierarchicalGroupByItem
+    ************************** -->
+   <Style x:Key="tableflowViewClassicSystemColorHierarchicalGroupByItemStyle"
+          TargetType="local:HierarchicalGroupByItem">
 
-        <Setter Property="Template" Value="{StaticResource tableflowViewGroupLevelIndicatorTemplate}" />
+      <Setter Property="Background"
+              Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" />
 
-    </Style>
+      <Setter Property="Foreground"
+              Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" />
 
-    <!--
-        **************************
-        * STYLE: DetailIndicator
-        **************************
-    -->
-    <Style x:Key="tableflowViewClassicSystemColorDetailIndicatorStyle" TargetType="local:DetailIndicator">
+      <Setter Property="Padding"
+              Value="{StaticResource cellPadding}" />
 
-        <Setter Property="Background" Value="{x:Null}" />
+      <Setter Property="Margin"
+              Value="4,0,4,0" />
 
-        <Setter Property="Width" Value="{Binding RelativeSource={RelativeSource Self}, Path=(local:DataGridControl.DataGridContext).DetailIndicatorWidth}" />
+      <Setter Property="Template"
+              Value="{StaticResource tableflowViewHierarchicalGroupByItemTemplate}" />
 
-        <Setter Property="Template" Value="{StaticResource tableflowViewDetailIndicatorTemplate}" />
+   </Style>
 
-    </Style>
+   <!--**************************
+    * STYLE: ScrollTip
+    ************************** -->
+   <Style x:Key="tableflowViewClassicSystemColorScrollTipStyle"
+          TargetType="local:ScrollTip">
 
-    <!--
-        **************************
-        * STYLE: GroupLevelIndicatorPane
-        **************************
-    -->
-    <Style x:Key="tableflowViewClassicSystemColorGroupLevelIndicatorPaneStyle" TargetType="local:GroupLevelIndicatorPane">
+      <Setter Property="Template"
+              Value="{StaticResource scrollTipTemplate}" />
 
-        <Setter Property="Template" Value="{StaticResource tableflowViewGroupLevelIndicatorPaneTemplate}" />
+      <Setter Property="VerticalAlignment"
+              Value="Center" />
 
-        <Setter Property="BorderBrush" Value="{StaticResource gridLineBrush}" />
+      <Setter Property="HorizontalAlignment"
+              Value="Right" />
 
-        <Style.Triggers>
-            <MultiTrigger>
-                <MultiTrigger.Conditions>
-                    <Condition Property="IsLeaf" Value="False" />
-                    <Condition Property="views:ViewBase.IsLastItem" Value="True" />
-                </MultiTrigger.Conditions>
+      <Setter Property="Background"
+              Value="{DynamicResource {x:Static SystemColors.ControlLightLightBrushKey}}" />
 
-                <Setter Property="Margin" Value="0,0,0,-5" />
-            </MultiTrigger>
+      <Setter Property="Foreground"
+              Value="{DynamicResource {x:Static SystemColors.WindowTextBrushKey}}" />
 
-        </Style.Triggers>
-    </Style>
+      <Setter Property="BorderBrush"
+              Value="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}" />
 
-    <!--
-        **************************
-        * STYLE: HierarchicalGroupLevelIndicatorPane
-        **************************
-    -->
-    <Style x:Key="tableflowViewClassicSystemColorHierarchicalGroupLevelIndicatorPaneStyle" TargetType="local:HierarchicalGroupLevelIndicatorPane">
+   </Style>
 
-        <Setter Property="Template" Value="{StaticResource tableflowViewHierarchicalGroupLevelIndicatorPaneTemplate}" />
+   <!--**************************
+    * STYLE: GroupNavigationControl
+    ************************** -->
+   <Style x:Key="tableflowViewClassicSystemColorGroupNavigationControlStyle"
+          TargetType="local:GroupNavigationControl">
+      <Setter Property="Template"
+              Value="{StaticResource tableflowViewGroupNavigationControlTemplate}" />
+   </Style>
 
-        <Setter Property="local:GroupLevelIndicatorPane.ShowIndicators" Value="True" />
+   <!--**************************
+    * STYLE: GroupNavigationControlItem
+    ************************** -->
+   <Style x:Key="tableflowViewClassicSystemColorGroupNavigationControlItemStyle"
+          TargetType="{x:Type local:GroupNavigationControlItem}">
 
-        <Setter Property="local:GroupLevelIndicatorPane.ShowVerticalBorder" Value="True" />
+      <Setter Property="Template">
+         <Setter.Value>
+            <ControlTemplate TargetType="{x:Type local:GroupNavigationControlItem}">
+               <Grid SnapsToDevicePixels="true">
+                  <Border x:Name="Border"
+                          Background="Transparent" />
+                  <Border Margin="2">
+                     <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                       VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                  </Border>
+               </Grid>
+               <ControlTemplate.Triggers>
 
-        <Style.Triggers>
-            <Trigger Property="local:GroupLevelIndicatorPane.GroupLevel" Value="-1">
+                  <!-- Change IsSelected SelectedBackgroundBrush to set the selection color for the items -->
+                  <Trigger Property="IsMouseOver"
+                           Value="true">
+                     <Setter Property="Background"
+                             TargetName="Border"
+                             Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
 
-                <!--
-                    Stop the propagation of the value set by the default style trigger of
-                    the ColumnManagerRow
-                -->
-                <Setter Property="local:GroupLevelIndicatorPane.ShowIndicators" Value="True" />
+                     <Setter Property="Foreground"
+                             Value="Black" />
+                  </Trigger>
 
-            </Trigger>
-        </Style.Triggers>
-    </Style>
+                  <Trigger Property="IsEnabled"
+                           Value="false">
+                     <Setter Property="Foreground"
+                             Value="Gray" />
+                  </Trigger>
+               </ControlTemplate.Triggers>
+            </ControlTemplate>
+         </Setter.Value>
+      </Setter>
+   </Style>
 
-    <!--
-        **************************
-        * STYLE: HierarchicalGroupByControlNode
-        **************************
-    -->
-    <Style x:Key="tableflowViewClassicSystemColorHierarchicalGroupByControlNodeStyle" TargetType="local:HierarchicalGroupByControlNode">
+   <!--**************************
+    * STYLE: GroupNavigationButton
+    ************************** -->
+   <Style x:Key="tableflowViewClassicSystemColorGroupNavigationButtonStyle"
+          TargetType="local:GroupNavigationButton">
+      <Setter Property="Template"
+              Value="{StaticResource tableflowViewGroupNavigationButtonTemplate}" />
+   </Style>
 
-        <Setter Property="StairHeight" Value="0" />
+   <!-- =================================================================== -->
+   <!-- Default values for the View                                         -->
+   <!-- =================================================================== -->
 
-        <Setter Property="ConnectionLineOffset" Value="0" />
+   <Style x:Key="tableflowViewClassicSystemColorDefaultValues"
+          TargetType="views:TableflowView">
 
-        <Setter Property="ConnectionLineAlignment" Value="CenterToCenter" />
+      <Setter Property="HorizontalGridLineBrush"
+              Value="{StaticResource gridLineBrush}" />
 
-        <Setter Property="Focusable" Value="False" />
+      <Setter Property="HorizontalGridLineThickness"
+              Value="1" />
 
-        <Setter Property="Margin" Value="4" />
+      <Setter Property="VerticalGridLineBrush"
+              Value="{StaticResource gridLineBrush}" />
 
-        <Setter Property="Template" Value="{StaticResource tableflowViewHierarchicalGroupByControlNodeTemplate}" />
+      <Setter Property="VerticalGridLineThickness"
+              Value="1" />
 
-    </Style>
+      <Setter Property="GroupLevelIndicatorWidth"
+              Value="17" />
 
-    <!--
-        **************************
-        * STYLE: HierarchicalGroupByControl
-        **************************
-    -->
-    <Style x:Key="tableflowViewClassicSystemColorHierarchicalGroupByControlStyle" TargetType="local:HierarchicalGroupByControl">
+      <Setter Property="DetailIndicatorWidth"
+              Value="34" />
 
-        <!--
-            If we don't specify a MinHeight, the default "size-to-content" behavior will arrange
-            the control with a Height of 0, which makes it invisible and unusable.
-            In a typical TableflowView, a height of at least 25 is appropriate for the GroupByControl.
-        -->
-        <Setter Property="MinHeight" Value="25" />
+      <Setter Property="ContainerHeight"
+              Value="30" />
 
-        <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}" />
+      <Setter Property="DefaultDropMarkPen"
+              Value="{StaticResource dropMarkPen}" />
 
-        <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" />
+      <!-- Those glyphs are null by default on ViewBase, so every Theme should define
+           and set their own custom glyphs. -->
 
-        <Setter Property="Padding" Value="8" />
+      <Setter Property="AscendingSortGlyph"
+              Value="{StaticResource ascendingSortGlyph}" />
 
-        <Setter Property="BorderBrush" Value="{StaticResource gridLineBrush}" />
+      <Setter Property="DescendingSortGlyph"
+              Value="{StaticResource descendingSortGlyph}" />
 
-        <Setter Property="BorderThickness" Value="1,1,1,0" />
+      <Setter Property="ExpandGroupGlyph"
+              Value="{StaticResource expandGroupGlyph}" />
 
-        <Setter Property="StairHeight" Value="0" />
+      <Setter Property="CollapseGroupGlyph"
+              Value="{StaticResource collapseGroupGlyph}" />
 
-        <Setter Property="ConnectionLineOffset" Value="0" />
+      <Setter Property="CurrentItemGlyph"
+              Value="{StaticResource currentItemGlyph}" />
 
-        <Setter Property="ConnectionLineAlignment" Value="CenterToCenter" />
+      <Setter Property="EditingRowGlyph"
+              Value="{StaticResource editingRowGlyph}" />
 
-        <Setter Property="local:RowSelector.Visible" Value="False" />
+      <Setter Property="ValidationErrorGlyph"
+              Value="{StaticResource validationErrorGlyph}" />
 
-        <Setter Property="views:TableView.CanScrollHorizontally" Value="False" />
+      <Setter Property="ConnectionStateLoadingGlyph"
+              Value="{StaticResource connectionStateLoadingGlyph}" />
 
-        <Setter Property="Template" Value="{StaticResource tableflowViewCommonHierarchicalGroupByControlTemplate}" />
+      <Setter Property="ConnectionStateCommittingGlyph"
+              Value="{StaticResource connectionStateLoadingGlyph}" />
 
-        <Style.Triggers>
+      <Setter Property="ConnectionStateErrorGlyph"
+              Value="{StaticResource connectionStateErrorGlyph}" />
 
-            <!--  We use the old GroupByControl Template if there are no Details in the DataGridControl.ItemsSource  -->
-            <MultiDataTrigger>
-                <MultiDataTrigger.Conditions>
+   </Style>
 
-                    <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=(local:DataGridControl.DataGridContext).HasDetails}" Value="False" />
+   <!-- =================================================================== -->
+   <!-- DefaultStyleKey declarations                                        -->
+   <!-- =================================================================== -->
 
-                    <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=(local:DataGridControl.DataGridContext).ParentDataGridContext, Converter={StaticResource nullToBooleanConverter}}" Value="True" />
+   <Style x:Key="{markup:ThemeKey TargetViewType=views:TableflowView, ThemeType=views:ClassicSystemColorTheme}"
+          TargetType="views:TableflowView"
+          BasedOn="{StaticResource tableflowViewClassicSystemColorDefaultValues}" />
 
-                </MultiDataTrigger.Conditions>
+   <Style x:Key="{markup:ThemeKey TargetViewType=views:TableflowView, ThemeType=views:ClassicSystemColorTheme, TargetElementType=local:DataGridControl}"
+          TargetType="local:DataGridControl"
+          BasedOn="{StaticResource tableflowViewForcedClassicSystemColorGridControlStyle}" />
 
-                <Setter Property="Template" Value="{StaticResource tableflowViewCommonHierarchicalGroupByControlOldGroupByControlTemplate}" />
+   <Style x:Key="{markup:ThemeKey TargetViewType=views:TableflowView, ThemeType=views:ClassicSystemColorTheme, TargetElementType=local:RowSelectorPane}"
+          TargetType="local:RowSelectorPane"
+          BasedOn="{StaticResource tableflowViewClassicSystemColorRowSelectorPaneStyle}" />
 
-            </MultiDataTrigger>
+   <Style x:Key="{markup:ThemeKey TargetViewType=views:TableflowView, ThemeType=views:ClassicSystemColorTheme, TargetElementType=local:RowSelector}"
+          TargetType="local:RowSelector"
+          BasedOn="{StaticResource tableflowViewClassicSystemColorRowSelectorStyle}" />
 
-        </Style.Triggers>
+   <Style x:Key="{markup:ThemeKey TargetViewType=views:TableflowView, ThemeType=views:ClassicSystemColorTheme, TargetElementType=local:Row}"
+          TargetType="local:Row"
+          BasedOn="{StaticResource tableflowViewClassicSystemColorRowStyle}" />
 
-    </Style>
+   <Style x:Key="{markup:ThemeKey TargetViewType=views:TableflowView, ThemeType=views:ClassicSystemColorTheme, TargetElementType=local:DataRow}"
+          TargetType="local:DataRow"
+          BasedOn="{StaticResource tableflowViewClassicSystemColorDataRowStyle}" />
 
-    <!--
-        **************************
-        * STYLE: HierarchicalGroupByItem
-        **************************
-    -->
-    <Style x:Key="tableflowViewClassicSystemColorHierarchicalGroupByItemStyle" TargetType="local:HierarchicalGroupByItem">
+   <Style x:Key="{markup:ThemeKey TargetViewType=views:TableflowView, ThemeType=views:ClassicSystemColorTheme, TargetElementType=local:ColumnManagerRow}"
+          TargetType="local:ColumnManagerRow"
+          BasedOn="{StaticResource tableflowViewClassicSystemColorColumnManagerRowStyle}" />
 
-        <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" />
+   <Style x:Key="{markup:ThemeKey TargetViewType=views:TableflowView, ThemeType=views:ClassicSystemColorTheme, TargetElementType=local:Cell}"
+          TargetType="local:Cell"
+          BasedOn="{StaticResource tableflowViewClassicSystemColorCellStyle}" />
 
-        <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" />
+   <Style x:Key="{markup:ThemeKey TargetViewType=views:TableflowView, ThemeType=views:ClassicSystemColorTheme, TargetElementType=local:DataCell}"
+          TargetType="local:DataCell"
+          BasedOn="{StaticResource tableflowViewClassicSystemColorDataCellStyle}" />
 
-        <Setter Property="Padding" Value="{StaticResource cellPadding}" />
+   <Style x:Key="{markup:ThemeKey TargetViewType=views:TableflowView, ThemeType=views:ClassicSystemColorTheme, TargetElementType=local:ColumnManagerCell}"
+          TargetType="local:ColumnManagerCell"
+          BasedOn="{StaticResource tableflowViewClassicSystemColorColumnManagerCellStyle}" />
 
-        <Setter Property="Margin" Value="4,0,4,0" />
+   <Style x:Key="{markup:ThemeKey TargetViewType=views:TableflowView, ThemeType=views:ClassicSystemColorTheme, TargetElementType=local:GroupByControl}"
+          TargetType="local:GroupByControl"
+          BasedOn="{StaticResource tableflowViewClassicSystemColorGroupByControlStyle}" />
 
-        <Setter Property="Template" Value="{StaticResource tableflowViewHierarchicalGroupByItemTemplate}" />
+   <Style x:Key="{markup:ThemeKey TargetViewType=views:TableflowView, ThemeType=views:ClassicSystemColorTheme, TargetElementType=local:GroupByItem}"
+          TargetType="local:GroupByItem"
+          BasedOn="{StaticResource tableflowViewClassicSystemColorGroupByItemStyle}" />
 
-    </Style>
+   <Style x:Key="{markup:ThemeKey TargetViewType=views:TableflowView, ThemeType=views:ClassicSystemColorTheme, TargetElementType=local:GroupHeaderControl}"
+          TargetType="local:GroupHeaderControl"
+          BasedOn="{StaticResource tableflowViewClassicSystemColorGroupHeaderControlStyle}" />
 
-    <!--
-        **************************
-        * STYLE: ScrollTip
-        **************************
-    -->
-    <Style x:Key="tableflowViewClassicSystemColorScrollTipStyle" TargetType="local:ScrollTip">
+   <Style x:Key="{markup:ThemeKey TargetViewType=views:TableflowView, ThemeType=views:ClassicSystemColorTheme, TargetElementType=local:GroupLevelIndicator}"
+          TargetType="local:GroupLevelIndicator"
+          BasedOn="{StaticResource tableflowViewClassicSystemColorGroupLevelIndicatorStyle}" />
 
-        <Setter Property="Template" Value="{StaticResource scrollTipTemplate}" />
+   <Style x:Key="{markup:ThemeKey TargetViewType=views:TableflowView, ThemeType=views:ClassicSystemColorTheme, TargetElementType=local:DetailIndicator}"
+          TargetType="local:DetailIndicator"
+          BasedOn="{StaticResource tableflowViewClassicSystemColorDetailIndicatorStyle}" />
 
-        <Setter Property="VerticalAlignment" Value="Center" />
+   <Style x:Key="{markup:ThemeKey TargetViewType=views:TableflowView, ThemeType=views:ClassicSystemColorTheme, TargetElementType=local:GroupLevelIndicatorPane}"
+          TargetType="local:GroupLevelIndicatorPane"
+          BasedOn="{StaticResource tableflowViewClassicSystemColorGroupLevelIndicatorPaneStyle}" />
 
-        <Setter Property="HorizontalAlignment" Value="Right" />
+   <Style x:Key="{markup:ThemeKey TargetViewType=views:TableflowView, ThemeType=views:ClassicSystemColorTheme, TargetElementType=local:HierarchicalGroupLevelIndicatorPane}"
+          TargetType="local:HierarchicalGroupLevelIndicatorPane"
+          BasedOn="{StaticResource tableflowViewClassicSystemColorHierarchicalGroupLevelIndicatorPaneStyle}" />
 
-        <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.ControlLightLightBrushKey}}" />
+   <Style x:Key="{markup:ThemeKey TargetViewType=views:TableflowView, ThemeType=views:ClassicSystemColorTheme, TargetElementType=local:ScrollTip}"
+          TargetType="local:ScrollTip"
+          BasedOn="{StaticResource tableflowViewClassicSystemColorScrollTipStyle}" />
 
-        <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.WindowTextBrushKey}}" />
+   <Style x:Key="{markup:ThemeKey TargetViewType=views:TableflowView, ThemeType=views:ClassicSystemColorTheme, TargetElementType=local:HierarchicalGroupByControlNode}"
+          TargetType="local:HierarchicalGroupByControlNode"
+          BasedOn="{StaticResource tableflowViewClassicSystemColorHierarchicalGroupByControlNodeStyle}" />
 
-        <Setter Property="BorderBrush" Value="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}" />
+   <Style x:Key="{markup:ThemeKey TargetViewType=views:TableflowView, ThemeType=views:ClassicSystemColorTheme, TargetElementType=local:HierarchicalGroupByControl}"
+          TargetType="local:HierarchicalGroupByControl"
+          BasedOn="{StaticResource tableflowViewClassicSystemColorHierarchicalGroupByControlStyle}" />
 
-    </Style>
+   <Style x:Key="{markup:ThemeKey TargetViewType=views:TableflowView, ThemeType=views:ClassicSystemColorTheme, TargetElementType=local:HierarchicalGroupByItem}"
+          TargetType="local:HierarchicalGroupByItem"
+          BasedOn="{StaticResource tableflowViewClassicSystemColorHierarchicalGroupByItemStyle}" />
 
-    <!--
-        **************************
-        * STYLE: GroupNavigationControl
-        **************************
-    -->
-    <Style x:Key="tableflowViewClassicSystemColorGroupNavigationControlStyle" TargetType="local:GroupNavigationControl">
-        <Setter Property="Template" Value="{StaticResource tableflowViewGroupNavigationControlTemplate}" />
-    </Style>
+   <Style x:Key="{markup:ThemeKey TargetViewType=views:TableflowView, ThemeType=views:ClassicSystemColorTheme, TargetElementType=local:GroupNavigationButton}"
+          TargetType="local:GroupNavigationButton"
+          BasedOn="{StaticResource tableflowViewClassicSystemColorGroupNavigationButtonStyle}" />
 
-    <!--
-        **************************
-        * STYLE: GroupNavigationControlItem
-        **************************
-    -->
-    <Style x:Key="tableflowViewClassicSystemColorGroupNavigationControlItemStyle" TargetType="{x:Type local:GroupNavigationControlItem}">
+   <Style x:Key="{markup:ThemeKey TargetViewType=views:TableflowView, ThemeType=views:ClassicSystemColorTheme, TargetElementType=local:GroupNavigationControl}"
+          TargetType="local:GroupNavigationControl"
+          BasedOn="{StaticResource tableflowViewClassicSystemColorGroupNavigationControlStyle}" />
 
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type local:GroupNavigationControlItem}">
-                    <Grid SnapsToDevicePixels="true">
-                        <Border x:Name="Border" Background="Transparent" />
-                        <Border Margin="2">
-                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
-                        </Border>
-                    </Grid>
-                    <ControlTemplate.Triggers>
+   <Style x:Key="{markup:ThemeKey TargetViewType=views:TableflowView, ThemeType=views:ClassicSystemColorTheme, TargetElementType=local:GroupNavigationControlItem}"
+          TargetType="local:GroupNavigationControlItem"
+          BasedOn="{StaticResource tableflowViewClassicSystemColorGroupNavigationControlItemStyle}" />
 
-                        <!--  Change IsSelected SelectedBackgroundBrush to set the selection color for the items  -->
-                        <Trigger Property="IsMouseOver" Value="true">
-                            <Setter TargetName="Border" Property="Background" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
-
-                            <Setter Property="Foreground" Value="Black" />
-                        </Trigger>
-
-                        <Trigger Property="IsEnabled" Value="false">
-                            <Setter Property="Foreground" Value="Gray" />
-                        </Trigger>
-                    </ControlTemplate.Triggers>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-
-    <!--
-        **************************
-        * STYLE: GroupNavigationButton
-        **************************
-    -->
-    <Style x:Key="tableflowViewClassicSystemColorGroupNavigationButtonStyle" TargetType="local:GroupNavigationButton">
-        <Setter Property="Template" Value="{StaticResource tableflowViewGroupNavigationButtonTemplate}" />
-    </Style>
-
-    <!--  ===================================================================  -->
-    <!--  Default values for the View  -->
-    <!--  ===================================================================  -->
-
-    <Style x:Key="tableflowViewClassicSystemColorDefaultValues" TargetType="views:TableflowView">
-
-        <Setter Property="HorizontalGridLineBrush" Value="{StaticResource gridLineBrush}" />
-
-        <Setter Property="HorizontalGridLineThickness" Value="1" />
-
-        <Setter Property="VerticalGridLineBrush" Value="{StaticResource gridLineBrush}" />
-
-        <Setter Property="VerticalGridLineThickness" Value="1" />
-
-        <Setter Property="GroupLevelIndicatorWidth" Value="17" />
-
-        <Setter Property="DetailIndicatorWidth" Value="34" />
-
-        <Setter Property="ContainerHeight" Value="30" />
-
-        <Setter Property="DefaultDropMarkPen" Value="{StaticResource dropMarkPen}" />
-
-        <!--
-            Those glyphs are null by default on ViewBase, so every Theme should define
-            and set their own custom glyphs.
-        -->
-
-        <Setter Property="AscendingSortGlyph" Value="{StaticResource ascendingSortGlyph}" />
-
-        <Setter Property="DescendingSortGlyph" Value="{StaticResource descendingSortGlyph}" />
-
-        <Setter Property="ExpandGroupGlyph" Value="{StaticResource expandGroupGlyph}" />
-
-        <Setter Property="CollapseGroupGlyph" Value="{StaticResource collapseGroupGlyph}" />
-
-        <Setter Property="CurrentItemGlyph" Value="{StaticResource currentItemGlyph}" />
-
-        <Setter Property="EditingRowGlyph" Value="{StaticResource editingRowGlyph}" />
-
-        <Setter Property="ValidationErrorGlyph" Value="{StaticResource validationErrorGlyph}" />
-
-        <Setter Property="ConnectionStateLoadingGlyph" Value="{StaticResource connectionStateLoadingGlyph}" />
-
-        <Setter Property="ConnectionStateCommittingGlyph" Value="{StaticResource connectionStateLoadingGlyph}" />
-
-        <Setter Property="ConnectionStateErrorGlyph" Value="{StaticResource connectionStateErrorGlyph}" />
-
-    </Style>
-
-    <!--  ===================================================================  -->
-    <!--  DefaultStyleKey declarations  -->
-    <!--  ===================================================================  -->
-
-    <Style
-        x:Key="{markup:ThemeKey TargetViewType=views:TableflowView,
-                                ThemeType=views:ClassicSystemColorTheme}"
-        BasedOn="{StaticResource tableflowViewClassicSystemColorDefaultValues}"
-        TargetType="views:TableflowView" />
-
-    <Style
-        x:Key="{markup:ThemeKey TargetViewType=views:TableflowView,
-                                ThemeType=views:ClassicSystemColorTheme,
-                                TargetElementType=local:DataGridControl}"
-        BasedOn="{StaticResource tableflowViewForcedClassicSystemColorGridControlStyle}"
-        TargetType="local:DataGridControl" />
-
-    <Style
-        x:Key="{markup:ThemeKey TargetViewType=views:TableflowView,
-                                ThemeType=views:ClassicSystemColorTheme,
-                                TargetElementType=local:RowSelectorPane}"
-        BasedOn="{StaticResource tableflowViewClassicSystemColorRowSelectorPaneStyle}"
-        TargetType="local:RowSelectorPane" />
-
-    <Style
-        x:Key="{markup:ThemeKey TargetViewType=views:TableflowView,
-                                ThemeType=views:ClassicSystemColorTheme,
-                                TargetElementType=local:RowSelector}"
-        BasedOn="{StaticResource tableflowViewClassicSystemColorRowSelectorStyle}"
-        TargetType="local:RowSelector" />
-
-    <Style
-        x:Key="{markup:ThemeKey TargetViewType=views:TableflowView,
-                                ThemeType=views:ClassicSystemColorTheme,
-                                TargetElementType=local:Row}"
-        BasedOn="{StaticResource tableflowViewClassicSystemColorRowStyle}"
-        TargetType="local:Row" />
-
-    <Style
-        x:Key="{markup:ThemeKey TargetViewType=views:TableflowView,
-                                ThemeType=views:ClassicSystemColorTheme,
-                                TargetElementType=local:DataRow}"
-        BasedOn="{StaticResource tableflowViewClassicSystemColorDataRowStyle}"
-        TargetType="local:DataRow" />
-
-    <Style
-        x:Key="{markup:ThemeKey TargetViewType=views:TableflowView,
-                                ThemeType=views:ClassicSystemColorTheme,
-                                TargetElementType=local:ColumnManagerRow}"
-        BasedOn="{StaticResource tableflowViewClassicSystemColorColumnManagerRowStyle}"
-        TargetType="local:ColumnManagerRow" />
-
-    <Style
-        x:Key="{markup:ThemeKey TargetViewType=views:TableflowView,
-                                ThemeType=views:ClassicSystemColorTheme,
-                                TargetElementType=local:Cell}"
-        BasedOn="{StaticResource tableflowViewClassicSystemColorCellStyle}"
-        TargetType="local:Cell" />
-
-    <Style
-        x:Key="{markup:ThemeKey TargetViewType=views:TableflowView,
-                                ThemeType=views:ClassicSystemColorTheme,
-                                TargetElementType=local:DataCell}"
-        BasedOn="{StaticResource tableflowViewClassicSystemColorDataCellStyle}"
-        TargetType="local:DataCell" />
-
-    <Style
-        x:Key="{markup:ThemeKey TargetViewType=views:TableflowView,
-                                ThemeType=views:ClassicSystemColorTheme,
-                                TargetElementType=local:ColumnManagerCell}"
-        BasedOn="{StaticResource tableflowViewClassicSystemColorColumnManagerCellStyle}"
-        TargetType="local:ColumnManagerCell" />
-
-    <Style
-        x:Key="{markup:ThemeKey TargetViewType=views:TableflowView,
-                                ThemeType=views:ClassicSystemColorTheme,
-                                TargetElementType=local:GroupByControl}"
-        BasedOn="{StaticResource tableflowViewClassicSystemColorGroupByControlStyle}"
-        TargetType="local:GroupByControl" />
-
-    <Style
-        x:Key="{markup:ThemeKey TargetViewType=views:TableflowView,
-                                ThemeType=views:ClassicSystemColorTheme,
-                                TargetElementType=local:GroupByItem}"
-        BasedOn="{StaticResource tableflowViewClassicSystemColorGroupByItemStyle}"
-        TargetType="local:GroupByItem" />
-
-    <Style
-        x:Key="{markup:ThemeKey TargetViewType=views:TableflowView,
-                                ThemeType=views:ClassicSystemColorTheme,
-                                TargetElementType=local:GroupHeaderControl}"
-        BasedOn="{StaticResource tableflowViewClassicSystemColorGroupHeaderControlStyle}"
-        TargetType="local:GroupHeaderControl" />
-
-    <Style
-        x:Key="{markup:ThemeKey TargetViewType=views:TableflowView,
-                                ThemeType=views:ClassicSystemColorTheme,
-                                TargetElementType=local:GroupLevelIndicator}"
-        BasedOn="{StaticResource tableflowViewClassicSystemColorGroupLevelIndicatorStyle}"
-        TargetType="local:GroupLevelIndicator" />
-
-    <Style
-        x:Key="{markup:ThemeKey TargetViewType=views:TableflowView,
-                                ThemeType=views:ClassicSystemColorTheme,
-                                TargetElementType=local:DetailIndicator}"
-        BasedOn="{StaticResource tableflowViewClassicSystemColorDetailIndicatorStyle}"
-        TargetType="local:DetailIndicator" />
-
-    <Style
-        x:Key="{markup:ThemeKey TargetViewType=views:TableflowView,
-                                ThemeType=views:ClassicSystemColorTheme,
-                                TargetElementType=local:GroupLevelIndicatorPane}"
-        BasedOn="{StaticResource tableflowViewClassicSystemColorGroupLevelIndicatorPaneStyle}"
-        TargetType="local:GroupLevelIndicatorPane" />
-
-    <Style
-        x:Key="{markup:ThemeKey TargetViewType=views:TableflowView,
-                                ThemeType=views:ClassicSystemColorTheme,
-                                TargetElementType=local:HierarchicalGroupLevelIndicatorPane}"
-        BasedOn="{StaticResource tableflowViewClassicSystemColorHierarchicalGroupLevelIndicatorPaneStyle}"
-        TargetType="local:HierarchicalGroupLevelIndicatorPane" />
-
-    <Style
-        x:Key="{markup:ThemeKey TargetViewType=views:TableflowView,
-                                ThemeType=views:ClassicSystemColorTheme,
-                                TargetElementType=local:ScrollTip}"
-        BasedOn="{StaticResource tableflowViewClassicSystemColorScrollTipStyle}"
-        TargetType="local:ScrollTip" />
-
-    <Style
-        x:Key="{markup:ThemeKey TargetViewType=views:TableflowView,
-                                ThemeType=views:ClassicSystemColorTheme,
-                                TargetElementType=local:HierarchicalGroupByControlNode}"
-        BasedOn="{StaticResource tableflowViewClassicSystemColorHierarchicalGroupByControlNodeStyle}"
-        TargetType="local:HierarchicalGroupByControlNode" />
-
-    <Style
-        x:Key="{markup:ThemeKey TargetViewType=views:TableflowView,
-                                ThemeType=views:ClassicSystemColorTheme,
-                                TargetElementType=local:HierarchicalGroupByControl}"
-        BasedOn="{StaticResource tableflowViewClassicSystemColorHierarchicalGroupByControlStyle}"
-        TargetType="local:HierarchicalGroupByControl" />
-
-    <Style
-        x:Key="{markup:ThemeKey TargetViewType=views:TableflowView,
-                                ThemeType=views:ClassicSystemColorTheme,
-                                TargetElementType=local:HierarchicalGroupByItem}"
-        BasedOn="{StaticResource tableflowViewClassicSystemColorHierarchicalGroupByItemStyle}"
-        TargetType="local:HierarchicalGroupByItem" />
-
-    <Style
-        x:Key="{markup:ThemeKey TargetViewType=views:TableflowView,
-                                ThemeType=views:ClassicSystemColorTheme,
-                                TargetElementType=local:GroupNavigationButton}"
-        BasedOn="{StaticResource tableflowViewClassicSystemColorGroupNavigationButtonStyle}"
-        TargetType="local:GroupNavigationButton" />
-
-    <Style
-        x:Key="{markup:ThemeKey TargetViewType=views:TableflowView,
-                                ThemeType=views:ClassicSystemColorTheme,
-                                TargetElementType=local:GroupNavigationControl}"
-        BasedOn="{StaticResource tableflowViewClassicSystemColorGroupNavigationControlStyle}"
-        TargetType="local:GroupNavigationControl" />
-
-    <Style
-        x:Key="{markup:ThemeKey TargetViewType=views:TableflowView,
-                                ThemeType=views:ClassicSystemColorTheme,
-                                TargetElementType=local:GroupNavigationControlItem}"
-        BasedOn="{StaticResource tableflowViewClassicSystemColorGroupNavigationControlItemStyle}"
-        TargetType="local:GroupNavigationControlItem" />
 </ResourceDictionary>

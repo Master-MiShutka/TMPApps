@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ARMTES.Shared
+﻿namespace ARMTES.Shared
 {
+    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel;
+    using System.Linq;
+    using System.Runtime.InteropServices;
+    using System.Text;
+    using System.Threading.Tasks;
+
     public class Util
     {
         /*[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1060:MovePInvokesToNativeMethodsClass")]
@@ -124,7 +124,6 @@ namespace ARMTES.Shared
             }
             return result;
         }*/
-
     }
 }
 
@@ -153,7 +152,7 @@ public void Save(System.Windows.Data.CollectionView items)
     xdoc.Save("MyData.xml");
 }
 
-    // Create the query 
+    // Create the query
         var rowsFromFile = from c in XDocument.Load(
                             "MyData.xml").Elements(
                             "Data").Elements("Rows").Elements("Row")

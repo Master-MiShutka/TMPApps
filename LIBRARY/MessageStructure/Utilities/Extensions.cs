@@ -4,13 +4,13 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using TMP.MessageStructure.Model;
-
 namespace TMP.MessageStructure.Utilities
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using TMP.MessageStructure.Model;
+
     /// <summary>
     /// Extensions methods.
     /// </summary>
@@ -34,7 +34,7 @@ namespace TMP.MessageStructure.Utilities
         {
             if (message == null)
             {
-                throw new ArgumentNullException("message", "This message has no header message!");
+                throw new ArgumentNullException(nameof(message), "This message has no header message!");
             }
 
             return (T)Convert.ChangeType(message, typeof(T));

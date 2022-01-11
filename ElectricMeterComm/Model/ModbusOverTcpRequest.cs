@@ -1,52 +1,69 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-
-namespace TMP.ElectricMeterComm.Model
+﻿namespace TMP.ElectricMeterComm.Model
 {
+    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel;
+    using System.Linq;
+    using System.Text;
+
     public class ModbusOverTcpRequest : INotifyPropertyChanged
     {
-        private string _receivedAsHex, _receivedAsText;
-        private byte[] sended, received;
+        private string receivedAsHex;
+        private string receivedAsText;
+        private byte[] sended;
+        private byte[] received;
 
         public void SetSendBytes(byte[] value)
         {
-            sended = value;
+            this.sended = value;
 
             string text = string.Empty, hex = string.Empty;
-            ParseBytes(sended, out text, out hex);
-            SendedAsText = text;
-            SendedAsHex = hex;
+            this.ParseBytes(this.sended, out text, out hex);
+            this.SendedAsText = text;
+            this.SendedAsHex = hex;
 
-            OnPropertyChanged("SendedAsHex");
-            OnPropertyChanged("SendedAsText");
+            this.OnPropertyChanged(nameof(this.SendedAsHex));
+            this.OnPropertyChanged(nameof(this.SendedAsText));
         }
+
         public void SetRecivedBytes(byte[] value)
         {
-            received = value;
+            this.received = value;
             string text, hex;
-            ParseBytes(received, out text, out hex);
-            ReceivedAsText = text;
-            ReceivedAsHex = hex;
+            this.ParseBytes(this.received, out text, out hex);
+            this.ReceivedAsText = text;
+            this.ReceivedAsHex = hex;
 
-            OnPropertyChanged("ReceivedAsHex");
-            OnPropertyChanged("ReceivedAsText");
+            this.OnPropertyChanged(nameof(this.ReceivedAsHex));
+            this.OnPropertyChanged(nameof(this.ReceivedAsText));
         }
 
         public string SendedAsHex { get; set; }
+
         public string SendedAsText { get; set; }
+
         public string ReceivedAsHex
         {
-            get { return _receivedAsHex; }
-            set { _receivedAsHex = value; OnPropertyChanged("ReceivedAsHex"); }
+            get => this.receivedAsHex;
+
+            set
+            {
+                this.receivedAsHex = value;
+                this.OnPropertyChanged(nameof(this.ReceivedAsHex));
+            }
         }
+
         public string ReceivedAsText
         {
-            get { return _receivedAsText; }
-            set { _receivedAsText = value; OnPropertyChanged("ReceivedAsText"); }
+            get => this.receivedAsText;
+
+            set
+            {
+                this.receivedAsText = value;
+                this.OnPropertyChanged(nameof(this.ReceivedAsText));
+            }
         }
+
         private void ParseBytes(byte[] bytes, out string outText, out string outHex)
         {
             StringBuilder asText = new StringBuilder();
@@ -64,11 +81,13 @@ namespace TMP.ElectricMeterComm.Model
                     asHex.Append(Environment.NewLine);
                 }
             }
+
             outText = asText.ToString();
             outHex = asHex.ToString();
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
+
         protected virtual void OnPropertyChanged(string propertyName)
         {
             PropertyChangedEventHandler handler = this.PropertyChanged;

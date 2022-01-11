@@ -26,7 +26,7 @@ namespace TMP.ARMTES.ViewModel
     {
         public MainViewModel()
         {
-            GetData = new DelegateCommand((o) =>
+            GetData = new DelegateCommand(() =>
             {
                 IsBusy = true;
                 var task = Task.Factory.StartNew(Start);
@@ -38,7 +38,7 @@ namespace TMP.ARMTES.ViewModel
                 });
                 task.ContinueWith(t =>
                 {
-                    MessageBox.Show(SmallEngineViewerApp.GetExceptionDetails(t.Exception), "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show(App.GetExceptionDetails(t.Exception), "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                 }, TaskContinuationOptions.OnlyOnFaulted);
 
             });

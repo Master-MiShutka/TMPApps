@@ -205,7 +205,7 @@ namespace TMP.Work.AmperM.TestApp.ViewModel
                 {
                     App.Log.Log("Попытка импорта списка запросов из файла '" + ofd.FileName + "'");
                     bool success = true;
-                    IList<IRepositoryItem> list = Common.RepositoryCommon.BaseRepository<List<IRepositoryItem>>.GzJsonDeSerialize(
+                    IList<IRepositoryItem> list = Common.RepositoryCommon.BaseDeserializer<List<IRepositoryItem>>.GzJsonDeSerialize(
                         ofd.FileName,
                         (e) =>
                         {
@@ -247,7 +247,7 @@ namespace TMP.Work.AmperM.TestApp.ViewModel
                 {
                     App.Log.Log("Попытка экспорта списка запросов в файл '" + ofd.FileName + "'");
                     bool success = true;
-                    Common.RepositoryCommon.BaseRepository<List<IRepositoryItem>>.GzJsonSerialize(
+                    Common.RepositoryCommon.BaseDeserializer<List<IRepositoryItem>>.GzJsonSerialize(
                         RepositoryItems.ToList(),
                         ofd.FileName,
                         (e) =>

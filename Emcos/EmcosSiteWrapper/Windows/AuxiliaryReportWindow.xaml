@@ -1,66 +1,100 @@
-﻿<Window x:Class="TMP.Work.Emcos.AuxiliaryReportWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:common_controls="clr-namespace:TMP.Wpf.Common.Controls;assembly=TMP.Wpf.Common"
-        xmlns:icons="clr-namespace:TMP.Wpf.Common.Icons;assembly=TMP.Wpf.Common"
-        xmlns:local_controls="clr-namespace:TMP.Work.Emcos.Controls"
-        xmlns:local_converters="clr-namespace:TMP.Work.Emcos.Converters"
-        xmlns:local_vm="clr-namespace:TMP.Work.Emcos.ViewModel"
-        xmlns:model="clr-namespace:TMP.Work.Emcos.Model"
-        xmlns:treeListView="clr-namespace:TMP.Wpf.Common.Controls.TreeListView;assembly=TMP.Wpf.Common"
-        xmlns:vtreeview="clr-namespace:TMP.Work.Emcos.Controls.VTreeView"
-        mc:Ignorable="d"
-        Height="300" Width="600"
-        Background="{DynamicResource WindowBackground}"
-        FontFamily="Calibri,Verdana,Tahoma"
-        FontSize="{DynamicResource SubHeaderFontSize}"
-        Icon="/EmcosSiteWrapper;component/ImagesAndIcons/emcos.ico"
-        Title="Отчёт по собственным нуждам"
-        TextOptions.TextFormattingMode="Ideal"
-        UseLayoutRounding="True"
-        WindowStartupLocation="CenterOwner">
+﻿<Window
+    x:Class="TMP.Work.Emcos.AuxiliaryReportWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local_controls="clr-namespace:TMP.Work.Emcos.Controls"
+    xmlns:local_converters="clr-namespace:TMP.Work.Emcos.Converters"
+    xmlns:local_vm="clr-namespace:TMP.Work.Emcos.ViewModel"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:model="clr-namespace:TMP.Work.Emcos.Model"
+    xmlns:treeListView="clr-namespace:TMP.UI.Controls.WPF.TreeListView;assembly=ui.controls.wpf"
+    xmlns:ui="clr-namespace:TMP.UI.Controls.WPF;assembly=ui.controls.wpf"
+    Title="Отчёт по собственным нуждам"
+    Width="800"
+    Height="350"
+    Background="{DynamicResource WindowBackground}"
+    FontFamily="Calibri,Verdana,Tahoma"
+    FontSize="{DynamicResource SubHeaderFontSize}"
+    Icon="/EmcosSiteWrapper;component/ImagesAndIcons/emcos.ico"
+    TextOptions.TextFormattingMode="Ideal"
+    UseLayoutRounding="True"
+    WindowStartupLocation="CenterOwner"
+    mc:Ignorable="d">
     <Window.Resources>
         <DataTemplate DataType="{x:Type model:AuxiliaryReportItem}">
             <StackPanel Orientation="Horizontal">
                 <treeListView:RowExpander />
-                <Image x:Name="img" Source="{StaticResource UnitTransformer}" Height="{Binding ElementName=text, Path=ActualHeight}" Effect="{DynamicResource dropShadowWhite}"/>
-                <TextBlock x:Name="text" Margin="5,0,0,0"  Style="{StaticResource TextCellStyle}" Text="{Binding Name}" />
+                <Image
+                    x:Name="img"
+                    Height="{Binding ElementName=text, Path=ActualHeight}"
+                    Effect="{DynamicResource dropShadowWhite}"
+                    Source="{StaticResource UnitTransformer}" />
+                <TextBlock
+                    x:Name="text"
+                    Margin="5,0,0,0"
+                    Style="{StaticResource TextCellStyle}"
+                    Text="{Binding Name}" />
             </StackPanel>
             <DataTemplate.Triggers>
                 <DataTrigger Binding="{Binding Type}" Value="Departament">
-                    <Setter TargetName="img" Property="Source" Value="{StaticResource Departament}"/>
+                    <Setter TargetName="img" Property="Source" Value="{StaticResource Departament}" />
                 </DataTrigger>
                 <DataTrigger Binding="{Binding Type}" Value="Substation">
-                    <Setter TargetName="img" Property="Source" Value="{StaticResource Substation}"/>
+                    <Setter TargetName="img" Property="Source" Value="{StaticResource Substation}" />
                 </DataTrigger>
             </DataTemplate.Triggers>
-    </DataTemplate>
+        </DataTemplate>
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <!--  0  -->
-        <treeListView:TreeListView x:Name="tree"
-                                   Grid.Row="0"
-                                   Margin="5"
-                                   AlternationCount="2"
-                                   FontSize="{DynamicResource tableFontSize}"
-                                   TextBlock.FontSize="{DynamicResource tableFontSize}"
-                                   VirtualizingStackPanel.IsVirtualizing="True">
+        <Label
+            Margin="5,1"
+            Padding="0"
+            HorizontalAlignment="Right"
+            Content="Энергия в кВт∙ч" />
+        <!--  1  -->
+        <treeListView:TreeListView
+            x:Name="tree"
+            Grid.Row="1"
+            Margin="5"
+            AlternationCount="2"
+            FontSize="{DynamicResource tableFontSize}"
+            TextBlock.FontSize="{DynamicResource tableFontSize}"
+            VirtualizingStackPanel.IsVirtualizing="True">
             <treeListView:TreeListView.View>
                 <GridView>
                     <GridViewColumn Width="300" Header="Наименование" />
-                    <GridViewColumn Header="Расход, кВт∙ч" >
+                    <GridViewColumn Header="Расход A+, кВт∙ч">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Style="{StaticResource NumericCellStyle}"
-                                               Text="{Binding Value,
-                                                              StringFormat={StaticResource NumberStringFormat},
-                                                              ConverterCulture=be-BY}" />
+                                <TextBlock Style="{StaticResource NumericCellStyle}" Text="{Binding APlus, StringFormat={StaticResource NumberStringFormat}, ConverterCulture=be-BY}" />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="Расход A-, кВт∙ч">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Style="{StaticResource NumericCellStyle}" Text="{Binding AMinus, StringFormat={StaticResource NumberStringFormat}, ConverterCulture=be-BY}" />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="Расход R+, кВт∙ч">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Style="{StaticResource NumericCellStyle}" Text="{Binding RPlus, StringFormat={StaticResource NumberStringFormat}, ConverterCulture=be-BY}" />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="Расход R-, кВт∙ч">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Style="{StaticResource NumericCellStyle}" Text="{Binding RMinus, StringFormat={StaticResource NumberStringFormat}, ConverterCulture=be-BY}" />
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
@@ -69,15 +103,16 @@
             <treeListView:TreeListView.Style>
                 <Style TargetType="{x:Type treeListView:TreeListView}">
                     <Style.Triggers>
-                        <DataTrigger Binding="{Binding Items.Count}" Value="0">
+                        <DataTrigger Binding="{Binding Items}" Value="{x:Null}">
                             <Setter Property="Template">
                                 <Setter.Value>
                                     <ControlTemplate>
-                                        <Border Background="{TemplateBinding Background}"
-                                                BorderBrush="{TemplateBinding BorderBrush}"
-                                                BorderThickness="{TemplateBinding BorderThickness}"
-                                                SnapsToDevicePixels="true">
-                                            <local_controls:NoData />
+                                        <Border
+                                            Background="{TemplateBinding Background}"
+                                            BorderBrush="{TemplateBinding BorderBrush}"
+                                            BorderThickness="{TemplateBinding BorderThickness}"
+                                            SnapsToDevicePixels="true">
+                                            <ui:NoData />
                                         </Border>
                                     </ControlTemplate>
                                 </Setter.Value>
@@ -87,31 +122,48 @@
                 </Style>
             </treeListView:TreeListView.Style>
         </treeListView:TreeListView>
-        <!--  1  -->
-        <Border Grid.Row="1"
-                Margin="0"
-                CornerRadius="0"
-                Padding="0"
-                Style="{StaticResource MainBorderStyle}">
+        <!--  2  -->
+        <Border
+            Grid.Row="2"
+            Margin="0"
+            Padding="0"
+            CornerRadius="0"
+            Style="{StaticResource MainBorderStyle}">
             <DockPanel LastChildFill="False">
-                <Button Margin="10 2" Click="ButtonExport_Click">
+                <Button Margin="10,2" Click="ButtonExport_Click">
                     <StackPanel Orientation="Horizontal">
-                        <icons:PackIconModern Width="{StaticResource iconSize}"
-                                              Height="{StaticResource iconSize}"
-                                              HorizontalAlignment="Center"
-                                              VerticalAlignment="Center"
-                                              Kind="OfficeExcel" />
-                        <TextBlock LineHeight="20" Text="Экспорт данных" />
+                        <ui:Icons
+                            Width="{StaticResource iconSize}"
+                            Height="{StaticResource iconSize}"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Kind="OfficeExcel" />
+                        <TextBlock
+                            Padding="2,0"
+                            VerticalAlignment="Center"
+                            LineHeight="20"
+                            Text="Экспорт данных"
+                            TextWrapping="Wrap" />
                     </StackPanel>
                 </Button>
-                <Button Margin="10 2" DockPanel.Dock="Right" Click="ButtonClose_Click">
+                <Button
+                    Margin="10,2"
+                    Padding="2"
+                    Click="ButtonClose_Click"
+                    DockPanel.Dock="Right">
                     <StackPanel Orientation="Horizontal">
-                        <icons:PackIconModern Width="{StaticResource iconSize}"
-                                              Height="{StaticResource iconSize}"
-                                              HorizontalAlignment="Center"
-                                              VerticalAlignment="Center"
-                                              Kind="Close" />
-                        <TextBlock LineHeight="20" Text="Закрыть" />
+                        <ui:Icons
+                            Width="{StaticResource iconSize}"
+                            Height="{StaticResource iconSize}"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Kind="Close" />
+                        <TextBlock
+                            Padding="2,0"
+                            VerticalAlignment="Center"
+                            LineHeight="20"
+                            Text="Закрыть"
+                            TextWrapping="Wrap" />
                     </StackPanel>
                 </Button>
             </DockPanel>

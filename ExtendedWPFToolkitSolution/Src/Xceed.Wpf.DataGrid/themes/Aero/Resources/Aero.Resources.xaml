@@ -1,43 +1,38 @@
-﻿<!--
-    ***********************************************************************************
-    
-    Extended WPF Toolkit
-    
-    Copyright (C) 2007-2013 Xceed Software Inc.
-    
-    This program is provided to you under the terms of the Microsoft Public
-    License (Ms-PL) as published at http://wpftoolkit.codeplex.com/license
-    
-    For more features, controls, and fast professional support,
-    pick up the Plus Edition at http://xceed.com/wpf_toolkit
-    
-    Stay informed: follow @datagrid on Twitter or Like http://facebook.com/datagrids
-    
-    **********************************************************************************
--->
+﻿<!--***********************************************************************************
 
-<ResourceDictionary
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:cnv="clr-namespace:Xceed.Wpf.DataGrid.Converters"
-    xmlns:local="clr-namespace:Xceed.Wpf.DataGrid">
+   Extended WPF Toolkit
 
-    <!--  ===================================================================  -->
-    <!--  Utility Resources  -->
-    <!--  ===================================================================  -->
+   Copyright (C) 2007-2013 Xceed Software Inc.
 
-    <Thickness
-        x:Key="columnManagerCellPadding"
-        Bottom="2"
-        Left="3"
-        Right="3"
-        Top="0" />
+   This program is provided to you under the terms of the Microsoft Public
+   License (Ms-PL) as published at http://wpftoolkit.codeplex.com/license 
 
-    <Thickness
-        x:Key="groupHeaderPadding"
-        Bottom="3"
-        Left="8"
-        Right="8"
-        Top="1" />
+   For more features, controls, and fast professional support,
+   pick up the Plus Edition at http://xceed.com/wpf_toolkit
+
+   Stay informed: follow @datagrid on Twitter or Like http://facebook.com/datagrids
+
+  **********************************************************************************-->
+
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:Xceed.Wpf.DataGrid"
+                    xmlns:cnv="clr-namespace:Xceed.Wpf.DataGrid.Converters">
+
+   <!-- =================================================================== -->
+   <!-- Utility Resources                                                   -->
+   <!-- =================================================================== -->
+
+   <Thickness x:Key="columnManagerCellPadding"
+              Left="3"
+              Top="0"
+              Right="3"
+              Bottom="2" />
+
+   <Thickness x:Key="groupHeaderPadding"
+              Left="8"
+              Top="1"
+              Right="8"
+              Bottom="3" />
 
 </ResourceDictionary>

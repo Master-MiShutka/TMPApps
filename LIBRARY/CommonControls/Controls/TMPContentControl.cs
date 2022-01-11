@@ -12,24 +12,24 @@ namespace TMP.Wpf.CommonControls
 
         public bool ReverseTransition
         {
-            get { return (bool)GetValue(ReverseTransitionProperty); }
-            set { SetValue(ReverseTransitionProperty, value); }
+            get => (bool)GetValue(ReverseTransitionProperty);
+            set => SetValue(ReverseTransitionProperty, value);
         }
 
         public static readonly DependencyProperty TransitionsEnabledProperty = DependencyProperty.Register("TransitionsEnabled", typeof(bool), typeof(TMPContentControl), new FrameworkPropertyMetadata(true));
 
         public bool TransitionsEnabled
         {
-            get { return (bool)GetValue(TransitionsEnabledProperty); }
-            set { SetValue(TransitionsEnabledProperty, value); }
+            get => (bool)GetValue(TransitionsEnabledProperty);
+            set => SetValue(TransitionsEnabledProperty, value);
         }
 
         public static readonly DependencyProperty OnlyLoadTransitionProperty = DependencyProperty.Register("OnlyLoadTransition", typeof(bool), typeof(TMPContentControl), new FrameworkPropertyMetadata(false));
 
         public bool OnlyLoadTransition
         {
-            get { return (bool)GetValue(OnlyLoadTransitionProperty); }
-            set { SetValue(OnlyLoadTransitionProperty, value); }
+            get => (bool)GetValue(OnlyLoadTransitionProperty);
+            set => SetValue(OnlyLoadTransitionProperty, value);
         }
 
         private bool transitionLoaded;

@@ -178,50 +178,50 @@ namespace TMP.Wpf.CommonControls.Dialogs
 
         public string Message
         {
-            get { return (string)GetValue(MessageProperty); }
-            set { SetValue(MessageProperty, value); }
+            get => (string)GetValue(MessageProperty);
+            set => SetValue(MessageProperty, value);
         }
 
         public string Username
         {
-            get { return (string)GetValue(UsernameProperty); }
-            set { SetValue(UsernameProperty, value); }
+            get => (string)GetValue(UsernameProperty);
+            set => SetValue(UsernameProperty, value);
         }
 
         public string Password
         {
-            get { return (string)GetValue(PasswordProperty); }
-            set { SetValue(PasswordProperty, value); }
+            get => (string)GetValue(PasswordProperty);
+            set => SetValue(PasswordProperty, value);
         }
 
         public string UsernameWatermark
         {
-            get { return (string)GetValue(UsernameWatermarkProperty); }
-            set { SetValue(UsernameWatermarkProperty, value); }
+            get => (string)GetValue(UsernameWatermarkProperty);
+            set => SetValue(UsernameWatermarkProperty, value);
         }
 
         public string PasswordWatermark
         {
-            get { return (string)GetValue(PasswordWatermarkProperty); }
-            set { SetValue(PasswordWatermarkProperty, value); }
+            get => (string)GetValue(PasswordWatermarkProperty);
+            set => SetValue(PasswordWatermarkProperty, value);
         }
 
         public string AffirmativeButtonText
         {
-            get { return (string)GetValue(AffirmativeButtonTextProperty); }
-            set { SetValue(AffirmativeButtonTextProperty, value); }
+            get => (string)GetValue(AffirmativeButtonTextProperty);
+            set => SetValue(AffirmativeButtonTextProperty, value);
         }
 
         public string NegativeButtonText
         {
-            get { return (string)GetValue(NegativeButtonTextProperty); }
-            set { SetValue(NegativeButtonTextProperty, value); }
+            get => (string)GetValue(NegativeButtonTextProperty);
+            set => SetValue(NegativeButtonTextProperty, value);
         }
 
         public Visibility NegativeButtonButtonVisibility
         {
-            get { return (Visibility)GetValue(NegativeButtonButtonVisibilityProperty); }
-            set { SetValue(NegativeButtonButtonVisibilityProperty, value); }
+            get => (Visibility)GetValue(NegativeButtonButtonVisibilityProperty);
+            set => SetValue(NegativeButtonButtonVisibilityProperty, value);
         }
     }
 }

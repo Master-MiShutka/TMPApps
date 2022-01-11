@@ -1,9 +1,9 @@
-﻿using System;
-
-namespace TemplateEngine.Docx.Errors
+﻿namespace TemplateEngine.Docx.Errors
 {
-	internal interface IError:IEquatable<IError>
-	{
-		string Message { get; }
-	}
+    using System;
+
+    internal interface IError : IEquatable<IError>
+    {
+        string Message { get; }
+    }
 }

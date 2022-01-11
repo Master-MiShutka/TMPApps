@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Printing;
-using System.Xml;
-
-namespace TMP.PrintEngine.Utils
+﻿namespace TMP.PrintEngine.Utils
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Printing;
+    using System.Xml;
+
     public static class XpsPrinterUtils
     {
         public static Dictionary<string, string> GetInputBins(PrintQueue printQueue)
@@ -30,12 +30,11 @@ namespace TMP.PrintEngine.Utils
             return inputBins;
         }
 
-
         public static PrintTicket ModifyPrintTicket(PrintTicket ticket, string featureName, string newValue)
         {
             if (ticket == null)
             {
-                throw new ArgumentNullException("ticket");
+                throw new ArgumentNullException(nameof(ticket));
             }
 
             var xmlDoc = new XmlDocument();

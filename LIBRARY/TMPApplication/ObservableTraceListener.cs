@@ -1,35 +1,35 @@
-﻿using System;
-using System.Diagnostics;
-using System.Text;
-
-namespace TMPApplication
+﻿namespace TMPApplication
 {
+    using System;
+    using System.Diagnostics;
+    using System.Text;
+
     /// <summary>
     /// A TraceListener that raise an event each time a trace is written
     /// </summary>
-    sealed class ObservableTraceListener : TraceListener
+    internal sealed class ObservableTraceListener : TraceListener
     {
-        StringBuilder buffer = new StringBuilder();
+        private StringBuilder buffer = new StringBuilder();
 
         public override void Write(string message)
         {
-            buffer.Append(message);
+            this.buffer.Append(message);
         }
 
         [DebuggerStepThrough]
         public override void WriteLine(string message)
         {
-            buffer.Append(message);
-            string msg = buffer.ToString();
+            this.buffer.Append(message);
+            string msg = this.buffer.ToString();
 
             Debug.WriteLine(msg, "Binding error >> ");
 
-            if (TraceCatched != null)
+            if (this.TraceCatched != null)
             {
-                TraceCatched(msg);
+                this.TraceCatched(msg);
             }
 
-            buffer.Clear();
+            this.buffer.Clear();
         }
 
         public event Action<string> TraceCatched;

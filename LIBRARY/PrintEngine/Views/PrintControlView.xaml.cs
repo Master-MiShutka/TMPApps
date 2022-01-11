@@ -1,10 +1,10 @@
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Media;
-using TMP.PrintEngine.ViewModels;
-
 namespace TMP.PrintEngine.Views
 {
+    using System.Windows;
+    using System.Windows.Controls;
+    using System.Windows.Media;
+    using TMP.PrintEngine.ViewModels;
+
     /// <summary>
     /// Interaction logic for AdvancedColorPicker.xaml
     /// </summary>
@@ -12,54 +12,48 @@ namespace TMP.PrintEngine.Views
     {
         public PrintControlView()
         {
-            InitializeComponent();
+            this.InitializeComponent();
         }
 
         #region IView Members
 
-        private APrintControlViewModel _viewModel;
+        private APrintControlViewModel viewModel;
+
         public IViewModel ViewModel
         {
-            get
-            {
-                return _viewModel;
-            }
+            get => this.viewModel;
+
             set
             {
-                _viewModel = value as APrintControlViewModel;
-                DataContext = _viewModel;
+                this.viewModel = value as APrintControlViewModel;
+                this.DataContext = this.viewModel;
             }
         }
+
         public void SetPageNumberVisibility(Visibility visibility)
         {
-            PageNumberMarker.Visibility = visibility;
+            this.PageNumberMarker.Visibility = visibility;
         }
 
         public void SetPrintingOptionsWaitCurtainVisibility(Visibility visibility)
         {
-            PrintingOptionsWaitCurtain.Visibility = visibility;
+            this.PrintingOptionsWaitCurtain.Visibility = visibility;
         }
 
         #endregion
 
         #region IPrintControlView Members
 
-        DocumentViewer IPrintControlView.DocumentViewer
-        {
-            get
-            {
-                return null;// DocViewer;
-            }
-        }
+        DocumentViewer IPrintControlView.DocumentViewer => null; // DocViewer;
 
         public StackPanel GetPagePreviewContainer()
         {
-            return PagePreviewContainer;
+            return this.PagePreviewContainer;
         }
 
         public ScrollViewer GetSv()
         {
-            return null;//sv;
+            return null; // sv;
         }
 
         #endregion
@@ -75,21 +69,30 @@ namespace TMP.PrintEngine.Views
         public void PrintingOptionsWaitCurtainVisibility(bool isVisible)
         {
             if (isVisible)
-                PrintingOptionsWaitCurtain.Visibility = Visibility.Visible;
+            {
+                this.PrintingOptionsWaitCurtain.Visibility = Visibility.Visible;
+            }
             else
-                PrintingOptionsWaitCurtain.Visibility = Visibility.Collapsed;
+            {
+                this.PrintingOptionsWaitCurtain.Visibility = Visibility.Collapsed;
+            }
         }
+
         public void ScalePreviewNode(ScaleTransform scaleTransform)
         {
-            PreviewNode.LayoutTransform = scaleTransform;
+            this.PreviewNode.LayoutTransform = scaleTransform;
         }
 
         internal void EnablePrintingOptionsSet(bool isEnabled)
         {
             if (isEnabled)
-                SetPanel.Visibility = Visibility.Visible;
+            {
+                this.SetPanel.Visibility = Visibility.Visible;
+            }
             else
-                SetPanel.Visibility = Visibility.Collapsed;
+            {
+                this.SetPanel.Visibility = Visibility.Collapsed;
+            }
         }
     }
 }

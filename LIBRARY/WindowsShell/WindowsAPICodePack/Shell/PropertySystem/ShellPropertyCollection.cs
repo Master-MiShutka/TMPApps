@@ -1,16 +1,16 @@
-﻿//Copyright (c) Microsoft Corporation.  All rights reserved.
-
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Runtime.InteropServices.ComTypes;
-using Microsoft.WindowsAPICodePack.Shell.Resources;
-using MS.WindowsAPICodePack.Internal;
+﻿// Copyright (c) Microsoft Corporation.  All rights reserved.
 
 namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+    using System.Linq;
+    using System.Runtime.InteropServices;
+    using System.Runtime.InteropServices.ComTypes;
+    using Microsoft.WindowsAPICodePack.Shell.Resources;
+    using MS.WindowsAPICodePack.Internal;
+
     /// <summary>
     /// Creates a readonly collection of IProperty objects.
     /// </summary>
@@ -25,8 +25,8 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
         internal ShellPropertyCollection(IPropertyStore nativePropertyStore)
             : base(new List<IShellProperty>())
         {
-            NativePropertyStore = nativePropertyStore;
-            AddProperties(nativePropertyStore);
+            this.NativePropertyStore = nativePropertyStore;
+            this.AddProperties(nativePropertyStore);
         }
 
         #endregion
@@ -40,12 +40,12 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
         public ShellPropertyCollection(ShellObject parent)
             : base(new List<IShellProperty>())
         {
-            ParentShellObject = parent;
+            this.ParentShellObject = parent;
             IPropertyStore nativePropertyStore = null;
             try
             {
-                nativePropertyStore = CreateDefaultPropertyStore(ParentShellObject);
-                AddProperties(nativePropertyStore);
+                nativePropertyStore = CreateDefaultPropertyStore(this.ParentShellObject);
+                this.AddProperties(nativePropertyStore);
             }
             catch
             {
@@ -53,6 +53,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
                 {
                     parent.Dispose();
                 }
+
                 throw;
             }
             finally
@@ -68,8 +69,10 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
         /// <summary>
         /// Creates a new <c>ShellPropertyCollection</c> object with the specified file or folder path.
         /// </summary>
-        /// <param name="path">The path to the file or folder.</param>        
-        public ShellPropertyCollection(string path) : this(ShellObjectFactory.Create(path)) { }
+        /// <param name="path">The path to the file or folder.</param>
+        public ShellPropertyCollection(string path) : this(ShellObjectFactory.Create(path))
+        {
+        }
 
         #endregion
 
@@ -90,13 +93,13 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
             {
                 nativePropertyStore.GetAt(i, out propKey);
 
-                if (ParentShellObject != null)
+                if (this.ParentShellObject != null)
                 {
-                    Items.Add(ParentShellObject.Properties.CreateTypedProperty(propKey));
+                    this.Items.Add(this.ParentShellObject.Properties.CreateTypedProperty(propKey));
                 }
                 else
                 {
-                    Items.Add(CreateTypedProperty(propKey, NativePropertyStore));
+                    this.Items.Add(CreateTypedProperty(propKey, this.NativePropertyStore));
                 }
             }
         }
@@ -111,7 +114,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
                    ref guid,
                    out nativePropertyStore);
 
-            // throw on failure 
+            // throw on failure
             if (nativePropertyStore == null || !CoreErrorHelper.Succeeded(hr))
             {
                 throw new ShellException(hr);
@@ -119,9 +122,6 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
             return nativePropertyStore;
         }
-
-
-
 
         #endregion
 
@@ -136,11 +136,10 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
         {
             if (string.IsNullOrEmpty(canonicalName))
             {
-                throw new ArgumentException(LocalizedMessages.PropertyCollectionNullCanonicalName, "canonicalName");
+                throw new ArgumentException(LocalizedMessages.PropertyCollectionNullCanonicalName, nameof(canonicalName));
             }
 
-            return Items.Any(p => p.CanonicalName == canonicalName);
-
+            return this.Items.Any(p => p.CanonicalName == canonicalName);
         }
 
         /// <summary>
@@ -150,17 +149,17 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
         /// <returns><B>True</B> if available, <B>false</B> otherwise.</returns>
         public bool Contains(PropertyKey key)
         {
-            return Items.Any(p => p.PropertyKey == key);
+            return this.Items.Any(p => p.PropertyKey == key);
         }
 
         /// <summary>
         /// Gets the property associated with the supplied canonical name string.
         /// The canonical name property is case-sensitive.
-        /// 
+        ///
         /// </summary>
         /// <param name="canonicalName">The canonical name.</param>
         /// <returns>The property associated with the canonical name, if found.</returns>
-        /// <exception cref="IndexOutOfRangeException">Throws IndexOutOfRangeException 
+        /// <exception cref="IndexOutOfRangeException">Throws IndexOutOfRangeException
         /// if no matching property is found.</exception>
         public IShellProperty this[string canonicalName]
         {
@@ -168,32 +167,36 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
             {
                 if (string.IsNullOrEmpty(canonicalName))
                 {
-                    throw new ArgumentException(LocalizedMessages.PropertyCollectionNullCanonicalName, "canonicalName");
+                    throw new ArgumentException(LocalizedMessages.PropertyCollectionNullCanonicalName, nameof(canonicalName));
                 }
 
-                IShellProperty prop = Items.FirstOrDefault(p => p.CanonicalName == canonicalName);
+                IShellProperty prop = this.Items.FirstOrDefault(p => p.CanonicalName == canonicalName);
                 if (prop == null)
                 {
                     throw new IndexOutOfRangeException(LocalizedMessages.PropertyCollectionCanonicalInvalidIndex);
                 }
+
                 return prop;
             }
         }
 
         /// <summary>
         /// Gets a property associated with the supplied property key.
-        /// 
+        ///
         /// </summary>
         /// <param name="key">The property key.</param>
         /// <returns>The property associated with the property key, if found.</returns>
-        /// <exception cref="IndexOutOfRangeException">Throws IndexOutOfRangeException 
+        /// <exception cref="IndexOutOfRangeException">Throws IndexOutOfRangeException
         /// if no matching property is found.</exception>
         public IShellProperty this[PropertyKey key]
         {
             get
             {
-                IShellProperty prop = Items.FirstOrDefault(p => p.PropertyKey == key);
-                if (prop != null) return prop;
+                IShellProperty prop = this.Items.FirstOrDefault(p => p.PropertyKey == key);
+                if (prop != null)
+                {
+                    return prop;
+                }
 
                 throw new IndexOutOfRangeException(LocalizedMessages.PropertyCollectionInvalidIndex);
             }
@@ -202,11 +205,11 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
         #endregion
 
         // TODO - ShellProperties.cs also has a similar class that is used for creating
-        // a ShellObject specific IShellProperty. These 2 methods should be combined or moved to a 
+        // a ShellObject specific IShellProperty. These 2 methods should be combined or moved to a
         // common location.
-        internal static IShellProperty CreateTypedProperty(PropertyKey propKey, IPropertyStore NativePropertyStore)
+        internal static IShellProperty CreateTypedProperty(PropertyKey propKey, IPropertyStore nativePropertyStore)
         {
-            return ShellPropertyFactory.CreateShellProperty(propKey, NativePropertyStore);
+            return ShellPropertyFactory.CreateShellProperty(propKey, nativePropertyStore);
         }
 
         #region IDisposable Members
@@ -217,10 +220,10 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
         /// <param name="disposing">Indicates that this is being called from Dispose(), rather than the finalizer.</param>
         protected virtual void Dispose(bool disposing)
         {
-            if (NativePropertyStore != null)
+            if (this.NativePropertyStore != null)
             {
-                Marshal.ReleaseComObject(NativePropertyStore);
-                NativePropertyStore = null;
+                Marshal.ReleaseComObject(this.NativePropertyStore);
+                this.NativePropertyStore = null;
             }
         }
 
@@ -229,7 +232,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
         /// </summary>
         public void Dispose()
         {
-            Dispose(true);
+            this.Dispose(true);
             GC.SuppressFinalize(this);
         }
 
@@ -238,7 +241,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
         /// </summary>
         ~ShellPropertyCollection()
         {
-            Dispose(false);
+            this.Dispose(false);
         }
 
         #endregion

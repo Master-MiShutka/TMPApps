@@ -1,18 +1,12 @@
-﻿using System.IO;
-
-namespace TMP.Common.JsonUtils.JsonClassGenerator.CodeWriters
+﻿namespace TMP.Common.JsonUtils.JsonClassGenerator.CodeWriters
 {
+    using System.IO;
+
     public class CSharpCodeWriter : ICodeWriter
     {
-        public string FileExtension
-        {
-            get { return ".cs"; }
-        }
+        public string FileExtension => ".cs";
 
-        public string DisplayName
-        {
-            get { return "C#"; }
-        }
+        public string DisplayName => "C#";
 
         private const string NoRenameAttribute = "[Obfuscation(Feature = \"renaming\", Exclude = true)]";
         private const string NoPruneAttribute = "[Obfuscation(Feature = \"trigger\", Exclude = false)]";
@@ -24,8 +18,8 @@ namespace TMP.Common.JsonUtils.JsonClassGenerator.CodeWriters
             switch (type.Type)
             {
                 case JsonTypeEnum.Anything: return "object";
-                case JsonTypeEnum.Array: return arraysAsLists ? "IList<" + GetTypeName(type.InternalType, config) + ">" : GetTypeName(type.InternalType, config) + "[]";
-                case JsonTypeEnum.Dictionary: return "Dictionary<string, " + GetTypeName(type.InternalType, config) + ">";
+                case JsonTypeEnum.Array: return arraysAsLists ? "IList<" + this.GetTypeName(type.InternalType, config) + ">" : this.GetTypeName(type.InternalType, config) + "[]";
+                case JsonTypeEnum.Dictionary: return "Dictionary<string, " + this.GetTypeName(type.InternalType, config) + ">";
                 case JsonTypeEnum.Boolean: return "bool";
                 case JsonTypeEnum.Float: return "double";
                 case JsonTypeEnum.Integer: return "int";
@@ -48,6 +42,7 @@ namespace TMP.Common.JsonUtils.JsonClassGenerator.CodeWriters
         {
             return config.ApplyObfuscationAttributes && !config.ExplicitDeserialization && !config.UsePascalCase;
         }
+
         private bool ShouldApplyNoPruneAttribute(IJsonClassGeneratorConfig config)
         {
             return config.ApplyObfuscationAttributes && !config.ExplicitDeserialization && config.UseProperties;
@@ -60,13 +55,22 @@ namespace TMP.Common.JsonUtils.JsonClassGenerator.CodeWriters
                 sw.WriteLine();
                 sw.WriteLine("using System;");
                 sw.WriteLine("using System.Collections.Generic;");
-                if (ShouldApplyNoPruneAttribute(config) || ShouldApplyNoRenamingAttribute(config))
+                if (this.ShouldApplyNoPruneAttribute(config) || this.ShouldApplyNoRenamingAttribute(config))
+                {
                     sw.WriteLine("using System.Reflection;");
+                }
+
                 if (!config.ExplicitDeserialization && config.UsePascalCase)
+                {
                     sw.WriteLine("using Newtonsoft.Json;");
+                }
+
                 sw.WriteLine("using Newtonsoft.Json.Linq;");
                 if (config.ExplicitDeserialization)
+                {
                     sw.WriteLine("using JsonCSharpClassGenerator;");
+                }
+
                 if (config.SecondaryNamespace != null && config.HasSecondaryClasses && !config.UseNestedClasses)
                 {
                     sw.WriteLine("using {0};", config.SecondaryNamespace);
@@ -109,16 +113,32 @@ namespace TMP.Common.JsonUtils.JsonClassGenerator.CodeWriters
             {
                 if (!type.IsRoot)
                 {
-                    if (ShouldApplyNoRenamingAttribute(config)) sw.WriteLine("        " + NoRenameAttribute);
-                    if (ShouldApplyNoPruneAttribute(config)) sw.WriteLine("        " + NoPruneAttribute);
+                    if (this.ShouldApplyNoRenamingAttribute(config))
+                    {
+                        sw.WriteLine("        " + NoRenameAttribute);
+                    }
+
+                    if (this.ShouldApplyNoPruneAttribute(config))
+                    {
+                        sw.WriteLine("        " + NoPruneAttribute);
+                    }
+
                     sw.WriteLine("        {0} class {1}", visibility, type.AssignedName);
                     sw.WriteLine("        {");
                 }
             }
             else
             {
-                if (ShouldApplyNoRenamingAttribute(config)) sw.WriteLine("    " + NoRenameAttribute);
-                if (ShouldApplyNoPruneAttribute(config)) sw.WriteLine("    " + NoPruneAttribute);
+                if (this.ShouldApplyNoRenamingAttribute(config))
+                {
+                    sw.WriteLine("    " + NoRenameAttribute);
+                }
+
+                if (this.ShouldApplyNoPruneAttribute(config))
+                {
+                    sw.WriteLine("    " + NoPruneAttribute);
+                }
+
                 sw.WriteLine("    {0} class {1}", visibility, type.AssignedName);
                 sw.WriteLine("    {");
             }
@@ -129,19 +149,31 @@ namespace TMP.Common.JsonUtils.JsonClassGenerator.CodeWriters
             if (shouldSuppressWarning)
             {
                 sw.WriteLine("#pragma warning disable 0649");
-                if (!config.UsePascalCase) sw.WriteLine();
+                if (!config.UsePascalCase)
+                {
+                    sw.WriteLine();
+                }
             }
 
-            if (type.IsRoot && config.ExplicitDeserialization) WriteStringConstructorExplicitDeserialization(config, sw, type, prefix);
+            if (type.IsRoot && config.ExplicitDeserialization)
+            {
+                this.WriteStringConstructorExplicitDeserialization(config, sw, type, prefix);
+            }
 
             if (config.ExplicitDeserialization)
             {
-                if (config.UseProperties) WriteClassWithPropertiesExplicitDeserialization(sw, type, prefix);
-                else WriteClassWithFieldsExplicitDeserialization(sw, type, prefix);
+                if (config.UseProperties)
+                {
+                    this.WriteClassWithPropertiesExplicitDeserialization(sw, type, prefix);
+                }
+                else
+                {
+                    this.WriteClassWithFieldsExplicitDeserialization(sw, type, prefix);
+                }
             }
             else
             {
-                WriteClassMembers(config, sw, type, prefix);
+                this.WriteClassMembers(config, sw, type, prefix);
             }
 
             if (shouldSuppressWarning)
@@ -152,10 +184,14 @@ namespace TMP.Common.JsonUtils.JsonClassGenerator.CodeWriters
             }
 
             if (config.UseNestedClasses && !type.IsRoot)
+            {
                 sw.WriteLine("        }");
+            }
 
             if (!config.UseNestedClasses)
+            {
                 sw.WriteLine("    }");
+            }
 
             sw.WriteLine();
         }
@@ -164,7 +200,10 @@ namespace TMP.Common.JsonUtils.JsonClassGenerator.CodeWriters
         {
             foreach (var field in type.Fields)
             {
-                if (config.UsePascalCase || config.ExamplesInDocumentation) sw.WriteLine();
+                if (config.UsePascalCase || config.ExamplesInDocumentation)
+                {
+                    sw.WriteLine();
+                }
 
                 if (config.ExamplesInDocumentation)
                 {
@@ -224,6 +263,7 @@ namespace TMP.Common.JsonUtils.JsonClassGenerator.CodeWriters
                 {
                     sw.WriteLine(prefix + "        return {0};", field.GetGenerationCode("__jobject"));
                 }
+
                 sw.WriteLine(prefix + "    }");
                 sw.WriteLine(prefix + "}");
                 sw.WriteLine();

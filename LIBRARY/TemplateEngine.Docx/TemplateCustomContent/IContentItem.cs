@@ -1,11 +1,11 @@
-﻿using System;
-
-namespace TemplateEngine.Docx
+﻿namespace TemplateEngine.Docx
 {
-	public interface IContentItem : IEquatable<IContentItem>
-	{
-		string Name { get; set; }
+    using System;
 
-	    bool IsHidden { get; set; }
-	}
+    public interface IContentItem : IEquatable<IContentItem>
+    {
+        string Name { get; set; }
+
+        bool IsHidden { get; set; }
+    }
 }

@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Input;
-
-namespace WPFHexaEditor.Core
+﻿namespace WPFHexaEditor.Core
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+    using System.Windows.Input;
+
     /// <summary>
     /// Static class for valid keyboard key.
     /// </summary>
@@ -28,13 +28,13 @@ namespace WPFHexaEditor.Core
         /// <returns></returns>
         public static bool IsHexKey(Key key)
         {
-            return key == Key.A || key == Key.B || key == Key.C || key == Key.D || key == Key.E || key == Key.F || 
+            return key == Key.A || key == Key.B || key == Key.C || key == Key.D || key == Key.E || key == Key.F ||
                 IsNumericKey(key);
         }
 
         /// <summary>
         /// Get the digit from key
-        /// </summary>        
+        /// </summary>
         public static int GetDigitFromKey(Key key)
         {
             switch (key)
@@ -63,20 +63,31 @@ namespace WPFHexaEditor.Core
             }
         }
 
-        public static bool IsBackspaceKey(Key key) { return key == Key.Back; }
+        public static bool IsBackspaceKey(Key key)
+        {
+            return key == Key.Back;
+        }
 
-        public static bool IsSubstractKey(Key key) { return key == Key.Subtract || key == Key.OemMinus; }
+        public static bool IsSubstractKey(Key key)
+        {
+            return key == Key.Subtract || key == Key.OemMinus;
+        }
 
-        public static bool IsDeleteKey(Key key) { return key == Key.Delete; }
+        public static bool IsDeleteKey(Key key)
+        {
+            return key == Key.Delete;
+        }
 
-        public static bool IsCapsLock(Key key) { return key == Key.CapsLock; }
+        public static bool IsCapsLock(Key key)
+        {
+            return key == Key.CapsLock;
+        }
 
         public static bool IsIgnoredKey(Key key)
         {
-            //ADD SOMES OTHER KEY FOR VALIDATED IN STRINGBYTE CONTROL
+            // ADD SOMES OTHER KEY FOR VALIDATED IN STRINGBYTE CONTROL
 
-            //DELETE KEY FOR ADD OTHER FUNCTIONALITY...
-
+            // DELETE KEY FOR ADD OTHER FUNCTIONALITY...
             return key == Key.Tab ||
                    key == Key.Enter ||
                    key == Key.Return ||
@@ -93,31 +104,69 @@ namespace WPFHexaEditor.Core
                    key == Key.End;
         }
 
-        public static bool IsEscapeKey(Key key) { return key == Key.Escape; }
+        public static bool IsEscapeKey(Key key)
+        {
+            return key == Key.Escape;
+        }
 
-        public static bool IsUpKey(Key key) { return key == Key.Up; }
+        public static bool IsUpKey(Key key)
+        {
+            return key == Key.Up;
+        }
 
-        public static bool IsWindowsKey(Key key) { return key == Key.LWin || key == Key.RWin; }
+        public static bool IsWindowsKey(Key key)
+        {
+            return key == Key.LWin || key == Key.RWin;
+        }
 
-        public static bool IsDownKey(Key key) { return key == Key.Down; }
+        public static bool IsDownKey(Key key)
+        {
+            return key == Key.Down;
+        }
 
-        public static bool IsRightKey(Key key) { return key == Key.Right; }
+        public static bool IsRightKey(Key key)
+        {
+            return key == Key.Right;
+        }
 
-        public static bool IsLeftKey(Key key) { return key == Key.Left; }
+        public static bool IsLeftKey(Key key)
+        {
+            return key == Key.Left;
+        }
 
-        public static bool IsPageDownKey(Key key) { return key == Key.PageDown; }
+        public static bool IsPageDownKey(Key key)
+        {
+            return key == Key.PageDown;
+        }
 
-        public static bool IsPageUpKey(Key key) { return key == Key.PageUp; }
+        public static bool IsPageUpKey(Key key)
+        {
+            return key == Key.PageUp;
+        }
 
-        public static bool IsEnterKey(Key key) { return key == Key.Enter; }
+        public static bool IsEnterKey(Key key)
+        {
+            return key == Key.Enter;
+        }
 
-        public static bool IsCtrlCKey(Key key) { return key == Key.C && Keyboard.Modifiers == ModifierKeys.Control; }
+        public static bool IsCtrlCKey(Key key)
+        {
+            return key == Key.C && Keyboard.Modifiers == ModifierKeys.Control;
+        }
 
-        public static bool IsCtrlZKey(Key key) { return key == Key.Z && Keyboard.Modifiers == ModifierKeys.Control; }
+        public static bool IsCtrlZKey(Key key)
+        {
+            return key == Key.Z && Keyboard.Modifiers == ModifierKeys.Control;
+        }
 
-        public static bool IsCtrlYKey(Key key) { return key == Key.Y && Keyboard.Modifiers == ModifierKeys.Control; }
+        public static bool IsCtrlYKey(Key key)
+        {
+            return key == Key.Y && Keyboard.Modifiers == ModifierKeys.Control;
+        }
 
-        public static bool IsCtrlVKey(Key key) { return key == Key.V && Keyboard.Modifiers == ModifierKeys.Control; }
-
+        public static bool IsCtrlVKey(Key key)
+        {
+            return key == Key.V && Keyboard.Modifiers == ModifierKeys.Control;
+        }
     }
 }

@@ -1,139 +1,45 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{E925301D-936E-4FE1-A31D-2D5CBE0623DD}</ProjectGuid>
+    <TargetFramework>net45</TargetFramework>
     <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>TMP.DWRES.Graph</RootNamespace>
     <AssemblyName>TMP.DWRES.Graph</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <OutputPath>..\..\out\$(Configuration)\</OutputPath>
+    <UseWindowsForms>true</UseWindowsForms>
+    <UseWPF>true</UseWPF>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
     <OutputPath>..\..\out\Debug\DWRESGraphBuilder\Libs\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
     <OutputPath>..\..\out\Release\DWRESGraphBuilder\Libs\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="GraphSharp, Version=1.0.2.0, Culture=neutral, PublicKeyToken=f9c24778325a6b82, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\GraphSharp.1.1.0.0\lib\net40\GraphSharp.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="GraphSharp.Controls, Version=1.1.0.0, Culture=neutral, PublicKeyToken=f9c24778325a6b82, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\GraphSharp.1.1.0.0\lib\net40\GraphSharp.Controls.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="PresentationCore" />
-    <Reference Include="PresentationFramework" />
-    <Reference Include="QuickGraph, Version=3.6.61114.0, Culture=neutral, PublicKeyToken=f3fb40175eec2af3, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\QuickGraph.3.6.61119.7\lib\net4\QuickGraph.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="QuickGraph.Data, Version=3.6.61114.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\QuickGraph.3.6.61119.7\lib\net4\QuickGraph.Data.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="QuickGraph.Graphviz, Version=3.6.61114.0, Culture=neutral, PublicKeyToken=f3fb40175eec2af3, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\QuickGraph.3.6.61119.7\lib\net4\QuickGraph.Graphviz.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="QuickGraph.Serialization, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\QuickGraph.3.6.61119.7\lib\net4\QuickGraph.Serialization.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xaml" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
-    <Reference Include="WindowsBase" />
-    <Reference Include="WPFExtensions, Version=1.0.3437.34043, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\WPFExtensions.1.0.0\lib\WPFExtensions.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
+    <ProjectReference Include="..\Controls\WPFControls.csproj" />
+    <ProjectReference Include="..\Helper\Helper.csproj" />
+    <ProjectReference Include="..\Objects\Objects.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="EdgeColorConverter.cs" />
-    <Compile Include="Fider\FiderGraphVertexControlStyleConverters\VertexControlDropShadowEffectColorStyleConverter.cs" />
-    <Compile Include="Fider\FiderGraphVertexControlStyleConverters\VertexControlBorderBrushStyleConverter.cs" />
-    <Compile Include="Fider\FiderGraphVertexControlStyleConverters\VertexControlBackgroundStyleConverter.cs" />
-    <Compile Include="Fider\FiderGraphVertexControlTemplateConverter.cs" />
-    <Compile Include="EdgeRouteToPathConverter.cs" />
-    <Compile Include="Fider\FiderGraphNodeTypeConverter.cs" />
-    <Compile Include="Fider\GraphLayout.xaml.cs">
-      <DependentUpon>GraphLayout.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Fider\FiderGraphEdge.cs" />
-    <Compile Include="Fider\FiderGraph.cs" />
-    <Compile Include="Fider\FiderGraphLayout.cs" />
-    <Compile Include="Fider\FiderGraphVertex.cs" />
+    <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Fider\GraphLayout.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Generic.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Fider\FiderGraph.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Themes\Generic.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
+    <PackageReference Include="GraphSharp" Version="1.1.0.0" />
+    <PackageReference Include="QuickGraph" Version="3.6.61119.7" />
+    <PackageReference Include="WPFExtensions" Version="1.0.0" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Controls\WPFControls.csproj">
-      <Project>{d2e33fee-6689-4bb4-a95c-1b5c327a1e8f}</Project>
-      <Name>WPFControls</Name>
-      <Private>False</Private>
-    </ProjectReference>
-    <ProjectReference Include="..\Helper\Helper.csproj">
-      <Project>{c8733eca-b241-4a52-bee9-ed764df1edc9}</Project>
-      <Name>Helper</Name>
-      <Private>False</Private>
-    </ProjectReference>
-    <ProjectReference Include="..\Objects\Objects.csproj">
-      <Project>{29b62fe5-aa18-4c76-9eaa-e2456b936515}</Project>
-      <Name>Objects</Name>
-      <Private>False</Private>
-    </ProjectReference>
+    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <Compile Remove="FiderGraph.cs" />
+    <Compile Remove="GraphEdge.cs" />
+    <Compile Remove="GraphStyleConverter.cs" />
+    <Compile Remove="GraphVertex.cs" />
+    <Compile Remove="MyRouteToPathConverter.cs" />
+    <Compile Remove="NodeTypeConverter.cs" />
+    <Compile Remove="TestGraphLayout.cs" />
+    <Page Remove="FiderGraph.xaml" />
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>

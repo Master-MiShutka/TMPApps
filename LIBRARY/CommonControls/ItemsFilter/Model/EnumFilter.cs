@@ -37,18 +37,16 @@ namespace TMP.Wpf.CommonControls.ItemsFilter.Model
                 if (allValues == null)
                 {
                     Type enumType = typeof(T);
-                    if (enumType.IsEnum) {
+                    if (enumType.IsEnum)
+                    {
                         allValues = enumType.GetEnumValues();
                     }
                     else
-                        allValues =new string[0];
+                        allValues = new string[0];
                 }
                 return allValues;
             }
-            set
-            {
-                throw new NotImplementedException();
-            }
+            set => throw new NotImplementedException();
         }
         public override void IsMatch(FilterPresenter sender, FilterEventArgs e) {
             if (e.Accepted) {

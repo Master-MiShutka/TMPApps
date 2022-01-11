@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Windows.Controls;
-
-namespace TMP.UI.Controls.WPF
+﻿namespace TMP.UI.Controls.WPF
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Windows.Controls;
+
     public class LayoutGroup : StackPanel
     {
         public LayoutGroup()

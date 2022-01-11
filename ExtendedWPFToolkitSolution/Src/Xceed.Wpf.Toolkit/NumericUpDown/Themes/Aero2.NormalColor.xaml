@@ -1,15 +1,15 @@
 ﻿<!--
     ***********************************************************************************
     
-    Extended WPF Toolkit
+    Toolkit for WPF
     
-    Copyright (C) 2007-2013 Xceed Software Inc.
+    Copyright (C) 2007-2018 Xceed Software Inc.
     
     This program is provided to you under the terms of the Microsoft Public
     License (Ms-PL) as published at http://wpftoolkit.codeplex.com/license
     
     For more features, controls, and fast professional support,
-    pick up the Plus Edition at http://xceed.com/wpf_toolkit
+    pick up the Plus Edition at https://xceed.com/xceed-toolkit-plus-for-wpf/
     
     Stay informed: follow @datagrid on Twitter or Like http://facebook.com/datagrids
     
@@ -78,6 +78,7 @@
                             Foreground="{TemplateBinding Foreground}"
                             IsTabStop="True"
                             IsUndoEnabled="{Binding IsUndoEnabled, RelativeSource={RelativeSource TemplatedParent}}"
+                            MaxLength="{Binding MaxLength, RelativeSource={RelativeSource TemplatedParent}}"
                             TabIndex="{TemplateBinding TabIndex}"
                             TextAlignment="{Binding TextAlignment, RelativeSource={RelativeSource TemplatedParent}}"
                             TextWrapping="NoWrap"
@@ -153,7 +154,7 @@
     <!--  Style for all internal derived types of NumericUpDown will be done in code-behind  -->
     <!--  for external themes to redefine the default style. The reason is that the  -->
     <!--  toolkit.dll uses the InternalsVisibleTo attribute which makes internal data only  -->
-    <!--  available in code-behind(not xaml).  -->
+    <!--  available in code-behind (not xaml).  -->
     <!--  (ex. Office2007 theme)  -->
     <!--  ===============================================================================  -->
 

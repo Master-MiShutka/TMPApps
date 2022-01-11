@@ -1,8 +1,8 @@
-﻿using System;
-using System.Windows;
-
-namespace Interactivity
+﻿namespace Interactivity
 {
+    using System;
+    using System.Windows;
+
     /// <summary>
     /// Represents a collection of behaviors with a shared AssociatedObject and provides change notifications to its contents when that AssociatedObject changes.
     /// </summary>

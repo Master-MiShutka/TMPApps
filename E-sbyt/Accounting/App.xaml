@@ -1,9 +1,10 @@
-﻿<tmpapp:TMPApp
-    x:Class="TMP.Work.ESbyt.Accounting.App"
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="clr-namespace:TMP.Work.ESbyt.Accounting"
-    xmlns:tmpapp="clr-namespace:TMPApplication;assembly=TMPApplication"
-    StartupUri="MainWindow.xaml">
-    <tmpapp:TMPApp.Resources />
+﻿<tmpapp:TMPApp x:Class="TMP.Work.ESbyt.Accounting.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:tmpapp="clr-namespace:TMPApplication;assembly=TMPApplication"
+             xmlns:local="clr-namespace:TMP.Work.ESbyt.Accounting"
+             StartupUri="MainWindow.xaml">
+    <tmpapp:TMPApp.Resources>
+         
+    </tmpapp:TMPApp.Resources>
 </tmpapp:TMPApp>

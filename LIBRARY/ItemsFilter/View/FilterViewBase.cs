@@ -1,11 +1,12 @@
-﻿using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
-using System.Windows.Data;
-using ItemsFilter.Model;
-using System.Windows.Input;
+﻿namespace ItemsFilter.View
+{
+    using System.Windows;
+    using System.Windows.Controls;
+    using System.Windows.Controls.Primitives;
+    using System.Windows.Data;
+    using System.Windows.Input;
+    using ItemsFilter.Model;
 
-namespace ItemsFilter.View {
     /// <summary>
     /// Provide base class for filter View that include Filter as Model property.
     /// </summary>
@@ -15,91 +16,99 @@ namespace ItemsFilter.View {
     {
         public const string PART_Name = "PART_Name";
 
-        static FilterViewBase() {
+        static FilterViewBase()
+        {
             CommandManager.RegisterClassCommandBinding(typeof(FilterViewBase<T>),
                 new CommandBinding(FilterCommand.Clear, ClearFilterExecute, ClearFilterCanExecute));
         }
 
-        private static void ClearFilterCanExecute(object sender, CanExecuteRoutedEventArgs e) {
-            e.CanExecute = ((FilterViewBase<T>)sender).Model != null && ((IFilter)( ((FilterViewBase<T>)sender).Model)).IsActive;
+        private static void ClearFilterCanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = ((FilterViewBase<T>)sender).ViewModel != null && ((IFilter)((FilterViewBase<T>)sender).ViewModel).IsActive;
         }
-        private static void ClearFilterExecute(object sender, ExecutedRoutedEventArgs e) {
-            ((IFilter)(((FilterViewBase<T>)sender).Model)).IsActive = false;
-        }
-        private TextBlock _txtName;
 
+        private static void ClearFilterExecute(object sender, ExecutedRoutedEventArgs e)
+        {
+            ((IFilter)((FilterViewBase<T>)sender).ViewModel).IsActive = false;
+        }
+
+        private TextBlock txtName;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FilterViewBase&lt;T&gt;"/> class.
         /// </summary>
-        public FilterViewBase() {
+        public FilterViewBase()
+        {
         }
 
-        #region Model
+        #region ViewModel
 
         /// <summary>
-        /// Model Dependency Property
+        /// ViewModel Dependency Property
         /// </summary>
-        public static readonly DependencyProperty ModelProperty =
-            DependencyProperty.Register("Model", typeof(T), typeof(FilterViewBase<T>),
-                new FrameworkPropertyMetadata(default(T),  
-                    new PropertyChangedCallback(OnModelChanged)));
+        public static readonly DependencyProperty ViewModelProperty =
+            DependencyProperty.Register("ViewModel", typeof(T), typeof(FilterViewBase<T>),
+                new FrameworkPropertyMetadata(default(T),
+                    new PropertyChangedCallback(OnViewModelChanged)));
 
         /// <summary>
-        /// Gets or sets the VievModel.
+        /// Gets or sets the ViewModel.
         /// </summary>
-        public T Model
+        public T ViewModel
         {
-            get { return (T)GetValue(ModelProperty); }
-            set { SetValue(ModelProperty, value); }
+            get => (T)this.GetValue(ViewModelProperty);
+            set => this.SetValue(ViewModelProperty, value);
         }
 
         /// <summary>
         /// Handles changes to the VievModel.
         /// </summary>
-        private static void OnModelChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private static void OnViewModelChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             FilterViewBase<T> target = (FilterViewBase<T>)d;
-            T oldModel = (T)e.OldValue;
-            T newModel = (T)e.NewValue;
-            target.OnModelChanged(oldModel, newModel);
+            T oldViewModel = (T)e.OldValue;
+            T newViewModel = (T)e.NewValue;
+            target.OnViewModelChanged(oldViewModel, newViewModel);
+
+            target.ViewModelChanged?.Invoke(target, new ViewModelChangedEventArgs(oldViewModel as IFilter, newViewModel as IFilter));
         }
 
         /// <summary>
-        /// Provides derived classes an opportunity to handle changes to the Model property.
+        /// Provides derived classes an opportunity to handle changes to the ViewModel property.
         /// </summary>
-        protected virtual void OnModelChanged(T oldModel, T newModel)
+        protected virtual void OnViewModelChanged(T oldViewModel, T newViewModel)
         {
         }
 
+        public event ViewModelChangedEventHandler ViewModelChanged;
+
         #endregion
 
-     
-        IFilter IFilterView.Model {
-            get { return (IFilter)Model; }
-        }
+        IFilter IFilterView.ViewModel => (IFilter)this.ViewModel;
 
         /// <summary>
         /// When overridden in a derived class, is invoked whenever application code or internal processes (such as a rebuilding layout pass) call <see cref="M:System.Windows.Controls.Control.ApplyTemplate"/>.
         /// </summary>
-        public override void OnApplyTemplate() {
+        public override void OnApplyTemplate()
+        {
             base.OnApplyTemplate();
-            _txtName = GetTemplateChild(PART_Name) as TextBlock;
-            InitializeBindings();
+            this.txtName = this.GetTemplateChild(PART_Name) as TextBlock;
+            this.InitializeBindings();
         }
+
         /// <summary>
         /// Initializes the bindings.
         /// </summary>
-        private void InitializeBindings() {
-            if (_txtName != null) {
-                _txtName.SetBinding(TextBlock.TextProperty, new Binding("Model.Name")
+        private void InitializeBindings()
+        {
+            if (this.txtName != null)
+            {
+                this.txtName.SetBinding(TextBlock.TextProperty, new Binding("ViewModel.Name")
                 {
                     Mode = BindingMode.OneWay,
                     Source = this,
                 });
             }
         }
-       
-
     }
 }

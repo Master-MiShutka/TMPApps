@@ -1,22 +1,21 @@
-using System;
-using System.Collections.Generic;
-using System.Drawing.Printing;
-using System.IO;
-using System.Printing;
-using System.Windows;
-
 namespace TMP.PrintEngine.Utils
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Drawing.Printing;
+    using System.IO;
+    using System.Printing;
+    using System.Windows;
+
     public class PrintUtility
     {
         public PrintUtility()
         {
-            ;
         }
 
         public string GetSaveLocation(string printerFullName)
         {
-            return String.Format("{0}//{1}_printTicket.xml", Constants.Print.SETTINGS_FOLDER, printerFullName.Replace("\\", "_"));
+            return string.Format("{0}//{1}_printTicket.xml", Constants.Print.SETTINGS_FOLDER, printerFullName.Replace("\\", "_"));
         }
 
         private PrinterSettings GetPrinterSettings(string currentPrinterName)
@@ -28,7 +27,7 @@ namespace TMP.PrintEngine.Utils
         {
             float hardMarginX;
             float hardMarginY;
-            var printerSettings = GetPrinterSettings(currentPrinterName);
+            var printerSettings = this.GetPrinterSettings(currentPrinterName);
             try
             {
                 hardMarginX = printerSettings.DefaultPageSettings.HardMarginX;
@@ -39,6 +38,7 @@ namespace TMP.PrintEngine.Utils
                 hardMarginX = 10;
                 hardMarginY = 10;
             }
+
             var margin = new Thickness(hardMarginX + 5, hardMarginY + 5, printerSettings.DefaultPageSettings.Margins.Right, printerSettings.DefaultPageSettings.Margins.Bottom + 50);
             ////TempFileLogger.Log(String.Format("Paper margin = ({0}, {1}, {2}, {3})", margin.Left, margin.Top, margin.Right, margin.Bottom));
             return margin;
@@ -47,7 +47,7 @@ namespace TMP.PrintEngine.Utils
         public IList<PaperSize> GetPaperSizes(string currentPrinterName)
         {
             var paperSizes = new List<PaperSize>();
-            var sizes = GetPrinterSettings(currentPrinterName).PaperSizes;
+            var sizes = this.GetPrinterSettings(currentPrinterName).PaperSizes;
             foreach (var ps in sizes)
             {
                 if (((PaperSize)ps).PaperName != "Custom Size")
@@ -63,7 +63,7 @@ namespace TMP.PrintEngine.Utils
         {
             try
             {
-                var printServer = new PrintServer();                
+                var printServer = new PrintServer();
                 var printers = printServer.GetPrintQueues(new[] { EnumeratedPrintQueueTypes.Connections, EnumeratedPrintQueueTypes.Local });
                 return printers;
             }
@@ -83,9 +83,9 @@ namespace TMP.PrintEngine.Utils
 
         public PrintTicket GetUserPrintTicket(string printerFullName)
         {
-            if (File.Exists(GetSaveLocation(printerFullName)))
+            if (File.Exists(this.GetSaveLocation(printerFullName)))
             {
-                var fileStream = new FileStream(GetSaveLocation(printerFullName), FileMode.Open);
+                var fileStream = new FileStream(this.GetSaveLocation(printerFullName), FileMode.Open);
                 var userPrintTicket = new PrintTicket(fileStream);
                 fileStream.Close();
 
@@ -97,7 +97,7 @@ namespace TMP.PrintEngine.Utils
 
         public void SaveUserPrintTicket(PrintQueue currentPrinter)
         {
-            Stream outStream = new FileStream(GetSaveLocation(currentPrinter.FullName), FileMode.Create);
+            Stream outStream = new FileStream(this.GetSaveLocation(currentPrinter.FullName), FileMode.Create);
             currentPrinter.UserPrintTicket.SaveTo(outStream);
             outStream.Close();
         }

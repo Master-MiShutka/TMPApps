@@ -1,7 +1,7 @@
-﻿using System.Runtime.InteropServices;
-
-namespace Microsoft.WindowsAPICodePack.Shell
+﻿namespace Microsoft.WindowsAPICodePack.Shell
 {
+    using System.Runtime.InteropServices;
+
     /// <summary>
     /// A wrapper for a RECT struct
     /// </summary>
@@ -10,22 +10,22 @@ namespace Microsoft.WindowsAPICodePack.Shell
     {
         /// <summary>
         /// Position of left edge
-        /// </summary>            
+        /// </summary>
         public int Left { get; set; }
 
         /// <summary>
         /// Position of top edge
-        /// </summary>            
+        /// </summary>
         public int Top { get; set; }
 
         /// <summary>
         /// Position of right edge
-        /// </summary>            
+        /// </summary>
         public int Right { get; set; }
 
         /// <summary>
         /// Position of bottom edge
-        /// </summary>            
+        /// </summary>
         public int Bottom { get; set; }
 
         /// <summary>
@@ -38,10 +38,10 @@ namespace Microsoft.WindowsAPICodePack.Shell
         public NativeRect(int left, int top, int right, int bottom)
             : this()
         {
-            Left = left;
-            Top = top;
-            Right = right;
-            Bottom = bottom;
+            this.Left = left;
+            this.Top = top;
+            this.Right = right;
+            this.Bottom = bottom;
         }
 
         /// <summary>
@@ -85,12 +85,11 @@ namespace Microsoft.WindowsAPICodePack.Shell
         /// <returns>Returns hash code for this NativeRect</returns>
         public override int GetHashCode()
         {
-            int hash = Left.GetHashCode();
-            hash = hash * 31 + Top.GetHashCode();
-            hash = hash * 31 + Right.GetHashCode();
-            hash = hash * 31 + Bottom.GetHashCode();
+            int hash = this.Left.GetHashCode();
+            hash = (hash * 31) + this.Top.GetHashCode();
+            hash = (hash * 31) + this.Right.GetHashCode();
+            hash = (hash * 31) + this.Bottom.GetHashCode();
             return hash;
         }
     }
-
 }

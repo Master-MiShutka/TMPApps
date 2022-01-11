@@ -1,9 +1,9 @@
-﻿using System;
-using System.Windows;
-using System.Windows.Threading;
-
-namespace TMPApplication
+﻿namespace TMPApplication
 {
+    using System;
+    using System.Windows;
+    using System.Windows.Threading;
+
     partial class TMPApp
     {
         public Window CreateExternalWindow(
@@ -31,7 +31,7 @@ namespace TMPApplication
 
                 ShowMinButton = showMinButton,
                 ShowMaxRestoreButton = showMaxButton,
-                ShowCloseButton = showCloseButton
+                ShowCloseButton = showCloseButton,
             };
         }
 
@@ -41,96 +41,213 @@ namespace TMPApplication
         /// <param name="exception">
         /// Исключение
         /// </param>
-        public static void ShowError(object exception)
+        public static void ShowError(object exception, Action runAfter = null)
         {
             Exception e = (Exception)exception;
             if (e != null)
-                ShowError(e, null);
+            {
+                ShowError(exception: e, null, runAfter: runAfter);
+            }
             else
-                ShowError("Произошла неисправимая ошибка.\nПрограмма будет закрыта.");
+            {
+                ShowError(message: "Произошла неисправимая ошибка.\nПрограмма будет закрыта.", runAfter: runAfter);
+            }
         }
+
         /// <summary>
         /// Отобразить сообщение об ошибке
         /// </summary>
         /// <param name="message">Сообщение</param>
         /// <returns></returns>
-        public static MessageBoxResult ShowError(string message, MessageBoxButton buttons = MessageBoxButton.OK)
+        public static MessageBoxResult ShowError(string message, MessageBoxButton buttons = MessageBoxButton.OK, Action runAfter = null)
         {
             Func<MessageBoxResult> func = () =>
             {
-                LogError("ОШИБКА: " + message);
                 System.Media.SystemSounds.Exclamation.Play();
                 if (Current == null || Current.MainWindow == null)
-                    return MessageBox.Show(message, Title, buttons, MessageBoxImage.Error);
+                {
+                    logger?.Error("ОШИБКА: " + message);
+                    return MessageBox.Show(message, Instance?.Title, buttons, MessageBoxImage.Error, MessageBoxResult.OK, MessageBoxOptions.DefaultDesktopOnly);
+                }
                 else
-                    return MessageBox.Show(Current.MainWindow, message, Title, buttons, MessageBoxImage.Error);
+                {
+                    if (Current.MainWindow is WpfDialogs.Contracts.IWindowWithDialogs windowWithDialogs && windowWithDialogs.DialogManager != null)
+                    {
+                        windowWithDialogs.ShowDialogError(message, Instance.Title, ok: runAfter);
+                        return MessageBoxResult.OK;
+                    }
+                    else
+                    {
+                        logger?.Error("ОШИБКА: " + message);
+                        return MessageBox.Show(Current.MainWindow, message, Instance.Title, buttons, MessageBoxImage.Error, MessageBoxResult.OK, MessageBoxOptions.DefaultDesktopOnly);
+                    }
+                }
             };
-            return (MessageBoxResult)DispatcherExtensions.InUi(func);
+            if (Application.Current != null && Application.Current.Dispatcher.CheckAccess() == false)
+            {
+                return (MessageBoxResult)DispatcherExtensions.InUi(func);
+            }
+            else
+            {
+                return func();
+            }
         }
+
         /// <summary>
         /// Отобразить сообщение об ошибке при возникновении исключения указанного формата
         /// </summary>
-        /// <param name="e">Исключение</param>
+        /// <param name="exception">Исключение</param>
         /// <param name="format">Формат сообщения</param>
         /// <returns></returns>
-        public static MessageBoxResult ShowError(Exception e, string format, MessageBoxButton buttons = MessageBoxButton.OK)
+        public static MessageBoxResult ShowError(Exception exception, string format, MessageBoxButton buttons = MessageBoxButton.OK, Action runAfter = null)
         {
             Func<MessageBoxResult> func = () =>
             {
-                if (String.IsNullOrEmpty(format))
+                if (string.IsNullOrEmpty(format))
+                {
                     format = "Произошла ошибка.\nОписание ошибки:\n{0}";
+                }
+
                 System.Media.SystemSounds.Exclamation.Play();
-                string msg = String.Format(format, GetExceptionDetails(e));
-                LogError(msg + "\nТрассировка:\n" + e.StackTrace);
+                string msg = string.Format(format, GetExceptionDetails(exception));
 
                 if (Current == null || Current.MainWindow == null)
-                    return MessageBox.Show(msg, Title, buttons, MessageBoxImage.Error);
+                {
+                    logger?.Error(message: msg + "\nТрассировка:\n" + exception.StackTrace);
+                    return MessageBox.Show(msg, Instance.Title, buttons, MessageBoxImage.Error, MessageBoxResult.OK, MessageBoxOptions.DefaultDesktopOnly);
+                }
                 else
-                    return MessageBox.Show(Current.MainWindow, msg, Title, buttons, MessageBoxImage.Error);
+                {
+                    if (Current.MainWindow is WpfDialogs.Contracts.IWindowWithDialogs windowWithDialogs && windowWithDialogs.DialogManager != null)
+                    {
+                        windowWithDialogs.ShowDialogError(msg, Instance.Title, ok: runAfter);
+                        return MessageBoxResult.OK;
+                    }
+                    else
+                    {
+                        logger?.Error(msg + "\nТрассировка:\n" + exception.StackTrace);
+                        return MessageBox.Show(Current.MainWindow, msg, Instance.Title, buttons, MessageBoxImage.Error, MessageBoxResult.OK, MessageBoxOptions.DefaultDesktopOnly);
+                    }
+                }
             };
-            return (MessageBoxResult)DispatcherExtensions.InUi(func);
+
+            if (Application.Current.Dispatcher.CheckAccess() == false)
+            {
+                return (MessageBoxResult)DispatcherExtensions.InUi(func);
+            }
+            else
+            {
+                return func();
+            }
         }
+
         /// <summary>
         /// Отобразить предупреждающее сообщение
         /// <param name="message">Сообщение</param>
         /// <returns></returns>
-        public static MessageBoxResult ShowWarning(string message, MessageBoxButton buttons = MessageBoxButton.OK)
+        public static MessageBoxResult ShowWarning(string message, MessageBoxButton buttons = MessageBoxButton.OK, Action runAfter = null)
         {
+            System.Media.SystemSounds.Hand.Play();
+
             Func<MessageBoxResult> func = () =>
             {
-                Log("ВНИМАНИЕ: " + message);
-                System.Media.SystemSounds.Hand.Play();
-                return MessageBox.Show(Current.MainWindow, message, Title, buttons, MessageBoxImage.Warning);
+                if (Current == null || Current.MainWindow == null)
+                {
+                    logger?.Warn("ВНИМАНИЕ: " + message);
+                    return MessageBox.Show(Current.MainWindow, message, Instance.Title, buttons, MessageBoxImage.Warning, MessageBoxResult.OK, MessageBoxOptions.DefaultDesktopOnly);
+                }
+                else
+                {
+                    if (Current.MainWindow is WpfDialogs.Contracts.IWindowWithDialogs windowWithDialogs && windowWithDialogs.DialogManager != null)
+                    {
+                        windowWithDialogs.ShowDialogWarning(message, Instance.Title, ok: runAfter);
+                        return MessageBoxResult.OK;
+                    }
+                    else
+                    {
+                        logger?.Warn("ВНИМАНИЕ: " + message);
+                        return MessageBox.Show(Current.MainWindow, message, Instance.Title, buttons, MessageBoxImage.Warning, MessageBoxResult.OK, MessageBoxOptions.DefaultDesktopOnly);
+                    }
+                }
             };
             return (MessageBoxResult)DispatcherExtensions.InUi(func);
         }
+
         /// <summary>
         /// Отобразить информационное сообщение
         /// <param name="message">Сообщение</param>
         /// <returns></returns>
-        public static MessageBoxResult ShowInfo(string message, MessageBoxButton buttons = MessageBoxButton.OK)
+        public static MessageBoxResult ShowInfo(string message, Action onOk, MessageBoxButton buttons = MessageBoxButton.OK, Action runAfter = null)
         {
             Func<MessageBoxResult> func = () =>
             {
-                Log("ИНФО: " + message);
                 System.Media.SystemSounds.Asterisk.Play();
 
-                return MessageBox.Show(Current.MainWindow, message, Title, buttons, MessageBoxImage.Information);
+                if (Current == null || Current.MainWindow == null)
+                {
+                    logger?.Info("ИНФО: " + message);
+                    return MessageBox.Show(Current.MainWindow, message, Instance.Title, buttons, MessageBoxImage.Information, MessageBoxResult.OK, MessageBoxOptions.DefaultDesktopOnly);
+                }
+                else
+                {
+                    if (Current.MainWindow is WpfDialogs.Contracts.IWindowWithDialogs windowWithDialogs && windowWithDialogs.DialogManager != null)
+                    {
+                        var dialog = windowWithDialogs.DialogInfo(message, Instance.Title, ok: runAfter);
+
+                        dialog.Ok = onOk;
+                        dialog.Show();
+
+                        return MessageBoxResult.OK;
+                    }
+                    else
+                    {
+                        logger?.Info("ИНФО: " + message);
+                        return MessageBox.Show(Current.MainWindow, message, Instance.Title, buttons, MessageBoxImage.Information, MessageBoxResult.OK, MessageBoxOptions.DefaultDesktopOnly);
+                    }
+                }
             };
             return (MessageBoxResult)DispatcherExtensions.InUi(func);
         }
+
         /// <summary>
         /// Отобразить сообщение с вопросом
         /// <param name="message">Сообщение</param>
         /// <returns></returns>
-        public static MessageBoxResult ShowQuestion(string message, MessageBoxButton buttons = MessageBoxButton.YesNo)
+        public static void ShowQuestion(string message, Action onYes, Action onNo, MessageBoxButton buttons = MessageBoxButton.YesNo)
         {
-            Func<MessageBoxResult> func = () =>
+            Action func = () =>
             {
                 System.Media.SystemSounds.Question.Play();
-                return MessageBox.Show(Current.MainWindow, message, Title, buttons, MessageBoxImage.Question);
+                if (Current == null || Current.MainWindow == null)
+                {
+                    var result = MessageBox.Show(Current.MainWindow, message, Instance.Title, buttons, MessageBoxImage.Question, MessageBoxResult.No, MessageBoxOptions.DefaultDesktopOnly);
+                    if (result == MessageBoxResult.Yes)
+                        onYes?.Invoke();
+                    if (result == MessageBoxResult.No)
+                        onNo?.Invoke();
+                }
+                else
+                {
+                    if (Current.MainWindow is WpfDialogs.Contracts.IWindowWithDialogs windowWithDialogs && windowWithDialogs.DialogManager != null)
+                    {
+                        var dialog = windowWithDialogs.DialogQuestion(message, Instance.Title);
+
+                        dialog.Yes = onYes;
+                        dialog.No = onNo;
+
+                        dialog.Show();
+                    }
+                    else
+                    {
+                        var result = MessageBox.Show(Current.MainWindow, message, Instance.Title, buttons, MessageBoxImage.Question, MessageBoxResult.No, MessageBoxOptions.DefaultDesktopOnly);
+                        if (result == MessageBoxResult.Yes)
+                            onYes?.Invoke();
+                        if (result == MessageBoxResult.No)
+                            onNo?.Invoke();
+                    }
+                }
             };
-            return (MessageBoxResult)DispatcherExtensions.InUi(func);
+            DispatcherExtensions.InUi(func);
         }
     }
 }

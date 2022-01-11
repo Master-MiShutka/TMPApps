@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace WpfApplicationTest.Presentation
+﻿namespace WpfApplicationTest.Presentation
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+
     /// <summary>
     /// Identifies the available font size.
     /// </summary>
@@ -15,10 +15,10 @@ namespace WpfApplicationTest.Presentation
         /// Large fonts.
         /// </summary>
         Large,
+
         /// <summary>
         /// Small fonts.
         /// </summary>
-        Small
+        Small,
     }
-
 }

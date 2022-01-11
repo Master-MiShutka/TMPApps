@@ -1,44 +1,44 @@
-//Copyright (c) Microsoft Corporation.  All rights reserved.
-
-using System;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
-using System.Runtime.InteropServices.ComTypes;
-using System.Text;
-using Microsoft.WindowsAPICodePack.Shell.PropertySystem;
-using Microsoft.WindowsAPICodePack.Taskbar;
-using MS.WindowsAPICodePack.Internal;
+// Copyright (c) Microsoft Corporation.  All rights reserved.
 
 namespace Microsoft.WindowsAPICodePack.Shell
 {
+    using System;
+    using System.Runtime.CompilerServices;
+    using System.Runtime.InteropServices;
+    using System.Runtime.InteropServices.ComTypes;
+    using System.Text;
+    using Microsoft.WindowsAPICodePack.Shell.PropertySystem;
+    using Microsoft.WindowsAPICodePack.Taskbar;
+    using MS.WindowsAPICodePack.Internal;
+
     internal enum SICHINTF
     {
         SICHINT_DISPLAY = 0x00000000,
         SICHINT_CANONICAL = 0x10000000,
         SICHINT_TEST_FILESYSPATH_IF_NOT_EQUAL = 0x20000000,
-        SICHINT_ALLFIELDS = unchecked((int)0x80000000)
+        SICHINT_ALLFIELDS = unchecked((int)0x80000000),
     }
 
     // Disable warning if a method declaration hides another inherited from a parent COM interface
-    // To successfully import a COM interface, all inherited methods need to be declared again with 
+    // To successfully import a COM interface, all inherited methods need to be declared again with
     // the exception of those already declared in "IUnknown"
 #pragma warning disable 108
 
     #region COM Interfaces
 
-    [ComImport(),
-    Guid(ShellIIDGuid.IModalWindow),
-    InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+    [ComImport()]
+    [Guid(ShellIIDGuid.IModalWindow)]
+    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     internal interface IModalWindow
     {
-        [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime),
-        PreserveSig]
+        [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
+        [PreserveSig]
         int Show([In] IntPtr parent);
     }
 
-    [ComImport,
-    Guid(ShellIIDGuid.IShellItem),
-    InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+    [ComImport]
+    [Guid(ShellIIDGuid.IShellItem)]
+    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     internal interface IShellItem
     {
         // Not supported: IBindCtx.
@@ -70,9 +70,9 @@ namespace Microsoft.WindowsAPICodePack.Shell
             out int piOrder);
     }
 
-    [ComImport,
-    Guid(ShellIIDGuid.IShellItem2),
-    InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+    [ComImport]
+    [Guid(ShellIIDGuid.IShellItem2)]
+    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     internal interface IShellItem2 : IShellItem
     {
         // Not supported: IBindCtx.
@@ -103,17 +103,18 @@ namespace Microsoft.WindowsAPICodePack.Shell
             [In] uint hint,
             out int piOrder);
 
-        [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime), PreserveSig]
+        [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
+        [PreserveSig]
         int GetPropertyStore(
-            [In] ShellNativeMethods.GetPropertyStoreOptions Flags,
+            [In] ShellNativeMethods.GetPropertyStoreOptions flags,
             [In] ref Guid riid,
             [Out, MarshalAs(UnmanagedType.Interface)] out IPropertyStore ppv);
 
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
-        void GetPropertyStoreWithCreateObject([In] ShellNativeMethods.GetPropertyStoreOptions Flags, [In, MarshalAs(UnmanagedType.IUnknown)] object punkCreateObject, [In] ref Guid riid, out IntPtr ppv);
+        void GetPropertyStoreWithCreateObject([In] ShellNativeMethods.GetPropertyStoreOptions flags, [In, MarshalAs(UnmanagedType.IUnknown)] object punkCreateObject, [In] ref Guid riid, out IntPtr ppv);
 
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
-        void GetPropertyStoreForKeys([In] ref PropertyKey rgKeys, [In] uint cKeys, [In] ShellNativeMethods.GetPropertyStoreOptions Flags, [In] ref Guid riid, [Out, MarshalAs(UnmanagedType.IUnknown)] out IPropertyStore ppv);
+        void GetPropertyStoreForKeys([In] ref PropertyKey rgKeys, [In] uint cKeys, [In] ShellNativeMethods.GetPropertyStoreOptions flags, [In] ref Guid riid, [Out, MarshalAs(UnmanagedType.IUnknown)] out IPropertyStore ppv);
 
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         void GetPropertyDescriptionList([In] ref PropertyKey keyType, [In] ref Guid riid, out IntPtr ppv);
@@ -147,9 +148,9 @@ namespace Microsoft.WindowsAPICodePack.Shell
         void GetBool([In] ref PropertyKey key, out int pf);
     }
 
-    [ComImport,
-    Guid(ShellIIDGuid.IShellItemArray),
-    InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+    [ComImport]
+    [Guid(ShellIIDGuid.IShellItemArray)]
+    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     internal interface IShellItemArray
     {
         // Not supported: IBindCtx.
@@ -164,7 +165,7 @@ namespace Microsoft.WindowsAPICodePack.Shell
         [PreserveSig]
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         HResult GetPropertyStore(
-            [In] int Flags,
+            [In] int flags,
             [In] ref Guid riid,
             out IntPtr ppv);
 
@@ -198,9 +199,9 @@ namespace Microsoft.WindowsAPICodePack.Shell
         HResult EnumItems([MarshalAs(UnmanagedType.Interface)] out IntPtr ppenumShellItems);
     }
 
-    [ComImport,
-    Guid(ShellIIDGuid.IShellLibrary),
-    InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+    [ComImport]
+    [Guid(ShellIIDGuid.IShellLibrary)]
+    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     internal interface IShellLibrary
     {
         [PreserveSig]
@@ -282,12 +283,12 @@ namespace Microsoft.WindowsAPICodePack.Shell
             [In, MarshalAs(UnmanagedType.LPWStr)] string libraryName,
             [In] ShellNativeMethods.LibrarySaveOptions lsf,
             [MarshalAs(UnmanagedType.Interface)] out IShellItem2 savedTo);
-    };
+    }
 
     [ComImportAttribute()]
     [GuidAttribute("bcc18b79-ba16-442f-80c4-8a59c30c463b")]
     [InterfaceTypeAttribute(ComInterfaceType.InterfaceIsIUnknown)]
-    interface IShellItemImageFactory
+    internal interface IShellItemImageFactory
     {
         [PreserveSig]
         HResult GetImage(
@@ -296,10 +297,10 @@ namespace Microsoft.WindowsAPICodePack.Shell
         [Out] out IntPtr phbm);
     }
 
-    [ComImport,
-    Guid(ShellIIDGuid.IThumbnailCache),
-    InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-    interface IThumbnailCache
+    [ComImport]
+    [Guid(ShellIIDGuid.IThumbnailCache)]
+    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+    internal interface IThumbnailCache
     {
         void GetThumbnail([In] IShellItem pShellItem,
         [In] uint cxyRequestedThumbSize,
@@ -314,25 +315,31 @@ namespace Microsoft.WindowsAPICodePack.Shell
         [Out] out Microsoft.WindowsAPICodePack.Shell.ShellNativeMethods.ThumbnailCacheOptions pOutFlags);
     }
 
-    [ComImport,
-    Guid(ShellIIDGuid.ISharedBitmap),
-    InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-    interface ISharedBitmap
+    [ComImport]
+    [Guid(ShellIIDGuid.ISharedBitmap)]
+    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+    internal interface ISharedBitmap
     {
         void GetSharedBitmap([Out] out IntPtr phbm);
+
         void GetSize([Out] out CoreNativeMethods.Size pSize);
+
         void GetFormat([Out] out ThumbnailAlphaType pat);
+
         void InitializeBitmap([In] IntPtr hbm, [In] ThumbnailAlphaType wtsAT);
+
         void Detach([Out] out IntPtr phbm);
     }
-    [ComImport,
-    Guid(ShellIIDGuid.IShellFolder),
-    InterfaceType(ComInterfaceType.InterfaceIsIUnknown),
-    ComConversionLoss]
+
+    [ComImport]
+    [Guid(ShellIIDGuid.IShellFolder)]
+    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+    [ComConversionLoss]
     internal interface IShellFolder
     {
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         void ParseDisplayName(IntPtr hwnd, [In, MarshalAs(UnmanagedType.Interface)] IBindCtx pbc, [In, MarshalAs(UnmanagedType.LPWStr)] string pszDisplayName, [In, Out] ref uint pchEaten, [Out] IntPtr ppidl, [In, Out] ref uint pdwAttributes);
+
         [PreserveSig]
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         HResult EnumObjects([In] IntPtr hwnd, [In] ShellNativeMethods.ShellFolderEnumerationOptions grfFlags, [MarshalAs(UnmanagedType.Interface)] out IEnumIDList ppenumIDList);
@@ -353,7 +360,6 @@ namespace Microsoft.WindowsAPICodePack.Shell
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         void GetAttributesOf([In] uint cidl, [In] IntPtr apidl, [In, Out] ref uint rgfInOut);
 
-
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         void GetUIObjectOf([In] IntPtr hwndOwner, [In] uint cidl, [In] IntPtr apidl, [In] ref Guid riid, [In, Out] ref uint rgfReserved, out IntPtr ppv);
 
@@ -364,10 +370,10 @@ namespace Microsoft.WindowsAPICodePack.Shell
         void SetNameOf([In] IntPtr hwnd, [In] ref IntPtr pidl, [In, MarshalAs(UnmanagedType.LPWStr)] string pszName, [In] uint uFlags, [Out] IntPtr ppidlOut);
     }
 
-    [ComImport,
-    Guid(ShellIIDGuid.IShellFolder2),
-    InterfaceType(ComInterfaceType.InterfaceIsIUnknown),
-    ComConversionLoss]
+    [ComImport]
+    [Guid(ShellIIDGuid.IShellFolder2)]
+    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+    [ComConversionLoss]
     internal interface IShellFolder2 : IShellFolder
     {
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
@@ -422,9 +428,9 @@ namespace Microsoft.WindowsAPICodePack.Shell
         void MapColumnToSCID([In] uint iColumn, out PropertyKey pscid);
     }
 
-    [ComImport,
-    Guid(ShellIIDGuid.IEnumIDList),
-    InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+    [ComImport]
+    [Guid(ShellIIDGuid.IEnumIDList)]
+    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     internal interface IEnumIDList
     {
         [PreserveSig]
@@ -444,58 +450,77 @@ namespace Microsoft.WindowsAPICodePack.Shell
         HResult Clone([MarshalAs(UnmanagedType.Interface)] out IEnumIDList ppenum);
     }
 
-    [ComImport,
-    Guid(ShellIIDGuid.IShellLinkW),
-    InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+    [ComImport]
+    [Guid(ShellIIDGuid.IShellLinkW)]
+    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     internal interface IShellLinkW
     {
         void GetPath(
             [Out(), MarshalAs(UnmanagedType.LPWStr)] StringBuilder pszFile,
             int cchMaxPath,
-            //ref _WIN32_FIND_DATAW pfd,
+
+            // ref _WIN32_FIND_DATAW pfd,
             IntPtr pfd,
             uint fFlags);
+
         void GetIDList(out IntPtr ppidl);
+
         void SetIDList(IntPtr pidl);
+
         void GetDescription(
             [Out(), MarshalAs(UnmanagedType.LPWStr)] StringBuilder pszFile,
             int cchMaxName);
+
         void SetDescription(
             [MarshalAs(UnmanagedType.LPWStr)] string pszName);
+
         void GetWorkingDirectory(
             [Out(), MarshalAs(UnmanagedType.LPWStr)] StringBuilder pszDir,
-            int cchMaxPath
-            );
+            int cchMaxPath);
+
         void SetWorkingDirectory(
             [MarshalAs(UnmanagedType.LPWStr)] string pszDir);
+
         void GetArguments(
             [Out(), MarshalAs(UnmanagedType.LPWStr)] StringBuilder pszArgs,
             int cchMaxPath);
+
         void SetArguments(
             [MarshalAs(UnmanagedType.LPWStr)] string pszArgs);
+
         void GetHotKey(out short wHotKey);
+
         void SetHotKey(short wHotKey);
+
         void GetShowCmd(out uint iShowCmd);
+
         void SetShowCmd(uint iShowCmd);
+
         void GetIconLocation(
             [Out(), MarshalAs(UnmanagedType.LPWStr)] out StringBuilder pszIconPath,
             int cchIconPath,
             out int iIcon);
+
         void SetIconLocation(
             [MarshalAs(UnmanagedType.LPWStr)] string pszIconPath,
             int iIcon);
+
         void SetRelativePath(
             [MarshalAs(UnmanagedType.LPWStr)] string pszPathRel,
             uint dwReserved);
+
         void Resolve(IntPtr hwnd, uint fFlags);
+
         void SetPath(
             [MarshalAs(UnmanagedType.LPWStr)] string pszFile);
     }
 
-    [ComImport,
-    Guid(ShellIIDGuid.CShellLink),
-    ClassInterface(ClassInterfaceType.None)]
-    internal class CShellLink { }
+    [ComImport]
+    [Guid(ShellIIDGuid.CShellLink)]
+    [ClassInterface(ClassInterfaceType.None)]
+    internal class CShellLink
+    {
+    }
 
     // Summary:
     //     Provides the managed definition of the IPersistStream interface, with functionality
@@ -514,7 +539,7 @@ namespace Microsoft.WindowsAPICodePack.Shell
         //     is passed uninitialized.
         [PreserveSig]
         void GetClassID(out Guid pClassID);
-        //
+
         // Summary:
         //     Checks an object for changes since it was last saved to its current file.
         //
@@ -534,9 +559,9 @@ namespace Microsoft.WindowsAPICodePack.Shell
         HResult GetSizeMax(out ulong cbSize);
     }
 
-    [ComImport(),
-    Guid(ShellIIDGuid.ICondition),
-    InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+    [ComImport()]
+    [Guid(ShellIIDGuid.ICondition)]
+    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     internal interface ICondition : IPersistStream
     {
         // Summary:
@@ -548,7 +573,7 @@ namespace Microsoft.WindowsAPICodePack.Shell
         //     is passed uninitialized.
         [PreserveSig]
         void GetClassID(out Guid pClassID);
-        //
+
         // Summary:
         //     Checks an object for changes since it was last saved to its current file.
         //
@@ -611,11 +636,11 @@ namespace Microsoft.WindowsAPICodePack.Shell
         // Make a deep copy of this ICondition.
         [PreserveSig]
         HResult Clone([Out()] out ICondition ppc);
-    };
+    }
 
-    [ComImport,
-    Guid(ShellIIDGuid.IRichChunk),
-    InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+    [ComImport]
+    [Guid(ShellIIDGuid.IRichChunk)]
+    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     internal interface IRichChunk
     {
         // The position *pFirstPos is zero-based.
@@ -630,19 +655,21 @@ namespace Microsoft.WindowsAPICodePack.Shell
     internal interface IEnumUnknown
     {
         [PreserveSig]
-        HResult Next(UInt32 requestedNumber, ref IntPtr buffer, ref UInt32 fetchedNumber);
+        HResult Next(uint requestedNumber, ref IntPtr buffer, ref uint fetchedNumber);
+
         [PreserveSig]
-        HResult Skip(UInt32 number);
+        HResult Skip(uint number);
+
         [PreserveSig]
         HResult Reset();
+
         [PreserveSig]
         HResult Clone(out IEnumUnknown result);
     }
 
-
-    [ComImport,
-    Guid(ShellIIDGuid.IConditionFactory),
-    InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+    [ComImport]
+    [Guid(ShellIIDGuid.IConditionFactory)]
+    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     internal interface IConditionFactory
     {
         [PreserveSig]
@@ -665,29 +692,26 @@ namespace Microsoft.WindowsAPICodePack.Shell
 
         [PreserveSig]
         HResult Resolve(/*[In] ICondition pc, [In] STRUCTURED_QUERY_RESOLVE_OPTION sqro, [In] ref SYSTEMTIME pstReferenceTime, [Out] out ICondition ppcResolved*/);
+    }
 
-    };
-
-    [ComImport,
-    Guid(ShellIIDGuid.IConditionFactory),
-    CoClass(typeof(ConditionFactoryCoClass))]
+    [ComImport]
+    [Guid(ShellIIDGuid.IConditionFactory)]
+    [CoClass(typeof(ConditionFactoryCoClass))]
     internal interface INativeConditionFactory : IConditionFactory
     {
     }
 
-    [ComImport,
-    ClassInterface(ClassInterfaceType.None),
-    TypeLibType(TypeLibTypeFlags.FCanCreate),
-    Guid(ShellCLSIDGuid.ConditionFactory)]
+    [ComImport]
+    [ClassInterface(ClassInterfaceType.None)]
+    [TypeLibType(TypeLibTypeFlags.FCanCreate)]
+    [Guid(ShellCLSIDGuid.ConditionFactory)]
     internal class ConditionFactoryCoClass
     {
     }
 
-
-
-    [ComImport,
-    Guid(ShellIIDGuid.ISearchFolderItemFactory),
-    InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+    [ComImport]
+    [Guid(ShellIIDGuid.ISearchFolderItemFactory)]
+    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     internal interface ISearchFolderItemFactory
     {
         [PreserveSig]
@@ -725,27 +749,27 @@ namespace Microsoft.WindowsAPICodePack.Shell
 
         [PreserveSig]
         HResult GetIDList([Out] IntPtr ppidl);
-    };
+    }
 
-    [ComImport,
-    Guid(ShellIIDGuid.ISearchFolderItemFactory),
-    CoClass(typeof(SearchFolderItemFactoryCoClass))]
+    [ComImport]
+    [Guid(ShellIIDGuid.ISearchFolderItemFactory)]
+    [CoClass(typeof(SearchFolderItemFactoryCoClass))]
     internal interface INativeSearchFolderItemFactory : ISearchFolderItemFactory
     {
     }
 
-    [ComImport,
-    ClassInterface(ClassInterfaceType.None),
-    TypeLibType(TypeLibTypeFlags.FCanCreate),
-    Guid(ShellCLSIDGuid.SearchFolderItemFactory)]
+    [ComImport]
+    [ClassInterface(ClassInterfaceType.None)]
+    [TypeLibType(TypeLibTypeFlags.FCanCreate)]
+    [Guid(ShellCLSIDGuid.SearchFolderItemFactory)]
     internal class SearchFolderItemFactoryCoClass
     {
     }
 
-    [ComImport,
-    Guid(ShellIIDGuid.IQuerySolution),
-    InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-    interface IQuerySolution : IConditionFactory
+    [ComImport]
+    [Guid(ShellIIDGuid.IQuerySolution)]
+    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+    internal interface IQuerySolution : IConditionFactory
     {
         [PreserveSig]
         HResult MakeNot([In] ICondition pcSub, [In] bool fSimplify, [Out] out ICondition ppcResult);
@@ -787,9 +811,9 @@ namespace Microsoft.WindowsAPICodePack.Shell
         HResult GetLexicalData([MarshalAs(UnmanagedType.LPWStr)] out string ppszInputString, [Out] /* ITokenCollection** */ out IntPtr ppTokens, [Out] out uint plcid, [Out] /* IUnknown** */ out IntPtr ppWordBreaker);
     }
 
-    [ComImport,
-    Guid(ShellIIDGuid.IQueryParser),
-    InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+    [ComImport]
+    [Guid(ShellIIDGuid.IQueryParser)]
+    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     internal interface IQueryParser
     {
         // Parse parses an input string, producing a query solution.
@@ -830,9 +854,9 @@ namespace Microsoft.WindowsAPICodePack.Shell
         HResult RestatePropertyValueToString([In] ICondition pCondition, [In] bool fUseEnglish, [Out, MarshalAs(UnmanagedType.LPWStr)] out string ppszPropertyName, [Out, MarshalAs(UnmanagedType.LPWStr)] out string ppszQueryString);
     }
 
-    [ComImport,
-    Guid(ShellIIDGuid.IQueryParserManager),
-    InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+    [ComImport]
+    [Guid(ShellIIDGuid.IQueryParserManager)]
+    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     internal interface IQueryParserManager
     {
         // Create a query parser loaded with the schema for a certain catalog localize to a certain language, and initialized with
@@ -849,27 +873,26 @@ namespace Microsoft.WindowsAPICodePack.Shell
         // schema binaries. By default, the settings point to the schema binaries used by Windows Shell.
         [PreserveSig]
         HResult SetOption([In] QueryParserManagerOption option, [In] PropVariant pOptionValue);
+    }
 
-    };
-
-    [ComImport,
-    Guid(ShellIIDGuid.IQueryParserManager),
-    CoClass(typeof(QueryParserManagerCoClass))]
+    [ComImport]
+    [Guid(ShellIIDGuid.IQueryParserManager)]
+    [CoClass(typeof(QueryParserManagerCoClass))]
     internal interface INativeQueryParserManager : IQueryParserManager
     {
     }
 
-    [ComImport,
-    ClassInterface(ClassInterfaceType.None),
-    TypeLibType(TypeLibTypeFlags.FCanCreate),
-    Guid(ShellCLSIDGuid.QueryParserManager)]
+    [ComImport]
+    [ClassInterface(ClassInterfaceType.None)]
+    [TypeLibType(TypeLibTypeFlags.FCanCreate)]
+    [Guid(ShellCLSIDGuid.QueryParserManager)]
     internal class QueryParserManagerCoClass
     {
     }
 
-    [ComImport,
-    Guid("24264891-E80B-4fd3-B7CE-4FF2FAE8931F"),
-    InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+    [ComImport]
+    [Guid("24264891-E80B-4fd3-B7CE-4FF2FAE8931F")]
+    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     internal interface IEntity
     {
         // TODO

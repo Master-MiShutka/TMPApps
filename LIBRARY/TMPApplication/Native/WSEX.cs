@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace Native
+﻿namespace Native
 {
+    using System;
+
     [Flags]
     public enum WSEX : int
     {
@@ -138,6 +138,6 @@ namespace Native
         /// <summary>
         /// Specifies that a window has a border with a raised edge.
         /// </summary>
-        WINDOWEDGE = 0x00000100
+        WINDOWEDGE = 0x00000100,
     }
 }

@@ -1,5 +1,4 @@
-//Copyright (c) Microsoft Corporation.  All rights reserved.
-
+// Copyright (c) Microsoft Corporation.  All rights reserved.
 
 namespace Microsoft.WindowsAPICodePack.Dialogs
 {
@@ -11,33 +10,41 @@ namespace Microsoft.WindowsAPICodePack.Dialogs
         /// <summary>
         /// Creates a new instance of this class.
         /// </summary>
-        public TaskDialogBar() { }
+        public TaskDialogBar()
+        {
+        }
+
         /// <summary>
         /// Creates a new instance of this class with the specified name.
         /// </summary>
         /// <param name="name">The name for this control.</param>
-        protected TaskDialogBar(string name) : base(name) { }
+        protected TaskDialogBar(string name) : base(name)
+        {
+        }
 
         private TaskDialogProgressBarState state;
+
         /// <summary>
         /// Gets or sets the state of the progress bar.
         /// </summary>
         public TaskDialogProgressBarState State
         {
-            get { return state; }
+            get => this.state;
+
             set
             {
-                CheckPropertyChangeAllowed("State");
-                state = value;
-                ApplyPropertyChange("State");
+                this.CheckPropertyChangeAllowed("State");
+                this.state = value;
+                this.ApplyPropertyChange("State");
             }
         }
+
         /// <summary>
         /// Resets the state of the control to normal.
         /// </summary>
         protected internal virtual void Reset()
         {
-            state = TaskDialogProgressBarState.Normal;
+            this.state = TaskDialogProgressBarState.Normal;
         }
     }
 }

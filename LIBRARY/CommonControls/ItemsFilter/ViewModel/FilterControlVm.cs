@@ -28,20 +28,20 @@ namespace TMP.Wpf.CommonControls.ItemsFilter.ViewModel {
         /// </summary>
         public FilterControl.State State
         {
-            get { return state; }
+            get => state;
             private set
             {
                 if (state != value)
                 {
                     state = value;
-                    if (StateChanged!=null)
+                    if (StateChanged != null)
                     {
                         lock (StateChanged)
                         {
                             StateChanged(this, state);
                         }
                     };
-                    OnPropertyChanged(new PropertyChangedEventArgs("State"));
+                    OnPropertyChanged(new PropertyChangedEventArgs(nameof(State)));
                 }
             }
         }
@@ -52,48 +52,57 @@ namespace TMP.Wpf.CommonControls.ItemsFilter.ViewModel {
         /// <summary>
         /// Get or set FilterControl.IsEnabled.
         /// </summary>
-        public bool IsEnable {
-            get { return isEnable; }
-            set {
-                if (isEnable != value) {
+        public bool IsEnable
+        {
+            get => isEnable;
+            set
+            {
+                if (isEnable != value)
+                {
                     isEnable = value;
                     if (value)
                         State |= FilterControl.State.Enable;
                     else
                         State &= ~FilterControl.State.Enable;
-                    OnPropertyChanged(new PropertyChangedEventArgs("IsEnable"));
+                    OnPropertyChanged(new PropertyChangedEventArgs(nameof(IsEnable)));
                 }
             }
         }
         /// <summary>
         /// Gets or sets whether the popup is currently displaying on the screen.
         /// </summary>
-        public bool IsOpen {
-            get { return isOpen; }
-            set {
-                if (isOpen != value) {
+        public bool IsOpen
+        {
+            get => isOpen;
+            set
+            {
+                if (isOpen != value)
+                {
                     isOpen = value;
                     if (value)
                         State |= FilterControl.State.Open;
                     else
                         State &= ~FilterControl.State.Open;
-                    OnPropertyChanged(new PropertyChangedEventArgs("IsOpen"));
+                    OnPropertyChanged(new PropertyChangedEventArgs(nameof(IsOpen)));
                 }
             }
         }
         /// <summary>
         /// Get or set whether filter is active.
         /// </summary>
-        public bool IsActive {
-            get { return isActive; }
-            set {
-                if (isActive != value) {
+        public bool IsActive
+        {
+            get => isActive;
+            set
+            {
+                if (isActive != value)
+                {
                     isActive = value;
-                     if (value)
-                         State |= FilterControl.State.Active;
+                    if (value)
+                        State |= FilterControl.State.Active;
                     else
-                         State &= ~FilterControl.State.Active;
-                   OnPropertyChanged(new PropertyChangedEventArgs("IsActive"));
+                        State &= ~FilterControl.State.Active;
+                    OnPropertyChanged(new PropertyChangedEventArgs(nameof(IsActive)));
                 }
             }
         }

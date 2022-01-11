@@ -1,18 +1,18 @@
-﻿//Copyright (c) Microsoft Corporation.  All rights reserved.
-
-using System;
-using System.Runtime.InteropServices;
-using System.Security;
+﻿// Copyright (c) Microsoft Corporation.  All rights reserved.
 
 namespace Microsoft.WindowsAPICodePack.Shell
 {
+    using System;
+    using System.Runtime.InteropServices;
+    using System.Security;
+
     /// <summary>
-    /// Internal class that contains interop declarations for 
+    /// Internal class that contains interop declarations for
     /// functions that are considered benign but that
-    /// are performance critical. 
+    /// are performance critical.
     /// </summary>
     /// <remarks>
-    /// Functions that are benign but not performance critical 
+    /// Functions that are benign but not performance critical
     /// should be located in the NativeMethods class.
     /// </remarks>
     [SuppressUnmanagedCodeSecurity]
@@ -33,7 +33,7 @@ namespace Microsoft.WindowsAPICodePack.Shell
             internal IntPtr localizedName;
             internal IntPtr icon;
             internal IntPtr security;
-            internal UInt32 attributes;
+            internal uint attributes;
             internal DefinitionOptions definitionOptions;
             internal Guid folderTypeId;
         }

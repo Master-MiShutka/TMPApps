@@ -39,12 +39,12 @@ namespace TMP.DWRES.ViewModel
         public DBConnectionParams DBConnectionParams
         {
             get { return _dbConnectionParams; }
-            set { SetProp<DBConnectionParams>(ref _dbConnectionParams, value, "DBConnectionParams"); }
+            set { SetProperty<DBConnectionParams>(ref _dbConnectionParams, value, "DBConnectionParams"); }
         }
         public bool DBLoaded
         {
             get { return _dbLoaded; }
-            set { SetProp<bool>(ref _dbLoaded, value, "DBLoaded"); }
+            set { SetProperty<bool>(ref _dbLoaded, value, "DBLoaded"); }
         }        
 
         public bool RecentDBExists
@@ -125,7 +125,7 @@ namespace TMP.DWRES.ViewModel
                 }
                 finally
                 {
-                    Dispatcher.BeginInvoke(new Action(() =>
+                    System.Windows.Threading.Dispatcher.CurrentDispatcher.BeginInvoke(new Action(() =>
                     {
                         // получаем участки
                         Lines = _dwh.GetLines(SelectedFider.ID);
@@ -167,7 +167,7 @@ namespace TMP.DWRES.ViewModel
                 }
                 finally
                 {
-                    Dispatcher.BeginInvoke(new Action(() =>
+                    System.Windows.Threading.Dispatcher.CurrentDispatcher.BeginInvoke(new Action(() =>
                     {
                         // получаем участки
                         LinesWithNames = Lines;

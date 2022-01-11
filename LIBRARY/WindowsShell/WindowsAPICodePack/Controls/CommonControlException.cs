@@ -1,9 +1,9 @@
-﻿using System;
-using System.Runtime.InteropServices;
-using MS.WindowsAPICodePack.Internal;
-
-namespace Microsoft.WindowsAPICodePack.Controls
+﻿namespace Microsoft.WindowsAPICodePack.Controls
 {
+    using System;
+    using System.Runtime.InteropServices;
+    using MS.WindowsAPICodePack.Internal;
+
     /// <summary>
     /// An exception thrown when an error occurs while dealing with Control objects.
     /// </summary>
@@ -13,13 +13,17 @@ namespace Microsoft.WindowsAPICodePack.Controls
         /// <summary>
         /// Default constructor.
         /// </summary>
-        public CommonControlException() { }
+        public CommonControlException()
+        {
+        }
 
         /// <summary>
         /// Initializes an excpetion with a custom message.
         /// </summary>
         /// <param name="message"></param>
-        public CommonControlException(string message) : base(message) { }
+        public CommonControlException(string message) : base(message)
+        {
+        }
 
         /// <summary>
         /// Initializes an exception with custom message and inner exception.
@@ -36,14 +40,18 @@ namespace Microsoft.WindowsAPICodePack.Controls
         /// </summary>
         /// <param name="message"></param>
         /// <param name="errorCode"></param>
-        public CommonControlException(string message, int errorCode) : base(message, errorCode) { }
+        public CommonControlException(string message, int errorCode) : base(message, errorCode)
+        {
+        }
 
         /// <summary>
         /// Initializes an exception with custom message and error code.
         /// </summary>
         /// <param name="message"></param>
         /// <param name="errorCode"></param>
-        internal CommonControlException(string message, HResult errorCode) : this(message, (int)errorCode) { }
+        internal CommonControlException(string message, HResult errorCode) : this(message, (int)errorCode)
+        {
+        }
 
         /// <summary>
         /// Initializes an exception from serialization info and a context.
@@ -56,6 +64,5 @@ namespace Microsoft.WindowsAPICodePack.Controls
             : base(info, context)
         {
         }
-
     }
 }

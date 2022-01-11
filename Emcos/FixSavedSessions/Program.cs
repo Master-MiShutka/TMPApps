@@ -16,7 +16,7 @@ namespace FixSavedSessions
         public static string SESSION_FILE_EXTENSION;
         static void Main(string[] args)
         {
-            TMP.Work.Emcos.ViewModel.BalansViewModel vm = new TMP.Work.Emcos.ViewModel.BalansViewModel(null);
+            TMP.Work.Emcos.ViewModel.BalanceViewModel vm = new TMP.Work.Emcos.ViewModel.BalanceViewModel(null);
 
             SESSIONS_FOLDER = String.IsNullOrEmpty(vm.SESSIONS_FOLDER) ? "Sessions" : vm.SESSIONS_FOLDER;
             SESSION_FILE_EXTENSION = String.IsNullOrEmpty(vm.SESSION_FILE_EXTENSION) ? ".session-data" : vm.SESSION_FILE_EXTENSION;
@@ -115,7 +115,7 @@ namespace FixSavedSessions
                                                     Console.WriteLine("\t* это новая версия сессии");
                                             }
                                             #endregion
-                                            session = TMP.Common.RepositoryCommon.BaseRepository<BalansSession>.GzXmlDataContractDeSerialize(
+                                            session = TMP.Common.RepositoryCommon.BaseDeserializer<BalansSession>.GzXmlDataContractDeSerialize(
                                                 fi.FullName,
                                                 new Type[]
                                                 {
@@ -124,7 +124,7 @@ namespace FixSavedSessions
                                                 typeof(SubstationPowerTransformers),
                                                 typeof(SubstationAuxiliary),
                                                 typeof(GroupItem),
-                                                typeof(BalansItem),
+                                                typeof(BalanceItem),
                                                 typeof(Fider),
                                                 typeof(PowerTransformer),
                                                 typeof(UnitTransformer),
@@ -139,7 +139,7 @@ namespace FixSavedSessions
                                             if (first == '{')
                                         {
                                             Console.WriteLine("\t* это JSON");
-                                            session = TMP.Common.RepositoryCommon.BaseRepository<BalansSession>.JsonDeSerializeFromStream(gzip, OnError);
+                                            session = TMP.Common.RepositoryCommon.BaseDeserializer<BalansSession>.JsonDeSerializeFromStream(gzip, OnError);
 
                                         }
                                         else
@@ -149,7 +149,7 @@ namespace FixSavedSessions
                                     }
                                 }
                                 if (session != null)
-                                    TMP.Common.RepositoryCommon.BaseRepository<BalansSession>.GzJsonSerialize(
+                                    TMP.Common.RepositoryCommon.BaseDeserializer<BalansSession>.GzJsonSerialize(
                                         session,
                                         outFolder + @"\" + session.Period.GetFileNameForSaveSession() + vm.SESSION_FILE_EXTENSION);
                             }

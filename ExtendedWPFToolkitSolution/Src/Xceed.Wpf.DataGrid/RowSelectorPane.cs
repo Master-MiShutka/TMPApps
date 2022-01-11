@@ -23,8 +23,6 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
-using System.Linq;
-using System.Linq.Expressions;
 
 namespace Xceed.Wpf.DataGrid
 {
@@ -89,15 +87,7 @@ namespace Xceed.Wpf.DataGrid
         }
       }
 
-        var l = this.InternalChildren.Cast<RowSelectorDecorator>().Select(i => i.DesiredSize).ToList();
-            double max = this.DesiredSize.Width;
-        if (l != null && l.Count > 0)
-                max = l.Select(i => i.Width).Max();
-
-            if (double.IsInfinity(availableSize.Height))
-                return RowSelectorPane.EmptySize;
-
-      return new Size(max, availableSize.Height);
+      return RowSelectorPane.EmptySize;
     }
 
     protected override Size ArrangeOverride( Size finalSize )
@@ -127,9 +117,21 @@ namespace Xceed.Wpf.DataGrid
         }
       }
 
+      // The call to Mouse.Synchronize must not start dragging rows.
+      // Update the mouse status to make sure no container has invalid mouse over status.
+      // Only do this when the mouse is over the panel, to prevent unescessary update when scrolling with thumb.
       if( this.IsMouseOver )
       {
-        Mouse.Synchronize();
+        var dataGridContext = DataGridControl.GetDataGridContext( this );
+        var dataGridControl = ( dataGridContext != null ) ? dataGridContext.DataGridControl : null;
+
+        if( dataGridControl != null )
+        {
+          using( dataGridControl.InhibitDrag() )
+          {
+            Mouse.Synchronize();
+          }
+        }
       }
 
       return finalSize;
@@ -503,6 +505,7 @@ namespace Xceed.Wpf.DataGrid
       {
         this.Focusable = false;
         this.OverridesDefaultStyle = true;
+
         this.Child = new RowSelector();
       }
 

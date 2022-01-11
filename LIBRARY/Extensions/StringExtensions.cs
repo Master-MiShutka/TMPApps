@@ -1,8 +1,8 @@
-﻿using System;
-using System.Globalization;
-
-namespace TMP.Extensions
+﻿namespace TMP.Extensions
 {
+    using System;
+    using System.Globalization;
+
     public static class StringExtensions
     {
         /// <summary>
@@ -16,13 +16,19 @@ namespace TMP.Extensions
         public static string Left(this string input, int length)
         {
             if (string.IsNullOrEmpty(input))
+            {
                 throw new ArgumentException("The input string is null or empty.", nameof(input));
+            }
 
             if (length <= 0)
+            {
                 throw new ArgumentOutOfRangeException(nameof(length), "The length must be greater than 0.");
+            }
 
             if (length > input.Length)
+            {
                 throw new ArgumentOutOfRangeException(nameof(length), "The length must be smaller or equal to the length of the input string.");
+            }
 
             return input.Substring(0, length);
         }
@@ -38,13 +44,19 @@ namespace TMP.Extensions
         public static string Right(this string input, int length)
         {
             if (string.IsNullOrEmpty(input))
+            {
                 throw new ArgumentException("The input string is null or empty.", nameof(input));
+            }
 
             if (length <= 0)
+            {
                 throw new ArgumentOutOfRangeException(nameof(length), "The length must be greater than 0.");
+            }
 
             if (length > input.Length)
+            {
                 throw new ArgumentOutOfRangeException(nameof(length), "The length must be smaller or equal to the length of the input string.");
+            }
 
             return input.Substring(input.Length - length, length);
         }
@@ -72,10 +84,14 @@ namespace TMP.Extensions
         public static string AddWhitespaceLeft(this string input, int length)
         {
             if (string.IsNullOrEmpty(input))
+            {
                 throw new ArgumentException("The input string is null or empty.", nameof(input));
+            }
 
             if (length <= 0)
+            {
                 throw new ArgumentOutOfRangeException(nameof(length), "The length must be greater than 0.");
+            }
 
             return string.Concat(new string(' ', length), input);
         }
@@ -91,16 +107,20 @@ namespace TMP.Extensions
         public static string AddWhitespaceRight(this string input, int length)
         {
             if (string.IsNullOrEmpty(input))
+            {
                 throw new ArgumentException("The input string is null or empty.", nameof(input));
+            }
 
             if (length <= 0)
+            {
                 throw new ArgumentOutOfRangeException(nameof(length), "The length must be greater than 0.");
+            }
 
             return string.Concat(input, new string(' ', length));
         }
 
         /// <summary>
-        /// Uses the <see cref="input"/> string and tries to convert it to a <see cref="byte"/>. An <see cref="InvalidCastException"/> will be 
+        /// Uses the <see cref="input"/> string and tries to convert it to a <see cref="byte"/>. An <see cref="InvalidCastException"/> will be
         /// thrown if the conversion fails.
         /// </summary>
         /// <param name="input">The source string for the operation.</param>
@@ -108,16 +128,21 @@ namespace TMP.Extensions
         public static byte ToByte(this string input)
         {
             if (input == null)
+            {
                 throw new ArgumentNullException(nameof(input));
+            }
 
             var parsed = byte.TryParse(input, out byte result);
             if (parsed)
+            {
                 return result;
+            }
+
             throw new InvalidCastException("The input cannot be changed into a byte.");
         }
 
         /// <summary>
-        /// Uses the <see cref="input"/> string and tries to convert it to a <see cref="byte"/>. An <see cref="InvalidCastException"/> will be 
+        /// Uses the <see cref="input"/> string and tries to convert it to a <see cref="byte"/>. An <see cref="InvalidCastException"/> will be
         /// thrown if the conversion fails.
         /// </summary>
         /// <param name="input">The source string for the operation.</param>
@@ -127,16 +152,21 @@ namespace TMP.Extensions
         public static byte ToByte(this string input, IFormatProvider formatProvider, NumberStyles numberStyle)
         {
             if (input == null)
+            {
                 throw new ArgumentNullException(nameof(input));
+            }
 
             var parsed = byte.TryParse(input, numberStyle, formatProvider, out byte result);
             if (parsed)
+            {
                 return result;
+            }
+
             throw new InvalidCastException("The input cannot be changed into a byte.");
         }
 
         /// <summary>
-        /// Uses the <see cref="input"/> string and tries to convert it to a <see cref="sbyte"/>. An <see cref="InvalidCastException"/> will be 
+        /// Uses the <see cref="input"/> string and tries to convert it to a <see cref="sbyte"/>. An <see cref="InvalidCastException"/> will be
         /// thrown if the conversion fails.
         /// </summary>
         /// <param name="input">The source string for the operation.</param>
@@ -144,16 +174,21 @@ namespace TMP.Extensions
         public static sbyte ToSByte(this string input)
         {
             if (input == null)
+            {
                 throw new ArgumentNullException(nameof(input));
+            }
 
             var parsed = sbyte.TryParse(input, out sbyte result);
             if (parsed)
+            {
                 return result;
+            }
+
             throw new InvalidCastException("The input cannot be changed into a sbyte.");
         }
 
         /// <summary>
-        /// Uses the <see cref="input"/> string and tries to convert it to a <see cref="sbyte"/>. An <see cref="InvalidCastException"/> will be 
+        /// Uses the <see cref="input"/> string and tries to convert it to a <see cref="sbyte"/>. An <see cref="InvalidCastException"/> will be
         /// thrown if the conversion fails.
         /// </summary>
         /// <param name="input">The source string for the operation.</param>
@@ -163,16 +198,21 @@ namespace TMP.Extensions
         public static sbyte ToSByte(this string input, IFormatProvider formatProvider, NumberStyles numberStyle)
         {
             if (input == null)
+            {
                 throw new ArgumentNullException(nameof(input));
+            }
 
             var parsed = sbyte.TryParse(input, numberStyle, formatProvider, out sbyte result);
             if (parsed)
+            {
                 return result;
+            }
+
             throw new InvalidCastException("The input cannot be changed into a sbyte.");
         }
 
         /// <summary>
-        /// Uses the <see cref="input"/> string and tries to convert it to an <see cref="int"/>. An <see cref="InvalidCastException"/> will be 
+        /// Uses the <see cref="input"/> string and tries to convert it to an <see cref="int"/>. An <see cref="InvalidCastException"/> will be
         /// thrown if the conversion fails.
         /// </summary>
         /// <param name="input">The source string for the operation.</param>
@@ -180,16 +220,21 @@ namespace TMP.Extensions
         public static int ToInt(this string input)
         {
             if (input == null)
+            {
                 throw new ArgumentNullException(nameof(input));
+            }
 
             var parsed = int.TryParse(input, out int result);
             if (parsed)
+            {
                 return result;
+            }
+
             throw new InvalidCastException("The input cannot be changed into an int.");
         }
 
         /// <summary>
-        /// Uses the <see cref="input"/> string and tries to convert it to an <see cref="int"/>. An <see cref="InvalidCastException"/> will be 
+        /// Uses the <see cref="input"/> string and tries to convert it to an <see cref="int"/>. An <see cref="InvalidCastException"/> will be
         /// thrown if the conversion fails.
         /// </summary>
         /// <param name="input">The source string for the operation.</param>
@@ -199,16 +244,21 @@ namespace TMP.Extensions
         public static int ToInt(this string input, IFormatProvider formatProvider, NumberStyles numberStyle)
         {
             if (input == null)
+            {
                 throw new ArgumentNullException(nameof(input));
+            }
 
             var parsed = int.TryParse(input, numberStyle, formatProvider, out int result);
             if (parsed)
+            {
                 return result;
+            }
+
             throw new InvalidCastException("The input cannot be changed into an int.");
         }
 
         /// <summary>
-        /// Uses the <see cref="input"/> string and tries to convert it to an <see cref="uint"/>. An <see cref="InvalidCastException"/> will be 
+        /// Uses the <see cref="input"/> string and tries to convert it to an <see cref="uint"/>. An <see cref="InvalidCastException"/> will be
         /// thrown if the conversion fails.
         /// </summary>
         /// <param name="input">The source string for the operation.</param>
@@ -216,16 +266,21 @@ namespace TMP.Extensions
         public static uint ToUInt(this string input)
         {
             if (input == null)
+            {
                 throw new ArgumentNullException(nameof(input));
+            }
 
             var parsed = uint.TryParse(input, out uint result);
             if (parsed)
+            {
                 return result;
+            }
+
             throw new InvalidCastException("The input cannot be changed into an uint.");
         }
 
         /// <summary>
-        /// Uses the <see cref="input"/> string and tries to convert it to an <see cref="uint"/>. An <see cref="InvalidCastException"/> will be 
+        /// Uses the <see cref="input"/> string and tries to convert it to an <see cref="uint"/>. An <see cref="InvalidCastException"/> will be
         /// thrown if the conversion fails.
         /// </summary>
         /// <param name="input">The source string for the operation.</param>
@@ -235,16 +290,21 @@ namespace TMP.Extensions
         public static uint ToUInt(this string input, IFormatProvider formatProvider, NumberStyles numberStyle)
         {
             if (input == null)
+            {
                 throw new ArgumentNullException(nameof(input));
+            }
 
             var parsed = uint.TryParse(input, numberStyle, formatProvider, out uint result);
             if (parsed)
+            {
                 return result;
+            }
+
             throw new InvalidCastException("The input cannot be changed into an uint.");
         }
 
         /// <summary>
-        /// Uses the <see cref="input"/> string and tries to convert it to a <see cref="short"/>. An <see cref="InvalidCastException"/> will be 
+        /// Uses the <see cref="input"/> string and tries to convert it to a <see cref="short"/>. An <see cref="InvalidCastException"/> will be
         /// thrown if the conversion fails.
         /// </summary>
         /// <param name="input">The source string for the operation.</param>
@@ -252,16 +312,21 @@ namespace TMP.Extensions
         public static short ToShort(this string input)
         {
             if (input == null)
+            {
                 throw new ArgumentNullException(nameof(input));
+            }
 
             var parsed = short.TryParse(input, out short result);
             if (parsed)
+            {
                 return result;
+            }
+
             throw new InvalidCastException("The input cannot be changed into a short.");
         }
 
         /// <summary>
-        /// Uses the <see cref="input"/> string and tries to convert it to a <see cref="short"/>. An <see cref="InvalidCastException"/> will be 
+        /// Uses the <see cref="input"/> string and tries to convert it to a <see cref="short"/>. An <see cref="InvalidCastException"/> will be
         /// thrown if the conversion fails.
         /// </summary>
         /// <param name="input">The source string for the operation.</param>
@@ -271,16 +336,21 @@ namespace TMP.Extensions
         public static short ToShort(this string input, IFormatProvider formatProvider, NumberStyles numberStyle)
         {
             if (input == null)
+            {
                 throw new ArgumentNullException(nameof(input));
+            }
 
             var parsed = short.TryParse(input, numberStyle, formatProvider, out short result);
             if (parsed)
+            {
                 return result;
+            }
+
             throw new InvalidCastException("The input cannot be changed into a short.");
         }
 
         /// <summary>
-        /// Uses the <see cref="input"/> string and tries to convert it to an <see cref="ushort"/>. An <see cref="InvalidCastException"/> will be 
+        /// Uses the <see cref="input"/> string and tries to convert it to an <see cref="ushort"/>. An <see cref="InvalidCastException"/> will be
         /// thrown if the conversion fails.
         /// </summary>
         /// <param name="input">The source string for the operation.</param>
@@ -288,16 +358,21 @@ namespace TMP.Extensions
         public static ushort ToUShort(this string input)
         {
             if (input == null)
+            {
                 throw new ArgumentNullException(nameof(input));
+            }
 
             var parsed = ushort.TryParse(input, out ushort result);
             if (parsed)
+            {
                 return result;
+            }
+
             throw new InvalidCastException("The input cannot be changed into an ushort.");
         }
 
         /// <summary>
-        /// Uses the <see cref="input"/> string and tries to convert it to an <see cref="ushort"/>. An <see cref="InvalidCastException"/> will be 
+        /// Uses the <see cref="input"/> string and tries to convert it to an <see cref="ushort"/>. An <see cref="InvalidCastException"/> will be
         /// thrown if the conversion fails.
         /// </summary>
         /// <param name="input">The source string for the operation.</param>
@@ -307,16 +382,21 @@ namespace TMP.Extensions
         public static ushort ToUShort(this string input, IFormatProvider formatProvider, NumberStyles numberStyle)
         {
             if (input == null)
+            {
                 throw new ArgumentNullException(nameof(input));
+            }
 
             var parsed = ushort.TryParse(input, numberStyle, formatProvider, out ushort result);
             if (parsed)
+            {
                 return result;
+            }
+
             throw new InvalidCastException("The input cannot be changed into an ushort.");
         }
 
         /// <summary>
-        /// Uses the <see cref="input"/> string and tries to convert it to an <see cref="long"/>. An <see cref="InvalidCastException"/> will be 
+        /// Uses the <see cref="input"/> string and tries to convert it to an <see cref="long"/>. An <see cref="InvalidCastException"/> will be
         /// thrown if the conversion fails.
         /// </summary>
         /// <param name="input">The source string for the operation.</param>
@@ -324,16 +404,21 @@ namespace TMP.Extensions
         public static long ToLong(this string input)
         {
             if (input == null)
+            {
                 throw new ArgumentNullException(nameof(input));
+            }
 
             var parsed = long.TryParse(input, out long result);
             if (parsed)
+            {
                 return result;
+            }
+
             throw new InvalidCastException("The input cannot be changed into a long.");
         }
 
         /// <summary>
-        /// Uses the <see cref="input"/> string and tries to convert it to an <see cref="long"/>. An <see cref="InvalidCastException"/> will be 
+        /// Uses the <see cref="input"/> string and tries to convert it to an <see cref="long"/>. An <see cref="InvalidCastException"/> will be
         /// thrown if the conversion fails.
         /// </summary>
         /// <param name="input">The source string for the operation.</param>
@@ -343,16 +428,21 @@ namespace TMP.Extensions
         public static long ToLong(this string input, IFormatProvider formatProvider, NumberStyles numberStyle)
         {
             if (input == null)
+            {
                 throw new ArgumentNullException(nameof(input));
+            }
 
             var parsed = long.TryParse(input, numberStyle, formatProvider, out long result);
             if (parsed)
+            {
                 return result;
+            }
+
             throw new InvalidCastException("The input cannot be changed into a long.");
         }
 
         /// <summary>
-        /// Uses the <see cref="input"/> string and tries to convert it to an <see cref="ulong"/>. An <see cref="InvalidCastException"/> will be 
+        /// Uses the <see cref="input"/> string and tries to convert it to an <see cref="ulong"/>. An <see cref="InvalidCastException"/> will be
         /// thrown if the conversion fails.
         /// </summary>
         /// <param name="input">The source string for the operation.</param>
@@ -360,16 +450,21 @@ namespace TMP.Extensions
         public static ulong ToULong(this string input)
         {
             if (input == null)
+            {
                 throw new ArgumentNullException(nameof(input));
+            }
 
             var parsed = ulong.TryParse(input, out ulong result);
             if (parsed)
+            {
                 return result;
+            }
+
             throw new InvalidCastException("The input cannot be changed into an ulong.");
         }
 
         /// <summary>
-        /// Uses the <see cref="input"/> string and tries to convert it to an <see cref="ulong"/>. An <see cref="InvalidCastException"/> will be 
+        /// Uses the <see cref="input"/> string and tries to convert it to an <see cref="ulong"/>. An <see cref="InvalidCastException"/> will be
         /// thrown if the conversion fails.
         /// </summary>
         /// <param name="input">The source string for the operation.</param>
@@ -379,16 +474,21 @@ namespace TMP.Extensions
         public static ulong ToULong(this string input, IFormatProvider formatProvider, NumberStyles numberStyle)
         {
             if (input == null)
+            {
                 throw new ArgumentNullException(nameof(input));
+            }
 
             var parsed = ulong.TryParse(input, numberStyle, formatProvider, out ulong result);
             if (parsed)
+            {
                 return result;
+            }
+
             throw new InvalidCastException("The input cannot be changed into an ulong.");
         }
 
         /// <summary>
-        /// Uses the <see cref="input"/> string and tries to convert it to an <see cref="float"/>. An <see cref="InvalidCastException"/> will be 
+        /// Uses the <see cref="input"/> string and tries to convert it to an <see cref="float"/>. An <see cref="InvalidCastException"/> will be
         /// thrown if the conversion fails.
         /// </summary>
         /// <param name="input">The source string for the operation.</param>
@@ -396,16 +496,21 @@ namespace TMP.Extensions
         public static float ToFloat(this string input)
         {
             if (input == null)
+            {
                 throw new ArgumentNullException(nameof(input));
+            }
 
             var parsed = float.TryParse(input, out float result);
             if (parsed)
+            {
                 return result;
+            }
+
             throw new InvalidCastException("The input cannot be changed into a float.");
         }
 
         /// <summary>
-        /// Uses the <see cref="input"/> string and tries to convert it to an <see cref="float"/>. An <see cref="InvalidCastException"/> will be 
+        /// Uses the <see cref="input"/> string and tries to convert it to an <see cref="float"/>. An <see cref="InvalidCastException"/> will be
         /// thrown if the conversion fails.
         /// </summary>
         /// <param name="input">The source string for the operation.</param>
@@ -415,16 +520,21 @@ namespace TMP.Extensions
         public static float ToFloat(this string input, IFormatProvider formatProvider, NumberStyles numberStyle)
         {
             if (input == null)
+            {
                 throw new ArgumentNullException(nameof(input));
+            }
 
             var parsed = float.TryParse(input, numberStyle, formatProvider, out float result);
             if (parsed)
+            {
                 return result;
+            }
+
             throw new InvalidCastException("The input cannot be changed into a float.");
         }
 
         /// <summary>
-        /// Uses the <see cref="input"/> string and tries to convert it to an <see cref="double"/>. An <see cref="InvalidCastException"/> will be 
+        /// Uses the <see cref="input"/> string and tries to convert it to an <see cref="double"/>. An <see cref="InvalidCastException"/> will be
         /// thrown if the conversion fails.
         /// </summary>
         /// <param name="input">The source string for the operation.</param>
@@ -432,16 +542,21 @@ namespace TMP.Extensions
         public static double ToDouble(this string input)
         {
             if (input == null)
+            {
                 throw new ArgumentNullException(nameof(input));
+            }
 
             var parsed = double.TryParse(input, out double result);
             if (parsed)
+            {
                 return result;
+            }
+
             throw new InvalidCastException("The input cannot be changed into a double.");
         }
 
         /// <summary>
-        /// Uses the <see cref="input"/> string and tries to convert it to an <see cref="double"/>. An <see cref="InvalidCastException"/> will be 
+        /// Uses the <see cref="input"/> string and tries to convert it to an <see cref="double"/>. An <see cref="InvalidCastException"/> will be
         /// thrown if the conversion fails.
         /// </summary>
         /// <param name="input">The source string for the operation.</param>
@@ -451,16 +566,21 @@ namespace TMP.Extensions
         public static double ToDouble(this string input, IFormatProvider formatProvider, NumberStyles numberStyle)
         {
             if (input == null)
+            {
                 throw new ArgumentNullException(nameof(input));
+            }
 
             var parsed = double.TryParse(input, numberStyle, formatProvider, out double result);
             if (parsed)
+            {
                 return result;
+            }
+
             throw new InvalidCastException("The input cannot be changed into a double.");
         }
 
         /// <summary>
-        /// Uses the <see cref="input"/> string and tries to convert it to an <see cref="decimal"/>. An <see cref="InvalidCastException"/> will be 
+        /// Uses the <see cref="input"/> string and tries to convert it to an <see cref="decimal"/>. An <see cref="InvalidCastException"/> will be
         /// thrown if the conversion fails.
         /// </summary>
         /// <param name="input">The source string for the operation.</param>
@@ -468,16 +588,21 @@ namespace TMP.Extensions
         public static decimal ToDecimal(this string input)
         {
             if (input == null)
+            {
                 throw new ArgumentNullException(nameof(input));
+            }
 
             var parsed = decimal.TryParse(input, out decimal result);
             if (parsed)
+            {
                 return result;
+            }
+
             throw new InvalidCastException("The input cannot be changed into a decimal.");
         }
 
         /// <summary>
-        /// Uses the <see cref="input"/> string and tries to convert it to an <see cref="decimal"/>. An <see cref="InvalidCastException"/> will be 
+        /// Uses the <see cref="input"/> string and tries to convert it to an <see cref="decimal"/>. An <see cref="InvalidCastException"/> will be
         /// thrown if the conversion fails.
         /// </summary>
         /// <param name="input">The source string for the operation.</param>
@@ -487,16 +612,21 @@ namespace TMP.Extensions
         public static decimal ToDecimal(this string input, IFormatProvider formatProvider, NumberStyles numberStyle)
         {
             if (input == null)
+            {
                 throw new ArgumentNullException(nameof(input));
+            }
 
             var parsed = decimal.TryParse(input, numberStyle, formatProvider, out decimal result);
             if (parsed)
+            {
                 return result;
+            }
+
             throw new InvalidCastException("The input cannot be changed into a decimal.");
         }
 
         /// <summary>
-        /// Uses the <see cref="input"/> string and tries to convert it to an <see cref="bool"/>. An <see cref="InvalidCastException"/> will be 
+        /// Uses the <see cref="input"/> string and tries to convert it to an <see cref="bool"/>. An <see cref="InvalidCastException"/> will be
         /// thrown if the conversion fails.
         /// </summary>
         /// <param name="input">The source string for the operation.</param>
@@ -504,16 +634,21 @@ namespace TMP.Extensions
         public static bool ToBool(this string input)
         {
             if (input == null)
+            {
                 throw new ArgumentNullException(nameof(input));
+            }
 
             var parsed = bool.TryParse(input, out bool result);
             if (parsed)
+            {
                 return result;
+            }
+
             throw new InvalidCastException("The input cannot be changed into a bool.");
         }
 
         /// <summary>
-        /// Uses the <see cref="input"/> string and tries to convert it to an <see cref="char"/>. An <see cref="InvalidCastException"/> will be 
+        /// Uses the <see cref="input"/> string and tries to convert it to an <see cref="char"/>. An <see cref="InvalidCastException"/> will be
         /// thrown if the conversion fails.
         /// </summary>
         /// <param name="input">The source string for the operation.</param>
@@ -521,16 +656,21 @@ namespace TMP.Extensions
         public static char ToChar(this string input)
         {
             if (input == null)
+            {
                 throw new ArgumentNullException(nameof(input));
+            }
 
             var parsed = char.TryParse(input, out char result);
             if (parsed)
+            {
                 return result;
+            }
+
             throw new InvalidCastException("The input cannot be changed into a char.");
         }
 
         /// <summary>
-        /// Uses the <see cref="input"/> string and tries to convert it to an <see cref="DateTime"/>. An <see cref="InvalidCastException"/> will be 
+        /// Uses the <see cref="input"/> string and tries to convert it to an <see cref="DateTime"/>. An <see cref="InvalidCastException"/> will be
         /// thrown if the conversion fails.
         /// </summary>
         /// <param name="input">The source string for the operation.</param>
@@ -538,16 +678,21 @@ namespace TMP.Extensions
         public static DateTime ToDateTime(this string input)
         {
             if (input == null)
+            {
                 throw new ArgumentNullException(nameof(input));
+            }
 
             var parsed = DateTime.TryParse(input, out DateTime result);
             if (parsed)
+            {
                 return result;
+            }
+
             throw new InvalidCastException("The input cannot be changed into a DateTime.");
         }
 
         /// <summary>
-        /// Uses the <see cref="input"/> string and tries to convert it to an <see cref="DateTime"/>. An <see cref="InvalidCastException"/> will be 
+        /// Uses the <see cref="input"/> string and tries to convert it to an <see cref="DateTime"/>. An <see cref="InvalidCastException"/> will be
         /// thrown if the conversion fails.
         /// </summary>
         /// <param name="input">The source string for the operation.</param>
@@ -557,11 +702,16 @@ namespace TMP.Extensions
         public static DateTime ToDateTime(this string input, IFormatProvider formatProvider, DateTimeStyles dateTimeStyle)
         {
             if (input == null)
+            {
                 throw new ArgumentNullException(nameof(input));
+            }
 
             var parsed = DateTime.TryParse(input, formatProvider, dateTimeStyle, out DateTime result);
             if (parsed)
+            {
                 return result;
+            }
+
             throw new InvalidCastException("The input cannot be changed into a DateTime.");
         }
     }

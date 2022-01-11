@@ -1,117 +1,128 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-namespace TemplateEngine.Docx
+﻿namespace TemplateEngine.Docx
 {
-	public class ListItemContent : Container, IEquatable<ListItemContent>
-	{
-		public ICollection<ListItemContent> NestedFields { get; set; }
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
 
-		#region ctors
+    public class ListItemContent : Container, IEquatable<ListItemContent>
+    {
+        public ICollection<ListItemContent> NestedFields { get; set; }
 
-		public ListItemContent()
-		{
-			
-		}
+        #region ctors
 
-		public ListItemContent(params IContentItem[] contentItems):base(contentItems)
+        public ListItemContent()
         {
-            
         }
 
-		public ListItemContent(IEnumerable<ListItemContent> nestedfields, params IContentItem[] contentItems)
-			: base(contentItems)
-		{
-			NestedFields = nestedfields.ToList();
-		}
+        public ListItemContent(params IContentItem[] contentItems) : base(contentItems)
+        {
+        }
 
-		public ListItemContent(string name, string value)
-		{
-			Fields = new List<FieldContent> {new FieldContent {Name = name, Value = value}};
-			NestedFields = new List<ListItemContent>();
-		}
-		
-		public ListItemContent(string name, string value, IEnumerable<ListItemContent> nestedfields)
-		{
-			Fields = new List<FieldContent>{new FieldContent{Name = name, Value = value}};
-			NestedFields = nestedfields.ToList();
-		}
+        public ListItemContent(IEnumerable<ListItemContent> nestedfields, params IContentItem[] contentItems)
+            : base(contentItems)
+        {
+            this.NestedFields = nestedfields.ToList();
+        }
 
-		public ListItemContent(string name, string value, params ListItemContent[] nestedfields)
-		{
-			Fields = new List<FieldContent> {new FieldContent {Name = name, Value = value}};
-			NestedFields = nestedfields.ToList();
+        public ListItemContent(string name, string value)
+        {
+            this.Fields = new List<FieldContent> { new FieldContent { Name = name, Value = value } };
+            this.NestedFields = new List<ListItemContent>();
+        }
 
-		}
+        public ListItemContent(string name, string value, IEnumerable<ListItemContent> nestedfields)
+        {
+            this.Fields = new List<FieldContent> { new FieldContent { Name = name, Value = value } };
+            this.NestedFields = nestedfields.ToList();
+        }
 
-		#endregion
+        public ListItemContent(string name, string value, params ListItemContent[] nestedfields)
+        {
+            this.Fields = new List<FieldContent> { new FieldContent { Name = name, Value = value } };
+            this.NestedFields = nestedfields.ToList();
+        }
 
-		#region Fluent
+        #endregion
 
-		public static ListItemContent Create(string name, string value, params ListItemContent[] nestedfields)
-		{
-			return new ListItemContent(name, value, nestedfields);
-		}
+        #region Fluent
 
-		public static ListItemContent Create(string name, string value, List<ListItemContent> nestedfields)
-		{
-			return new ListItemContent(name, value, nestedfields);
-		}
-		public new ListItemContent AddField(string name, string value)
-		{
-			return (ListItemContent)base.AddField(name, value);
-		}
+        public static ListItemContent Create(string name, string value, params ListItemContent[] nestedfields)
+        {
+            return new ListItemContent(name, value, nestedfields);
+        }
 
-		public new ListItemContent AddTable(TableContent table)
-		{
-			return (ListItemContent)base.AddTable(table);
-		}
-		public new ListItemContent AddList(ListContent list)
-		{
-			return (ListItemContent)base.AddList(list);
-		}
+        public static ListItemContent Create(string name, string value, List<ListItemContent> nestedfields)
+        {
+            return new ListItemContent(name, value, nestedfields);
+        }
 
-		public ListItemContent AddNestedItem(ListItemContent nestedItem)
-		{
-			if (NestedFields == null) NestedFields = new List<ListItemContent>();
+        public new ListItemContent AddField(string name, string value)
+        {
+            return (ListItemContent)base.AddField(name, value);
+        }
 
-			NestedFields.Add(nestedItem);
-			return this;
-		}
+        public new ListItemContent AddTable(TableContent table)
+        {
+            return (ListItemContent)base.AddTable(table);
+        }
 
-		public ListItemContent AddNestedItem(IContentItem nestedItem)
-		{
-			if (NestedFields == null) NestedFields = new List<ListItemContent>();
+        public new ListItemContent AddList(ListContent list)
+        {
+            return (ListItemContent)base.AddList(list);
+        }
 
-			NestedFields.Add(new ListItemContent(nestedItem));
-			return this;
-		}
+        public ListItemContent AddNestedItem(ListItemContent nestedItem)
+        {
+            if (this.NestedFields == null)
+            {
+                this.NestedFields = new List<ListItemContent>();
+            }
 
-		#endregion
+            this.NestedFields.Add(nestedItem);
+            return this;
+        }
 
-		#region Equals
-		public bool Equals(ListItemContent other)
-		{
-			if (other == null) return false;
+        public ListItemContent AddNestedItem(IContentItem nestedItem)
+        {
+            if (this.NestedFields == null)
+            {
+                this.NestedFields = new List<ListItemContent>();
+            }
 
-			var equals = base.Equals(other);
-	
-			if (NestedFields != null)
-				return equals && NestedFields.SequenceEqual(other.NestedFields);
+            this.NestedFields.Add(new ListItemContent(nestedItem));
+            return this;
+        }
 
-			return equals;
-		}
-		public override int GetHashCode()
-		{
-			var nestedHc = 0;
-			
-			nestedHc = NestedFields.Aggregate(nestedHc, (current, p) => current ^ p.GetHashCode());
-			var baseHc = base.GetHashCode();
+        #endregion
 
-			return new { baseHc, nestedHc }.GetHashCode();
-		}
+        #region Equals
+        public bool Equals(ListItemContent other)
+        {
+            if (other == null)
+            {
+                return false;
+            }
 
-		#endregion
-	}
+            var equals = base.Equals(other);
+
+            if (this.NestedFields != null)
+            {
+                return equals && this.NestedFields.SequenceEqual(other.NestedFields);
+            }
+
+            return equals;
+        }
+
+        public override int GetHashCode()
+        {
+            var nestedHc = 0;
+
+            nestedHc = this.NestedFields.Aggregate(nestedHc, (current, p) => current ^ p.GetHashCode());
+            var baseHc = base.GetHashCode();
+
+            return new { baseHc, nestedHc }.GetHashCode();
+        }
+
+        #endregion
+    }
 }

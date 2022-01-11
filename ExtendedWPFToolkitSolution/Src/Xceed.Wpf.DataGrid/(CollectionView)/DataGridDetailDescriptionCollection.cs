@@ -16,12 +16,11 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Collections.ObjectModel;
 
 namespace Xceed.Wpf.DataGrid
 {
-  public class DataGridDetailDescriptionCollection : ObservableCollection<DataGridDetailDescription>
+  internal class DataGridDetailDescriptionCollection : ObservableCollection<DataGridDetailDescription>
   {
     public DataGridDetailDescriptionCollection()
     {
@@ -37,9 +36,8 @@ namespace Xceed.Wpf.DataGrid
     {
       get
       {
-        int index = this.IndexOf( relationName );
-
-        if( index == -1 )
+        var index = this.IndexOf( relationName );
+        if( index < 0 )
           return null;
 
         return this.Items[ index ];
@@ -48,8 +46,8 @@ namespace Xceed.Wpf.DataGrid
 
     public int IndexOf( string relationName )
     {
-      IList<DataGridDetailDescription> items = this.Items;
-      int count = items.Count;
+      var items = this.Items;
+      var count = items.Count;
 
       for( int i = 0; i < count; i++ )
       {
@@ -60,23 +58,8 @@ namespace Xceed.Wpf.DataGrid
       return -1;
     }
 
-    [System.Diagnostics.CodeAnalysis.SuppressMessage( "Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly" )]
-    internal ICollection<DataGridDetailDescription> DefaultDetailDescriptions
-    {
-      get
-      {
-        return m_defaultDetailDescriptions;
-      }
-      set
-      {
-        if( m_defaultDetailDescriptions == null )
-          m_defaultDetailDescriptions = value;
-      }
-    }
-
     protected override void SetItem( int index, DataGridDetailDescription item )
     {
-      if (item == null) return;
       if( string.IsNullOrEmpty( item.RelationName ) )
         throw new ArgumentException( "The RelationName property of the specified DataGridDetailDescription cannot be null or empty.", "item" );
 
@@ -85,28 +68,10 @@ namespace Xceed.Wpf.DataGrid
 
     protected override void InsertItem( int index, DataGridDetailDescription item )
     {
-        if (item == null) return;
-            if ( string.IsNullOrEmpty( item.RelationName ) )
+      if( string.IsNullOrEmpty( item.RelationName ) )
         throw new ArgumentException( "The RelationName property of the specified DataGridDetailDescription cannot be null or empty.", "item" );
 
       base.InsertItem( index, item );
     }
-
-    private DataGridDetailDescription FindDefaultDetailDescription( string name )
-    {
-      if( m_defaultDetailDescriptions != null )
-      {
-        foreach( DataGridDetailDescription detailDescription in m_defaultDetailDescriptions )
-        {
-          if( string.Equals( detailDescription.RelationName, name ) )
-            return detailDescription;
-        }
-      }
-
-      return null;
-    }
-
-    private ICollection<DataGridDetailDescription> m_defaultDetailDescriptions;
-
   }
 }

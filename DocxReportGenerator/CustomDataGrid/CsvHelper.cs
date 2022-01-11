@@ -1,14 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text.RegularExpressions;
-using MoreLinq;
-
-namespace TMP.Work.DocxReportGenerator.CustomControls
+﻿namespace TMP.Work.DocxReportGenerator.CustomControls
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text.RegularExpressions;
+    using MoreLinq;
+
     public class CsvHelper
     {
-        public static Dictionary<LineSeparator, Func<string, string[]>>  DictionaryOfLineSeparatorAndItsFunc = new Dictionary<LineSeparator, Func<string, string[]>>();
+        public static Dictionary<LineSeparator, Func<string, string[]>> DictionaryOfLineSeparatorAndItsFunc = new Dictionary<LineSeparator, Func<string, string[]>>();
 
         static CsvHelper()
         {
@@ -24,7 +24,7 @@ namespace TMP.Work.DocxReportGenerator.CustomControls
             Unknown = 0,
             Tab,
             Semicolon,
-            Comma
+            Comma,
         }
 
         // ******************************************************************
@@ -36,7 +36,7 @@ namespace TMP.Work.DocxReportGenerator.CustomControls
             listOfLineSeparatorAndThereFirstLineSeparatedValueCount.Add(new Tuple<LineSeparator, int>(LineSeparator.Semicolon, CsvHelper.ParseLineSemicolonSeparated(oneLine).Count()));
             listOfLineSeparatorAndThereFirstLineSeparatedValueCount.Add(new Tuple<LineSeparator, int>(LineSeparator.Comma, CsvHelper.ParseLineCommaSeparated(oneLine).Count()));
 
-            Tuple<LineSeparator, int> bestBet = listOfLineSeparatorAndThereFirstLineSeparatedValueCount.MaxBy((n)=>n.Item2);
+            var bestBet = listOfLineSeparatorAndThereFirstLineSeparatedValueCount.MaxBy((n) => n.Item2).FirstOrDefault();
 
             if (bestBet != null && bestBet.Item2 > 1)
             {
@@ -66,7 +66,7 @@ namespace TMP.Work.DocxReportGenerator.CustomControls
                             RegexOptions.ExplicitCapture);
 
             string[] values = (from Match m in matchesTab
-                                select m.Groups["x"].Value.Trim().Replace("\"\"", "\"")).ToArray();
+                               select m.Groups["x"].Value.Trim().Replace("\"\"", "\"")).ToArray();
 
             return values;
         }
@@ -87,7 +87,7 @@ namespace TMP.Work.DocxReportGenerator.CustomControls
         // ******************************************************************
         public static string[] ParseLineNotSeparated(string line)
         {
-            string [] lineValues = new string[1];
+            string[] lineValues = new string[1];
             lineValues[0] = line;
             return lineValues;
         }

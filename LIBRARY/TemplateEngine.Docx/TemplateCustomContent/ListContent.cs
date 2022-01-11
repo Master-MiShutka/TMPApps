@@ -1,134 +1,154 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-
-namespace TemplateEngine.Docx
+﻿namespace TemplateEngine.Docx
 {
-	[ContentItemName("List")]
-	public class ListContent : HiddenContent<ListContent>, IEquatable<ListContent>
-	{
-	    public ICollection<ListItemContent> Items { get; set; }
+    using System;
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+    using System.Linq;
 
-		public IEnumerable<string> FieldNames => GetFieldNames(Items) ?? new List<string>();
+    [ContentItemName("List")]
+    public class ListContent : HiddenContent<ListContent>, IEquatable<ListContent>
+    {
+        public ICollection<ListItemContent> Items { get; set; }
 
-	    #region ctors
+        public IEnumerable<string> FieldNames => this.GetFieldNames(this.Items) ?? new List<string>();
 
-		public ListContent()
+        #region ctors
+
+        public ListContent()
         {
-            
         }
 
         public ListContent(string name)
         {
-            Name = name;
+            this.Name = name;
         }
 
-		public ListContent(string name, IEnumerable<ListItemContent> items)
+        public ListContent(string name, IEnumerable<ListItemContent> items)
             : this(name)
         {
-            Items = items.ToList();
+            this.Items = items.ToList();
         }
 
-		public ListContent(string name, params ListItemContent[] items)
+        public ListContent(string name, params ListItemContent[] items)
             : this(name)
         {
-			Items = items.ToList();
+            this.Items = items.ToList();
         }
 
-		#endregion
+        #endregion
 
-		#region Fluent
+        #region Fluent
 
-		public static ListContent Create(string name, params ListItemContent[] items)
+        public static ListContent Create(string name, params ListItemContent[] items)
         {
-			return new ListContent(name, items);
+            return new ListContent(name, items);
         }
 
-		public static ListContent Create(string name, IEnumerable<ListItemContent> items)
+        public static ListContent Create(string name, IEnumerable<ListItemContent> items)
         {
-			return new ListContent(name, items);
+            return new ListContent(name, items);
         }
 
-		public ListContent AddItem(ListItemContent item)
-		{
-			if (Items == null) Items = new Collection<ListItemContent>();
-			Items.Add(item);
-			return this;
-		}
+        public ListContent AddItem(ListItemContent item)
+        {
+            if (this.Items == null)
+            {
+                this.Items = new Collection<ListItemContent>();
+            }
 
-		public ListContent AddItem(params IContentItem[] contentItems)
-		{
-			if (Items == null) Items = new Collection<ListItemContent>();
-			Items.Add(new ListItemContent(contentItems));
-			return this;
-		}
+            this.Items.Add(item);
+            return this;
+        }
+
+        public ListContent AddItem(params IContentItem[] contentItems)
+        {
+            if (this.Items == null)
+            {
+                this.Items = new Collection<ListItemContent>();
+            }
+
+            this.Items.Add(new ListItemContent(contentItems));
+            return this;
+        }
 
         #endregion
 
         #region IContentItem implementation
 
         private List<string> GetFieldNames(IEnumerable<ListItemContent> items)
-		{
-			var result = new List<string>();
-			if (items == null) return null;
+        {
+            var result = new List<string>();
+            if (items == null)
+            {
+                return null;
+            }
 
-			foreach (var item in items)
-			{
-				if (item != null)
-				{
-					foreach (var fieldName in item.FieldNames.Where(fieldName => !result.Contains(fieldName)))
-					{
-						result.Add(fieldName);
-					}
+            foreach (var item in items)
+            {
+                if (item != null)
+                {
+                    foreach (var fieldName in item.FieldNames.Where(fieldName => !result.Contains(fieldName)))
+                    {
+                        result.Add(fieldName);
+                    }
 
-					if (item.NestedFields != null)
-					{
-						var listItem = item;
-						if (listItem.NestedFields != null)
-						{
-							var nestedFieldNames = GetFieldNames(listItem.NestedFields);
-							foreach (var nestedFieldName in nestedFieldNames)
-							{
-								if (!result.Contains(nestedFieldName))
-									result.Add(nestedFieldName);
-							}
-						}
-					}
+                    if (item.NestedFields != null)
+                    {
+                        var listItem = item;
+                        if (listItem.NestedFields != null)
+                        {
+                            var nestedFieldNames = this.GetFieldNames(listItem.NestedFields);
+                            foreach (var nestedFieldName in nestedFieldNames)
+                            {
+                                if (!result.Contains(nestedFieldName))
+                                {
+                                    result.Add(nestedFieldName);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
 
-				}
-			}			
-			return result;
-		}
+            return result;
+        }
 
-		#endregion
+        #endregion
 
-		#region Equals
+        #region Equals
 
-		public bool Equals(ListContent other)
-		{
-			if (other == null) return false;
+        public bool Equals(ListContent other)
+        {
+            if (other == null)
+            {
+                return false;
+            }
 
-            return Name.Equals(other.Name) && 
-                Items.SequenceEqual(other.Items);
-		}
+            return this.Name.Equals(other.Name) &&
+                this.Items.SequenceEqual(other.Items);
+        }
 
-		public override bool Equals(IContentItem other)
-		{
-			if (!(other is ListContent)) return false;
+        public override bool Equals(IContentItem other)
+        {
+            if (!(other is ListContent))
+            {
+                return false;
+            }
 
-			return Equals((ListContent)other);
-		}
+            return this.Equals((ListContent)other);
+        }
 
-		public override int GetHashCode()
-		{
-			var hc = 0;
-			if (Items != null)
-				hc = Items.Aggregate(hc, (current, p) => current ^ p.GetHashCode());
-			
-			return new { Name, hc }.GetHashCode();
-		}
+        public override int GetHashCode()
+        {
+            var hc = 0;
+            if (this.Items != null)
+            {
+                hc = this.Items.Aggregate(hc, (current, p) => current ^ p.GetHashCode());
+            }
 
-		#endregion
-	}
+            return new { this.Name, hc }.GetHashCode();
+        }
+
+        #endregion
+    }
 }

@@ -1,26 +1,26 @@
-﻿using Modbus.Device;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Net.Sockets;
-using System.Text;
-using System.Threading;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-
-namespace TMP.ElectricMeterComm
+﻿namespace TMP.ElectricMeterComm
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+    using System.ComponentModel;
+    using System.Diagnostics;
+    using System.IO;
+    using System.Linq;
+    using System.Net.Sockets;
+    using System.Text;
+    using System.Threading;
+    using System.Windows;
+    using System.Windows.Controls;
+    using System.Windows.Data;
+    using System.Windows.Documents;
+    using System.Windows.Input;
+    using System.Windows.Media;
+    using System.Windows.Media.Imaging;
+    using System.Windows.Navigation;
+    using System.Windows.Shapes;
+    using Modbus.Device;
+
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
@@ -28,9 +28,9 @@ namespace TMP.ElectricMeterComm
     {
         #region Fields
 
-        private ObservableCollection<Model.ModbusOverTcpRequest> _modbusOverTcpRequests = null;
+        private ObservableCollection<Model.ModbusOverTcpRequest> modbusOverTcpRequests = null;
 
-        private bool _isConnected = false;
+        private bool isConnected = false;
         private bool _isReady = true;
 
         private TcpClient _tcpClient;
@@ -47,14 +47,12 @@ namespace TMP.ElectricMeterComm
 
         public MainWindow()
         {
-            InitializeComponent();
+            this.InitializeComponent();
 
-            //hexEditor.Stream = new MemoryStream(new byte[] { 0 });
+            // hexEditor.Stream = new MemoryStream(new byte[] { 0 });
+            this.ModbusOverTcpRequests = new ObservableCollection<Model.ModbusOverTcpRequest>();
 
-
-            ModbusOverTcpRequests = new ObservableCollection<Model.ModbusOverTcpRequest>();
-
-            DataContext = this;
+            this.DataContext = this;
 
             this._tcpClient = new TcpClient();
         }
@@ -63,55 +61,61 @@ namespace TMP.ElectricMeterComm
         {
             base.OnClosed(e);
 
-            if (_tcpClient != null)
-                _tcpClient.Close();
+            if (this._tcpClient != null)
+            {
+                this._tcpClient.Close();
+            }
         }
 
         #region Private methods
 
         private void ResetBuffer()
         {
-            _buffer = new Byte[BUFFER_SIZE];
+            this._buffer = new byte[BUFFER_SIZE];
         }
 
         private void DisconnectCallback(IAsyncResult ar)
         {
             try
             {
-                _tcpClient.Client.EndDisconnect(ar);
-                _tcpClient.Close();
+                this._tcpClient.Client.EndDisconnect(ar);
+                this._tcpClient.Close();
 
-                UIAction(() =>
+                this.UIAction(() =>
                 {
-                    MessageBox.Show("Соединение разорвано.", "", MessageBoxButton.OK, MessageBoxImage.Information);
-                    btnConnectDisconnect.Content = "Подключить";
+                    MessageBox.Show("Соединение разорвано.", string.Empty, MessageBoxButton.OK, MessageBoxImage.Information);
+                    this.btnConnectDisconnect.Content = "Подключить";
                 });
-                IsConnected = false;
+                this.IsConnected = false;
             }
             catch (Exception ex)
             {
-                UIAction(() => MessageBox.Show(ex.Message, "ERROR", MessageBoxButton.OK, MessageBoxImage.Error));
+                this.UIAction(() => MessageBox.Show(ex.Message, "ERROR", MessageBoxButton.OK, MessageBoxImage.Error));
             }
         }
 
         private void UIAction(Action action)
         {
             if (this.Dispatcher.CheckAccess())
+            {
                 action();
+            }
             else
+            {
                 this.Dispatcher.Invoke(action);
+            }
         }
 
         private void SendAndReceive(object param)
         {
-            IsReady = false;
+            this.IsReady = false;
             try
             {
                 var text = string.Empty;
-                UIAction(() => text = Request);
-                if (String.IsNullOrEmpty(text))
+                this.UIAction(() => text = this.Request);
+                if (string.IsNullOrEmpty(text))
                 {
-                    UIAction(() => MessageBox.Show("Текст запроса не должен быть пустым", "ERROR", MessageBoxButton.OK, MessageBoxImage.Warning));
+                    this.UIAction(() => MessageBox.Show("Текст запроса не должен быть пустым", "ERROR", MessageBoxButton.OK, MessageBoxImage.Warning));
                     return;
                 }
 
@@ -130,54 +134,56 @@ namespace TMP.ElectricMeterComm
                 }
                 catch (Exception ex)
                 {
-                    UIAction(() => MessageBox.Show("Текст запроса должен быть в шестнадцатиричном формате!\n" + ex.Message, "ERROR", MessageBoxButton.OK, MessageBoxImage.Warning));
+                    this.UIAction(() => MessageBox.Show("Текст запроса должен быть в шестнадцатиричном формате!\n" + ex.Message, "ERROR", MessageBoxButton.OK, MessageBoxImage.Warning));
                     return;
                 }
 
-                _lastSend = new Model.ModbusOverTcpRequest();
-                _lastSend.SetSendBytes(sendBytesList.ToArray());
-                UIAction(() => ModbusOverTcpRequests.Add(_lastSend));
+                this._lastSend = new Model.ModbusOverTcpRequest();
+                this._lastSend.SetSendBytes(sendBytesList.ToArray());
+                this.UIAction(() => this.ModbusOverTcpRequests.Add(this._lastSend));
 
                 byte[] buffer = new byte[BUFFER_SIZE];
                 IModbusMaster mmaster = ModbusSerialMaster.CreateRtu(this._tcpClient);
 
                 SocketError Error;
-                _tcpClient.Client.Send(sendBytesList.ToArray(), 0, sendBytesList.Count, SocketFlags.None, out Error);
+                this._tcpClient.Client.Send(sendBytesList.ToArray(), 0, sendBytesList.Count, SocketFlags.None, out Error);
                 if (Error > SocketError.Success)
                 {
                     if (Error == SocketError.NotConnected || Error == SocketError.ConnectionReset || Error == SocketError.ConnectionAborted || Error == SocketError.ConnectionRefused)
                     {
-                        UIAction(() => MessageBox.Show("Ошибка соединения", "", MessageBoxButton.OK, MessageBoxImage.Information));
+                        this.UIAction(() => MessageBox.Show("Ошибка соединения", string.Empty, MessageBoxButton.OK, MessageBoxImage.Information));
                     }
                 }
 
                 Action<string> setError = (msg) =>
                 {
-                    _lastSend.ReceivedAsHex = msg;
-                    _lastSend.ReceivedAsText = String.Empty;
+                    this._lastSend.ReceivedAsHex = msg;
+                    this._lastSend.ReceivedAsText = string.Empty;
                 };
 
-                ResetBuffer();
-                int timeout = _tcpClient.Client.ReceiveTimeout;
+                this.ResetBuffer();
+                int timeout = this._tcpClient.Client.ReceiveTimeout;
                 int received = 0;
                 int needToReceive = 16;
                 int delay = 100;
                 while (timeout >= 0)
                 {
                     System.Threading.Thread.Sleep(delay);
-                    if (_tcpClient.Available == 0 && timeout <= 0)
+                    if (this._tcpClient.Available == 0 && timeout <= 0)
                     {
                         setError("истекло время ожидания");
                         break;
                     }
                     else
                     {
-                        int bytesRead = _tcpClient.Client.Receive(_buffer, received, _tcpClient.Client.Available, SocketFlags.None, out Error);
+                        int bytesRead = this._tcpClient.Client.Receive(this._buffer, received, this._tcpClient.Client.Available, SocketFlags.None, out Error);
                         if (bytesRead > 0 && Error == SocketError.Success)
                         {
                             received += bytesRead;
                             if (received >= needToReceive)
+                            {
                                 break;
+                            }
                         }
                         else
                             if (Error == SocketError.TimedOut)
@@ -191,22 +197,24 @@ namespace TMP.ElectricMeterComm
                             break;
                         }
                     }
+
                     timeout -= delay;
                 }
+
                 if (received > 0)
                 {
                     byte[] tmparray = new byte[received];
-                    _buffer.ToList<byte>().CopyTo(0, tmparray, 0, received);
-                    _lastSend.SetRecivedBytes(tmparray);
+                    this._buffer.ToList<byte>().CopyTo(0, tmparray, 0, received);
+                    this._lastSend.SetRecivedBytes(tmparray);
                 }
             }
             catch (Exception ex)
             {
-                UIAction(() => MessageBox.Show(ex.Message, "ERROR", MessageBoxButton.OK, MessageBoxImage.Error));
+                this.UIAction(() => MessageBox.Show(ex.Message, "ERROR", MessageBoxButton.OK, MessageBoxImage.Error));
             }
             finally
             {
-                IsReady = true;
+                this.IsReady = true;
             }
         }
 
@@ -220,9 +228,11 @@ namespace TMP.ElectricMeterComm
 
             StringBuilder sb = new StringBuilder();
             foreach (var s in req)
+            {
                 sb.AppendFormat("{0:X2} ", s);
+            }
 
-            Request = sb.ToString().Trim();
+            this.Request = sb.ToString().Trim();
         }
 
         #endregion
@@ -231,30 +241,30 @@ namespace TMP.ElectricMeterComm
 
         private async void Connect_Click(object sender, RoutedEventArgs e)
         {
-            IsConnected = false;
-            if (_tcpClient.Connected)
+            this.IsConnected = false;
+            if (this._tcpClient.Connected)
             {
-                _tcpClient.Client.BeginDisconnect(false, new AsyncCallback(this.DisconnectCallback), _tcpClient);
+                this._tcpClient.Client.BeginDisconnect(false, new AsyncCallback(this.DisconnectCallback), this._tcpClient);
             }
             else
             {
-                _tcpClient.ReceiveTimeout = Convert.ToInt32(this.tbTimeOut.Text) * 1000;
-                _tcpClient.SendTimeout = Convert.ToInt32(this.tbTimeOut.Text) * 1000;
-                _tcpClient.ReceiveBufferSize = 1024;
+                this._tcpClient.ReceiveTimeout = Convert.ToInt32(this.tbTimeOut.Text) * 1000;
+                this._tcpClient.SendTimeout = Convert.ToInt32(this.tbTimeOut.Text) * 1000;
+                this._tcpClient.ReceiveBufferSize = 1024;
                 (sender as Button).Content = "Отключить";
 
                 try
                 {
                     (sender as Button).IsEnabled = false;
-                    await _tcpClient.ConnectAsync(this.tbAddress.Text, Convert.ToInt32(this.tbPort.Text));
+                    await this._tcpClient.ConnectAsync(this.tbAddress.Text, Convert.ToInt32(this.tbPort.Text));
                     (sender as Button).IsEnabled = true;
-                    IsConnected = true;
+                    this.IsConnected = true;
                 }
                 catch (Exception ex)
                 {
                     MessageBox.Show(ex.Message, "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
                     (sender as Button).IsEnabled = true;
-                    IsConnected = false;
+                    this.IsConnected = false;
                     (sender as Button).Content = "Подключить";
                 }
             }
@@ -262,36 +272,37 @@ namespace TMP.ElectricMeterComm
 
         private void GetCounterType_Click(object sender, RoutedEventArgs e)
         {
-            SetCommandBytes(new byte[6] { Convert.ToByte(tbCounterAddr.Text), 3, 17, 0, 0, 0 });
+            this.SetCommandBytes(new byte[6] { Convert.ToByte(this.tbCounterAddr.Text), 3, 17, 0, 0, 0 });
         }
 
         private void GetCounterNumber_Click(object sender, RoutedEventArgs e)
         {
-            SetCommandBytes(new byte[6] { Convert.ToByte(tbCounterAddr.Text), 3, 18, 0, 0, 0 });
+            this.SetCommandBytes(new byte[6] { Convert.ToByte(this.tbCounterAddr.Text), 3, 18, 0, 0, 0 });
         }
 
         private void AnyCounter_Click(object sender, RoutedEventArgs e)
         {
-            //SetCommandBytes(new byte[4] { 0xf, 0, 0, 0 });
-
+            // SetCommandBytes(new byte[4] { 0xf, 0, 0, 0 });
             List<byte> req = new List<byte>();
             req.AddRange(new byte[7] { 0xf, 3, 0, 0, 0, 0xD8, 0x41 });
 
             StringBuilder sb = new StringBuilder();
             foreach (var s in req)
+            {
                 sb.AppendFormat("{0:X2} ", s);
+            }
 
-            Request = sb.ToString().Trim();
+            this.Request = sb.ToString().Trim();
         }
 
         private void SendRequest_Click(object sender, RoutedEventArgs e)
         {
-            ThreadPool.QueueUserWorkItem(new WaitCallback(SendAndReceive));
+            ThreadPool.QueueUserWorkItem(new WaitCallback(this.SendAndReceive));
         }
 
         private void ClearRequest_Click(object sender, RoutedEventArgs e)
         {
-            Request = string.Empty;
+            this.Request = string.Empty;
         }
         #endregion
 
@@ -299,30 +310,33 @@ namespace TMP.ElectricMeterComm
 
         public ObservableCollection<Model.ModbusOverTcpRequest> ModbusOverTcpRequests
         {
-            get { return _modbusOverTcpRequests; }
-            private set { SetProperty(ref _modbusOverTcpRequests, value, "ModbusOverTcpRequests"); }
+            get => this.modbusOverTcpRequests;
+            private set => this.SetProperty(ref this.modbusOverTcpRequests, value, nameof(this.ModbusOverTcpRequests));
         }
 
         public bool IsConnected
         {
-            get { return _isConnected; }
-            private set { SetProperty(ref _isConnected, value, "IsConnected"); OnPropertyChanged("TcpParamPanelEnabled"); }
+            get => this.isConnected;
+
+            private set
+            {
+                this.SetProperty(ref this.isConnected, value, nameof(this.IsConnected));
+                this.OnPropertyChanged(nameof(this.TcpParamPanelEnabled));
+            }
         }
-        public bool TcpParamPanelEnabled
-        {
-            get { return !_isConnected; }
-        }
+
+        public bool TcpParamPanelEnabled => !this.isConnected;
 
         public string Request
         {
-            get { return _request; }
-            set { SetProperty(ref _request, value, "Request"); }
+            get => this._request;
+            set => this.SetProperty(ref this._request, value, nameof(this.Request));
         }
 
         public bool IsReady
         {
-            get { return _isReady; }
-            set { SetProperty(ref _isReady, value, "IsReady"); }
+            get => this._isReady;
+            set => this.SetProperty(ref this._isReady, value, nameof(this.IsReady));
         }
 
         #endregion
@@ -344,9 +358,13 @@ namespace TMP.ElectricMeterComm
                 string msg = "Invalid property name: " + propertyName;
 
                 if (this.ThrowOnInvalidPropertyName)
+                {
                     throw new Exception(msg);
+                }
                 else
+                {
                     Debug.Fail(msg);
+                }
             }
         }
         #endregion Debugging Aides

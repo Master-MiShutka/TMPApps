@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace Native
+﻿namespace Native
 {
+    using System;
+
     public static class Constants
     {
         public enum ShowWindowCommands
@@ -64,7 +64,7 @@ namespace Native
             /// <summary>
             ///        Activates and displays the window. If the window is minimized or maximized, the system restores it to its original size and position. An application should specify this flag when restoring a minimized window.
             /// </summary>
-            SW_RESTORE = 9
+            SW_RESTORE = 9,
         }
 
         [Flags()]
@@ -114,7 +114,7 @@ namespace Native
 
             Frame = 0x400,
 
-            NoFrame = 0x800
+            NoFrame = 0x800,
         }
 
         public const int MONITOR_DEFAULTTONEAREST = 0x00000002;

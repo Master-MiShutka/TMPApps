@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace WPFHexaEditor.Core.MethodExtention
+﻿namespace WPFHexaEditor.Core.MethodExtention
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+
     /// <summary>
     /// Extention methodes for find match in byte[]
     /// </summary>
@@ -21,7 +21,9 @@ namespace WPFHexaEditor.Core.MethodExtention
                 for (int i = 0; i < self.Length; i++)
                 {
                     if (!IsMatch(self, i, candidate))
+                    {
                         continue;
+                    }
 
                     yield return i;
                 }
@@ -30,23 +32,29 @@ namespace WPFHexaEditor.Core.MethodExtention
 
         /// <summary>
         /// Check if match is finded
-        /// </summary>        
-        static bool IsMatch(byte[] array, long position, byte[] candidate)
+        /// </summary>
+        private static bool IsMatch(byte[] array, long position, byte[] candidate)
         {
             if (candidate.Length > (array.Length - position))
+            {
                 return false;
+            }
 
             for (int i = 0; i < candidate.Length; i++)
+            {
                 if (array[position + i] != candidate[i])
+                {
                     return false;
+                }
+            }
 
             return true;
         }
 
         /// <summary>
         /// Check if can find
-        /// </summary>        
-        static bool IsEmptyLocate(byte[] array, byte[] candidate)
+        /// </summary>
+        private static bool IsEmptyLocate(byte[] array, byte[] candidate)
         {
             return array == null
                 || candidate == null
@@ -54,6 +62,5 @@ namespace WPFHexaEditor.Core.MethodExtention
                 || candidate.Length == 0
                 || candidate.Length > array.Length;
         }
-
     }
 }

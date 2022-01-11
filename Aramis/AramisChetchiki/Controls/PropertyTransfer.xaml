@@ -1,0 +1,123 @@
+﻿<UserControl x:Class="TMP.WORK.AramisChetchiki.Controls.PropertyTransfer"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:dd="urn:gong-wpf-dragdrop"
+             xmlns:controls="clr-namespace:TMP.UI.Controls.WPF;assembly=ui.controls.wpf"
+             xmlns:helpers="clr-namespace:TMP.UI.Controls.WPF.Helpers;assembly=ui.controls.wpf"
+             xmlns:local_controls="clr-namespace:TMP.WORK.AramisChetchiki.Controls"
+             mc:Ignorable="d"  x:Name="root"
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="2*" />
+        </Grid.ColumnDefinitions>
+        <GridSplitter
+            Grid.Column="1"
+            HorizontalAlignment="Left"
+            Width="3"
+            Margin="0"
+            VerticalAlignment="Stretch"
+            Background="{DynamicResource HighlightBrush}"
+            ResizeBehavior="PreviousAndNext"
+            ResizeDirection="Columns" />
+        <HeaderedContentControl Header="Доступные поля" >
+            <DockPanel>
+                <TextBlock DockPanel.Dock="Bottom" Text="{Binding Path=SourceCollection.Count, StringFormat={}Выбрано {0}, ElementName=root}"/>
+                <ListBox
+                dd:DragDrop.IsDragSource="True"
+                dd:DragDrop.IsDropTarget="True" SelectedValuePath="Name"
+                dd:DragDrop.UseDefaultEffectDataTemplate="True"
+                AlternationCount="2" DisplayMemberPath="DisplayName"
+                SelectedItem="{Binding SourceSelectedItem, ElementName=root, Mode=TwoWay}"
+                ItemContainerStyle="{StaticResource ListBoxItemWithAlternationIndex}"
+                ItemsSource="{Binding SourceCollection, ElementName=root}">
+                    <ListBox.GroupStyle>
+                        <GroupStyle>
+                            <GroupStyle.HeaderTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Name}" FontWeight="Black" HorizontalAlignment="Center" />
+                                </DataTemplate>
+                            </GroupStyle.HeaderTemplate>
+                        </GroupStyle>
+                    </ListBox.GroupStyle>
+                    <ListBox.Style>
+                        <Style BasedOn="{StaticResource {x:Type ListBox}}" TargetType="{x:Type ListBox}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding HasSourceItems, RelativeSource={RelativeSource AncestorType={x:Type local_controls:PropertyTransfer}}}" Value="False">
+                                    <Setter Property="Margin" Value="5" />
+                                    <Setter Property="ToolTip" Value="{Binding AllSourceCollectionItemsUsed,NotifyOnTargetUpdated=True}" />
+                                    <Setter Property="ToolTip" Value="{Binding HasSourceItems, RelativeSource={RelativeSource AncestorType={x:Type local_controls:PropertyTransfer}}}" />
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate>
+                                                <StackPanel>
+                                                    <controls:NoData Message="список&#x0A;пуст" />
+                                                </StackPanel>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding AllSourceCollectionItemsUsed, RelativeSource={RelativeSource AncestorType={x:Type local_controls:PropertyTransfer}}}" Value="True">
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate>
+                                                <Border HorizontalAlignment="Center" VerticalAlignment="Center" CornerRadius="10" Margin="5" Background="{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}"
+                                                    BorderThickness="1" BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}" Padding="10,5" >
+                                                    <local_controls:GlowEffectTextBlock FontWeight="DemiBold" helpers:RelativeFontSize.RelativeFontSize="1.5" Text="используются&#x0A;все&#x0A;доступные&#x0A;поля" />
+                                                </Border>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ListBox.Style>
+                </ListBox>
+            </DockPanel>
+        </HeaderedContentControl>
+        <controls:StackPanel MarginBetweenChildren="10" Grid.Column="1" VerticalAlignment="Center" Margin="8,0,5,0">
+            <controls:ButtonWithIconKind ToolTip="Удалить из списка" ImageKind="Delete" Command="{Binding CommandDelete, ElementName=root}"/>
+            <controls:ButtonWithIconKind ToolTip="Очистить список" ImageKind="ClearReflectHorizontal" Command="{Binding CommandClear, ElementName=root}"/>
+            <Separator/>
+            <controls:ButtonWithIconKind ToolTip="Добавить поле в используемые" ImageKind="ChevronRight" Command="{Binding CommandAddToTarget, ElementName=root}"/>
+            <controls:ButtonWithIconKind ToolTip="Удалить поле из используемых" ImageKind="ChevronLeft" Command="{Binding CommandRemoveFromTarget, ElementName=root}"/>
+            <Separator/>
+            <controls:ButtonWithIconKind ToolTip="Переместить выше по списку" ImageKind="ChevronUp" Command="{Binding CommandMoveUp, ElementName=root}"/>
+            <controls:ButtonWithIconKind ToolTip="Переместить ниже по списку" ImageKind="ChevronDown" Command="{Binding CommandMoveDown, ElementName=root}"/>
+        </controls:StackPanel>
+        <HeaderedContentControl Header="Используемые поля" Grid.Column="2" >
+            <DockPanel>
+                <TextBlock DockPanel.Dock="Bottom" Text="{Binding Path=TargetCollection.Count, StringFormat={}Выбрано {0}, ElementName=root}"/>
+                <ListBox
+                    dd:DragDrop.IsDragSource="True"
+                    dd:DragDrop.IsDropTarget="True"
+                    ToolTip="Измените порядок полей, перетаскивая их с помощью мыши."
+                    AlternationCount="2" DisplayMemberPath="DisplayName"
+                    SelectedItem="{Binding TargetSelectedItem, ElementName=root, Mode=TwoWay}"
+                    ItemContainerStyle="{StaticResource ListBoxItemWithAlternationIndex}"
+                    ItemsSource="{Binding TargetCollection, ElementName=root}" >
+                    <ListBox.Style>
+                        <Style BasedOn="{StaticResource {x:Type ListBox}}" TargetType="{x:Type ListBox}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding HasTargetItems, RelativeSource={RelativeSource AncestorType={x:Type local_controls:PropertyTransfer}}}" Value="False">
+                                    <Setter Property="Margin" Value="5" />
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate>
+                                                <controls:NoData Message="список&#x0A;пуст" />
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ListBox.Style>
+                </ListBox>
+            </DockPanel>
+        </HeaderedContentControl>
+    </Grid>
+</UserControl>

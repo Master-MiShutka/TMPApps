@@ -1,9 +1,10 @@
 ﻿namespace TMPApplication.Themes
 {
     using System.Windows;
+
     public static class MenuKeys
     {
-        //public static readonly ComponentResourceKey BackgroundSelectedKey = new ComponentResourceKey(typeof(ResourceKeys), "BackgroundSelectedKey");
+        // public static readonly ComponentResourceKey BackgroundSelectedKey = new ComponentResourceKey(typeof(ResourceKeys), "BackgroundSelectedKey");
         public static readonly ComponentResourceKey MenuSeparatorBorderBrushKey = new ComponentResourceKey(typeof(ResourceKeys), "MenuSeparatorBorderBrushKey");
 
         public static readonly ComponentResourceKey SubmenuItemBackgroundKey = new ComponentResourceKey(typeof(ResourceKeys), "SubmenuItemBackgroundKey");

@@ -48,16 +48,12 @@ namespace TMP.Wpf.CommonControls.ItemsFilter.Model {
         #region IComparableFilter Members
 
         object IComparableFilter.CompareTo {
-            get {
-                return CompareTo;
-            }
-            set {
-                CompareTo=(T?)value;
-            }
+            get => CompareTo;
+            set => CompareTo = (T?)value;
         }
 
         #endregion
 
-        
+
     }
 }

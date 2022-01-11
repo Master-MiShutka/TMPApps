@@ -5,9 +5,11 @@
     xmlns:converters="clr-namespace:TMPApplication.Converters"
     xmlns:local="clr-namespace:TMPApplication.CustomWpfWindow"
     xmlns:reskeys="clr-namespace:TMPApplication.Themes"
+    xmlns:shared="clr-namespace:TMP.Shared;assembly=Shared"
     xmlns:shell="clr-namespace:MS.Windows.Shell;assembly=WindowsShell">
 
     <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+    <converters:EnumToStringConverter x:Key="EnumToStringConverter" />
 
     <ControlTemplate x:Key="WindowWithDialogsTemplate" TargetType="{x:Type local:WindowWithDialogs}">
         <Grid x:Name="LayoutRoot" Background="{TemplateBinding Background}">
@@ -126,7 +128,7 @@
                         Grid.ColumnSpan="3"
                         Background="{DynamicResource {x:Static reskeys:ResourceKeys.ControlAccent70BrushKey}}"
                         Foreground="{DynamicResource {x:Static reskeys:ResourceKeys.ControlNormalBackgroundBrushKey}}">
-                        <StatusBarItem Content="Status" />
+                        <StatusBarItem Content="{Binding Status, Converter={StaticResource EnumToStringConverter}}" />
                     </StatusBar>
                     <ResizeGrip
                         x:Name="WindowResizeGrip"

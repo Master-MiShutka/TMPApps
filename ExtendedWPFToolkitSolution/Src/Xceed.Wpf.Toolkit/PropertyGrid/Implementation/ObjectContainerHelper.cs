@@ -1,14 +1,14 @@
 ﻿/*************************************************************************************
+   
+   Toolkit for WPF
 
-   Extended WPF Toolkit
-
-   Copyright (C) 2007-2013 Xceed Software Inc.
+   Copyright (C) 2007-2018 Xceed Software Inc.
 
    This program is provided to you under the terms of the Microsoft Public
    License (Ms-PL) as published at http://wpftoolkit.codeplex.com/license 
 
    For more features, controls, and fast professional support,
-   pick up the Plus Edition at http://xceed.com/wpf_toolkit
+   pick up the Plus Edition at https://xceed.com/xceed-toolkit-plus-for-wpf/
 
    Stay informed: follow @datagrid on Twitter or Like http://facebook.com/datagrids
 
@@ -51,7 +51,7 @@ namespace Xceed.Wpf.Toolkit.PropertyGrid
       return ( selectedObject != null ) ? ObjectContainerHelperBase.GetDefaultPropertyName( SelectedObject ) : ( string )null;
     }
 
-    protected override IEnumerable<PropertyItem> GenerateSubPropertiesCore()
+    protected override void GenerateSubPropertiesCore( Action<IEnumerable<PropertyItem>> updatePropertyItemsCallback )
     {
       var propertyItems = new List<PropertyItem>();
 
@@ -59,7 +59,7 @@ namespace Xceed.Wpf.Toolkit.PropertyGrid
       {
         try
         {
-          List<PropertyDescriptor> descriptors = new List<PropertyDescriptor>();
+          var descriptors = new List<PropertyDescriptor>();
           {
             descriptors = ObjectContainerHelperBase.GetPropertyDescriptors( SelectedObject, this.PropertyContainer.HideInheritedProperties );
           }
@@ -114,16 +114,13 @@ namespace Xceed.Wpf.Toolkit.PropertyGrid
         }
       }
 
-      return propertyItems;
+      updatePropertyItemsCallback.Invoke( propertyItems );
     }
 
 
     private PropertyItem CreatePropertyItem( PropertyDescriptor property, PropertyDefinition propertyDef )
     {
-      DescriptorPropertyDefinition definition = new DescriptorPropertyDefinition( property,
-                                                                                  SelectedObject, 
-                                                                                  this.PropertyContainer.IsCategorized
-                                                                                 );
+      DescriptorPropertyDefinition definition = new DescriptorPropertyDefinition( property, SelectedObject, this.PropertyContainer );                                                                                 
       definition.InitProperties();
 
       this.InitializeDescriptorDefinition( definition, propertyDef );
@@ -131,6 +128,7 @@ namespace Xceed.Wpf.Toolkit.PropertyGrid
       Debug.Assert( SelectedObject != null );
       propertyItem.Instance = SelectedObject;
       propertyItem.CategoryOrder = this.GetCategoryOrder( definition.CategoryValue );
+
       propertyItem.WillRefreshPropertyGrid = this.GetWillRefreshPropertyGrid( property );
       return propertyItem;
     }
@@ -142,28 +140,12 @@ namespace Xceed.Wpf.Toolkit.PropertyGrid
       if( categoryValue == null )
         return int.MaxValue;
 
-      int order = int.MaxValue;
-        object selectedObject = SelectedObject;
-        CategoryOrderAttribute[] orderAttributes = ( selectedObject != null )
-          ? ( CategoryOrderAttribute[] )selectedObject.GetType().GetCustomAttributes( typeof( CategoryOrderAttribute ), true )
-          : new CategoryOrderAttribute[ 0 ];
+      object selectedObject = SelectedObject;
+      var orderAttribute = TypeDescriptor.GetAttributes(selectedObject)
+        .OfType<CategoryOrderAttribute>()
+        .FirstOrDefault(a => Equals(a.CategoryValue, categoryValue));
 
-        var orderAttribute = orderAttributes
-          .FirstOrDefault( ( a ) => object.Equals( a.CategoryValue, categoryValue ) );
-
-        if( orderAttribute != null )
-        {
-          order = orderAttribute.Order;
-        }
-
-      return order;
+      return orderAttribute?.Order ?? int.MaxValue;
     }
-
-
-
-
-
-
-
   }
 }

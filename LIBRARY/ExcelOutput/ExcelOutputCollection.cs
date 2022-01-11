@@ -1,16 +1,17 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-
-namespace TMP.ExcelOutput
+﻿namespace TMP.ExcelOutput
 {
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+    using System.Linq;
+
     public class ExcelOutputCollection : ICollection<ExcelOutputItem>
     {
         public PostCreationActions PostCreationAction { get; }
+
         public string Path { get; }
 
-        private readonly Collection<ExcelOutputItem> _collection;
+        private readonly Collection<ExcelOutputItem> collection;
 
         /// <summary>
         /// Instantiate an instance of the ExcelOutputCollection with default values.
@@ -18,9 +19,9 @@ namespace TMP.ExcelOutput
         /// </summary>
         public ExcelOutputCollection()
         {
-            _collection = new Collection<ExcelOutputItem>();
-            PostCreationAction = PostCreationActions.Open;
-            Path = null;
+            this.collection = new Collection<ExcelOutputItem>();
+            this.PostCreationAction = PostCreationActions.Open;
+            this.Path = null;
         }
 
         /// <summary>
@@ -31,66 +32,74 @@ namespace TMP.ExcelOutput
         /// </summary>
         public ExcelOutputCollection(PostCreationActions postCreationAction, string path)
         {
-            _collection = new Collection<ExcelOutputItem>();
-            PostCreationAction = postCreationAction;
-            Path = path;
+            this.collection = new Collection<ExcelOutputItem>();
+            this.PostCreationAction = postCreationAction;
+            this.Path = path;
         }
 
         public IEnumerator<ExcelOutputItem> GetEnumerator()
         {
-            return _collection.GetEnumerator();
+            return this.collection.GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return GetEnumerator();
+            return this.GetEnumerator();
         }
 
         public void Add(ExcelOutputItem item)
         {
-            if (_collection.Any(x => x.WorksheetName == item.WorksheetName))
+            if (this.collection.Any(x => x.WorksheetName == item.WorksheetName))
+            {
                 throw new WorksheetNameExistsException();
-            _collection.Add(item);
+            }
+
+            this.collection.Add(item);
         }
 
         public void Add(params ExcelOutputItem[] items)
         {
             foreach (var item in items)
-                Add(item);
+            {
+                this.Add(item);
+            }
         }
 
         public void Add(IEnumerable<ExcelOutputItem> items)
         {
             foreach (var item in items)
-                Add(item);
+            {
+                this.Add(item);
+            }
         }
 
         public void Clear()
         {
-            _collection.Clear();
+            this.collection.Clear();
         }
 
         public bool Contains(ExcelOutputItem item)
         {
-            return _collection.Contains(item);
+            return this.collection.Contains(item);
         }
 
         public bool Contains(string worksheetName)
         {
-            return _collection.Any(x => x.WorksheetName == worksheetName);
+            return this.collection.Any(x => x.WorksheetName == worksheetName);
         }
 
         public void CopyTo(ExcelOutputItem[] array, int arrayIndex)
         {
-            _collection.CopyTo(array, arrayIndex);
+            this.collection.CopyTo(array, arrayIndex);
         }
 
         public bool Remove(ExcelOutputItem item)
         {
-            return _collection.Remove(item);
+            return this.collection.Remove(item);
         }
 
-        public int Count => _collection.Count;
+        public int Count => this.collection.Count;
+
         public bool IsReadOnly => false;
     }
 }

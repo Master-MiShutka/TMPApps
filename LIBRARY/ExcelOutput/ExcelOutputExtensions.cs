@@ -1,21 +1,19 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Reflection;
-using System.Threading;
-using NetOffice.ExcelApi;
-
-using TMP.Extensions;
-
-namespace TMP.ExcelOutput
+﻿namespace TMP.ExcelOutput
 {
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Globalization;
+    using System.Linq;
+    using System.Reflection;
+    using System.Threading;
+    using NetOffice.ExcelApi;
+
     public static class ExcelOutputExtensions
     {
         /// <summary>
-        /// Evaluates, expands and exports an <see cref="IEnumerable{T}"/> into Excel and opens Excel to display the exported data. 
-        /// If <see cref="T"/> is a complex type, all properties and fields are exported into columns. If <see cref="T"/> is a simple type, 
+        /// Evaluates, expands and exports an <see cref="IEnumerable{T}"/> into Excel and opens Excel to display the exported data.
+        /// If <see cref="T"/> is a complex type, all properties and fields are exported into columns. If <see cref="T"/> is a simple type,
         /// the data is exported into a single column.
         /// </summary>
         /// <typeparam name="T">A generic type which is contained within the IEnumerable.</typeparam>
@@ -26,8 +24,8 @@ namespace TMP.ExcelOutput
         }
 
         /// <summary>
-        /// Evaluates, expands and exports an <see cref="IEnumerable"/> of type <see cref="type"/> into Excel. If <see cref="type"/> is a complex type, 
-        /// all properties and fields are exported into columns. If <see cref="type"/> is a simple type, the data is exported into a 
+        /// Evaluates, expands and exports an <see cref="IEnumerable"/> of type <see cref="type"/> into Excel. If <see cref="type"/> is a complex type,
+        /// all properties and fields are exported into columns. If <see cref="type"/> is a simple type, the data is exported into a
         /// single column.
         /// </summary>
         /// <param name="input">An <see cref="IEnumerable"/> which will be evaluated, expanded and exported into Excel.</param>
@@ -38,8 +36,8 @@ namespace TMP.ExcelOutput
         }
 
         /// <summary>
-        /// Evaluates, expands and exports an <see cref="IEnumerable{T}"/> into Excel and opens Excel to display the exported data. 
-        /// If <see cref="T"/> is a complex type, all properties and fields are exported into columns. If <see cref="T"/> is a simple type, 
+        /// Evaluates, expands and exports an <see cref="IEnumerable{T}"/> into Excel and opens Excel to display the exported data.
+        /// If <see cref="T"/> is a complex type, all properties and fields are exported into columns. If <see cref="T"/> is a simple type,
         /// the data is exported into a single column.
         /// </summary>
         /// <typeparam name="T">A generic type which is contained within the IEnumerable.</typeparam>
@@ -51,8 +49,8 @@ namespace TMP.ExcelOutput
         }
 
         /// <summary>
-        /// Evaluates, expands and exports an <see cref="IEnumerable"/> of type <see cref="type"/> into Excel. If <see cref="type"/> is a complex type, 
-        /// all properties and fields are exported into columns. If <see cref="type"/> is a simple type, the data is exported into a 
+        /// Evaluates, expands and exports an <see cref="IEnumerable"/> of type <see cref="type"/> into Excel. If <see cref="type"/> is a complex type,
+        /// all properties and fields are exported into columns. If <see cref="type"/> is a simple type, the data is exported into a
         /// single column.
         /// </summary>
         /// <param name="input">An <see cref="IEnumerable"/> which will be evaluated, expanded and exported into Excel.</param>
@@ -64,8 +62,8 @@ namespace TMP.ExcelOutput
         }
 
         /// <summary>
-        /// Evaluates, expands and exports an <see cref="IEnumerable{T}"/> into Excel and opens Excel to display the exported data. 
-        /// If <see cref="T"/> is a complex type, all properties and fields are exported into columns. If <see cref="T"/> is a simple type, 
+        /// Evaluates, expands and exports an <see cref="IEnumerable{T}"/> into Excel and opens Excel to display the exported data.
+        /// If <see cref="T"/> is a complex type, all properties and fields are exported into columns. If <see cref="T"/> is a simple type,
         /// the data is exported into a single column.
         /// </summary>
         /// <typeparam name="T">A generic type which is contained within the IEnumerable.</typeparam>
@@ -77,8 +75,8 @@ namespace TMP.ExcelOutput
         }
 
         /// <summary>
-        /// Evaluates, expands and exports an <see cref="IEnumerable"/> of type <see cref="type"/> into Excel. If <see cref="type"/> is a complex type, 
-        /// all properties and fields are exported into columns. If <see cref="type"/> is a simple type, the data is exported into a 
+        /// Evaluates, expands and exports an <see cref="IEnumerable"/> of type <see cref="type"/> into Excel. If <see cref="type"/> is a complex type,
+        /// all properties and fields are exported into columns. If <see cref="type"/> is a simple type, the data is exported into a
         /// single column.
         /// </summary>
         /// <param name="input">An <see cref="IEnumerable"/> which will be evaluated, expanded and exported into Excel.</param>
@@ -90,8 +88,8 @@ namespace TMP.ExcelOutput
         }
 
         /// <summary>
-        /// Evaluates, expands and exports an <see cref="IEnumerable{T}"/> into Excel. If <see cref="T"/> is a complex type, 
-        /// all properties and fields are exported into columns. If <see cref="T"/> is a simple type, the data is exported into a 
+        /// Evaluates, expands and exports an <see cref="IEnumerable{T}"/> into Excel. If <see cref="T"/> is a complex type,
+        /// all properties and fields are exported into columns. If <see cref="T"/> is a simple type, the data is exported into a
         /// single column.
         /// </summary>
         /// <typeparam name="T">A generic type which is contained within the IEnumerable.</typeparam>
@@ -104,8 +102,8 @@ namespace TMP.ExcelOutput
         }
 
         /// <summary>
-        /// Evaluates, expands and exports an <see cref="IEnumerable"/> of type <see cref="type"/> into Excel. If <see cref="type"/> is a complex type, 
-        /// all properties and fields are exported into columns. If <see cref="type"/> is a simple type, the data is exported into a 
+        /// Evaluates, expands and exports an <see cref="IEnumerable"/> of type <see cref="type"/> into Excel. If <see cref="type"/> is a complex type,
+        /// all properties and fields are exported into columns. If <see cref="type"/> is a simple type, the data is exported into a
         /// single column.
         /// </summary>
         /// <param name="input">An <see cref="IEnumerable"/> which will be evaluated, expanded and exported into Excel.</param>
@@ -118,8 +116,8 @@ namespace TMP.ExcelOutput
         }
 
         /// <summary>
-        /// Evaluates, expands and exports an <see cref="IEnumerable{T}"/> into Excel. If <see cref="T"/> is a complex type, 
-        /// all properties and fields are exported into columns. If <see cref="T"/> is a simple type, the data is exported into a 
+        /// Evaluates, expands and exports an <see cref="IEnumerable{T}"/> into Excel. If <see cref="T"/> is a complex type,
+        /// all properties and fields are exported into columns. If <see cref="T"/> is a simple type, the data is exported into a
         /// single column.
         /// </summary>
         /// <typeparam name="T">A generic type which is contained within the IEnumerable.</typeparam>
@@ -134,8 +132,8 @@ namespace TMP.ExcelOutput
         }
 
         /// <summary>
-        /// Evaluates, expands and exports an <see cref="IEnumerable"/> of type <see cref="type"/> into Excel. If <see cref="type"/> is a complex type, 
-        /// all properties and fields are exported into columns. If <see cref="type"/> is a simple type, the data is exported into a 
+        /// Evaluates, expands and exports an <see cref="IEnumerable"/> of type <see cref="type"/> into Excel. If <see cref="type"/> is a complex type,
+        /// all properties and fields are exported into columns. If <see cref="type"/> is a simple type, the data is exported into a
         /// single column.
         /// </summary>
         /// <param name="input">An <see cref="IEnumerable"/> which will be evaluated, expanded and exported into Excel.</param>
@@ -150,15 +148,17 @@ namespace TMP.ExcelOutput
         }
 
         /// <summary>
-        /// Evaluates, expands and exports an <see cref="IEnumerable"/> of a specified type contained in <see cref="excelOutputItem"/>into Excel. If the specified type is a complex type, 
-        /// all properties and fields are exported into columns. If the specified type is a simple type, the data is exported into a 
+        /// Evaluates, expands and exports an <see cref="IEnumerable"/> of a specified type contained in <see cref="excelOutputItem"/>into Excel. If the specified type is a complex type,
+        /// all properties and fields are exported into columns. If the specified type is a simple type, the data is exported into a
         /// single column.
         /// </summary>
         /// <param name="excelOutputItem">An object containing all the necessary parameters to create an Excel export into a single worksheet.</param>
         public static void ToExcel(this ExcelOutputItem excelOutputItem)
         {
-            var excelOutputCollection = new ExcelOutputCollection(excelOutputItem.PostCreationActions, excelOutputItem.Path);
-            excelOutputCollection.Add(excelOutputItem);
+            var excelOutputCollection = new ExcelOutputCollection(excelOutputItem.PostCreationActions, excelOutputItem.Path)
+            {
+                excelOutputItem,
+            };
             excelOutputCollection.ToExcel();
         }
 
@@ -177,7 +177,7 @@ namespace TMP.ExcelOutput
             ExcelOutputConfiguration.DefaultDateFormat = ExcelOutputConfiguration.DefaultCulture.DateTimeFormat.ShortDatePattern;
             ExcelOutputConfiguration.DefaultTimeFormat = ExcelOutputConfiguration.DefaultCulture.DateTimeFormat.LongTimePattern;
 
-            //HACK: Workaround for Excel bug on machines which are set up in the English language, but not an English region.
+            // HACK: Workaround for Excel bug on machines which are set up in the English language, but not an English region.
             var enusCultureInfo = CultureInfo.GetCultureInfo("en-US");
             Thread.CurrentThread.CurrentCulture = enusCultureInfo;
 
@@ -216,7 +216,10 @@ namespace TMP.ExcelOutput
                         }
 
                         if (app.IsDisposed)
+                        {
                             throw exception;
+                        }
+
                         app.Quit();
                         app.Dispose();
                         throw exception;
@@ -258,7 +261,9 @@ namespace TMP.ExcelOutput
                         var enumerator = item.Enumerable.GetEnumerator();
                         var arrayList = new ArrayList();
                         while (enumerator.MoveNext())
+                        {
                             arrayList.Add(enumerator.Current);
+                        }
 
                         var inputArray = arrayList.ToArray();
                         var rowCount = inputArray.Length;
@@ -276,6 +281,7 @@ namespace TMP.ExcelOutput
 
                         ws.Columns.AutoFit();
                     }
+
                     count++;
                 }
             }
@@ -318,6 +324,7 @@ namespace TMP.ExcelOutput
                 SetPropertyDataPerColumn(stringsTrimmed, inputArray, simpleProperties, simplePropertyCount, dataArray, row);
                 SetFieldDataPerColumn(stringsTrimmed, inputArray, simpleFields, simplePropertyCount, simpleFieldCount, dataArray, row);
             }
+
             dataRange.Value2 = dataArray;
 
             var fullRange = ws.Range(headerStartCell, dataEndCell);
@@ -329,12 +336,16 @@ namespace TMP.ExcelOutput
             for (var column = 0; column < simpleProperties.Length; column++)
             {
                 var rangeColumn = GetExcelColumnName(column + 1);
-                var range = ws.Range($"{rangeColumn}:{rangeColumn}");
+                NetOffice.ExcelApi.Range range = ws.Range($"{rangeColumn}:{rangeColumn}");
                 var columnDataTypeAttribute = simpleProperties[column].GetCustomAttribute<ColumnNumberFormatAttribute>();
                 if (columnDataTypeAttribute == null)
+                {
                     SetRangeNumberFormatBasedOnDataType(simpleProperties[column].PropertyType, range);
+                }
                 else
+                {
                     SetRangeNumberFormatBasedOnAttribute(range, columnDataTypeAttribute.NumberFormat);
+                }
             }
         }
 
@@ -346,21 +357,29 @@ namespace TMP.ExcelOutput
                 var range = ws.Range($"{rangeColumn}:{rangeColumn}");
                 var columnDataTypeAttribute = simpleFields[column - simplePropertiesCount].GetCustomAttribute<ColumnNumberFormatAttribute>();
                 if (columnDataTypeAttribute == null)
+                {
                     SetRangeNumberFormatBasedOnDataType(simpleFields[column - simplePropertiesCount].FieldType, range);
+                }
                 else
+                {
                     SetRangeNumberFormatBasedOnAttribute(range, columnDataTypeAttribute.NumberFormat);
+                }
             }
         }
 
-        private static void SetRangeNumberFormatBasedOnDataType(Type type, Range range)
+        private static void SetRangeNumberFormatBasedOnDataType(Type type, NetOffice.ExcelApi.Range range)
         {
             if (type == typeof(string) || type == typeof(char) || Nullable.GetUnderlyingType(type) == typeof(char))
+            {
                 range.NumberFormat = "@";
+            }
             else if (type == typeof(DateTime) || Nullable.GetUnderlyingType(type) == typeof(DateTime))
+            {
                 range.NumberFormat = ExcelOutputConfiguration.DefaultDateTimeFormat;
+            }
         }
 
-        private static void SetRangeNumberFormatBasedOnAttribute(Range range, string numberFormat)
+        private static void SetRangeNumberFormatBasedOnAttribute(NetOffice.ExcelApi.Range range, string numberFormat)
         {
             range.NumberFormat = numberFormat;
         }
@@ -369,7 +388,7 @@ namespace TMP.ExcelOutput
         {
             for (var column = 0; column < simplePropertyCount; column++)
             {
-                inputArray[row].SetDataPerColumn(stringsTrimmed, column, row, dataArray, simpleProperties[column].GetValue);
+                inputArray[row].SetDataPerColumn1(stringsTrimmed, column, row, dataArray, simpleProperties[column].GetValue);
             }
         }
 
@@ -377,32 +396,29 @@ namespace TMP.ExcelOutput
         {
             for (var column = simplePropertyCount; column < simplePropertyCount + simpleFieldCount; column++)
             {
-                inputArray[row].SetDataPerColumn(stringsTrimmed, column, row, dataArray, simpleFields[column - simplePropertyCount].GetValue);
+                inputArray[row].SetDataPerColumn2(stringsTrimmed, column, row, dataArray, simpleFields[column - simplePropertyCount].GetValue);
             }
         }
 
-        private static void SetDataPerColumn(this object item, bool stringsTrimmed, int column, int row, object[,] dataArray, Func<object, object[], object> getValueFunction)
+        private static void SetDataPerColumn1(this object item, bool stringsTrimmed, int column, int row, object[,] dataArray, Func<object, object[], object> getValueFunction)
         {
             var value = getValueFunction.Invoke(item, null);
-            if (value != null && (value is string || value is char) && stringsTrimmed)
-                dataArray[row, column] = value.ToTrimmedString();
-            else
-                dataArray[row, column] = value;
+            dataArray[row, column] = value != null && (value is string || value is char) && stringsTrimmed ? value.ToTrimmedString() : value;
         }
-        private static void SetDataPerColumn(this object item, bool stringsTrimmed, int column, int row, object[,] dataArray, Func<object, object> getValueFunction)
+
+        private static void SetDataPerColumn2(this object item, bool stringsTrimmed, int column, int row, object[,] dataArray, Func<object, object> getValueFunction)
         {
             var value = getValueFunction.Invoke(item);
-            if (value != null && (value is string || value is char) && stringsTrimmed)
-                dataArray[row, column] = value.ToTrimmedString();
-            else
-                dataArray[row, column] = value;
+            dataArray[row, column] = value != null && (value is string || value is char) && stringsTrimmed ? value.ToTrimmedString() : value;
         }
 
         private static void SimpleTypeProcessing(Type type, object[] inputArray, int rowCount, Worksheet ws)
         {
             var dataArray = new object[rowCount, 1];
             for (var i = 0; i < inputArray.Length; i++)
+            {
                 dataArray[i, 0] = inputArray[i];
+            }
 
             var dataStartCell = ws.Cells[1, 1];
             var dataEndCell = ws.Cells[rowCount, 1];
@@ -425,7 +441,10 @@ namespace TMP.ExcelOutput
                 case PostCreationActions.SaveAndView:
                 case PostCreationActions.SaveAndClose:
                     if (string.IsNullOrEmpty(path))
+                    {
                         throw new ArgumentException($"The {nameof(path)} cannot be null or empty if the file is to be saved.", nameof(path));
+                    }
+
                     break;
                 case PostCreationActions.Open:
                     break;

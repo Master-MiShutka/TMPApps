@@ -299,14 +299,6 @@
                         <DockPanel>
                             <DockPanel.Resources>
                                 <xcdg:DataGridCollectionViewSource x:Key="devicesList" Source="{Binding Source={StaticResource Configuration}, Path=DevicesList}">
-                                    <xcdg:DataGridCollectionViewSource.DetailDescriptions>
-                                        <xcdg:DataRelationDetailDescription Title="Meter Configurations" RelationName="MeterConfigurations">
-                                            <xcdg:DataRelationDetailDescription.ItemProperties>
-                                                <xcdg:DataGridItemProperty Name="Number" />
-                                                <xcdg:DataGridItemProperty Name="City" />
-                                            </xcdg:DataRelationDetailDescription.ItemProperties>
-                                        </xcdg:DataRelationDetailDescription>
-                                    </xcdg:DataGridCollectionViewSource.DetailDescriptions>
                                 </xcdg:DataGridCollectionViewSource>
                             </DockPanel.Resources>
                             <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" />
@@ -315,7 +307,6 @@
                                 AllowDetailToggle="True"
                                 AlternationCount="2"
                                 AutoCreateColumns="False"
-                                AutoCreateDetailConfigurations="True"
                                 ItemScrollingBehavior="Immediate"
                                 ItemsSource="{Binding Source={StaticResource devicesList}}"
                                 NavigationBehavior="RowOnly"

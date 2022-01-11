@@ -1,8 +1,8 @@
-﻿using System;
-using System.Globalization;
-
-namespace TMP.ExcelOutput
+﻿namespace TMP.ExcelOutput
 {
+    using System;
+    using System.Globalization;
+
     /// <summary>
     ///     An attribute that can be applied to a field or property which sets the column's Excel data type in an Excel export.
     /// </summary>
@@ -15,8 +15,8 @@ namespace TMP.ExcelOutput
         /// <param name="numberFormat"></param>
         public ColumnNumberFormatAttribute(string numberFormat)
         {
-            ExcelNumberFormat = ExcelNumberFormats.Custom;
-            NumberFormat = numberFormat;
+            this.ExcelNumberFormat = ExcelNumberFormats.Custom;
+            this.NumberFormat = numberFormat;
         }
 
         /// <summary>
@@ -31,33 +31,33 @@ namespace TMP.ExcelOutput
             var currencyDecimalSeparator = CultureInfo.CurrentCulture.NumberFormat.CurrencyDecimalSeparator;
             var currencyGroupSeparator = CultureInfo.CurrentCulture.NumberFormat.CurrencyGroupSeparator;
 
-            ExcelNumberFormat = excelNumberFormat;
+            this.ExcelNumberFormat = excelNumberFormat;
 
             switch (excelNumberFormat)
             {
                 case ExcelNumberFormats.General:
-                    NumberFormat = "General";
+                    this.NumberFormat = "General";
                     break;
                 case ExcelNumberFormats.Text:
-                    NumberFormat = "@";
+                    this.NumberFormat = "@";
                     break;
                 case ExcelNumberFormats.Number:
-                    NumberFormat = "0";
+                    this.NumberFormat = "0";
                     break;
                 case ExcelNumberFormats.Date:
-                    NumberFormat = datePattern;
+                    this.NumberFormat = datePattern;
                     break;
                 case ExcelNumberFormats.DateTime:
-                    NumberFormat = datePattern + " " + timePattern;
+                    this.NumberFormat = datePattern + " " + timePattern;
                     break;
                 case ExcelNumberFormats.Time:
-                    NumberFormat = timePattern;
+                    this.NumberFormat = timePattern;
                     break;
                 case ExcelNumberFormats.Currency:
-                    NumberFormat = string.Concat("#", currencyGroupSeparator, "##0", currencyDecimalSeparator, "00 ", currencySymbol);
+                    this.NumberFormat = string.Concat("#", currencyGroupSeparator, "##0", currencyDecimalSeparator, "00 ", currencySymbol);
                     break;
                 case ExcelNumberFormats.Accounting:
-                    NumberFormat = string.Concat("_-* #", currencyGroupSeparator, "##0", currencyDecimalSeparator, "00 ", currencySymbol, "_-;-* #", currencyGroupSeparator, "##0", currencyDecimalSeparator, "00 ", currencySymbol, "_-;_-* \" - \"?? ", currencySymbol, "_-;_-@_-");
+                    this.NumberFormat = string.Concat("_-* #", currencyGroupSeparator, "##0", currencyDecimalSeparator, "00 ", currencySymbol, "_-;-* #", currencyGroupSeparator, "##0", currencyDecimalSeparator, "00 ", currencySymbol, "_-;_-* \" - \"?? ", currencySymbol, "_-;_-@_-");
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(excelNumberFormat), excelNumberFormat, null);

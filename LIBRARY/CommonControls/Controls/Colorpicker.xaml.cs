@@ -26,14 +26,8 @@ namespace TMP.Wpf.CommonControls
         }
         public Brush SelectedColor
         {
-            get
-            {
-                return (Brush)GetValue(SelectedColorProperty);
-            }
-            set
-            {
-                SetValue(SelectedColorProperty, value);
-            }
+            get => (Brush)GetValue(SelectedColorProperty);
+            set => SetValue(SelectedColorProperty, value);
         }
 
         // Using a DependencyProperty as the backing store for SelectedColor.  

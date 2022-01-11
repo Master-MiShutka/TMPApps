@@ -8,7 +8,8 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:model="clr-namespace:TMP.ElectricMeterComm.Model"
     Title="Тестирование обмена данными с электросчётчиками"
-    Width="600" MinHeight="300"
+    Width="600"
+    MinHeight="300"
     mc:Ignorable="d">
     <Window.Resources>
         <Style BasedOn="{StaticResource {x:Type TextBox}}" TargetType="{x:Type TextBox}">
@@ -86,7 +87,10 @@
                             HorizontalAlignment="Center"
                             DockPanel.Dock="Bottom"
                             Orientation="Horizontal">
-                            <Button Click="SendRequest_Click" Content="Отправить" IsEnabled="{Binding IsReady}"/>
+                            <Button
+                                Click="SendRequest_Click"
+                                Content="Отправить"
+                                IsEnabled="{Binding IsReady}" />
                             <Button Click="ClearRequest_Click" Content="Очистить" />
                         </StackPanel>
                         <TextBox
@@ -94,23 +98,26 @@
                             AcceptsReturn="True"
                             AcceptsTab="True"
                             FontFamily="Consolas,Lucida Console,Courier New"
-                            Text="{Binding Request}"
-                            ScrollViewer.VerticalScrollBarVisibility="Visible" />
+                            ScrollViewer.VerticalScrollBarVisibility="Visible"
+                            Text="{Binding Request}" />
                     </DockPanel>
                 </GroupBox>
                 <!-- GroupBox Grid.Row="2" Header="Запрос" IsEnabled="{Binding IsConnected}" >
                     <hexeditor:HexaEditor x:Name="hexEditor" />
-                </GroupBox -->
-                <GroupBox Grid.Row="3" Header="Ответ" >
-                    <ListBox MinHeight="50" ItemsSource="{Binding ModbusOverTcpRequests}" ScrollViewer.VerticalScrollBarVisibility="Auto">
+                </GroupBox-->
+                <GroupBox Grid.Row="3" Header="Ответ">
+                    <ListBox
+                        MinHeight="50"
+                        ItemsSource="{Binding ModbusOverTcpRequests}"
+                        ScrollViewer.VerticalScrollBarVisibility="Auto">
                         <ListBox.Resources>
                             <Style TargetType="TextBox">
-                                <Setter Property="Margin" Value="5,1"/>
-                                <Setter Property="BorderBrush" Value="{x:Null}"/>
-                                <Setter Property="Background" Value="Transparent"/>
-                                <Setter Property="IsReadOnly" Value="True"/>
-                                <Setter Property="IsReadOnlyCaretVisible" Value="True"/>
-                                <Setter Property="FontFamily" Value="Consolas,Lucida Console,Courier New"/>
+                                <Setter Property="Margin" Value="5,1" />
+                                <Setter Property="BorderBrush" Value="{x:Null}" />
+                                <Setter Property="Background" Value="Transparent" />
+                                <Setter Property="IsReadOnly" Value="True" />
+                                <Setter Property="IsReadOnlyCaretVisible" Value="True" />
+                                <Setter Property="FontFamily" Value="Consolas,Lucida Console,Courier New" />
                             </Style>
                         </ListBox.Resources>
                         <ListBox.ItemContainerStyle>
@@ -118,7 +125,11 @@
                                 <Setter Property="Template">
                                     <Setter.Value>
                                         <ControlTemplate TargetType="{x:Type ListBoxItem}">
-                                            <Border CornerRadius="3" BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}" BorderThickness="1" x:Name="bd">
+                                            <Border
+                                                x:Name="bd"
+                                                BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}"
+                                                BorderThickness="1"
+                                                CornerRadius="3">
                                                 <Grid>
                                                     <Grid.ColumnDefinitions>
                                                         <ColumnDefinition Width="Auto" />
@@ -129,29 +140,35 @@
                                                         <RowDefinition />
                                                         <RowDefinition />
                                                     </Grid.RowDefinitions>
-                                                    <Label Grid.Row="0" Content="Отправлено:" Foreground="{TemplateBinding Foreground}"/>
+                                                    <Label
+                                                        Grid.Row="0"
+                                                        Content="Отправлено:"
+                                                        Foreground="{TemplateBinding Foreground}" />
                                                     <TextBox
-                                        Grid.Row="0"
-                                        Grid.Column="1"
+                                                        Grid.Row="0"
+                                                        Grid.Column="1"
                                                         Foreground="{TemplateBinding Foreground}"
-                                        Text="{Binding SendedAsHex}" />
+                                                        Text="{Binding SendedAsHex}" />
                                                     <TextBox
-                                        Grid.Row="0"
-                                        Grid.Column="2"
+                                                        Grid.Row="0"
+                                                        Grid.Column="2"
                                                         Foreground="{TemplateBinding Foreground}"
-                                        Text="{Binding SendedAsText}" />
+                                                        Text="{Binding SendedAsText}" />
 
-                                                    <Label Grid.Row="1" Content="Получено:" Foreground="{TemplateBinding Foreground}"/>
+                                                    <Label
+                                                        Grid.Row="1"
+                                                        Content="Получено:"
+                                                        Foreground="{TemplateBinding Foreground}" />
                                                     <TextBox
-                                        Grid.Row="1"
-                                        Grid.Column="1"
+                                                        Grid.Row="1"
+                                                        Grid.Column="1"
                                                         Foreground="{TemplateBinding Foreground}"
-                                        Text="{Binding ReceivedAsHex}" />
+                                                        Text="{Binding ReceivedAsHex}" />
                                                     <TextBox
-                                        Grid.Row="1"
-                                        Grid.Column="2"
+                                                        Grid.Row="1"
+                                                        Grid.Column="2"
                                                         Foreground="{TemplateBinding Foreground}"
-                                        Text="{Binding ReceivedAsText}" />
+                                                        Text="{Binding ReceivedAsText}" />
                                                 </Grid>
                                             </Border>
                                             <ControlTemplate.Triggers>

@@ -7,7 +7,7 @@ using System.Reflection;
 using System.Windows;
 using System.Windows.Input;
 
-namespace TMP.DWRES.GUI.ViewModel
+namespace TMP.DWRES.ViewModel
 {
     public partial class MainWindowViewModel
     {

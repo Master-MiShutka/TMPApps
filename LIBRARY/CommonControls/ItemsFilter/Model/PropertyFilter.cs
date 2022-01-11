@@ -19,10 +19,8 @@ namespace TMP.Wpf.CommonControls.ItemsFilter.Model
         /// </summary>
         /// <value>The property info.</value>
         public ItemPropertyInfo PropertyInfo {
-            get { return _propertyInfo; }
-            protected set {
-                _propertyInfo = value;
-            }
+            get => _propertyInfo;
+            protected set => _propertyInfo = value;
         }
     }
 }

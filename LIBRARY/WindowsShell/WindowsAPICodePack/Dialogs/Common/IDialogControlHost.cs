@@ -1,4 +1,4 @@
-//Copyright (c) Microsoft Corporation.  All rights reserved.
+// Copyright (c) Microsoft Corporation.  All rights reserved.
 
 namespace Microsoft.WindowsAPICodePack.Dialogs
 {
@@ -20,11 +20,11 @@ namespace Microsoft.WindowsAPICodePack.Dialogs
         void ApplyCollectionChanged();
 
         /// <summary>
-        /// Handle notifications of individual child 
+        /// Handle notifications of individual child
         /// pseudo-controls' properties changing..
-        /// Prefilter should throw if the property 
+        /// Prefilter should throw if the property
         /// cannot be set in the dialog's current state.
-        /// PostProcess should pass on changes to native control, 
+        /// PostProcess should pass on changes to native control,
         /// if appropriate.
         /// </summary>
         /// <param name="propertyName">The name of the property.</param>
@@ -33,7 +33,7 @@ namespace Microsoft.WindowsAPICodePack.Dialogs
         bool IsControlPropertyChangeAllowed(string propertyName, DialogControl control);
 
         /// <summary>
-        /// Called when a control currently in the collection 
+        /// Called when a control currently in the collection
         /// has a property changed.
         /// </summary>
         /// <param name="propertyName">The name of the property changed.</param>

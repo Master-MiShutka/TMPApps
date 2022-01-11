@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace WpfApplicationTest.Presentation
+﻿namespace WpfApplicationTest.Presentation
 {
+    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+
     /// <summary>
     /// The base implementation of the INotifyPropertyChanged contract.
     /// </summary>
@@ -31,5 +31,4 @@ namespace WpfApplicationTest.Presentation
             }
         }
     }
-
 }

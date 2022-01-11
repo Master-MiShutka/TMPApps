@@ -2,6 +2,6 @@
 {
     public enum MatrixSummaryType
     {
-        RowSummary, ColumnSummary, TotalSummary, RowsGroupSummary, ColumnsGroupSummary, TotalGroupSummary
+        RowSummary, ColumnSummary, TotalSummary, RowsGroupSummary, ColumnsGroupSummary, TotalGroupSummary,
     }
 }

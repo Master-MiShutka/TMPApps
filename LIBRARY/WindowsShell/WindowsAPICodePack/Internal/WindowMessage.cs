@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace MS.WindowsAPICodePack.Internal
+﻿namespace MS.WindowsAPICodePack.Internal
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+
     internal enum WindowMessage
     {
         Null = 0x00,

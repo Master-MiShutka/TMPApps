@@ -1,8 +1,8 @@
-﻿using System;
-using System.Windows;
-
-namespace Interactivity
+﻿namespace Interactivity
 {
+    using System;
+    using System.Windows;
+
     /// <summary>
     /// Static class that owns the Triggers and Behaviors attached properties. Handles propagation of AssociatedObject change notifications.
     /// </summary>
@@ -21,6 +21,7 @@ namespace Interactivity
                 behaviorCollection = new BehaviorCollection();
                 obj.SetValue(Interaction.BehaviorsProperty, behaviorCollection);
             }
+
             return behaviorCollection;
         }
 
@@ -31,7 +32,7 @@ namespace Interactivity
         /// This property is not exposed publicly. This forces clients to use the GetBehaviors and SetBehaviors methods to access the
         /// collection, ensuring the collection exists and is set before it is used.
         /// </remarks>
-        private static readonly DependencyProperty BehaviorsProperty = DependencyProperty.RegisterAttached("ShadowBehaviors", typeof(BehaviorCollection), typeof(Interaction), new FrameworkPropertyMetadata(new PropertyChangedCallback(Interaction.OnBehaviorsChanged)));
+        private static readonly DependencyProperty BehaviorsProperty = DependencyProperty.RegisterAttached("Behaviors", typeof(BehaviorCollection), typeof(Interaction), new FrameworkPropertyMetadata(new PropertyChangedCallback(Interaction.OnBehaviorsChanged)));
 
         /// <exception cref="T:System.InvalidOperationException">Cannot host the same BehaviorCollection on more than one object at a time.</exception>
         private static void OnBehaviorsChanged(DependencyObject obj, DependencyPropertyChangedEventArgs args)
@@ -44,12 +45,14 @@ namespace Interactivity
                 {
                     behaviorCollection.Detach();
                 }
+
                 if (behaviorCollection2 != null && obj != null)
                 {
                     if (((IAttachedObject)behaviorCollection2).AssociatedObject != null)
                     {
                         throw new InvalidOperationException("Cannot set the same BehaviorCollection on multiple objects.");
                     }
+
                     behaviorCollection2.Attach(obj);
                 }
             }

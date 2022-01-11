@@ -3,6 +3,8 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:Default="clr-namespace:ICSharpCode.TreeView">
 
+    <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+
     <SolidColorBrush x:Key="BorderBrush" Color="#FF7F9DB9" />
     <LinearGradientBrush x:Key="ExpandCollapseToggleBackground" StartPoint="0,0" EndPoint="1,1">
         <LinearGradientBrush.GradientStops>
@@ -202,6 +204,7 @@
 
     <Style TargetType="{x:Type Default:SharpTreeNodeView}">
         <Setter Property="Focusable" Value="False" />
+        <Setter Property="Visibility" Value="{Binding Path=IsMatch, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Default:SharpTreeNodeView}">

@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows;
-using System.Windows.Controls;
-
-namespace TMP.PrintEngine.Utils
+﻿namespace TMP.PrintEngine.Utils
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Windows;
+    using System.Windows.Controls;
+
     public class UiUtil
     {
         public static void UpdateSize(FrameworkElement element, double availableWidth)

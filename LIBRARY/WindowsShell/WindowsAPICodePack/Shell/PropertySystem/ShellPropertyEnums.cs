@@ -1,9 +1,9 @@
-﻿//Copyright (c) Microsoft Corporation.  All rights reserved.
-
-using System;
+﻿// Copyright (c) Microsoft Corporation.  All rights reserved.
 
 namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 {
+    using System;
+
     #region Property System Enumerations
 
     /// <summary>
@@ -24,15 +24,15 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
         /// <summary>
         /// Contained in file, has been updated since file was consumed.
         /// </summary>
-        Dirty = 2
+        Dirty = 2,
     }
 
     /// <summary>
     /// Delineates the format of a property string.
     /// </summary>
     /// <remarks>
-    /// Typically use one, or a bitwise combination of 
-    /// these flags, to specify the format. Some flags are mutually exclusive, 
+    /// Typically use one, or a bitwise combination of
+    /// these flags, to specify the format. Some flags are mutually exclusive,
     /// so combinations like <c>ShortTime | LongTime | HideTime</c> are not allowed.
     /// </remarks>
     [Flags]
@@ -47,7 +47,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
         /// The value preceded with the property's display name.
         /// </summary>
         /// <remarks>
-        /// This flag is ignored when the <c>hideLabelPrefix</c> attribute of the <c>labelInfo</c> element 
+        /// This flag is ignored when the <c>hideLabelPrefix</c> attribute of the <c>labelInfo</c> element
         /// in the property's .propinfo file is set to true.
         /// </remarks>
         PrefixName = 0x1,
@@ -58,10 +58,10 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
         FileName = 0x2,
 
         /// <summary>
-        /// The sizes displayed in kilobytes (KB), regardless of size. 
+        /// The sizes displayed in kilobytes (KB), regardless of size.
         /// </summary>
         /// <remarks>
-        /// This flag applies to properties of <c>Integer</c> types and aligns the values in the column. 
+        /// This flag applies to properties of <c>Integer</c> types and aligns the values in the column.
         /// </remarks>
         AlwaysKB = 0x4,
 
@@ -91,7 +91,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
         ShortDate = 0x80,
 
         /// <summary>
-        /// The date displayed as 'DayOfWeek Month day, year'. 
+        /// The date displayed as 'DayOfWeek Month day, year'.
         /// For example, 'Monday, March 21, 2004'.
         /// </summary>
         LongDate = 0x100,
@@ -110,24 +110,24 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
         /// The text displayed in a text box as a cue for the user, such as 'Enter your name'.
         /// </summary>
         /// <remarks>
-        /// The invitation text is returned if formatting failed or the value was empty. 
-        /// Invitation text is text displayed in a text box as a cue for the user, 
-        /// Formatting can fail if the data entered 
-        /// is not of an expected type, such as putting alpha characters in 
+        /// The invitation text is returned if formatting failed or the value was empty.
+        /// Invitation text is text displayed in a text box as a cue for the user,
+        /// Formatting can fail if the data entered
+        /// is not of an expected type, such as putting alpha characters in
         /// a phone number field.
         /// </remarks>
         UseEditInvitation = 0x800,
 
         /// <summary>
-        /// This flag requires UseEditInvitation to also be specified. When the 
-        /// formatting flags are ReadOnly | UseEditInvitation and the algorithm 
-        /// would have shown invitation text, a string is returned that indicates 
+        /// This flag requires UseEditInvitation to also be specified. When the
+        /// formatting flags are ReadOnly | UseEditInvitation and the algorithm
+        /// would have shown invitation text, a string is returned that indicates
         /// the value is "Unknown" instead of the invitation text.
         /// </summary>
         ReadOnly = 0x1000,
 
         /// <summary>
-        /// The detection of the reading order is not automatic. Useful when converting 
+        /// The detection of the reading order is not automatic. Useful when converting
         /// to ANSI to omit the Unicode reading order characters.
         /// </summary>
         NoAutoReadingOrder = 0x2000,
@@ -135,7 +135,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
         /// <summary>
         /// Smart display of DateTime values
         /// </summary>
-        SmartDateTime = 0x4000
+        SmartDateTime = 0x4000,
     }
 
     /// <summary>
@@ -166,7 +166,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
         /// <summary>
         /// The Enumerated Display.
         /// </summary>
-        Enumerated = 4
+        Enumerated = 4,
     }
 
     /// <summary>
@@ -185,27 +185,27 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
         First = 1,
 
         /// <summary>
-        /// The sum of the selected values is displayed. This flag is never returned 
+        /// The sum of the selected values is displayed. This flag is never returned
         /// for data types VT_LPWSTR, VT_BOOL, and VT_FILETIME.
         /// </summary>
         Sum = 2,
 
         /// <summary>
-        /// The numerical average of the selected values is displayed. This flag 
+        /// The numerical average of the selected values is displayed. This flag
         /// is never returned for data types VT_LPWSTR, VT_BOOL, and VT_FILETIME.
         /// </summary>
         Average = 3,
 
         /// <summary>
-        /// The date range of the selected values is displayed. This flag is only 
+        /// The date range of the selected values is displayed. This flag is only
         /// returned for values of the VT_FILETIME data type.
         /// </summary>
         DateRange = 4,
 
         /// <summary>
-        /// A concatenated string of all the values is displayed. The order of 
-        /// individual values in the string is undefined. The concatenated 
-        /// string omits duplicate values; if a value occurs more than once, 
+        /// A concatenated string of all the values is displayed. The order of
+        /// individual values in the string is undefined. The concatenated
+        /// string omits duplicate values; if a value occurs more than once,
         /// it only appears a single time in the concatenated string.
         /// </summary>
         Union = 5,
@@ -218,7 +218,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
         /// <summary>
         /// The lowest of the selected values is displayed.
         /// </summary>
-        Min = 7
+        Min = 7,
     }
 
     /// <summary>
@@ -244,8 +244,8 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
         /// <summary>
         /// Use Value or RangeMinValue
         /// </summary>
-        EndRange = 3
-    };
+        EndRange = 3,
+    }
 
     /// <summary>
     /// Describes how a property should be treated for display purposes.
@@ -391,7 +391,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
     }
 
     /// <summary>
-    /// Provides a set of flags to be used with IConditionFactory, 
+    /// Provides a set of flags to be used with IConditionFactory,
     /// ICondition, and IConditionGenerator to indicate the operation.
     /// </summary>
     public enum PropertyConditionOperation
@@ -517,7 +517,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
     /// Describes the particular wordings of sort offerings.
     /// </summary>
     /// <remarks>
-    /// Note that the strings shown are English versions only; 
+    /// Note that the strings shown are English versions only;
     /// localized strings are used for other locales.
     /// </remarks>
     public enum PropertySortDescription
@@ -560,7 +560,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
         None = 0x00000000,
 
         /// <summary>
-        /// The property can have multiple values.   
+        /// The property can have multiple values.
         /// </summary>
         /// <remarks>
         /// These values are stored as a VT_VECTOR in the PROPVARIANT structure.
@@ -569,7 +569,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
         MultipleValues = 0x00000001,
 
         /// <summary>
-        /// This property cannot be written to. 
+        /// This property cannot be written to.
         /// </summary>
         /// <remarks>
         /// This value is set by the isInnate attribute of the typeInfo element in the property's .propdesc file.
@@ -577,7 +577,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
         IsInnate = 0x00000002,
 
         /// <summary>
-        /// The property is a group heading. 
+        /// The property is a group heading.
         /// </summary>
         /// <remarks>
         /// This value is set by the isGroup attribute of the typeInfo element in the property's .propdesc file.
@@ -585,7 +585,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
         IsGroup = 0x00000004,
 
         /// <summary>
-        /// The user can group by this property. 
+        /// The user can group by this property.
         /// </summary>
         /// <remarks>
         /// This value is set by the canGroupBy attribute of the typeInfo element in the property's .propdesc file.
@@ -593,7 +593,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
         CanGroupBy = 0x00000008,
 
         /// <summary>
-        /// The user can stack by this property. 
+        /// The user can stack by this property.
         /// </summary>
         /// <remarks>
         /// This value is set by the canStackBy attribute of the typeInfo element in the property's .propdesc file.
@@ -601,7 +601,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
         CanStackBy = 0x00000010,
 
         /// <summary>
-        /// This property contains a hierarchy. 
+        /// This property contains a hierarchy.
         /// </summary>
         /// <remarks>
         /// This value is set by the isTreeProperty attribute of the typeInfo element in the property's .propdesc file.
@@ -609,7 +609,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
         IsTreeProperty = 0x00000020,
 
         /// <summary>
-        /// Include this property in any full text query that is performed. 
+        /// Include this property in any full text query that is performed.
         /// </summary>
         /// <remarks>
         /// This value is set by the includeInFullTextQuery attribute of the typeInfo element in the property's .propdesc file.
@@ -617,7 +617,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
         IncludeInFullTextQuery = 0x00000040,
 
         /// <summary>
-        /// This property is meant to be viewed by the user.  
+        /// This property is meant to be viewed by the user.
         /// </summary>
         /// <remarks>
         /// This influences whether the property shows up in the "Choose Columns" dialog, for example.
@@ -626,7 +626,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
         IsViewable = 0x00000080,
 
         /// <summary>
-        /// This property is included in the list of properties that can be queried.   
+        /// This property is included in the list of properties that can be queried.
         /// </summary>
         /// <remarks>
         /// A queryable property must also be viewable.
@@ -636,7 +636,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
         IsQueryable = 0x00000100,
 
         /// <summary>
-        /// Used with an innate property (that is, a value calculated from other property values) to indicate that it can be deleted.  
+        /// Used with an innate property (that is, a value calculated from other property values) to indicate that it can be deleted.
         /// </summary>
         /// <remarks>
         /// Windows Vista with Service Pack 1 (SP1) and later.

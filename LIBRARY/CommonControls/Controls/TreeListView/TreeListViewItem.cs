@@ -12,7 +12,7 @@ namespace TMP.Wpf.CommonControls.Controls.TreeListView
         private TreeNode _node;
         public TreeNode Node
         {
-            get { return _node; }
+            get => _node;
             internal set
             {
                 _node = value;

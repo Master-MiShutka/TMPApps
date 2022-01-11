@@ -1,30 +1,37 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
+﻿namespace ItemsFilter.ViewModel
+{
+    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel;
+    using System.Diagnostics;
+    using System.Linq;
+    using System.Text;
 
-namespace ItemsFilter.ViewModel {
     /// <summary>
     /// Provide INotifyPropertyChanged implementation for derived class.
     /// </summary>
-    public class ViewModel:INotifyPropertyChanged {
-        
+    public class ViewModel : INotifyPropertyChanged
+    {
+
         #region Члены INotifyPropertyChanged
 
         public event PropertyChangedEventHandler PropertyChanged;
-        protected virtual void RaisePropertyChanged(string propertyName) {
-            VerifyPropertyName(propertyName);
 
-            var handler = PropertyChanged;
-            if (handler != null) {
+        protected virtual void RaisePropertyChanged(string propertyName)
+        {
+            this.VerifyPropertyName(propertyName);
+
+            var handler = this.PropertyChanged;
+            if (handler != null)
+            {
                 handler(this, new PropertyChangedEventArgs(propertyName));
             }
         }
+
         [Conditional("DEBUG")]
         [DebuggerStepThrough]
-        public void VerifyPropertyName(string propertyName) {
+        public void VerifyPropertyName(string propertyName)
+        {
             var myType = this.GetType();
 
 #if NETFX_CORE
@@ -35,14 +42,17 @@ namespace ItemsFilter.ViewModel {
             }
 #else
             if (!string.IsNullOrEmpty(propertyName)
-                && myType.GetProperty(propertyName) == null) {
+                && myType.GetProperty(propertyName) == null)
+            {
 #if !SILVERLIGHT
                 var descriptor = this as ICustomTypeDescriptor;
 
-                if (descriptor != null) {
+                if (descriptor != null)
+                {
                     if (descriptor.GetProperties()
                         .Cast<PropertyDescriptor>()
-                        .Any(property => property.Name == propertyName)) {
+                        .Any(property => property.Name == propertyName))
+                    {
                         return;
                     }
                 }
@@ -53,6 +63,6 @@ namespace ItemsFilter.ViewModel {
 #endif
         }
         #endregion
-   
+
     }
 }

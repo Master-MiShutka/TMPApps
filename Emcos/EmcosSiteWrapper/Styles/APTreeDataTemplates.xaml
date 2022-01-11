@@ -6,7 +6,7 @@
 
     <HierarchicalDataTemplate DataType="{x:Type model:GRTreeNode}" ItemsSource="{Binding Children}">
         <DockPanel LastChildFill="True">
-            <Image x:Name="icon" Source="pack://application:,,,/EmcosSiteWrapper;component/Resources/group.png" />
+            <Image x:Name="icon" Source="pack://application:,,,/EmcosSiteWrapper;component/ImagesAndIcons/group.png" />
             <StackPanel Orientation="Vertical">
                 <TextBlock
                     x:Name="name"
@@ -20,7 +20,7 @@
         </DockPanel>
         <HierarchicalDataTemplate.Triggers>
             <DataTrigger Binding="{Binding TYPE}" Value="POINT">
-                <Setter TargetName="icon" Property="Source" Value="pack://application:,,,/EmcosSiteWrapper;component/Resources/element.png" />
+                <Setter TargetName="icon" Property="Source" Value="pack://application:,,,/EmcosSiteWrapper;component/ImagesAndIcons/element.png" />
                 <Setter TargetName="name" Property="Text" Value="{Binding CODE}" />
             </DataTrigger>
         </HierarchicalDataTemplate.Triggers>
@@ -28,7 +28,7 @@
 
     <HierarchicalDataTemplate DataType="{x:Type vtree:TreeNode}" ItemsSource="{Binding Children}">
         <DockPanel LastChildFill="True">
-            <Image x:Name="icon" Source="pack://application:,,,/EmcosSiteWrapper;component/Resources/element.png" />
+            <Image x:Name="icon" Source="pack://application:,,,/EmcosSiteWrapper;component/ImagesAndIcons/element.png" />
             <TextBlock
                 Margin="0"
                 Padding="0"
@@ -39,7 +39,7 @@
         <!--
             HierarchicalDataTemplate.Triggers>
             <DataTrigger Binding="{Binding TYPE}" Value="POINT">
-            <Setter TargetName="icon" Property="Source" Value="pack://application:,,,/EmcosSiteWrapper;component/Resources/element.png" />
+            <Setter TargetName="icon" Property="Source" Value="pack://application:,,,/EmcosSiteWrapper;component/ImagesAndIcons/element.png" />
             </DataTrigger>
             </
         -->

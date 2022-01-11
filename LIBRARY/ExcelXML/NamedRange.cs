@@ -1,29 +1,33 @@
-using System;
-using TMP.Extensions;
-
 namespace TMP.ExcelXml
 {
-	internal class NamedRange
-	{
-		#region Private and Internal fields
-		internal Range Range;
-		internal Worksheet Worksheet;
-		internal string Name;
-		#endregion
+    using System;
+    using TMP.Extensions;
 
-		#region Constructor
-		internal NamedRange(Range range, string name, Worksheet ws)
-		{
-			if (range == null)
-				throw new ArgumentNullException("range");
+    internal class NamedRange
+    {
+        #region Private and Internal fields
+        internal Range Range;
+        internal Worksheet Worksheet;
+        internal string Name;
+        #endregion
 
-			if (name.IsNullOrEmpty())
-				throw new ArgumentNullException("name");
+        #region Constructor
+        internal NamedRange(Range range, string name, Worksheet ws)
+        {
+            if (range == null)
+            {
+                throw new ArgumentNullException(nameof(range));
+            }
 
-			Worksheet = ws;
-			Range = range;
-			Name = name;
-		}
-		#endregion
-	}
+            if (name.IsNullOrEmpty())
+            {
+                throw new ArgumentNullException(nameof(name));
+            }
+
+            this.Worksheet = ws;
+            this.Range = range;
+            this.Name = name;
+        }
+        #endregion
+    }
 }

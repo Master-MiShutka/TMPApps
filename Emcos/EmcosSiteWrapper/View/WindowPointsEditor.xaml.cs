@@ -18,7 +18,7 @@ namespace TMP.Work.Emcos.View
 {
     using Model;
     using System.Collections.ObjectModel;
-    using TMP.Wpf.Common;
+    using TMP.Shared.Commands;
 
     /// <summary>
     /// Interaction logic for WindowPointsEditor.xaml
@@ -30,7 +30,7 @@ namespace TMP.Work.Emcos.View
         public WindowPointsEditor(IList<IHierarchicalEmcosPoint> points)
         {
             _sourcePoints = points;
-            EmcosPoints = new TreeModel(new TreeEmcosPoint() { Name = "ROOT", Children = new List<IHierarchicalEmcosPoint>(points) });
+            EmcosPoints = new TreeModel(new EmcosPoint(name : "ROOT", children : points));
 
             InitializeComponent();
             DataContext = this;
@@ -44,10 +44,10 @@ namespace TMP.Work.Emcos.View
             };
             _emcosWebServiceClient = new EmcosTestWebService.ServiceSoapClient(binding,
                 new System.ServiceModel.EndpointAddress(String.Format("http://{0}/{1}",
-                    Properties.Settings.Default.ServerAddress,
-                    Properties.Settings.Default.ServiceName)));
+                    EmcosSettings.Default.ServerAddress,
+                    EmcosSettings.Default.WebServiceName)));
 
-            this.Loaded += async (s, e) =>
+            this.Loaded += (s, e) =>
             {
                 //await LoadPointsFromServiceAsync();
             };
@@ -119,14 +119,14 @@ namespace TMP.Work.Emcos.View
                 }
                 else
                 {
-                    EmcosFromSiteModel = new TreeModel(new TreeEmcosPoint() { Name = "ROOT", Children = new List<IHierarchicalEmcosPoint>(source) });
+                    EmcosFromSiteModel = new TreeModel(new EmcosPoint("ROOT", source));
                 }
             }
             catch (Exception ex)
             {
-                App.Log("Получение списка точек от сервиса - ошибка");
+                EmcosSiteWrapperApp.Log("Получение списка точек от сервиса - ошибка");
                 IsGettingPointsFromService = false;
-                this.ShowDialogError(String.Format(ErrorMessage, App.GetExceptionDetails(ex)));
+                this.ShowDialogError(String.Format(ErrorMessage, EmcosSiteWrapperApp.GetExceptionDetails(ex)));
             }
         }
 
@@ -179,18 +179,16 @@ namespace TMP.Work.Emcos.View
                 }
                 list.Add(element);
             }
-            IList<IHierarchicalEmcosPoint> points = list.Select(i => new TreeEmcosPoint
+            IList<IHierarchicalEmcosPoint> points = list.Select(i => new EmcosPoint
             {
                 Id = i.Id,
                 Name = i.Name,
-                IsGroup = i.Type == Model.ElementTypes.GROUP,
+                //IsGroup = i.Type == Model.ElementTypes.GROUP,
                 TypeCode = i.TypeCode,
                 EcpName = i is Model.EmcosPointElement ? (i as Model.EmcosPointElement).EcpName : String.Empty,
                 ElementType = i.Type,
                 IsChecked = false,
-                ParentId = parent.Id,
-                ParentTypeCode = parent.TypeCode,
-                ParentName = parent.Name
+                Parent = parent
             }).ToList<IHierarchicalEmcosPoint>();
             return points;
         }
@@ -208,7 +206,9 @@ namespace TMP.Work.Emcos.View
                 {
                     if (list[i].IsGroup)
                     {
-                        list[i].Children = new List<IHierarchicalEmcosPoint>(await FillPointsTree(list[i]));
+                        IList<IHierarchicalEmcosPoint> childs = await FillPointsTree(list[i]);
+                        foreach (var child in childs)
+                            list[i].Children.Add(child);
                         _index++;
                         if (_index > maxItemsCount) throw new OverflowException("Превышено максимальное количество элементов в дереве - " + maxItemsCount);
                     }
@@ -234,8 +234,8 @@ namespace TMP.Work.Emcos.View
         /// Id 53 РУП Гродноэнерго Code 14
         /// Id 60 Ошмянские ЭС Code 143
         /// </summary>
-        private readonly TreeEmcosPoint DEFAULT_ROOT_EMCOS_GROUP = new TreeEmcosPoint { Id = 60, TypeCode = "FES", Name = "Ошмянские ЭС" };
-        private TreeEmcosPoint _rootEmcosGroup;
+        private readonly EmcosPoint DEFAULT_ROOT_EMCOS_GROUP = new EmcosPoint { Id = 60, TypeCode = "FES", Name = "Ошмянские ЭС" };
+        private EmcosPoint _rootEmcosGroup;
 
         #endregion
 

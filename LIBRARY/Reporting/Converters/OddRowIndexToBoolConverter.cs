@@ -1,10 +1,10 @@
-﻿using System;
-using System.Globalization;
-using System.Windows.Data;
-using System.Windows;
-
-namespace TMP.UI.Controls.WPF.Reporting.Converters
+﻿namespace TMP.UI.Controls.WPF.Reporting.Converters
 {
+    using System;
+    using System.Globalization;
+    using System.Windows;
+    using System.Windows.Data;
+
     [ValueConversion(typeof(int), typeof(bool))]
     public class OddRowIndexToBoolConverter : IValueConverter
     {
@@ -15,7 +15,9 @@ namespace TMP.UI.Controls.WPF.Reporting.Converters
             get
             {
                 if (mg_singleton == null)
+                {
                     mg_singleton = new OddRowIndexToBoolConverter();
+                }
 
                 return mg_singleton;
             }
@@ -38,7 +40,7 @@ namespace TMP.UI.Controls.WPF.Reporting.Converters
 
             int index = (int)value;
 
-            return ((index % 2) == 1);
+            return (index % 2) == 1;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

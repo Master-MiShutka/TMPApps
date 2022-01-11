@@ -1,25 +1,25 @@
-﻿//Copyright (c) Microsoft Corporation.  All rights reserved.
-
-using System;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
-using MS.WindowsAPICodePack.Internal;
+﻿// Copyright (c) Microsoft Corporation.  All rights reserved.
 
 namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 {
+    using System;
+    using System.Runtime.CompilerServices;
+    using System.Runtime.InteropServices;
+    using MS.WindowsAPICodePack.Internal;
+
     // Disable warning if a method declaration hides another inherited from a parent COM interface
-    // To successfully import a COM interface, all inherited methods need to be declared again with 
+    // To successfully import a COM interface, all inherited methods need to be declared again with
     // the exception of those already declared in "IUnknown"
 #pragma warning disable 108
 
     #region Property System COM Interfaces
 
-    [ComImport]    
+    [ComImport]
     [Guid(ShellIIDGuid.IPropertyStoreCapabilities)]
     [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-    interface IPropertyStoreCapabilities
+    internal interface IPropertyStoreCapabilities
     {
-        HResult IsPropertyWritable([In]ref PropertyKey propertyKey);
+        HResult IsPropertyWritable([In] ref PropertyKey propertyKey);
     }
 
     /// <summary>
@@ -28,7 +28,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
     [ComImport]
     [Guid(ShellIIDGuid.IPropertyStoreCache)]
     [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-    interface IPropertyStoreCache
+    internal interface IPropertyStoreCache
     {
         /// <summary>
         /// Gets the state of a property stored in the cache
@@ -75,7 +75,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
     [ComImport]
     [Guid(ShellIIDGuid.IPropertyStore)]
     [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-    interface IPropertyStore
+    internal interface IPropertyStore
     {
         /// <summary>
         /// Gets the number of properties contained in the property store.
@@ -109,7 +109,8 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
         /// <param name="key"></param>
         /// <param name="pv"></param>
         /// <returns></returns>
-        [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime), PreserveSig]
+        [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
+        [PreserveSig]
         HResult SetValue([In] ref PropertyKey key, [In] PropVariant pv);
 
         /// <summary>
@@ -121,106 +122,137 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
         HResult Commit();
     }
 
-    [ComImport,
-    Guid(ShellIIDGuid.IPropertyDescriptionList),
-    InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+    [ComImport]
+    [Guid(ShellIIDGuid.IPropertyDescriptionList)]
+    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     internal interface IPropertyDescriptionList
     {
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         void GetCount(out uint pcElem);
+
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         void GetAt([In] uint iElem, [In] ref Guid riid, [MarshalAs(UnmanagedType.Interface)] out IPropertyDescription ppv);
     }
 
-    [ComImport,
-    Guid(ShellIIDGuid.IPropertyDescription),
-    InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+    [ComImport]
+    [Guid(ShellIIDGuid.IPropertyDescription)]
+    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     internal interface IPropertyDescription
     {
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         void GetPropertyKey(out PropertyKey pkey);
+
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         void GetCanonicalName([MarshalAs(UnmanagedType.LPWStr)] out string ppszName);
+
         [PreserveSig]
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         HResult GetPropertyType(out VarEnum pvartype);
-        [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime),
-        PreserveSig]
+
+        [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
+        [PreserveSig]
         HResult GetDisplayName(out IntPtr ppszName);
+
         [PreserveSig]
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         HResult GetEditInvitation(out IntPtr ppszInvite);
+
         [PreserveSig]
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         HResult GetTypeFlags([In] PropertyTypeOptions mask, out PropertyTypeOptions ppdtFlags);
+
         [PreserveSig]
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         HResult GetViewFlags(out PropertyViewOptions ppdvFlags);
+
         [PreserveSig]
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         HResult GetDefaultColumnWidth(out uint pcxChars);
+
         [PreserveSig]
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         HResult GetDisplayType(out PropertyDisplayType pdisplaytype);
+
         [PreserveSig]
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         HResult GetColumnState(out PropertyColumnStateOptions pcsFlags);
+
         [PreserveSig]
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         HResult GetGroupingRange(out PropertyGroupingRange pgr);
+
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         void GetRelativeDescriptionType(out PropertySystemNativeMethods.RelativeDescriptionType prdt);
+
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         void GetRelativeDescription([In] PropVariant propvar1, [In] PropVariant propvar2, [MarshalAs(UnmanagedType.LPWStr)] out string ppszDesc1, [MarshalAs(UnmanagedType.LPWStr)] out string ppszDesc2);
+
         [PreserveSig]
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         HResult GetSortDescription(out PropertySortDescription psd);
+
         [PreserveSig]
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         HResult GetSortDescriptionLabel([In] bool fDescending, out IntPtr ppszDescription);
+
         [PreserveSig]
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         HResult GetAggregationType(out PropertyAggregationType paggtype);
+
         [PreserveSig]
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         HResult GetConditionType(out PropertyConditionType pcontype, out PropertyConditionOperation popDefault);
+
         [PreserveSig]
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         HResult GetEnumTypeList([In] ref Guid riid, [Out, MarshalAs(UnmanagedType.Interface)] out IPropertyEnumTypeList ppv);
+
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         void CoerceToCanonicalValue([In, Out] PropVariant propvar);
+
         [PreserveSig]
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)] // Note: this method signature may be wrong, but it is not used.
         HResult FormatForDisplay([In] PropVariant propvar, [In] ref PropertyDescriptionFormatOptions pdfFlags, [MarshalAs(UnmanagedType.LPWStr)] out string ppszDisplay);
+
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         HResult IsValueCanonical([In] PropVariant propvar);
     }
 
-    [ComImport,
-    Guid(ShellIIDGuid.IPropertyDescription2),
-    InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+    [ComImport]
+    [Guid(ShellIIDGuid.IPropertyDescription2)]
+    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     internal interface IPropertyDescription2 : IPropertyDescription
     {
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         void GetPropertyKey(out PropertyKey pkey);
+
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         void GetCanonicalName([MarshalAs(UnmanagedType.LPWStr)] out string ppszName);
+
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         void GetPropertyType(out VarEnum pvartype);
+
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         void GetDisplayName([MarshalAs(UnmanagedType.LPWStr)] out string ppszName);
+
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         void GetEditInvitation([MarshalAs(UnmanagedType.LPWStr)] out string ppszInvite);
+
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         void GetTypeFlags([In] PropertyTypeOptions mask, out PropertyTypeOptions ppdtFlags);
+
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         void GetViewFlags(out PropertyViewOptions ppdvFlags);
+
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         void GetDefaultColumnWidth(out uint pcxChars);
+
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         void GetDisplayType(out PropertyDisplayType pdisplaytype);
+
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         void GetColumnState(out uint pcsFlags);
+
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         void GetGroupingRange(out PropertyGroupingRange pgr);
 
@@ -266,9 +298,9 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
             [Out, MarshalAs(UnmanagedType.LPWStr)] out string ppszImageRes);
     }
 
-    [ComImport,
-    Guid(ShellIIDGuid.IPropertyEnumType),
-    InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+    [ComImport]
+    [Guid(ShellIIDGuid.IPropertyEnumType)]
+    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     internal interface IPropertyEnumType
     {
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
@@ -287,9 +319,9 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
         void GetDisplayText([Out, MarshalAs(UnmanagedType.LPWStr)] out string ppszDisplay);
     }
 
-    [ComImport,
-    Guid(ShellIIDGuid.IPropertyEnumType2),
-    InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+    [ComImport]
+    [Guid(ShellIIDGuid.IPropertyEnumType2)]
+    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     internal interface IPropertyEnumType2 : IPropertyEnumType
     {
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
@@ -311,10 +343,9 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
         void GetImageReference([Out, MarshalAs(UnmanagedType.LPWStr)] out string ppszImageRes);
     }
 
-
-    [ComImport,
-    Guid(ShellIIDGuid.IPropertyEnumTypeList),
-    InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+    [ComImport]
+    [Guid(ShellIIDGuid.IPropertyEnumTypeList)]
+    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     internal interface IPropertyEnumTypeList
     {
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]

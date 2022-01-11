@@ -1,44 +1,31 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using WPFHexaEditor.Core.Bytes;
-
-namespace WPFHexaEditor.Core
+﻿namespace WPFHexaEditor.Core
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using WPFHexaEditor.Core.Bytes;
+
     /// <summary>
     /// BookMark class
     /// </summary>
     public class BookMark
     {
-        ScrollMarker _marker = ScrollMarker.Nothing;
-        long _bytePositionInFile = 0;
-
+        private ScrollMarker marker = ScrollMarker.Nothing;
+        private long bytePositionInFile = 0;
 
         public ScrollMarker Marker
         {
-            get
-            {
-                return _marker;
-            }
+            get => this.marker;
 
-            set
-            {
-                _marker = value;
-            }
+            set => this.marker = value;
         }
 
         public long BytePositionInFile
         {
-            get
-            {
-                return _bytePositionInFile;
-            }
+            get => this.bytePositionInFile;
 
-            set
-            {
-                _bytePositionInFile = value;
-            }
+            set => this.bytePositionInFile = value;
         }
     }
 }

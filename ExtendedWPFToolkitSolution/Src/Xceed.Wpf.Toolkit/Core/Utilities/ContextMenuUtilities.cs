@@ -1,20 +1,22 @@
 ﻿/*************************************************************************************
+   
+   Toolkit for WPF
 
-   Extended WPF Toolkit
-
-   Copyright (C) 2007-2013 Xceed Software Inc.
+   Copyright (C) 2007-2018 Xceed Software Inc.
 
    This program is provided to you under the terms of the Microsoft Public
    License (Ms-PL) as published at http://wpftoolkit.codeplex.com/license 
 
    For more features, controls, and fast professional support,
-   pick up the Plus Edition at http://xceed.com/wpf_toolkit
+   pick up the Plus Edition at https://xceed.com/xceed-toolkit-plus-for-wpf/
 
    Stay informed: follow @datagrid on Twitter or Like http://facebook.com/datagrids
 
   ***********************************************************************************/
 
 using System.Windows;
+using System.Windows.Media;
+using Xceed.Wpf.Toolkit.PropertyGrid;
 
 namespace Xceed.Wpf.Toolkit.Core.Utilities
 {
@@ -32,19 +34,42 @@ namespace Xceed.Wpf.Toolkit.Core.Utilities
 
     public static void OpenOnMouseLeftButtonClickChanged( DependencyObject sender, DependencyPropertyChangedEventArgs e )
     {
-      var control = ( FrameworkElement )sender;
-      if( ( bool )e.NewValue )
+      var control = sender as FrameworkElement;
+      if( control != null )
       {
-        control.PreviewMouseLeftButtonDown += ( s, args ) =>
+        if( ( bool )e.NewValue )
         {
-          if( control.ContextMenu != null )
-          {
-            control.ContextMenu.PlacementTarget = control;
-            control.ContextMenu.IsOpen = true;
-          }
-        };
+          control.PreviewMouseLeftButtonDown += ContextMenuUtilities.Control_PreviewMouseLeftButtonDown;
+        }
+        else
+        {
+          control.PreviewMouseLeftButtonDown -= ContextMenuUtilities.Control_PreviewMouseLeftButtonDown;
+        }
       }
-      //TODO: remove handler when set to false
+    }
+
+    private static void Control_PreviewMouseLeftButtonDown( object sender, System.Windows.Input.MouseButtonEventArgs e )
+    {
+      var control = sender as FrameworkElement;
+      if( (control != null) && (control.ContextMenu != null) )
+      {
+        // Get PropertyItemBase parent
+        var parent = VisualTreeHelper.GetParent( control );
+        while( parent != null )
+        {
+          var propertyItemBase = parent as PropertyItemBase;
+          if( propertyItemBase != null )
+          {
+            // Set the ContextMenu.DataContext to the PropertyItem associated to the clicked image.
+            control.ContextMenu.DataContext = propertyItemBase;
+            break;
+          }
+          parent = VisualTreeHelper.GetParent( parent );
+        }
+
+        control.ContextMenu.PlacementTarget = control;
+        control.ContextMenu.IsOpen = true;
+      }
     }
   }
 }

@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-
-namespace ItemsFilter.Model
+﻿namespace ItemsFilter.Model
 {
+    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel;
+    using System.Linq;
+    using System.Text;
+
     /// <summary>
     /// Defines the contract for Property filter.
     /// </summary>

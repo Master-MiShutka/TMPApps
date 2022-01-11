@@ -1,14 +1,14 @@
 ﻿/*************************************************************************************
+   
+   Toolkit for WPF
 
-   Extended WPF Toolkit
-
-   Copyright (C) 2007-2013 Xceed Software Inc.
+   Copyright (C) 2007-2018 Xceed Software Inc.
 
    This program is provided to you under the terms of the Microsoft Public
    License (Ms-PL) as published at http://wpftoolkit.codeplex.com/license 
 
    For more features, controls, and fast professional support,
-   pick up the Plus Edition at http://xceed.com/wpf_toolkit
+   pick up the Plus Edition at https://xceed.com/xceed-toolkit-plus-for-wpf/
 
    Stay informed: follow @datagrid on Twitter or Like http://facebook.com/datagrids
 
@@ -92,9 +92,9 @@ namespace Xceed.Wpf.Toolkit
       _pickerBrush.EndPoint = new Point( 0.5, 1 );
       _pickerBrush.ColorInterpolationMode = ColorInterpolationMode.SRgbLinearInterpolation;
 
-      List<Color> colorsList = ColorUtilities.GenerateHsvSpectrum();
+      var colorsList = ColorUtilities.GenerateHsvSpectrum();
 
-      double stopIncrement = ( double )1 / colorsList.Count;
+      double stopIncrement = ( double )1 / (colorsList.Count - 1);
 
       int i;
       for( i = 0; i < colorsList.Count; i++ )

@@ -36,11 +36,11 @@ namespace TMP.Wpf.CommonControls
         {
             if (null == propertySource)
             {
-                throw new ArgumentNullException("propertySource");
+                throw new ArgumentNullException(nameof(propertySource));
             }
             if (null == property)
             {
-                throw new ArgumentNullException("property");
+                throw new ArgumentNullException(nameof(property));
             }
             this._propertySource = new WeakReference(propertySource);
             var binding = new Binding();
@@ -86,8 +86,8 @@ namespace TMP.Wpf.CommonControls
         [Bindable(true)]
         public object Value
         {
-            get { return (object)this.GetValue(ValueProperty); }
-            set { this.SetValue(ValueProperty, value); }
+            get => (object)this.GetValue(ValueProperty);
+            set => this.SetValue(ValueProperty, value);
         }
 
         private static void OnPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)

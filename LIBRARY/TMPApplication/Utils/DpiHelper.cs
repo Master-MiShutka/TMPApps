@@ -1,9 +1,9 @@
-﻿using System.Reflection;
-using System.Windows;
-using System.Windows.Media;
-
-namespace TMPApplication.Utils
+﻿namespace TMPApplication.Utils
 {
+    using System.Reflection;
+    using System.Windows;
+    using System.Windows.Media;
+
     // TODO Check if we can remove this class and use instead the Standard.DpiHelper
     public static class DpiHelper
     {

@@ -5,7 +5,7 @@ using System.Windows.Data;
 
 using TMP.DWRES.ViewModel;
 
-namespace TMP.DWRES.GUI.Converters
+namespace TMP.DWRES.Converters
 {
     [ValueConversion(typeof(StateType), typeof(bool))]
     public class StateTypeToBoolConverter : IValueConverter

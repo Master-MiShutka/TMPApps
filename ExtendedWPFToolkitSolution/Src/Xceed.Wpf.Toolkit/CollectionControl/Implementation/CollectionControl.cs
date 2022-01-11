@@ -1,14 +1,14 @@
 ﻿/*************************************************************************************
+   
+   Toolkit for WPF
 
-   Extended WPF Toolkit
-
-   Copyright (C) 2007-2013 Xceed Software Inc.
+   Copyright (C) 2007-2018 Xceed Software Inc.
 
    This program is provided to you under the terms of the Microsoft Public
    License (Ms-PL) as published at http://wpftoolkit.codeplex.com/license 
 
    For more features, controls, and fast professional support,
-   pick up the Plus Edition at http://xceed.com/wpf_toolkit
+   pick up the Plus Edition at https://xceed.com/xceed-toolkit-plus-for-wpf/
 
    Stay informed: follow @datagrid on Twitter or Like http://facebook.com/datagrids
 
@@ -23,6 +23,9 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using Xceed.Wpf.Toolkit.Core.Utilities;
+using Xceed.Wpf.Toolkit.PropertyGrid;
+using System.Windows.Threading;
+using System.Reflection;
 
 namespace Xceed.Wpf.Toolkit
 {
@@ -40,6 +43,7 @@ namespace Xceed.Wpf.Toolkit
     private ComboBox _newItemTypesComboBox;
     private PropertyGrid.PropertyGrid _propertyGrid;
     private ListBox _listBox;
+    private bool _isCollectionUpdated;
 
     #endregion
 
@@ -174,6 +178,23 @@ namespace Xceed.Wpf.Toolkit
 
     #endregion  //NewItemType
 
+    #region PropertiesLabel Property
+
+    public static readonly DependencyProperty PropertiesLabelProperty = DependencyProperty.Register( "PropertiesLabel", typeof( object ), typeof( CollectionControl ), new UIPropertyMetadata( "Properties:" ) );
+    public object PropertiesLabel
+    {
+      get
+      {
+        return ( object )GetValue( PropertiesLabelProperty );
+      }
+      set
+      {
+        SetValue( PropertiesLabelProperty, value );
+      }
+    }
+
+    #endregion  //PropertiesLabel
+
     #region SelectedItem Property
 
     public static readonly DependencyProperty SelectedItemProperty = DependencyProperty.Register( "SelectedItem", typeof( object ), typeof( CollectionControl ), new UIPropertyMetadata( null ) );
@@ -189,7 +210,41 @@ namespace Xceed.Wpf.Toolkit
       }
     }
 
-    #endregion  //SelectedItem
+    #endregion  //EditorDefinitions
+
+    #region TypeSelectionLabel Property
+
+    public static readonly DependencyProperty TypeSelectionLabelProperty = DependencyProperty.Register( "TypeSelectionLabel", typeof( object ), typeof( CollectionControl ), new UIPropertyMetadata( "Select type:" ) );
+    public object TypeSelectionLabel
+    {
+      get
+      {
+        return ( object )GetValue( TypeSelectionLabelProperty );
+      }
+      set
+      {
+        SetValue( TypeSelectionLabelProperty, value );
+      }
+    }
+
+    #endregion  //TypeSelectionLabel
+
+    #region EditorDefinitions Property
+
+    public static readonly DependencyProperty EditorDefinitionsProperty = DependencyProperty.Register( "EditorDefinitions", typeof( EditorDefinitionCollection ), typeof( CollectionControl ), new UIPropertyMetadata( null ) );
+    public EditorDefinitionCollection EditorDefinitions
+    {
+      get
+      {
+        return ( EditorDefinitionCollection )GetValue( EditorDefinitionsProperty );
+      }
+      set
+      {
+        SetValue( EditorDefinitionsProperty, value );
+      }
+    }
+
+    #endregion  //EditorDefinitions
 
     #endregion //Properties
 
@@ -220,7 +275,7 @@ namespace Xceed.Wpf.Toolkit
       {
         _propertyGrid.PropertyValueChanged += this.PropertyGrid_PropertyValueChanged;
       }
-    }    
+    }
 
     public PropertyGrid.PropertyGrid PropertyGrid
     {
@@ -234,6 +289,9 @@ namespace Xceed.Wpf.Toolkit
       }
     }
 
+
+
+
     #endregion
 
     #region Constructors
@@ -246,10 +304,11 @@ namespace Xceed.Wpf.Toolkit
     public CollectionControl()
     {
       Items = new ObservableCollection<object>();
-      CommandBindings.Add( new CommandBinding( ApplicationCommands.New, AddNew, CanAddNew ) );
-      CommandBindings.Add( new CommandBinding( ApplicationCommands.Delete, Delete, CanDelete ) );
-      CommandBindings.Add( new CommandBinding( ComponentCommands.MoveDown, MoveDown, CanMoveDown ) );
-      CommandBindings.Add( new CommandBinding( ComponentCommands.MoveUp, MoveUp, CanMoveUp ) );
+      CommandBindings.Add( new CommandBinding( ApplicationCommands.New, this.AddNew, this.CanAddNew ) );
+      CommandBindings.Add( new CommandBinding( ApplicationCommands.Delete, this.Delete, this.CanDelete ) );
+      CommandBindings.Add( new CommandBinding( ApplicationCommands.Copy, this.Duplicate, this.CanDuplicate ) );
+      CommandBindings.Add( new CommandBinding( ComponentCommands.MoveDown, this.MoveDown, this.CanMoveDown ) );
+      CommandBindings.Add( new CommandBinding( ComponentCommands.MoveUp, this.MoveUp, this.CanMoveUp ) );
     }
 
     #endregion //Constructors
@@ -384,7 +443,12 @@ namespace Xceed.Wpf.Toolkit
     {
       if( _listBox != null )
       {
-        _listBox.Items.Refresh();
+        _isCollectionUpdated = true;
+        _listBox.Dispatcher.BeginInvoke( DispatcherPriority.Input, new Action( () =>
+        {
+          _listBox.Items.Refresh();
+        }
+        ) );
       }
     }
 
@@ -394,17 +458,34 @@ namespace Xceed.Wpf.Toolkit
 
     private void AddNew( object sender, ExecutedRoutedEventArgs e )
     {
-      var newItem = CreateNewItem( ( Type )e.Parameter );
-      var properties = newItem.GetType().GetProperties();
-      foreach( var property in properties )
+      var newItem = this.CreateNewItem( ( Type )e.Parameter );
+
+      this.AddNewCore( newItem );
+    }
+
+    private void CanAddNew( object sender, CanExecuteRoutedEventArgs e )
+    {
+      var t = e.Parameter as Type;
+      this.CanAddNewCore( t, e );
+    }
+
+    private void CanAddNewCore( Type t, CanExecuteRoutedEventArgs e )
+    {
+      if( ( t != null ) && !this.IsReadOnly )
       {
-        // For Generic Types, add an empty collection/list of T.
-        if( property.CanWrite && property.PropertyType.IsGenericType )
+        var isComplexStruct = t.IsValueType && !t.IsEnum && !t.IsPrimitive;
+
+        if( isComplexStruct || ( t.GetConstructor( Type.EmptyTypes ) != null ) )
         {
-          var genericCollection = Activator.CreateInstance( property.PropertyType );
-          property.SetValue( newItem, genericCollection, null );
+          e.CanExecute = true;
         }
       }
+    }
+
+    private void AddNewCore( object newItem )
+    {
+      if( newItem == null )
+        throw new ArgumentNullException( "newItem" );
 
       var eventArgs = new ItemAddingEventArgs( ItemAddingEvent, newItem );
       this.RaiseEvent( eventArgs );
@@ -412,25 +493,12 @@ namespace Xceed.Wpf.Toolkit
         return;
       newItem = eventArgs.Item;
 
-      Items.Add( newItem );
+      this.Items.Add( newItem );
 
       this.RaiseEvent( new ItemEventArgs( ItemAddedEvent, newItem ) );
+      _isCollectionUpdated = true;
 
-      SelectedItem = newItem;
-    }
-
-    private void CanAddNew( object sender, CanExecuteRoutedEventArgs e )
-    {
-      Type t = e.Parameter as Type;
-      if( (t != null) && !this.IsReadOnly )
-      {
-        bool isComplexStruct = t.IsValueType && !t.IsEnum && !t.IsPrimitive;
-
-        if( isComplexStruct || (t.GetConstructor( Type.EmptyTypes ) != null) )
-        {
-          e.CanExecute = true;
-        }
-      }
+      this.SelectedItem = newItem;
     }
 
     private void Delete( object sender, ExecutedRoutedEventArgs e )
@@ -440,14 +508,50 @@ namespace Xceed.Wpf.Toolkit
       if( eventArgs.Cancel )
         return;
 
-      Items.Remove( e.Parameter );
+      this.Items.Remove( e.Parameter );
 
       this.RaiseEvent( new ItemEventArgs( ItemDeletedEvent, e.Parameter ) );
+      _isCollectionUpdated = true;
     }
 
     private void CanDelete( object sender, CanExecuteRoutedEventArgs e )
     {
-      e.CanExecute = e.Parameter != null && !IsReadOnly;
+      e.CanExecute = e.Parameter != null && !this.IsReadOnly;
+    }
+
+    private void Duplicate( object sender, ExecutedRoutedEventArgs e )
+    {
+      var newItem = this.DuplicateItem( e );
+      this.AddNewCore( newItem );
+    }
+
+    private void CanDuplicate( object sender, CanExecuteRoutedEventArgs e )
+    {
+      var t = (e.Parameter != null) ? e.Parameter.GetType() : null;
+      this.CanAddNewCore( t, e );
+    }
+
+    private object DuplicateItem( ExecutedRoutedEventArgs e )
+    {
+      if( e == null )
+        throw new ArgumentNullException( "e" );
+
+      var baseItem = e.Parameter;
+      var newItemType = baseItem.GetType();
+      var newItem = this.CreateNewItem( newItemType );
+
+      var type = newItemType;
+      while( type != null )
+      {
+        var baseProperties = type.GetFields( BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance );
+        foreach( var prop in baseProperties )
+        {
+          prop.SetValue( newItem, prop.GetValue( baseItem ) );
+        }
+        type = type.BaseType;
+      }
+
+      return newItem;
     }
 
     private void MoveDown( object sender, ExecutedRoutedEventArgs e )
@@ -458,13 +562,14 @@ namespace Xceed.Wpf.Toolkit
       Items.Insert( ++index, selectedItem );
 
       this.RaiseEvent( new ItemEventArgs( ItemMovedDownEvent, selectedItem ) );
+      _isCollectionUpdated = true;
 
-      SelectedItem = selectedItem;
+      this.SelectedItem = selectedItem;
     }
 
     private void CanMoveDown( object sender, CanExecuteRoutedEventArgs e )
     {
-      if( e.Parameter != null && Items.IndexOf( e.Parameter ) < ( Items.Count - 1 ) && !IsReadOnly )
+      if( e.Parameter != null && Items.IndexOf( e.Parameter ) < ( Items.Count - 1 ) && !this.IsReadOnly )
         e.CanExecute = true;
     }
 
@@ -472,17 +577,18 @@ namespace Xceed.Wpf.Toolkit
     {
       var selectedItem = e.Parameter;
       var index = Items.IndexOf( selectedItem );
-      Items.RemoveAt( index );
-      Items.Insert( --index, selectedItem );
+      this.Items.RemoveAt( index );
+      this.Items.Insert( --index, selectedItem );
 
       this.RaiseEvent( new ItemEventArgs( ItemMovedUpEvent, selectedItem ) );
+      _isCollectionUpdated = true;
 
-      SelectedItem = selectedItem;
+      this.SelectedItem = selectedItem;
     }
 
     private void CanMoveUp( object sender, CanExecuteRoutedEventArgs e )
     {
-      if( e.Parameter != null && Items.IndexOf( e.Parameter ) > 0 && !IsReadOnly )
+      if( e.Parameter != null && Items.IndexOf( e.Parameter ) > 0 && !this.IsReadOnly )
         e.CanExecute = true;
     }
 
@@ -490,9 +596,10 @@ namespace Xceed.Wpf.Toolkit
 
     #region Methods
 
-    public void PersistChanges()
+    public bool PersistChanges()
     {
       this.PersistChanges( this.Items );
+      return _isCollectionUpdated;
     }
 
     internal void PersistChanges( IList sourceList )
@@ -529,6 +636,9 @@ namespace Xceed.Wpf.Toolkit
 
         if( list.IsFixedSize )
         {
+          if( sourceList.Count > list.Count )
+            throw new IndexOutOfRangeException("Exceeding array size.");
+
           for( int i = 0; i < sourceList.Count; ++i )
             list[ i ] = sourceList[ i ];
         }
@@ -573,7 +683,11 @@ namespace Xceed.Wpf.Toolkit
         var constructor = ItemsSourceType.GetConstructor( Type.EmptyTypes );
         if( constructor != null )
         {
-          collection = (IEnumerable)constructor.Invoke( null );
+          collection = ( IEnumerable )constructor.Invoke( null );
+        }
+        else if( ItemsSourceType.IsArray )
+        {
+          collection = Array.CreateInstance( ItemsSourceType.GetElementType(), Items.Count );
         }
       }
 

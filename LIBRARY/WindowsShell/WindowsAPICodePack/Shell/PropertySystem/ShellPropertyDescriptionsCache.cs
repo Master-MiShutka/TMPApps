@@ -1,15 +1,15 @@
-﻿//Copyright (c) Microsoft Corporation.  All rights reserved.
-
-using System.Collections.Generic;
-using Microsoft.WindowsAPICodePack.Shell;
+﻿// Copyright (c) Microsoft Corporation.  All rights reserved.
 
 namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 {
+    using System.Collections.Generic;
+    using Microsoft.WindowsAPICodePack.Shell;
+
     internal class ShellPropertyDescriptionsCache
     {
         private ShellPropertyDescriptionsCache()
         {
-            propsDictionary = new Dictionary<PropertyKey, ShellPropertyDescription>();
+            this.propsDictionary = new Dictionary<PropertyKey, ShellPropertyDescription>();
         }
 
         private IDictionary<PropertyKey, ShellPropertyDescription> propsDictionary;
@@ -23,17 +23,19 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
                 {
                     cacheInstance = new ShellPropertyDescriptionsCache();
                 }
+
                 return cacheInstance;
             }
         }
 
         public ShellPropertyDescription GetPropertyDescription(PropertyKey key)
         {
-            if (!propsDictionary.ContainsKey(key))
+            if (!this.propsDictionary.ContainsKey(key))
             {
-                propsDictionary.Add(key, new ShellPropertyDescription(key));
+                this.propsDictionary.Add(key, new ShellPropertyDescription(key));
             }
-            return propsDictionary[key];
+
+            return this.propsDictionary[key];
         }
     }
 }

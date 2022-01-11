@@ -1,31 +1,31 @@
-﻿using System;
-using System.Diagnostics;
-
-namespace TMPApplication
+﻿namespace TMPApplication
 {
+    using System;
+    using System.Diagnostics;
+
     /// <summary>
     /// Raises an event each time a WPF Binding error occurs.
     /// </summary>
     public sealed class BindingErrorListener : IDisposable
     {
-        readonly ObservableTraceListener traceListener;
+        private readonly ObservableTraceListener traceListener;
 
         static BindingErrorListener()
         {
-            //PresentationTraceSources.Refresh();
+            // PresentationTraceSources.Refresh();
         }
 
         public BindingErrorListener()
         {
-            traceListener = new ObservableTraceListener();
+            this.traceListener = new ObservableTraceListener();
             PresentationTraceSources.DataBindingSource.Switch.Level = SourceLevels.Error;
-            PresentationTraceSources.DataBindingSource.Listeners.Add(traceListener);
+            PresentationTraceSources.DataBindingSource.Listeners.Add(this.traceListener);
         }
 
         public void Dispose()
         {
-            PresentationTraceSources.DataBindingSource.Listeners.Remove(traceListener);
-            traceListener.Dispose();
+            PresentationTraceSources.DataBindingSource.Listeners.Remove(this.traceListener);
+            this.traceListener.Dispose();
         }
 
         /// <summary>
@@ -33,9 +33,8 @@ namespace TMPApplication
         /// </summary>
         public event Action<string> ErrorCatched
         {
-            add { traceListener.TraceCatched += value; }
-            remove { traceListener.TraceCatched -= value; }
+            add { this.traceListener.TraceCatched += value; }
+            remove { this.traceListener.TraceCatched -= value; }
         }
     }
-
 }

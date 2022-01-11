@@ -5,9 +5,7 @@ using System.Linq;
 namespace TMP.Work.Emcos.Export
 {
     using OfficeOpenXml;
-    using TMP.Work.Emcos.Model.Balans;
-
-    using TMP.Wpf.Common.Controls.TableView;
+    using TMP.Work.Emcos.Model.Balance;
 
     public class SubstationExport : BaseExport
     {
@@ -18,13 +16,13 @@ namespace TMP.Work.Emcos.Export
         private OfficeOpenXml.Style.ExcelStyle cellTextStyle;
         private OfficeOpenXml.Style.ExcelStyle cellNumbersStyle;
 
-        private Model.BalansGrop balansGroup;
+        private IBalance _balance;
 
-        public SubstationExport(Model.BalansGrop balansGroup)
+        public SubstationExport(IBalance balance)
         {
-            if (balansGroup == null)
-                throw new ArgumentNullException("SubstationExport - constructor: argument balansGroup is null");
-            this.balansGroup = balansGroup;
+            if (_balance == null)
+                throw new ArgumentNullException("SubstationExport - constructor: argument Balance<ENERGY> is null");
+            this._balance = balance;
 
             tableStyle = CreateStyle("style_table");
             tableStyle.Border.Left.Style =
@@ -77,7 +75,7 @@ namespace TMP.Work.Emcos.Export
         {
             CreateCell(1, 1, "Экспорт из");
             CreateCell(1, 2, "Архивов");
-            CreateCell(1, 3, "Баланс по ПС " + balansGroup.SubstationName);
+            CreateCell(1, 3, "Баланс по ПС " + _balance.Substation.Name);
             Range(1, 1, 1, 3).Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Left;
             CreateCell(2, 1, "Экспортировано: " + DateTime.Now);
         }
@@ -87,18 +85,18 @@ namespace TMP.Work.Emcos.Export
             int index = 1;
             int startRowIndex = 4;
             int rowIndex = startRowIndex;
-            foreach (Model.BalansGrop.HeaderElement header in balansGroup.Headers)
+            foreach (HeaderElement header in _balance.Headers)
             {
                 CreateCell(3, index++, header.Name, "style_table_header");
             }
 
-            foreach (Model.BalansGroupItem item in balansGroup.Items)
+            foreach (DayBalance item in _balance.Items)
             {
                 index = 1;
                 CreateCell(rowIndex, index++, item.Date);
                 CreateCell(rowIndex, index++, item.VvodaIn);
                 CreateCell(rowIndex, index++, item.VvodaOut);
-                if (balansGroup.AuxCount != 0)
+                if (_balance.AuxCount != 0)
                     CreateCell(rowIndex, index++, item.Tsn);
                 CreateCell(rowIndex, index++, item.FideraIn);
                 CreateCell(rowIndex, index++, item.FideraOut);
@@ -106,7 +104,7 @@ namespace TMP.Work.Emcos.Export
                 CreateCell(rowIndex, index++, item.PercentageOfUnbalance);
                 foreach(var t in item.Transformers)
                     CreateCell(rowIndex, index++, t);
-                if (balansGroup.AuxCount != 0)
+                if (_balance.AuxCount != 0)
                     foreach (var a in item.Auxiliary)
                         CreateCell(rowIndex, index++, a);
                 foreach (var f in item.Fiders)
@@ -123,7 +121,7 @@ namespace TMP.Work.Emcos.Export
             var groupColor = System.Drawing.ColorTranslator.FromHtml("#FF63C384");
             sheet.ConditionalFormatting.AddDatabar(Range(startRowIndex, index++, rowIndex - startRowIndex, 1), groupColor);
             sheet.ConditionalFormatting.AddDatabar(Range(startRowIndex, index++, rowIndex - startRowIndex, 1), groupColor);
-            if (balansGroup.AuxCount != 0)
+            if (_balance.AuxCount != 0)
                 sheet.ConditionalFormatting.AddDatabar(Range(startRowIndex, index++, rowIndex - startRowIndex, 1), groupColor);
             sheet.ConditionalFormatting.AddDatabar(Range(startRowIndex, index++, rowIndex - startRowIndex, 1), groupColor);
             sheet.ConditionalFormatting.AddDatabar(Range(startRowIndex, index++, rowIndex - startRowIndex, 1), groupColor);
@@ -132,15 +130,15 @@ namespace TMP.Work.Emcos.Export
             sheet.ConditionalFormatting.AddDatabar(Range(startRowIndex, index++, rowIndex - startRowIndex, 1), balanceColor);
             var elementPlusColor = System.Drawing.ColorTranslator.FromHtml("#FFFFB628");
             var elementMinusColor = System.Drawing.ColorTranslator.FromHtml("#FF638EC6");
-            for (int i = 0; i < balansGroup.TransformersCount * 2; i++)
+            for (int i = 0; i < _balance.TransformersCount * 2; i++)
                 if (i % 2 == 0)
                     sheet.ConditionalFormatting.AddDatabar(Range(startRowIndex, index++, rowIndex - startRowIndex, 1), elementMinusColor);
                 else
                     sheet.ConditionalFormatting.AddDatabar(Range(startRowIndex, index++, rowIndex - startRowIndex, 1), elementPlusColor);
-            if (balansGroup.AuxCount != 0)
-                for (int i= 0; i < balansGroup.AuxCount; i++)
+            if (_balance.AuxCount != 0)
+                for (int i= 0; i < _balance.AuxCount; i++)
                     sheet.ConditionalFormatting.AddDatabar(Range(startRowIndex, index++, rowIndex - startRowIndex, 1), elementPlusColor);
-            for (int i = 0; i < balansGroup.FidersCount * 2; i++)
+            for (int i = 0; i < _balance.FidersCount * 2; i++)
                 if (i % 2 == 0)
                     sheet.ConditionalFormatting.AddDatabar(Range(startRowIndex, index++, rowIndex - startRowIndex, 1), elementPlusColor);
                 else
@@ -149,13 +147,13 @@ namespace TMP.Work.Emcos.Export
             #region | минимумы, максимумы, среднее и сумма |
             rowIndex++;
             startRowIndex = rowIndex;
-            var firstItem = balansGroup.Items[0];
+            var firstItem = _balance.Items[0];
 
             var lists = new List<IList<double?>>();
-            lists.Add(balansGroup.Min);
-            lists.Add(balansGroup.Max);
-            lists.Add(balansGroup.Average);
-            lists.Add(balansGroup.Sum);
+            lists.Add(_balance.Min);
+            lists.Add(_balance.Max);
+            lists.Add(_balance.Average);
+            lists.Add(_balance.Sum);
 
             CreateCell(rowIndex, 1, "Минимум");
             CreateCell(rowIndex + 1, 1, "Максимум");
@@ -167,18 +165,18 @@ namespace TMP.Work.Emcos.Export
                 index = 2;
                 CreateCell(rowIndex, index++, list[index - 2]);
                 CreateCell(rowIndex, index++, list[index - 2]);
-                if (balansGroup.AuxCount != 0)
+                if (_balance.AuxCount != 0)
                     CreateCell(rowIndex, index++, list[index - 2]);
                 CreateCell(rowIndex, index++, list[index - 2]);
                 CreateCell(rowIndex, index++, list[index - 2]);
                 CreateCell(rowIndex, index++, list[index - 2]);
                 CreateCell(rowIndex, index++, list[index - 2]);
-                for (int i = 0; i < balansGroup.TransformersCount * 2; i++)
+                for (int i = 0; i < _balance.TransformersCount * 2; i++)
                     CreateCell(rowIndex, index++, list[index - 2]);
-                if (balansGroup.AuxCount != 0)
-                    for (int i = 0; i < balansGroup.AuxCount; i++)
+                if (_balance.AuxCount != 0)
+                    for (int i = 0; i < _balance.AuxCount; i++)
                         CreateCell(rowIndex, index++, list[index - 2]);
-                for (int i = 0; i < balansGroup.FidersCount * 2; i++)
+                for (int i = 0; i < _balance.FidersCount * 2; i++)
                     CreateCell(rowIndex, index++, list[index - 2]);
                 rowIndex++;
             }
@@ -218,7 +216,7 @@ namespace TMP.Work.Emcos.Export
         {
             // верхний колонтитул
             sheet.HeaderFooter.differentOddEven = false;
-            sheet.HeaderFooter.OddHeader.LeftAlignedText = "ПС " + balansGroup.SubstationName;
+            sheet.HeaderFooter.OddHeader.LeftAlignedText = "ПС " + _balance.Substation.Name;
             sheet.HeaderFooter.OddHeader.RightAlignedText = string.Format("Экспортировано: {0}", DateTime.Now);
             // нижний колонтитул
             sheet.HeaderFooter.OddHeader.CenteredText = String.Format("Стр. {0} из {1}", ExcelHeaderFooter.PageNumber, ExcelHeaderFooter.NumberOfPages);
@@ -237,4 +235,4 @@ namespace TMP.Work.Emcos.Export
             sheet.PrinterSettings.FitToWidth = 1;
         }
     }
-}
+}

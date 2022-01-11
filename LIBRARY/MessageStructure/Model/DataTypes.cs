@@ -54,6 +54,6 @@ namespace TMP.MessageStructure.Model
         /// <summary>
         /// Byte array.
         /// </summary>
-        BYTEARRAY
+        BYTEARRAY,
     }
 }

@@ -44,26 +44,26 @@ namespace TMP.Wpf.CommonControls.Dialogs
 
         public string Message
         {
-            get { return (string)GetValue(MessageProperty); }
-            set { SetValue(MessageProperty, value); }
+            get => (string)GetValue(MessageProperty);
+            set => SetValue(MessageProperty, value);
         }
 
         public bool IsCancelable
         {
-            get { return (bool)GetValue(IsCancelableProperty); }
-            set { SetValue(IsCancelableProperty, value); }
+            get => (bool)GetValue(IsCancelableProperty);
+            set => SetValue(IsCancelableProperty, value);
         }
 
         public string NegativeButtonText
         {
-            get { return (string)GetValue(NegativeButtonTextProperty); }
-            set { SetValue(NegativeButtonTextProperty, value); }
+            get => (string)GetValue(NegativeButtonTextProperty);
+            set => SetValue(NegativeButtonTextProperty, value);
         }
 
         public Brush ProgressBarForeground
         {
-            get { return (Brush)GetValue(ProgressBarForegroundProperty); }
-            set { SetValue(ProgressBarForegroundProperty, value); }
+            get => (Brush)GetValue(ProgressBarForegroundProperty);
+            set => SetValue(ProgressBarForegroundProperty, value);
         }
     }
 }

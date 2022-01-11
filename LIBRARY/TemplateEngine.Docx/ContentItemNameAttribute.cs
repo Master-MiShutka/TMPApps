@@ -1,14 +1,14 @@
-﻿using System;
-
-namespace TemplateEngine.Docx
+﻿namespace TemplateEngine.Docx
 {
-	internal class ContentItemNameAttribute:Attribute
-	{
-		internal ContentItemNameAttribute(string name)
-		{
-			Name = name;
-		}
+    using System;
 
-		internal string Name { get; private set; }
-	}
+    internal class ContentItemNameAttribute : Attribute
+    {
+        internal ContentItemNameAttribute(string name)
+        {
+            this.Name = name;
+        }
+
+        internal string Name { get; private set; }
+    }
 }

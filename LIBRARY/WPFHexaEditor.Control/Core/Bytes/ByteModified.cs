@@ -1,32 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace WPFHexaEditor.Core.Bytes
+﻿namespace WPFHexaEditor.Core.Bytes
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+
     public class ByteModified
     {
-        private byte? _byte = null;
-        private ByteAction _action = ByteAction.Nothing;
-        private long _position = -1;
-        private long _undoLenght = 1;
-        
+        private byte? @byte = null;
+        private ByteAction action = ByteAction.Nothing;
+        private long position = -1;
+        private long undoLenght = 1;
+
         /// <summary>
         /// Byte mofidied
         /// </summary>
         public byte? Byte
         {
-            get
-            {
-                return _byte;
-            }
+            get => this.@byte;
 
-            set
-            {
-                _byte = value;
-            }
+            set => this.@byte = value;
         }
 
         /// <summary>
@@ -34,15 +28,9 @@ namespace WPFHexaEditor.Core.Bytes
         /// </summary>
         public ByteAction Action
         {
-            get
-            {
-                return _action;
-            }
+            get => this.action;
 
-            set
-            {
-                _action = value;
-            }
+            set => this.action = value;
         }
 
         /// <summary>
@@ -50,17 +38,11 @@ namespace WPFHexaEditor.Core.Bytes
         /// </summary>
         public long BytePositionInFile
         {
-            get
-            {
-                return _position;
-            }
+            get => this.position;
 
-            set
-            {
-                _position = value;
-            }
+            set => this.position = value;
         }
-        
+
         /// <summary>
         /// Check if the object is valid and data can be used for action
         /// </summary>
@@ -68,10 +50,14 @@ namespace WPFHexaEditor.Core.Bytes
         {
             get
             {
-                if (BytePositionInFile > -1 && Action != ByteAction.Nothing && Byte != null)
+                if (this.BytePositionInFile > -1 && this.Action != ByteAction.Nothing && this.Byte != null)
+                {
                     return true;
+                }
                 else
+                {
                     return false;
+                }
             }
         }
 
@@ -80,15 +66,9 @@ namespace WPFHexaEditor.Core.Bytes
         /// </summary>
         public long UndoLenght
         {
-            get
-            {
-                return _undoLenght;
-            }
+            get => this.undoLenght;
 
-            set
-            {
-                _undoLenght = value;
-            }
+            set => this.undoLenght = value;
         }
 
         /// <summary>
@@ -96,9 +76,9 @@ namespace WPFHexaEditor.Core.Bytes
         /// </summary>
         public void Clear()
         {
-            _byte = null;
-            _action = ByteAction.Nothing;
-            _position = -1;
+            this.@byte = null;
+            this.action = ByteAction.Nothing;
+            this.position = -1;
         }
 
         /// <summary>
@@ -110,20 +90,19 @@ namespace WPFHexaEditor.Core.Bytes
             ByteModified newByteModified = new ByteModified();
             object copied = null;
 
-            newByteModified.Action = Action;
-            newByteModified.Byte = Byte; //.Value;
-            newByteModified.BytePositionInFile = BytePositionInFile;
+            newByteModified.Action = this.Action;
+            newByteModified.Byte = this.Byte; // .Value;
+            newByteModified.BytePositionInFile = this.BytePositionInFile;
 
             copied = newByteModified;
-            
+
             return (ByteModified)copied;
         }
 
         public override string ToString()
         {
-            return $"ByteModified - Action:{Action} Position:{BytePositionInFile} Byte:{Byte}";
+            return $"ByteModified - Action:{this.Action} Position:{this.BytePositionInFile} Byte:{this.Byte}";
         }
-
 
         /// <summary>
         /// Get if file is open
@@ -131,8 +110,12 @@ namespace WPFHexaEditor.Core.Bytes
         public static bool CheckIsValid(ByteModified byteModified)
         {
             if (byteModified != null)
+            {
                 if (byteModified.IsValid)
+                {
                     return true;
+                }
+            }
 
             return false;
         }

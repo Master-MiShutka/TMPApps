@@ -1,17 +1,14 @@
-﻿using ItemsFilter.Model;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-
-namespace ItemsFilter.Initializer
+﻿namespace ItemsFilter.Initializer
 {
+    using System.ComponentModel;
+    using System.Diagnostics;
+    using System.Linq;
+    using ItemsFilter.Model;
+
     /// <summary>
     /// Base class for PropertyFilter initialiser.
     /// </summary>
-    public abstract class PropertyFilterInitializer:FilterInitializer
+    public abstract class PropertyFilterInitializer : FilterInitializer
     {
         /// <summary>
         /// Generate new instance of Filter class, if it is possible for filterPresenter and key.
@@ -25,17 +22,22 @@ namespace ItemsFilter.Initializer
             Debug.Assert(key != null);
 
             if (key is ItemPropertyInfo)
-                return NewFilter(filterPresenter, (ItemPropertyInfo)key);
+            {
+                return this.NewFilter(filterPresenter, (ItemPropertyInfo)key);
+            }
+
             if (key is string)
             {
                 ItemPropertyInfo propertyInfo = filterPresenter.ItemProperties.FirstOrDefault(item => item.Name == (string)key);
                 if (propertyInfo != null)
                 {
-                    return NewFilter(filterPresenter, propertyInfo);
+                    return this.NewFilter(filterPresenter, propertyInfo);
                 }
             }
+
             return null;
         }
+
         /// <summary>
         /// Create instance of PropertyFilter for  filterPresenter and key, if it is possible.
         /// </summary>

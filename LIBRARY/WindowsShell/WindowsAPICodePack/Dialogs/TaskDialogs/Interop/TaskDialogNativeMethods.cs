@@ -1,11 +1,10 @@
-﻿//Copyright (c) Microsoft Corporation.  All rights reserved.
-
-using System;
-using System.Runtime.InteropServices;
-using MS.WindowsAPICodePack.Internal;
+﻿// Copyright (c) Microsoft Corporation.  All rights reserved.
 
 namespace Microsoft.WindowsAPICodePack.Dialogs
 {
+    using System;
+    using System.Runtime.InteropServices;
+    using MS.WindowsAPICodePack.Internal;
 
     /// <summary>
     /// Internal class containing most native interop declarations used
@@ -66,29 +65,29 @@ namespace Microsoft.WindowsAPICodePack.Dialogs
         internal const int TaskDialogIdealWidth = 0;  // Value for TASKDIALOGCONFIG.cxWidth
         internal const int TaskDialogButtonShieldIcon = 1;
 
-        // NOTE: We include a "spacer" so that the struct size varies on 
+        // NOTE: We include a "spacer" so that the struct size varies on
         // 64-bit architectures.
         [StructLayout(LayoutKind.Explicit, CharSet = CharSet.Auto)]
         internal struct IconUnion
         {
             internal IconUnion(int i)
             {
-                mainIcon = i;
-                spacer = IntPtr.Zero;
+                this.mainIcon = i;
+                this.spacer = IntPtr.Zero;
             }
 
             [FieldOffset(0)]
             private int mainIcon;
 
             // This field is used to adjust the length of the structure on 32/64bit OS.
-            [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
+            [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields", Justification = "ToDo")]
             [FieldOffset(0)]
             private IntPtr spacer;
 
             /// <summary>
             /// Gets the handle to the Icon
             /// </summary>
-            public int MainIcon { get { return mainIcon; } }
+            public int MainIcon => this.mainIcon;
         }
 
         // NOTE: Packing must be set to 4 to make this work on 64-bit platforms.
@@ -98,7 +97,7 @@ namespace Microsoft.WindowsAPICodePack.Dialogs
             public TaskDialogButton(int buttonId, string text)
             {
                 this.buttonId = buttonId;
-                buttonText = text;
+                this.buttonText = text;
             }
 
             internal int buttonId;
@@ -115,7 +114,7 @@ namespace Microsoft.WindowsAPICodePack.Dialogs
             No = 0x0004, // selected control return value IDNO
             Cancel = 0x0008, // selected control return value IDCANCEL
             Retry = 0x0010, // selected control return value IDRETRY
-            Close = 0x0020  // selected control return value IDCLOSE
+            Close = 0x0020,  // selected control return value IDCLOSE
         }
 
         // Identify button *return values* - note that, unfortunately, these are different
@@ -129,7 +128,7 @@ namespace Microsoft.WindowsAPICodePack.Dialogs
             Ignore = 5,
             Yes = 6,
             No = 7,
-            Close = 8
+            Close = 8,
         }
 
         internal enum TaskDialogElements
@@ -137,13 +136,13 @@ namespace Microsoft.WindowsAPICodePack.Dialogs
             Content,
             ExpandedInformation,
             Footer,
-            MainInstruction
+            MainInstruction,
         }
 
         internal enum TaskDialogIconElement
         {
             Main,
-            Footer
+            Footer,
         }
 
         // Task Dialog - flags
@@ -165,7 +164,7 @@ namespace Microsoft.WindowsAPICodePack.Dialogs
             UseCallbackTimer = 0x0800,
             PositionRelativeToWindow = 0x1000,
             RightToLeftLayout = 0x2000,
-            NoDefaultRadioButton = 0x4000
+            NoDefaultRadioButton = 0x4000,
         }
 
         internal enum TaskDialogMessages
@@ -184,7 +183,7 @@ namespace Microsoft.WindowsAPICodePack.Dialogs
             ClickVerification = CoreNativeMethods.UserMessage + 113, // wParam = 0 (unchecked), 1 (checked), lParam = 1 (set key focus)
             UpdateElementText = CoreNativeMethods.UserMessage + 114, // wParam = element (TASKDIALOG_ELEMENTS), lParam = new element text (LPCWSTR)
             SetButtonElevationRequiredState = CoreNativeMethods.UserMessage + 115, // wParam = Button ID, lParam = 0 (elevation not required), lParam != 0 (elevation required)
-            UpdateIcon = CoreNativeMethods.UserMessage + 116  // wParam = icon element (TASKDIALOG_ICON_ELEMENTS), lParam = new icon (hIcon if TDF_USE_HICON_* was set, PCWSTR otherwise)
+            UpdateIcon = CoreNativeMethods.UserMessage + 116,  // wParam = icon element (TASKDIALOG_ICON_ELEMENTS), lParam = new icon (hIcon if TDF_USE_HICON_* was set, PCWSTR otherwise)
         }
 
         internal enum TaskDialogNotifications
@@ -199,7 +198,7 @@ namespace Microsoft.WindowsAPICodePack.Dialogs
             Constructed = 7,
             VerificationClicked = 8,      // wParam = 1 if checkbox checked, 0 if not, lParam is unused and always 0
             Help = 9,
-            ExpandButtonClicked = 10    // wParam = 0 (dialog is now collapsed), wParam != 0 (dialog is now expanded)
+            ExpandButtonClicked = 10,    // wParam = 0 (dialog is now collapsed), wParam != 0 (dialog is now expanded)
         }
 
         // Used in the various SET_DEFAULT* TaskDialog messages
@@ -217,7 +216,7 @@ namespace Microsoft.WindowsAPICodePack.Dialogs
         {
             Normal = 0x0001,
             Error = 0x0002,
-            Paused = 0x0003
+            Paused = 0x0003,
         }
 
         internal enum TaskDialogIcons
@@ -225,7 +224,7 @@ namespace Microsoft.WindowsAPICodePack.Dialogs
             Warning = 65535,
             Error = 65534,
             Information = 65533,
-            Shield = 65532
+            Shield = 65532,
         }
 
         #endregion

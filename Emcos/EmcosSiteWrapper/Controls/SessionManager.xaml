@@ -1,0 +1,134 @@
+﻿<UserControl
+    x:Class="TMP.Work.Emcos.Controls.SessionManager"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:i="clr-namespace:Interactivity;assembly=Interactivity"
+    xmlns:local="clr-namespace:TMP.Work.Emcos.Controls"
+    xmlns:local_converters="clr-namespace:TMP.Work.Emcos.Converters"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:model="clr-namespace:TMP.Work.Emcos.Model"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    Background="{DynamicResource ControlBackgroundImageBrush}"
+    SnapsToDevicePixels="True"
+    TextOptions.TextFormattingMode="Ideal"
+    UseLayoutRounding="True"
+    mc:Ignorable="d">
+    <UserControl.Resources>
+        <local_converters:FileSizeToHumanReadableConverter x:Key="FileSizeToHumanReadableConverter" />
+
+        <Style x:Key="normal" TargetType="{x:Type TextBlock}">
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="LineStackingStrategy" Value="BlockLineHeight" />
+            <Setter Property="LineHeight" Value="15" />
+        </Style>
+        <Style x:Key="smallTextBlock" TargetType="{x:Type TextBlock}">
+            <Setter Property="Foreground" Value="{DynamicResource GrayBrush2}" />
+            <Setter Property="FontSize" Value="{DynamicResource SmallFontSize}" />
+            <Setter Property="FontStyle" Value="Italic" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="Margin" Value="5,2" />
+            <Setter Property="LineStackingStrategy" Value="BlockLineHeight" />
+            <Setter Property="LineHeight" Value="12" />
+        </Style>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" MinHeight="50" />
+        </Grid.RowDefinitions>
+        <!--    -->
+        <TextBlock
+            Grid.Row="0"
+            Text="{Binding Message}"
+            TextAlignment="Center" />
+        <!--    -->
+        <ListBox
+            x:Name="sessions"
+            Grid.Row="1"
+            Margin="5"
+            i:MouseDoubleClick.Command="{Binding LoadCommand}"
+            ItemsSource="{Binding SessionsInfoList}"
+            SelectedItem="{Binding SelectedSessionInfo}">
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="{x:Type ListBoxItem}">
+                    <Setter Property="Background" Value="Transparent" />
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                                <Border
+                                    x:Name="Border"
+                                    Margin="2,1"
+                                    Padding="2"
+                                    BorderBrush="{DynamicResource GrayBrush2}"
+                                    BorderThickness="1"
+                                    CornerRadius="3">
+                                    <ContentPresenter />
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsSelected" Value="True">
+                                        <Setter Property="FontWeight" Value="Bold" />
+                                    </Trigger>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter TargetName="Border" Property="Background" Value="{DynamicResource AccentColorBrush4}" />
+                                    </Trigger>
+                                    <MultiTrigger>
+                                        <MultiTrigger.Conditions>
+                                            <Condition Property="IsSelected" Value="True" />
+                                        </MultiTrigger.Conditions>
+                                        <MultiTrigger.Setters>
+                                            <Setter TargetName="Border" Property="Background" Value="{DynamicResource HighlightBrush}" />
+                                            <Setter TargetName="Border" Property="BorderBrush" Value="{DynamicResource AccentBaseColorBrush}" />
+                                            <Setter Property="Foreground" Value="{DynamicResource WhiteColorBrush}" />
+                                        </MultiTrigger.Setters>
+                                    </MultiTrigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </ListBox.ItemContainerStyle>
+            <ListBox.ItemTemplate>
+                <DataTemplate DataType="{x:Type model:BalanceSessionInfo}">
+                    <StackPanel Orientation="Vertical">
+                        <StackPanel Orientation="Vertical">
+                            <DockPanel LastChildFill="True">
+                                <TextBlock
+                                    x:Name="tbLoaded"
+                                    DockPanel.Dock="Right"
+                                    FontWeight="Bold"
+                                    Style="{StaticResource normal}"
+                                    Text="Загружен" />
+                                <TextBlock Style="{StaticResource normal}" Text="{Binding FileName, FallbackValue=&lt;не указано&gt;, StringFormat={}Файл: {0}}" />
+                            </DockPanel>
+                            <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                                <TextBlock Style="{StaticResource smallTextBlock}" Text="{Binding FileSize, Converter={StaticResource FileSizeToHumanReadableConverter}, StringFormat={}Размер файла: {0}}" />
+                                <TextBlock Style="{StaticResource smallTextBlock}" Text="{Binding LastModifiedDate, StringFormat={}Изменен: {0}}" />
+                            </StackPanel>
+                        </StackPanel>
+                        <TextBlock
+                            HorizontalAlignment="Center"
+                            FontSize="{DynamicResource HeaderFontSize}"
+                            Style="{StaticResource normal}"
+                            Text="{Binding Title, FallbackValue=&lt;без названия&gt;}" />
+                        <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                            <TextBlock Style="{StaticResource smallTextBlock}" Text="{Binding Version, StringFormat={}Версия: {0}}" />
+                            <TextBlock Style="{StaticResource smallTextBlock}" Text="Период: с " />
+                            <TextBlock Style="{StaticResource smallTextBlock}" Text="{Binding Period.StartDate, StringFormat={}{0:dd.MM.yyyy}}" />
+                            <TextBlock Style="{StaticResource smallTextBlock}" Text=" по " />
+                            <TextBlock Style="{StaticResource smallTextBlock}" Text="{Binding Period.EndDate, StringFormat={}{0:dd.MM.yyyy}}" />
+                        </StackPanel>
+                        <!--  TextBlock Style="{StaticResource normal}"  Text="{Binding ProcessedSubstations}" /  -->
+                    </StackPanel>
+                    <DataTemplate.Triggers>
+                        <DataTrigger Binding="{Binding IsLoaded}" Value="false">
+                            <Setter TargetName="tbLoaded" Property="Visibility" Value="Hidden" />
+                        </DataTrigger>
+                    </DataTemplate.Triggers>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+            <!--    -->
+        </ListBox>
+    </Grid>
+</UserControl>

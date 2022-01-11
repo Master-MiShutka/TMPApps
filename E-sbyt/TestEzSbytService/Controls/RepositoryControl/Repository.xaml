@@ -5,11 +5,11 @@
     xmlns:controls="clr-namespace:TMP.Wpf.CommonControls;assembly=TMP.Wpf.CommonControls"
     xmlns:controls_behaviors="clr-namespace:TMP.Wpf.CommonControls.Behaviors;assembly=TMP.Wpf.CommonControls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:dd="urn:gong-wpf-dragdrop"
     xmlns:i="clr-namespace:Interactivity;assembly=Interactivity"
+    xmlns:iconpack="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:local="clr-namespace:TMP.Work.AmperM.TestApp.Controls.RepositoryControl"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:iconpack="http://metro.mahapps.com/winfx/xaml/iconpacks"
-    xmlns:dd="urn:gong-wpf-dragdrop"
     mc:Ignorable="d">
     <UserControl.Resources>
         <ResourceDictionary Source="DataTemplates.xaml" />
@@ -19,25 +19,54 @@
         BorderBrush="{DynamicResource ControlBorderBrush}"
         BorderThickness="1"
         CornerRadius="2">
-        <Grid KeyboardNavigation.DirectionalNavigation="Contained"
-                        KeyboardNavigation.TabNavigation="Local">
+        <Grid KeyboardNavigation.DirectionalNavigation="Contained" KeyboardNavigation.TabNavigation="Local">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
             <WrapPanel Margin="0,0,0,2" Background="{DynamicResource PanelBackgroundHorizontal}">
-                <Button Command="{Binding AddCommand}" ToolTip="Добавить группу или запись" KeyboardNavigation.TabIndex="1" Padding="0">
-                    <iconpack:PackIconModern Kind="Add" Width="16" Height="16" VerticalAlignment="Center" />
+                <Button
+                    Padding="0"
+                    Command="{Binding AddCommand}"
+                    KeyboardNavigation.TabIndex="1"
+                    ToolTip="Добавить группу или запись">
+                    <iconpack:PackIconModern
+                        Width="16"
+                        Height="16"
+                        VerticalAlignment="Center"
+                        Kind="Add" />
                 </Button>
-                <Button Command="{Binding RemoveCommand}" ToolTip="Удалить" KeyboardNavigation.TabIndex="2">
-                    <iconpack:PackIconModern Kind="Delete" Width="16" Height="16" VerticalAlignment="Center" />
+                <Button
+                    Command="{Binding RemoveCommand}"
+                    KeyboardNavigation.TabIndex="2"
+                    ToolTip="Удалить">
+                    <iconpack:PackIconModern
+                        Width="16"
+                        Height="16"
+                        VerticalAlignment="Center"
+                        Kind="Delete" />
                 </Button>
-                <Button Command="{Binding EditCommand}" ToolTip="Редактировать" KeyboardNavigation.TabIndex="3">
-                    <iconpack:PackIconModern Kind="EditBox" Width="16" Height="16" VerticalAlignment="Center" />
+                <Button
+                    Command="{Binding EditCommand}"
+                    KeyboardNavigation.TabIndex="3"
+                    ToolTip="Редактировать">
+                    <iconpack:PackIconModern
+                        Width="16"
+                        Height="16"
+                        VerticalAlignment="Center"
+                        Kind="EditBox" />
                 </Button>
-                <Button Command="{Binding LoadCommand}" ToolTip="Загрузить выбранный запрос" KeyboardNavigation.TabIndex="4" HorizontalAlignment="Right">
-                    <iconpack:PackIconModern Kind="ArrowRight" Width="16" Height="16" VerticalAlignment="Center" />
+                <Button
+                    HorizontalAlignment="Right"
+                    Command="{Binding LoadCommand}"
+                    KeyboardNavigation.TabIndex="4"
+                    ToolTip="Загрузить выбранный запрос">
+                    <iconpack:PackIconModern
+                        Width="16"
+                        Height="16"
+                        VerticalAlignment="Center"
+                        Kind="ArrowRight" />
                 </Button>
             </WrapPanel>
             <Separator
@@ -48,16 +77,17 @@
             <TreeView
                 x:Name="tree"
                 Grid.Row="1"
-                Margin="2,2,2,5" 
-                BorderThickness="0" AllowDrop="True"
-                ItemTemplate="{StaticResource RepositoryItemTemplateInTree}"
-                ItemsSource="{Binding RepositoryItems}"
-                KeyboardNavigation.TabIndex="5"
+                Margin="2,2,2,5"
+                controls_behaviors:MouseDoubleClick.Command="{Binding EditCommand}"
                 dd:DragDrop.IsDragSource="True"
                 dd:DragDrop.IsDropTarget="True"
                 dd:DragDrop.UseDefaultDragAdorner="True"
                 dd:DragDrop.UseDefaultEffectDataTemplate="False"
-                controls_behaviors:MouseDoubleClick.Command="{Binding EditCommand}">
+                AllowDrop="True"
+                BorderThickness="0"
+                ItemTemplate="{StaticResource RepositoryItemTemplateInTree}"
+                ItemsSource="{Binding RepositoryItems}"
+                KeyboardNavigation.TabIndex="5">
                 <i:Interaction.Behaviors>
                     <local:BindableSelectedItemBehavior SelectedItem="{Binding SelectedItem, Mode=TwoWay}" />
                 </i:Interaction.Behaviors>
@@ -95,19 +125,21 @@
                 LastChildFill="False">
                 <Button
                     Command="{Binding ImportCommand}"
-                    DockPanel.Dock="Right" KeyboardNavigation.TabIndex="6">
+                    DockPanel.Dock="Right"
+                    KeyboardNavigation.TabIndex="6">
                     <StackPanel Orientation="Horizontal">
-                    <iconpack:PackIconModern Kind="DiskUpload" VerticalAlignment="Center"/>
-                    <Label Content="Импорт ..." Padding="5 0"/>
-                </StackPanel>
+                        <iconpack:PackIconModern VerticalAlignment="Center" Kind="DiskUpload" />
+                        <Label Padding="5,0" Content="Импорт ..." />
+                    </StackPanel>
                 </Button>
                 <Button
                     Command="{Binding ExportCommand}"
-                    DockPanel.Dock="Right" KeyboardNavigation.TabIndex="7">
+                    DockPanel.Dock="Right"
+                    KeyboardNavigation.TabIndex="7">
                     <StackPanel Orientation="Horizontal">
-                    <iconpack:PackIconModern Kind="DiskDownload" VerticalAlignment="Center"/>
-                    <Label Content="Экспорт ..." Padding="5 0"/>
-                </StackPanel>
+                        <iconpack:PackIconModern VerticalAlignment="Center" Kind="DiskDownload" />
+                        <Label Padding="5,0" Content="Экспорт ..." />
+                    </StackPanel>
                 </Button>
             </DockPanel>
         </Grid>

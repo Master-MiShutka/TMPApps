@@ -1,0 +1,31 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="clr-namespace:TMP.UI.Controls.WPF">
+
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/ui.controls.wpf;component/Themes/Converters.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+
+    <Style TargetType="{x:Type controls:StretchingTreeViewItem}">
+        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+        <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled" />
+        <Style.Triggers>
+            <Trigger Property="ItemsControl.AlternationIndex" Value="1">
+                <Setter Property="Background" Value="WhiteSmoke" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style x:Key="TreeViewItemStyleWithFilter" TargetType="{x:Type controls:StretchingTreeViewItem}">
+        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+        <Setter Property="IsExpanded" Value="{Binding Path=IsExpanded, Mode=TwoWay}" />
+        <Setter Property="Visibility" Value="{Binding Path=IsMatch, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" />
+        <Style.Triggers>
+            <Trigger Property="ItemsControl.AlternationIndex" Value="1">
+                <Setter Property="Background" Value="WhiteSmoke" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+</ResourceDictionary>

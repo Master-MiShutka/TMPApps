@@ -30,32 +30,34 @@ namespace TMP.Wpf.CommonControls.ItemsFilter.Model {
         /// <summary>
         /// Get or set Name of filter.
         /// </summary>
-        public string Name {
-            get {
-                return name;
-            }
-            set {
-                if (name != value) {
+        public string Name
+        {
+            get => name;
+            set
+            {
+                if (name != value)
+                {
                     name = value;
-                    RaisePropertyChanged("Name");
+                    RaisePropertyChanged(nameof(Name));
                 }
             }
         }
         /// <summary>
         /// Get or set value, determines is filter IsMatch action include in parentCollection filter.
         /// </summary>
-        public bool IsActive {
-            get {
-                return isActive;
-            }
-            set {
-                if (isActive != value) {
+        public bool IsActive
+        {
+            get => isActive;
+            set
+            {
+                if (isActive != value)
+                {
                     isActive = value;
                     IDisposable defer = this.FilterPresenter == null ? null : this.FilterPresenter.DeferRefresh();
                     OnIsActiveChanged();
                     if (defer != null)
                         defer.Dispose();
-                    RaisePropertyChanged("IsActive");
+                    RaisePropertyChanged(nameof(IsActive));
                 }
             }
         }

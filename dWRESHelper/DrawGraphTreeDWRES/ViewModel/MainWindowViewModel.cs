@@ -1,15 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Globalization;
 using System.Reflection;
 using System.Windows;
-using System.Windows.Input;
-using Model = TMP.DWRES.Objects;
-
-using TMP.Shared;
 using TMP.DWRES.Graph;
+using TMP.Shared;
+using Model = TMP.DWRES.Objects;
 
 namespace TMP.DWRES.ViewModel
 {
@@ -124,13 +121,13 @@ namespace TMP.DWRES.ViewModel
         public ICollection<Model.Line> Lines
         {
             get { return _lines; }
-            set { SetProp<ICollection<Model.Line>>(ref _lines, value, "Lines"); }
+            set { SetProperty<ICollection<Model.Line>>(ref _lines, value, "Lines"); }
         }
 
         public ICollection<Model.Line> LinesWithNames
         {
             get { return _linesWithNames; }
-            set { SetProp<ICollection<Model.Line>>(ref _linesWithNames, value, "LinesWithNames"); }
+            set { SetProperty<ICollection<Model.Line>>(ref _linesWithNames, value, "LinesWithNames"); }
         }
 
         public string MainDescription
@@ -148,7 +145,7 @@ namespace TMP.DWRES.ViewModel
         public FiderGraph ModelGraph
         {
             get { return _modelgraph; }
-            set { SetProp<FiderGraph>(ref _modelgraph, value, "ModelGraph"); }
+            set { SetProperty<FiderGraph>(ref _modelgraph, value, "ModelGraph"); }
         }
 
         public TMP.DWRES.GUI.UserPreferences UserPrefs
@@ -159,7 +156,7 @@ namespace TMP.DWRES.ViewModel
         public string WaitText
         {
             get { return _waitText; }
-            set { SetProp<string>(ref _waitText, value, "WaitText"); }
+            set { SetProperty<string>(ref _waitText, value, "WaitText"); }
         }
         #region | Списки объектов DwRes |
 
@@ -229,7 +226,7 @@ namespace TMP.DWRES.ViewModel
             get { return _selectedEnergoSystem; }
             set
             {
-                SetProp<Model.EnergoSystem>(ref _selectedEnergoSystem, value, "SelectedEnergoSystem");
+                SetProperty<Model.EnergoSystem>(ref _selectedEnergoSystem, value, "SelectedEnergoSystem");
                 RaisePropertyChanged("Filials");
             }
         }
@@ -238,7 +235,7 @@ namespace TMP.DWRES.ViewModel
             get { return _selectedFider; }
             set
             {
-                SetProp<Model.Fider>(ref _selectedFider, value, "SelectedFider");
+                SetProperty<Model.Fider>(ref _selectedFider, value, "SelectedFider");
                 RaisePropertyChanged("TPs");
                 if (value != null)
                     BuildFiderGraph();
@@ -250,7 +247,7 @@ namespace TMP.DWRES.ViewModel
             get { return _selectedFilial; }
             set
             {
-                SetProp<Model.Filial>(ref _selectedFilial, value, "SelectedFilial");
+                SetProperty<Model.Filial>(ref _selectedFilial, value, "SelectedFilial");
                 RaisePropertyChanged("Reses");
             }
         }
@@ -259,7 +256,7 @@ namespace TMP.DWRES.ViewModel
             get { return _selectedRes; }
             set
             {
-                SetProp<Model.Res>(ref _selectedRes, value, "SelectedRes");
+                SetProperty<Model.Res>(ref _selectedRes, value, "SelectedRes");
                 RaisePropertyChanged("Substations");
             }
         }
@@ -268,7 +265,7 @@ namespace TMP.DWRES.ViewModel
             get { return _selectedSubstation; }
             set
             {
-                SetProp<Model.Substation>(ref _selectedSubstation, value, "SelectedSubstation");
+                SetProperty<Model.Substation>(ref _selectedSubstation, value, "SelectedSubstation");
                 _state = StateType.Loaded;
                 RaisePropertyChanged("State");
                 RaisePropertyChanged("Fiders");
@@ -281,7 +278,7 @@ namespace TMP.DWRES.ViewModel
             get { return _selectedTp; }
             set
             {
-                SetProp<Model.Tp>(ref _selectedTp, value, "SelectedTp");
+                SetProperty<Model.Tp>(ref _selectedTp, value, "SelectedTp");
             }
         }
         public StateType State
@@ -308,11 +305,11 @@ namespace TMP.DWRES.ViewModel
                     RaisePropertyChanged("SelectedSubstation");
                     RaisePropertyChanged("SelectedFider");
                 }
-                SetProp<StateType>(ref _state, value, "State");
+                SetProperty<StateType>(ref _state, value, "State");
             }
         }
         #endregion | Выбранные объекты DwRes |
 
-        #endregion Public Properties        
+        #endregion Public Properties
     }
 }

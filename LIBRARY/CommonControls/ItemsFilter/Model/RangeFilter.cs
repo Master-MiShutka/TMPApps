@@ -60,16 +60,16 @@ namespace TMP.Wpf.CommonControls.ItemsFilter.Model {
         /// </summary>
         public T? CompareFrom
         {
-            get {
-                return _compareFrom;
-            }
-            set {
-                if (!Object.Equals(_compareFrom, value)) {
+            get => _compareFrom;
+            set
+            {
+                if (!Object.Equals(_compareFrom, value))
+                {
                     _compareFrom = value;
                     RefreshIsActive();
                     OnIsActiveChanged();
-                    RaisePropertyChanged("CompareFrom");
-                 }
+                    RaisePropertyChanged(nameof(CompareFrom));
+                }
             }
         }
         /// <summary>
@@ -78,15 +78,15 @@ namespace TMP.Wpf.CommonControls.ItemsFilter.Model {
         /// </summary>
         public T? CompareTo
         {
-            get { return _compareTo; }
+            get => _compareTo;
             set
             {
                 if (!Object.Equals(_compareTo, value))
                 {
                     _compareTo = value;
-                    RefreshIsActive(); 
+                    RefreshIsActive();
                     OnIsActiveChanged();
-                    RaisePropertyChanged("CompareTo");
+                    RaisePropertyChanged(nameof(CompareTo));
                 }
             }
         }
@@ -110,14 +110,14 @@ namespace TMP.Wpf.CommonControls.ItemsFilter.Model {
                     e.Accepted = false;
                 else {
                     T value = getter(e.Item);
-                    e.Accepted = (Object.ReferenceEquals(_compareFrom, null)| value.CompareTo(_compareFrom) >= 0)
-                        && (Object.ReferenceEquals(_compareTo, null) | value.CompareTo(_compareTo) <= 0);
+                    e.Accepted = (_compareFrom is null | value.CompareTo(_compareFrom) >= 0)
+                        && (_compareTo is null | value.CompareTo(_compareTo) <= 0);
                 }
             }
         }
         private void RefreshIsActive()
         {
-            base.IsActive = !(Object.ReferenceEquals(_compareFrom, null) && Object.ReferenceEquals(_compareTo, null));
+            base.IsActive = !(_compareFrom is null && _compareTo is null);
 
         }
 
@@ -125,21 +125,13 @@ namespace TMP.Wpf.CommonControls.ItemsFilter.Model {
         #region IRangeFilter Members
 
         object IRangeFilter.CompareFrom {
-            get {
-                return CompareFrom;
-            }
-            set {
-                CompareFrom=(T?)value;
-            }
+            get => CompareFrom;
+            set => CompareFrom = (T?)value;
         }
 
         object IRangeFilter.CompareTo {
-            get {
-                return CompareFrom;
-            }
-            set {
-                CompareFrom = (T?)value;
-            }
+            get => CompareFrom;
+            set => CompareFrom = (T?)value;
         }
 
         #endregion

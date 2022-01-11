@@ -1,10 +1,10 @@
-﻿using System;
-using System.Drawing;
-using System.Runtime.InteropServices;
-using System.Runtime.InteropServices.ComTypes;
-
-namespace Microsoft.WindowsAPICodePack.Shell.Interop
+﻿namespace Microsoft.WindowsAPICodePack.Shell.Interop
 {
+    using System;
+    using System.Drawing;
+    using System.Runtime.InteropServices;
+    using System.Runtime.InteropServices.ComTypes;
+
     internal static class HandlerNativeMethods
     {
         [DllImport("user32.dll")]
@@ -33,8 +33,9 @@ namespace Microsoft.WindowsAPICodePack.Shell.Interop
         /// <param name="squareLength"></param>
         /// <param name="bitmapHandle"></param>
         /// <param name="bitmapType"></param>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#")]
-        void GetThumbnail(uint squareLength, out IntPtr bitmapHandle, out UInt32 bitmapType);
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "ToDo")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "ToDo")]
+        void GetThumbnail(uint squareLength, out IntPtr bitmapHandle, out uint bitmapType);
     }
 
     /// <summary>
@@ -56,7 +57,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.Interop
     /// <summary>
     /// Provides means by which to initialize with a stream.
     /// </summary>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix")]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "ToDo")]
     [ComVisible(true)]
     [Guid("b824b49d-22ac-4161-ac8a-9916e8fa3f7f")]
     [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
@@ -89,32 +90,40 @@ namespace Microsoft.WindowsAPICodePack.Shell.Interop
     [ComImport]
     [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     [Guid("fc4801a3-2ba9-11cf-a229-00aa003d7352")]
-    interface IObjectWithSite
+    internal interface IObjectWithSite
     {
         void SetSite([In, MarshalAs(UnmanagedType.IUnknown)] object pUnkSite);
+
         void GetSite(ref Guid riid, [MarshalAs(UnmanagedType.IUnknown)] out object ppvSite);
     }
 
     [ComImport]
     [Guid("00000114-0000-0000-C000-000000000046")]
     [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-    interface IOleWindow
+    internal interface IOleWindow
     {
         void GetWindow(out IntPtr phwnd);
+
         void ContextSensitiveHelp([MarshalAs(UnmanagedType.Bool)] bool fEnterMode);
     }
 
     [ComImport]
     [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     [Guid("8895b1c6-b41f-4c1c-a562-0d564250836f")]
-    interface IPreviewHandler
+    internal interface IPreviewHandler
     {
         void SetWindow(IntPtr hwnd, ref RECT rect);
+
         void SetRect(ref RECT rect);
+
         void DoPreview();
+
         void Unload();
+
         void SetFocus();
+
         void QueryFocus(out IntPtr phwnd);
+
         [PreserveSig]
         uint TranslateAccelerator(ref MSG pmsg);
     }
@@ -122,20 +131,23 @@ namespace Microsoft.WindowsAPICodePack.Shell.Interop
     [ComImport]
     [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     [Guid("fec87aaf-35f9-447a-adb7-20234491401a")]
-    interface IPreviewHandlerFrame
+    internal interface IPreviewHandlerFrame
     {
         void GetWindowContext(IntPtr pinfo);
+
         [PreserveSig]
         uint TranslateAccelerator(ref MSG pmsg);
-    };
+    }
 
     [ComImport]
     [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     [Guid("8327b13c-b63f-4b24-9b8a-d010dcc3f599")]
-    interface IPreviewHandlerVisuals
+    internal interface IPreviewHandlerVisuals
     {
         void SetBackgroundColor(COLORREF color);
+
         void SetFont(ref LogFont plf);
+
         void SetTextColor(COLORREF color);
     }
     #endregion
@@ -166,16 +178,11 @@ namespace Microsoft.WindowsAPICodePack.Shell.Interop
     internal struct COLORREF
     {
         public uint Dword;
-        public Color Color
-        {
-            get
-            {
-                return Color.FromArgb(
-                    (int)(0x000000FFU & Dword),
-                    (int)(0x0000FF00U & Dword) >> 8,
-                    (int)(0x00FF0000U & Dword) >> 16);
-            }
-        }
+
+        public Color Color => Color.FromArgb(
+                    (int)(0x000000FFU & this.Dword),
+                    (int)(0x0000FF00U & this.Dword) >> 8,
+                    (int)(0x00FF0000U & this.Dword) >> 16);
     }
 
     [StructLayout(LayoutKind.Sequential)]
@@ -197,7 +204,11 @@ namespace Microsoft.WindowsAPICodePack.Shell.Interop
         public readonly int top;
         public readonly int right;
         public readonly int bottom;
-        public Rectangle ToRectangle() { return Rectangle.FromLTRB(left, top, right, bottom); }
+
+        public Rectangle ToRectangle()
+        {
+            return Rectangle.FromLTRB(this.left, this.top, this.right, this.bottom);
+        }
     }
 
     #endregion
@@ -222,5 +233,4 @@ namespace Microsoft.WindowsAPICodePack.Shell.Interop
         /// </summary>
         HasAlphaChannel = 2,
     }
-
 }

@@ -1,10 +1,10 @@
-//Copyright (c) Microsoft Corporation.  All rights reserved.
+// Copyright (c) Microsoft Corporation.  All rights reserved.
 
 namespace Microsoft.WindowsAPICodePack.Dialogs
 {
     /// <summary>
     /// Indicates the various buttons and options clicked by the user on the task dialog.
-    /// </summary>        
+    /// </summary>
     public enum TaskDialogResult
     {
         /// <summary>

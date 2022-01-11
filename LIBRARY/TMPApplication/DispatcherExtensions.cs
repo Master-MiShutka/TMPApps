@@ -1,18 +1,22 @@
-﻿using System;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Threading;
-
-namespace TMPApplication
+﻿namespace TMPApplication
 {
+    using System;
+    using System.Threading.Tasks;
+    using System.Windows;
+    using System.Windows.Threading;
+
     public static class DispatcherExtensions
     {
         public static MessageBoxResult InUi(Func<MessageBoxResult> func)
         {
             if (Application.Current == null)
+            {
                 return func();
+            }
+
             return Application.Current.Dispatcher.Do(func);
         }
+
         public static void InUi(Action action)
         {
             if (Application.Current == null)
@@ -38,17 +42,18 @@ namespace TMPApplication
         {
             if (!dispatcher.CheckAccess())
             {
-                dispatcher.BeginInvoke(action, DispatcherPriority.Background);
+                dispatcher.Invoke(action);
                 return;
             }
 
             action();
         }
+
         private static MessageBoxResult Do(this Dispatcher dispatcher, Func<MessageBoxResult> func)
         {
             if (!dispatcher.CheckAccess())
             {
-                return (MessageBoxResult)dispatcher.Invoke(func, DispatcherPriority.Background);
+                return (MessageBoxResult)dispatcher.Invoke(func);
             }
 
             return func();
@@ -95,6 +100,7 @@ namespace TMPApplication
             {
                 completionSource.SetException(ex);
             }
+
             return completionSource.Task;
         }
     }

@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace WPFHexaEditor.Core
+﻿namespace WPFHexaEditor.Core
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+
     /// <summary>
     /// ByteAction used for ByteModified class
     /// </summary>
@@ -19,7 +19,7 @@ namespace WPFHexaEditor.Core
         /// <summary>
         /// Used in ByteProvider for get list
         /// </summary>
-        All 
+        All,
     }
 
     /// <summary>
@@ -28,7 +28,7 @@ namespace WPFHexaEditor.Core
     public enum FirstColor
     {
         HexByteData,
-        StringByteData
+        StringByteData,
     }
 
     /// <summary>
@@ -38,7 +38,7 @@ namespace WPFHexaEditor.Core
     {
         Byte,
         HexaString,
-        ASCIIString
+        ASCIIString,
     }
 
     /// <summary>
@@ -48,7 +48,7 @@ namespace WPFHexaEditor.Core
     {
         FirstChar,
         SecondChar,
-        NextPosition
+        NextPosition,
     }
 
     public enum ByteToString
@@ -57,10 +57,11 @@ namespace WPFHexaEditor.Core
         /// Build-in convertion mode. (recommended)
         /// </summary>
         ByteToCharProcess,
+
         /// <summary>
         /// System.Text.Encoding.ASCII string encoder
         /// </summary>
-        ASCIIEncoding
+        ASCIIEncoding,
     }
 
     /// <summary>
@@ -73,7 +74,7 @@ namespace WPFHexaEditor.Core
         Bookmark,
         SelectionStart,
         ByteModified,
-        ByteDeleted
+        ByteDeleted,
     }
 
     /// <summary>
@@ -83,7 +84,7 @@ namespace WPFHexaEditor.Core
     {
         File,
         MemoryStream,
-        Nothing
+        Nothing,
     }
 
     /// <summary>
@@ -92,6 +93,6 @@ namespace WPFHexaEditor.Core
     public enum CharacterTable
     {
         ASCII,
-        TBLFile
+        TBLFile,
     }
 }

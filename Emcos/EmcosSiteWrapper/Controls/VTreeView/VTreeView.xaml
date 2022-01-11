@@ -1,12 +1,13 @@
-﻿<ListBox x:Class="TMP.Work.Emcos.Controls.VTreeView.VTreeView"
-         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-         xmlns:local="clr-namespace:TMP.Work.Emcos.Controls.VTreeView"
-         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-         d:DesignHeight="300"
-         d:DesignWidth="300"
-         mc:Ignorable="d">
+﻿<ListBox
+    x:Class="TMP.Work.Emcos.Controls.VTreeView.VTreeView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:TMP.Work.Emcos.Controls.VTreeView"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:DesignHeight="300"
+    d:DesignWidth="300"
+    mc:Ignorable="d">
     <ListBox.Resources>
         <local:ConvertLevelToIndent x:Key="ConvertLevelToIndent" Length="16" />
 
@@ -18,15 +19,17 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type ListBoxItem}">
-                        <Border x:Name="Bd"
-                                Background="{TemplateBinding Background}"
-                                BorderBrush="{TemplateBinding BorderBrush}"
-                                BorderThickness="{TemplateBinding BorderThickness}"
-                                Padding="{TemplateBinding Padding}"
-                                SnapsToDevicePixels="true">
-                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                              SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                        <Border
+                            x:Name="Bd"
+                            Padding="{TemplateBinding Padding}"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            SnapsToDevicePixels="true">
+                            <ContentPresenter
+                                HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsSelected" Value="True">
@@ -62,13 +65,14 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type local:VTreeView}">
-                        <Border x:Name="Bd"
-                                Background="{TemplateBinding Background}"
-                                BorderBrush="{TemplateBinding BorderBrush}"
-                                BorderThickness="{TemplateBinding BorderThickness}"
-                                Padding="1"
-                                SnapsToDevicePixels="true">
-                            <ScrollViewer Focusable="false" Padding="{TemplateBinding Padding}">
+                        <Border
+                            x:Name="Bd"
+                            Padding="1"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            SnapsToDevicePixels="true">
+                            <ScrollViewer Padding="{TemplateBinding Padding}" Focusable="false">
                                 <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
                             </ScrollViewer>
                         </Border>
@@ -88,16 +92,18 @@
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">
                             <Border Width="{Binding Path=Level, Converter={StaticResource ConvertLevelToIndent}}" />
-                            <ToggleButton x:Name="tb"
-                                          ClickMode="Press"
-                                          IsChecked="{Binding Path=IsExpanded}"
-                                          IsTabStop="False"
-                                          Style="{DynamicResource ExpandCollapsePlusMinusToggleStyle}" />
+                            <ToggleButton
+                                x:Name="tb"
+                                ClickMode="Press"
+                                IsChecked="{Binding Path=IsExpanded}"
+                                IsTabStop="False"
+                                Style="{DynamicResource ExpandCollapsePlusMinusToggleStyle}" />
                             <Grid x:Name="myGrid">
-                                <ContentPresenter x:Name="myTextBlock"
-                                                  HorizontalAlignment="Stretch"
-                                                  VerticalAlignment="Center"
-                                                  Content="{Binding}" />
+                                <ContentPresenter
+                                    x:Name="myTextBlock"
+                                    HorizontalAlignment="Stretch"
+                                    VerticalAlignment="Center"
+                                    Content="{Binding}" />
                             </Grid>
                         </StackPanel>
                         <DataTemplate.Triggers>
@@ -110,4 +116,4 @@
             </Setter>
         </Style>
     </ListBox.Resources>
-</ListBox>
+</ListBox>

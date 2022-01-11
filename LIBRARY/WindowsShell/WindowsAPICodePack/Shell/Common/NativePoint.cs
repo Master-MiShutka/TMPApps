@@ -1,7 +1,7 @@
-﻿using System.Runtime.InteropServices;
-
-namespace Microsoft.WindowsAPICodePack.Shell
+﻿namespace Microsoft.WindowsAPICodePack.Shell
 {
+    using System.Runtime.InteropServices;
+
     /// <summary>
     /// A wrapper for the native POINT structure.
     /// </summary>
@@ -16,18 +16,18 @@ namespace Microsoft.WindowsAPICodePack.Shell
         public NativePoint(int x, int y)
             : this()
         {
-            X = x;
-            Y = y;
+            this.X = x;
+            this.Y = y;
         }
-        
+
         /// <summary>
         /// The X coordinate of the point
-        /// </summary>        
+        /// </summary>
         public int X { get; set; }
 
         /// <summary>
         /// The Y coordinate of the point
-        /// </summary>                                
+        /// </summary>
         public int Y { get; set; }
 
         /// <summary>
@@ -69,10 +69,9 @@ namespace Microsoft.WindowsAPICodePack.Shell
         /// <returns>Hash code for the NativePoint</returns>
         public override int GetHashCode()
         {
-            int hash = X.GetHashCode();
-            hash = hash * 31 + Y.GetHashCode();
+            int hash = this.X.GetHashCode();
+            hash = (hash * 31) + this.Y.GetHashCode();
             return hash;
         }
     }
-
 }

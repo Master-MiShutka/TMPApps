@@ -50,8 +50,8 @@ namespace TMP.Wpf.CommonControls.ItemsFilter.View {
         /// </summary>
         public T Model
         {
-            get { return (T)GetValue(ModelProperty); }
-            set { SetValue(ModelProperty, value); }
+            get => (T)GetValue(ModelProperty);
+            set => SetValue(ModelProperty, value);
         }
 
         /// <summary>

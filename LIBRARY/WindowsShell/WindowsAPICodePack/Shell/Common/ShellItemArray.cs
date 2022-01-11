@@ -1,19 +1,19 @@
-﻿//Copyright (c) Microsoft Corporation.  All rights reserved.
-
-using System;
-using System.Collections.Generic;
-using Microsoft.WindowsAPICodePack.Shell.PropertySystem;
-using MS.WindowsAPICodePack.Internal;
+﻿// Copyright (c) Microsoft Corporation.  All rights reserved.
 
 namespace Microsoft.WindowsAPICodePack.Shell
 {
+    using System;
+    using System.Collections.Generic;
+    using Microsoft.WindowsAPICodePack.Shell.PropertySystem;
+    using MS.WindowsAPICodePack.Internal;
+
     internal class ShellItemArray : IShellItemArray
     {
-        List<IShellItem> shellItemsList = new List<IShellItem>();
+        private List<IShellItem> shellItemsList = new List<IShellItem>();
 
         internal ShellItemArray(IShellItem[] shellItems)
         {
-            shellItemsList.AddRange(shellItems);
+            this.shellItemsList.AddRange(shellItems);
         }
 
         #region IShellItemArray Members
@@ -40,7 +40,7 @@ namespace Microsoft.WindowsAPICodePack.Shell
 
         public HResult GetCount(out uint pdwNumItems)
         {
-            pdwNumItems = (uint)shellItemsList.Count;
+            pdwNumItems = (uint)this.shellItemsList.Count;
             return HResult.Ok;
         }
 
@@ -48,9 +48,9 @@ namespace Microsoft.WindowsAPICodePack.Shell
         {
             int index = (int)dwIndex;
 
-            if (index < shellItemsList.Count)
+            if (index < this.shellItemsList.Count)
             {
-                ppsi = shellItemsList[index];
+                ppsi = this.shellItemsList[index];
                 return HResult.Ok;
             }
             else

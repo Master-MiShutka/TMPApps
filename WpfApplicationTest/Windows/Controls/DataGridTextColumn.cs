@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-
-namespace WpfApplicationTest.Windows.Controls
+﻿namespace WpfApplicationTest.Windows.Controls
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+    using System.Windows;
+
     /// <summary>
     /// A DataGrid text column using default Modern UI element styles.
     /// </summary>

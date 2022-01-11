@@ -16,36 +16,61 @@ using System.Net;
 namespace TMP.ARMTES
 {
     using Model;
+    public enum ProfileType
+    {
+        [Display(Name = "текущие показания")]
+        Current = 1,
+        [Display(Name = "показания на начало суток")]
+        Days = 2,
+        [Display(Name = "показания на начало месяца")]
+        Months = 3
+    }
+
+    public enum SectorType
+    {
+        [Display(Name = "Аскуэ-быт")]
+        HHS,
+        [Display(Name = "Мелкомоторный сектор")]
+        [Description("СДСП")]
+        SES
+    }
+
     public sealed class ArmTESSiteWrapper
     {
         #region Fields
+        protected static readonly NLog.Logger _logger = NLog.LogManager.GetCurrentClassLogger();
+
+        private const string chromeUserAgent = "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36";
+
+        private const string firefoxUserAgent = "Mozilla/5.0 (Windows NT 6.3; rv:36.0) Gecko/20100101 Firefox/36.0";
+
+        private const string ieUserAgent = "Mozilla/5.0 (compatible, MSIE 11, Windows NT 6.3; Trident/7.0; rv:11.0) like Gecko";
+
+        private static Object theLock = new Object();
+
         /// <summary>
         /// Куки для авторизация
         /// </summary>
         private Cookie aspxauth = new Cookie(".ASPXAUTH", string.Empty);
         /// <summary>
-        /// Куки для хранения значения выбранного сектора
-        /// </summary>
-        private Cookie userSettings = new Cookie("UserSettings", string.Empty);  
-        /// <summary>
         /// Логин
         /// </summary>
         private string login;
+
         /// <summary>
         /// Пароль
         /// </summary>
         private string password;
+
         /// <summary>
         /// Адрес сайта, без завершающего /
         /// </summary>
         private string siteUrl;
 
-        private static Object theLock = new Object();
-
-        private const string chromeUserAgent = "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36";
-        private const string firefoxUserAgent = "Mozilla/5.0 (Windows NT 6.3; rv:36.0) Gecko/20100101 Firefox/36.0";
-        private const string ieUserAgent = "Mozilla/5.0 (compatible, MSIE 11, Windows NT 6.3; Trident/7.0; rv:11.0) like Gecko";
-
+        /// <summary>
+        /// Куки для хранения значения выбранного сектора
+        /// </summary>
+        private Cookie userSettings = new Cookie("UserSettings", string.Empty);  
         #endregion
 
         #region Constructor
@@ -72,18 +97,6 @@ namespace TMP.ARMTES
         #endregion
 
         #region Private and Internal methods
-
-        private void ConfigureRequest(ref HttpWebRequest httpWebRequest)
-        {
-            httpWebRequest.Timeout = this.TimeOut * 1000;
-            httpWebRequest.ReadWriteTimeout = this.TimeOut * 1000;
-            httpWebRequest.Date = DateTime.Now;            
-            httpWebRequest.Accept = "text/html, application/xhtml+xml, */*";
-            httpWebRequest.UserAgent = ieUserAgent;
-            httpWebRequest.AllowAutoRedirect = false;
-            httpWebRequest.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
-            httpWebRequest.KeepAlive = true;
-        }
 
         /// <summary>
         /// Авторизация и получение "печенек"
@@ -139,14 +152,14 @@ namespace TMP.ARMTES
             }
             catch (TimeoutException ex)
             {
-                App.LogException(ex);
+                _logger?.Error(ex);
                 LastStatusCode = HttpStatusCode.RequestTimeout;
                 LastException = ex;
                 return false;
             }
             catch (WebException we)
             {
-                App.LogException(we);
+                _logger?.Error(we);
                 if (we.Status == WebExceptionStatus.Timeout)
                     LastStatusCode = HttpStatusCode.RequestTimeout;
                 else
@@ -156,17 +169,28 @@ namespace TMP.ARMTES
             }
             catch (Exception ex)
             {
-                App.LogException(ex);
+                _logger?.Error(ex);
                 LastStatusCode = HttpStatusCode.BadRequest;
                 LastException = ex;
                 return false;
             }
             finally
             {
-                if (httpWebResponse != null ) httpWebResponse.Close();
+                if (httpWebResponse != null) httpWebResponse.Close();
             }
         }
 
+        private void ConfigureRequest(ref HttpWebRequest httpWebRequest)
+        {
+            httpWebRequest.Timeout = this.TimeOut * 1000;
+            httpWebRequest.ReadWriteTimeout = this.TimeOut * 1000;
+            httpWebRequest.Date = DateTime.Now;            
+            httpWebRequest.Accept = "text/html, application/xhtml+xml, */*";
+            httpWebRequest.UserAgent = ieUserAgent;
+            httpWebRequest.AllowAutoRedirect = false;
+            httpWebRequest.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
+            httpWebRequest.KeepAlive = true;
+        }
         private string ShortDate(DateTime date)
         {
             return date.ToString("dd.MM.yyyy");
@@ -236,14 +260,14 @@ namespace TMP.ARMTES
             }
             catch (TimeoutException ex)
             {
-                App.LogException(ex);
+                _logger?.Error(ex);
                 LastStatusCode = HttpStatusCode.RequestTimeout;
                 LastException = ex;
                 return false;
             }
             catch (WebException we)
             {
-                App.LogException(we);
+                _logger?.Error(we);
                 if (we.Status == WebExceptionStatus.Timeout)
                     LastStatusCode = HttpStatusCode.RequestTimeout;
                 else
@@ -253,7 +277,7 @@ namespace TMP.ARMTES
             }
             catch (Exception ex)
             {
-                App.LogException(ex);
+                _logger?.Error(ex);
                 LastStatusCode = HttpStatusCode.BadRequest;
                 LastException = ex;
                 return false;
@@ -263,6 +287,192 @@ namespace TMP.ARMTES
                 if (httpWebResponse != null) httpWebResponse.Close();
             }
         }
+        public PostTariffIndications CounterData(long flatId, DateTime fromDate, DateTime toDate, ProfileType profile, byte tariffNumber)
+        {
+            PostTariffIndications result = null;
+
+            string url = @"{0}/ARMTES/api/SingleMeterApi/PostTariffIndications";
+            url = string.Format(url, this.siteUrl);
+            string domain = new Uri(url).Host;
+            string postData = @"""FlatId"":""{0}"",""DateFrom"":""{1}"",""DateTo"":""{2}"",""ProfileId"":""{3}"",""TariffNumber"":""{4}"",""SectorTypeId"":""SES""";
+            postData = string.Format(postData, flatId, ShortDate(fromDate), ShortDate(toDate), (byte)profile, tariffNumber);
+            postData = "{" + postData + "}";
+
+            HttpWebRequest httpWebRequest = WebRequest.Create(url) as HttpWebRequest;
+            ConfigureRequest(ref httpWebRequest);
+            httpWebRequest.Method = "POST";
+            httpWebRequest.Accept = "*/*";
+            httpWebRequest.Headers.Add("X-Requested-With: XMLHttpRequest");
+            // передаём куки
+            httpWebRequest.CookieContainer = new CookieContainer(4);
+            httpWebRequest.CookieContainer.Add(this.userSettings);
+            httpWebRequest.CookieContainer.Add(this.aspxauth);
+            httpWebRequest.CookieContainer.Add(new Cookie("SmallEngine_SingleMeterTab", "1") { Domain = domain });
+            httpWebRequest.CookieContainer.Add(new Cookie("SmallObjects_AllObjectsTab", "1") { Domain = domain });
+
+            byte[] buffer = Encoding.ASCII.GetBytes(postData);
+            httpWebRequest.ContentLength = buffer.Length;
+            httpWebRequest.ContentType = "application/json";
+            using (Stream reqStream = httpWebRequest.GetRequestStream())
+            {
+                reqStream.Write(buffer, 0, buffer.Length);
+                reqStream.Close();
+            }
+
+            HttpWebResponse httpWebResponse = null;
+            try
+            {
+                httpWebResponse = (HttpWebResponse)httpWebRequest.GetResponse();
+                // сохраняем состояние ответа
+                LastStatusCode = httpWebResponse.StatusCode;
+
+                if (httpWebResponse.StatusCode == HttpStatusCode.OK)
+                {
+                    // получаем результат
+                    if (httpWebResponse.ContentType == "application/json; charset=utf-8")
+                    {
+                        using (Stream responseStream = httpWebResponse.GetResponseStream())
+                        {
+                            using (StreamReader streamReader = new StreamReader(responseStream, new UTF8Encoding()))
+                            {
+                                string json = streamReader.ReadToEnd();
+                                System.Diagnostics.Debugger.Break();
+
+                                result = System.Text.Json.JsonSerializer.Deserialize<PostTariffIndications>(json);
+                            }
+                        }
+                    }
+                    else
+                        throw new InvalidDataException("Invalid response content type");
+                }
+                LastException = null;
+                return result;
+            }
+            catch (TimeoutException ex)
+            {
+                _logger?.Error(ex);
+                LastStatusCode = HttpStatusCode.RequestTimeout;
+                LastException = ex;
+                return null;
+            }
+            catch (WebException we)
+            {
+                _logger?.Error(we);
+                if (we.Status == WebExceptionStatus.Timeout)
+                    LastStatusCode = HttpStatusCode.RequestTimeout;
+                else
+                    LastStatusCode = HttpStatusCode.BadRequest;
+                LastException = we;
+                return null;
+            }
+            catch (Exception ex)
+            {
+                _logger?.Error(ex);
+                LastStatusCode = HttpStatusCode.BadRequest;
+                LastException = ex;
+                return null;
+            }
+            finally
+            {
+                if (httpWebResponse != null) httpWebResponse.Close();
+            }
+        }
+
+        /// <summary>
+        /// История сеансов связи с устройством
+        /// </summary>
+        /// <param name="deviceId">Идентификатор устройства</param>
+        /// <returns></returns>
+        public DeviceSessionsData GetDeviceSessionHistory(long deviceId)
+        {
+            DeviceSessionsData result = null;
+
+            string url = @"{0}/ARMTES/api/DeviceSessionApi/GetDeviceSessionHistory'";
+            url = string.Format(url, this.siteUrl);
+            string domain = new Uri(url).Host;
+            string postData = @"{""DeviceId"":""{0}""}";
+            postData = string.Format(postData, deviceId);
+
+            HttpWebRequest httpWebRequest = WebRequest.Create(url) as HttpWebRequest;
+            ConfigureRequest(ref httpWebRequest);
+            httpWebRequest.Method = "POST";
+            httpWebRequest.Accept = "*/*";
+            httpWebRequest.Headers.Add("X-Requested-With: XMLHttpRequest");
+            // передаём куки
+            httpWebRequest.CookieContainer = new CookieContainer(4);
+            httpWebRequest.CookieContainer.Add(this.userSettings);
+            httpWebRequest.CookieContainer.Add(this.aspxauth);
+            httpWebRequest.CookieContainer.Add(new Cookie("SmallEngine_SingleMeterTab", "1") { Domain = domain });
+            httpWebRequest.CookieContainer.Add(new Cookie("SmallObjects_AllObjectsTab", "1") { Domain = domain });
+
+            byte[] buffer = Encoding.ASCII.GetBytes(postData);
+            httpWebRequest.ContentLength = buffer.Length;
+            httpWebRequest.ContentType = "application/json";
+            using (Stream reqStream = httpWebRequest.GetRequestStream())
+            {
+                reqStream.Write(buffer, 0, buffer.Length);
+                reqStream.Close();
+            }
+
+            HttpWebResponse httpWebResponse = null;
+            try
+            {
+                httpWebResponse = (HttpWebResponse)httpWebRequest.GetResponse();
+                // сохраняем состояние ответа
+                LastStatusCode = httpWebResponse.StatusCode;
+
+                if (httpWebResponse.StatusCode == HttpStatusCode.OK)
+                {
+                    // получаем результат
+                    if (httpWebResponse.ContentType == "application/json; charset=utf-8")
+                    {
+                        using (Stream responseStream = httpWebResponse.GetResponseStream())
+                        {
+                            using (StreamReader streamReader = new StreamReader(responseStream, new UTF8Encoding()))
+                            {
+                                string json = streamReader.ReadToEnd();
+                                System.Diagnostics.Debugger.Break();
+
+                                result = System.Text.Json.JsonSerializer.Deserialize<DeviceSessionsData>(json);
+                            }
+                        }
+                    }
+                    else
+                        throw new InvalidDataException("Invalid response content type");
+                }
+                LastException = null;
+                return result;
+            }
+            catch (TimeoutException ex)
+            {
+                _logger?.Error(ex);
+                LastStatusCode = HttpStatusCode.RequestTimeout;
+                LastException = ex;
+                return null;
+            }
+            catch (WebException we)
+            {
+                _logger?.Error(we);
+                if (we.Status == WebExceptionStatus.Timeout)
+                    LastStatusCode = HttpStatusCode.RequestTimeout;
+                else
+                    LastStatusCode = HttpStatusCode.BadRequest;
+                LastException = we;
+                return null;
+            }
+            catch (Exception ex)
+            {
+                _logger?.Error(ex);
+                LastStatusCode = HttpStatusCode.BadRequest;
+                LastException = ex;
+                return null;
+            }
+            finally
+            {
+                if (httpWebResponse != null) httpWebResponse.Close();
+            }
+        }
+
         /// <summary>
         /// Возвращает список дочерних объектов СДСП указанного объекта
         /// </summary>
@@ -311,8 +521,7 @@ namespace TMP.ARMTES
                                 string json = streamReader.ReadToEnd();
                                 //System.Diagnostics.Debugger.Break();
 
-                                System.Web.Script.Serialization.JavaScriptSerializer ser = new System.Web.Script.Serialization.JavaScriptSerializer();
-                                elements = ser.Deserialize<List<ArmtesElement>>(json);
+                                elements = System.Text.Json.JsonSerializer.Deserialize<List<ArmtesElement>>(json);
                             }
                         }
                     }
@@ -325,21 +534,21 @@ namespace TMP.ARMTES
             }
             catch (TimeoutException ex)
             {
-                App.LogException(ex);
+                _logger?.Error(ex);
                 LastStatusCode = HttpStatusCode.RequestTimeout;
                 LastException = ex;
                 return null;
             }
             catch (WebException we)
             {
-                App.LogException(we);
+                _logger?.Error(we);
                 LastStatusCode = HttpStatusCode.InternalServerError;
                 LastException = we;
                 return null;
             }
             catch (Exception ex)
             {
-                App.LogException(ex);
+                _logger?.Error(ex);
                 LastStatusCode = HttpStatusCode.BadRequest;
                 LastException = ex;
                 return null;
@@ -348,6 +557,229 @@ namespace TMP.ARMTES
             {
                 if (httpWebResponse != null) httpWebResponse.Close();
             }    
+        }
+
+        public PageResult<EnterpriseViewItem> GetEnterprises()
+        {
+            PageResult<EnterpriseViewItem> result = null;
+
+            string url = @"{0}/ARMTES/api/SmallEngineApi/GetEnterprises";
+            url = string.Format(url, this.siteUrl);
+
+            HttpWebRequest httpWebRequest = WebRequest.Create(url) as HttpWebRequest;
+            ConfigureRequest(ref httpWebRequest);
+            httpWebRequest.Method = "GET";
+            httpWebRequest.Accept = "*/*";
+            httpWebRequest.Headers.Add("X-Requested-With: XMLHttpRequest");
+
+
+            HttpWebResponse httpWebResponse = null;
+            try
+            {
+                httpWebResponse = (HttpWebResponse)httpWebRequest.GetResponse();
+                // сохраняем состояние ответа
+                LastStatusCode = httpWebResponse.StatusCode;
+
+                if (httpWebResponse.StatusCode == HttpStatusCode.OK)
+                {
+                    // получаем результат
+                    if (httpWebResponse.ContentType == "application/json; charset=utf-8")
+                    {
+                        using (Stream responseStream = httpWebResponse.GetResponseStream())
+                        {
+                            using (StreamReader streamReader = new StreamReader(responseStream, new UTF8Encoding()))
+                            {
+                                string json = streamReader.ReadToEnd();
+                                //System.Diagnostics.Debugger.Break();
+
+                                result = System.Text.Json.JsonSerializer.Deserialize<PageResult<EnterpriseViewItem>>(json);
+                            }
+                        }
+                    }
+                    else
+                        throw new InvalidDataException("Invalid response content type");
+                }
+                LastException = null;
+                return result;
+
+            }
+            catch (TimeoutException ex)
+            {
+                _logger?.Error(ex);
+                LastStatusCode = HttpStatusCode.RequestTimeout;
+                LastException = ex;
+                return null;
+            }
+            catch (WebException we)
+            {
+                _logger?.Error(we);
+                LastStatusCode = HttpStatusCode.InternalServerError;
+                LastException = we;
+                return null;
+            }
+            catch (Exception ex)
+            {
+                _logger?.Error(ex);
+                LastStatusCode = HttpStatusCode.BadRequest;
+                LastException = ex;
+                return null;
+            }
+            finally
+            {
+                if (httpWebResponse != null) httpWebResponse.Close();
+            }
+        }
+
+        public PageResult<ExportPersonalAccountViewItem> GetPersonalAccounts(string enterprise = "", SectorType sectorType = SectorType.SES)
+        {
+            PageResult<ExportPersonalAccountViewItem> result = null;
+
+            string url = @"{0}/ARMTES/api/PersonalAccountsApi/GetPersonalAccounts?";
+            url = string.Format(url, this.siteUrl);
+            string queryData = "enterprise={0}&sectorTypeId={1}";
+            queryData = string.Format(queryData, enterprise, sectorType);
+
+            url = url + queryData;
+
+            HttpWebRequest httpWebRequest = WebRequest.Create(url) as HttpWebRequest;
+            ConfigureRequest(ref httpWebRequest);
+            httpWebRequest.Method = "GET";
+            httpWebRequest.Accept = "*/*";
+            httpWebRequest.Headers.Add("X-Requested-With: XMLHttpRequest");
+
+
+            HttpWebResponse httpWebResponse = null;
+            try
+            {
+                httpWebResponse = (HttpWebResponse)httpWebRequest.GetResponse();
+                // сохраняем состояние ответа
+                LastStatusCode = httpWebResponse.StatusCode;
+
+                if (httpWebResponse.StatusCode == HttpStatusCode.OK)
+                {
+                    // получаем результат
+                    if (httpWebResponse.ContentType == "application/json; charset=utf-8")
+                    {
+                        using (Stream responseStream = httpWebResponse.GetResponseStream())
+                        {
+                            using (StreamReader streamReader = new StreamReader(responseStream, new UTF8Encoding()))
+                            {
+                                string json = streamReader.ReadToEnd();
+                                //System.Diagnostics.Debugger.Break();
+
+                                result = System.Text.Json.JsonSerializer.Deserialize<PageResult<ExportPersonalAccountViewItem>>(json);
+                            }
+                        }
+                    }
+                    else
+                        throw new InvalidDataException("Invalid response content type");
+                }
+                LastException = null;
+                return result;
+
+            }
+            catch (TimeoutException ex)
+            {
+                _logger?.Error(ex);
+                LastStatusCode = HttpStatusCode.RequestTimeout;
+                LastException = ex;
+                return null;
+            }
+            catch (WebException we)
+            {
+                _logger?.Error(we);
+                LastStatusCode = HttpStatusCode.InternalServerError;
+                LastException = we;
+                return null;
+            }
+            catch (Exception ex)
+            {
+                _logger?.Error(ex);
+                LastStatusCode = HttpStatusCode.BadRequest;
+                LastException = ex;
+                return null;
+            }
+            finally
+            {
+                if (httpWebResponse != null) httpWebResponse.Close();
+            }
+        }
+
+        public PageResult<AllTariffsExportIndicationViewItem> GetSmallEngineExportIndications(DateTime date, string enterprise = "")
+        {
+            string dateAsString = date.ToString("d.M.yyyy", CultureInfo.InvariantCulture);
+
+            PageResult<AllTariffsExportIndicationViewItem> result = null;
+
+            string url = @"{0}/ARMTES/api/IndicationsExportApi/GetSmallEngineExportIndications?";
+            url = string.Format(url, this.siteUrl);
+            string queryData = "date={0}&enterprise={1}";
+            queryData = string.Format(queryData, dateAsString, enterprise);
+
+            url = url + queryData;
+
+            HttpWebRequest httpWebRequest = WebRequest.Create(url) as HttpWebRequest;
+            ConfigureRequest(ref httpWebRequest);
+            httpWebRequest.Method = "GET";
+            httpWebRequest.Accept = "*/*";
+            httpWebRequest.Headers.Add("X-Requested-With: XMLHttpRequest");
+
+
+            HttpWebResponse httpWebResponse = null;
+            try
+            {
+                httpWebResponse = (HttpWebResponse)httpWebRequest.GetResponse();
+                // сохраняем состояние ответа
+                LastStatusCode = httpWebResponse.StatusCode;
+
+                if (httpWebResponse.StatusCode == HttpStatusCode.OK)
+                {
+                    // получаем результат
+                    if (httpWebResponse.ContentType == "application/json; charset=utf-8")
+                    {
+                        using (Stream responseStream = httpWebResponse.GetResponseStream())
+                        {
+                            using (StreamReader streamReader = new StreamReader(responseStream, new UTF8Encoding()))
+                            {
+                                string json = streamReader.ReadToEnd();
+                                //System.Diagnostics.Debugger.Break();
+
+                                result = System.Text.Json.JsonSerializer.Deserialize<PageResult<AllTariffsExportIndicationViewItem>>(json);
+                            }
+                        }
+                    }
+                    else
+                        throw new InvalidDataException("Invalid response content type");
+                }
+                LastException = null;
+                return result;
+
+            }
+            catch (TimeoutException ex)
+            {
+                _logger?.Error(ex);
+                LastStatusCode = HttpStatusCode.RequestTimeout;
+                LastException = ex;
+                return null;
+            }
+            catch (WebException we)
+            {
+                _logger?.Error(we);
+                LastStatusCode = HttpStatusCode.InternalServerError;
+                LastException = we;
+                return null;
+            }
+            catch (Exception ex)
+            {
+                _logger?.Error(ex);
+                LastStatusCode = HttpStatusCode.BadRequest;
+                LastException = ex;
+                return null;
+            }
+            finally
+            {
+                if (httpWebResponse != null) httpWebResponse.Close();
+            }
         }
 
         /// <summary>
@@ -418,14 +850,14 @@ namespace TMP.ARMTES
             }
             catch (TimeoutException ex)
             {
-                App.LogException(ex);
+                _logger?.Error(ex);
                 LastStatusCode = HttpStatusCode.RequestTimeout;
                 LastException = ex;
                 return null;
             }
             catch (WebException we)
             {
-                App.LogException(we);
+                _logger?.Error(we);
                 if (we.Status == WebExceptionStatus.Timeout)
                     LastStatusCode = HttpStatusCode.RequestTimeout;
                 else
@@ -435,7 +867,7 @@ namespace TMP.ARMTES
             }
             catch (Exception ex)
             {
-                App.LogException(ex);
+                _logger?.Error(ex);
                 LastStatusCode = HttpStatusCode.BadRequest;
                 LastException = ex;
                 return null;
@@ -444,6 +876,174 @@ namespace TMP.ARMTES
             {
                 if (httpWebResponse != null) httpWebResponse.Close();
             }           
+        }
+
+        public object test(string parentId)
+        {
+            List<object> elements = null;
+
+            string url = @"{0}/ARMTES/SubscribersRegistryEdit/GetSubscribers?pagenum=1&pagesize=10&pagenum=1&pagesize=10";
+            url = string.Format(url, this.siteUrl);
+
+
+            HttpWebRequest httpWebRequest = WebRequest.Create(url) as HttpWebRequest;
+            ConfigureRequest(ref httpWebRequest);
+            httpWebRequest.Method = "GET";
+            httpWebRequest.Accept = "*/*";
+            httpWebRequest.Headers.Add("X-Requested-With: XMLHttpRequest");
+            // передаём куки
+            httpWebRequest.CookieContainer = new CookieContainer(2);
+            httpWebRequest.CookieContainer.Add(this.userSettings);
+            httpWebRequest.CookieContainer.Add(this.aspxauth);
+
+            HttpWebResponse httpWebResponse = null;
+            try
+            {
+                httpWebResponse = (HttpWebResponse)httpWebRequest.GetResponse();
+                // сохраняем состояние ответа
+                LastStatusCode = httpWebResponse.StatusCode;
+
+                if (httpWebResponse.StatusCode == HttpStatusCode.OK)
+                {
+                    // получаем результат
+                    if (httpWebResponse.ContentType == "application/json; charset=utf-8")
+                    {
+                        using (Stream responseStream = httpWebResponse.GetResponseStream())
+                        {
+                            using (StreamReader streamReader = new StreamReader(responseStream, new UTF8Encoding()))
+                            {
+                                /*
+                                 [{"label":"Гродноэнерго","parentid":0,"value":"e2","items":[{"label":"Loading...","parentid":0,"value":"/ARMTES/Home/GetElements?parentId=e2","items":null}]}]
+                                 */
+                                string json = streamReader.ReadToEnd();
+                                //System.Diagnostics.Debugger.Break();
+
+                                /*
+                                 * 
+                                {"Subscribers":[{"SubscriberId":237955,"Name":"","PersonalAccount":"31091000392","SubscribersType":"Бытовой потребитель","City":"д. Стерково","Street":"","House":"СТП-2","Flat":"23","ContractNumber":null},{"SubscriberId":237955,"Name":"","PersonalAccount":"31091801641","SubscribersType":"Бытовой потребитель","City":"д. Бердовка","Street":"","House":"ЗТП-3","Flat":"Коренюка, 16","ContractNumber":null},{"SubscriberId":237955,"Name":"","PersonalAccount":"31090900312","SubscribersType":"Бытовой потребитель","City":"д. Стерково","Street":"","House":"СТП-2","Flat":"47","ContractNumber":null},{"SubscriberId":237955,"Name":"","PersonalAccount":"31091801611","SubscribersType":"Бытовой потребитель","City":"д. Бердовка","Street":"","House":"ЗТП-3","Flat":"Коренюка, 10","ContractNumber":null},{"SubscriberId":237955,"Name":"","PersonalAccount":"31091600481","SubscribersType":"Бытовой потребитель","City":"д. Бердовка","Street":"","House":"ЗТП-3","Flat":"Коренюка, хутор","ContractNumber":null},{"SubscriberId":237955,"Name":"","PersonalAccount":"31091801591","SubscribersType":"Бытовой потребитель","City":"д. Бердовка","Street":"","House":"ЗТП-3","Flat":"Коренюка, 14","ContractNumber":null},{"SubscriberId":237955,"Name":"","PersonalAccount":"31091800842","SubscribersType":"Бытовой потребитель","City":"д. Бердовка","Street":"","House":"ЗТП-3","Flat":"Советская, 38 кв.1","ContractNumber":null},{"SubscriberId":237955,"Name":"","PersonalAccount":"","SubscribersType":"Бытовой потребитель","City":"д. Бакуны","Street":"","House":"МТП-1","Flat":"хутор(Ковалева)","ContractNumber":null},{"SubscriberId":237955,"Name":"","PersonalAccount":"","SubscribersType":"Бытовой потребитель","City":"д. Бакуны","Street":"","House":"МТП-1","Flat":"хутор(Новокумская)","ContractNumber":null},{"SubscriberId":237955,"Name":"","PersonalAccount":"31091801621","SubscribersType":"Бытовой потребитель","City":"д. Бердовка","Street":"","House":"ЗТП-3","Flat":"Коренюка, 8","ContractNumber":null}],"TotalSubscribersCount":65435}
+
+                                    */
+
+                                elements = System.Text.Json.JsonSerializer.Deserialize<List<object>>(json);
+                            }
+                        }
+                    }
+                    else
+                        throw new InvalidDataException("Invalid response content type");
+                }
+                LastException = null;
+                return elements;
+
+            }
+            catch (TimeoutException ex)
+            {
+                _logger?.Error(ex);
+                LastStatusCode = HttpStatusCode.RequestTimeout;
+                LastException = ex;
+                return null;
+            }
+            catch (WebException we)
+            {
+                _logger?.Error(we);
+                LastStatusCode = HttpStatusCode.InternalServerError;
+                LastException = we;
+                return null;
+            }
+            catch (Exception ex)
+            {
+                _logger?.Error(ex);
+                LastStatusCode = HttpStatusCode.BadRequest;
+                LastException = ex;
+                return null;
+            }
+            finally
+            {
+                if (httpWebResponse != null) httpWebResponse.Close();
+            }
+        }
+
+        public string ViewMeter(string elementId, string selectedElementId, string parentSelectedDeviceId, DateTime fromDate, DateTime toDate, ProfileType profile, SectorType sector)
+        {
+            string result = String.Empty;
+
+            // если аскуэ-быт
+            if (sector == SectorType.HHS)
+                this.userSettings.Value = "SectorType=HHS";
+            else
+                // Мелкомоторный сектор
+                this.userSettings.Value = "SectorType=SES";
+
+            string url = @"{0}/ARMTES/Home/ViewMeter?";
+            url = string.Format(url, this.siteUrl);
+            string domain = new Uri(url).Host;
+            string queryData = "elementId={0}&selectedElementId={1}&parentSelectedDeviceId={2}&dateFrom={3}&dateTo={4}&profileId={5}&sectorTypeId={6}&filterMask=0";
+            queryData = string.Format(queryData, elementId, selectedElementId, parentSelectedDeviceId, ShortDate(fromDate), ShortDate(toDate), profile, sector);
+
+            url = url + queryData;
+
+            HttpWebRequest httpWebRequest = WebRequest.Create(url) as HttpWebRequest;
+            ConfigureRequest(ref httpWebRequest);
+            httpWebRequest.Method = "GET";
+            httpWebRequest.Headers.Add("X-Requested-With: XMLHttpRequest");
+            // передаём куки
+            httpWebRequest.CookieContainer = new CookieContainer(4);
+            httpWebRequest.CookieContainer.Add(this.userSettings);
+            httpWebRequest.CookieContainer.Add(this.aspxauth);
+            httpWebRequest.CookieContainer.Add(new Cookie("HouseHold_AllObjectsTab", "0") { Domain = domain });
+            httpWebRequest.CookieContainer.Add(new Cookie("SmallEngine_SingleMeterTab", "1") { Domain = domain });
+
+            HttpWebResponse httpWebResponse = null;
+            try
+            {
+                httpWebResponse = (HttpWebResponse)httpWebRequest.GetResponse();
+                // сохраняем состояние ответа
+                LastStatusCode = httpWebResponse.StatusCode;
+
+                if (httpWebResponse.StatusCode == HttpStatusCode.OK)
+                {
+                    // получаем результат
+                    if (httpWebResponse.ContentType == "text/html; charset=utf-8")
+                    {
+                        using (Stream responseStream = httpWebResponse.GetResponseStream())
+                        {
+                            using (StreamReader streamReader = new StreamReader(responseStream, new UTF8Encoding()))
+                            {
+                                result = streamReader.ReadToEnd();
+                            }
+                        }
+                    }
+                    else
+                        throw new InvalidDataException("Invalid response content type");
+                }
+                LastException = null;
+                return result;
+            }
+            catch (TimeoutException ex)
+            {
+                _logger?.Error(ex);
+                LastStatusCode = HttpStatusCode.RequestTimeout;
+                LastException = ex;
+                return null;
+            }
+            catch (WebException we)
+            {
+                _logger?.Error(we);
+                if (we.Status == WebExceptionStatus.Timeout)
+                    LastStatusCode = HttpStatusCode.RequestTimeout;
+                LastException = we;
+                return null;
+            }
+            catch (Exception ex)
+            {
+                _logger?.Error(ex);
+                LastStatusCode = HttpStatusCode.BadRequest;
+                LastException = ex;
+                return null;
+            }
+            finally
+            {
+                if (httpWebResponse != null) httpWebResponse.Close();
+            }
         }
 
         public string ViewObject(string deviceId, string selectedElementId, DateTime fromDate, DateTime toDate, ProfileType profile, SectorType sector)
@@ -509,14 +1109,14 @@ namespace TMP.ARMTES
             }
             catch (TimeoutException ex)
             {
-                App.LogException(ex);
+                _logger?.Error(ex);
                 LastStatusCode = HttpStatusCode.RequestTimeout;
                 LastException = ex;
                 return null;
             }
             catch (WebException we)
             {
-                App.LogException(we);
+                _logger?.Error(we);
                 if (we.Status == WebExceptionStatus.Timeout)
                     LastStatusCode = HttpStatusCode.RequestTimeout;
                 else
@@ -526,7 +1126,7 @@ namespace TMP.ARMTES
             }
             catch (Exception ex)
             {
-                App.LogException(ex);
+                _logger?.Error(ex);
                 LastStatusCode = HttpStatusCode.BadRequest;
                 LastException = ex;
                 return null;
@@ -536,630 +1136,22 @@ namespace TMP.ARMTES
                 if (httpWebResponse != null) httpWebResponse.Close();
             }            
         }
-        public string ViewMeter(string elementId, string selectedElementId, string parentSelectedDeviceId, DateTime fromDate, DateTime toDate, ProfileType profile, SectorType sector)
-        {
-            string result = String.Empty;
-            
-            // если аскуэ-быт
-            if (sector == SectorType.HHS)
-                this.userSettings.Value = "SectorType=HHS";
-            else
-                // Мелкомоторный сектор
-                this.userSettings.Value = "SectorType=SES";
+        #endregion
 
-            string url = @"{0}/ARMTES/Home/ViewMeter?";
-            url = string.Format(url, this.siteUrl);
-            string domain = new Uri(url).Host;
-            string queryData = "elementId={0}&selectedElementId={1}&parentSelectedDeviceId={2}&dateFrom={3}&dateTo={4}&profileId={5}&sectorTypeId={6}&filterMask=0";
-            queryData = string.Format(queryData, elementId, selectedElementId, parentSelectedDeviceId, ShortDate(fromDate), ShortDate(toDate), profile, sector);
+        #region Properties
+        public bool IsAuthorized { get; private set; }
 
-            url = url + queryData;
-
-            HttpWebRequest httpWebRequest = WebRequest.Create(url) as HttpWebRequest;
-            ConfigureRequest(ref httpWebRequest);
-            httpWebRequest.Method = "GET";
-            httpWebRequest.Headers.Add("X-Requested-With: XMLHttpRequest");
-            // передаём куки
-            httpWebRequest.CookieContainer = new CookieContainer(4);
-            httpWebRequest.CookieContainer.Add(this.userSettings);
-            httpWebRequest.CookieContainer.Add(this.aspxauth);
-            httpWebRequest.CookieContainer.Add(new Cookie("HouseHold_AllObjectsTab", "0") { Domain = domain });
-            httpWebRequest.CookieContainer.Add(new Cookie("SmallEngine_SingleMeterTab", "1") { Domain = domain });
-
-            HttpWebResponse httpWebResponse = null;
-            try
-            {
-                httpWebResponse = (HttpWebResponse)httpWebRequest.GetResponse();
-                // сохраняем состояние ответа
-                LastStatusCode = httpWebResponse.StatusCode;
-
-                if (httpWebResponse.StatusCode == HttpStatusCode.OK)
-                {
-                    // получаем результат
-                    if (httpWebResponse.ContentType == "text/html; charset=utf-8")
-                    {
-                        using (Stream responseStream = httpWebResponse.GetResponseStream())
-                        {
-                            using (StreamReader streamReader = new StreamReader(responseStream, new UTF8Encoding()))
-                            {
-                                result = streamReader.ReadToEnd();
-                            }
-                        }
-                    }
-                    else
-                        throw new InvalidDataException("Invalid response content type");
-                }
-                LastException = null;
-                return result;
-            }
-            catch (TimeoutException ex)
-            {
-                App.LogException(ex);
-                LastStatusCode = HttpStatusCode.RequestTimeout;
-                LastException = ex;
-                return null;
-            }
-            catch (WebException we)
-            {
-                App.LogException(we);
-                if (we.Status == WebExceptionStatus.Timeout)
-                    LastStatusCode = HttpStatusCode.RequestTimeout;
-                LastException = we;
-                return null;
-            }
-            catch (Exception ex)
-            {
-                App.LogException(ex);
-                LastStatusCode = HttpStatusCode.BadRequest;
-                LastException = ex;
-                return null;
-            }
-            finally
-            {
-                if (httpWebResponse != null) httpWebResponse.Close();
-            }           
-        }
-
-        public PostTariffIndications CounterData(long flatId, DateTime fromDate, DateTime toDate, ProfileType profile, byte tariffNumber)
-        {
-            PostTariffIndications result = null;
-
-            string url = @"{0}/ARMTES/api/SingleMeterApi/PostTariffIndications";
-            url = string.Format(url, this.siteUrl);
-            string domain = new Uri(url).Host;
-            string postData = @"""FlatId"":""{0}"",""DateFrom"":""{1}"",""DateTo"":""{2}"",""ProfileId"":""{3}"",""TariffNumber"":""{4}"",""SectorTypeId"":""SES""";
-            postData = string.Format(postData, flatId, ShortDate(fromDate), ShortDate(toDate), (byte)profile, tariffNumber);
-            postData = "{" + postData + "}";
-
-            HttpWebRequest httpWebRequest = WebRequest.Create(url) as HttpWebRequest;
-            ConfigureRequest(ref httpWebRequest);
-            httpWebRequest.Method = "POST";
-            httpWebRequest.Accept = "*/*";
-            httpWebRequest.Headers.Add("X-Requested-With: XMLHttpRequest");
-            // передаём куки
-            httpWebRequest.CookieContainer = new CookieContainer(4);
-            httpWebRequest.CookieContainer.Add(this.userSettings);
-            httpWebRequest.CookieContainer.Add(this.aspxauth);
-            httpWebRequest.CookieContainer.Add(new Cookie("SmallEngine_SingleMeterTab", "1") { Domain = domain });
-            httpWebRequest.CookieContainer.Add(new Cookie("SmallObjects_AllObjectsTab", "1") { Domain = domain });
-
-            byte[] buffer = Encoding.ASCII.GetBytes(postData);
-            httpWebRequest.ContentLength = buffer.Length;
-            httpWebRequest.ContentType = "application/json";
-            using (Stream reqStream = httpWebRequest.GetRequestStream())
-            {
-                reqStream.Write(buffer, 0, buffer.Length);
-                reqStream.Close();
-            }
-
-            HttpWebResponse httpWebResponse = null;
-            try
-            {
-                httpWebResponse = (HttpWebResponse)httpWebRequest.GetResponse();
-                // сохраняем состояние ответа
-                LastStatusCode = httpWebResponse.StatusCode;
-
-                if (httpWebResponse.StatusCode == HttpStatusCode.OK)
-                {
-                    // получаем результат
-                    if (httpWebResponse.ContentType == "application/json; charset=utf-8")
-                    {
-                        using (Stream responseStream = httpWebResponse.GetResponseStream())
-                        {
-                            using (StreamReader streamReader = new StreamReader(responseStream, new UTF8Encoding()))
-                            {
-                                string json = streamReader.ReadToEnd();
-                                System.Diagnostics.Debugger.Break();
-
-                                System.Web.Script.Serialization.JavaScriptSerializer ser = new System.Web.Script.Serialization.JavaScriptSerializer();
-                                result = ser.Deserialize<PostTariffIndications>(json);
-                            }
-                        }
-                    }
-                    else
-                        throw new InvalidDataException("Invalid response content type");
-                }
-                LastException = null;
-                return result;
-            }
-            catch (TimeoutException ex)
-            {
-                App.LogException(ex);
-                LastStatusCode = HttpStatusCode.RequestTimeout;
-                LastException = ex;
-                return null;
-            }
-            catch (WebException we)
-            {
-                App.LogException(we);
-                if (we.Status == WebExceptionStatus.Timeout)
-                    LastStatusCode = HttpStatusCode.RequestTimeout;
-                else
-                    LastStatusCode = HttpStatusCode.BadRequest;
-                LastException = we;
-                return null;
-            }
-            catch (Exception ex)
-            {
-                App.LogException(ex);
-                LastStatusCode = HttpStatusCode.BadRequest;
-                LastException = ex;
-                return null;
-            }
-            finally
-            {
-                if (httpWebResponse != null) httpWebResponse.Close();
-            }            
-        }
+        public Exception LastException { get; private set; }
 
         /// <summary>
-        /// История сеансов связи с устройством
+        /// Последнее состояние ответа
         /// </summary>
-        /// <param name="deviceId">Идентификатор устройства</param>
-        /// <returns></returns>
-        public DeviceSessionsData GetDeviceSessionHistory(long deviceId)
-        {
-            DeviceSessionsData result = null;
-
-            string url = @"{0}/ARMTES/api/DeviceSessionApi/GetDeviceSessionHistory'";
-            url = string.Format(url, this.siteUrl);
-            string domain = new Uri(url).Host;
-            string postData = @"{""DeviceId"":""{0}""}";
-            postData = string.Format(postData, deviceId);
-
-            HttpWebRequest httpWebRequest = WebRequest.Create(url) as HttpWebRequest;
-            ConfigureRequest(ref httpWebRequest);
-            httpWebRequest.Method = "POST";
-            httpWebRequest.Accept = "*/*";            
-            httpWebRequest.Headers.Add("X-Requested-With: XMLHttpRequest");
-            // передаём куки
-            httpWebRequest.CookieContainer = new CookieContainer(4);
-            httpWebRequest.CookieContainer.Add(this.userSettings);
-            httpWebRequest.CookieContainer.Add(this.aspxauth);
-            httpWebRequest.CookieContainer.Add(new Cookie("SmallEngine_SingleMeterTab", "1") { Domain = domain });
-            httpWebRequest.CookieContainer.Add(new Cookie("SmallObjects_AllObjectsTab", "1") { Domain = domain });
-
-            byte[] buffer = Encoding.ASCII.GetBytes(postData);
-            httpWebRequest.ContentLength = buffer.Length;
-            httpWebRequest.ContentType = "application/json";
-            using (Stream reqStream = httpWebRequest.GetRequestStream())
-            {
-                reqStream.Write(buffer, 0, buffer.Length);
-                reqStream.Close();
-            }
-
-            HttpWebResponse httpWebResponse = null;
-            try
-            {
-                httpWebResponse = (HttpWebResponse)httpWebRequest.GetResponse();
-                // сохраняем состояние ответа
-                LastStatusCode = httpWebResponse.StatusCode;
-
-                if (httpWebResponse.StatusCode == HttpStatusCode.OK)
-                {
-                    // получаем результат
-                    if (httpWebResponse.ContentType == "application/json; charset=utf-8")
-                    {
-                        using (Stream responseStream = httpWebResponse.GetResponseStream())
-                        {
-                            using (StreamReader streamReader = new StreamReader(responseStream, new UTF8Encoding()))
-                            {
-                                string json = streamReader.ReadToEnd();
-                                System.Diagnostics.Debugger.Break();
-
-                                System.Web.Script.Serialization.JavaScriptSerializer ser = new System.Web.Script.Serialization.JavaScriptSerializer();
-                                result = ser.Deserialize<DeviceSessionsData>(json);
-                            }
-                        }
-                    }
-                    else
-                        throw new InvalidDataException("Invalid response content type");
-                }
-                LastException = null;
-                return result;
-            }
-            catch (TimeoutException ex)
-            {
-                App.LogException(ex);
-                LastStatusCode = HttpStatusCode.RequestTimeout;
-                LastException = ex;
-                return null;
-            }
-            catch (WebException we)
-            {
-                App.LogException(we);
-                if (we.Status == WebExceptionStatus.Timeout)
-                    LastStatusCode = HttpStatusCode.RequestTimeout;
-                else
-                    LastStatusCode = HttpStatusCode.BadRequest;
-                LastException = we;
-                return null;
-            }
-            catch (Exception ex)
-            {
-                App.LogException(ex);
-                LastStatusCode = HttpStatusCode.BadRequest;
-                LastException = ex;
-                return null;
-            }
-            finally
-            {
-                if (httpWebResponse != null) httpWebResponse.Close();
-            }
-        }
-
-
-        public PageResult<AllTariffsExportIndicationViewItem> GetSmallEngineExportIndications(DateTime date, string enterprise = "")
-        {
-            string dateAsString = date.ToString("d.M.yyyy", CultureInfo.InvariantCulture);
-
-            PageResult<AllTariffsExportIndicationViewItem> result = null;
-
-            string url = @"{0}/ARMTES/api/IndicationsExportApi/GetSmallEngineExportIndications?";
-            url = string.Format(url, this.siteUrl);
-            string queryData = "date={0}&enterprise={1}";
-            queryData = string.Format(queryData, dateAsString, enterprise);
-
-            url = url + queryData;
-
-            HttpWebRequest httpWebRequest = WebRequest.Create(url) as HttpWebRequest;
-            ConfigureRequest(ref httpWebRequest);
-            httpWebRequest.Method = "GET";
-            httpWebRequest.Accept = "*/*";
-            httpWebRequest.Headers.Add("X-Requested-With: XMLHttpRequest");
-
-            
-            HttpWebResponse httpWebResponse = null;
-            try
-            {
-                httpWebResponse = (HttpWebResponse)httpWebRequest.GetResponse();
-                // сохраняем состояние ответа
-                LastStatusCode = httpWebResponse.StatusCode;
-
-                if (httpWebResponse.StatusCode == HttpStatusCode.OK)
-                {
-                    // получаем результат
-                    if (httpWebResponse.ContentType == "application/json; charset=utf-8")
-                    {
-                        using (Stream responseStream = httpWebResponse.GetResponseStream())
-                        {
-                            using (StreamReader streamReader = new StreamReader(responseStream, new UTF8Encoding()))
-                            {
-                                string json = streamReader.ReadToEnd();
-                                //System.Diagnostics.Debugger.Break();
-
-                                System.Web.Script.Serialization.JavaScriptSerializer ser = new System.Web.Script.Serialization.JavaScriptSerializer();
-                                ser.MaxJsonLength = int.MaxValue;
-                                result = ser.Deserialize<PageResult<AllTariffsExportIndicationViewItem>>(json);
-                            }
-                        }
-                    }
-                    else
-                        throw new InvalidDataException("Invalid response content type");
-                }
-                LastException = null;
-                return result;
-
-            }
-            catch (TimeoutException ex)
-            {
-                App.LogException(ex);
-                LastStatusCode = HttpStatusCode.RequestTimeout;
-                LastException = ex;
-                return null;
-            }
-            catch (WebException we)
-            {
-                App.LogException(we);
-                LastStatusCode = HttpStatusCode.InternalServerError;
-                LastException = we;
-                return null;
-            }
-            catch (Exception ex)
-            {
-                App.LogException(ex);
-                LastStatusCode = HttpStatusCode.BadRequest;
-                LastException = ex;
-                return null;
-            }
-            finally
-            {
-                if (httpWebResponse != null) httpWebResponse.Close();
-            }
-        }
-
-        public PageResult<ExportPersonalAccountViewItem> GetPersonalAccounts(string enterprise = "", SectorType sectorType = SectorType.SES)
-        {
-            PageResult<ExportPersonalAccountViewItem> result = null;
-
-            string url = @"{0}/ARMTES/api/PersonalAccountsApi/GetPersonalAccounts?";
-            url = string.Format(url, this.siteUrl);
-            string queryData = "enterprise={0}&sectorTypeId={1}";
-            queryData = string.Format(queryData, enterprise, sectorType);
-
-            url = url + queryData;
-
-            HttpWebRequest httpWebRequest = WebRequest.Create(url) as HttpWebRequest;
-            ConfigureRequest(ref httpWebRequest);
-            httpWebRequest.Method = "GET";
-            httpWebRequest.Accept = "*/*";
-            httpWebRequest.Headers.Add("X-Requested-With: XMLHttpRequest");
-
-
-            HttpWebResponse httpWebResponse = null;
-            try
-            {
-                httpWebResponse = (HttpWebResponse)httpWebRequest.GetResponse();
-                // сохраняем состояние ответа
-                LastStatusCode = httpWebResponse.StatusCode;
-
-                if (httpWebResponse.StatusCode == HttpStatusCode.OK)
-                {
-                    // получаем результат
-                    if (httpWebResponse.ContentType == "application/json; charset=utf-8")
-                    {
-                        using (Stream responseStream = httpWebResponse.GetResponseStream())
-                        {
-                            using (StreamReader streamReader = new StreamReader(responseStream, new UTF8Encoding()))
-                            {
-                                string json = streamReader.ReadToEnd();
-                                //System.Diagnostics.Debugger.Break();
-
-                                System.Web.Script.Serialization.JavaScriptSerializer ser = new System.Web.Script.Serialization.JavaScriptSerializer();
-                                ser.MaxJsonLength = int.MaxValue;
-
-                                result = ser.Deserialize<PageResult<ExportPersonalAccountViewItem>>(json);
-                            }
-                        }
-                    }
-                    else
-                        throw new InvalidDataException("Invalid response content type");
-                }
-                LastException = null;
-                return result;
-
-            }
-            catch (TimeoutException ex)
-            {
-                App.LogException(ex);
-                LastStatusCode = HttpStatusCode.RequestTimeout;
-                LastException = ex;
-                return null;
-            }
-            catch (WebException we)
-            {
-                App.LogException(we);
-                LastStatusCode = HttpStatusCode.InternalServerError;
-                LastException = we;
-                return null;
-            }
-            catch (Exception ex)
-            {
-                App.LogException(ex);
-                LastStatusCode = HttpStatusCode.BadRequest;
-                LastException = ex;
-                return null;
-            }
-            finally
-            {
-                if (httpWebResponse != null) httpWebResponse.Close();
-            }
-        }
-
-        public PageResult<EnterpriseViewItem> GetEnterprises()
-        {
-            PageResult<EnterpriseViewItem> result = null;
-
-            string url = @"{0}/ARMTES/api/SmallEngineApi/GetEnterprises";
-            url = string.Format(url, this.siteUrl);
-
-            HttpWebRequest httpWebRequest = WebRequest.Create(url) as HttpWebRequest;
-            ConfigureRequest(ref httpWebRequest);
-            httpWebRequest.Method = "GET";
-            httpWebRequest.Accept = "*/*";
-            httpWebRequest.Headers.Add("X-Requested-With: XMLHttpRequest");
-
-
-            HttpWebResponse httpWebResponse = null;
-            try
-            {
-                httpWebResponse = (HttpWebResponse)httpWebRequest.GetResponse();
-                // сохраняем состояние ответа
-                LastStatusCode = httpWebResponse.StatusCode;
-
-                if (httpWebResponse.StatusCode == HttpStatusCode.OK)
-                {
-                    // получаем результат
-                    if (httpWebResponse.ContentType == "application/json; charset=utf-8")
-                    {
-                        using (Stream responseStream = httpWebResponse.GetResponseStream())
-                        {
-                            using (StreamReader streamReader = new StreamReader(responseStream, new UTF8Encoding()))
-                            {
-                                string json = streamReader.ReadToEnd();
-                                //System.Diagnostics.Debugger.Break();
-
-                                System.Web.Script.Serialization.JavaScriptSerializer ser = new System.Web.Script.Serialization.JavaScriptSerializer();
-
-                                result = ser.Deserialize<PageResult<EnterpriseViewItem>>(json);
-                            }
-                        }
-                    }
-                    else
-                        throw new InvalidDataException("Invalid response content type");
-                }
-                LastException = null;
-                return result;
-
-            }
-            catch (TimeoutException ex)
-            {
-                App.LogException(ex);
-                LastStatusCode = HttpStatusCode.RequestTimeout;
-                LastException = ex;
-                return null;
-            }
-            catch (WebException we)
-            {
-                App.LogException(we);
-                LastStatusCode = HttpStatusCode.InternalServerError;
-                LastException = we;
-                return null;
-            }
-            catch (Exception ex)
-            {
-                App.LogException(ex);
-                LastStatusCode = HttpStatusCode.BadRequest;
-                LastException = ex;
-                return null;
-            }
-            finally
-            {
-                if (httpWebResponse != null) httpWebResponse.Close();
-            }
-        }
-
-        public object test (string parentId)
-        {
-            List<object> elements = null;
-
-            string url = @"{0}/ARMTES/SubscribersRegistryEdit/GetSubscribers?pagenum=1&pagesize=10&pagenum=1&pagesize=10";
-            url = string.Format(url, this.siteUrl);
-
-
-            HttpWebRequest httpWebRequest = WebRequest.Create(url) as HttpWebRequest;
-            ConfigureRequest(ref httpWebRequest);
-            httpWebRequest.Method = "GET";
-            httpWebRequest.Accept = "*/*";
-            httpWebRequest.Headers.Add("X-Requested-With: XMLHttpRequest");
-            // передаём куки
-            httpWebRequest.CookieContainer = new CookieContainer(2);
-            httpWebRequest.CookieContainer.Add(this.userSettings);
-            httpWebRequest.CookieContainer.Add(this.aspxauth);
-
-            HttpWebResponse httpWebResponse = null;
-            try
-            {
-                httpWebResponse = (HttpWebResponse)httpWebRequest.GetResponse();
-                // сохраняем состояние ответа
-                LastStatusCode = httpWebResponse.StatusCode;
-
-                if (httpWebResponse.StatusCode == HttpStatusCode.OK)
-                {
-                    // получаем результат
-                    if (httpWebResponse.ContentType == "application/json; charset=utf-8")
-                    {
-                        using (Stream responseStream = httpWebResponse.GetResponseStream())
-                        {
-                            using (StreamReader streamReader = new StreamReader(responseStream, new UTF8Encoding()))
-                            {
-                                /*
-                                 [{"label":"Гродноэнерго","parentid":0,"value":"e2","items":[{"label":"Loading...","parentid":0,"value":"/ARMTES/Home/GetElements?parentId=e2","items":null}]}]
-                                 */
-                                string json = streamReader.ReadToEnd();
-                                //System.Diagnostics.Debugger.Break();
-
-/*
- * 
-{"Subscribers":[{"SubscriberId":237955,"Name":"","PersonalAccount":"31091000392","SubscribersType":"Бытовой потребитель","City":"д. Стерково","Street":"","House":"СТП-2","Flat":"23","ContractNumber":null},{"SubscriberId":237955,"Name":"","PersonalAccount":"31091801641","SubscribersType":"Бытовой потребитель","City":"д. Бердовка","Street":"","House":"ЗТП-3","Flat":"Коренюка, 16","ContractNumber":null},{"SubscriberId":237955,"Name":"","PersonalAccount":"31090900312","SubscribersType":"Бытовой потребитель","City":"д. Стерково","Street":"","House":"СТП-2","Flat":"47","ContractNumber":null},{"SubscriberId":237955,"Name":"","PersonalAccount":"31091801611","SubscribersType":"Бытовой потребитель","City":"д. Бердовка","Street":"","House":"ЗТП-3","Flat":"Коренюка, 10","ContractNumber":null},{"SubscriberId":237955,"Name":"","PersonalAccount":"31091600481","SubscribersType":"Бытовой потребитель","City":"д. Бердовка","Street":"","House":"ЗТП-3","Flat":"Коренюка, хутор","ContractNumber":null},{"SubscriberId":237955,"Name":"","PersonalAccount":"31091801591","SubscribersType":"Бытовой потребитель","City":"д. Бердовка","Street":"","House":"ЗТП-3","Flat":"Коренюка, 14","ContractNumber":null},{"SubscriberId":237955,"Name":"","PersonalAccount":"31091800842","SubscribersType":"Бытовой потребитель","City":"д. Бердовка","Street":"","House":"ЗТП-3","Flat":"Советская, 38 кв.1","ContractNumber":null},{"SubscriberId":237955,"Name":"","PersonalAccount":"","SubscribersType":"Бытовой потребитель","City":"д. Бакуны","Street":"","House":"МТП-1","Flat":"хутор(Ковалева)","ContractNumber":null},{"SubscriberId":237955,"Name":"","PersonalAccount":"","SubscribersType":"Бытовой потребитель","City":"д. Бакуны","Street":"","House":"МТП-1","Flat":"хутор(Новокумская)","ContractNumber":null},{"SubscriberId":237955,"Name":"","PersonalAccount":"31091801621","SubscribersType":"Бытовой потребитель","City":"д. Бердовка","Street":"","House":"ЗТП-3","Flat":"Коренюка, 8","ContractNumber":null}],"TotalSubscribersCount":65435}
-
-    */
-
-System.Web.Script.Serialization.JavaScriptSerializer ser = new System.Web.Script.Serialization.JavaScriptSerializer();
-elements = ser.Deserialize<List<object>>(json);
-}
-}
-}
-else
-throw new InvalidDataException("Invalid response content type");
-}
-LastException = null;
-return elements;
-
-}
-catch (TimeoutException ex)
-{
-App.LogException(ex);
-LastStatusCode = HttpStatusCode.RequestTimeout;
-LastException = ex;
-return null;
-}
-catch (WebException we)
-{
-App.LogException(we);
-LastStatusCode = HttpStatusCode.InternalServerError;
-LastException = we;
-return null;
-}
-catch (Exception ex)
-{
-App.LogException(ex);
-LastStatusCode = HttpStatusCode.BadRequest;
-LastException = ex;
-return null;
-}
-finally
-{
-if (httpWebResponse != null) httpWebResponse.Close();
-}
-}
-
-#endregion
-
-#region Properties
-/// <summary>
-/// Последнее состояние ответа
-/// </summary>
-public HttpStatusCode LastStatusCode { get; private set; }
+        public HttpStatusCode LastStatusCode { get; private set; }
 /// <summary>
 /// Таймаут в секундах
 /// </summary>
 public int TimeOut { get; set; }
-
-public Exception LastException { get; private set; }
-
-public bool IsAuthorized { get; private set; }
-
 #endregion
 
-}
-
-public enum SectorType
-{
-[Display(Name = "Аскуэ-быт")]
-HHS,
-[Display(Name = "Мелкомоторный сектор")]
-[Description("СДСП")]
-SES
-}
-
-public enum ProfileType
-{
-[Display(Name = "текущие показания")]
-Current = 1,
-[Display(Name = "показания на начало суток")]
-Days = 2,
-[Display(Name = "показания на начало месяца")]
-Months = 3
 }
 }

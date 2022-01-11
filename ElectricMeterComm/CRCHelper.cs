@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace TMP.ElectricMeterComm
+﻿namespace TMP.ElectricMeterComm
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+
     public static class CRCHelper
     {
         private static byte[] tblCRChi =
@@ -26,7 +26,7 @@ namespace TMP.ElectricMeterComm
             0x80, 0x41, 0x00, 0xC1, 0x81, 0x40, 0x00, 0xC1, 0x81, 0x40, 0x01, 0xC0, 0x80, 0x41, 0x01,
             0xC0, 0x80, 0x41, 0x00, 0xC1, 0x81, 0x40, 0x00, 0xC1, 0x81, 0x40, 0x01, 0xC0, 0x80, 0x41,
             0x00, 0xC1, 0x81, 0x40, 0x01, 0xC0, 0x80, 0x41, 0x01, 0xC0, 0x80, 0x41, 0x00, 0xC1, 0x81,
-            0x40
+            0x40,
         };
 
         private static byte[] tblCRClo =
@@ -48,7 +48,7 @@ namespace TMP.ElectricMeterComm
             0x5D, 0x9D, 0x5F, 0x9F, 0x9E, 0x5E, 0x5A, 0x9A, 0x9B, 0x5B, 0x99, 0x59, 0x58, 0x98, 0x88,
             0x48, 0x49, 0x89, 0x4B, 0x8B, 0x8A, 0x4A, 0x4E, 0x8E, 0x8F, 0x4F, 0x8D, 0x4D, 0x4C, 0x8C,
             0x44, 0x84, 0x85, 0x45, 0x87, 0x47, 0x46, 0x86, 0x82, 0x42, 0x43, 0x83, 0x41, 0x81, 0x80,
-            0x40
+            0x40,
         };
 
         public static ushort getCRC16(params byte[] msg)
@@ -63,8 +63,10 @@ namespace TMP.ElectricMeterComm
                 CRChi = (byte)(CRClo ^ tblCRChi[idx]);
                 CRClo = tblCRClo[idx];
             }
+
             return (ushort)((CRChi << 8) | CRClo);
         }
+
         public static byte[] GetCRC16(params byte[] msg)
         {
             byte[] result = new byte[2];
@@ -79,6 +81,7 @@ namespace TMP.ElectricMeterComm
                 CRChi = (byte)(CRClo ^ tblCRChi[idx]);
                 CRClo = tblCRClo[idx];
             }
+
             result[0] = CRClo;
             result[1] = CRChi;
             return result;

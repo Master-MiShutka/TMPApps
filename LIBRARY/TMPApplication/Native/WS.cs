@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace Native
+﻿namespace Native
 {
+    using System;
+
     [Flags]
     public enum WS : uint
     {
@@ -83,6 +83,6 @@ namespace Native
         /// <summary>The window has a vertical scroll bar.</summary>
         VSCROLL = 0x200000,
 
-        THICKFRAME = 0x00040000
+        THICKFRAME = 0x00040000,
     }
 }

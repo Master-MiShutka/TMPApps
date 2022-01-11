@@ -1,20 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Globalization;
-using System.Reflection;
-using System.Text.RegularExpressions;
-using System.Threading;
-using System.Xml;
-
-namespace TMP.Extensions
+﻿namespace TMP.Extensions
 {
+    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel;
+    using System.Globalization;
+    using System.Reflection;
+    using System.Text.RegularExpressions;
+    using System.Threading;
+    using System.Xml;
+
     /// <summary>
     /// Object extensions methods which are available if you are using VS2008
     /// </summary>
     public static class ObjectExtensions
     {
-        private static XmlDocument _staticDoc;
+        private static XmlDocument staticDoc;
 
         /// <summary>
         /// Checks if the string is empty or only contains spaces
@@ -25,6 +25,7 @@ namespace TMP.Extensions
         {
             return text == null || string.IsNullOrEmpty(text.Trim());
         }
+
         /// <summary>
         /// Checks if the string is a valid email address
         /// </summary>
@@ -34,6 +35,7 @@ namespace TMP.Extensions
         {
             return inputEmail.IsValidEmail(false);
         }
+
         /// <summary>
         /// Checks if the string is empty or only contains spaces
         /// </summary>
@@ -53,8 +55,10 @@ namespace TMP.Extensions
                 Regex regex = new Regex(pattern);
                 result = regex.IsMatch(inputEmail);
             }
+
             return result;
         }
+
         /// <summary>
         /// XML encodes a string
         /// </summary>
@@ -65,29 +69,32 @@ namespace TMP.Extensions
             string result;
             if (text == null)
             {
-                result = "";
+                result = string.Empty;
             }
             else
             {
-                if (ObjectExtensions._staticDoc == null)
+                if (ObjectExtensions.staticDoc == null)
                 {
-                    ObjectExtensions._staticDoc = new XmlDocument();
-                    ObjectExtensions._staticDoc.LoadXml("<text></text>");
+                    ObjectExtensions.staticDoc = new XmlDocument();
+                    ObjectExtensions.staticDoc.LoadXml("<text></text>");
                 }
+
                 XmlDocument staticDoc;
-                Monitor.Enter(staticDoc = ObjectExtensions._staticDoc);
+                Monitor.Enter(staticDoc = ObjectExtensions.staticDoc);
                 try
                 {
-                    ObjectExtensions._staticDoc.LastChild.InnerText = text;
-                    result = ObjectExtensions._staticDoc.LastChild.InnerXml;
+                    ObjectExtensions.staticDoc.LastChild.InnerText = text;
+                    result = ObjectExtensions.staticDoc.LastChild.InnerXml;
                 }
                 finally
                 {
                     Monitor.Exit(staticDoc);
                 }
             }
+
             return result;
         }
+
         /// <summary>
         /// Parses a string to a integar form
         /// </summary>
@@ -101,6 +108,7 @@ namespace TMP.Extensions
             {
                 throw new ArgumentException("'variable' must only be a primitive type");
             }
+
             decimal num;
             bool result;
             if (!decimal.TryParse(text, NumberStyles.Number, CultureInfo.InvariantCulture, out num))
@@ -110,11 +118,13 @@ namespace TMP.Extensions
             }
             else
             {
-                variable = (T)((object)Convert.ChangeType(num, typeof(T), CultureInfo.InvariantCulture));
+                variable = (T)(object)Convert.ChangeType(num, typeof(T), CultureInfo.InvariantCulture);
                 result = true;
             }
+
             return result;
         }
+
         /// <summary>
         /// Checks whether a enum value is correct or not
         /// </summary>
@@ -173,7 +183,7 @@ namespace TMP.Extensions
         /// fe.IsValid();
         ///
         /// fe = (FlagEnum) 21;
-        /// // true because value will be: 
+        /// // true because value will be:
         /// // FlagEnum.Five | FlagEnum.Three | FlagEnum.One
         /// fe.IsValid();
         ///
@@ -197,9 +207,11 @@ namespace TMP.Extensions
                     return result;
                 }
             }
+
             result = flag;
             return result;
         }
+
         /// <summary>
         /// Returns enum's description
         /// </summary>
@@ -219,8 +231,10 @@ namespace TMP.Extensions
             {
                 result = enumerator.ToString();
             }
+
             return result;
         }
+
         /// <summary>
         /// Check whether a flag is set in a particular enum value
         /// </summary>
@@ -250,12 +264,14 @@ namespace TMP.Extensions
                     {
                         int num = (int)Enum.Parse(enumerator.GetType(), enumerator.ToString());
                         int num2 = (int)Enum.Parse(enumFlag.GetType(), enumFlag.ToString());
-                        result = ((num & num2) == num2);
+                        result = (num & num2) == num2;
                     }
                 }
             }
+
             return result;
         }
+
         /// <summary>
         /// Returns difference of two dates
         /// </summary>
@@ -266,7 +282,7 @@ namespace TMP.Extensions
         /// lesser than date. If it is not, the answer is always a little bit... ahem... weird.</remarks>
         public static DateSpan DateDifference(this DateTime date, DateTime dateToCompare)
         {
-            int num = (date.Year - dateToCompare.Year) * 12 + date.Month - dateToCompare.Month;
+            int num = ((date.Year - dateToCompare.Year) * 12) + date.Month - dateToCompare.Month;
             int days;
             if (date.Day < dateToCompare.Day)
             {
@@ -283,6 +299,7 @@ namespace TMP.Extensions
                     month = date.Month - 1;
                     year = date.Year;
                 }
+
                 DateTime d = new DateTime(year, month, day);
                 days = (date - d).Days;
                 num--;
@@ -291,13 +308,15 @@ namespace TMP.Extensions
             {
                 days = date.Day - dateToCompare.Day;
             }
+
             return new DateSpan
             {
                 Years = num / 12,
                 Months = num % 12,
-                Days = days
+                Days = days,
             };
         }
+
         /// <summary>
         /// Extension method to get a single attribute and its value
         /// </summary>
@@ -308,6 +327,7 @@ namespace TMP.Extensions
         {
             return reader.GetSingleAttribute(attribute, false);
         }
+
         /// <summary>
         /// Extension method to get a single attribute and its value
         /// </summary>
@@ -322,6 +342,7 @@ namespace TMP.Extensions
             {
                 moveToEnd = false;
             }
+
             XmlReaderAttributeItem result;
             foreach (XmlReaderAttributeItem current in reader.GetAttributes())
             {
@@ -333,19 +354,23 @@ namespace TMP.Extensions
                         {
                         }
                     }
+
                     result = current;
                     return result;
                 }
             }
+
             if (moveToEnd)
             {
                 while (reader.Read() && (!(reader.Name == name) || reader.NodeType != XmlNodeType.EndElement))
                 {
                 }
             }
+
             result = null;
             return result;
         }
+
         /// <summary>
         /// Extension method to get a all attribute of a element
         /// </summary>
@@ -367,10 +392,13 @@ namespace TMP.Extensions
                 {
                     list.Add(ObjectExtensions.ReadAttribute(reader));
                 }
+
                 result = list;
             }
+
             return result;
         }
+
         private static XmlReaderAttributeItem ReadAttribute(XmlReader reader)
         {
             XmlReaderAttributeItem xmlReaderAttributeItem = new XmlReaderAttributeItem();
@@ -384,20 +412,23 @@ namespace TMP.Extensions
             }
             else
             {
-                xmlReaderAttributeItem.Value = "";
+                xmlReaderAttributeItem.Value = string.Empty;
             }
+
             return xmlReaderAttributeItem;
         }
+
         /// <summary>
-        /// Parses a enum from a string 
+        /// Parses a enum from a string
         /// </summary>
         /// <typeparam name="T">Enum type</typeparam>
         /// <param name="value">String to parse</param>
         /// <returns>Parsed enum value</returns>
         public static T ParseEnum<T>(string value)
         {
-            return (T)((object)Enum.Parse(typeof(T), value));
+            return (T)(object)Enum.Parse(typeof(T), value);
         }
+
         /// <summary>
         /// Checks where a type is a numeric type
         /// </summary>
@@ -424,6 +455,7 @@ namespace TMP.Extensions
                     result = true;
                     return result;
             }
+
             result = false;
             return result;
         }

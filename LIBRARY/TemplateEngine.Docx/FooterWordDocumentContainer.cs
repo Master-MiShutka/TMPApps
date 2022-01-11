@@ -1,35 +1,37 @@
-﻿using System.Collections.Generic;
-using System.IO;
-using DocumentFormat.OpenXml.Packaging;
-
-namespace TemplateEngine.Docx
+﻿namespace TemplateEngine.Docx
 {
-	internal class FooterWordDocumentContainer:NestedWordDocumentContainer
-	{
+    using System.Collections.Generic;
+    using System.IO;
+    using DocumentFormat.OpenXml.Packaging;
+
+    internal class FooterWordDocumentContainer : NestedWordDocumentContainer
+    {
         internal FooterWordDocumentContainer(string identifier, WordprocessingDocument document)
             : base(identifier, document)
         {
-            ImagesPart = GetImagesPart();
+            this.ImagesPart = this.GetImagesPart();
         }
 
-		public override string AddImagePart(byte[] bytes)
-		{
-			if (_document == null)
-				return null;
+        public override string AddImagePart(byte[] bytes)
+        {
+            if (this.document == null)
+            {
+                return null;
+            }
 
-            var imagePart = ((FooterPart)_document).AddImagePart(ImagePartType.Jpeg);
+            var imagePart = ((FooterPart)this.document).AddImagePart(ImagePartType.Jpeg);
 
-			using (var stream = new MemoryStream(bytes))
-			{
-				imagePart.FeedData(stream);
-			}
+            using (var stream = new MemoryStream(bytes))
+            {
+                imagePart.FeedData(stream);
+            }
 
-			return _document.GetIdOfPart(imagePart);
-		}
+            return this.document.GetIdOfPart(imagePart);
+        }
 
-	    private IEnumerable<ImagePart> GetImagesPart()
-	    {
-            return ((FooterPart)_document).ImageParts;
-	    }
-	}
+        private IEnumerable<ImagePart> GetImagesPart()
+        {
+            return ((FooterPart)this.document).ImageParts;
+        }
+    }
 }

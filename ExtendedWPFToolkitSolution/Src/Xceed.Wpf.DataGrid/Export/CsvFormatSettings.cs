@@ -22,66 +22,31 @@ using System.Globalization;
 
 namespace Xceed.Wpf.DataGrid.Export
 {
-    public class CsvFormatSettings : IFormatSettings
+  public class CsvFormatSettings : FormatSettingsBase
+  {
+    public CsvFormatSettings()
     {
-        public CsvFormatSettings()
-        {
-            this.SeparatorType = CsvValueSeparatorType.Comma;
-            this.TextQualifier = '"';
-            this.NewLine = Environment.NewLine;
-            this.Culture = CultureInfo.CurrentCulture;
-
-            this.DateTimeFormat = "dd.MM.yyy";
-            this.NumericFormat = "G";
-            this.FloatingPointFormat = "F3";
-        }
-
-        public CsvValueSeparatorType SeparatorType
-        {
-            get;
-            set;
-        }
-        private char _separator;
-        public char Separator
-        {
-            get
-            {
-                switch (SeparatorType)
-                {
-                    case CsvValueSeparatorType.Comma:
-                        return ',';
-                    case CsvValueSeparatorType.Tab:
-                        return '\t';
-                    case CsvValueSeparatorType.Semicolon:
-                        return ';';
-                    case CsvValueSeparatorType.Custom:
-                        return _separator;
-                    default:
-                        throw new NotImplementedException("SeparateType");
-                }
-            }
-            set
-            {
-                if (SeparatorType != CsvValueSeparatorType.Custom)
-                    throw new InvalidOperationException("SeparateType must be CsvValueSeparateType.Custom");
-                _separator = value;
-            }
-        }
-
-        public char TextQualifier
-        {
-            get;
-            set;
-        }
-
-        public string NewLine
-        {
-            get;
-            set;
-        }
-        public string DateTimeFormat { get ; set ; }
-        public string NumericFormat { get ; set ; }
-        public string FloatingPointFormat { get ; set ; }
-        public CultureInfo Culture { get ; set ; }
+      this.Separator = ',';
+      this.TextQualifier = '"';
+      this.NewLine = Environment.NewLine;
     }
+
+    public char Separator
+    {
+      get;
+      set;
+    }
+
+    public char TextQualifier
+    {
+      get;
+      set;
+    }
+
+    public string NewLine
+    {
+      get;
+      set;
+    }
+  }
 }

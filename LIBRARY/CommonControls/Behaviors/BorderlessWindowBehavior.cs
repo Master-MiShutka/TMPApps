@@ -264,8 +264,8 @@ namespace TMP.Wpf.CommonControls.Behaviors
 
         public bool EnableDWMDropShadow
         {
-            get { return (bool)GetValue(EnableDWMDropShadowProperty); }
-            set { SetValue(EnableDWMDropShadowProperty, value); }
+            get => (bool)GetValue(EnableDWMDropShadowProperty);
+            set => SetValue(EnableDWMDropShadowProperty, value);
         }
     }
 }

@@ -1,21 +1,23 @@
-﻿using ItemsFilter.Initializer;
-using ItemsFilter.Model;
-using ItemsFilter.ViewModel;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Linq;
-using System.Windows;
-using System.Windows.Data;
+﻿namespace ItemsFilter
+{
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+    using System.ComponentModel;
+    using System.Linq;
+    using System.Windows;
+    using System.Windows.Data;
+    using ItemsFilter.Initializer;
+    using ItemsFilter.Model;
+    using ItemsFilter.ViewModel;
 
-namespace ItemsFilter {
-   // <summary>
-    // FilterPresenter performs the role of a manager that manages the instantiation of filters and their connection to the CollectionView.
+    // <summary>
+    // Выполняет роль управляющего для создания экземпляров фильтра и их подключения к CollectionView
     // </summary>
-    public sealed class FilterPresenter : DependencyObject {
-        private static Dictionary<ICollectionView,WeakReference> filterPresenters=new Dictionary<ICollectionView,WeakReference>();
+    public sealed class FilterPresenter : DependencyObject
+    {
+
         private ReadOnlyCollection<ItemPropertyInfo> itemProperties;
         private int itemsDeferRefreshCount = 0;
         private IDisposable itemsDeferRefresh = null;
@@ -23,161 +25,171 @@ namespace ItemsFilter {
         private bool isFilterActive;
         private readonly ICollectionView collectionView;
         private readonly Dictionary<string, FiltersCollection> filters;
-        private event FilterEventHandler _Filter;
+
+        private event FilterEventHandler FilterEventHandler;
+
         private readonly FilteredEventArgs filteredEventArgs;
-       // <summary>
-        // Returns FilterPresenter, connected to a pass source .
-        // If pass instance of ICollectionView, FilterPresenter connected to passed instance, otherwise, filterPresenter connected to default view for passed collection.
-        // </summary>
-        // <param name="source">ICollectionView for source or source</param>
-        // <returns>FilterPresenter, connected to source, or null if source is null.</returns>
-        public static FilterPresenter TryGet(IEnumerable source){
-            if (source==null)
-                return null;
-            ICollectionView sourceCollectionView = source as ICollectionView;
-             if (sourceCollectionView==null)
-                sourceCollectionView=CollectionViewSource.GetDefaultView(source);
-            FilterPresenter instance=null;
-            //GC.Collect();
-            foreach (var entry in filterPresenters.ToArray()) {
-                if (!entry.Value.IsAlive)
-                    filterPresenters.Remove(entry.Key);
-            }  
-            if (filterPresenters.ContainsKey(sourceCollectionView)){
-                var wr = filterPresenters[sourceCollectionView];
-                instance=wr.Target as FilterPresenter;
-            }
-            if(instance==null){
-                instance=new FilterPresenter(sourceCollectionView);
-                if(filterPresenters.ContainsKey(sourceCollectionView))
-                    filterPresenters[sourceCollectionView]=new WeakReference(instance);
-                else
-                    filterPresenters.Add(sourceCollectionView,new WeakReference(instance));
-            }
-            return instance;
+
+        internal FilterPresenter(ICollectionView source)
+        {
+            this.collectionView = source;
+            this.filteredEventArgs = new FilteredEventArgs(source);
+            this.itemProperties = (IItemProperties)source == null ? null
+                : ((IItemProperties)source).ItemProperties;
+            this.filterFunction = new Predicate<object>(this.FilterFunction);
+            this.filters = new Dictionary<string, FiltersCollection>();
         }
 
-        private FilterPresenter(ICollectionView source) {
-            collectionView=source;
-            filteredEventArgs = new FilteredEventArgs(source);
-            itemProperties=(IItemProperties)source==null?null
-                :((IItemProperties)source).ItemProperties;
-            filterFunction = new Predicate<object>(FilterFunction);
-            filters = new Dictionary<string, FiltersCollection>();
-          }
-
         // <summary>
-        // Returns the connected  collection.
+        // Возвращает подключенную коллекцию
         // </summary>
-        public ICollectionView CollectionView {
-            get { return collectionView; }
-        } 
+        public ICollectionView CollectionView => this.collectionView;
 
         /// <summary>
         /// Get or set a value that indicates whether the defined filter set to attached ItemsControl.Items.PropertyFilter.
         /// </summary>
-        public bool IsFilterActive {
-            get {
-                return isFilterActive;
-            }
-            set {
-                if (isFilterActive != value) {
-                    isFilterActive = value;
-                    DeferRefresh().Dispose();
+        public bool IsFilterActive
+        {
+            get => this.isFilterActive;
+
+            set
+            {
+                if (this.isFilterActive != value)
+                {
+                    this.isFilterActive = value;
+                    this.DeferRefresh().Dispose();
                 }
             }
         }
+
         // <summary>
         // Initializes and configures the ViewModel for FilterControl.
         // </summary>
         // <param name="viewKey">A string representing the key for a set of filters.</param>
         // <param name="filterInitializers"> Filter initialisers to determine permissible set of the filters in the FilterControlVm.</param>
         // <returns>Instance of FilterControlVm that was bind to view.</returns>
-        public FilterControlVm TryGetFilterControlVm(string viewKey, IEnumerable<FilterInitializer> filterInitializers) {
-            //string viewKey = view.Key;
-            FilterControlVm viewModel=null;
-            if (viewKey!=null)
+        public FilterControlVm TryGetFilterControlVm(string viewKey, IEnumerable<FilterInitializer> filterInitializers)
+        {
+            // string viewKey = view.Key;
+            FilterControlVm viewModel = null;
+            if (viewKey != null)
             {
                 FiltersCollection filtersEntry;
+
                 // Get registered collection by key.
-                if (filters.ContainsKey(viewKey))
-                    filtersEntry = filters[viewKey];
+                if (this.filters.ContainsKey(viewKey))
+                {
+                    filtersEntry = this.filters[viewKey];
+                }
                 else
                 {
                     filtersEntry = new FiltersCollection(this);
-                    filters.Add(viewKey, filtersEntry);
+                    this.filters.Add(viewKey, filtersEntry);
                 }
+
                 filterInitializers = filterInitializers ?? FilterInitializersManager.Default;
-                
+
                 foreach (FilterInitializer initializer in filterInitializers)
                 {
                     Type filterKey = initializer.GetType();
-                    Filter filter;
+                    IFilter filter;
                     if (filtersEntry.ContainsKey(filterKey))
+                    {
                         filter = filtersEntry[filterKey];
+                    }
                     else
                     {
                         filter = initializer.NewFilter(this, viewKey);
                         if (filter != null)
+                        {
                             filtersEntry[filterKey] = filter;
+                        }
                     }
+
                     if (filter != null)
                     {
-                        viewModel =viewModel?? new FilterControlVm();
+                        viewModel = viewModel ?? new FilterControlVm();
                         viewModel.Add(filter);
-                        
                     }
                 }
-                //view.ItemsSource = viewModel; 
+
+                // view.ItemsSource = viewModel;
             }
+
             return viewModel;
         }
+
         /// <summary>
         /// Retrieves  or tries to create the filter model, using as a key pair {viewKey, initializer}.
         /// </summary>
         /// <param name="viewKey">A string representing a key of the set of filters.</param>
         /// <param name="initializer">Initialiser filter that defines filter in the collection of filters.</param>
         /// <returns>FilterPresenter instance, if it is possible provide for couples viewKey and initializer. Otherwise, null.</returns>
-        public Filter TryGetFilter(string viewKey, FilterInitializer initializer) {
-            Filter filter = null;
-            if (viewKey != null) {
+        public IFilter TryGetFilter(string viewKey, FilterInitializer initializer)
+        {
+            IFilter filter = null;
+            if (viewKey != null)
+            {
                 FiltersCollection filtersEntry;
+
                 // Get registered collection by key.
-                if (filters.ContainsKey(viewKey))
-                    filtersEntry = filters[viewKey];
-                else {
-                    filtersEntry = new FiltersCollection(this);
-                    filters.Add(viewKey, filtersEntry);
+                if (this.filters.ContainsKey(viewKey))
+                {
+                    filtersEntry = this.filters[viewKey];
                 }
+                else
+                {
+                    filtersEntry = new FiltersCollection(this);
+                    this.filters.Add(viewKey, filtersEntry);
+                }
+
                 Type filterKey = initializer.GetType();
                 if (filtersEntry.ContainsKey(filterKey))
+                {
                     filter = filtersEntry[filterKey];
-                else {
+                }
+                else
+                {
                     filter = initializer.NewFilter(this, viewKey);
                     if (filter != null)
+                    {
                         filtersEntry[filterKey] = filter;
+                    }
                 }
             }
+
             return filter;
         }
+
         // Represent a set of Predicate<Object> that used to generate filter function.
-        internal event FilterEventHandler Filter {
-            add {
-                if (filterFunction==null)
-                    filterFunction = new Predicate<object>(FilterFunction);
-                var deferRefresh = DeferRefresh();
-                _Filter += value;
-                IsFilterActive = true;
+        internal event FilterEventHandler Filter
+        {
+            add
+            {
+                if (this.filterFunction == null)
+                {
+                    this.filterFunction = new Predicate<object>(this.FilterFunction);
+                }
+
+                var deferRefresh = this.DeferRefresh();
+                this.FilterEventHandler += value;
+                this.IsFilterActive = true;
                 deferRefresh.Dispose();
             }
-            remove {
-                var deferRefresh = DeferRefresh();
-                _Filter -= value;
-                //if (itemsControl != null && _Filter==null)
+
+            remove
+            {
+                var deferRefresh = this.DeferRefresh();
+                this.FilterEventHandler -= value;
+
+                // if (itemsControl != null && _Filter==null)
                 //    itemsControl.Items.PropertyFilter = null;
-                IsFilterActive = _Filter != null;
-                if (_Filter == null)
-                    filterFunction = null;
+                this.IsFilterActive = this.FilterEventHandler != null;
+                if (this.FilterEventHandler == null)
+                {
+                    this.filterFunction = null;
+                }
+
                 deferRefresh.Dispose();
             }
         }
@@ -186,100 +198,150 @@ namespace ItemsFilter {
         ///  Enters a defer cycle that you can use to change filter of the view and delay automatic refresh.
         /// </summary>
         /// <returns> An System.IDisposable object that you can use to dispose of the calling object. </returns>
-        public IDisposable DeferRefresh() {
+        public IDisposable DeferRefresh()
+        {
             return new DisposeItemsDeferRefresh(this);
         }
+
         /// <summary>
-        /// Gets a collection that contains information about the properties that are
-        //     available on the items in a collection.
+        /// Возвращает коллекцию, содержащую информацию о свойствах элементов коллекции
         /// </summary>
-        public ReadOnlyCollection<ItemPropertyInfo> ItemProperties {
-            get { return itemProperties; }
-            private set {
-                if (itemProperties != value) {
-                     itemProperties = value;
+        public ReadOnlyCollection<ItemPropertyInfo> ItemProperties
+        {
+            get => this.itemProperties;
+
+            private set
+            {
+                if (this.itemProperties != value)
+                {
+                    this.itemProperties = value;
                 }
             }
         }
+
         /// <summary>
-        /// Occurs after filtration when changing the filter conditions.
+        /// Возникает после фильтрации, вызванной изменением условий фильтров
         /// </summary>
         public EventHandler<FilteredEventArgs> Filtered;
+
         // Сообщает FilterPresenter об изменении состояния фильтра.
         // Для экземпляра фильтра в активном состоянии, производится включение фильтра в условие фильтрации представления коллекции.
         // Для экземпляра фильтра в пассивном состоянии, производится исключение фильтра из условия фильтрации коллекции.
+
         /// <summary>
         /// Receives notice of the change filter conditions and IsActive property.
         /// </summary>
         /// <param name="filter"></param>
-        internal void ReceiveFilterChanged(IFilter filter) {
-            var defer = DeferRefresh();
-            Filter -= filter.IsMatch;
+        internal void ReceiveFilterChanged(IFilter filter)
+        {
+            var defer = this.DeferRefresh();
+            this.Filter -= filter.IsMatch;
             if (filter.IsActive)
-                Filter += filter.IsMatch;
+            {
+                this.Filter += filter.IsMatch;
+            }
+
             defer.Dispose();
         }
-        private void RaiseFiltered() {
-            lock (filteredEventArgs) {
-                if (Filtered != null)
-                    Filtered(this,filteredEventArgs);
+
+        private void RaiseFiltered()
+        {
+            lock (this.filteredEventArgs)
+            {
+                this.Filtered?.Invoke(this, this.filteredEventArgs);
             }
         }
-        private bool FilterFunction(object obj) {
-            if (_Filter != null) {
+
+        private bool FilterFunction(object obj)
+        {
+            if (this.FilterEventHandler != null)
+            {
                 FilterEventArgs args = new FilterEventArgs(obj);
-                _Filter(this, args);
+                this.FilterEventHandler(this, args);
                 return args.Accepted;
             }
             else
+            {
                 return true;
-        }
-        private class DisposeItemsDeferRefresh : IDisposable {
-            private FilterPresenter filterPr;
-            private bool isDisposed = false;
-            internal DisposeItemsDeferRefresh(FilterPresenter filterVm) {
-                this.filterPr = filterVm;
-                IEditableCollectionView cv = filterPr.CollectionView as IEditableCollectionView;
-                if (cv != null) {
-                    if (cv.IsAddingNew)
-                        cv.CommitNew();
-                    if (cv.IsEditingItem)
-                        cv.CommitEdit();
-                }
-                if (filterPr.itemsDeferRefreshCount == 0)
-                    filterPr.itemsDeferRefresh = filterPr.CollectionView.DeferRefresh();
-                filterPr.itemsDeferRefreshCount++;
             }
-            public void Dispose() {
-                if (!isDisposed) {
-                    filterPr.itemsDeferRefreshCount--;
-                    if (filterPr.itemsDeferRefreshCount <= 0) {
-                        filterPr.itemsDeferRefreshCount = 0;
-                        IEditableCollectionView cv = filterPr.CollectionView as IEditableCollectionView;
-                        if (cv != null) {
+        }
+
+        private class DisposeItemsDeferRefresh : IDisposable
+        {
+            private FilterPresenter filterPresenter;
+            private bool isDisposed = false;
+
+            internal DisposeItemsDeferRefresh(FilterPresenter filterVm)
+            {
+                this.filterPresenter = filterVm;
+                if (this.filterPresenter.CollectionView is IEditableCollectionView cv)
+                {
+                    if (cv.IsAddingNew)
+                    {
+                        cv.CommitNew();
+                    }
+
+                    if (cv.IsEditingItem)
+                    {
+                        cv.CommitEdit();
+                    }
+                }
+
+                if (this.filterPresenter.itemsDeferRefreshCount == 0)
+                {
+                    this.filterPresenter.itemsDeferRefresh = this.filterPresenter.CollectionView.DeferRefresh();
+                }
+
+                this.filterPresenter.itemsDeferRefreshCount++;
+            }
+
+            public void Dispose()
+            {
+                if (!this.isDisposed)
+                {
+                    this.filterPresenter.itemsDeferRefreshCount--;
+                    if (this.filterPresenter.itemsDeferRefreshCount <= 0)
+                    {
+                        this.filterPresenter.itemsDeferRefreshCount = 0;
+                        if (this.filterPresenter.CollectionView is IEditableCollectionView cv)
+                        {
                             if (cv.IsAddingNew)
+                            {
                                 cv.CancelNew();
+                            }
+
                             if (cv.IsEditingItem)
+                            {
                                 cv.CancelEdit();
+                            }
                         }
 
-                        if (filterPr.isFilterActive) {
-                            filterPr.CollectionView.Filter = filterPr.filterFunction;
+                        if (this.filterPresenter.isFilterActive)
+                        {
+                            this.filterPresenter.CollectionView.Filter = this.filterPresenter.filterFunction;
                         }
                         else
-                            if (filterPr.CollectionView.Filter != null)
-                              filterPr.CollectionView.Filter = null;
-                        filterPr.RaiseFiltered();
-                        if (filterPr.itemsDeferRefresh != null) {
-                            filterPr.itemsDeferRefresh.Dispose();
+                            if (this.filterPresenter.CollectionView.Filter != null)
+                        {
+                            this.filterPresenter.CollectionView.Filter = null;
                         }
-                        filterPr.itemsDeferRefresh = null;
+
+                        this.filterPresenter.RaiseFiltered();
+                        if (this.filterPresenter.itemsDeferRefresh != null)
+                        {
+                            this.filterPresenter.itemsDeferRefresh.Dispose();
+                        }
+
+                        this.filterPresenter.itemsDeferRefresh = null;
                     }
-                    isDisposed = true;
+
+                    this.isDisposed = true;
                 }
-                else throw new ObjectDisposedException("FilterPresenter(" + filterPr.CollectionView.ToString() + ").GetDeferRefresh()");
+                else
+                {
+                    throw new ObjectDisposedException("FilterPresenter(" + this.filterPresenter.CollectionView.ToString() + ").GetDeferRefresh()");
+                }
             }
         }
-
     }
 }

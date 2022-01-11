@@ -1,20 +1,20 @@
-//Copyright (c) Microsoft Corporation.  All rights reserved.
-
-using System;
-using System.Runtime.InteropServices;
-using MS.WindowsAPICodePack.Internal;
-using Microsoft.WindowsAPICodePack.Shell.Interop;
-using Microsoft.WindowsAPICodePack.Shell;
+// Copyright (c) Microsoft Corporation.  All rights reserved.
 
 namespace Microsoft.WindowsAPICodePack.Taskbar
 {
+    using System;
+    using System.Runtime.InteropServices;
+    using Microsoft.WindowsAPICodePack.Shell;
+    using Microsoft.WindowsAPICodePack.Shell.Interop;
+    using MS.WindowsAPICodePack.Internal;
+
     internal static class TabbedThumbnailNativeMethods
     {
         internal const int DisplayFrame = 0x00000001;
 
         internal const int ForceIconicRepresentation = 7;
         internal const int HasIconicBitmap = 10;
-        
+
         internal const uint WmDwmSendIconicThumbnail = 0x0323;
         internal const uint WmDwmSendIconicLivePreviewBitmap = 0x0326;
 
@@ -49,7 +49,8 @@ namespace Microsoft.WindowsAPICodePack.Taskbar
         [DllImport("dwmapi.dll", PreserveSig = true)]
         internal static extern int DwmSetWindowAttribute(
             IntPtr hwnd,
-            //DWMWA_* values.
+
+            // DWMWA_* values.
             uint dwAttributeToSet,
             IntPtr pvAttributeValue,
             uint cbAttribute);
@@ -70,6 +71,7 @@ namespace Microsoft.WindowsAPICodePack.Taskbar
                 size = new System.Drawing.Size(-1, -1);
                 return false;
             }
+
             size = new System.Drawing.Size(rect.Right, rect.Bottom);
             return true;
         }
@@ -79,7 +81,6 @@ namespace Microsoft.WindowsAPICodePack.Taskbar
         internal static extern bool ClientToScreen(
             IntPtr hwnd,
             ref NativePoint point);
-
 
         [DllImport("gdi32.dll")]
         [return: MarshalAs(UnmanagedType.Bool)]
@@ -205,6 +206,5 @@ namespace Microsoft.WindowsAPICodePack.Taskbar
                 Marshal.FreeHGlobal(t);
             }
         }
-
     }
 }

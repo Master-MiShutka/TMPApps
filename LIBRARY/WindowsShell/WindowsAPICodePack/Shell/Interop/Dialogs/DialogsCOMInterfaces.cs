@@ -1,31 +1,30 @@
-//Copyright (c) Microsoft Corporation.  All rights reserved.
-
-using System;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
-using Microsoft.WindowsAPICodePack.Shell;
-using Microsoft.WindowsAPICodePack.Shell.PropertySystem;
-using MS.WindowsAPICodePack.Internal;
+// Copyright (c) Microsoft Corporation.  All rights reserved.
 
 namespace Microsoft.WindowsAPICodePack.Dialogs
 {
+    using System;
+    using System.Runtime.CompilerServices;
+    using System.Runtime.InteropServices;
+    using Microsoft.WindowsAPICodePack.Shell;
+    using Microsoft.WindowsAPICodePack.Shell.PropertySystem;
+    using MS.WindowsAPICodePack.Internal;
+
     // Disable warning if a method declaration hides another inherited from a parent COM interface
-    // To successfully import a COM interface, all inherited methods need to be declared again with 
+    // To successfully import a COM interface, all inherited methods need to be declared again with
     // the exception of those already declared in "IUnknown"
 #pragma warning disable 0108
 
-    [ComImport(),
-    Guid(ShellIIDGuid.IFileDialog),
-    InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+    [ComImport()]
+    [Guid(ShellIIDGuid.IFileDialog)]
+    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     internal interface IFileDialog : IModalWindow
     {
         // Defined on IModalWindow - repeated here due to requirements of COM interop layer.
-        [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime),
-        PreserveSig]
+        [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
+        [PreserveSig]
         int Show([In] IntPtr parent);
 
         // IFileDialog-Specific interface members.
-
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         void SetFileTypes(
             [In] uint cFileTypes,
@@ -101,14 +100,14 @@ namespace Microsoft.WindowsAPICodePack.Dialogs
         void SetFilter([MarshalAs(UnmanagedType.Interface)] IntPtr pFilter);
     }
 
-    [ComImport(),
-    Guid(ShellIIDGuid.IFileOpenDialog),
-    InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+    [ComImport()]
+    [Guid(ShellIIDGuid.IFileOpenDialog)]
+    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     internal interface IFileOpenDialog : IFileDialog
     {
         // Defined on IModalWindow - repeated here due to requirements of COM interop layer.
-        [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime),
-        PreserveSig]
+        [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
+        [PreserveSig]
         int Show([In] IntPtr parent);
 
         // Defined on IFileDialog - repeated here due to requirements of COM interop layer.
@@ -192,14 +191,14 @@ namespace Microsoft.WindowsAPICodePack.Dialogs
         void GetSelectedItems([MarshalAs(UnmanagedType.Interface)] out IShellItemArray ppsai);
     }
 
-    [ComImport(),
-    Guid(ShellIIDGuid.IFileSaveDialog),
-    InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+    [ComImport()]
+    [Guid(ShellIIDGuid.IFileSaveDialog)]
+    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     internal interface IFileSaveDialog : IFileDialog
     {
         // Defined on IModalWindow - repeated here due to requirements of COM interop layer.
-        [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime),
-        PreserveSig]
+        [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
+        [PreserveSig]
         int Show([In] IntPtr parent);
 
         // Defined on IFileDialog - repeated here due to requirements of COM interop layer.
@@ -280,7 +279,6 @@ namespace Microsoft.WindowsAPICodePack.Dialogs
         void SetFilter([MarshalAs(UnmanagedType.Interface)] IntPtr pFilter);
 
         // Defined by IFileSaveDialog interface.
-
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         void SetSaveAsItem([In, MarshalAs(UnmanagedType.Interface)] IShellItem psi);
 
@@ -307,22 +305,21 @@ namespace Microsoft.WindowsAPICodePack.Dialogs
             [In, MarshalAs(UnmanagedType.Interface)] IntPtr pSink);
     }
 
-    [ComImport,
-    Guid(ShellIIDGuid.IFileDialogEvents),
-    InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+    [ComImport]
+    [Guid(ShellIIDGuid.IFileDialogEvents)]
+    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     internal interface IFileDialogEvents
     {
-        // NOTE: some of these callbacks are cancelable - returning S_FALSE means that 
-        // the dialog should not proceed (e.g. with closing, changing folder); to 
+        // NOTE: some of these callbacks are cancelable - returning S_FALSE means that
+        // the dialog should not proceed (e.g. with closing, changing folder); to
         // support this, we need to use the PreserveSig attribute to enable us to return
         // the proper HRESULT.
-
-        [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime),
-        PreserveSig]
+        [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
+        [PreserveSig]
         HResult OnFileOk([In, MarshalAs(UnmanagedType.Interface)] IFileDialog pfd);
 
-        [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime),
-        PreserveSig]
+        [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
+        [PreserveSig]
         HResult OnFolderChanging(
             [In, MarshalAs(UnmanagedType.Interface)] IFileDialog pfd,
             [In, MarshalAs(UnmanagedType.Interface)] IShellItem psiFolder);
@@ -348,9 +345,9 @@ namespace Microsoft.WindowsAPICodePack.Dialogs
             out ShellNativeMethods.FileDialogEventOverwriteResponse pResponse);
     }
 
-    [ComImport,
-    Guid(ShellIIDGuid.IFileDialogCustomize),
-    InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+    [ComImport]
+    [Guid(ShellIIDGuid.IFileDialogCustomize)]
+    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     internal interface IFileDialogCustomize
     {
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
@@ -474,9 +471,9 @@ namespace Microsoft.WindowsAPICodePack.Dialogs
         void MakeProminent([In] int dwIDCtl);
     }
 
-    [ComImport,
-    Guid(ShellIIDGuid.IFileDialogControlEvents),
-    InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+    [ComImport]
+    [Guid(ShellIIDGuid.IFileDialogControlEvents)]
+    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     internal interface IFileDialogControlEvents
     {
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
@@ -501,6 +498,7 @@ namespace Microsoft.WindowsAPICodePack.Dialogs
             [In, MarshalAs(UnmanagedType.Interface)] IFileDialogCustomize pfdc,
             [In] int dwIDCtl);
     }
+
     // Restore the warning
 #pragma warning restore 0108
 

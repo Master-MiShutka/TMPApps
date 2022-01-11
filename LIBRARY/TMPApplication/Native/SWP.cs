@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace Native
+﻿namespace Native
 {
+    using System;
+
     [Flags]
     public enum SWP : int
     {

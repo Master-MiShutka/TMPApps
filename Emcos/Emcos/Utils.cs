@@ -6,6 +6,9 @@ using System.Collections.Specialized;
 
 namespace TMP.Work.Emcos
 {
+    using System.Linq;
+    using TMP.Work.Emcos.Model;
+
     public class Utils
     {
         public static NameValueCollection ParsePairs(string data)
@@ -271,104 +274,218 @@ namespace TMP.Work.Emcos
 
             foreach (var nvc in list)
             {
-                var item = new Model.ArchData();
-
-                item.MONTH = nvc.Get("MONTH");
-                item.DA = nvc.Get("DA");
-                item.H = nvc.Get("H");
-                item.BT = nvc.Get("BT");
-                item.ET = nvc.Get("ET");
-                item.I = nvc.Get("I");
-                item.DR = nvc.Get("DR");
-                item.D = nvc.Get("D");
-                item.READ_TIME = nvc.Get("READ_TIME");
-                item.HSS = nvc.Get("HSS");
-                item.SFS = nvc.Get("SFS");
-                item.HAS_ACT = nvc.Get("HAS_ACT");
-                item.TFF_ID = nvc.Get("TFF_ID");
-                item.E_BT = nvc.Get("E_BT");
+                var item = new Model.ArchData
+                {
+                    MONTH = nvc.Get("MONTH"),
+                    DA = nvc.Get("DA"),
+                    H = nvc.Get("H"),
+                    BT = nvc.Get("BT"),
+                    ET = nvc.Get("ET"),
+                    I = nvc.Get("I"),
+                    DR = nvc.Get("DR"),
+                    D = nvc.Get("D"),
+                    READ_TIME = nvc.Get("READ_TIME"),
+                    HSS = nvc.Get("HSS"),
+                    SFS = nvc.Get("SFS"),
+                    HAS_ACT = nvc.Get("HAS_ACT"),
+                    TFF_ID = nvc.Get("TFF_ID"),
+                    E_BT = nvc.Get("E_BT")
+                };
 
                 result.Add(item);
             }
             return result;
         }
 
-        /********************************/
-        public static string GetData(FrameworkElement sender, EmcosSiteWrapperMethod method, string parametr, Func<string, bool> postAction)
+        /// <summary>
+        /// Определяет содержит ли указанный интервал дат месяц
+        /// </summary>
+        /// <param name="startDate">Начальная дата</param>
+        /// <param name="endDate">Конечная дата</param>
+        /// <returns>True если это интервал за месяц</returns>
+        public static bool HasDateIntervalMonth(DateTime startDate, DateTime endDate)
         {
-            var stateObj = sender as IStateObject;
-            if (stateObj == null)
-                throw new ArgumentException("Not a IStateObject");
-            var data = String.Empty;
-            stateObj.State = State.Busy;
-            try
-            {
-                var response = string.Empty;
-                var task = method(parametr);
-                if (task == null) return null;
-
-                task.
-                ContinueWith<String>((t) =>
-                {
-                    MessageBox.Show(t.Exception.InnerException.Message);
-                    stateObj.State = State.Idle;
-                    return null;
-                },
-                    System.Threading.CancellationToken.None,
-                    System.Threading.Tasks.TaskContinuationOptions.OnlyOnFaulted,
-                    System.Threading.Tasks.TaskScheduler.Current
-                    );
-                task.
-                ContinueWith<String>(t =>
-                {
-                    response = t.Result;
-
-                    if (String.IsNullOrWhiteSpace(response))
-                    {
-                        sender.Dispatcher.Invoke((Action)(() =>
-                                MessageBox.Show("Не удалось получить данные!", "Проблема с доступом", MessageBoxButton.OK, MessageBoxImage.Exclamation)));
-                    }
-                    if (response.Contains("result=1"))
-                    {
-                        if (EmcosSiteWrapper.Instance.Login(EmcosSiteWrapper.AuthorizationType.Login) == true)
-                        {
-                            if (EmcosSiteWrapper.Instance.Login(EmcosSiteWrapper.AuthorizationType.GetRights) == false)
-                                sender.Dispatcher.Invoke((Action)(() =>
-                                MessageBox.Show("Не удалось авторизоваться!", "Нет доступа", MessageBoxButton.OK, MessageBoxImage.Exclamation)));
-                        }
-                        else
-                            response = GetData(sender, method, parametr, postAction);
-                    }
-                    else
-                    {
-                        if (response.Contains("result=0") == false)
-                            sender.Dispatcher.Invoke((Action)(() =>
-                                MessageBox.Show("Данные не получены!\nКод результата:\n" + response, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Exclamation)));
-                        else
-                        {
-                            postAction(response);
-                        }
-                    }
-                    stateObj.State = State.Idle;
-                    return response;
-                },
-                    System.Threading.CancellationToken.None,
-                    System.Threading.Tasks.TaskContinuationOptions.OnlyOnRanToCompletion,
-                    System.Threading.Tasks.TaskScheduler.Current
-                    );
-
-                if (String.IsNullOrWhiteSpace(response))
-                    response = task.Result;
-
-                return response;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Exclamation);
-                stateObj.State = State.Idle;
-                return null;
-            }
+            var nextMonthOfEndDate = endDate.AddMonths(1);
+            var nextMonthOfEndDate2 = new DateTime(nextMonthOfEndDate.Year, nextMonthOfEndDate.Month, 1);
+            int lastDayInEndDateMonth = nextMonthOfEndDate2.AddDays(-1).Day;
+            return startDate.Day == 1 && endDate.Day == lastDayInEndDateMonth;
         }
 
+        /// <summary>
+        /// Получение архивных данных по указанной подстанции
+        /// </summary>
+        /// <param name="startDate">Начальная дата</param>
+        /// <param name="endDate">Конечная дата</param>
+        /// <param name="substation">Подстанция</param>
+        /// <param name="cts">Маркер отмены</param>
+        /// <param name="callback">Функция обратного вызова, для информирования о прогрессе</param>
+        /// <returns>True если успешно</returns>
+        public static bool GetArchiveDataForSubstation(DateTime startDate, DateTime endDate,
+            Model.Balance.Substation substation, System.Threading.CancellationTokenSource cts, Action<int, int> callback)
+        {
+            bool error;
+
+            int current = 0, total = 0;
+
+            bool hasMonthData = HasDateIntervalMonth(startDate, endDate);
+            // измерения - А энергия за сутки
+            var measurementsDaysPart = @"T2_TYPE_0=MSF&T2_NAME_0=А энергия&T2_MSF_ID_0=14&T2_MSF_NAME_0=А энергия&T2_AGGS_TYPE_ID_0=3&T2_MS_TYPE_ID_0=1";
+            // А энергия за месяц
+            var measurementsMonthPart = @"&T2_TYPE_1=MSF&T2_NAME_1=А энергия&T2_MSF_ID_1=14&T2_MSF_NAME_1=А энергия&T2_AGGS_TYPE_ID_1=4&T2_MS_TYPE_ID_1=1";
+            // 
+            var measurementsEndPartIfNotHasMonth = "&T2_COUNT=1&";
+            var measurementsEndPartIfHasMonth = "&T2_COUNT=2&";
+
+            substation.Status = Model.DataStatus.Processing;
+            error = false;
+
+            string[] wids = null;
+
+            if (substation.Children == null || substation.Children.Count == 0)
+                error = true;
+            else
+            {
+                if (substation.Items == null)
+                {
+                    TMPApplication.TMPApp.LogInfo(String.Format("Подстанция <{0}> не имеет точек.", substation.Name));
+                    error = true;
+                }
+                else
+                {
+                    try
+                    {
+                        var items = substation.Items.Cast<Model.IEmcosPoint>();
+                        string points = EmcosSiteWrapper.Instance.CreatePointsParam(items);
+                        wids = EmcosSiteWrapper.Instance.GetArchiveWIds(
+                            hasMonthData
+                              ? measurementsDaysPart + measurementsMonthPart + measurementsEndPartIfHasMonth
+                              : measurementsDaysPart + measurementsEndPartIfNotHasMonth,
+                            points, startDate, endDate, cts.Token);
+                    }
+                    catch (Exception e)
+                    {
+                        TMPApplication.TMPApp.LogInfo("GetSubstationsDaylyArchives - ошибка: " + e.Message);
+                        error = true;
+                    }
+                    if (wids == null || wids.Length == 0)
+                    {
+                        TMPApplication.TMPApp.LogInfo("GetSubstationsDaylyArchives - ошибка получен неверный wid. Подстанция - " + substation.Name);
+                        error = true;
+                    }
+                }
+            }
+            if (error == false)
+            {
+                var mls = EmcosSiteWrapper.Instance.GetParamsForArchiveData(wids[0]);
+
+                var m = mls.ToList();
+
+                total = substation.Items.Count;
+                // получение архивных данных по каждой из точек
+                foreach (Model.Balance.IBalanceItem item in substation.Items)
+                {
+                    if (item == null)
+                        throw new ArgumentNullException();
+
+                    current++;
+                    if (callback != null)
+                        callback.Invoke(current, total);
+
+                    GetBalanceItemArchiveData(item, startDate, endDate, cts);
+                }
+            }
+            substation.Status = Model.DataStatus.Processed;
+            return error == false;
+        }
+        /// <summary>
+        /// Получение архивных данных по указанному элементу
+        /// </summary>
+        /// <param name="item">Элемент баланса подстанции</param>
+        /// <param name="startDate">Начальная дата</param>
+        /// <param name="endDate">Конечная дата</param>
+        /// <param name="cts">Маркер отмены</param>
+        public static void GetBalanceItemArchiveData(Model.Balance.IBalanceItem item, DateTime startDate, DateTime endDate, System.Threading.CancellationTokenSource cts)
+        {
+            bool hasMonthData = HasDateIntervalMonth(startDate, endDate);
+
+            Action<Model.Balance.IDirectedEnergy> getDirectedEnergyValuesForBalanceItem = null;
+            getDirectedEnergyValuesForBalanceItem = (Model.Balance.IDirectedEnergy energy) =>
+            {
+                if (cts.IsCancellationRequested) return;
+                IEnumerable<Model.ArchData> data_days, data_month = null;
+                // энергия за сутки
+                data_days = GetPointArchive(item.Id, item.Name, startDate, endDate, energy.DayMlParam);
+                // разбор данных
+                energy.DaysValues = ParseArchiveData(data_days);
+
+                // энергия за месяц
+                if (hasMonthData)
+                {
+                    data_month = GetPointArchive(item.Id, item.Name, startDate, endDate, energy.MonthMlParam);
+                    if (data_month == null || data_month.Count() != 1)
+                        TMPApplication.TMPApp.LogInfo(String.Format("getDirectedEnergyValuesForBalanceItem - данные за месяц. Ошибка в данных (data_month == null || data_month.Count() != 1). Точка: ID={0}, NAME={1}", item.Id, item.Name));
+                    // разбор данных
+                    energy.MonthValue = ParseArchiveData(data_month).FirstOrDefault();
+                }
+            };
+            try
+            {
+                item.Status = Model.DataStatus.Processing;
+                getDirectedEnergyValuesForBalanceItem(item.ActiveEnergy.Plus);
+                getDirectedEnergyValuesForBalanceItem(item.ActiveEnergy.Minus);
+                getDirectedEnergyValuesForBalanceItem(item.ReactiveEnergy.Plus);
+                getDirectedEnergyValuesForBalanceItem(item.ReactiveEnergy.Minus);
+            }
+            catch (Exception e)
+            {
+                item.Status = Model.DataStatus.Processed;
+                TMPApplication.TMPApp.LogInfo(String.Format("GetBalanceItemArchiveData. Ошибка получения данных по точке: ID={0}, NAME={1}. Сообщение: {2}",
+                            item.Id, item.Name, e.Message));
+            }
+            finally
+            {
+                item.Status = Model.DataStatus.Processed;
+            }
+        }
+        /// <summary>
+        ///  Получение архивных данных энергии, заданной параметром
+        /// </summary>
+        /// <param name="pointId">ИД точки</param>
+        /// <param name="pointName">Название точки</param>
+        /// <param name="startDate">Начальная дата</param>
+        /// <param name="endDate">Конечная дата</param>
+        /// <param name="ml">Параметр, описывающий энергию - тип, направление, а также вид временного интервала</param>
+        /// <returns>Список <see cref="Model.ArchData"/> для каждого интервала времени</returns>
+        public static IEnumerable<Model.ArchData> GetPointArchive(int pointId, string pointName, DateTime startDate, DateTime endDate, Model.ML_Param ml)
+        {
+            var point = new Model.ArchAP { Id = pointId, Type = "POINT", Name = pointName };
+            IEnumerable<Model.ArchData> list;
+            try
+            {
+                list = EmcosSiteWrapper.Instance.GetArchiveData(ml, point, startDate, endDate).Result;
+            }
+            catch (Exception e)
+            {
+                TMPApplication.TMPApp.LogInfo(String.Format("GetPointArchive. Ошибка получения данных по точке: ИД-[{0}], название-[{1}]. Сообщение: {2}",
+                    pointId, pointName, e.Message));
+                return null;
+            }
+            return list;
+        }
+        /// <summary>
+        /// Преобразование архивных данных энергии в список значений
+        /// </summary>
+        /// <param name="values">Список <see cref="Model.ArchData"/></param>
+        /// <returns>Спсиок значений</returns>
+        public static IList<double?> ParseArchiveData(IEnumerable<Model.ArchData> values)
+        {
+            return values
+                .Select(d =>
+                    d.SFS == "Нормальные данные" || d.SFS.Contains("Ручной ввод")
+                        ? Double.Parse(d.D, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture)
+                        : new Nullable<double>()
+                        )
+                .ToList();
+        }
     }
-}
+}

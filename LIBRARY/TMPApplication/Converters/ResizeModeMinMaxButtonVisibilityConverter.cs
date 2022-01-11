@@ -1,14 +1,14 @@
-﻿using System;
-using System.Globalization;
-using System.Linq;
-using System.Windows;
-using System.Windows.Data;
-
-namespace TMPApplication.Converters
+﻿namespace TMPApplication.Converters
 {
+    using System;
+    using System.Globalization;
+    using System.Linq;
+    using System.Windows;
+    using System.Windows.Data;
+
     public sealed class ResizeModeMinMaxButtonVisibilityConverter : IMultiValueConverter
     {
-        private static ResizeModeMinMaxButtonVisibilityConverter _instance;
+        private static ResizeModeMinMaxButtonVisibilityConverter instance;
 
         // Explicit static constructor to tell C# compiler
         // not to mark type as beforefieldinit
@@ -20,10 +20,7 @@ namespace TMPApplication.Converters
         {
         }
 
-        public static ResizeModeMinMaxButtonVisibilityConverter Instance
-        {
-            get { return _instance ?? (_instance = new ResizeModeMinMaxButtonVisibilityConverter()); }
-        }
+        public static ResizeModeMinMaxButtonVisibilityConverter Instance => instance ?? (instance = new ResizeModeMinMaxButtonVisibilityConverter());
 
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
@@ -49,6 +46,7 @@ namespace TMPApplication.Converters
                         {
                             return useNoneWindowStyle || !showButton ? Visibility.Collapsed : Visibility.Visible;
                         }
+
                         return Visibility.Collapsed;
 
                     case ResizeMode.CanResize:
@@ -57,6 +55,7 @@ namespace TMPApplication.Converters
                         return useNoneWindowStyle || !showButton ? Visibility.Collapsed : Visibility.Visible;
                 }
             }
+
             return Visibility.Visible;
         }
 

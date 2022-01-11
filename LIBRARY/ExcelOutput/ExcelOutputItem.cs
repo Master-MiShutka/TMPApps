@@ -1,12 +1,14 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-
-namespace TMP.ExcelOutput
+﻿namespace TMP.ExcelOutput
 {
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
+
     public class ExcelOutputItem
     {
-        private ExcelOutputItem() {}
+        private ExcelOutputItem()
+        {
+        }
 
         /// <summary>
         /// Instantiate an instance of the ExcelOutputItem with a particular <see cref="IEnumerable{T}"/> collection.
@@ -208,7 +210,7 @@ namespace TMP.ExcelOutput
                 WorksheetName = worksheetName,
                 Trim = trim,
                 PostCreationActions = postCreationAction,
-                Path = path
+                Path = path,
             };
             return excelOutputItem;
         }
@@ -224,5 +226,5 @@ namespace TMP.ExcelOutput
         internal string Path { get; private set; }
 
         internal Type Type { get; private set; }
-}
+    }
 }

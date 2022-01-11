@@ -1,18 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace TMPApplication
+﻿namespace TMPApplication
 {
+    using System;
+    using System.Collections.Generic;
+
     public class ServiceInjector
     {
         #region Fields
 
         public static readonly ServiceInjector Instance = new ServiceInjector();
 
-        readonly Dictionary<Type, object> _serviceMap;
-        readonly object _serviceMapLock;
+        private readonly Dictionary<Type, object> serviceMap;
+        private readonly object serviceMapLock;
 
         #endregion
 
@@ -20,8 +18,8 @@ namespace TMPApplication
 
         public ServiceInjector()
         {
-            _serviceMap = new Dictionary<Type, object>();
-            _serviceMapLock = new object();
+            this.serviceMap = new Dictionary<Type, object>();
+            this.serviceMapLock = new object();
         }
 
         #endregion
@@ -31,9 +29,9 @@ namespace TMPApplication
         public void AddService<TServiceContract>(TServiceContract implementation)
             where TServiceContract : class
         {
-            lock (_serviceMapLock)
+            lock (this.serviceMapLock)
             {
-                _serviceMap[typeof(TServiceContract)] = implementation;
+                this.serviceMap[typeof(TServiceContract)] = implementation;
             }
         }
 
@@ -41,9 +39,9 @@ namespace TMPApplication
             where TServiceContract : class
         {
             object service;
-            lock (_serviceMapLock)
+            lock (this.serviceMapLock)
             {
-                _serviceMap.TryGetValue(typeof(TServiceContract), out service);
+                this.serviceMap.TryGetValue(typeof(TServiceContract), out service);
             }
 
             return service as TServiceContract;
@@ -51,7 +49,6 @@ namespace TMPApplication
 
         public static void InjectServices()
         {
-
         }
 
         #endregion

@@ -1,20 +1,20 @@
-﻿//Copyright (c) Microsoft Corporation.  All rights reserved.
+﻿// Copyright (c) Microsoft Corporation.  All rights reserved.
 
 namespace MS.WindowsAPICodePack.Internal
 {
     /// <summary>
-    /// HRESULT Wrapper    
-    /// </summary>    
+    /// HRESULT Wrapper
+    /// </summary>
     public enum HResult
     {
-        /// <summary>     
-        /// S_OK          
-        /// </summary>    
+        /// <summary>
+        /// S_OK
+        /// </summary>
         Ok = 0x0000,
 
         /// <summary>
         /// S_FALSE
-        /// </summary>        
+        /// </summary>
         False = 0x0001,
 
         /// <summary>
@@ -70,7 +70,7 @@ namespace MS.WindowsAPICodePack.Internal
         /// <summary>
         /// The requested resources is read-only.
         /// </summary>
-        AccessDenied = unchecked((int)0x80030005)
+        AccessDenied = unchecked((int)0x80030005),
     }
 
     /// <summary>
@@ -101,8 +101,8 @@ namespace MS.WindowsAPICodePack.Internal
                 win32ErrorCode =
                     (int)(((uint)win32ErrorCode & 0x0000FFFF) | (FacilityWin32 << 16) | 0x80000000);
             }
-            return win32ErrorCode;
 
+            return win32ErrorCode;
         }
 
         /// <summary>
@@ -153,9 +153,7 @@ namespace MS.WindowsAPICodePack.Internal
         /// <returns>Inticates that the Win32 error code corresponds to the COM error code.</returns>
         public static bool Matches(int result, int win32ErrorCode)
         {
-            return (result == HResultFromWin32(win32ErrorCode));
+            return result == HResultFromWin32(win32ErrorCode);
         }
-
-
     }
 }

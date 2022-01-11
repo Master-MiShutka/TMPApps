@@ -1,18 +1,18 @@
-﻿//Copyright (c) Microsoft Corporation.  All rights reserved.
-
-using System;
-using System.Runtime.InteropServices;
-using Microsoft.WindowsAPICodePack.Shell;
-using Microsoft.WindowsAPICodePack.Shell.PropertySystem;
-using MS.WindowsAPICodePack.Internal;
+﻿// Copyright (c) Microsoft Corporation.  All rights reserved.
 
 namespace Microsoft.WindowsAPICodePack.Taskbar
 {
+    using System;
+    using System.Runtime.InteropServices;
+    using Microsoft.WindowsAPICodePack.Shell;
+    using Microsoft.WindowsAPICodePack.Shell.PropertySystem;
+    using MS.WindowsAPICodePack.Internal;
+
     #region Enums
     internal enum KnownDestinationCategory
     {
         Frequent = 1,
-        Recent
+        Recent,
     }
 
     internal enum ShellAddToRecentDocs
@@ -23,7 +23,7 @@ namespace Microsoft.WindowsAPICodePack.Taskbar
         AppIdInfo = 0x4,       // indicates the data type is a pointer to a SHARDAPPIDINFO structure
         AppIdInfoIdList = 0x5, // indicates the data type is a pointer to a SHARDAPPIDINFOIDLIST structure
         Link = 0x6,            // indicates the data type is a pointer to an IShellLink instance
-        AppIdInfoLink = 0x7,   // indicates the data type is a pointer to a SHARDAPPIDINFOLINK structure 
+        AppIdInfoLink = 0x7,   // indicates the data type is a pointer to a SHARDAPPIDINFOLINK structure
     }
 
     internal enum TaskbarProgressBarStatus
@@ -32,13 +32,13 @@ namespace Microsoft.WindowsAPICodePack.Taskbar
         Indeterminate = 0x1,
         Normal = 0x2,
         Error = 0x4,
-        Paused = 0x8
+        Paused = 0x8,
     }
 
     internal enum TaskbarActiveTabSetting
     {
         UseMdiThumbnail = 0x1,
-        UseMdiLivePreview = 0x2
+        UseMdiLivePreview = 0x2,
     }
 
     internal enum ThumbButtonMask
@@ -46,7 +46,7 @@ namespace Microsoft.WindowsAPICodePack.Taskbar
         Bitmap = 0x1,
         Icon = 0x2,
         Tooltip = 0x4,
-        THB_FLAGS = 0x8
+        THB_FLAGS = 0x8,
     }
 
     [Flags]
@@ -57,7 +57,7 @@ namespace Microsoft.WindowsAPICodePack.Taskbar
         DismissOnClick = 0x00000002,
         NoBackground = 0x00000004,
         Hidden = 0x00000008,
-        NonInteractive = 0x00000010
+        NonInteractive = 0x00000010,
     }
 
     internal enum SetTabPropertiesOption
@@ -66,7 +66,7 @@ namespace Microsoft.WindowsAPICodePack.Taskbar
         UseAppThumbnailAlways = 0x1,
         UseAppThumbnailWhenActive = 0x2,
         UseAppPeekAlways = 0x4,
-        UseAppPeekWhenActive = 0x8
+        UseAppPeekWhenActive = 0x8,
     }
 
     #endregion
@@ -132,12 +132,11 @@ namespace Microsoft.WindowsAPICodePack.Taskbar
         [DllImport("user32.dll", EntryPoint = "RegisterWindowMessage", SetLastError = true, CharSet = CharSet.Unicode)]
         internal static extern uint RegisterWindowMessage([MarshalAs(UnmanagedType.LPWStr)] string lpString);
 
-
         [DllImport("shell32.dll")]
         public static extern int SHGetPropertyStoreForWindow(
             IntPtr hwnd,
             ref Guid iid /*IID_IPropertyStore*/,
-            [Out(), MarshalAs(UnmanagedType.Interface)]out IPropertyStore propertyStore);
+            [Out(), MarshalAs(UnmanagedType.Interface)] out IPropertyStore propertyStore);
 
         /// <summary>
         /// Sets the window's application id by its window handle.
@@ -164,7 +163,6 @@ namespace Microsoft.WindowsAPICodePack.Taskbar
                 }
             }
 
-
             // Dispose the IPropertyStore and PropVariant
             Marshal.ReleaseComObject(propStore);
         }
@@ -181,6 +179,7 @@ namespace Microsoft.WindowsAPICodePack.Taskbar
             {
                 throw Marshal.GetExceptionForHR(rc);
             }
+
             return propStore;
         }
 

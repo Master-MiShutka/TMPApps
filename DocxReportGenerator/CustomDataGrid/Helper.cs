@@ -1,16 +1,17 @@
-﻿using System.Windows.Media;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.ComponentModel;
-
-namespace TMP.Work.DocxReportGenerator.CustomControls
+﻿namespace TMP.Work.DocxReportGenerator.CustomControls
 {
+    using System.ComponentModel;
+    using System.Windows;
+    using System.Windows.Controls;
+    using System.Windows.Data;
+    using System.Windows.Media;
+
     public static class Helper
     {
         #region GetVisualChild
 
-        public static T GetVisualChild<T>(Visual parent) where T : Visual
+        public static T GetVisualChild<T>(Visual parent)
+            where T : Visual
         {
             T child = default(T);
 
@@ -32,7 +33,8 @@ namespace TMP.Work.DocxReportGenerator.CustomControls
 
         #region FindVisualParent
 
-        public static T FindVisualParent<T>(UIElement element) where T : UIElement
+        public static T FindVisualParent<T>(UIElement element)
+            where T : UIElement
         {
             UIElement parent = element;
             while (parent != null)
@@ -59,6 +61,7 @@ namespace TMP.Work.DocxReportGenerator.CustomControls
             {
                 return null;
             }
+
             if (name.Equals(ele.GetValue(FrameworkElement.NameProperty)))
             {
                 return ele;
@@ -74,6 +77,7 @@ namespace TMP.Work.DocxReportGenerator.CustomControls
                     return result;
                 }
             }
+
             return null;
         }
 
@@ -112,11 +116,12 @@ namespace TMP.Work.DocxReportGenerator.CustomControls
             int i = 0;
             foreach (SortDescription sortDesc in sortDescriptions)
             {
-                if (System.String.CompareOrdinal(sortDesc.PropertyName, sortPropertyName) == 0)
+                if (string.CompareOrdinal(sortDesc.PropertyName, sortPropertyName) == 0)
                 {
                     index = i;
                     break;
                 }
+
                 i++;
             }
 

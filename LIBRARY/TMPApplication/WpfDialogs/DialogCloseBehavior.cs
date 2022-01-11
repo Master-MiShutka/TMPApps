@@ -1,8 +1,8 @@
 ﻿namespace TMPApplication.WpfDialogs
 {
-	public enum DialogCloseBehavior
-	{
-		AutoCloseOnButtonClick,
-		ExplicitClose
-	}
+    public enum DialogCloseBehavior
+    {
+        AutoCloseOnButtonClick,
+        ExplicitClose,
+    }
 }

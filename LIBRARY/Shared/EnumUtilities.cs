@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace TMP.Shared
+﻿namespace TMP.Shared
 {
-    class EnumUtilities
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+
+    internal class EnumUtilities
     {
     }
 }

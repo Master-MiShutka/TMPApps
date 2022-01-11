@@ -1,9 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿namespace ItemsFilter
+{
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
 
-namespace ItemsFilter {
     // Summary:
     //     Represents the method that will handle the ItemsFilter.FilterPresenter.Filter  event.
     //

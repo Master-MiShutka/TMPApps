@@ -1,11 +1,11 @@
-﻿//Copyright (c) Microsoft Corporation.  All rights reserved.
-
-using System;
-using System.Diagnostics;
-using System.Runtime.InteropServices;
+﻿// Copyright (c) Microsoft Corporation.  All rights reserved.
 
 namespace Microsoft.WindowsAPICodePack.Shell
 {
+    using System;
+    using System.Diagnostics;
+    using System.Runtime.InteropServices;
+
     /// <summary>
     /// Represents a registered non file system Known Folder
     /// </summary>
@@ -20,17 +20,19 @@ namespace Microsoft.WindowsAPICodePack.Shell
 
         #region Internal Constructors
 
-        internal NonFileSystemKnownFolder(IShellItem2 shellItem) : base(shellItem) { }
+        internal NonFileSystemKnownFolder(IShellItem2 shellItem) : base(shellItem)
+        {
+        }
 
         internal NonFileSystemKnownFolder(IKnownFolderNative kf)
         {
             Debug.Assert(kf != null);
-            knownFolderNative = kf;
+            this.knownFolderNative = kf;
 
             // Set the native shell item
             // and set it on the base class (ShellObject)
             Guid guid = new Guid(ShellIIDGuid.IShellItem2);
-            knownFolderNative.GetShellItem(0, ref guid, out nativeShellItem);
+            this.knownFolderNative.GetShellItem(0, ref guid, out this.nativeShellItem);
         }
 
         #endregion
@@ -41,35 +43,35 @@ namespace Microsoft.WindowsAPICodePack.Shell
         {
             get
             {
-                if (knownFolderNative == null)
+                if (this.knownFolderNative == null)
                 {
                     // We need to get the PIDL either from the NativeShellItem,
                     // or from base class's property (if someone already set it on us).
                     // Need to use the PIDL to get the native IKnownFolder interface.
 
                     // Get teh PIDL for the ShellItem
-                    if (nativeShellItem != null && base.PIDL == IntPtr.Zero)
+                    if (this.nativeShellItem != null && base.PIDL == IntPtr.Zero)
                     {
-                        base.PIDL = ShellHelper.PidlFromShellItem(nativeShellItem);
+                        base.PIDL = ShellHelper.PidlFromShellItem(this.nativeShellItem);
                     }
 
                     // If we have a valid PIDL, get the native IKnownFolder
                     if (base.PIDL != IntPtr.Zero)
                     {
-                        knownFolderNative = KnownFolderHelper.FromPIDL(base.PIDL);
+                        this.knownFolderNative = KnownFolderHelper.FromPIDL(base.PIDL);
                     }
 
-                    Debug.Assert(knownFolderNative != null);
+                    Debug.Assert(this.knownFolderNative != null);
                 }
 
                 // If this is the first time this property is being called,
                 // get the native Folder Defination (KnownFolder properties)
-                if (knownFolderSettings == null)
+                if (this.knownFolderSettings == null)
                 {
-                    knownFolderSettings = new KnownFolderSettings(knownFolderNative);
+                    this.knownFolderSettings = new KnownFolderSettings(this.knownFolderNative);
                 }
 
-                return knownFolderSettings;
+                return this.knownFolderSettings;
             }
         }
 
@@ -80,178 +82,124 @@ namespace Microsoft.WindowsAPICodePack.Shell
         /// <summary>
         /// Gets the path for this known folder.
         /// </summary>
-        /// <value>A <see cref="System.String"/> object.</value>
-        public string Path
-        {
-            get { return KnownFolderSettings.Path; }
-        }
+        /// <value>A <see cref="string"/> object.</value>
+        public string Path => this.KnownFolderSettings.Path;
 
         /// <summary>
         /// Gets the category designation for this known folder.
         /// </summary>
         /// <value>A <see cref="FolderCategory"/> value.</value>
-        public FolderCategory Category
-        {
-            get { return KnownFolderSettings.Category; }
-        }
+        public FolderCategory Category => this.KnownFolderSettings.Category;
 
         /// <summary>
         /// Gets this known folder's canonical name.
         /// </summary>
-        /// <value>A <see cref="System.String"/> object.</value>
-        public string CanonicalName
-        {
-            get { return KnownFolderSettings.CanonicalName; }
-        }
+        /// <value>A <see cref="string"/> object.</value>
+        public string CanonicalName => this.KnownFolderSettings.CanonicalName;
 
         /// <summary>
         /// Gets this known folder's description.
         /// </summary>
-        /// <value>A <see cref="System.String"/> object.</value>
-        public string Description
-        {
-            get { return KnownFolderSettings.Description; }
-        }
+        /// <value>A <see cref="string"/> object.</value>
+        public string Description => this.KnownFolderSettings.Description;
 
         /// <summary>
         /// Gets the unique identifier for this known folder's parent folder.
         /// </summary>
         /// <value>A <see cref="System.Guid"/> value.</value>
-        public Guid ParentId
-        {
-            get { return KnownFolderSettings.ParentId; }
-        }
+        public Guid ParentId => this.KnownFolderSettings.ParentId;
 
         /// <summary>
         /// Gets this known folder's relative path.
         /// </summary>
-        /// <value>A <see cref="System.String"/> object.</value>
-        public string RelativePath
-        {
-            get { return KnownFolderSettings.RelativePath; }
-        }
+        /// <value>A <see cref="string"/> object.</value>
+        public string RelativePath => this.KnownFolderSettings.RelativePath;
 
         /// <summary>
         /// Gets this known folder's parsing name.
         /// </summary>
-        /// <value>A <see cref="System.String"/> object.</value>
-        public override string ParsingName
-        {
-            get { return base.ParsingName; }
-        }
+        /// <value>A <see cref="string"/> object.</value>
+        public override string ParsingName => base.ParsingName;
 
         /// <summary>
         /// Gets this known folder's tool tip text.
         /// </summary>
-        /// <value>A <see cref="System.String"/> object.</value>
-        public string Tooltip
-        {
-            get { return KnownFolderSettings.Tooltip; }
-        }
+        /// <value>A <see cref="string"/> object.</value>
+        public string Tooltip => this.KnownFolderSettings.Tooltip;
+
         /// <summary>
-        /// Gets the resource identifier for this 
+        /// Gets the resource identifier for this
         /// known folder's tool tip text.
         /// </summary>
-        /// <value>A <see cref="System.String"/> object.</value>
-        public string TooltipResourceId
-        {
-            get { return KnownFolderSettings.TooltipResourceId; }
-        }
+        /// <value>A <see cref="string"/> object.</value>
+        public string TooltipResourceId => this.KnownFolderSettings.TooltipResourceId;
 
         /// <summary>
         /// Gets this known folder's localized name.
         /// </summary>
-        /// <value>A <see cref="System.String"/> object.</value>
-        public string LocalizedName
-        {
-            get { return KnownFolderSettings.LocalizedName; }
-        }
+        /// <value>A <see cref="string"/> object.</value>
+        public string LocalizedName => this.KnownFolderSettings.LocalizedName;
+
         /// <summary>
-        /// Gets the resource identifier for this 
+        /// Gets the resource identifier for this
         /// known folder's localized name.
         /// </summary>
-        /// <value>A <see cref="System.String"/> object.</value>
-        public string LocalizedNameResourceId
-        {
-            get { return KnownFolderSettings.LocalizedNameResourceId; }
-        }
+        /// <value>A <see cref="string"/> object.</value>
+        public string LocalizedNameResourceId => this.KnownFolderSettings.LocalizedNameResourceId;
 
         /// <summary>
         /// Gets this known folder's security attributes.
         /// </summary>
-        /// <value>A <see cref="System.String"/> object.</value>
-        public string Security
-        {
-            get { return KnownFolderSettings.Security; }
-        }
+        /// <value>A <see cref="string"/> object.</value>
+        public string Security => this.KnownFolderSettings.Security;
 
         /// <summary>
-        /// Gets this known folder's file attributes, 
+        /// Gets this known folder's file attributes,
         /// such as "read-only".
         /// </summary>
         /// <value>A <see cref="System.IO.FileAttributes"/> value.</value>
-        public System.IO.FileAttributes FileAttributes
-        {
-            get { return KnownFolderSettings.FileAttributes; }
-        }
+        public System.IO.FileAttributes FileAttributes => this.KnownFolderSettings.FileAttributes;
 
         /// <summary>
         /// Gets an value that describes this known folder's behaviors.
         /// </summary>
         /// <value>A <see cref="DefinitionOptions"/> value.</value>
-        public DefinitionOptions DefinitionOptions
-        {
-            get { return KnownFolderSettings.DefinitionOptions; }
-        }
+        public DefinitionOptions DefinitionOptions => this.KnownFolderSettings.DefinitionOptions;
 
         /// <summary>
         /// Gets the unique identifier for this known folder's type.
         /// </summary>
         /// <value>A <see cref="System.Guid"/> value.</value>
-        public Guid FolderTypeId
-        {
-            get { return KnownFolderSettings.FolderTypeId; }
-        }
+        public Guid FolderTypeId => this.KnownFolderSettings.FolderTypeId;
 
         /// <summary>
         /// Gets a string representation of this known folder's type.
         /// </summary>
-        /// <value>A <see cref="System.String"/> object.</value>
-        public string FolderType
-        {
-            get { return KnownFolderSettings.FolderType; }
-        }
+        /// <value>A <see cref="string"/> object.</value>
+        public string FolderType => this.KnownFolderSettings.FolderType;
+
         /// <summary>
         /// Gets the unique identifier for this known folder.
         /// </summary>
         /// <value>A <see cref="System.Guid"/> value.</value>
-        public Guid FolderId
-        {
-            get { return KnownFolderSettings.FolderId; }
-        }
+        public Guid FolderId => this.KnownFolderSettings.FolderId;
 
         /// <summary>
-        /// Gets a value that indicates whether this known folder's path exists on the computer. 
+        /// Gets a value that indicates whether this known folder's path exists on the computer.
         /// </summary>
-        /// <value>A bool<see cref="System.Boolean"/> value.</value>
-        /// <remarks>If this property value is <b>false</b>, 
+        /// <value>A bool<see cref="bool"/> value.</value>
+        /// <remarks>If this property value is <b>false</b>,
         /// the folder might be a virtual folder (<see cref="Category"/> property will
         /// be <see cref="FolderCategory.Virtual"/> for virtual folders)</remarks>
-        public bool PathExists
-        {
-            get { return KnownFolderSettings.PathExists; }
-        }
+        public bool PathExists => this.KnownFolderSettings.PathExists;
 
         /// <summary>
-        /// Gets a value that states whether this known folder 
-        /// can have its path set to a new value, 
+        /// Gets a value that states whether this known folder
+        /// can have its path set to a new value,
         /// including any restrictions on the redirection.
         /// </summary>
         /// <value>A <see cref="RedirectionCapability"/> value.</value>
-        public RedirectionCapability Redirection
-        {
-            get { return KnownFolderSettings.Redirection; }
-        }
+        public RedirectionCapability Redirection => this.KnownFolderSettings.Redirection;
 
         #endregion
 
@@ -265,13 +213,13 @@ namespace Microsoft.WindowsAPICodePack.Shell
         {
             if (disposing)
             {
-                knownFolderSettings = null;
+                this.knownFolderSettings = null;
             }
 
-            if (knownFolderNative != null)
+            if (this.knownFolderNative != null)
             {
-                Marshal.ReleaseComObject(knownFolderNative);
-                knownFolderNative = null;
+                Marshal.ReleaseComObject(this.knownFolderNative);
+                this.knownFolderNative = null;
             }
 
             base.Dispose(disposing);

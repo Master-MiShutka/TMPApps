@@ -16,7 +16,7 @@ namespace Test
     {
         private void TMPApp_Startup(object sender, StartupEventArgs e)
         {
-            var p1 = BaseRepository<TMP.Work.Emcos.Model.EmcosPoint>.XmlDataContractDeSerialize("Settings\\DataModel-dc.xml", null);
+            /*var p1 = BaseRepository<TMP.Work.Emcos.Model.EmcosPoint>.XmlDataContractDeSerialize("Settings\\DataModel-dc.xml", null);
             var p2 = BaseRepository<TMP.Work.Emcos.Model.EmcosPoint>.JsonDeSerialize("Settings\\DataModel.json", null);
             var p3 = BaseRepository<TMP.Work.Emcos.Model.EmcosPoint>.GzJsonDeSerialize("Settings\\DataModel.gz.json", null);
 
@@ -31,7 +31,7 @@ namespace Test
             BaseRepository<TMP.Work.Emcos.Model.EmcosPoint>.GzJsonSerialize(p1, "Settings\\DataModel.gz.json");
 
             var p = BaseRepository<TMP.Work.Emcos.Model.EmcosPoint>.XmlDeSerialize("Settings\\DataModel.xml");
-            BaseRepository<TMP.Work.Emcos.Model.EmcosPoint>.XmlDataContractSerialize(p, "Settings\\DataModel-dc.xml", null);
+            BaseRepository<TMP.Work.Emcos.Model.EmcosPoint>.XmlDataContractSerialize(p, "Settings\\DataModel-dc.xml", null);*/
             //Common.RepositoryCommon.BaseRepository<Model.EmcosPoint>.JsonSerialize(p, "qqqqqqq-J", null);
         }
     }

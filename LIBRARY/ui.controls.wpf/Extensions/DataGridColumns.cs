@@ -1,13 +1,13 @@
-﻿using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.ComponentModel;
-using System.Reflection;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-
-namespace TMP.UI.Controls.WPF.Extensions
+﻿namespace TMP.UI.Controls.WPF.Extensions
 {
+    using System.Collections.Generic;
+    using System.Collections.Specialized;
+    using System.ComponentModel;
+    using System.Reflection;
+    using System.Windows;
+    using System.Windows.Controls;
+    using System.Windows.Data;
+
     public static class DataGridColumns
     {
         [AttachedPropertyBrowsableForType(typeof(DataGrid))]
@@ -31,7 +31,6 @@ namespace TMP.UI.Controls.WPF.Extensions
                     null,
                     ColumnsSourceChanged));
 
-
         [AttachedPropertyBrowsableForType(typeof(DataGrid))]
         public static string GetHeaderTextMember(DependencyObject obj)
         {
@@ -46,7 +45,6 @@ namespace TMP.UI.Controls.WPF.Extensions
         // Using a DependencyProperty as the backing store for HeaderTextMember.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty HeaderTextMemberProperty =
             DependencyProperty.RegisterAttached("HeaderTextMember", typeof(string), typeof(DataGridColumns), new UIPropertyMetadata(null));
-
 
         [AttachedPropertyBrowsableForType(typeof(DataGrid))]
         public static string GetDisplayMemberMember(DependencyObject obj)
@@ -63,7 +61,6 @@ namespace TMP.UI.Controls.WPF.Extensions
         public static readonly DependencyProperty DisplayMemberMemberProperty =
             DependencyProperty.RegisterAttached("DisplayMemberMember", typeof(string), typeof(DataGridColumns), new UIPropertyMetadata(null));
 
-
         private static void ColumnsSourceChanged(DependencyObject obj, DependencyPropertyChangedEventArgs e)
         {
             DataGrid dataGrid = obj as DataGrid;
@@ -75,7 +72,9 @@ namespace TMP.UI.Controls.WPF.Extensions
                 {
                     ICollectionView view = CollectionViewSource.GetDefaultView(e.OldValue);
                     if (view != null)
+                    {
                         RemoveHandlers(dataGrid, view);
+                    }
                 }
 
                 if (e.NewValue != null)
@@ -90,17 +89,18 @@ namespace TMP.UI.Controls.WPF.Extensions
             }
         }
 
-        private static IDictionary<ICollectionView, List<DataGrid>> _dataGridsByColumnsSource =
+        private static IDictionary<ICollectionView, List<DataGrid>> dataGridsByColumnsSource =
             new Dictionary<ICollectionView, List<DataGrid>>();
 
         private static List<DataGrid> GetDataGridsForColumnSource(ICollectionView columnSource)
         {
             List<DataGrid> dataGrids;
-            if (!_dataGridsByColumnsSource.TryGetValue(columnSource, out dataGrids))
+            if (!dataGridsByColumnsSource.TryGetValue(columnSource, out dataGrids))
             {
                 dataGrids = new List<DataGrid>();
-                _dataGridsByColumnsSource.Add(columnSource, dataGrids);
+                dataGridsByColumnsSource.Add(columnSource, dataGrids);
             }
+
             return dataGrids;
         }
 
@@ -130,7 +130,9 @@ namespace TMP.UI.Controls.WPF.Extensions
             ICollectionView view = sender as ICollectionView;
             var dataGrids = GetDataGridsForColumnSource(view);
             if (dataGrids == null || dataGrids.Count == 0)
+            {
                 return;
+            }
 
             switch (e.Action)
             {
@@ -143,6 +145,7 @@ namespace TMP.UI.Controls.WPF.Extensions
                             dataGrid.Columns.Insert(e.NewStartingIndex + i, column);
                         }
                     }
+
                     break;
                 case NotifyCollectionChangedAction.Move:
                     foreach (var dataGrid in dataGrids)
@@ -153,12 +156,14 @@ namespace TMP.UI.Controls.WPF.Extensions
                             DataGridColumn column = dataGrid.Columns[e.OldStartingIndex + i];
                             columns.Add(column);
                         }
+
                         for (int i = 0; i < e.NewItems.Count; i++)
                         {
                             DataGridColumn column = columns[i];
                             dataGrid.Columns.Insert(e.NewStartingIndex + i, column);
                         }
                     }
+
                     break;
                 case NotifyCollectionChangedAction.Remove:
                     foreach (var dataGrid in dataGrids)
@@ -168,6 +173,7 @@ namespace TMP.UI.Controls.WPF.Extensions
                             dataGrid.Columns.RemoveAt(e.OldStartingIndex);
                         }
                     }
+
                     break;
                 case NotifyCollectionChangedAction.Replace:
                     foreach (var dataGrid in dataGrids)
@@ -178,6 +184,7 @@ namespace TMP.UI.Controls.WPF.Extensions
                             dataGrid.Columns[e.NewStartingIndex + i] = column;
                         }
                     }
+
                     break;
                 case NotifyCollectionChangedAction.Reset:
                     foreach (var dataGrid in dataGrids)
@@ -185,6 +192,7 @@ namespace TMP.UI.Controls.WPF.Extensions
                         dataGrid.Columns.Clear();
                         CreateColumns(dataGrid, sender as ICollectionView);
                     }
+
                     break;
                 default:
                     break;
@@ -200,11 +208,13 @@ namespace TMP.UI.Controls.WPF.Extensions
             {
                 column.Header = GetPropertyValue(columnSource, headerTextMember);
             }
+
             if (!string.IsNullOrEmpty(displayMemberMember))
             {
                 string propertyName = GetPropertyValue(columnSource, displayMemberMember) as string;
                 column.Binding = new Binding(propertyName);
             }
+
             return column;
         }
 
@@ -214,8 +224,11 @@ namespace TMP.UI.Controls.WPF.Extensions
             {
                 PropertyInfo prop = obj.GetType().GetProperty(propertyName);
                 if (prop != null)
+                {
                     return prop.GetValue(obj, null);
+                }
             }
+
             return null;
         }
     }

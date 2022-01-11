@@ -1,7 +1,7 @@
-﻿using System.Xml.Linq;
-
-namespace TemplateEngine.Docx
+﻿namespace TemplateEngine.Docx
 {
+    using System.Xml.Linq;
+
     internal static class R
     {
         public static XNamespace r = "http://schemas.openxmlformats.org/officeDocument/2006/relationships";

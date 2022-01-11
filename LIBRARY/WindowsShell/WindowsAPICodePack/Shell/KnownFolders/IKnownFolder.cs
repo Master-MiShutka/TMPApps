@@ -1,11 +1,11 @@
 // Copyright (c) Microsoft Corporation.  All rights reserved.
 
-using System;
-using System.Collections.Generic;
-using System.IO;
-
 namespace Microsoft.WindowsAPICodePack.Shell
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+
     /// <summary>
     /// Represents a registered or known folder in the system.
     /// </summary>
@@ -52,7 +52,7 @@ namespace Microsoft.WindowsAPICodePack.Shell
         string Tooltip { get; }
 
         /// <summary>
-        /// Gets the resource identifier for this 
+        /// Gets the resource identifier for this
         /// known folder's tool tip text.
         /// </summary>
         string TooltipResourceId { get; }
@@ -63,7 +63,7 @@ namespace Microsoft.WindowsAPICodePack.Shell
         string LocalizedName { get; }
 
         /// <summary>
-        /// Gets the resource identifier for this 
+        /// Gets the resource identifier for this
         /// known folder's localized name.
         /// </summary>
         string LocalizedNameResourceId { get; }
@@ -74,7 +74,7 @@ namespace Microsoft.WindowsAPICodePack.Shell
         string Security { get; }
 
         /// <summary>
-        /// Gets this known folder's file attributes, 
+        /// Gets this known folder's file attributes,
         /// such as "read-only".
         /// </summary>
         FileAttributes FileAttributes { get; }
@@ -100,16 +100,16 @@ namespace Microsoft.WindowsAPICodePack.Shell
         Guid FolderId { get; }
 
         /// <summary>
-        /// Gets a value that indicates whether this known folder's path exists on the computer. 
+        /// Gets a value that indicates whether this known folder's path exists on the computer.
         /// </summary>
-        /// <remarks>If this property value is <b>false</b>, 
+        /// <remarks>If this property value is <b>false</b>,
         /// the folder might be a virtual folder (<see cref="Category"/> property will
         /// be <see cref="FolderCategory.Virtual"/> for virtual folders)</remarks>
         bool PathExists { get; }
 
         /// <summary>
-        /// Gets a value that states whether this known folder 
-        /// can have its path set to a new value, 
+        /// Gets a value that states whether this known folder
+        /// can have its path set to a new value,
         /// including any restrictions on the redirection.
         /// </summary>
         RedirectionCapability Redirection { get; }

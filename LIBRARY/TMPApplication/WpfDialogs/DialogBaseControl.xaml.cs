@@ -1,193 +1,213 @@
-﻿using System;
-using System.ComponentModel;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-
-namespace TMPApplication.WpfDialogs
+﻿namespace TMPApplication.WpfDialogs
 {
-	/// <summary>
-	/// Interaction logic for DialogBaseControl.xaml
-	/// </summary>
-	partial class DialogBaseControl : INotifyPropertyChanged
-	{
-		public DialogBaseControl(FrameworkElement originalContent, DialogBase dialog, Control background = null)
-		{
-			Caption = dialog.Caption;
+    using System;
+    using System.ComponentModel;
+    using System.Windows;
+    using System.Windows.Controls;
+    using System.Windows.Data;
 
-			_dialog = dialog;
+    /// <summary>
+    /// Interaction logic for DialogBaseControl.xaml
+    /// </summary>
+    partial class DialogBaseControl : INotifyPropertyChanged
+    {
+        public DialogBaseControl(DialogBase dialog, Control background = null)
+        {
+            this.Caption = dialog.Caption;
 
-            InitializeComponent();
+            this.dialog = dialog;
 
-            CreateButtons();
+            this.InitializeComponent();
 
-			if (background != null)
-			{
-                //var backgroundImage = originalContent.CaptureImage();
-                //backgroundImage.Stretch = System.Windows.Media.Stretch.Fill;
-                //BackgroundImageHolder.Content = backgroundImage;
-                BackgroundImageHolder.Content = background;
-            }				
-		}
+            this.CreateButtons();
 
-		private readonly DialogBase _dialog;
+            if (background != null)
+            {
+                this.BackgroundImageHolder.Content = background;
+            }
+        }
 
-        public System.Windows.MessageBoxImage Image => _dialog != null ? _dialog.Image : MessageBoxImage.None;
+        private readonly DialogBase dialog;
+
+        public System.Windows.MessageBoxImage Image => this.dialog != null ? this.dialog.Image : MessageBoxImage.None;
+
+        public Visibility ImageVisibility => this.Image == MessageBoxImage.None
+                    ? Visibility.Collapsed
+                    : Visibility.Visible;
 
         public string Caption { get; private set; }
 
-		public Visibility CaptionVisibility
-		{
-			get
-			{
-				return string.IsNullOrWhiteSpace(Caption)
-					? Visibility.Collapsed
-					: Visibility.Visible;
-			}
-		}
-		public Visibility ButtonsVisibility
-		{
-			get
-			{
-				if (_dialog == null) return Visibility.Collapsed;
-		  
-				if (_dialog.Mode == DialogMode.None)
-					return Visibility.Collapsed;
-					else
-					return Visibility.Visible;
-			}
-		}
+        public Visibility CaptionVisibility => string.IsNullOrWhiteSpace(this.Caption)
+                    ? Visibility.Collapsed
+                    : Visibility.Visible;
 
-		private VerticalAlignment _verticalDialogAlignment = VerticalAlignment.Center;
-		public VerticalAlignment VerticalDialogAlignment
-		{
-			get { return _verticalDialogAlignment; }
-			set
-			{
-				_verticalDialogAlignment = value;
-				OnPropertyChanged("VerticalDialogAlignment");
-			}
-		}
+        public Visibility ButtonsVisibility
+        {
+            get
+            {
+                if (this.dialog == null)
+                {
+                    return Visibility.Collapsed;
+                }
 
-		private HorizontalAlignment _horizontalDialogAlignment = HorizontalAlignment.Center;
-		public HorizontalAlignment HorizontalDialogAlignment
-		{
-			get { return _horizontalDialogAlignment; }
-			set
-			{
-				_horizontalDialogAlignment = value;
-				OnPropertyChanged("HorizontalDialogAlignment");
-			}
-		}
+                if (this.dialog.Mode == DialogMode.None)
+                {
+                    return Visibility.Collapsed;
+                }
+                else
+                {
+                    return Visibility.Visible;
+                }
+            }
+        }
 
-		public void SetCustomContent(object content)
-		{
-			CustomContent.Content = content;
-		}
+        private VerticalAlignment verticalDialogAlignment = VerticalAlignment.Center;
 
-		private void CreateButtons()
-		{
-			switch (_dialog.Mode)
-			{
-				case DialogMode.None:
-					break;
-				case DialogMode.Ok:
-					AddOkButton();
-					break;
-				case DialogMode.Cancel:
-					AddCancelButton();
-					break;
-				case DialogMode.OkCancel:
-					AddOkButton();
-					AddCancelButton();
-					break;
-				case DialogMode.YesNo:
-					AddYesButton();
-					AddNoButton();
-					break;
-				case DialogMode.YesNoCancel:
-					AddYesButton();
-					AddNoButton();
-					AddCancelButton();
-					break;
-				default:
-					throw new ArgumentOutOfRangeException();
-			}
-			OnPropertyChanged("ButtonsVisibility");
-		}
+        public VerticalAlignment VerticalDialogAlignment
+        {
+            get => this.verticalDialogAlignment;
+            set
+            {
+                this.verticalDialogAlignment = value;
+                this.OnPropertyChanged(nameof(this.VerticalDialogAlignment));
+            }
+        }
 
-		public void AddNoButton()
-		{
-			AddButton(_dialog.NoText, GetCallback(_dialog.No, DialogResultState.No), false, true, "CanNo");
-		}
+        private HorizontalAlignment horizontalDialogAlignment = HorizontalAlignment.Center;
 
-		public void AddYesButton()
-		{
-			AddButton(_dialog.YesText, GetCallback(_dialog.Yes, DialogResultState.Yes), true, false, "CanYes");
-		}
+        public HorizontalAlignment HorizontalDialogAlignment
+        {
+            get => this.horizontalDialogAlignment;
+            set
+            {
+                this.horizontalDialogAlignment = value;
+                this.OnPropertyChanged(nameof(this.HorizontalDialogAlignment));
+            }
+        }
 
-		public void AddCancelButton()
-		{
-			AddButton(_dialog.CancelText, GetCallback(_dialog.Cancel, DialogResultState.Cancel), false, true, "CanCancel");
-		}
+        public void SetCustomContent(object content)
+        {
+            if (content is string str)
+            {
+                this.CustomContent.Visibility = Visibility.Collapsed;
+                this.ScrollContent.Visibility = Visibility.Visible;
+                this.StringContent.Content = str;
+            }
+            else
+            {
+                this.CustomContent.Visibility = Visibility.Visible;
+                this.ScrollContent.Visibility = Visibility.Collapsed;
+                this.CustomContent.Content = content;
+            }
+        }
 
-		public void AddOkButton()
-		{
-			AddButton(_dialog.OkText, GetCallback(_dialog.Ok, DialogResultState.Ok), true, true, "CanOk");
-		}
+        private void CreateButtons()
+        {
+            switch (this.dialog.Mode)
+            {
+                case DialogMode.None:
+                    break;
+                case DialogMode.Ok:
+                    this.AddOkButton();
+                    break;
+                case DialogMode.Cancel:
+                    this.AddCancelButton();
+                    break;
+                case DialogMode.OkCancel:
+                    this.AddOkButton();
+                    this.AddCancelButton();
+                    break;
+                case DialogMode.YesNo:
+                    this.AddYesButton();
+                    this.AddNoButton();
+                    break;
+                case DialogMode.YesNoCancel:
+                    this.AddYesButton();
+                    this.AddNoButton();
+                    this.AddCancelButton();
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
 
-		private void AddButton(
-			string buttonText,
-			Action callback,
-			bool isDefault,
-			bool isCancel,
-			string bindingPath)
-		{
-			var btn = new Button
-			{
-				Content = buttonText,
-				MinWidth = 80,
-				MaxWidth = 150,
-				IsDefault = isDefault,
-				IsCancel = isCancel,
-				Margin = new Thickness(5)
-			};
+            this.OnPropertyChanged(nameof(this.ButtonsVisibility));
+        }
 
-			var enabledBinding = new Binding(bindingPath) { Source = _dialog };
-			btn.SetBinding(IsEnabledProperty, enabledBinding);
+        public void AddNoButton()
+        {
+            this.AddButton(this.dialog.NoText, this.GetCallback(this.dialog.No, DialogResultState.No), false, true, "CanNo");
+        }
 
-			btn.Click += (s, e) => callback();
+        public void AddYesButton()
+        {
+            this.AddButton(this.dialog.YesText, this.GetCallback(this.dialog.Yes, DialogResultState.Yes), true, false, "CanYes");
+        }
 
-			ButtonsGrid.Columns++;
-			ButtonsGrid.Children.Add(btn);
-		}
+        public void AddCancelButton()
+        {
+            this.AddButton(this.dialog.CancelText, this.GetCallback(this.dialog.Cancel, DialogResultState.Cancel), false, true, "CanCancel");
+        }
 
-		internal void RemoveButtons()
-		{
-			ButtonsGrid.Children.Clear();
-		}
+        public void AddOkButton()
+        {
+            this.AddButton(this.dialog.OkText, this.GetCallback(this.dialog.Ok, DialogResultState.Ok), true, true, "CanOk");
+        }
 
-		private Action GetCallback(
-			Action dialogCallback,
-			DialogResultState result)
-		{
-			_dialog.Result = result;
-			Action callback = () =>
-			{
-				if (dialogCallback != null)
-					dialogCallback();
-				if (_dialog.CloseBehavior == DialogCloseBehavior.AutoCloseOnButtonClick)
-					_dialog.Close();
-			};
+        private void AddButton(
+            string buttonText,
+            Action callback,
+            bool isDefault,
+            bool isCancel,
+            string bindingPath)
+        {
+            var btn = new Button
+            {
+                Content = buttonText,
+                MinWidth = 80,
+                MaxWidth = 450,
+                IsDefault = isDefault,
+                IsCancel = isCancel,
+                Margin = new Thickness(5),
+            };
 
-			return callback;
-		}
+            btn.SetValue(TextBlock.TextAlignmentProperty, TextAlignment.Center);
 
-		public event PropertyChangedEventHandler PropertyChanged;
-		private void OnPropertyChanged(string propertyName)
-		{
-			if (PropertyChanged != null)
-				PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-		}
-	}
+            var enabledBinding = new Binding(bindingPath) { Source = this.dialog };
+            btn.SetBinding(IsEnabledProperty, enabledBinding);
+
+            btn.Click += (s, e) => callback();
+
+            this.ButtonsGrid.Columns++;
+            this.ButtonsGrid.Children.Add(btn);
+        }
+
+        internal void RemoveButtons()
+        {
+            this.ButtonsGrid.Children.Clear();
+        }
+
+        private Action GetCallback(
+            Action dialogCallback,
+            DialogResultState result)
+        {
+            this.dialog.Result = result;
+            Action callback = () =>
+            {
+                dialogCallback?.Invoke();
+                if (this.dialog.CloseBehavior == DialogCloseBehavior.AutoCloseOnButtonClick)
+                {
+                    this.dialog.Close();
+                }
+            };
+
+            return callback;
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void OnPropertyChanged(string propertyName)
+        {
+            this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+    }
 }

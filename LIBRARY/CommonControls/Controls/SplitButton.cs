@@ -79,56 +79,56 @@ namespace TMP.Wpf.CommonControls
 
         public Object CommandParameter
         {
-            get { return (Object)GetValue(CommandParameterProperty); }
-            set { SetValue(CommandParameterProperty, value); }
+            get => (Object)GetValue(CommandParameterProperty);
+            set => SetValue(CommandParameterProperty, value);
         }
 
         public IInputElement CommandTarget
         {
-            get { return (IInputElement)GetValue(CommandTargetProperty); }
-            set { SetValue(CommandTargetProperty, value); }
+            get => (IInputElement)GetValue(CommandTargetProperty);
+            set => SetValue(CommandTargetProperty, value);
         }
 
         public ICommand Command
         {
-            get { return (ICommand)GetValue(CommandProperty); }
-            set { SetValue(CommandProperty, value); }
+            get => (ICommand)GetValue(CommandProperty);
+            set => SetValue(CommandProperty, value);
         }
 
         public Int32 SelectedIndex
         {
-            get { return (Int32)GetValue(SelectedIndexProperty); }
-            set { SetValue(SelectedIndexProperty, value); }
+            get => (Int32)GetValue(SelectedIndexProperty);
+            set => SetValue(SelectedIndexProperty, value);
         }
 
         public Object SelectedItem
         {
-            get { return GetValue(SelectedItemProperty); }
-            set { SetValue(SelectedItemProperty, value); }
+            get => GetValue(SelectedItemProperty);
+            set => SetValue(SelectedItemProperty, value);
         }
 
         public Boolean IsExpanded
         {
-            get { return (bool)GetValue(IsExpandedProperty); }
-            set { SetValue(IsExpandedProperty, value); }
+            get => (bool)GetValue(IsExpandedProperty);
+            set => SetValue(IsExpandedProperty, value);
         }
 
         public Object ExtraTag
         {
-            get { return GetValue(ExtraTagProperty); }
-            set { SetValue(ExtraTagProperty, value); }
+            get => GetValue(ExtraTagProperty);
+            set => SetValue(ExtraTagProperty, value);
         }
 
         public Orientation Orientation
         {
-            get { return (Orientation)GetValue(OrientationProperty); }
-            set { SetValue(OrientationProperty, value); }
+            get => (Orientation)GetValue(OrientationProperty);
+            set => SetValue(OrientationProperty, value);
         }
 
         public Object Icon
         {
-            get { return GetValue(IconProperty); }
-            set { SetValue(IconProperty, value); }
+            get => GetValue(IconProperty);
+            set => SetValue(IconProperty, value);
         }
 
         #endregion

@@ -1,7 +1,7 @@
-﻿using System.Runtime.InteropServices;
-
-namespace Native
+﻿namespace Native
 {
+    using System.Runtime.InteropServices;
+
     [StructLayout(LayoutKind.Sequential)]
     public struct MARGINS
     {

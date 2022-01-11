@@ -1,13 +1,13 @@
-﻿using System;
-using System.Runtime.InteropServices;
-
-namespace TMPApplication
+﻿namespace TMPApplication
 {
+    using System;
+    using System.Runtime.InteropServices;
+
     /// <summary>
-    /// Diese Klasse stellt Funktionen bereit, um aus einer normalen WinForms- oder WPF-Anwendung 
+    /// Diese Klasse stellt Funktionen bereit, um aus einer normalen WinForms- oder WPF-Anwendung
     /// optional auch eine Konsolenanwendung zu machen.
     /// Im Prinzip muss nur InitConsoleHandles und später dann ReleaseConsoleHandles aufgerufen werden.
-    /// Wenn das Prog aus der Kommandozeile gestartet wird, hängt es sich an die vorhandene Console, 
+    /// Wenn das Prog aus der Kommandozeile gestartet wird, hängt es sich an die vorhandene Console,
     /// ansonsten (Start über Windows) wird temporär eine Console erstellt.
     /// Hier ein Beispiel zu WPF (zusätzlich muss die BuildAction der app.xaml auf 'Page' gestellt werden)
     /// (Hier wird auch der CommandLineParser verwendet)
@@ -56,6 +56,7 @@ namespace TMPApplication
         private static extern bool FreeConsole();
 
         [StructLayout(LayoutKind.Explicit)]
+
         // ReSharper disable once InconsistentNaming
         public struct CHAR_UNION
         {
@@ -95,8 +96,10 @@ namespace TMPApplication
         {
             public InputEventType EventType;
             [MarshalAs(UnmanagedType.Bool)]
-            //wenn hier ein anderer Typ wie KeyEvent verwendet werden soll, so muss der struct entsprechend angepasst werden
+
+            // wenn hier ein anderer Typ wie KeyEvent verwendet werden soll, so muss der struct entsprechend angepasst werden
             public bool bKeyDown;
+
             public short wRepeatCount;
             public short wVirtualKeyCode;
             public short wVirtualScanCode;
@@ -120,14 +123,16 @@ namespace TMPApplication
         // ReSharper disable once InconsistentNaming
         private const int ATTACH_PARENT_PROCESS = -1;
 
-        //true if attached - used to free it later
+        // true if attached - used to free it later
         public static bool ConsoleIsAttached { get; private set; }
 
         public static void InitConsoleHandles()
         {
             // Attach to console window – this may modify the standard handles
             if (AttachConsole(ATTACH_PARENT_PROCESS))
+            {
                 ConsoleIsAttached = true;
+            }
             else
             {
                 AllocConsole();
@@ -140,22 +145,20 @@ namespace TMPApplication
 
         public static void ReleaseConsoleHandles()
         {
-            //Console.WriteLine("Bye Bye");
-
+            // Console.WriteLine("Bye Bye");
             if (ConsoleIsAttached)
             {
-                //Leider wird im Falle von AttachConsole (an vorhandene Console) am Ende noch ein Enter erwartet
-                //dies ist ein im Netz bekanntes Problem, man muss eben ein Enter simulieren, dafür gibt es versch. Methoden:
+                // Leider wird im Falle von AttachConsole (an vorhandene Console) am Ende noch ein Enter erwartet
+                // dies ist ein im Netz bekanntes Problem, man muss eben ein Enter simulieren, dafür gibt es versch. Methoden:
 
-                //System.Windows.Forms.SendKeys.SendWait("{ENTER}"); //wir wollen kein WinForms
-                //Process.GetCurrentProcess().Kill(); //klappt nicht
-                //HToolBox.HSendKeys.Send("\r"); //"{ENTER}");
-
-                SendEnterToConsoleInput(); //sauberste Lösung
+                // System.Windows.Forms.SendKeys.SendWait("{ENTER}"); //wir wollen kein WinForms
+                // Process.GetCurrentProcess().Kill(); //klappt nicht
+                // HToolBox.HSendKeys.Send("\r"); //"{ENTER}");
+                SendEnterToConsoleInput(); // sauberste Lösung
             }
             else
             {
-                FreeConsole(); //Pendant zu AllocConsole
+                FreeConsole(); // Pendant zu AllocConsole
             }
         }
 
@@ -177,7 +180,8 @@ namespace TMPApplication
             data[0].wVirtualKeyCode = 0;
             data[0].wVirtualScanCode = 0;
             WriteConsoleInput(stdIn, data, 1, ref eventsWritten);
-            //Console.WriteLine("{0} events written to {1} Written:{2}", eventsWritten, stdIn.ToInt32(), written);
+
+            // Console.WriteLine("{0} events written to {1} Written:{2}", eventsWritten, stdIn.ToInt32(), written);
         }
     }
 }

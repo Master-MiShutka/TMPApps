@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>library</OutputType>
+    <RootNamespace>WpfMouseWheel</RootNamespace>
+    <AssemblyName>WpfMouseWheelLib</AssemblyName>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <UseWPF>true</UseWPF>
+    <Description>WPF Mouse Wheel Library</Description>
+    <Copyright>Copyright © 2011-2016, Roger Vuistiner, CH-1180 Rolle, Switzerland</Copyright>
+    <Authors>Roger Vuistiner</Authors>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Update="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
+    <PackageReference Update="StyleCop.Analyzers" Version="1.1.118">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>build; analyzers</IncludeAssets>
+    </PackageReference>
+    <PackageReference Update="WpfAnalyzers" Version="4.0.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>build; analyzers</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+</Project>

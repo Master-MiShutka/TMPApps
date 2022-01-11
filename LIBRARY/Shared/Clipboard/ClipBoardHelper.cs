@@ -1,30 +1,31 @@
-﻿using System;
-using System.Windows;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-
-namespace TMP.Shared
+﻿namespace TMP.Shared
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Windows;
+    using System.Windows.Media;
+    using System.Windows.Media.Imaging;
+
     /// <summary>
-//Format Identifier           Data Type           Description
-//CF_TEXT(1)                  ANSI text           Text.
-//CF_BITMAP (2)	              HBITMAP             Handle to a bitmap(GDI object).
-//CF_METAFILEPICT(3)          METAFILEPICT        Metafile picture.
-//CF_TIFF (6)	              Binary(TIFF)        TIFF image.
-//CF_ENHMETAFILE(14)          ENHMETAHEADER       Enhanced meta file.
-//CF_DSPTEXT(0x0081)          ANSI text           Text.
-//CF_DSPBITMAP (0x0082)	      HBITMAP             Handle to a bitmap(GDI object)
-//CF_DSPMETAFILEPICT(0x0083)  METAFILEPICT        Metafile picture.
-//CF_DSPENHMETAFILE (0x008E)  ENHMETAHEADER       Enhanced meta file.
-//text/html                                       HTML [W3C] file content. The encoding is defined by BOM and HTML headers.
-//text/csv                                        Comma-Separated Values (CSV) [IETF] file content.
-//CSV                                             See text/csv.
-//image/jpeg                                      JPEG [W3C] file content.
-//JPEG                                            See image/jpeg.
-//JPG                                             See image/jpeg.
-//image/png                                       PNG [W3C] file content.
-//PNG                                             See image/png.
-        /// </summary>
+    // Format Identifier           Data Type           Description
+    // CF_TEXT(1)                  ANSI text           Text.
+    // CF_BITMAP (2)	              HBITMAP             Handle to a bitmap(GDI object).
+    // CF_METAFILEPICT(3)          METAFILEPICT        Metafile picture.
+    // CF_TIFF (6)	              Binary(TIFF)        TIFF image.
+    // CF_ENHMETAFILE(14)          ENHMETAHEADER       Enhanced meta file.
+    // CF_DSPTEXT(0x0081)          ANSI text           Text.
+    // CF_DSPBITMAP (0x0082)	      HBITMAP             Handle to a bitmap(GDI object)
+    // CF_DSPMETAFILEPICT(0x0083)  METAFILEPICT        Metafile picture.
+    // CF_DSPENHMETAFILE (0x008E)  ENHMETAHEADER       Enhanced meta file.
+    // text/html                                       HTML [W3C] file content. The encoding is defined by BOM and HTML headers.
+    // text/csv                                        Comma-Separated Values (CSV) [IETF] file content.
+    // CSV                                             See text/csv.
+    // image/jpeg                                      JPEG [W3C] file content.
+    // JPEG                                            See image/jpeg.
+    // JPG                                             See image/jpeg.
+    // image/png                                       PNG [W3C] file content.
+    // PNG                                             See image/png.
+    /// </summary>
     public static class ClipBoardHelper
     {
         public static BitmapSource RenderFrameworkElementToBitmapSource(FrameworkElement visual)
@@ -83,6 +84,54 @@ namespace TMP.Shared
             // Place the data on the clipboard.
             System.Windows.Clipboard.Clear();
             System.Windows.Clipboard.SetDataObject(data_object, true);
+        }
+
+        /// <summary>
+        /// Gets the clipboard data as a table.
+        /// </summary>
+        /// <returns>The parsed clipboard data as a table, or <c>null</c> if the clipboard is empty or does not contain normalized table data.</returns>
+        /// <remarks>If no TEXT is present in the clipboard, CSV data is used.</remarks>
+        public static IList<IList<string>>? GetClipboardDataAsTable()
+        {
+            var text = Clipboard.GetText();
+            if (!string.IsNullOrEmpty(text))
+            {
+                return text.ParseTable(TableHelper.TextColumnSeparator);
+            }
+
+            var csv = Clipboard.GetData(DataFormats.CommaSeparatedValue) as string;
+            if (!string.IsNullOrEmpty(csv))
+            {
+                return csv.ParseTable(TableHelper.CsvColumnSeparator);
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// Sets the clipboard data for the specified table.
+        /// </summary>
+        /// <param name="table">The table.</param>
+        /// <remarks>
+        /// This method sets the TEXT (tab delimited) and CSV data. Like in Excel the CSV delimiter is either comma or semicolon, depending on the current culture.
+        /// </remarks>
+        public static void SetClipboardData(this IList<IList<string>>? table)
+        {
+            if (table == null)
+            {
+                Clipboard.Clear();
+                return;
+            }
+
+            var textString = table.ToTextString();
+            var csvString = table.ToCsvString();
+
+            var dataObject = new DataObject();
+
+            dataObject.SetText(textString);
+            dataObject.SetText(csvString, TextDataFormat.CommaSeparatedValue);
+
+            Clipboard.SetDataObject(dataObject);
         }
     }
 }

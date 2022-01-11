@@ -1,4 +1,4 @@
-//Copyright (c) Microsoft Corporation.  All rights reserved.
+// Copyright (c) Microsoft Corporation.  All rights reserved.
 
 namespace Microsoft.WindowsAPICodePack.Dialogs
 {
@@ -10,27 +10,33 @@ namespace Microsoft.WindowsAPICodePack.Dialogs
         /// <summary>
         /// Creates a new instance of this class.
         /// </summary>
-        public TaskDialogButton() { }
+        public TaskDialogButton()
+        {
+        }
 
         /// <summary>
         /// Creates a new instance of this class with the specified property settings.
         /// </summary>
         /// <param name="name">The name of the button.</param>
         /// <param name="text">The button label.</param>
-        public TaskDialogButton(string name, string text) : base(name, text) { }
+        public TaskDialogButton(string name, string text) : base(name, text)
+        {
+        }
 
         private bool useElevationIcon;
+
         /// <summary>
         /// Gets or sets a value that controls whether the elevation icon is displayed.
         /// </summary>
         public bool UseElevationIcon
         {
-            get { return useElevationIcon; }
+            get => this.useElevationIcon;
+
             set
             {
-                CheckPropertyChangeAllowed("ShowElevationIcon");
-                useElevationIcon = value;
-                ApplyPropertyChange("ShowElevationIcon");
+                this.CheckPropertyChangeAllowed("ShowElevationIcon");
+                this.useElevationIcon = value;
+                this.ApplyPropertyChange("ShowElevationIcon");
             }
         }
     }

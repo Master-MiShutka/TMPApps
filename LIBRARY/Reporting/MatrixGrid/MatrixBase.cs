@@ -1,30 +1,36 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Windows;
-using System.Windows.Input;
-
-namespace TMP.UI.Controls.WPF.Reporting.MatrixGrid
+﻿namespace TMP.UI.Controls.WPF.Reporting.MatrixGrid
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+    using System.ComponentModel;
+    using System.Linq;
+    using System.Threading.Tasks;
+    using System.Windows;
+    using System.Windows.Input;
+
     /// <summary>
     /// Базовый класс для отображения данных в виде матрицы в MatrixControl
     /// </summary>
     public abstract class MatrixBase : IMatrix, INotifyPropertyChanged
     {
+        private bool isBuilded = false;
+        private bool isBuilding;
+        private bool? showColumnsTotal;
+        private bool? showRowsTotal;
+
         #region Constructor
 
         protected MatrixBase()
         {
-            CommandCopyToClipboard = new RelayCommand(
-                CopyToClipboard, 
-                () => {
-                    return HasData;
-                    });
+            this.CommandCopyToClipboard = new RelayCommand(
+                this.CopyToClipboard,
+                () =>
+                {
+                    return this.HasData;
+                });
 
-            CommandPrint = new RelayCommand(
+            this.CommandPrint = new RelayCommand(
                 () =>
                 {
                     var section = Helpers.FormatHelper.MatrixToFlowDocumentSectionWithTable(this);
@@ -34,7 +40,7 @@ namespace TMP.UI.Controls.WPF.Reporting.MatrixGrid
                     System.Windows.Controls.PrintDialog pd = new System.Windows.Controls.PrintDialog();
                     System.Printing.PrintTicket pt = new System.Printing.PrintTicket();
                     pt.PageOrientation = System.Printing.PageOrientation.Landscape;
-                    pd.PrintTicket = pd.PrintQueue.MergeAndValidatePrintTicket(pd.PrintQueue.DefaultPrintTicket, pt).ValidatedPrintTicket;                    
+                    pd.PrintTicket = pd.PrintQueue.MergeAndValidatePrintTicket(pd.PrintQueue.DefaultPrintTicket, pt).ValidatedPrintTicket;
 
                     System.Windows.Documents.IDocumentPaginatorSource fdd = flowDocument;
                     flowDocument.PageWidth = pd.PrintableAreaWidth;
@@ -53,10 +59,12 @@ namespace TMP.UI.Controls.WPF.Reporting.MatrixGrid
                             writer.Write(fdd.DocumentPaginator);
                         }
                     }
+
                     ms.Position = 0;
                     var pkg2 = System.IO.Packaging.Package.Open(ms);
+
                     // Read the XPS document into a dynamically generated
-                    // preview Window 
+                    // preview Window
                     var url = new Uri("memorystream://printstream");
                     System.IO.Packaging.PackageStore.AddPackage(url, pkg2);
                     try
@@ -72,7 +80,7 @@ namespace TMP.UI.Controls.WPF.Reporting.MatrixGrid
                             wnd.Padding = new Thickness(2);
                             wnd.Content = new System.Windows.Controls.DocumentViewer()
                             {
-                                Document = fds as System.Windows.Documents.IDocumentPaginatorSource
+                                Document = fds,
                             };
                             wnd.ShowDialog();
                         }
@@ -80,11 +88,20 @@ namespace TMP.UI.Controls.WPF.Reporting.MatrixGrid
                     finally
                     {
                         System.IO.Packaging.PackageStore.RemovePackage(url);
-                    }                    
+                    }
                 },
                 () =>
                 {
-                    return HasData;
+                    return this.HasData;
+                });
+
+            this.CommandRefresh = new RelayCommand(() =>
+                {
+                    this.Build();
+                },
+                () =>
+                {
+                    return this.HasData;
                 });
         }
 
@@ -106,7 +123,7 @@ namespace TMP.UI.Controls.WPF.Reporting.MatrixGrid
 
         /// <summary>
         /// Наследуемые классы должны переопределить этот метод для возврата
-        /// каждой ячейки данных в матрице, где ячейка определяется пересечением 
+        /// каждой ячейки данных в матрице, где ячейка определяется пересечением
         /// строки и столбцы
         /// </summary>
         /// <param name="rowHeaderValue">Строка</param>
@@ -116,13 +133,11 @@ namespace TMP.UI.Controls.WPF.Reporting.MatrixGrid
         #endregion // Abstract Methods
 
         #region Properties
+
         /// <summary>
         /// Построена ли матрица
         /// </summary>
-        public bool HasData
-        {
-            get { return _matrixItems != null; }
-        }
+        public bool HasData => this._items != null;
 
         /// <summary>
         /// Возвращает доступную только для чтения коллекцию всех ячеек матрицы
@@ -131,139 +146,174 @@ namespace TMP.UI.Controls.WPF.Reporting.MatrixGrid
         {
             get
             {
-                if (_matrixItems == null)
+                if (this._items == null)
                 {
-                    System.Threading.Tasks.Task.Factory.StartNew(() =>
-                    {
-                        _matrixItems = new ReadOnlyCollection<IMatrixCell>(this.BuildMatrix());
-                        RaisePropertyChanged("Items");
-                        RaisePropertyChanged("RowHeadersCount");
-                        RaisePropertyChanged("ColumnHeadersCount");
-                        RaisePropertyChanged("Size");
-                        RaisePropertyChanged("HasData");
-                    });
+                    this.Build();
                 }
-                return _matrixItems;
+
+                return this._items;
             }
         }
+
         /// <summary>
         /// Количество полных строк заголовка - количество строк с данными
         /// </summary>
-        public int RowHeadersCount
-        {
-            get
-            {
-                if (_matrixItems == null) return 0;
-                return _rowHeaders != null ? _rowHeaders.Count : 0;
-            }
-        }
+        public int RowHeadersCount => this._items == null ? 0 : this._rowHeaders != null ? this._rowHeaders.Count : 0;
+
         /// <summary>
         /// Количество полных столбцов заголовка - количество столбцов с данными
         /// </summary>
-        public int ColumnHeadersCount
-        {
-            get
-            {
-                if (_matrixItems == null) return 0;
-                return _columnHeaders != null ? _columnHeaders.Count : 0;
-            }
-        }
+        public int ColumnHeadersCount => this._items == null ? 0 : this._columnHeaders != null ? this._columnHeaders.Count : 0;
+
         /// <summary>
         /// Размер матрицы
         /// </summary>
-        public Size Size
-        {
-            get
-            {
-                if (_matrixItems == null)
-                    return Size.Empty;
-                return _size;
-            }
-        }
+        public Size Size => this._items == null ? Size.Empty : this._size;
+
         /// <summary>
         /// Двумерный массив ячеек матрицы
         /// </summary>
-        public IMatrixCell[,] Cells  => _cells;
+        public IMatrixCell[,] Cells { get => this._cells; private set => this.SetProperty(ref this._cells, value); }
 
         /// <summary>
         /// Заголовок матрицы
         /// </summary>
-        public string Header { get; set; }
+        public string Header { get => this._header; set => this.SetProperty(ref this._header, value); }
+
         /// <summary>
         /// Описание
         /// </summary>
-        public string Description { get; set; }
+        public string Description { get => this._description; set => this.SetProperty(ref this._description, value); }
+
         /// <summary>
         /// Команда копирования данных в виде таблицы в буфер обмена
         /// </summary>
-        public ICommand CommandCopyToClipboard { get; set; }
+        public ICommand CommandCopyToClipboard { get; }
+
         /// <summary>
         /// Команда печати данных
         /// </summary>
-        public ICommand CommandPrint { get; set; }
+        public ICommand CommandPrint { get; }
+
+        /// <summary>
+        /// Команда обновления данных
+        /// </summary>
+        public ICommand CommandRefresh { get; }
+
         /// <summary>
         /// Событие для оповещения о завершении построения матрицы
         /// </summary>
         public event PropertyChangedEventHandler Builded;
+
+        /// <summary>
+        /// Событие для оповещения о начале построения матрицы
+        /// </summary>
+        public event PropertyChangedEventHandler Building;
+
+        /// <summary>
+        /// Флаг, указывающий готова ли матрица к отображению
+        /// </summary>
+        public bool IsBuilded { get => this.isBuilded; private set => this.SetProperty(ref this.isBuilded, value); }
+
+        public bool IsBuilding { get => this.isBuilding; private set => this.SetProperty(ref this.isBuilding, value); }
+
         /// <summary>
         /// Отображать ли итоги по столбцам
         /// </summary>
-        public bool? ShowColumnsTotal { get; set; }
+        public bool? ShowColumnsTotal { get => this.showColumnsTotal; set => this.SetProperty(ref this.showColumnsTotal, value); }
+
         /// <summary>
         /// Отображать ли итоги по строкам
         /// </summary>
-        public bool? ShowRowsTotal { get; set; }
+        public bool? ShowRowsTotal { get => this.showRowsTotal; set => this.SetProperty(ref this.showRowsTotal, value); }
 
         #endregion // Properties
 
         #region Matrix Construction
 
-        List<IMatrixCell> BuildMatrix()
+        /// <summary>
+        /// Построение матрицы
+        /// </summary>
+        protected void Build()
         {
+            var task = System.Threading.Tasks.Task.Factory.StartNew(() =>
+            {
+                this._items = new ReadOnlyCollection<IMatrixCell>(this.GetMatrixCells());
+            })
+                .ContinueWith(t =>
+                {
+                    this.RaisePropertyChanged(nameof(this.HasData));
+                    this.RaisePropertyChanged(nameof(this.Items));
+                    this.RaisePropertyChanged(nameof(this.Cells));
+                    this.RaisePropertyChanged(nameof(this.RowHeadersCount));
+                    this.RaisePropertyChanged(nameof(this.ColumnHeadersCount));
+                    this.RaisePropertyChanged(nameof(this.Size));
+                }, TaskScheduler.FromCurrentSynchronizationContext());
+        }
+
+        /// <summary>
+        /// Возвращаетя список ячеек матрицы
+        /// </summary>
+        /// <returns></returns>
+        private List<IMatrixCell> GetMatrixCells()
+        {
+            this.IsBuilding = true;
+            this.Building?.Invoke(this, null);
             List<IMatrixCell> matrixItems = new List<IMatrixCell>();
 
             // Получение значений заголовков строк и столбцов
             List<IMatrixHeader> rowHeaderValues = this.GetRowHeaderValues().ToList();
             List<IMatrixHeader> columnHeaderValues = this.GetColumnHeaderValues().ToList();
 
-            SetParentForChildren(rowHeaderValues);
-            SetParentForChildren(columnHeaderValues);
+            IMatrixHeader nul = null;
+            this.SetParentForChildren(rowHeaderValues, ref nul);
+            this.SetParentForChildren(columnHeaderValues, ref nul);
 
             // подсчёт высоты заголовков
-            _rowHeadersColumnSpan = MaxHeaderDepth(rowHeaderValues);
-            _columnHeadersRowSpan = MaxHeaderDepth(columnHeaderValues);
+            this.rowHeadersColumnSpan = this.MaxHeaderDepth(rowHeaderValues);
+            this.columnHeadersRowSpan = this.MaxHeaderDepth(columnHeaderValues);
 
-            _rowHeaders = BuildFlatHeadersList(rowHeaderValues);
-            _columnHeaders = BuildFlatHeadersList(columnHeaderValues);
+            this._rowHeaders = this.BuildFlatHeadersList(rowHeaderValues);
+            this._columnHeaders = this.BuildFlatHeadersList(columnHeaderValues);
+            this.RaisePropertyChanged(nameof(this.RowHeadersCount));
+            this.RaisePropertyChanged(nameof(this.ColumnHeadersCount));
 
             // высота и ширина блока с данными
-            int dataBlockHeight = _rowHeaders.Count(),
-                dataBlockWidth = _columnHeaders.Count();
+            int dataBlockHeight = this._rowHeaders.Count(),
+                dataBlockWidth = this._columnHeaders.Count();
 
-            int matrixHeight = _columnHeadersRowSpan + dataBlockHeight;
-            int matrixWidth = _rowHeadersColumnSpan + dataBlockWidth;
+            int matrixHeight = this.columnHeadersRowSpan + dataBlockHeight;
+            int matrixWidth = this.rowHeadersColumnSpan + dataBlockWidth;
 
-            if (ShowColumnsTotal.GetValueOrDefault())
+            if (this.ShowColumnsTotal.GetValueOrDefault())
+            {
                 matrixHeight++;
-            if (ShowRowsTotal.GetValueOrDefault())
+            }
+
+            if (this.ShowRowsTotal.GetValueOrDefault())
+            {
                 matrixWidth++;
+            }
 
-            _size = new Size(matrixWidth, matrixHeight);
-
-            _cells = new IMatrixCell[(int)_size.Height, (int)_size.Width];
+            this._size = new Size(matrixWidth, matrixHeight);
+            this._cells = new IMatrixCell[(int)this._size.Height, (int)this._size.Width];
+            this.RaisePropertyChanged(nameof(this.Size));
+            this.RaisePropertyChanged(nameof(this.Cells));
 
             // проседура для добавления ячейки и в список и в массив
             Action<IMatrixCell> addCell = (cell) =>
             {
                 matrixItems.Add(cell);
-                _cells[cell.GridRow, cell.GridColumn] = cell;
+                this._cells[cell.GridRow, cell.GridColumn] = cell;
             };
 
             // учитывая высоту заголовков добавляем в верхний левый угол пустую ячейку
             this.CreateEmptyHeader(matrixItems);
+
             // добавление в матрицу заголовков
             this.CreateRowHeaders(matrixItems, rowHeaderValues);
             this.CreateColumnHeaders(matrixItems, columnHeaderValues);
+
             // добавление ячеек с данными
             this.CreateCells(matrixItems, rowHeaderValues, columnHeaderValues);
 
@@ -271,128 +321,141 @@ namespace TMP.UI.Controls.WPF.Reporting.MatrixGrid
             {
                 int result = 0;
                 if (value == null)
+                {
                     return result;
+                }
+
                 int.TryParse(value.ToString(), out result);
                 return result;
             };
 
-            if (ShowRowsTotal.GetValueOrDefault())
+            if (this.ShowRowsTotal.GetValueOrDefault())
             {
-                addCell(MatrixHeaderCell.CreateColumnSummaryHeader("Итого", row: 0, rowSpan: _columnHeadersRowSpan, column: _rowHeadersColumnSpan + _columnHeaders.Count));
+                addCell(MatrixHeaderCell.CreateColumnSummaryHeader("Итого", row: 0, rowSpan: this.columnHeadersRowSpan, column: this.rowHeadersColumnSpan + this._columnHeaders.Count));
 
                 int summ = 0;
-                for (int rowIndex = _columnHeadersRowSpan; rowIndex < _rowHeaders.Count + _columnHeadersRowSpan; rowIndex ++)
+                for (int rowIndex = this.columnHeadersRowSpan; rowIndex < this._rowHeaders.Count + this.columnHeadersRowSpan; rowIndex++)
                 {
                     summ = matrixItems.
                     Where(i => i.GridRow == rowIndex)
-                    .Where(i => i.GridColumn >= _rowHeadersColumnSpan)
+                    .Where(i => i.GridColumn >= this.rowHeadersColumnSpan)
                     .Where(i => i.CellType == MatrixCellType.DataCell)
                     .Cast<IMatrixDataCell>()
                     .Sum(i => getInt(i.Value));
 
-                    addCell(MatrixSummaryCell.CreateRowSummary(summ, row: rowIndex, column: _rowHeadersColumnSpan + _columnHeaders.Count));
+                    addCell(MatrixSummaryCell.CreateRowSummary(summ, row: rowIndex, column: this.rowHeadersColumnSpan + this._columnHeaders.Count));
                 }
             }
-            if (ShowColumnsTotal.GetValueOrDefault())
+
+            if (this.ShowColumnsTotal.GetValueOrDefault())
             {
-                addCell(MatrixHeaderCell.CreateRowSummaryHeader("Итого", row : _columnHeadersRowSpan + _rowHeaders.Count, column : 0, columnSpan : _rowHeadersColumnSpan ));
+                addCell(MatrixHeaderCell.CreateRowSummaryHeader("Итого", row: this.columnHeadersRowSpan + this._rowHeaders.Count, column: 0, columnSpan: this.rowHeadersColumnSpan));
 
                 int summ = 0;
-                for (int columnIndex = _rowHeadersColumnSpan; columnIndex < _columnHeaders.Count + _rowHeadersColumnSpan; columnIndex++)
+                for (int columnIndex = this.rowHeadersColumnSpan; columnIndex < this._columnHeaders.Count + this.rowHeadersColumnSpan; columnIndex++)
                 {
                     summ = matrixItems.
                     Where(i => i.GridColumn == columnIndex)
-                    .Where(i => i.GridRow >= _columnHeadersRowSpan)
+                    .Where(i => i.GridRow >= this.columnHeadersRowSpan)
                     .Where(i => i.CellType == MatrixCellType.DataCell)
                     .Cast<IMatrixDataCell>()
                     .Sum(i => getInt(i.Value));
 
-                    addCell(MatrixSummaryCell.CreateColumnSummary(summ, row: _columnHeadersRowSpan + _rowHeaders.Count, column: columnIndex));                    
+                    addCell(MatrixSummaryCell.CreateColumnSummary(summ, row: this.columnHeadersRowSpan + this._rowHeaders.Count, column: columnIndex));
                 }
             }
 
-            if (ShowRowsTotal.GetValueOrDefault() & ShowColumnsTotal.GetValueOrDefault())
+            if (this.ShowRowsTotal.GetValueOrDefault() & this.ShowColumnsTotal.GetValueOrDefault())
             {
                 int summ = matrixItems.
-                Where(i => i.GridColumn == _rowHeadersColumnSpan + _columnHeaders.Count)
-                .Where(i => (i.GridRow >= _columnHeadersRowSpan) & (i.GridRow != (_columnHeadersRowSpan + _rowHeaders.Count)))
+                Where(i => i.GridColumn == this.rowHeadersColumnSpan + this._columnHeaders.Count)
+                .Where(i => (i.GridRow >= this.columnHeadersRowSpan) & (i.GridRow != (this.columnHeadersRowSpan + this._rowHeaders.Count)))
                 .Where(i => i.CellType == MatrixCellType.SummaryCell)
                 .Cast<IMatrixSummaryCell>()
                 .Sum(i => i.ValueToInt());
 
-                addCell(MatrixSummaryCell.CreateTotalSummary(summ, row: _columnHeadersRowSpan + _rowHeaders.Count, column: _rowHeadersColumnSpan + _columnHeaders.Count));
+                addCell(MatrixSummaryCell.CreateTotalSummary(summ, row: this.columnHeadersRowSpan + this._rowHeaders.Count, column: this.rowHeadersColumnSpan + this._columnHeaders.Count));
             }
 
             // оповещение о готовности
-            Builded?.Invoke(this, null);
+            this.IsBuilded = true;
+            this.IsBuilding = false;
+            this.Builded?.Invoke(this, null);
 
             return matrixItems;
         }
 
-        void CreateEmptyHeader(ICollection<IMatrixCell> matrixItems)
+        private void CreateEmptyHeader(ICollection<IMatrixCell> matrixItems)
         {
             // Вставка пустой ячейки
-            var cell = MatrixHeaderCell.CreateEmptyHeader(row: 0, column: 0, rowSpan: _columnHeadersRowSpan, columnSpan: _rowHeadersColumnSpan);
+            var cell = MatrixHeaderCell.CreateEmptyHeader(row: 0, column: 0, rowSpan: this.columnHeadersRowSpan, columnSpan: this.rowHeadersColumnSpan);
             matrixItems.Add(cell);
-            _cells[0, 0] = cell;
+            this._cells[0, 0] = cell;
         }
 
-        enum HeaderType { row, column}
+        private enum HeaderType
+        {
+            row, column,
+        }
 
         /// <summary>
         /// Добавление в матрицу заголовков столбцов
         /// </summary>
         /// <param name="matrixItems">Коллекция ячеек матрицы</param>
         /// <param name="columnHeaderValues">Список заголовков столбцов</param>
-        void CreateColumnHeaders(ICollection<IMatrixCell> matrixItems, IList<IMatrixHeader> columnHeaderValues)
+        private void CreateColumnHeaders(ICollection<IMatrixCell> matrixItems, IList<IMatrixHeader> columnHeaderValues)
         {
             // необходимо учесть высоту заголовков строк
-            Tuple<IList<IMatrixHeader>, int, int, int, int> childs = CreateChildHeaders(columnHeaderValues, 0, _rowHeadersColumnSpan, HeaderType.column);
+            Tuple<IList<IMatrixHeader>, int, int, int, int> childs = this.CreateChildHeaders(columnHeaderValues, 0, this.rowHeadersColumnSpan, HeaderType.column);
             foreach (IMatrixHeader item in childs.Item1)
             {
                 matrixItems.Add(item);
-                _cells[item.GridRow, item.GridColumn] = item;
+                this._cells[item.GridRow, item.GridColumn] = item;
             }
         }
+
         /// <summary>
         /// Добавление в матрицу заголовков строк
         /// </summary>
         /// <param name="matrixItems">Коллекция ячеек матрицы</param>
         /// <param name="rowHeaderValues">Список заголовков строк</param>
-        void CreateRowHeaders(ICollection<IMatrixCell> matrixItems, IList<IMatrixHeader> rowHeaderValues)
+        private void CreateRowHeaders(ICollection<IMatrixCell> matrixItems, IList<IMatrixHeader> rowHeaderValues)
         {
             // необходимо учесть высоту заголовков столбцов
-            Tuple<IList<IMatrixHeader>, int, int, int, int> childs = CreateChildHeaders(rowHeaderValues, _columnHeadersRowSpan, 0, HeaderType.row);
+            Tuple<IList<IMatrixHeader>, int, int, int, int> childs = this.CreateChildHeaders(rowHeaderValues, this.columnHeadersRowSpan, 0, HeaderType.row);
             foreach (IMatrixHeader item in childs.Item1)
             {
                 matrixItems.Add(item);
-                _cells[item.GridRow, item.GridColumn] = item;
+                this._cells[item.GridRow, item.GridColumn] = item;
             }
         }
+
         /// <summary>
         /// Добавление в матрицу ячеек с данными
         /// </summary>
         /// <param name="matrixItems">Коллекция ячеек матрицы</param>
         /// <param name="rowHeaderValues">Список заголовков строк</param>
         /// <param name="columnHeaderValues">Список заголовков столбцов</param>
-        void CreateCells(ICollection<IMatrixCell> matrixItems, List<IMatrixHeader> rowHeaderValues, IList<IMatrixHeader> columnHeaderValues)
+        private void CreateCells(ICollection<IMatrixCell> matrixItems, List<IMatrixHeader> rowHeaderValues, IList<IMatrixHeader> columnHeaderValues)
         {
             // Добавление ячеек с данными
-            int row = _columnHeadersRowSpan, column = _rowHeadersColumnSpan;
+            int row = this.columnHeadersRowSpan, column = this.rowHeadersColumnSpan;
 
-            foreach (IMatrixHeader rowHeader in _rowHeaders)
+            foreach (IMatrixHeader rowHeader in this._rowHeaders)
             {
-                column = _rowHeadersColumnSpan;
-                foreach (IMatrixHeader columnHeader in _columnHeaders)
+                column = this.rowHeadersColumnSpan;
+                foreach (IMatrixHeader columnHeader in this._columnHeaders)
                 {
                     IMatrixDataCell dataCell = this.GetDataCell(rowHeader, columnHeader);
                     dataCell.SetGridProperties(row, column++);
                     matrixItems.Add(dataCell);
-                    _cells[dataCell.GridRow, dataCell.GridColumn] = dataCell;
+                    this._cells[dataCell.GridRow, dataCell.GridColumn] = dataCell;
                 }
+
                 row++;
             }
         }
+
         /// <summary>
         ///  Рекурсивное создание списка подзаголовков
         /// </summary>
@@ -401,7 +464,7 @@ namespace TMP.UI.Controls.WPF.Reporting.MatrixGrid
         /// <param name="colIndex">Колонка матрицы</param>
         /// <param name="headerType">Тип заголовка</param>
         /// <returns></returns>
-        Tuple<IList<IMatrixHeader>, int, int, int, int> CreateChildHeaders(IList<IMatrixHeader> headerValues, int rowIndex, int colIndex, HeaderType headerType)
+        private Tuple<IList<IMatrixHeader>, int, int, int, int> CreateChildHeaders(IList<IMatrixHeader> headerValues, int rowIndex, int colIndex, HeaderType headerType)
         {
             IList<IMatrixHeader> matrixItems = new List<IMatrixHeader>();
             Tuple<IList<IMatrixHeader>, int, int, int, int> childs;
@@ -412,9 +475,13 @@ namespace TMP.UI.Controls.WPF.Reporting.MatrixGrid
                 foreach (IMatrixHeader header in headerValues)
                 {
                     if (headerType == HeaderType.row)
-                        childs = CreateChildHeaders(header.Children, rowIndex, colIndex + 1, headerType);
+                    {
+                        childs = this.CreateChildHeaders(header.Children, rowIndex, colIndex + 1, headerType);
+                    }
                     else
-                        childs = CreateChildHeaders(header.Children, rowIndex + 1, colIndex, headerType);
+                    {
+                        childs = this.CreateChildHeaders(header.Children, rowIndex + 1, colIndex, headerType);
+                    }
 
                     MatrixHeaderCell headerItem;
                     if (headerType == HeaderType.row)
@@ -433,10 +500,13 @@ namespace TMP.UI.Controls.WPF.Reporting.MatrixGrid
                         span += childs.Item5;
                         colIndex += childs.Item5;
                     }
+
                     matrixItems.Add(headerItem);
 
                     foreach (IMatrixHeader item in childs.Item1)
+                    {
                         matrixItems.Add(item);
+                    }
                 }
 
                 return new Tuple<IList<IMatrixHeader>, int, int, int, int>(matrixItems, rowIndex, colIndex,
@@ -444,20 +514,24 @@ namespace TMP.UI.Controls.WPF.Reporting.MatrixGrid
                     headerType == HeaderType.column ? span : 1);
             }
             else
+            {
                 return new Tuple<IList<IMatrixHeader>, int, int, int, int>(matrixItems, rowIndex, colIndex,
-                    rowIndex < _columnHeadersRowSpan ? _columnHeadersRowSpan - rowIndex + 1 : 1,
-                    colIndex < _rowHeadersColumnSpan ? _rowHeadersColumnSpan - colIndex + 1 : 1);
-
+                    rowIndex < this.columnHeadersRowSpan ? this.columnHeadersRowSpan - rowIndex + 1 : 1,
+                    colIndex < this.rowHeadersColumnSpan ? this.rowHeadersColumnSpan - colIndex + 1 : 1);
+            }
         }
+
         /// <summary>
         /// Подсчёт высоты дерева
         /// </summary>
         /// <param name="headerValues"></param>
         /// <returns></returns>
-        int MaxHeaderDepth(IList<IMatrixHeader> headerValues)
+        private int MaxHeaderDepth(IList<IMatrixHeader> headerValues)
         {
             if (headerValues == null || headerValues.Count == 0)
+            {
                 return 0;
+            }
 
             int maxDepth = 0;
             foreach (IMatrixHeader header in headerValues)
@@ -465,32 +539,49 @@ namespace TMP.UI.Controls.WPF.Reporting.MatrixGrid
                 int childrenDepth = 1;
 
                 if (header.Children != null && header.Children.Count > 0)
-                    childrenDepth += MaxHeaderDepth(header.Children);
+                {
+                    childrenDepth += this.MaxHeaderDepth(header.Children);
+                }
+
                 maxDepth = Math.Max(maxDepth, childrenDepth);
             }
+
             return maxDepth;
         }
 
-        void SetParentForChildren(IList<IMatrixHeader> headers, IMatrixHeader parent = null)
+        private void SetParentForChildren(IList<IMatrixHeader> headers, ref IMatrixHeader parent)
         {
-            if (headers == null || headers.Count == 0) return; 
-            foreach (MatrixHeaderCell header in headers)
+            if (headers == null || headers.Count == 0)
             {
+                return;
+            }
+
+            for (int index = 0; index < headers.Count; index++)
+            {
+                IMatrixHeader header = headers[index];
                 header.Parent = parent;
-                SetParentForChildren(header.Children, header);
+                if (header.Children != null)
+                {
+                    this.SetParentForChildren(header.Children, ref header);
+                }
             }
         }
 
-        IList<IMatrixHeader> BuildFlatHeadersList(IList<IMatrixHeader> headers)
+        private IList<IMatrixHeader> BuildFlatHeadersList(IList<IMatrixHeader> headers)
         {
             List<IMatrixHeader> result = new List<IMatrixHeader>();
             foreach (MatrixHeaderCell header in headers)
             {
                 if (header.Children == null || header.Children.Count == 0)
+                {
                     result.Add(header);
+                }
                 else
-                    result.AddRange(BuildFlatHeadersList(header.Children));
+                {
+                    result.AddRange(this.BuildFlatHeadersList(header.Children));
+                }
             }
+
             return result;
         }
 
@@ -498,7 +589,7 @@ namespace TMP.UI.Controls.WPF.Reporting.MatrixGrid
 
         #region Default commands implementation
 
-        void CopyToClipboard()
+        private void CopyToClipboard()
         {
             Helpers.FormatHelper.MatrixToClipboard(this);
         }
@@ -506,66 +597,83 @@ namespace TMP.UI.Controls.WPF.Reporting.MatrixGrid
         #endregion
 
         #region Fields
+
         /// <summary>
         /// Коллекция ячеек матрицы
         /// </summary>
-        ReadOnlyCollection<IMatrixCell> _matrixItems;
+        private ReadOnlyCollection<IMatrixCell> _items;
 
-        IMatrixCell[,] _cells;
+        private IMatrixCell[,] _cells;
+        private string _header;
+        private string _description;
 
         /// <summary>
         /// Ширина заголовков строк и столбцов
         /// </summary>
-        int _columnHeadersRowSpan = 1, _rowHeadersColumnSpan = 1;
+        private int columnHeadersRowSpan = 1;
+        /// <summary>
+        /// Ширина заголовков строк и столбцов
+        /// </summary>
+        private int rowHeadersColumnSpan = 1;
 
-        IList<IMatrixHeader> _rowHeaders, _columnHeaders;
-        Size _size = Size.Empty;
+        private IList<IMatrixHeader> _rowHeaders;
+        private IList<IMatrixHeader> _columnHeaders;
+        private Size _size = Size.Empty;
 
         #endregion // Fields
 
-
         public override string ToString()
         {
-            if (_matrixItems == null || _matrixItems.Count == 0)
-                return "Matrix is empty.";
-            else
-                return String.Format("Matrix size {0}x{1}", Size.Height, Size.Width);
+            return this._items == null || this._items.Count == 0
+                ? "Matrix is empty."
+                : string.Format("Matrix size {0}x{1}", this.Size.Height, this.Size.Width);
         }
 
         #region INotifyPropertyChanged implementation
         public event PropertyChangedEventHandler PropertyChanged;
-        protected bool SetProperty<T>(ref T field, T value, string propertyName = null)
+
+        protected bool SetProperty<T>(ref T field, T value, [System.Runtime.CompilerServices.CallerMemberName] string propertyName = null)
         {
-            if (Equals(field, value)) { return false; }
+            if (Equals(field, value))
+            {
+                return false;
+            }
 
             field = value;
-            RaisePropertyChanged(propertyName);
+            this.RaisePropertyChanged(propertyName);
             return true;
         }
-        protected void RaisePropertyChanged(string propertyName = null)
-        {
-            OnPropertyChanged(new PropertyChangedEventArgs(propertyName));
-        }
-        protected virtual void OnPropertyChanged(PropertyChangedEventArgs e)
 
+        protected void RaisePropertyChanged([System.Runtime.CompilerServices.CallerMemberName] string propertyName = null)
         {
-            PropertyChanged?.Invoke(this, e);
+            this.OnPropertyChanged(new PropertyChangedEventArgs(propertyName));
+        }
+
+        protected virtual void OnPropertyChanged(PropertyChangedEventArgs e)
+        {
+            this.PropertyChanged?.Invoke(this, e);
         }
         #endregion
 
-        class RelayCommand : ICommand
+        private class RelayCommand : ICommand
         {
-            Action _action;
-            Func<bool> _canExecute;
+            private readonly Action action;
+            private readonly Func<bool> canExecute;
 
             public RelayCommand(Action action, Func<bool> canExecute)
             {
                 if (action == null)
+                {
                     throw new ArgumentNullException("Action");
+                }
+
                 if (canExecute == null)
+                {
                     throw new ArgumentNullException("CanExecute");
-                _action = action;
-                _canExecute = canExecute;
+                }
+
+                this.action = action;
+                this.canExecute = canExecute;
             }
 
             public event EventHandler CanExecuteChanged
@@ -573,15 +681,17 @@ namespace TMP.UI.Controls.WPF.Reporting.MatrixGrid
                 add { System.Windows.Input.CommandManager.RequerySuggested += value; }
                 remove { System.Windows.Input.CommandManager.RequerySuggested -= value; }
             }
+
             public bool CanExecute(object parameter)
             {
-                return _canExecute == null ? true : _canExecute();
+                return this.canExecute == null ? true : this.canExecute();
             }
 
             public void Execute(object parameter)
             {
-                _action();
+                this.action();
             }
+
             public void OnCanExecuteChanged()
             {
                 System.Windows.Input.CommandManager.InvalidateRequerySuggested();

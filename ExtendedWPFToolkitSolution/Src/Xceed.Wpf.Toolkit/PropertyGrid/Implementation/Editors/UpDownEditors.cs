@@ -1,14 +1,14 @@
 ﻿/*************************************************************************************
+   
+   Toolkit for WPF
 
-   Extended WPF Toolkit
-
-   Copyright (C) 2007-2013 Xceed Software Inc.
+   Copyright (C) 2007-2018 Xceed Software Inc.
 
    This program is provided to you under the terms of the Microsoft Public
    License (Ms-PL) as published at http://wpftoolkit.codeplex.com/license 
 
    For more features, controls, and fast professional support,
-   pick up the Plus Edition at http://xceed.com/wpf_toolkit
+   pick up the Plus Edition at https://xceed.com/xceed-toolkit-plus-for-wpf/
 
    Stay informed: follow @datagrid on Twitter or Like http://facebook.com/datagrids
 
@@ -17,6 +17,7 @@
 using Xceed.Wpf.Toolkit.Primitives;
 using System;
 using System.Windows;
+using System.Windows.Data;
 #if !VS2008
 using System.ComponentModel.DataAnnotations;
 #endif
@@ -51,7 +52,21 @@ namespace Xceed.Wpf.Toolkit.PropertyGrid.Editors
 #endif
   }
 
-  public class ByteUpDownEditor : UpDownEditor<ByteUpDown, byte?>
+  public class NumericUpDownEditor<TEditor, TType> : UpDownEditor<TEditor, TType> where TEditor : UpDownBase<TType>, new()
+  {
+    protected override void SetControlProperties( PropertyItem propertyItem )
+    {
+      base.SetControlProperties( propertyItem );
+
+      var binding = new Binding( "IsInvalid" );
+      binding.Source = this.Editor;
+      binding.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
+      binding.Mode = BindingMode.TwoWay;
+      BindingOperations.SetBinding( propertyItem, PropertyItem.IsInvalidProperty, binding );
+    }
+  }
+
+  public class ByteUpDownEditor : NumericUpDownEditor<ByteUpDown, byte?>
   {
     protected override ByteUpDown CreateEditor()
     {
@@ -67,7 +82,7 @@ namespace Xceed.Wpf.Toolkit.PropertyGrid.Editors
     }
   }
 
-  public class DecimalUpDownEditor : UpDownEditor<DecimalUpDown, decimal?>
+  public class DecimalUpDownEditor : NumericUpDownEditor<DecimalUpDown, decimal?>
   {
     protected override DecimalUpDown CreateEditor()
     {
@@ -83,7 +98,7 @@ namespace Xceed.Wpf.Toolkit.PropertyGrid.Editors
     }
   }
 
-  public class DoubleUpDownEditor : UpDownEditor<DoubleUpDown, double?> 
+  public class DoubleUpDownEditor : NumericUpDownEditor<DoubleUpDown, double?> 
   {
     protected override DoubleUpDown CreateEditor()
     {
@@ -94,13 +109,14 @@ namespace Xceed.Wpf.Toolkit.PropertyGrid.Editors
     {
       base.SetControlProperties( propertyItem );
       Editor.AllowInputSpecialValues = AllowedSpecialValues.Any;
+
 #if !VS2008
       this.SetMinMaxFromRangeAttribute( propertyItem.PropertyDescriptor, TypeDescriptor.GetConverter( typeof( double ) ) );      
 #endif
     }
   }
 
-  public class IntegerUpDownEditor : UpDownEditor<IntegerUpDown, int?>
+  public class IntegerUpDownEditor : NumericUpDownEditor<IntegerUpDown, int?>
   {
     protected override IntegerUpDown CreateEditor()
     {
@@ -116,7 +132,7 @@ namespace Xceed.Wpf.Toolkit.PropertyGrid.Editors
     }
   }
 
-  public class LongUpDownEditor : UpDownEditor<LongUpDown, long?>
+  public class LongUpDownEditor : NumericUpDownEditor<LongUpDown, long?>
   {
     protected override LongUpDown CreateEditor()
     {
@@ -132,7 +148,7 @@ namespace Xceed.Wpf.Toolkit.PropertyGrid.Editors
     }
   }
 
-  public class ShortUpDownEditor : UpDownEditor<ShortUpDown, short?>
+  public class ShortUpDownEditor : NumericUpDownEditor<ShortUpDown, short?>
   {
     protected override ShortUpDown CreateEditor()
     {
@@ -148,7 +164,7 @@ namespace Xceed.Wpf.Toolkit.PropertyGrid.Editors
     }
   }
 
-  public class SingleUpDownEditor : UpDownEditor<SingleUpDown, float?> 
+  public class SingleUpDownEditor : NumericUpDownEditor<SingleUpDown, float?> 
   {
     protected override SingleUpDown CreateEditor()
     {
@@ -196,7 +212,7 @@ namespace Xceed.Wpf.Toolkit.PropertyGrid.Editors
     }
   }
 
-  internal class SByteUpDownEditor : UpDownEditor<SByteUpDown, sbyte?>
+  internal class SByteUpDownEditor : NumericUpDownEditor<SByteUpDown, sbyte?>
   {
     protected override SByteUpDown CreateEditor()
     {
@@ -212,7 +228,7 @@ namespace Xceed.Wpf.Toolkit.PropertyGrid.Editors
     }
   }
 
-  internal class UIntegerUpDownEditor : UpDownEditor<UIntegerUpDown, uint?>
+  internal class UIntegerUpDownEditor : NumericUpDownEditor<UIntegerUpDown, uint?>
   {
     protected override UIntegerUpDown CreateEditor()
     {
@@ -228,7 +244,7 @@ namespace Xceed.Wpf.Toolkit.PropertyGrid.Editors
     }
   }
 
-  internal class ULongUpDownEditor : UpDownEditor<ULongUpDown, ulong?>
+  internal class ULongUpDownEditor : NumericUpDownEditor<ULongUpDown, ulong?>
   {
     protected override ULongUpDown CreateEditor()
     {
@@ -244,7 +260,7 @@ namespace Xceed.Wpf.Toolkit.PropertyGrid.Editors
     }
   }
 
-  internal class UShortUpDownEditor : UpDownEditor<UShortUpDown, ushort?>
+  internal class UShortUpDownEditor : NumericUpDownEditor<UShortUpDown, ushort?>
   {
     protected override UShortUpDown CreateEditor()
     {
@@ -334,7 +350,8 @@ namespace Xceed.Wpf.Toolkit.PropertyGrid.Editors
     }
   }
 
-  internal class PropertyGridEditorSByteUpDown : SByteUpDown
+  [CLSCompliantAttribute( false )]
+  public class PropertyGridEditorSByteUpDown : SByteUpDown
   {
     static PropertyGridEditorSByteUpDown()
     {
@@ -342,7 +359,8 @@ namespace Xceed.Wpf.Toolkit.PropertyGrid.Editors
     }
   }
 
-  internal class PropertyGridEditorUIntegerUpDown : UIntegerUpDown
+  [CLSCompliantAttribute( false )]
+  public class PropertyGridEditorUIntegerUpDown : UIntegerUpDown
   {
     static PropertyGridEditorUIntegerUpDown()
     {
@@ -350,7 +368,8 @@ namespace Xceed.Wpf.Toolkit.PropertyGrid.Editors
     }
   }
 
-  internal class PropertyGridEditorULongUpDown : ULongUpDown
+  [CLSCompliantAttribute( false )]
+  public class PropertyGridEditorULongUpDown : ULongUpDown
   {
     static PropertyGridEditorULongUpDown()
     {
@@ -358,7 +377,8 @@ namespace Xceed.Wpf.Toolkit.PropertyGrid.Editors
     }
   }
 
-  internal class PropertyGridEditorUShortUpDown : UShortUpDown
+  [CLSCompliantAttribute( false )]
+  public class PropertyGridEditorUShortUpDown : UShortUpDown
   {
     static PropertyGridEditorUShortUpDown()
     {

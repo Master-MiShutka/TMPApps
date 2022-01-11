@@ -1,8 +1,7 @@
-﻿using System;
-using System.Runtime.InteropServices;
-
-namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
+﻿namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 {
+    using System;
+    using System.Runtime.InteropServices;
 
     /// <summary>
     /// An exception thrown when an error occurs while dealing with the Property System API.
@@ -13,13 +12,17 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
         /// <summary>
         /// Default constructor.
         /// </summary>
-        public PropertySystemException() { }
+        public PropertySystemException()
+        {
+        }
 
         /// <summary>
         /// Initializes an excpetion with a custom message.
         /// </summary>
         /// <param name="message"></param>
-        public PropertySystemException(string message) : base(message) { }
+        public PropertySystemException(string message) : base(message)
+        {
+        }
 
         /// <summary>
         /// Initializes an exception with custom message and inner exception.
@@ -36,7 +39,9 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
         /// </summary>
         /// <param name="message"></param>
         /// <param name="errorCode"></param>
-        public PropertySystemException(string message, int errorCode) : base(message, errorCode) { }
+        public PropertySystemException(string message, int errorCode) : base(message, errorCode)
+        {
+        }
 
         /// <summary>
         /// Initializes an exception from serialization info and a context.
@@ -49,6 +54,5 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
             : base(info, context)
         {
         }
-
     }
 }

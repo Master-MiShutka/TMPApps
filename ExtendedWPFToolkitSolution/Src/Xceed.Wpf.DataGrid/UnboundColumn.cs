@@ -26,12 +26,7 @@ using System.Collections.ObjectModel;
 
 namespace Xceed.Wpf.DataGrid
 {
-    /// <summary>
-    /// Represents a column that can be used to display non-data related information 
-    /// such as a label or controls that allow some sort of action to be carried out 
-    /// (e.g., a button to open a window in which the current item can be edited).
-    /// </summary>
-    public class UnboundColumn : ColumnBase
+  public class UnboundColumn : ColumnBase
   {
     public UnboundColumn()
     {

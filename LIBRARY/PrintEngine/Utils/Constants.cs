@@ -1,9 +1,9 @@
-﻿using System;
-using System.IO;
-using System.Windows;
-
-namespace TMP.PrintEngine.Utils
+﻿namespace TMP.PrintEngine.Utils
 {
+    using System;
+    using System.IO;
+    using System.Windows;
+
     public class Constants
     {
         public class CsBook
@@ -25,6 +25,7 @@ namespace TMP.PrintEngine.Utils
             public static readonly Size A3 = new Size(1169, 1654);
             public static readonly Size A4 = new Size(827, 1169);
             public static readonly Size A5 = new Size(583, 827);
+
             public static string SETTINGS_FOLDER
             {
                 get
@@ -34,6 +35,7 @@ namespace TMP.PrintEngine.Utils
                     {
                         Directory.CreateDirectory(path);
                     }
+
                     return path;
                 }
             }

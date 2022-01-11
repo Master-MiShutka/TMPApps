@@ -1,23 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-
-namespace TMP.UI.Controls.WPF
+﻿namespace TMP.UI.Controls.WPF
 {
+    using System.Windows;
+    using System.Windows.Controls;
+
     /// <summary>
     /// Interaction logic for LabelledContent.xaml
     /// </summary>
-    public partial class LabelledContent : UserControl
+    public class LabelledContent : ContentControl
     {
         public static readonly DependencyProperty LabelProperty = DependencyProperty
         .Register("Label",
@@ -25,15 +14,19 @@ namespace TMP.UI.Controls.WPF
                 typeof(LabelledContent),
                 new FrameworkPropertyMetadata("Unnamed Label"));
 
-        public LabelledContent()
-        {
-            InitializeComponent();
-        }
-
         public string Label
         {
-            get { return (string)GetValue(LabelProperty); }
-            set { SetValue(LabelProperty, value); }
+            get => (string)this.GetValue(LabelProperty);
+            set => this.SetValue(LabelProperty, value);
         }
+
+        public Dock LabelDock
+        {
+            get => (Dock)this.GetValue(LabelDockProperty);
+            set => this.SetValue(LabelDockProperty, value);
+        }
+
+        public static readonly DependencyProperty LabelDockProperty =
+            DependencyProperty.Register("LabelDock", typeof(Dock), typeof(LabelledContent), new PropertyMetadata(Dock.Left));
     }
 }

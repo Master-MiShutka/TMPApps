@@ -1,12 +1,12 @@
-﻿//Copyright (c) Microsoft Corporation.  All rights reserved.
-
-using System;
-using System.ComponentModel;
-using System.Threading;
-using Microsoft.WindowsAPICodePack.Shell.Resources;
+﻿// Copyright (c) Microsoft Corporation.  All rights reserved.
 
 namespace Microsoft.WindowsAPICodePack.Shell
 {
+    using System;
+    using System.ComponentModel;
+    using System.Threading;
+    using Microsoft.WindowsAPICodePack.Shell.Resources;
+
     /// <summary>
     /// Listens for changes in/on a ShellObject and raises events when they occur.
     /// This class supports all items under the shell namespace including
@@ -14,8 +14,8 @@ namespace Microsoft.WindowsAPICodePack.Shell
     /// </summary>
     public class ShellObjectWatcher : IDisposable
     {
-        private ShellObject _shellObject;
-        private bool _recursive;
+        private ShellObject shellObject;
+        private bool recursive;
 
         private ChangeNotifyEventManager _manager = new ChangeNotifyEventManager();
         private IntPtr _listenerHandle;
@@ -35,21 +35,21 @@ namespace Microsoft.WindowsAPICodePack.Shell
         {
             if (shellObject == null)
             {
-                throw new ArgumentNullException("shellObject");
+                throw new ArgumentNullException(nameof(shellObject));
             }
 
-            if (_context == null)
+            if (this._context == null)
             {
-                _context = new SynchronizationContext();
-                SynchronizationContext.SetSynchronizationContext(_context);
+                this._context = new SynchronizationContext();
+                SynchronizationContext.SetSynchronizationContext(this._context);
             }
 
-            _shellObject = shellObject;
-            this._recursive = recursive;
+            this.shellObject = shellObject;
+            this.recursive = recursive;
 
-            var result = MessageListenerFilter.Register(OnWindowMessageReceived);
-            _listenerHandle = result.WindowHandle;
-            _message = result.Message;
+            var result = MessageListenerFilter.Register(this.OnWindowMessageReceived);
+            this._listenerHandle = result.WindowHandle;
+            this._message = result.Message;
         }
 
         /// <summary>
@@ -57,12 +57,12 @@ namespace Microsoft.WindowsAPICodePack.Shell
         /// </summary>
         public bool Running
         {
-            get { return _running; }
-            private set { _running = value; }
+            get => this._running;
+            private set => this._running = value;
         }
 
         /// <summary>
-        /// Start the watcher and begin receiving change notifications.        
+        /// Start the watcher and begin receiving change notifications.
         /// <remarks>
         /// If the watcher is running, has no effect.
         /// Registration for notifications should be done before this is called.
@@ -70,29 +70,32 @@ namespace Microsoft.WindowsAPICodePack.Shell
         /// </summary>
         public void Start()
         {
-            if (Running) { return; }
+            if (this.Running)
+            {
+                return;
+            }
 
             #region Registration
             ShellNativeMethods.SHChangeNotifyEntry entry = new ShellNativeMethods.SHChangeNotifyEntry();
-            entry.recursively = _recursive;
+            entry.recursively = this.recursive;
 
-            entry.pIdl = _shellObject.PIDL;
+            entry.pIdl = this.shellObject.PIDL;
 
-            _registrationId = ShellNativeMethods.SHChangeNotifyRegister(
-                _listenerHandle,
+            this._registrationId = ShellNativeMethods.SHChangeNotifyRegister(
+                this._listenerHandle,
                 ShellNativeMethods.ShellChangeNotifyEventSource.ShellLevel | ShellNativeMethods.ShellChangeNotifyEventSource.InterruptLevel | ShellNativeMethods.ShellChangeNotifyEventSource.NewDelivery,
-                 _manager.RegisteredTypes, //ShellObjectChangeTypes.AllEventsMask,
-                _message,
+                this._manager.RegisteredTypes, // ShellObjectChangeTypes.AllEventsMask,
+                this._message,
                 1,
                 ref entry);
 
-            if (_registrationId == 0)
+            if (this._registrationId == 0)
             {
                 throw new Win32Exception(LocalizedMessages.ShellObjectWatcherRegisterFailed);
             }
             #endregion
 
-            Running = true;
+            this.Running = true;
         }
 
         /// <summary>
@@ -101,26 +104,31 @@ namespace Microsoft.WindowsAPICodePack.Shell
         /// </summary>
         public void Stop()
         {
-            if (!Running) { return; }
-            if (_registrationId > 0)
+            if (!this.Running)
             {
-                ShellNativeMethods.SHChangeNotifyDeregister(_registrationId);
-                _registrationId = 0;
+                return;
             }
-            Running = false;
+
+            if (this._registrationId > 0)
+            {
+                ShellNativeMethods.SHChangeNotifyDeregister(this._registrationId);
+                this._registrationId = 0;
+            }
+
+            this.Running = false;
         }
 
         private void OnWindowMessageReceived(WindowMessageEventArgs e)
         {
-            if (e.Message.Msg == _message)
+            if (e.Message.Msg == this._message)
             {
-                _context.Send(x => ProcessChangeNotificationEvent(e), null);
+                this._context.Send(x => this.ProcessChangeNotificationEvent(e), null);
             }
         }
 
         private void ThrowIfRunning()
         {
-            if (Running)
+            if (this.Running)
             {
                 throw new InvalidOperationException(LocalizedMessages.ShellObjectWatcherUnableToChangeEvents);
             }
@@ -132,8 +140,15 @@ namespace Microsoft.WindowsAPICodePack.Shell
         /// <param name="e">The windows message representing the notification event</param>
         protected virtual void ProcessChangeNotificationEvent(WindowMessageEventArgs e)
         {
-            if (!Running) { return; }
-            if (e == null) { throw new ArgumentNullException("e"); }
+            if (!this.Running)
+            {
+                return;
+            }
+
+            if (e == null)
+            {
+                throw new ArgumentNullException(nameof(e));
+            }
 
             ChangeNotifyLock notifyLock = new ChangeNotifyLock(e.Message);
 
@@ -152,12 +167,13 @@ namespace Microsoft.WindowsAPICodePack.Shell
                     break;
             }
 
-            _manager.Invoke(this, notifyLock.ChangeType, args);
+            this._manager.Invoke(this, notifyLock.ChangeType, args);
         }
 
         #region Change Events
 
         #region Mask Events
+
         /// <summary>
         /// Raised when any event occurs.
         /// </summary>
@@ -165,13 +181,14 @@ namespace Microsoft.WindowsAPICodePack.Shell
         {
             add
             {
-                ThrowIfRunning();
-                _manager.Register(ShellObjectChangeTypes.AllEventsMask, value);
+                this.ThrowIfRunning();
+                this._manager.Register(ShellObjectChangeTypes.AllEventsMask, value);
             }
+
             remove
             {
-                ThrowIfRunning();
-                _manager.Unregister(ShellObjectChangeTypes.AllEventsMask, value);
+                this.ThrowIfRunning();
+                this._manager.Unregister(ShellObjectChangeTypes.AllEventsMask, value);
             }
         }
 
@@ -182,13 +199,14 @@ namespace Microsoft.WindowsAPICodePack.Shell
         {
             add
             {
-                ThrowIfRunning();
-                _manager.Register(ShellObjectChangeTypes.GlobalEventsMask, value);
+                this.ThrowIfRunning();
+                this._manager.Register(ShellObjectChangeTypes.GlobalEventsMask, value);
             }
+
             remove
             {
-                ThrowIfRunning();
-                _manager.Unregister(ShellObjectChangeTypes.GlobalEventsMask, value);
+                this.ThrowIfRunning();
+                this._manager.Unregister(ShellObjectChangeTypes.GlobalEventsMask, value);
             }
         }
 
@@ -199,18 +217,20 @@ namespace Microsoft.WindowsAPICodePack.Shell
         {
             add
             {
-                ThrowIfRunning();
-                _manager.Register(ShellObjectChangeTypes.DiskEventsMask, value);
+                this.ThrowIfRunning();
+                this._manager.Register(ShellObjectChangeTypes.DiskEventsMask, value);
             }
+
             remove
             {
-                ThrowIfRunning();
-                _manager.Unregister(ShellObjectChangeTypes.DiskEventsMask, value);
+                this.ThrowIfRunning();
+                this._manager.Unregister(ShellObjectChangeTypes.DiskEventsMask, value);
             }
         }
         #endregion
 
         #region Single Events
+
         /// <summary>
         /// Raised when an item is renamed.
         /// </summary>
@@ -218,13 +238,14 @@ namespace Microsoft.WindowsAPICodePack.Shell
         {
             add
             {
-                ThrowIfRunning();
-                _manager.Register(ShellObjectChangeTypes.ItemRename, value);
+                this.ThrowIfRunning();
+                this._manager.Register(ShellObjectChangeTypes.ItemRename, value);
             }
+
             remove
             {
-                ThrowIfRunning();
-                _manager.Unregister(ShellObjectChangeTypes.ItemRename, value);
+                this.ThrowIfRunning();
+                this._manager.Unregister(ShellObjectChangeTypes.ItemRename, value);
             }
         }
 
@@ -235,13 +256,14 @@ namespace Microsoft.WindowsAPICodePack.Shell
         {
             add
             {
-                ThrowIfRunning();
-                _manager.Register(ShellObjectChangeTypes.ItemCreate, value);
+                this.ThrowIfRunning();
+                this._manager.Register(ShellObjectChangeTypes.ItemCreate, value);
             }
+
             remove
             {
-                ThrowIfRunning();
-                _manager.Unregister(ShellObjectChangeTypes.ItemCreate, value);
+                this.ThrowIfRunning();
+                this._manager.Unregister(ShellObjectChangeTypes.ItemCreate, value);
             }
         }
 
@@ -252,13 +274,14 @@ namespace Microsoft.WindowsAPICodePack.Shell
         {
             add
             {
-                ThrowIfRunning();
-                _manager.Register(ShellObjectChangeTypes.ItemDelete, value);
+                this.ThrowIfRunning();
+                this._manager.Register(ShellObjectChangeTypes.ItemDelete, value);
             }
+
             remove
             {
-                ThrowIfRunning();
-                _manager.Unregister(ShellObjectChangeTypes.ItemDelete, value);
+                this.ThrowIfRunning();
+                this._manager.Unregister(ShellObjectChangeTypes.ItemDelete, value);
             }
         }
 
@@ -269,13 +292,14 @@ namespace Microsoft.WindowsAPICodePack.Shell
         {
             add
             {
-                ThrowIfRunning();
-                _manager.Register(ShellObjectChangeTypes.Update, value);
+                this.ThrowIfRunning();
+                this._manager.Register(ShellObjectChangeTypes.Update, value);
             }
+
             remove
             {
-                ThrowIfRunning();
-                _manager.Unregister(ShellObjectChangeTypes.Update, value);
+                this.ThrowIfRunning();
+                this._manager.Unregister(ShellObjectChangeTypes.Update, value);
             }
         }
 
@@ -286,13 +310,14 @@ namespace Microsoft.WindowsAPICodePack.Shell
         {
             add
             {
-                ThrowIfRunning();
-                _manager.Register(ShellObjectChangeTypes.DirectoryContentsUpdate, value);
+                this.ThrowIfRunning();
+                this._manager.Register(ShellObjectChangeTypes.DirectoryContentsUpdate, value);
             }
+
             remove
             {
-                ThrowIfRunning();
-                _manager.Unregister(ShellObjectChangeTypes.DirectoryContentsUpdate, value);
+                this.ThrowIfRunning();
+                this._manager.Unregister(ShellObjectChangeTypes.DirectoryContentsUpdate, value);
             }
         }
 
@@ -303,13 +328,14 @@ namespace Microsoft.WindowsAPICodePack.Shell
         {
             add
             {
-                ThrowIfRunning();
-                _manager.Register(ShellObjectChangeTypes.DirectoryRename, value);
+                this.ThrowIfRunning();
+                this._manager.Register(ShellObjectChangeTypes.DirectoryRename, value);
             }
+
             remove
             {
-                ThrowIfRunning();
-                _manager.Unregister(ShellObjectChangeTypes.DirectoryRename, value);
+                this.ThrowIfRunning();
+                this._manager.Unregister(ShellObjectChangeTypes.DirectoryRename, value);
             }
         }
 
@@ -320,13 +346,14 @@ namespace Microsoft.WindowsAPICodePack.Shell
         {
             add
             {
-                ThrowIfRunning();
-                _manager.Register(ShellObjectChangeTypes.DirectoryCreate, value);
+                this.ThrowIfRunning();
+                this._manager.Register(ShellObjectChangeTypes.DirectoryCreate, value);
             }
+
             remove
             {
-                ThrowIfRunning();
-                _manager.Unregister(ShellObjectChangeTypes.DirectoryCreate, value);
+                this.ThrowIfRunning();
+                this._manager.Unregister(ShellObjectChangeTypes.DirectoryCreate, value);
             }
         }
 
@@ -337,13 +364,14 @@ namespace Microsoft.WindowsAPICodePack.Shell
         {
             add
             {
-                ThrowIfRunning();
-                _manager.Register(ShellObjectChangeTypes.DirectoryDelete, value);
+                this.ThrowIfRunning();
+                this._manager.Register(ShellObjectChangeTypes.DirectoryDelete, value);
             }
+
             remove
             {
-                ThrowIfRunning();
-                _manager.Unregister(ShellObjectChangeTypes.DirectoryDelete, value);
+                this.ThrowIfRunning();
+                this._manager.Unregister(ShellObjectChangeTypes.DirectoryDelete, value);
             }
         }
 
@@ -354,13 +382,14 @@ namespace Microsoft.WindowsAPICodePack.Shell
         {
             add
             {
-                ThrowIfRunning();
-                _manager.Register(ShellObjectChangeTypes.MediaInsert, value);
+                this.ThrowIfRunning();
+                this._manager.Register(ShellObjectChangeTypes.MediaInsert, value);
             }
+
             remove
             {
-                ThrowIfRunning();
-                _manager.Unregister(ShellObjectChangeTypes.MediaInsert, value);
+                this.ThrowIfRunning();
+                this._manager.Unregister(ShellObjectChangeTypes.MediaInsert, value);
             }
         }
 
@@ -371,13 +400,14 @@ namespace Microsoft.WindowsAPICodePack.Shell
         {
             add
             {
-                ThrowIfRunning();
-                _manager.Register(ShellObjectChangeTypes.MediaRemove, value);
+                this.ThrowIfRunning();
+                this._manager.Register(ShellObjectChangeTypes.MediaRemove, value);
             }
+
             remove
             {
-                ThrowIfRunning();
-                _manager.Unregister(ShellObjectChangeTypes.MediaRemove, value);
+                this.ThrowIfRunning();
+                this._manager.Unregister(ShellObjectChangeTypes.MediaRemove, value);
             }
         }
 
@@ -388,13 +418,14 @@ namespace Microsoft.WindowsAPICodePack.Shell
         {
             add
             {
-                ThrowIfRunning();
-                _manager.Register(ShellObjectChangeTypes.DriveAdd, value);
+                this.ThrowIfRunning();
+                this._manager.Register(ShellObjectChangeTypes.DriveAdd, value);
             }
+
             remove
             {
-                ThrowIfRunning();
-                _manager.Unregister(ShellObjectChangeTypes.DriveAdd, value);
+                this.ThrowIfRunning();
+                this._manager.Unregister(ShellObjectChangeTypes.DriveAdd, value);
             }
         }
 
@@ -405,13 +436,14 @@ namespace Microsoft.WindowsAPICodePack.Shell
         {
             add
             {
-                ThrowIfRunning();
-                _manager.Register(ShellObjectChangeTypes.DriveRemove, value);
+                this.ThrowIfRunning();
+                this._manager.Register(ShellObjectChangeTypes.DriveRemove, value);
             }
+
             remove
             {
-                ThrowIfRunning();
-                _manager.Unregister(ShellObjectChangeTypes.DriveRemove, value);
+                this.ThrowIfRunning();
+                this._manager.Unregister(ShellObjectChangeTypes.DriveRemove, value);
             }
         }
 
@@ -422,13 +454,14 @@ namespace Microsoft.WindowsAPICodePack.Shell
         {
             add
             {
-                ThrowIfRunning();
-                _manager.Register(ShellObjectChangeTypes.NetShare, value);
+                this.ThrowIfRunning();
+                this._manager.Register(ShellObjectChangeTypes.NetShare, value);
             }
+
             remove
             {
-                ThrowIfRunning();
-                _manager.Unregister(ShellObjectChangeTypes.NetShare, value);
+                this.ThrowIfRunning();
+                this._manager.Unregister(ShellObjectChangeTypes.NetShare, value);
             }
         }
 
@@ -439,13 +472,14 @@ namespace Microsoft.WindowsAPICodePack.Shell
         {
             add
             {
-                ThrowIfRunning();
-                _manager.Register(ShellObjectChangeTypes.NetUnshare, value);
+                this.ThrowIfRunning();
+                this._manager.Register(ShellObjectChangeTypes.NetUnshare, value);
             }
+
             remove
             {
-                ThrowIfRunning();
-                _manager.Unregister(ShellObjectChangeTypes.NetUnshare, value);
+                this.ThrowIfRunning();
+                this._manager.Unregister(ShellObjectChangeTypes.NetUnshare, value);
             }
         }
 
@@ -456,13 +490,14 @@ namespace Microsoft.WindowsAPICodePack.Shell
         {
             add
             {
-                ThrowIfRunning();
-                _manager.Register(ShellObjectChangeTypes.ServerDisconnect, value);
+                this.ThrowIfRunning();
+                this._manager.Register(ShellObjectChangeTypes.ServerDisconnect, value);
             }
+
             remove
             {
-                ThrowIfRunning();
-                _manager.Unregister(ShellObjectChangeTypes.ServerDisconnect, value);
+                this.ThrowIfRunning();
+                this._manager.Unregister(ShellObjectChangeTypes.ServerDisconnect, value);
             }
         }
 
@@ -473,13 +508,14 @@ namespace Microsoft.WindowsAPICodePack.Shell
         {
             add
             {
-                ThrowIfRunning();
-                _manager.Register(ShellObjectChangeTypes.SystemImageUpdate, value);
+                this.ThrowIfRunning();
+                this._manager.Register(ShellObjectChangeTypes.SystemImageUpdate, value);
             }
+
             remove
             {
-                ThrowIfRunning();
-                _manager.Unregister(ShellObjectChangeTypes.SystemImageUpdate, value);
+                this.ThrowIfRunning();
+                this._manager.Unregister(ShellObjectChangeTypes.SystemImageUpdate, value);
             }
         }
 
@@ -490,13 +526,14 @@ namespace Microsoft.WindowsAPICodePack.Shell
         {
             add
             {
-                ThrowIfRunning();
-                _manager.Register(ShellObjectChangeTypes.FreeSpace, value);
+                this.ThrowIfRunning();
+                this._manager.Register(ShellObjectChangeTypes.FreeSpace, value);
             }
+
             remove
             {
-                ThrowIfRunning();
-                _manager.Unregister(ShellObjectChangeTypes.FreeSpace, value);
+                this.ThrowIfRunning();
+                this._manager.Unregister(ShellObjectChangeTypes.FreeSpace, value);
             }
         }
 
@@ -507,13 +544,14 @@ namespace Microsoft.WindowsAPICodePack.Shell
         {
             add
             {
-                ThrowIfRunning();
-                _manager.Register(ShellObjectChangeTypes.AssociationChange, value);
+                this.ThrowIfRunning();
+                this._manager.Register(ShellObjectChangeTypes.AssociationChange, value);
             }
+
             remove
             {
-                ThrowIfRunning();
-                _manager.Unregister(ShellObjectChangeTypes.AssociationChange, value);
+                this.ThrowIfRunning();
+                this._manager.Unregister(ShellObjectChangeTypes.AssociationChange, value);
             }
         }
         #endregion
@@ -528,12 +566,12 @@ namespace Microsoft.WindowsAPICodePack.Shell
         /// <param name="disposing"></param>
         protected virtual void Dispose(bool disposing)
         {
-            Stop();
-            _manager.UnregisterAll();
+            this.Stop();
+            this._manager.UnregisterAll();
 
-            if (_listenerHandle != IntPtr.Zero)
+            if (this._listenerHandle != IntPtr.Zero)
             {
-                MessageListenerFilter.Unregister(_listenerHandle, _message);
+                MessageListenerFilter.Unregister(this._listenerHandle, this._message);
             }
         }
 
@@ -542,7 +580,7 @@ namespace Microsoft.WindowsAPICodePack.Shell
         /// </summary>
         public void Dispose()
         {
-            Dispose(true);
+            this.Dispose(true);
             GC.SuppressFinalize(this);
         }
 
@@ -551,11 +589,9 @@ namespace Microsoft.WindowsAPICodePack.Shell
         /// </summary>
         ~ShellObjectWatcher()
         {
-            Dispose(false);
+            this.Dispose(false);
         }
 
         #endregion
     }
-
-
 }

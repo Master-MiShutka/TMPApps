@@ -7,7 +7,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:TMP.Work.Emcos.Controls"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:model="clr-namespace:TMP.Work.Emcos.Model.Balans"
+    xmlns:model="clr-namespace:TMP.Work.Emcos.Model.Balance;assembly=EmcosModel"
     x:Name="root"
     MinHeight="150"
     Padding="2"
@@ -22,7 +22,7 @@
 
         <BooleanToVisibilityConverter x:Key="BoolToVisiblityConv" />
 
-        <converters:BalansItemDayPercentValueConverter x:Key="BalansItemDayPercentValueConverter" />
+        <converters:BalanceItemDayPercentValueConverter x:Key="BalanceItemDayPercentValueConverter" />
         <converters:DaysValuesListTooltipConverter x:Key="DaysValuesListTooltipConverter" />
 
         <Style x:Key="EnergyText" TargetType="{x:Type TextBlock}">
@@ -81,7 +81,7 @@
                                 BorderThickness="1"
                                 Effect="{StaticResource dropShadowAccent}">
                                 <Border.Height>
-                                    <MultiBinding Converter="{StaticResource BalansItemDayPercentValueConverter}">
+                                    <MultiBinding Converter="{StaticResource BalanceItemDayPercentValueConverter}">
                                         <Binding Path="PercentValue" />
                                         <Binding Path="ActualHeight" RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type ItemsControl}}" />
                                     </MultiBinding>
@@ -158,7 +158,6 @@
                                 <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto" />
                                 <RowDefinition SharedSizeGroup="r1" />
                                 <RowDefinition SharedSizeGroup="r2" />
                                 <RowDefinition
@@ -168,36 +167,27 @@
                                 <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
 
-                            <TextBlock
-                                Grid.ColumnSpan="2"
-                                Padding="0"
-                                FontSize="{DynamicResource SubHeaderFontSize}"
-                                FontWeight="Bold"
-                                Foreground="{DynamicResource BlackBrush}"
-                                Text="{Binding SelectedBalansItem.Name, StringFormat=Значения данных по суткам по \{0\}}"
-                                TextAlignment="Center" />
-
                             <ScrollContentPresenter
-                                Grid.Row="1"
+                                Grid.Row="0"
                                 Grid.RowSpan="3"
                                 Grid.Column="1" />
 
                             <TextBlock
+                                Grid.Row="0"
+                                Style="{StaticResource EnergyText}"
+                                Text="{Binding Plus.ShortDescription, FallbackValue=plus}" />
+                            <TextBlock
                                 Grid.Row="1"
                                 Style="{StaticResource EnergyText}"
-                                Text="E+" />
+                                Text="{Binding Minus.ShortDescription, FallbackValue=minus}" />
                             <TextBlock
                                 Grid.Row="2"
-                                Style="{StaticResource EnergyText}"
-                                Text="E-" />
-                            <TextBlock
-                                Grid.Row="3"
                                 FontSize="{DynamicResource ContentFontSize}"
                                 Style="{StaticResource EnergyText}"
-                                Text="День" />
+                                Text="день" />
                             <ScrollBar
                                 x:Name="PART_HorizontalScrollBar"
-                                Grid.Row="4"
+                                Grid.Row="3"
                                 Grid.Column="1"
                                 Maximum="{TemplateBinding ScrollableWidth}"
                                 Orientation="Horizontal"
@@ -223,23 +213,22 @@
             <ItemsControl
                 Grid.Row="0"
                 Grid.Column="1"
-                ItemsSource="{Binding SelectedBalansItem.DailyEplusValues}"
+                ItemsSource="{Binding Energy.Plus.DaysValuesWithStatus, ElementName=root}"
                 Style="{StaticResource daysValuesItems}"
-                ToolTip="{Binding SelectedBalansItem.DailyEplusValues, Converter={StaticResource DaysValuesListTooltipConverter}}" />
+                ToolTip="{Binding Energy.Plus, ElementName=root, Converter={StaticResource DaysValuesListTooltipConverter}}" />
 
             <ItemsControl
                 Grid.Row="1"
                 Grid.Column="1"
                 Margin="0,-1,0,0"
-                ItemsSource="{Binding SelectedBalansItem.DailyEminusValues}"
+                ItemsSource="{Binding Energy.Minus.DaysValuesWithStatus, ElementName=root}"
                 Style="{StaticResource daysValuesItems}"
-                ToolTip="{Binding SelectedBalansItem.DailyEminusValues, Converter={StaticResource DaysValuesListTooltipConverter}}" />
+                ToolTip="{Binding Energy.Minus, ElementName=root, Converter={StaticResource DaysValuesListTooltipConverter}}" />
             <ItemsControl
                 Grid.Row="2"
                 Grid.Column="1"
-                ItemsSource="{Binding Session.Period.Dates}"
+                ItemsSource="{Binding Dates, ElementName=root}"
                 Style="{StaticResource daysItems}" />
-
         </Grid>
     </ScrollViewer>
 </UserControl>

@@ -1,14 +1,12 @@
-﻿//Copyright (c) Microsoft Corporation.  All rights reserved.
-
-using System;
-using System.Diagnostics.CodeAnalysis;
-using System.Runtime.InteropServices;
-using Microsoft.WindowsAPICodePack.Shell.Resources;
-using MS.WindowsAPICodePack.Internal;
+﻿// Copyright (c) Microsoft Corporation.  All rights reserved.
 
 namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 {
-
+    using System;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Runtime.InteropServices;
+    using Microsoft.WindowsAPICodePack.Shell.Resources;
+    using MS.WindowsAPICodePack.Internal;
 
     /// <summary>
     /// Provides easy access to all the system properties (property keys and their descriptions)
@@ -26,7 +24,6 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
             return ShellPropertyDescriptionsCache.Cache.GetPropertyDescription(propertyKey);
         }
 
-
         /// <summary>
         /// Gets the property description for a given property's canonical name.
         /// </summary>
@@ -42,6 +39,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
             {
                 throw new ArgumentException(LocalizedMessages.ShellInvalidCanonicalName, Marshal.GetExceptionForHR(result));
             }
+
             return ShellPropertyDescriptionsCache.Cache.GetPropertyDescription(propKey);
         }
 
@@ -50,7 +48,6 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
         /// </summary>
         public static class System
         {
-
 
             #region Properties
 
@@ -72,7 +69,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
             /// <summary>
             /// <para>Name:     System.ApplicationName -- PKEY_ApplicationName</para>
-            /// <para>Description: 
+            /// <para>Description:
             ///</para>
             /// <para>Type:     String -- VT_LPWSTR  (For variants: VT_BSTR)  Legacy code may treat this as VT_LPSTR.</para>
             /// <para>FormatID: (FMTID_SummaryInformation) {F29F85E0-4FF9-1068-AB91-08002B27B3D9}, 18 (PIDSI_APPNAME)</para>
@@ -89,7 +86,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
             /// <summary>
             /// <para>Name:     System.Author -- PKEY_Author</para>
-            /// <para>Description: 
+            /// <para>Description:
             ///</para>
             /// <para>Type:     Multivalue String -- VT_VECTOR | VT_LPWSTR  (For variants: VT_ARRAY | VT_BSTR)  Legacy code may treat this as VT_LPSTR.</para>
             /// <para>FormatID: (FMTID_SummaryInformation) {F29F85E0-4FF9-1068-AB91-08002B27B3D9}, 4 (PIDSI_AUTHOR)</para>
@@ -174,7 +171,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
             /// <summary>
             /// <para>Name:     System.ComputerName -- PKEY_ComputerName</para>
-            /// <para>Description: 
+            /// <para>Description:
             ///</para>
             /// <para>Type:     String -- VT_LPWSTR  (For variants: VT_BSTR)</para>
             /// <para>FormatID: (FMTID_ShellDetails) {28636AA6-953D-11D2-B5D6-00C04FD918D0}, 5 (PID_COMPUTERNAME)</para>
@@ -241,7 +238,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
             /// <summary>
             /// <para>Name:     System.Copyright -- PKEY_Copyright</para>
-            /// <para>Description: 
+            /// <para>Description:
             ///</para>
             /// <para>Type:     String -- VT_LPWSTR  (For variants: VT_BSTR)</para>
             /// <para>FormatID: (PSGUID_MEDIAFILESUMMARYINFORMATION) {64440492-4C8B-11D1-8B70-080036B11A03}, 11 (PIDMSI_COPYRIGHT)</para>
@@ -425,7 +422,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
             /// <summary>
             /// <para>Name:     System.FileAllocationSize -- PKEY_FileAllocationSize</para>
-            /// <para>Description: 
+            /// <para>Description:
             ///</para>
             /// <para>Type:     UInt64 -- VT_UI8</para>
             /// <para>FormatID: (FMTID_Storage) {B725F130-47EF-101A-A5F1-02608C9EEBAC}, 18 (PID_STG_ALLOCSIZE)</para>
@@ -459,7 +456,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
             /// <summary>
             /// <para>Name:     System.FileCount -- PKEY_FileCount</para>
-            /// <para>Description: 
+            /// <para>Description:
             ///</para>
             /// <para>Type:     UInt64 -- VT_UI8</para>
             /// <para>FormatID: (FMTID_ShellDetails) {28636AA6-953D-11D2-B5D6-00C04FD918D0}, 12</para>
@@ -493,10 +490,10 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
             /// <summary>
             /// <para>Name:     System.FileExtension -- PKEY_FileExtension</para>
-            /// <para>Description: This is the file extension of the file based item, including the leading period.  
+            /// <para>Description: This is the file extension of the file based item, including the leading period.
             ///
             ///If System.FileName is VT_EMPTY, then this property should be too.  Otherwise, it should be derived
-            ///appropriately by the data source from System.FileName.  If System.FileName does not have a file 
+            ///appropriately by the data source from System.FileName.  If System.FileName does not have a file
             ///extension, this value should be VT_EMPTY.
             ///
             ///To obtain the type of any item (including an item that is not a file), use System.ItemType.
@@ -547,11 +544,11 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
             /// <para>Name:     System.FileName -- PKEY_FileName</para>
             /// <para>Description: This is the file name (including extension) of the file.
             ///
-            ///It is possible that the item might not exist on a filesystem (ie, it may not be opened 
-            ///using CreateFile).  Nonetheless, if the item is represented as a file from the logical sense 
+            ///It is possible that the item might not exist on a filesystem (ie, it may not be opened
+            ///using CreateFile).  Nonetheless, if the item is represented as a file from the logical sense
             ///(and its name follows standard Win32 file-naming syntax), then the data source should emit this property.
             ///
-            ///If an item is not a file, then the value for this property is VT_EMPTY.  See 
+            ///If an item is not a file, then the value for this property is VT_EMPTY.  See
             ///System.ItemNameDisplay.
             ///
             ///This has the same value as System.ParsingName for items that are provided by the Shell's file folder.
@@ -599,7 +596,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
             /// <summary>
             /// <para>Name:     System.FileVersion -- PKEY_FileVersion</para>
-            /// <para>Description: 
+            /// <para>Description:
             ///</para>
             /// <para>Type:     String -- VT_LPWSTR  (For variants: VT_BSTR)</para>
             /// <para>FormatID: (PSFMTID_VERSION) {0CEF7D53-FA64-11D1-A203-0000F81FEDEE}, 4 (PIDVSI_FileVersion)</para>
@@ -633,7 +630,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
             /// <summary>
             /// <para>Name:     System.FlagColor -- PKEY_FlagColor</para>
-            /// <para>Description: 
+            /// <para>Description:
             ///</para>
             /// <para>Type:     UInt16 -- VT_UI2</para>
             /// <para>FormatID: {67DF94DE-0CA7-4D6F-B792-053A3E4F03CF}, 100</para>
@@ -650,7 +647,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
             /// <summary>
             /// <para>Name:     System.FlagColorText -- PKEY_FlagColorText</para>
-            /// <para>Description: This is the user-friendly form of System.FlagColor.  Not intended to be parsed 
+            /// <para>Description: This is the user-friendly form of System.FlagColor.  Not intended to be parsed
             ///programmatically.
             ///</para>
             /// <para>Type:     String -- VT_LPWSTR  (For variants: VT_BSTR)</para>
@@ -685,7 +682,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
             /// <summary>
             /// <para>Name:     System.FlagStatusText -- PKEY_FlagStatusText</para>
-            /// <para>Description: This is the user-friendly form of System.FlagStatus.  Not intended to be parsed 
+            /// <para>Description: This is the user-friendly form of System.FlagStatus.  Not intended to be parsed
             ///programmatically.
             ///</para>
             /// <para>Type:     String -- VT_LPWSTR  (For variants: VT_BSTR)</para>
@@ -787,7 +784,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
             /// <summary>
             /// <para>Name:     System.ImportanceText -- PKEY_ImportanceText</para>
-            /// <para>Description: This is the user-friendly form of System.Importance.  Not intended to be parsed 
+            /// <para>Description: This is the user-friendly form of System.Importance.  Not intended to be parsed
             ///programmatically.
             ///</para>
             /// <para>Type:     String -- VT_LPWSTR  (For variants: VT_BSTR)</para>
@@ -822,7 +819,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
             /// <summary>
             /// <para>Name:     System.InternalName -- PKEY_InternalName</para>
-            /// <para>Description: 
+            /// <para>Description:
             ///</para>
             /// <para>Type:     String -- VT_LPWSTR  (For variants: VT_BSTR)</para>
             /// <para>FormatID: (PSFMTID_VERSION) {0CEF7D53-FA64-11D1-A203-0000F81FEDEE}, 5 (PIDVSI_InternalName)</para>
@@ -1074,7 +1071,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
             /// <summary>
             /// <para>Name:     System.ItemAuthors -- PKEY_ItemAuthors</para>
-            /// <para>Description: This is the generic list of authors associated with an item. 
+            /// <para>Description: This is the generic list of authors associated with an item.
             ///
             ///For example, the artist name for a track is the item author.
             ///</para>
@@ -1109,7 +1106,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
             /// <summary>
             /// <para>Name:     System.ItemDate -- PKEY_ItemDate</para>
-            /// <para>Description: This is the main date for an item. The date of interest. 
+            /// <para>Description: This is the main date for an item. The date of interest.
             ///
             ///For example, for photos this maps to System.Photo.DateTaken.
             ///</para>
@@ -1130,7 +1127,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
             /// <para>Name:     System.ItemFolderNameDisplay -- PKEY_ItemFolderNameDisplay</para>
             /// <para>Description: This is the user-friendly display name of the parent folder of an item.
             ///
-            ///If System.ItemFolderPathDisplay is VT_EMPTY, then this property should be too.  Otherwise, it 
+            ///If System.ItemFolderPathDisplay is VT_EMPTY, then this property should be too.  Otherwise, it
             ///should be derived appropriately by the data source from System.ItemFolderPathDisplay.
             ///
             ///If the folder is a file folder, the value will be localized if a localized name is available.
@@ -1162,7 +1159,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
             /// <para>Name:     System.ItemFolderPathDisplay -- PKEY_ItemFolderPathDisplay</para>
             /// <para>Description: This is the user-friendly display path of the parent folder of an item.
             ///
-            ///If System.ItemPathDisplay is VT_EMPTY, then this property should be too.  Otherwise, it should 
+            ///If System.ItemPathDisplay is VT_EMPTY, then this property should be too.  Otherwise, it should
             ///be derived appropriately by the data source from System.ItemPathDisplay.
             ///
             ///Example values:
@@ -1253,8 +1250,8 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
             ///If the item is a file this property
             ///includes the extension in all cases, and will be localized if a localized name is available.
             ///
-            ///There are acceptable cases when System.FileName is not VT_EMPTY, yet the value of this property 
-            ///is completely different.  Email messages are a key example.  If the item is an email message, 
+            ///There are acceptable cases when System.FileName is not VT_EMPTY, yet the value of this property
+            ///is completely different.  Email messages are a key example.  If the item is an email message,
             ///the item name is likely the subject.  In that case, the value must be the concatenation of the
             ///System.ItemNamePrefix and System.ItemName.  Since the value of System.ItemNamePrefix excludes
             ///any trailing whitespace, the concatenation must include a whitespace when generating System.ItemNameDisplay.
@@ -1262,10 +1259,10 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
             ///Note that this property is not guaranteed to be unique, but the idea is to promote the most likely
             ///candidate that can be unique and also makes sense for end users. For example, for documents, you
             ///might think about using System.Title as the System.ItemNameDisplay, but in practice the title of
-            ///the documents may not be useful or unique enough to be of value as the sole System.ItemNameDisplay.  
+            ///the documents may not be useful or unique enough to be of value as the sole System.ItemNameDisplay.
             ///Instead, providing the value of System.FileName as the value of System.ItemNameDisplay is a better
-            ///candidate.  In Windows Mail, the emails are stored in the file system as .eml files and the 
-            ///System.FileName for those files are not human-friendly as they contain GUIDs. In this example, 
+            ///candidate.  In Windows Mail, the emails are stored in the file system as .eml files and the
+            ///System.FileName for those files are not human-friendly as they contain GUIDs. In this example,
             ///promoting System.Subject as System.ItemNameDisplay makes more sense.
             ///
             ///Compatibility notes:
@@ -1305,7 +1302,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
             ///
             ///If the item is a file, then the value of this property is VT_EMPTY.
             ///
-            ///If the item is a message, then the value of this property is the forwarding or reply 
+            ///If the item is a message, then the value of this property is the forwarding or reply
             ///prefixes (including delimiting colon, but no whitespace), or VT_EMPTY if there is no prefix.
             ///
             ///Example values:
@@ -1332,10 +1329,10 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
             /// <summary>
             /// <para>Name:     System.ItemParticipants -- PKEY_ItemParticipants</para>
-            /// <para>Description: This is the generic list of people associated with an item and who contributed 
-            ///to the item. 
+            /// <para>Description: This is the generic list of people associated with an item and who contributed
+            ///to the item.
             ///
-            ///For example, this is the combination of people in the To list, Cc list and 
+            ///For example, this is the combination of people in the To list, Cc list and
             ///sender of an email message.
             ///</para>
             /// <para>Type:     Multivalue String -- VT_VECTOR | VT_LPWSTR  (For variants: VT_ARRAY | VT_BSTR)</para>
@@ -1362,7 +1359,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
             ///
             ///Unlike System.ItemUrl, this property value does not include the URL scheme.
             ///
-            ///To parse an item path, use System.ItemUrl or System.ParsingPath.  To reference shell 
+            ///To parse an item path, use System.ItemUrl or System.ParsingPath.  To reference shell
             ///namespace items using shell APIs, use System.ParsingPath.
             ///
             ///Example values:
@@ -1390,7 +1387,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
             /// <summary>
             /// <para>Name:     System.ItemPathDisplayNarrow -- PKEY_ItemPathDisplayNarrow</para>
-            /// <para>Description: This is the user-friendly display path to the item. The format of the string should be 
+            /// <para>Description: This is the user-friendly display path to the item. The format of the string should be
             ///tailored such that the name comes first, to optimize for a narrow viewing column.
             ///
             ///If the item is a file, the value excludes the file extension, and includes localized names if they are present.
@@ -1466,11 +1463,11 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
             ///
             ///If System.ItemType is VT_EMPTY, the value of this property is also VT_EMPTY.
             ///
-            ///If the item is a file, the value of this property is the same as if you passed the 
+            ///If the item is a file, the value of this property is the same as if you passed the
             ///file's System.ItemType value to PSFormatForDisplay.
             ///
             ///This property should not be confused with System.Kind, where System.Kind is a high-level
-            ///user friendly kind name. For example, for a document, System.Kind = "Document" and 
+            ///user friendly kind name. For example, for a document, System.Kind = "Document" and
             ///System.Item.Type = ".doc" and System.Item.TypeText = "Microsoft Word Document"
             ///
             ///Example values:
@@ -1498,7 +1495,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
             /// <summary>
             /// <para>Name:     System.ItemUrl -- PKEY_ItemUrl</para>
-            /// <para>Description: This always represents a well formed URL that points to the item.  
+            /// <para>Description: This always represents a well formed URL that points to the item.
             ///
             ///To reference shell namespace items using shell APIs, use System.ParsingPath.
             ///
@@ -1559,7 +1556,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
             /// <summary>
             /// <para>Name:     System.KindText -- PKEY_KindText</para>
-            /// <para>Description: This is the user-friendly form of System.Kind.  Not intended to be parsed 
+            /// <para>Description: This is the user-friendly form of System.Kind.  Not intended to be parsed
             ///programmatically.
             ///</para>
             /// <para>Type:     String -- VT_LPWSTR  (For variants: VT_BSTR)</para>
@@ -1577,7 +1574,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
             /// <summary>
             /// <para>Name:     System.Language -- PKEY_Language</para>
-            /// <para>Description: 
+            /// <para>Description:
             ///</para>
             /// <para>Type:     String -- VT_LPWSTR  (For variants: VT_BSTR)</para>
             /// <para>FormatID: (FMTID_DocumentSummaryInformation) {D5CDD502-2E9C-101B-9397-08002B2CF9AE}, 28</para>
@@ -1692,7 +1689,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
             /// <summary>
             /// <para>Name:     System.OriginalFileName -- PKEY_OriginalFileName</para>
-            /// <para>Description: 
+            /// <para>Description:
             ///</para>
             /// <para>Type:     String -- VT_LPWSTR  (For variants: VT_BSTR)</para>
             /// <para>FormatID: (PSFMTID_VERSION) {0CEF7D53-FA64-11D1-A203-0000F81FEDEE}, 6</para>
@@ -1726,7 +1723,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
             /// <summary>
             /// <para>Name:     System.ParentalRating -- PKEY_ParentalRating</para>
-            /// <para>Description: 
+            /// <para>Description:
             ///</para>
             /// <para>Type:     String -- VT_LPWSTR  (For variants: VT_BSTR)</para>
             /// <para>FormatID: (PSGUID_MEDIAFILESUMMARYINFORMATION) {64440492-4C8B-11D1-8B70-080036B11A03}, 21 (PIDMSI_PARENTAL_RATING)</para>
@@ -1792,7 +1789,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
             /// <summary>
             /// <para>Name:     System.ParsingName -- PKEY_ParsingName</para>
-            /// <para>Description: The shell namespace name of an item relative to a parent folder.  This name may be passed to 
+            /// <para>Description: The shell namespace name of an item relative to a parent folder.  This name may be passed to
             ///IShellFolder::ParseDisplayName() of the parent shell folder.
             ///</para>
             /// <para>Type:     String -- VT_LPWSTR  (For variants: VT_BSTR)</para>
@@ -1810,7 +1807,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
             /// <summary>
             /// <para>Name:     System.ParsingPath -- PKEY_ParsingPath</para>
-            /// <para>Description: This is the shell namespace path to the item.  This path may be passed to 
+            /// <para>Description: This is the shell namespace path to the item.  This path may be passed to
             ///SHParseDisplayName to parse the path to the correct shell folder.
             ///
             ///If the item is a file, the value is identical to System.ItemPathDisplay.
@@ -1866,7 +1863,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
             /// <summary>
             /// <para>Name:     System.Priority -- PKEY_Priority</para>
-            /// <para>Description: 
+            /// <para>Description:
             ///</para>
             /// <para>Type:     UInt16 -- VT_UI2</para>
             /// <para>FormatID: {9C1FCF74-2D97-41BA-B4AE-CB2E3661A6E4}, 5</para>
@@ -1883,7 +1880,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
             /// <summary>
             /// <para>Name:     System.PriorityText -- PKEY_PriorityText</para>
-            /// <para>Description: This is the user-friendly form of System.Priority.  Not intended to be parsed 
+            /// <para>Description: This is the user-friendly form of System.Priority.  Not intended to be parsed
             ///programmatically.
             ///</para>
             /// <para>Type:     String -- VT_LPWSTR  (For variants: VT_BSTR)</para>
@@ -1917,7 +1914,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
             /// <summary>
             /// <para>Name:     System.ProviderItemID -- PKEY_ProviderItemID</para>
-            /// <para>Description: 
+            /// <para>Description:
             ///</para>
             /// <para>Type:     String -- VT_LPWSTR  (For variants: VT_BSTR)</para>
             /// <para>FormatID: {F21D9941-81F0-471A-ADEE-4E74B49217ED}, 100</para>
@@ -1934,7 +1931,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
             /// <summary>
             /// <para>Name:     System.Rating -- PKEY_Rating</para>
-            /// <para>Description: Indicates the users preference rating of an item on a scale of 1-99 (1-12 = One Star, 
+            /// <para>Description: Indicates the users preference rating of an item on a scale of 1-99 (1-12 = One Star,
             ///13-37 = Two Stars, 38-62 = Three Stars, 63-87 = Four Stars, 88-99 = Five Stars).
             ///</para>
             /// <para>Type:     UInt32 -- VT_UI4</para>
@@ -1952,7 +1949,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
             /// <summary>
             /// <para>Name:     System.RatingText -- PKEY_RatingText</para>
-            /// <para>Description: This is the user-friendly form of System.Rating.  Not intended to be parsed 
+            /// <para>Description: This is the user-friendly form of System.Rating.  Not intended to be parsed
             ///programmatically.
             ///</para>
             /// <para>Type:     String -- VT_LPWSTR  (For variants: VT_BSTR)</para>
@@ -1970,7 +1967,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
             /// <summary>
             /// <para>Name:     System.Sensitivity -- PKEY_Sensitivity</para>
-            /// <para>Description: 
+            /// <para>Description:
             ///</para>
             /// <para>Type:     UInt16 -- VT_UI2</para>
             /// <para>FormatID: {F8D3F6AC-4874-42CB-BE59-AB454B30716A}, 100</para>
@@ -1987,7 +1984,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
             /// <summary>
             /// <para>Name:     System.SensitivityText -- PKEY_SensitivityText</para>
-            /// <para>Description: This is the user-friendly form of System.Sensitivity.  Not intended to be parsed 
+            /// <para>Description: This is the user-friendly form of System.Sensitivity.  Not intended to be parsed
             ///programmatically.
             ///</para>
             /// <para>Type:     String -- VT_LPWSTR  (For variants: VT_BSTR)</para>
@@ -2010,7 +2007,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
             /// <para>Type:     UInt32 -- VT_UI4</para>
             /// <para>FormatID: (FMTID_ShellDetails) {28636AA6-953D-11D2-B5D6-00C04FD918D0}, 25</para>
             /// </summary>
-            [SuppressMessage("Microsoft.Naming", "CA1726:UsePreferredTerms", MessageId = "Flags")]
+            [SuppressMessage("Microsoft.Naming", "CA1726:UsePreferredTerms", MessageId = "Flags", Justification = "ToDo")]
             public static PropertyKey SFGAOFlags
             {
                 get
@@ -2040,7 +2037,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
             /// <summary>
             /// <para>Name:     System.ShareUserRating -- PKEY_ShareUserRating</para>
-            /// <para>Description: 
+            /// <para>Description:
             ///</para>
             /// <para>Type:     UInt32 -- VT_UI4</para>
             /// <para>FormatID: (PSGUID_MEDIAFILESUMMARYINFORMATION) {64440492-4C8B-11D1-8B70-080036B11A03}, 12 (PIDMSI_SHARE_USER_RATING)</para>
@@ -2092,7 +2089,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
             /// <summary>
             /// <para>Name:     System.Size -- PKEY_Size</para>
-            /// <para>Description: 
+            /// <para>Description:
             ///</para>
             /// <para>Type:     UInt64 -- VT_UI8</para>
             /// <para>FormatID: (FMTID_Storage) {B725F130-47EF-101A-A5F1-02608C9EEBAC}, 12 (PID_STG_SIZE)</para>
@@ -2174,7 +2171,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
             /// <summary>
             /// <para>Name:     System.Subject -- PKEY_Subject</para>
-            /// <para>Description: 
+            /// <para>Description:
             ///</para>
             /// <para>Type:     String -- VT_LPWSTR  (For variants: VT_BSTR)</para>
             /// <para>FormatID: (FMTID_SummaryInformation) {F29F85E0-4FF9-1068-AB91-08002B27B3D9}, 3 (PIDSI_SUBJECT)</para>
@@ -2208,7 +2205,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
             /// <summary>
             /// <para>Name:     System.ThumbnailCacheId -- PKEY_ThumbnailCacheId</para>
-            /// <para>Description: Unique value that can be used as a key to cache thumbnails. The value changes when the name, volume, or data modified 
+            /// <para>Description: Unique value that can be used as a key to cache thumbnails. The value changes when the name, volume, or data modified
             ///of an item changes.
             ///</para>
             /// <para>Type:     UInt64 -- VT_UI8</para>
@@ -2260,7 +2257,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
             /// <summary>
             /// <para>Name:     System.TotalFileSize -- PKEY_TotalFileSize</para>
-            /// <para>Description: 
+            /// <para>Description:
             ///</para>
             /// <para>Type:     UInt64 -- VT_UI8</para>
             /// <para>FormatID: (FMTID_ShellDetails) {28636AA6-953D-11D2-B5D6-00C04FD918D0}, 14</para>
@@ -2277,7 +2274,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
             /// <summary>
             /// <para>Name:     System.Trademarks -- PKEY_Trademarks</para>
-            /// <para>Description: 
+            /// <para>Description:
             ///</para>
             /// <para>Type:     String -- VT_LPWSTR  (For variants: VT_BSTR)</para>
             /// <para>FormatID: (PSFMTID_VERSION) {0CEF7D53-FA64-11D1-A203-0000F81FEDEE}, 9 (PIDVSI_Trademarks)</para>
@@ -2293,7 +2290,6 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
             }
             #endregion
 
-
             #region sub-classes
 
             /// <summary>
@@ -2301,7 +2297,6 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
             /// </summary>
             public static class AppUserModel
             {
-
 
                 #region Properties
 
@@ -2426,7 +2421,6 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
             public static class Audio
             {
 
-
                 #region Properties
 
                 /// <summary>
@@ -2448,7 +2442,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
                 /// <summary>
                 /// <para>Name:     System.Audio.Compression -- PKEY_Audio_Compression</para>
-                /// <para>Description: 
+                /// <para>Description:
                 ///</para>
                 /// <para>Type:     String -- VT_LPWSTR  (For variants: VT_BSTR)</para>
                 /// <para>FormatID: (FMTID_AudioSummaryInformation) {64440490-4C8B-11D1-8B70-080036B11A03}, 10 (PIDASI_COMPRESSION)</para>
@@ -2565,7 +2559,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
                 /// <summary>
                 /// <para>Name:     System.Audio.StreamName -- PKEY_Audio_StreamName</para>
-                /// <para>Description: 
+                /// <para>Description:
                 ///</para>
                 /// <para>Type:     String -- VT_LPWSTR  (For variants: VT_BSTR)</para>
                 /// <para>FormatID: (FMTID_AudioSummaryInformation) {64440490-4C8B-11D1-8B70-080036B11A03}, 9 (PIDASI_STREAM_NAME)</para>
@@ -2582,7 +2576,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
                 /// <summary>
                 /// <para>Name:     System.Audio.StreamNumber -- PKEY_Audio_StreamNumber</para>
-                /// <para>Description: 
+                /// <para>Description:
                 ///</para>
                 /// <para>Type:     UInt16 -- VT_UI2</para>
                 /// <para>FormatID: (FMTID_AudioSummaryInformation) {64440490-4C8B-11D1-8B70-080036B11A03}, 8 (PIDASI_STREAM_NUMBER)</para>
@@ -2598,8 +2592,6 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
                 }
                 #endregion
 
-
-
             }
 
             /// <summary>
@@ -2607,7 +2599,6 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
             /// </summary>
             public static class Calendar
             {
-
 
                 #region Properties
 
@@ -2826,7 +2817,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
                 /// <summary>
                 /// <para>Name:     System.Calendar.ShowTimeAs -- PKEY_Calendar_ShowTimeAs</para>
-                /// <para>Description: 
+                /// <para>Description:
                 ///</para>
                 /// <para>Type:     UInt16 -- VT_UI2</para>
                 /// <para>FormatID: {5BF396D4-5EB2-466F-BDE9-2FB3F2361D6E}, 100</para>
@@ -2843,7 +2834,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
                 /// <summary>
                 /// <para>Name:     System.Calendar.ShowTimeAsText -- PKEY_Calendar_ShowTimeAsText</para>
-                /// <para>Description: This is the user-friendly form of System.Calendar.ShowTimeAs.  Not intended to be parsed 
+                /// <para>Description: This is the user-friendly form of System.Calendar.ShowTimeAs.  Not intended to be parsed
                 ///programmatically.
                 ///</para>
                 /// <para>Type:     String -- VT_LPWSTR  (For variants: VT_BSTR)</para>
@@ -2860,8 +2851,6 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
                 }
                 #endregion
 
-
-
             }
 
             /// <summary>
@@ -2869,7 +2858,6 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
             /// </summary>
             public static class Communication
             {
-
 
                 #region Properties
 
@@ -3009,7 +2997,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
                 /// <summary>
                 /// <para>Name:     System.Communication.TaskStatusText -- PKEY_Communication_TaskStatusText</para>
-                /// <para>Description: This is the user-friendly form of System.Communication.TaskStatus.  Not intended to be parsed 
+                /// <para>Description: This is the user-friendly form of System.Communication.TaskStatus.  Not intended to be parsed
                 ///programmatically.
                 ///</para>
                 /// <para>Type:     String -- VT_LPWSTR  (For variants: VT_BSTR)</para>
@@ -3026,8 +3014,6 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
                 }
                 #endregion
 
-
-
             }
 
             /// <summary>
@@ -3035,7 +3021,6 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
             /// </summary>
             public static class Computer
             {
-
 
                 #region Properties
 
@@ -3057,8 +3042,6 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
                 }
                 #endregion
 
-
-
             }
 
             /// <summary>
@@ -3066,7 +3049,6 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
             /// </summary>
             public static class Contact
             {
-
 
                 #region Properties
 
@@ -4224,7 +4206,6 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
                 }
                 #endregion
 
-
                 #region sub-classes
 
                 /// <summary>
@@ -4233,12 +4214,11 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
                 public static class JA
                 {
 
-
                     #region Properties
 
                     /// <summary>
                     /// <para>Name:     System.Contact.JA.CompanyNamePhonetic -- PKEY_Contact_JA_CompanyNamePhonetic</para>
-                    /// <para>Description: 
+                    /// <para>Description:
                     ///</para>
                     /// <para>Type:     String -- VT_LPWSTR  (For variants: VT_BSTR)</para>
                     /// <para>FormatID: {897B3694-FE9E-43E6-8066-260F590C0100}, 2</para>
@@ -4255,7 +4235,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
                     /// <summary>
                     /// <para>Name:     System.Contact.JA.FirstNamePhonetic -- PKEY_Contact_JA_FirstNamePhonetic</para>
-                    /// <para>Description: 
+                    /// <para>Description:
                     ///</para>
                     /// <para>Type:     String -- VT_LPWSTR  (For variants: VT_BSTR)</para>
                     /// <para>FormatID: {897B3694-FE9E-43E6-8066-260F590C0100}, 3</para>
@@ -4272,7 +4252,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
                     /// <summary>
                     /// <para>Name:     System.Contact.JA.LastNamePhonetic -- PKEY_Contact_JA_LastNamePhonetic</para>
-                    /// <para>Description: 
+                    /// <para>Description:
                     ///</para>
                     /// <para>Type:     String -- VT_LPWSTR  (For variants: VT_BSTR)</para>
                     /// <para>FormatID: {897B3694-FE9E-43E6-8066-260F590C0100}, 4</para>
@@ -4298,12 +4278,11 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
             public static class JA
             {
 
-
                 #region Properties
 
                 /// <summary>
                 /// <para>Name:     System.Contact.JA.CompanyNamePhonetic -- PKEY_Contact_JA_CompanyNamePhonetic</para>
-                /// <para>Description: 
+                /// <para>Description:
                 ///</para>
                 /// <para>Type:     String -- VT_LPWSTR  (For variants: VT_BSTR)</para>
                 /// <para>FormatID: {897B3694-FE9E-43E6-8066-260F590C0100}, 2</para>
@@ -4320,7 +4299,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
                 /// <summary>
                 /// <para>Name:     System.Contact.JA.FirstNamePhonetic -- PKEY_Contact_JA_FirstNamePhonetic</para>
-                /// <para>Description: 
+                /// <para>Description:
                 ///</para>
                 /// <para>Type:     String -- VT_LPWSTR  (For variants: VT_BSTR)</para>
                 /// <para>FormatID: {897B3694-FE9E-43E6-8066-260F590C0100}, 3</para>
@@ -4337,7 +4316,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
                 /// <summary>
                 /// <para>Name:     System.Contact.JA.LastNamePhonetic -- PKEY_Contact_JA_LastNamePhonetic</para>
-                /// <para>Description: 
+                /// <para>Description:
                 ///</para>
                 /// <para>Type:     String -- VT_LPWSTR  (For variants: VT_BSTR)</para>
                 /// <para>FormatID: {897B3694-FE9E-43E6-8066-260F590C0100}, 4</para>
@@ -4353,8 +4332,6 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
                 }
                 #endregion
 
-
-
             }
 
             /// <summary>
@@ -4362,7 +4339,6 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
             /// </summary>
             public static class Device
             {
-
 
                 #region Properties
 
@@ -4384,8 +4360,6 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
                 }
                 #endregion
 
-
-
             }
 
             /// <summary>
@@ -4393,7 +4367,6 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
             /// </summary>
             public static class DeviceInterface
             {
-
 
                 #region Properties
 
@@ -4466,8 +4439,6 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
                 }
                 #endregion
 
-
-
             }
 
             /// <summary>
@@ -4475,7 +4446,6 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
             /// </summary>
             public static class Devices
             {
-
 
                 #region Properties
 
@@ -5262,7 +5232,6 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
                 }
                 #endregion
 
-
                 #region sub-classes
 
                 /// <summary>
@@ -5270,7 +5239,6 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
                 /// </summary>
                 public static class Notifications
                 {
-
 
                     #region Properties
 
@@ -5377,8 +5345,6 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
                     }
                     #endregion
 
-
-
                 }
                 #endregion
             }
@@ -5388,7 +5354,6 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
             /// </summary>
             public static class Notifications
             {
-
 
                 #region Properties
 
@@ -5495,8 +5460,6 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
                 }
                 #endregion
 
-
-
             }
 
             /// <summary>
@@ -5505,12 +5468,11 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
             public static class Document
             {
 
-
                 #region Properties
 
                 /// <summary>
                 /// <para>Name:     System.Document.ByteCount -- PKEY_Document_ByteCount</para>
-                /// <para>Description: 
+                /// <para>Description:
                 ///</para>
                 /// <para>Type:     Int32 -- VT_I4</para>
                 /// <para>FormatID: (FMTID_DocumentSummaryInformation) {D5CDD502-2E9C-101B-9397-08002B2CF9AE}, 4 (PIDDSI_BYTECOUNT)</para>
@@ -5527,7 +5489,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
                 /// <summary>
                 /// <para>Name:     System.Document.CharacterCount -- PKEY_Document_CharacterCount</para>
-                /// <para>Description: 
+                /// <para>Description:
                 ///</para>
                 /// <para>Type:     Int32 -- VT_I4</para>
                 /// <para>FormatID: (FMTID_SummaryInformation) {F29F85E0-4FF9-1068-AB91-08002B27B3D9}, 16 (PIDSI_CHARCOUNT)</para>
@@ -5659,7 +5621,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
                 /// <summary>
                 /// <para>Name:     System.Document.HiddenSlideCount -- PKEY_Document_HiddenSlideCount</para>
-                /// <para>Description: 
+                /// <para>Description:
                 ///</para>
                 /// <para>Type:     Int32 -- VT_I4</para>
                 /// <para>FormatID: (FMTID_DocumentSummaryInformation) {D5CDD502-2E9C-101B-9397-08002B2CF9AE}, 9 (PIDDSI_HIDDENCOUNT)</para>
@@ -5676,7 +5638,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
                 /// <summary>
                 /// <para>Name:     System.Document.LastAuthor -- PKEY_Document_LastAuthor</para>
-                /// <para>Description: 
+                /// <para>Description:
                 ///</para>
                 /// <para>Type:     String -- VT_LPWSTR  (For variants: VT_BSTR)</para>
                 /// <para>FormatID: (FMTID_SummaryInformation) {F29F85E0-4FF9-1068-AB91-08002B27B3D9}, 8 (PIDSI_LASTAUTHOR)</para>
@@ -5693,7 +5655,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
                 /// <summary>
                 /// <para>Name:     System.Document.LineCount -- PKEY_Document_LineCount</para>
-                /// <para>Description: 
+                /// <para>Description:
                 ///</para>
                 /// <para>Type:     Int32 -- VT_I4</para>
                 /// <para>FormatID: (FMTID_DocumentSummaryInformation) {D5CDD502-2E9C-101B-9397-08002B2CF9AE}, 5 (PIDDSI_LINECOUNT)</para>
@@ -5710,7 +5672,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
                 /// <summary>
                 /// <para>Name:     System.Document.Manager -- PKEY_Document_Manager</para>
-                /// <para>Description: 
+                /// <para>Description:
                 ///</para>
                 /// <para>Type:     String -- VT_LPWSTR  (For variants: VT_BSTR)</para>
                 /// <para>FormatID: (FMTID_DocumentSummaryInformation) {D5CDD502-2E9C-101B-9397-08002B2CF9AE}, 14 (PIDDSI_MANAGER)</para>
@@ -5727,7 +5689,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
                 /// <summary>
                 /// <para>Name:     System.Document.MultimediaClipCount -- PKEY_Document_MultimediaClipCount</para>
-                /// <para>Description: 
+                /// <para>Description:
                 ///</para>
                 /// <para>Type:     Int32 -- VT_I4</para>
                 /// <para>FormatID: (FMTID_DocumentSummaryInformation) {D5CDD502-2E9C-101B-9397-08002B2CF9AE}, 10 (PIDDSI_MMCLIPCOUNT)</para>
@@ -5744,7 +5706,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
                 /// <summary>
                 /// <para>Name:     System.Document.NoteCount -- PKEY_Document_NoteCount</para>
-                /// <para>Description: 
+                /// <para>Description:
                 ///</para>
                 /// <para>Type:     Int32 -- VT_I4</para>
                 /// <para>FormatID: (FMTID_DocumentSummaryInformation) {D5CDD502-2E9C-101B-9397-08002B2CF9AE}, 8 (PIDDSI_NOTECOUNT)</para>
@@ -5761,7 +5723,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
                 /// <summary>
                 /// <para>Name:     System.Document.PageCount -- PKEY_Document_PageCount</para>
-                /// <para>Description: 
+                /// <para>Description:
                 ///</para>
                 /// <para>Type:     Int32 -- VT_I4</para>
                 /// <para>FormatID: (FMTID_SummaryInformation) {F29F85E0-4FF9-1068-AB91-08002B27B3D9}, 14 (PIDSI_PAGECOUNT)</para>
@@ -5778,7 +5740,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
                 /// <summary>
                 /// <para>Name:     System.Document.ParagraphCount -- PKEY_Document_ParagraphCount</para>
-                /// <para>Description: 
+                /// <para>Description:
                 ///</para>
                 /// <para>Type:     Int32 -- VT_I4</para>
                 /// <para>FormatID: (FMTID_DocumentSummaryInformation) {D5CDD502-2E9C-101B-9397-08002B2CF9AE}, 6 (PIDDSI_PARCOUNT)</para>
@@ -5795,7 +5757,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
                 /// <summary>
                 /// <para>Name:     System.Document.PresentationFormat -- PKEY_Document_PresentationFormat</para>
-                /// <para>Description: 
+                /// <para>Description:
                 ///</para>
                 /// <para>Type:     String -- VT_LPWSTR  (For variants: VT_BSTR)</para>
                 /// <para>FormatID: (FMTID_DocumentSummaryInformation) {D5CDD502-2E9C-101B-9397-08002B2CF9AE}, 3 (PIDDSI_PRESFORMAT)</para>
@@ -5812,7 +5774,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
                 /// <summary>
                 /// <para>Name:     System.Document.RevisionNumber -- PKEY_Document_RevisionNumber</para>
-                /// <para>Description: 
+                /// <para>Description:
                 ///</para>
                 /// <para>Type:     String -- VT_LPWSTR  (For variants: VT_BSTR)</para>
                 /// <para>FormatID: (FMTID_SummaryInformation) {F29F85E0-4FF9-1068-AB91-08002B27B3D9}, 9 (PIDSI_REVNUMBER)</para>
@@ -5846,7 +5808,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
                 /// <summary>
                 /// <para>Name:     System.Document.SlideCount -- PKEY_Document_SlideCount</para>
-                /// <para>Description: 
+                /// <para>Description:
                 ///</para>
                 /// <para>Type:     Int32 -- VT_I4</para>
                 /// <para>FormatID: (FMTID_DocumentSummaryInformation) {D5CDD502-2E9C-101B-9397-08002B2CF9AE}, 7 (PIDDSI_SLIDECOUNT)</para>
@@ -5863,7 +5825,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
                 /// <summary>
                 /// <para>Name:     System.Document.Template -- PKEY_Document_Template</para>
-                /// <para>Description: 
+                /// <para>Description:
                 ///</para>
                 /// <para>Type:     String -- VT_LPWSTR  (For variants: VT_BSTR)</para>
                 /// <para>FormatID: (FMTID_SummaryInformation) {F29F85E0-4FF9-1068-AB91-08002B27B3D9}, 7 (PIDSI_TEMPLATE)</para>
@@ -5913,7 +5875,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
                 /// <summary>
                 /// <para>Name:     System.Document.WordCount -- PKEY_Document_WordCount</para>
-                /// <para>Description: 
+                /// <para>Description:
                 ///</para>
                 /// <para>Type:     Int32 -- VT_I4</para>
                 /// <para>FormatID: (FMTID_SummaryInformation) {F29F85E0-4FF9-1068-AB91-08002B27B3D9}, 15 (PIDSI_WORDCOUNT)</para>
@@ -5929,8 +5891,6 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
                 }
                 #endregion
 
-
-
             }
 
             /// <summary>
@@ -5938,7 +5898,6 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
             /// </summary>
             public static class DRM
             {
-
 
                 #region Properties
 
@@ -5995,7 +5954,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
                 /// <summary>
                 /// <para>Name:     System.DRM.IsProtected -- PKEY_DRM_IsProtected</para>
-                /// <para>Description: 
+                /// <para>Description:
                 ///</para>
                 /// <para>Type:     Boolean -- VT_BOOL</para>
                 /// <para>FormatID: (FMTID_DRM) {AEAC19E4-89AE-4508-B9B7-BB867ABEE2ED}, 2 (PIDDRSI_PROTECTED)</para>
@@ -6028,8 +5987,6 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
                 }
                 #endregion
 
-
-
             }
 
             /// <summary>
@@ -6038,12 +5995,11 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
             public static class GPS
             {
 
-
                 #region Properties
 
                 /// <summary>
                 /// <para>Name:     System.GPS.Altitude -- PKEY_GPS_Altitude</para>
-                /// <para>Description: Indicates the altitude based on the reference in PKEY_GPS_AltitudeRef.  Calculated from PKEY_GPS_AltitudeNumerator and 
+                /// <para>Description: Indicates the altitude based on the reference in PKEY_GPS_AltitudeRef.  Calculated from PKEY_GPS_AltitudeNumerator and
                 ///PKEY_GPS_AltitudeDenominator
                 ///</para>
                 /// <para>Type:     Double -- VT_R8</para>
@@ -6146,7 +6102,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
                 /// <summary>
                 /// <para>Name:     System.GPS.DestBearing -- PKEY_GPS_DestBearing</para>
-                /// <para>Description: Indicates the bearing to the destination point.  Calculated from PKEY_GPS_DestBearingNumerator and 
+                /// <para>Description: Indicates the bearing to the destination point.  Calculated from PKEY_GPS_DestBearingNumerator and
                 ///PKEY_GPS_DestBearingDenominator.
                 ///</para>
                 /// <para>Type:     Double -- VT_R8</para>
@@ -6215,7 +6171,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
                 /// <summary>
                 /// <para>Name:     System.GPS.DestDistance -- PKEY_GPS_DestDistance</para>
-                /// <para>Description: Indicates the distance to the destination point.  Calculated from PKEY_GPS_DestDistanceNumerator and 
+                /// <para>Description: Indicates the distance to the destination point.  Calculated from PKEY_GPS_DestDistanceNumerator and
                 ///PKEY_GPS_DestDistanceDenominator.
                 ///</para>
                 /// <para>Type:     Double -- VT_R8</para>
@@ -6284,8 +6240,8 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
                 /// <summary>
                 /// <para>Name:     System.GPS.DestLatitude -- PKEY_GPS_DestLatitude</para>
-                /// <para>Description: Indicates the latitude of the destination point.  This is an array of three values.  Index 0 is the degrees, index 1 
-                ///is the minutes, index 2 is the seconds.  Each is calculated from the values in PKEY_GPS_DestLatitudeNumerator and 
+                /// <para>Description: Indicates the latitude of the destination point.  This is an array of three values.  Index 0 is the degrees, index 1
+                ///is the minutes, index 2 is the seconds.  Each is calculated from the values in PKEY_GPS_DestLatitudeNumerator and
                 ///PKEY_GPS_DestLatitudeDenominator.
                 ///</para>
                 /// <para>Type:     Multivalue Double -- VT_VECTOR | VT_R8  (For variants: VT_ARRAY | VT_R8)</para>
@@ -6354,8 +6310,8 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
                 /// <summary>
                 /// <para>Name:     System.GPS.DestLongitude -- PKEY_GPS_DestLongitude</para>
-                /// <para>Description: Indicates the latitude of the destination point.  This is an array of three values.  Index 0 is the degrees, index 1 
-                ///is the minutes, index 2 is the seconds.  Each is calculated from the values in PKEY_GPS_DestLongitudeNumerator and 
+                /// <para>Description: Indicates the latitude of the destination point.  This is an array of three values.  Index 0 is the degrees, index 1
+                ///is the minutes, index 2 is the seconds.  Each is calculated from the values in PKEY_GPS_DestLongitudeNumerator and
                 ///PKEY_GPS_DestLongitudeDenominator.
                 ///</para>
                 /// <para>Type:     Multivalue Double -- VT_VECTOR | VT_R8  (For variants: VT_ARRAY | VT_R8)</para>
@@ -6492,7 +6448,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
                 /// <summary>
                 /// <para>Name:     System.GPS.ImgDirection -- PKEY_GPS_ImgDirection</para>
-                /// <para>Description: Indicates direction of the image when it was captured.  Calculated from PKEY_GPS_ImgDirectionNumerator and 
+                /// <para>Description: Indicates direction of the image when it was captured.  Calculated from PKEY_GPS_ImgDirectionNumerator and
                 ///PKEY_GPS_ImgDirectionDenominator.
                 ///</para>
                 /// <para>Type:     Double -- VT_R8</para>
@@ -6561,7 +6517,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
                 /// <summary>
                 /// <para>Name:     System.GPS.Latitude -- PKEY_GPS_Latitude</para>
-                /// <para>Description: Indicates the latitude.  This is an array of three values.  Index 0 is the degrees, index 1 is the minutes, index 2 
+                /// <para>Description: Indicates the latitude.  This is an array of three values.  Index 0 is the degrees, index 1 is the minutes, index 2
                 ///is the seconds.  Each is calculated from the values in PKEY_GPS_LatitudeNumerator and PKEY_GPS_LatitudeDenominator.
                 ///</para>
                 /// <para>Type:     Multivalue Double -- VT_VECTOR | VT_R8  (For variants: VT_ARRAY | VT_R8)</para>
@@ -6613,7 +6569,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
                 /// <summary>
                 /// <para>Name:     System.GPS.LatitudeRef -- PKEY_GPS_LatitudeRef</para>
-                /// <para>Description: Indicates whether latitude is north or south latitude 
+                /// <para>Description: Indicates whether latitude is north or south latitude
                 ///</para>
                 /// <para>Type:     String -- VT_LPWSTR  (For variants: VT_BSTR)</para>
                 /// <para>FormatID: {029C0252-5B86-46C7-ACA0-2769FFC8E3D4}, 100</para>
@@ -6630,7 +6586,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
                 /// <summary>
                 /// <para>Name:     System.GPS.Longitude -- PKEY_GPS_Longitude</para>
-                /// <para>Description: Indicates the longitude.  This is an array of three values.  Index 0 is the degrees, index 1 is the minutes, index 2 
+                /// <para>Description: Indicates the longitude.  This is an array of three values.  Index 0 is the degrees, index 1 is the minutes, index 2
                 ///is the seconds.  Each is calculated from the values in PKEY_GPS_LongitudeNumerator and PKEY_GPS_LongitudeDenominator.
                 ///</para>
                 /// <para>Type:     Multivalue Double -- VT_VECTOR | VT_R8  (For variants: VT_ARRAY | VT_R8)</para>
@@ -6767,7 +6723,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
                 /// <summary>
                 /// <para>Name:     System.GPS.Speed -- PKEY_GPS_Speed</para>
-                /// <para>Description: Indicates the speed of the GPS receiver movement.  Calculated from PKEY_GPS_SpeedNumerator and 
+                /// <para>Description: Indicates the speed of the GPS receiver movement.  Calculated from PKEY_GPS_SpeedNumerator and
                 ///PKEY_GPS_SpeedDenominator.
                 ///</para>
                 /// <para>Type:     Double -- VT_R8</para>
@@ -6819,7 +6775,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
                 /// <summary>
                 /// <para>Name:     System.GPS.SpeedRef -- PKEY_GPS_SpeedRef</para>
-                /// <para>Description: Indicates the unit used to express the speed of the GPS receiver movement.  (eg: kilometers per hour, 
+                /// <para>Description: Indicates the unit used to express the speed of the GPS receiver movement.  (eg: kilometers per hour,
                 ///miles per hour, knots).
                 ///</para>
                 /// <para>Type:     String -- VT_LPWSTR  (For variants: VT_BSTR)</para>
@@ -6837,7 +6793,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
                 /// <summary>
                 /// <para>Name:     System.GPS.Status -- PKEY_GPS_Status</para>
-                /// <para>Description: Indicates the status of the GPS receiver when the image was recorded.  (eg: measurement in progress, 
+                /// <para>Description: Indicates the status of the GPS receiver when the image was recorded.  (eg: measurement in progress,
                 ///measurement interoperability).
                 ///</para>
                 /// <para>Type:     String -- VT_LPWSTR  (For variants: VT_BSTR)</para>
@@ -6855,7 +6811,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
                 /// <summary>
                 /// <para>Name:     System.GPS.Track -- PKEY_GPS_Track</para>
-                /// <para>Description: Indicates the direction of the GPS receiver movement.  Calculated from PKEY_GPS_TrackNumerator and 
+                /// <para>Description: Indicates the direction of the GPS receiver movement.  Calculated from PKEY_GPS_TrackNumerator and
                 ///PKEY_GPS_TrackDenominator.
                 ///</para>
                 /// <para>Type:     Double -- VT_R8</para>
@@ -6940,8 +6896,6 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
                 }
                 #endregion
 
-
-
             }
 
             /// <summary>
@@ -6949,7 +6903,6 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
             /// </summary>
             public static class Identity
             {
-
 
                 #region Properties
 
@@ -7073,8 +7026,6 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
                 }
                 #endregion
 
-
-
             }
 
             /// <summary>
@@ -7082,7 +7033,6 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
             /// </summary>
             public static class IdentityProvider
             {
-
 
                 #region Properties
 
@@ -7121,8 +7071,6 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
                 }
                 #endregion
 
-
-
             }
 
             /// <summary>
@@ -7131,12 +7079,11 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
             public static class Image
             {
 
-
                 #region Properties
 
                 /// <summary>
                 /// <para>Name:     System.Image.BitDepth -- PKEY_Image_BitDepth</para>
-                /// <para>Description: 
+                /// <para>Description:
                 ///</para>
                 /// <para>Type:     UInt32 -- VT_UI4</para>
                 /// <para>FormatID: (PSGUID_IMAGESUMMARYINFORMATION) {6444048F-4C8B-11D1-8B70-080036B11A03}, 7 (PIDISI_BITDEPTH)</para>
@@ -7238,7 +7185,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
                 /// <summary>
                 /// <para>Name:     System.Image.CompressionText -- PKEY_Image_CompressionText</para>
-                /// <para>Description: This is the user-friendly form of System.Image.Compression.  Not intended to be parsed 
+                /// <para>Description: This is the user-friendly form of System.Image.Compression.  Not intended to be parsed
                 ///programmatically.
                 ///</para>
                 /// <para>Type:     String -- VT_LPWSTR  (For variants: VT_BSTR)</para>
@@ -7273,7 +7220,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
                 /// <summary>
                 /// <para>Name:     System.Image.HorizontalResolution -- PKEY_Image_HorizontalResolution</para>
-                /// <para>Description: 
+                /// <para>Description:
                 ///</para>
                 /// <para>Type:     Double -- VT_R8</para>
                 /// <para>FormatID: (PSGUID_IMAGESUMMARYINFORMATION) {6444048F-4C8B-11D1-8B70-080036B11A03}, 5 (PIDISI_RESOLUTIONX)</para>
@@ -7290,7 +7237,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
                 /// <summary>
                 /// <para>Name:     System.Image.HorizontalSize -- PKEY_Image_HorizontalSize</para>
-                /// <para>Description: 
+                /// <para>Description:
                 ///</para>
                 /// <para>Type:     UInt32 -- VT_UI4</para>
                 /// <para>FormatID: (PSGUID_IMAGESUMMARYINFORMATION) {6444048F-4C8B-11D1-8B70-080036B11A03}, 3 (PIDISI_CX)</para>
@@ -7339,7 +7286,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
                 /// <summary>
                 /// <para>Name:     System.Image.VerticalResolution -- PKEY_Image_VerticalResolution</para>
-                /// <para>Description: 
+                /// <para>Description:
                 ///</para>
                 /// <para>Type:     Double -- VT_R8</para>
                 /// <para>FormatID: (PSGUID_IMAGESUMMARYINFORMATION) {6444048F-4C8B-11D1-8B70-080036B11A03}, 6 (PIDISI_RESOLUTIONY)</para>
@@ -7356,7 +7303,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
                 /// <summary>
                 /// <para>Name:     System.Image.VerticalSize -- PKEY_Image_VerticalSize</para>
-                /// <para>Description: 
+                /// <para>Description:
                 ///</para>
                 /// <para>Type:     UInt32 -- VT_UI4</para>
                 /// <para>FormatID: (PSGUID_IMAGESUMMARYINFORMATION) {6444048F-4C8B-11D1-8B70-080036B11A03}, 4 (PIDISI_CY)</para>
@@ -7372,8 +7319,6 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
                 }
                 #endregion
 
-
-
             }
 
             /// <summary>
@@ -7381,7 +7326,6 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
             /// </summary>
             public static class Journal
             {
-
 
                 #region Properties
 
@@ -7418,8 +7362,6 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
                 }
                 #endregion
 
-
-
             }
 
             /// <summary>
@@ -7427,7 +7369,6 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
             /// </summary>
             public static class LayoutPattern
             {
-
 
                 #region Properties
 
@@ -7468,8 +7409,6 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
                 }
                 #endregion
 
-
-
             }
 
             /// <summary>
@@ -7477,7 +7416,6 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
             /// </summary>
             public static class Link
             {
-
 
                 #region Properties
 
@@ -7547,7 +7485,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
                 /// <summary>
                 /// <para>Name:     System.Link.Status -- PKEY_Link_Status</para>
-                /// <para>Description: 
+                /// <para>Description:
                 ///</para>
                 /// <para>Type:     Int32 -- VT_I4</para>
                 /// <para>FormatID: (PSGUID_LINK) {B9B4B3FC-2B51-4A42-B5D8-324146AFCF25}, 3 (PID_LINK_TARGET_TYPE)</para>
@@ -7581,7 +7519,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
                 /// <summary>
                 /// <para>Name:     System.Link.TargetParsingPath -- PKEY_Link_TargetParsingPath</para>
-                /// <para>Description: This is the shell namespace path to the target of the link item.  This path may be passed to 
+                /// <para>Description: This is the shell namespace path to the target of the link item.  This path may be passed to
                 ///SHParseDisplayName to parse the path to the correct shell folder.
                 ///
                 ///If the target item is a file, the value is identical to System.ItemPathDisplay.
@@ -7603,7 +7541,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
                 /// <summary>
                 /// <para>Name:     System.Link.TargetSFGAOFlags -- PKEY_Link_TargetSFGAOFlags</para>
-                /// <para>Description: IShellFolder::GetAttributesOf flags for the target of a link, with SFGAO_PKEYSFGAOMASK 
+                /// <para>Description: IShellFolder::GetAttributesOf flags for the target of a link, with SFGAO_PKEYSFGAOMASK
                 ///attributes masked out.
                 ///</para>
                 /// <para>Type:     UInt32 -- VT_UI4</para>
@@ -7621,7 +7559,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
                 /// <summary>
                 /// <para>Name:     System.Link.TargetSFGAOFlagsStrings -- PKEY_Link_TargetSFGAOFlagsStrings</para>
-                /// <para>Description: Expresses the SFGAO flags of a link as string values and is used as a query optimization.  See 
+                /// <para>Description: Expresses the SFGAO flags of a link as string values and is used as a query optimization.  See
                 ///PKEY_Shell_SFGAOFlagsStrings for possible values of this.
                 ///</para>
                 /// <para>Type:     Multivalue String -- VT_VECTOR | VT_LPWSTR  (For variants: VT_ARRAY | VT_BSTR)</para>
@@ -7654,8 +7592,6 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
                 }
                 #endregion
 
-
-
             }
 
             /// <summary>
@@ -7664,12 +7600,11 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
             public static class Media
             {
 
-
                 #region Properties
 
                 /// <summary>
                 /// <para>Name:     System.Media.AuthorUrl -- PKEY_Media_AuthorUrl</para>
-                /// <para>Description: 
+                /// <para>Description:
                 ///</para>
                 /// <para>Type:     String -- VT_LPWSTR  (For variants: VT_BSTR)</para>
                 /// <para>FormatID: (PSGUID_MEDIAFILESUMMARYINFORMATION) {64440492-4C8B-11D1-8B70-080036B11A03}, 32 (PIDMSI_AUTHOR_URL)</para>
@@ -7702,7 +7637,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
                 /// <summary>
                 /// <para>Name:     System.Media.ClassPrimaryID -- PKEY_Media_ClassPrimaryID</para>
-                /// <para>Description: 
+                /// <para>Description:
                 ///</para>
                 /// <para>Type:     String -- VT_LPWSTR  (For variants: VT_BSTR)</para>
                 /// <para>FormatID: (PSGUID_MEDIAFILESUMMARYINFORMATION) {64440492-4C8B-11D1-8B70-080036B11A03}, 13 (PIDMSI_CLASS_PRIMARY_ID)</para>
@@ -7719,7 +7654,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
                 /// <summary>
                 /// <para>Name:     System.Media.ClassSecondaryID -- PKEY_Media_ClassSecondaryID</para>
-                /// <para>Description: 
+                /// <para>Description:
                 ///</para>
                 /// <para>Type:     String -- VT_LPWSTR  (For variants: VT_BSTR)</para>
                 /// <para>FormatID: (PSGUID_MEDIAFILESUMMARYINFORMATION) {64440492-4C8B-11D1-8B70-080036B11A03}, 14 (PIDMSI_CLASS_SECONDARY_ID)</para>
@@ -7736,7 +7671,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
                 /// <summary>
                 /// <para>Name:     System.Media.CollectionGroupID -- PKEY_Media_CollectionGroupID</para>
-                /// <para>Description: 
+                /// <para>Description:
                 ///</para>
                 /// <para>Type:     String -- VT_LPWSTR  (For variants: VT_BSTR)</para>
                 /// <para>FormatID: (PSGUID_MEDIAFILESUMMARYINFORMATION) {64440492-4C8B-11D1-8B70-080036B11A03}, 24 (PIDMSI_COLLECTION_GROUP_ID)</para>
@@ -7753,7 +7688,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
                 /// <summary>
                 /// <para>Name:     System.Media.CollectionID -- PKEY_Media_CollectionID</para>
-                /// <para>Description: 
+                /// <para>Description:
                 ///</para>
                 /// <para>Type:     String -- VT_LPWSTR  (For variants: VT_BSTR)</para>
                 /// <para>FormatID: (PSGUID_MEDIAFILESUMMARYINFORMATION) {64440492-4C8B-11D1-8B70-080036B11A03}, 25 (PIDMSI_COLLECTION_ID)</para>
@@ -7770,7 +7705,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
                 /// <summary>
                 /// <para>Name:     System.Media.ContentDistributor -- PKEY_Media_ContentDistributor</para>
-                /// <para>Description: 
+                /// <para>Description:
                 ///</para>
                 /// <para>Type:     String -- VT_LPWSTR  (For variants: VT_BSTR)</para>
                 /// <para>FormatID: (PSGUID_MEDIAFILESUMMARYINFORMATION) {64440492-4C8B-11D1-8B70-080036B11A03}, 18 (PIDMSI_CONTENTDISTRIBUTOR)</para>
@@ -7787,7 +7722,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
                 /// <summary>
                 /// <para>Name:     System.Media.ContentID -- PKEY_Media_ContentID</para>
-                /// <para>Description: 
+                /// <para>Description:
                 ///</para>
                 /// <para>Type:     String -- VT_LPWSTR  (For variants: VT_BSTR)</para>
                 /// <para>FormatID: (PSGUID_MEDIAFILESUMMARYINFORMATION) {64440492-4C8B-11D1-8B70-080036B11A03}, 26 (PIDMSI_CONTENT_ID)</para>
@@ -7804,7 +7739,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
                 /// <summary>
                 /// <para>Name:     System.Media.CreatorApplication -- PKEY_Media_CreatorApplication</para>
-                /// <para>Description: 
+                /// <para>Description:
                 ///</para>
                 /// <para>Type:     String -- VT_LPWSTR  (For variants: VT_BSTR)</para>
                 /// <para>FormatID: (PSGUID_MEDIAFILESUMMARYINFORMATION) {64440492-4C8B-11D1-8B70-080036B11A03}, 27 (PIDMSI_TOOL_NAME)</para>
@@ -7821,7 +7756,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
                 /// <summary>
                 /// <para>Name:     System.Media.CreatorApplicationVersion -- PKEY_Media_CreatorApplicationVersion</para>
-                /// <para>Description: 
+                /// <para>Description:
                 ///</para>
                 /// <para>Type:     String -- VT_LPWSTR  (For variants: VT_BSTR)</para>
                 /// <para>FormatID: (PSGUID_MEDIAFILESUMMARYINFORMATION) {64440492-4C8B-11D1-8B70-080036B11A03}, 28 (PIDMSI_TOOL_VERSION)</para>
@@ -7888,7 +7823,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
                 /// <summary>
                 /// <para>Name:     System.Media.DVDID -- PKEY_Media_DVDID</para>
-                /// <para>Description: 
+                /// <para>Description:
                 ///</para>
                 /// <para>Type:     String -- VT_LPWSTR  (For variants: VT_BSTR)</para>
                 /// <para>FormatID: (PSGUID_MEDIAFILESUMMARYINFORMATION) {64440492-4C8B-11D1-8B70-080036B11A03}, 15 (PIDMSI_DVDID)</para>
@@ -7905,7 +7840,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
                 /// <summary>
                 /// <para>Name:     System.Media.EncodedBy -- PKEY_Media_EncodedBy</para>
-                /// <para>Description: 
+                /// <para>Description:
                 ///</para>
                 /// <para>Type:     String -- VT_LPWSTR  (For variants: VT_BSTR)</para>
                 /// <para>FormatID: (PSGUID_MEDIAFILESUMMARYINFORMATION) {64440492-4C8B-11D1-8B70-080036B11A03}, 36 (PIDMSI_ENCODED_BY)</para>
@@ -7922,7 +7857,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
                 /// <summary>
                 /// <para>Name:     System.Media.EncodingSettings -- PKEY_Media_EncodingSettings</para>
-                /// <para>Description: 
+                /// <para>Description:
                 ///</para>
                 /// <para>Type:     String -- VT_LPWSTR  (For variants: VT_BSTR)</para>
                 /// <para>FormatID: (PSGUID_MEDIAFILESUMMARYINFORMATION) {64440492-4C8B-11D1-8B70-080036B11A03}, 37 (PIDMSI_ENCODING_SETTINGS)</para>
@@ -7956,7 +7891,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
                 /// <summary>
                 /// <para>Name:     System.Media.MCDI -- PKEY_Media_MCDI</para>
-                /// <para>Description: 
+                /// <para>Description:
                 ///</para>
                 /// <para>Type:     String -- VT_LPWSTR  (For variants: VT_BSTR)</para>
                 /// <para>FormatID: (PSGUID_MEDIAFILESUMMARYINFORMATION) {64440492-4C8B-11D1-8B70-080036B11A03}, 16 (PIDMSI_MCDI)</para>
@@ -7973,7 +7908,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
                 /// <summary>
                 /// <para>Name:     System.Media.MetadataContentProvider -- PKEY_Media_MetadataContentProvider</para>
-                /// <para>Description: 
+                /// <para>Description:
                 ///</para>
                 /// <para>Type:     String -- VT_LPWSTR  (For variants: VT_BSTR)</para>
                 /// <para>FormatID: (PSGUID_MEDIAFILESUMMARYINFORMATION) {64440492-4C8B-11D1-8B70-080036B11A03}, 17 (PIDMSI_PROVIDER)</para>
@@ -7990,7 +7925,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
                 /// <summary>
                 /// <para>Name:     System.Media.Producer -- PKEY_Media_Producer</para>
-                /// <para>Description: 
+                /// <para>Description:
                 ///</para>
                 /// <para>Type:     Multivalue String -- VT_VECTOR | VT_LPWSTR  (For variants: VT_ARRAY | VT_BSTR)</para>
                 /// <para>FormatID: (PSGUID_MEDIAFILESUMMARYINFORMATION) {64440492-4C8B-11D1-8B70-080036B11A03}, 22 (PIDMSI_PRODUCER)</para>
@@ -8007,7 +7942,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
                 /// <summary>
                 /// <para>Name:     System.Media.PromotionUrl -- PKEY_Media_PromotionUrl</para>
-                /// <para>Description: 
+                /// <para>Description:
                 ///</para>
                 /// <para>Type:     String -- VT_LPWSTR  (For variants: VT_BSTR)</para>
                 /// <para>FormatID: (PSGUID_MEDIAFILESUMMARYINFORMATION) {64440492-4C8B-11D1-8B70-080036B11A03}, 33 (PIDMSI_PROMOTION_URL)</para>
@@ -8075,7 +8010,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
                 /// <summary>
                 /// <para>Name:     System.Media.Publisher -- PKEY_Media_Publisher</para>
-                /// <para>Description: 
+                /// <para>Description:
                 ///</para>
                 /// <para>Type:     String -- VT_LPWSTR  (For variants: VT_BSTR)</para>
                 /// <para>FormatID: (PSGUID_MEDIAFILESUMMARYINFORMATION) {64440492-4C8B-11D1-8B70-080036B11A03}, 30 (PIDMSI_PUBLISHER)</para>
@@ -8108,7 +8043,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
                 /// <summary>
                 /// <para>Name:     System.Media.SubTitle -- PKEY_Media_SubTitle</para>
-                /// <para>Description: 
+                /// <para>Description:
                 ///</para>
                 /// <para>Type:     String -- VT_LPWSTR  (For variants: VT_BSTR)</para>
                 /// <para>FormatID: (FMTID_MUSIC) {56A3372E-CE9C-11D2-9F0E-006097C686F6}, 38 (PIDSI_MUSIC_SUB_TITLE)</para>
@@ -8125,7 +8060,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
                 /// <summary>
                 /// <para>Name:     System.Media.UniqueFileIdentifier -- PKEY_Media_UniqueFileIdentifier</para>
-                /// <para>Description: 
+                /// <para>Description:
                 ///</para>
                 /// <para>Type:     String -- VT_LPWSTR  (For variants: VT_BSTR)</para>
                 /// <para>FormatID: (PSGUID_MEDIAFILESUMMARYINFORMATION) {64440492-4C8B-11D1-8B70-080036B11A03}, 35 (PIDMSI_UNIQUE_FILE_IDENTIFIER)</para>
@@ -8159,7 +8094,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
                 /// <summary>
                 /// <para>Name:     System.Media.UserWebUrl -- PKEY_Media_UserWebUrl</para>
-                /// <para>Description: 
+                /// <para>Description:
                 ///</para>
                 /// <para>Type:     String -- VT_LPWSTR  (For variants: VT_BSTR)</para>
                 /// <para>FormatID: (PSGUID_MEDIAFILESUMMARYINFORMATION) {64440492-4C8B-11D1-8B70-080036B11A03}, 34 (PIDMSI_USER_WEB_URL)</para>
@@ -8176,7 +8111,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
                 /// <summary>
                 /// <para>Name:     System.Media.Writer -- PKEY_Media_Writer</para>
-                /// <para>Description: 
+                /// <para>Description:
                 ///</para>
                 /// <para>Type:     Multivalue String -- VT_VECTOR | VT_LPWSTR  (For variants: VT_ARRAY | VT_BSTR)</para>
                 /// <para>FormatID: (PSGUID_MEDIAFILESUMMARYINFORMATION) {64440492-4C8B-11D1-8B70-080036B11A03}, 23 (PIDMSI_WRITER)</para>
@@ -8193,7 +8128,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
                 /// <summary>
                 /// <para>Name:     System.Media.Year -- PKEY_Media_Year</para>
-                /// <para>Description: 
+                /// <para>Description:
                 ///</para>
                 /// <para>Type:     UInt32 -- VT_UI4</para>
                 /// <para>FormatID: (FMTID_MUSIC) {56A3372E-CE9C-11D2-9F0E-006097C686F6}, 5 (PIDSI_MUSIC_YEAR)</para>
@@ -8209,8 +8144,6 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
                 }
                 #endregion
 
-
-
             }
 
             /// <summary>
@@ -8218,7 +8151,6 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
             /// </summary>
             public static class Message
             {
-
 
                 #region Properties
 
@@ -8341,7 +8273,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
                 /// <summary>
                 /// <para>Name:     System.Message.ConversationIndex -- PKEY_Message_ConversationIndex</para>
-                /// <para>Description: 
+                /// <para>Description:
                 ///</para>
                 /// <para>Type:     Buffer -- VT_VECTOR | VT_UI1  (For variants: VT_ARRAY | VT_UI1)</para>
                 /// <para>FormatID: {DC8F80BD-AF1E-4289-85B6-3DFC1B493992}, 101</para>
@@ -8393,7 +8325,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
                 /// <summary>
                 /// <para>Name:     System.Message.Flags -- PKEY_Message_Flags</para>
                 /// <para>Description: These are flags associated with email messages to know if a read receipt is pending, etc.
-                ///The values stored here by Outlook are defined for PR_MESSAGE_FLAGS on MSDN. 
+                ///The values stored here by Outlook are defined for PR_MESSAGE_FLAGS on MSDN.
                 ///</para>
                 /// <para>Type:     Int32 -- VT_I4</para>
                 /// <para>FormatID: {A82D9EE7-CA67-4312-965E-226BCEA85023}, 100</para>
@@ -8443,7 +8375,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
                 /// <summary>
                 /// <para>Name:     System.Message.HasAttachments -- PKEY_Message_HasAttachments</para>
-                /// <para>Description: 
+                /// <para>Description:
                 ///</para>
                 /// <para>Type:     Boolean -- VT_BOOL</para>
                 /// <para>FormatID: {9C1FCF74-2D97-41BA-B4AE-CB2E3661A6E4}, 8</para>
@@ -8625,8 +8557,6 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
                 }
                 #endregion
 
-
-
             }
 
             /// <summary>
@@ -8635,12 +8565,11 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
             public static class Music
             {
 
-
                 #region Properties
 
                 /// <summary>
                 /// <para>Name:     System.Music.AlbumArtist -- PKEY_Music_AlbumArtist</para>
-                /// <para>Description: 
+                /// <para>Description:
                 ///</para>
                 /// <para>Type:     String -- VT_LPWSTR  (For variants: VT_BSTR)</para>
                 /// <para>FormatID: (FMTID_MUSIC) {56A3372E-CE9C-11D2-9F0E-006097C686F6}, 13 (PIDSI_MUSIC_ALBUM_ARTIST)</para>
@@ -8675,7 +8604,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
                 /// <summary>
                 /// <para>Name:     System.Music.AlbumTitle -- PKEY_Music_AlbumTitle</para>
-                /// <para>Description: 
+                /// <para>Description:
                 ///</para>
                 /// <para>Type:     String -- VT_LPWSTR  (For variants: VT_BSTR)</para>
                 /// <para>FormatID: (FMTID_MUSIC) {56A3372E-CE9C-11D2-9F0E-006097C686F6}, 4 (PIDSI_MUSIC_ALBUM)</para>
@@ -8692,7 +8621,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
                 /// <summary>
                 /// <para>Name:     System.Music.Artist -- PKEY_Music_Artist</para>
-                /// <para>Description: 
+                /// <para>Description:
                 ///</para>
                 /// <para>Type:     Multivalue String -- VT_VECTOR | VT_LPWSTR  (For variants: VT_ARRAY | VT_BSTR)</para>
                 /// <para>FormatID: (FMTID_MUSIC) {56A3372E-CE9C-11D2-9F0E-006097C686F6}, 2 (PIDSI_MUSIC_ARTIST)</para>
@@ -8709,7 +8638,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
                 /// <summary>
                 /// <para>Name:     System.Music.BeatsPerMinute -- PKEY_Music_BeatsPerMinute</para>
-                /// <para>Description: 
+                /// <para>Description:
                 ///</para>
                 /// <para>Type:     String -- VT_LPWSTR  (For variants: VT_BSTR)</para>
                 /// <para>FormatID: (FMTID_MUSIC) {56A3372E-CE9C-11D2-9F0E-006097C686F6}, 35 (PIDSI_MUSIC_BEATS_PER_MINUTE)</para>
@@ -8726,7 +8655,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
                 /// <summary>
                 /// <para>Name:     System.Music.Composer -- PKEY_Music_Composer</para>
-                /// <para>Description: 
+                /// <para>Description:
                 ///</para>
                 /// <para>Type:     Multivalue String -- VT_VECTOR | VT_LPWSTR  (For variants: VT_ARRAY | VT_BSTR)</para>
                 /// <para>FormatID: (PSGUID_MEDIAFILESUMMARYINFORMATION) {64440492-4C8B-11D1-8B70-080036B11A03}, 19 (PIDMSI_COMPOSER)</para>
@@ -8743,7 +8672,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
                 /// <summary>
                 /// <para>Name:     System.Music.Conductor -- PKEY_Music_Conductor</para>
-                /// <para>Description: 
+                /// <para>Description:
                 ///</para>
                 /// <para>Type:     Multivalue String -- VT_VECTOR | VT_LPWSTR  (For variants: VT_ARRAY | VT_BSTR)</para>
                 /// <para>FormatID: (FMTID_MUSIC) {56A3372E-CE9C-11D2-9F0E-006097C686F6}, 36 (PIDSI_MUSIC_CONDUCTOR)</para>
@@ -8760,7 +8689,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
                 /// <summary>
                 /// <para>Name:     System.Music.ContentGroupDescription -- PKEY_Music_ContentGroupDescription</para>
-                /// <para>Description: 
+                /// <para>Description:
                 ///</para>
                 /// <para>Type:     String -- VT_LPWSTR  (For variants: VT_BSTR)</para>
                 /// <para>FormatID: (FMTID_MUSIC) {56A3372E-CE9C-11D2-9F0E-006097C686F6}, 33 (PIDSI_MUSIC_CONTENT_GROUP_DESCRIPTION)</para>
@@ -8795,7 +8724,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
                 /// <summary>
                 /// <para>Name:     System.Music.Genre -- PKEY_Music_Genre</para>
-                /// <para>Description: 
+                /// <para>Description:
                 ///</para>
                 /// <para>Type:     Multivalue String -- VT_VECTOR | VT_LPWSTR  (For variants: VT_ARRAY | VT_BSTR)</para>
                 /// <para>FormatID: (FMTID_MUSIC) {56A3372E-CE9C-11D2-9F0E-006097C686F6}, 11 (PIDSI_MUSIC_GENRE)</para>
@@ -8812,7 +8741,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
                 /// <summary>
                 /// <para>Name:     System.Music.InitialKey -- PKEY_Music_InitialKey</para>
-                /// <para>Description: 
+                /// <para>Description:
                 ///</para>
                 /// <para>Type:     String -- VT_LPWSTR  (For variants: VT_BSTR)</para>
                 /// <para>FormatID: (FMTID_MUSIC) {56A3372E-CE9C-11D2-9F0E-006097C686F6}, 34 (PIDSI_MUSIC_INITIAL_KEY)</para>
@@ -8846,7 +8775,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
                 /// <summary>
                 /// <para>Name:     System.Music.Lyrics -- PKEY_Music_Lyrics</para>
-                /// <para>Description: 
+                /// <para>Description:
                 ///</para>
                 /// <para>Type:     String -- VT_LPWSTR  (For variants: VT_BSTR)</para>
                 /// <para>FormatID: (FMTID_MUSIC) {56A3372E-CE9C-11D2-9F0E-006097C686F6}, 12 (PIDSI_MUSIC_LYRICS)</para>
@@ -8863,7 +8792,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
                 /// <summary>
                 /// <para>Name:     System.Music.Mood -- PKEY_Music_Mood</para>
-                /// <para>Description: 
+                /// <para>Description:
                 ///</para>
                 /// <para>Type:     String -- VT_LPWSTR  (For variants: VT_BSTR)</para>
                 /// <para>FormatID: (FMTID_MUSIC) {56A3372E-CE9C-11D2-9F0E-006097C686F6}, 39 (PIDSI_MUSIC_MOOD)</para>
@@ -8880,7 +8809,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
                 /// <summary>
                 /// <para>Name:     System.Music.PartOfSet -- PKEY_Music_PartOfSet</para>
-                /// <para>Description: 
+                /// <para>Description:
                 ///</para>
                 /// <para>Type:     String -- VT_LPWSTR  (For variants: VT_BSTR)</para>
                 /// <para>FormatID: (FMTID_MUSIC) {56A3372E-CE9C-11D2-9F0E-006097C686F6}, 37 (PIDSI_MUSIC_PART_OF_SET)</para>
@@ -8897,7 +8826,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
                 /// <summary>
                 /// <para>Name:     System.Music.Period -- PKEY_Music_Period</para>
-                /// <para>Description: 
+                /// <para>Description:
                 ///</para>
                 /// <para>Type:     String -- VT_LPWSTR  (For variants: VT_BSTR)</para>
                 /// <para>FormatID: (PSGUID_MEDIAFILESUMMARYINFORMATION) {64440492-4C8B-11D1-8B70-080036B11A03}, 31 (PIDMSI_PERIOD)</para>
@@ -8930,7 +8859,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
                 /// <summary>
                 /// <para>Name:     System.Music.TrackNumber -- PKEY_Music_TrackNumber</para>
-                /// <para>Description: 
+                /// <para>Description:
                 ///</para>
                 /// <para>Type:     UInt32 -- VT_UI4</para>
                 /// <para>FormatID: (FMTID_MUSIC) {56A3372E-CE9C-11D2-9F0E-006097C686F6}, 7 (PIDSI_MUSIC_TRACK)</para>
@@ -8946,8 +8875,6 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
                 }
                 #endregion
 
-
-
             }
 
             /// <summary>
@@ -8955,7 +8882,6 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
             /// </summary>
             public static class Note
             {
-
 
                 #region Properties
 
@@ -8977,7 +8903,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
                 /// <summary>
                 /// <para>Name:     System.Note.ColorText -- PKEY_Note_ColorText</para>
-                /// <para>Description: This is the user-friendly form of System.Note.Color.  Not intended to be parsed 
+                /// <para>Description: This is the user-friendly form of System.Note.Color.  Not intended to be parsed
                 ///programmatically.
                 ///</para>
                 /// <para>Type:     String -- VT_LPWSTR  (For variants: VT_BSTR)</para>
@@ -8994,8 +8920,6 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
                 }
                 #endregion
 
-
-
             }
 
             /// <summary>
@@ -9003,7 +8927,6 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
             /// </summary>
             public static class Photo
             {
-
 
                 #region Properties
 
@@ -9064,7 +8987,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
                 ///
                 ///Calculated from PKEY_Photo_BrightnessNumerator and PKEY_Photo_BrightnessDenominator.
                 ///
-                ///The units are "APEX", normally in the range of -99.99 to 99.99. If the numerator of 
+                ///The units are "APEX", normally in the range of -99.99 to 99.99. If the numerator of
                 ///the recorded value is FFFFFFFF.H, "Unknown" should be indicated.
                 ///</para>
                 /// <para>Type:     Double -- VT_R8</para>
@@ -9116,7 +9039,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
                 /// <summary>
                 /// <para>Name:     System.Photo.CameraManufacturer -- PKEY_Photo_CameraManufacturer</para>
-                /// <para>Description: 
+                /// <para>Description:
                 ///</para>
                 /// <para>Type:     String -- VT_LPWSTR  (For variants: VT_BSTR)</para>
                 /// <para>FormatID: (FMTID_ImageProperties) {14B81DA1-0135-4D31-96D9-6CBFC9671A99}, 271 (PropertyTagEquipMake)</para>
@@ -9133,7 +9056,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
                 /// <summary>
                 /// <para>Name:     System.Photo.CameraModel -- PKEY_Photo_CameraModel</para>
-                /// <para>Description: 
+                /// <para>Description:
                 ///</para>
                 /// <para>Type:     String -- VT_LPWSTR  (For variants: VT_BSTR)</para>
                 /// <para>FormatID: (FMTID_ImageProperties) {14B81DA1-0135-4D31-96D9-6CBFC9671A99}, 272 (PropertyTagEquipModel)</para>
@@ -9167,7 +9090,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
                 /// <summary>
                 /// <para>Name:     System.Photo.Contrast -- PKEY_Photo_Contrast</para>
-                /// <para>Description: This indicates the direction of contrast processing applied by the camera 
+                /// <para>Description: This indicates the direction of contrast processing applied by the camera
                 ///when the image was shot.
                 ///</para>
                 /// <para>Type:     UInt32 -- VT_UI4</para>
@@ -9185,7 +9108,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
                 /// <summary>
                 /// <para>Name:     System.Photo.ContrastText -- PKEY_Photo_ContrastText</para>
-                /// <para>Description: This is the user-friendly form of System.Photo.Contrast.  Not intended to be parsed 
+                /// <para>Description: This is the user-friendly form of System.Photo.Contrast.  Not intended to be parsed
                 ///programmatically.
                 ///</para>
                 /// <para>Type:     String -- VT_LPWSTR  (For variants: VT_BSTR)</para>
@@ -9407,7 +9330,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
                 /// <summary>
                 /// <para>Name:     System.Photo.ExposureProgram -- PKEY_Photo_ExposureProgram</para>
-                /// <para>Description: 
+                /// <para>Description:
                 ///</para>
                 /// <para>Type:     UInt32 -- VT_UI4</para>
                 /// <para>FormatID: (FMTID_ImageProperties) {14B81DA1-0135-4D31-96D9-6CBFC9671A99}, 34850 (PropertyTagExifExposureProg)</para>
@@ -9424,7 +9347,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
                 /// <summary>
                 /// <para>Name:     System.Photo.ExposureProgramText -- PKEY_Photo_ExposureProgramText</para>
-                /// <para>Description: This is the user-friendly form of System.Photo.ExposureProgram.  Not intended to be parsed 
+                /// <para>Description: This is the user-friendly form of System.Photo.ExposureProgram.  Not intended to be parsed
                 ///programmatically.
                 ///</para>
                 /// <para>Type:     String -- VT_LPWSTR  (For variants: VT_BSTR)</para>
@@ -9593,7 +9516,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
                 /// <summary>
                 /// <para>Name:     System.Photo.FlashText -- PKEY_Photo_FlashText</para>
-                /// <para>Description: This is the user-friendly form of System.Photo.Flash.  Not intended to be parsed 
+                /// <para>Description: This is the user-friendly form of System.Photo.Flash.  Not intended to be parsed
                 ///programmatically.
                 ///</para>
                 /// <para>Type:     String -- VT_LPWSTR  (For variants: VT_BSTR)</para>
@@ -9729,7 +9652,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
                 /// <summary>
                 /// <para>Name:     System.Photo.FocalPlaneXResolution -- PKEY_Photo_FocalPlaneXResolution</para>
-                /// <para>Description: PropertyTagExifFocalXRes.  Calculated from PKEY_Photo_FocalPlaneXResolutionNumerator and 
+                /// <para>Description: PropertyTagExifFocalXRes.  Calculated from PKEY_Photo_FocalPlaneXResolutionNumerator and
                 ///PKEY_Photo_FocalPlaneXResolutionDenominator.
                 ///</para>
                 /// <para>Type:     Double -- VT_R8</para>
@@ -9781,7 +9704,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
                 /// <summary>
                 /// <para>Name:     System.Photo.FocalPlaneYResolution -- PKEY_Photo_FocalPlaneYResolution</para>
-                /// <para>Description: PropertyTagExifFocalYRes.  Calculated from PKEY_Photo_FocalPlaneYResolutionNumerator and 
+                /// <para>Description: PropertyTagExifFocalYRes.  Calculated from PKEY_Photo_FocalPlaneYResolutionNumerator and
                 ///PKEY_Photo_FocalPlaneYResolutionDenominator.
                 ///</para>
                 /// <para>Type:     Double -- VT_R8</para>
@@ -9886,7 +9809,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
                 /// <summary>
                 /// <para>Name:     System.Photo.GainControlText -- PKEY_Photo_GainControlText</para>
-                /// <para>Description: This is the user-friendly form of System.Photo.GainControl.  Not intended to be parsed 
+                /// <para>Description: This is the user-friendly form of System.Photo.GainControl.  Not intended to be parsed
                 ///programmatically.
                 ///</para>
                 /// <para>Type:     String -- VT_LPWSTR  (For variants: VT_BSTR)</para>
@@ -10070,7 +9993,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
                 /// <summary>
                 /// <para>Name:     System.Photo.MeteringModeText -- PKEY_Photo_MeteringModeText</para>
-                /// <para>Description: This is the user-friendly form of System.Photo.MeteringMode.  Not intended to be parsed 
+                /// <para>Description: This is the user-friendly form of System.Photo.MeteringMode.  Not intended to be parsed
                 ///programmatically.
                 ///</para>
                 /// <para>Type:     String -- VT_LPWSTR  (For variants: VT_BSTR)</para>
@@ -10105,7 +10028,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
                 /// <summary>
                 /// <para>Name:     System.Photo.OrientationText -- PKEY_Photo_OrientationText</para>
-                /// <para>Description: This is the user-friendly form of System.Photo.Orientation.  Not intended to be parsed 
+                /// <para>Description: This is the user-friendly form of System.Photo.Orientation.  Not intended to be parsed
                 ///programmatically.
                 ///</para>
                 /// <para>Type:     String -- VT_LPWSTR  (For variants: VT_BSTR)</para>
@@ -10140,7 +10063,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
                 /// <summary>
                 /// <para>Name:     System.Photo.PhotometricInterpretation -- PKEY_Photo_PhotometricInterpretation</para>
-                /// <para>Description: This is the pixel composition. In JPEG compressed data, a JPEG marker is used 
+                /// <para>Description: This is the pixel composition. In JPEG compressed data, a JPEG marker is used
                 ///instead of this property.
                 ///</para>
                 /// <para>Type:     UInt16 -- VT_UI2</para>
@@ -10158,7 +10081,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
                 /// <summary>
                 /// <para>Name:     System.Photo.PhotometricInterpretationText -- PKEY_Photo_PhotometricInterpretationText</para>
-                /// <para>Description: This is the user-friendly form of System.Photo.PhotometricInterpretation.  Not intended to be parsed 
+                /// <para>Description: This is the user-friendly form of System.Photo.PhotometricInterpretation.  Not intended to be parsed
                 ///programmatically.
                 ///</para>
                 /// <para>Type:     String -- VT_LPWSTR  (For variants: VT_BSTR)</para>
@@ -10176,7 +10099,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
                 /// <summary>
                 /// <para>Name:     System.Photo.ProgramMode -- PKEY_Photo_ProgramMode</para>
-                /// <para>Description: This is the class of the program used by the camera to set exposure when the 
+                /// <para>Description: This is the class of the program used by the camera to set exposure when the
                 ///picture is taken.
                 ///</para>
                 /// <para>Type:     UInt32 -- VT_UI4</para>
@@ -10194,7 +10117,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
                 /// <summary>
                 /// <para>Name:     System.Photo.ProgramModeText -- PKEY_Photo_ProgramModeText</para>
-                /// <para>Description: This is the user-friendly form of System.Photo.ProgramMode.  Not intended to be parsed 
+                /// <para>Description: This is the user-friendly form of System.Photo.ProgramMode.  Not intended to be parsed
                 ///programmatically.
                 ///</para>
                 /// <para>Type:     String -- VT_LPWSTR  (For variants: VT_BSTR)</para>
@@ -10228,7 +10151,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
                 /// <summary>
                 /// <para>Name:     System.Photo.Saturation -- PKEY_Photo_Saturation</para>
-                /// <para>Description: This indicates the direction of saturation processing applied by the camera when 
+                /// <para>Description: This indicates the direction of saturation processing applied by the camera when
                 ///the image was shot.
                 ///</para>
                 /// <para>Type:     UInt32 -- VT_UI4</para>
@@ -10246,7 +10169,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
                 /// <summary>
                 /// <para>Name:     System.Photo.SaturationText -- PKEY_Photo_SaturationText</para>
-                /// <para>Description: This is the user-friendly form of System.Photo.Saturation.  Not intended to be parsed 
+                /// <para>Description: This is the user-friendly form of System.Photo.Saturation.  Not intended to be parsed
                 ///programmatically.
                 ///</para>
                 /// <para>Type:     String -- VT_LPWSTR  (For variants: VT_BSTR)</para>
@@ -10264,7 +10187,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
                 /// <summary>
                 /// <para>Name:     System.Photo.Sharpness -- PKEY_Photo_Sharpness</para>
-                /// <para>Description: This indicates the direction of sharpness processing applied by the camera when 
+                /// <para>Description: This indicates the direction of sharpness processing applied by the camera when
                 ///the image was shot.
                 ///</para>
                 /// <para>Type:     UInt32 -- VT_UI4</para>
@@ -10282,7 +10205,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
                 /// <summary>
                 /// <para>Name:     System.Photo.SharpnessText -- PKEY_Photo_SharpnessText</para>
-                /// <para>Description: This is the user-friendly form of System.Photo.Sharpness.  Not intended to be parsed 
+                /// <para>Description: This is the user-friendly form of System.Photo.Sharpness.  Not intended to be parsed
                 ///programmatically.
                 ///</para>
                 /// <para>Type:     String -- VT_LPWSTR  (For variants: VT_BSTR)</para>
@@ -10452,7 +10375,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
                 /// <summary>
                 /// <para>Name:     System.Photo.WhiteBalanceText -- PKEY_Photo_WhiteBalanceText</para>
-                /// <para>Description: This is the user-friendly form of System.Photo.WhiteBalance.  Not intended to be parsed 
+                /// <para>Description: This is the user-friendly form of System.Photo.WhiteBalance.  Not intended to be parsed
                 ///programmatically.
                 ///</para>
                 /// <para>Type:     String -- VT_LPWSTR  (For variants: VT_BSTR)</para>
@@ -10469,8 +10392,6 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
                 }
                 #endregion
 
-
-
             }
 
             /// <summary>
@@ -10478,7 +10399,6 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
             /// </summary>
             public static class PropGroup
             {
-
 
                 #region Properties
 
@@ -10787,8 +10707,6 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
                 }
                 #endregion
 
-
-
             }
 
             /// <summary>
@@ -10797,12 +10715,11 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
             public static class PropList
             {
 
-
                 #region Properties
 
                 /// <summary>
                 /// <para>Name:     System.PropList.ConflictPrompt -- PKEY_PropList_ConflictPrompt</para>
-                /// <para>Description: The list of properties to show in the file operation conflict resolution dialog. Properties with empty 
+                /// <para>Description: The list of properties to show in the file operation conflict resolution dialog. Properties with empty
                 ///values will not be displayed. Register under the regvalue of "ConflictPrompt".
                 ///</para>
                 /// <para>Type:     String -- VT_LPWSTR  (For variants: VT_BSTR)</para>
@@ -10856,7 +10773,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
                 /// <summary>
                 /// <para>Name:     System.PropList.ExtendedTileInfo -- PKEY_PropList_ExtendedTileInfo</para>
-                /// <para>Description: The list of properties to show in the listview on extended tiles. Register under the regvalue of 
+                /// <para>Description: The list of properties to show in the listview on extended tiles. Register under the regvalue of
                 ///"ExtendedTileInfo".
                 ///</para>
                 /// <para>Type:     String -- VT_LPWSTR  (For variants: VT_BSTR)</para>
@@ -10874,8 +10791,8 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
                 /// <summary>
                 /// <para>Name:     System.PropList.FileOperationPrompt -- PKEY_PropList_FileOperationPrompt</para>
-                /// <para>Description: The list of properties to show in the file operation confirmation dialog. Properties with empty values 
-                ///will not be displayed. If this list is not specified, then the InfoTip property list is used instead. 
+                /// <para>Description: The list of properties to show in the file operation confirmation dialog. Properties with empty values
+                ///will not be displayed. If this list is not specified, then the InfoTip property list is used instead.
                 ///Register under the regvalue of "FileOperationPrompt".
                 ///</para>
                 /// <para>Type:     String -- VT_LPWSTR  (For variants: VT_BSTR)</para>
@@ -10893,7 +10810,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
                 /// <summary>
                 /// <para>Name:     System.PropList.FullDetails -- PKEY_PropList_FullDetails</para>
-                /// <para>Description: The list of all the properties to show in the details page.  Property groups can be included in this list 
+                /// <para>Description: The list of all the properties to show in the details page.  Property groups can be included in this list
                 ///in order to more easily organize the UI.  Register under the regvalue of "FullDetails".
                 ///</para>
                 /// <para>Type:     String -- VT_LPWSTR  (For variants: VT_BSTR)</para>
@@ -10911,7 +10828,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
                 /// <summary>
                 /// <para>Name:     System.PropList.InfoTip -- PKEY_PropList_InfoTip</para>
-                /// <para>Description: The list of properties to show in the infotip. Properties with empty values will not be displayed. Register 
+                /// <para>Description: The list of properties to show in the infotip. Properties with empty values will not be displayed. Register
                 ///under the regvalue of "InfoTip".
                 ///</para>
                 /// <para>Type:     String -- VT_LPWSTR  (For variants: VT_BSTR)</para>
@@ -10929,8 +10846,8 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
                 /// <summary>
                 /// <para>Name:     System.PropList.NonPersonal -- PKEY_PropList_NonPersonal</para>
-                /// <para>Description: The list of properties that are considered 'non-personal'. When told to remove all non-personal properties 
-                ///from a given file, the system will leave these particular properties untouched. Register under the regvalue 
+                /// <para>Description: The list of properties that are considered 'non-personal'. When told to remove all non-personal properties
+                ///from a given file, the system will leave these particular properties untouched. Register under the regvalue
                 ///of "NonPersonal".
                 ///</para>
                 /// <para>Type:     String -- VT_LPWSTR  (For variants: VT_BSTR)</para>
@@ -10965,7 +10882,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
                 /// <summary>
                 /// <para>Name:     System.PropList.PreviewTitle -- PKEY_PropList_PreviewTitle</para>
-                /// <para>Description: The one or two properties to display in the preview pane title section.  The optional second property is 
+                /// <para>Description: The one or two properties to display in the preview pane title section.  The optional second property is
                 ///displayed as a subtitle.  Register under the regvalue of "PreviewTitle".
                 ///</para>
                 /// <para>Type:     String -- VT_LPWSTR  (For variants: VT_BSTR)</para>
@@ -10983,7 +10900,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
                 /// <summary>
                 /// <para>Name:     System.PropList.QuickTip -- PKEY_PropList_QuickTip</para>
-                /// <para>Description: The list of properties to show in the infotip when the item is on a slow network. Properties with empty 
+                /// <para>Description: The list of properties to show in the infotip when the item is on a slow network. Properties with empty
                 ///values will not be displayed. Register under the regvalue of "QuickTip".
                 ///</para>
                 /// <para>Type:     String -- VT_LPWSTR  (For variants: VT_BSTR)</para>
@@ -11034,8 +10951,6 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
                 }
                 #endregion
 
-
-
             }
 
             /// <summary>
@@ -11043,7 +10958,6 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
             /// </summary>
             public static class RecordedTV
             {
-
 
                 #region Properties
 
@@ -11308,8 +11222,6 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
                 }
                 #endregion
 
-
-
             }
 
             /// <summary>
@@ -11317,7 +11229,6 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
             /// </summary>
             public static class Search
             {
-
 
                 #region Properties
 
@@ -11357,7 +11268,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
                 /// <summary>
                 /// <para>Name:     System.Search.Contents -- PKEY_Search_Contents</para>
-                /// <para>Description: The contents of the item. This property is for query restrictions only; it cannot be retrieved in a 
+                /// <para>Description: The contents of the item. This property is for query restrictions only; it cannot be retrieved in a
                 ///query result. The Indexing Service friendly name is 'contents'.
                 ///</para>
                 /// <para>Type:     String -- VT_LPWSTR  (For variants: VT_BSTR)</para>
@@ -11579,8 +11490,6 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
                 }
                 #endregion
 
-
-
             }
 
             /// <summary>
@@ -11588,7 +11497,6 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
             /// </summary>
             public static class Shell
             {
-
 
                 #region Properties
 
@@ -11616,7 +11524,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
                 /// <para>Type:     Multivalue String -- VT_VECTOR | VT_LPWSTR  (For variants: VT_ARRAY | VT_BSTR)</para>
                 /// <para>FormatID: {D6942081-D53B-443D-AD47-5E059D9CD27A}, 2</para>
                 /// </summary>
-                [SuppressMessage("Microsoft.Naming", "CA1726:UsePreferredTerms", MessageId = "Flags")]
+                [SuppressMessage("Microsoft.Naming", "CA1726:UsePreferredTerms", MessageId = "Flags", Justification = "ToDo")]
                 public static PropertyKey SFGAOFlagsStrings
                 {
                     get
@@ -11628,8 +11536,6 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
                 }
                 #endregion
 
-
-
             }
 
             /// <summary>
@@ -11638,12 +11544,11 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
             public static class Software
             {
 
-
                 #region Properties
 
                 /// <summary>
                 /// <para>Name:     System.Software.DateLastUsed -- PKEY_Software_DateLastUsed</para>
-                /// <para>Description: 
+                /// <para>Description:
                 ///</para>
                 /// <para>Type:     DateTime -- VT_FILETIME  (For variants: VT_DATE)</para>
                 /// <para>FormatID: {841E4F90-FF59-4D16-8947-E81BBFFAB36D}, 16</para>
@@ -11660,7 +11565,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
                 /// <summary>
                 /// <para>Name:     System.Software.ProductName -- PKEY_Software_ProductName</para>
-                /// <para>Description: 
+                /// <para>Description:
                 ///</para>
                 /// <para>Type:     String -- VT_LPWSTR  (For variants: VT_BSTR)</para>
                 /// <para>FormatID: (PSFMTID_VERSION) {0CEF7D53-FA64-11D1-A203-0000F81FEDEE}, 7</para>
@@ -11676,8 +11581,6 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
                 }
                 #endregion
 
-
-
             }
 
             /// <summary>
@@ -11685,7 +11588,6 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
             /// </summary>
             public static class Sync
             {
-
 
                 #region Properties
 
@@ -11803,7 +11705,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
                 /// <summary>
                 /// <para>Name:     System.Sync.HandlerType -- PKEY_Sync_HandlerType</para>
-                /// <para>Description: 
+                /// <para>Description:
                 ///</para>
                 /// <para>Type:     UInt32 -- VT_UI4</para>
                 /// <para>FormatID: {7BD5533E-AF15-44DB-B8C8-BD6624E1D032}, 8</para>
@@ -11820,7 +11722,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
                 /// <summary>
                 /// <para>Name:     System.Sync.HandlerTypeLabel -- PKEY_Sync_HandlerTypeLabel</para>
-                /// <para>Description: 
+                /// <para>Description:
                 ///</para>
                 /// <para>Type:     String -- VT_LPWSTR  (For variants: VT_BSTR)</para>
                 /// <para>FormatID: {7BD5533E-AF15-44DB-B8C8-BD6624E1D032}, 9</para>
@@ -11918,8 +11820,6 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
                 }
                 #endregion
 
-
-
             }
 
             /// <summary>
@@ -11927,7 +11827,6 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
             /// </summary>
             public static class Task
             {
-
 
                 #region Properties
 
@@ -11980,8 +11879,6 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
                 }
                 #endregion
 
-
-
             }
 
             /// <summary>
@@ -11989,7 +11886,6 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
             /// </summary>
             public static class Video
             {
-
 
                 #region Properties
 
@@ -12012,7 +11908,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
                 /// <summary>
                 /// <para>Name:     System.Video.Director -- PKEY_Video_Director</para>
-                /// <para>Description: 
+                /// <para>Description:
                 ///</para>
                 /// <para>Type:     Multivalue String -- VT_VECTOR | VT_LPWSTR  (For variants: VT_ARRAY | VT_BSTR)</para>
                 /// <para>FormatID: (PSGUID_MEDIAFILESUMMARYINFORMATION) {64440492-4C8B-11D1-8B70-080036B11A03}, 20 (PIDMSI_DIRECTOR)</para>
@@ -12216,7 +12112,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
                 /// <summary>
                 /// <para>Name:     System.Video.VerticalAspectRatio -- PKEY_Video_VerticalAspectRatio</para>
-                /// <para>Description: Indicates the vertical portion of the aspect ratio. The Y portion of 
+                /// <para>Description: Indicates the vertical portion of the aspect ratio. The Y portion of
                 ///XX:YY, like 16:9.
                 ///</para>
                 /// <para>Type:     UInt32 -- VT_UI4</para>
@@ -12233,8 +12129,6 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
                 }
                 #endregion
 
-
-
             }
 
             /// <summary>
@@ -12242,7 +12136,6 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
             /// </summary>
             public static class Volume
             {
-
 
                 #region Properties
 
@@ -12281,7 +12174,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
                 /// <summary>
                 /// <para>Name:     System.Volume.IsRoot -- PKEY_Volume_IsRoot</para>
-                /// <para>Description: 
+                /// <para>Description:
                 ///</para>
                 /// <para>Type:     Boolean -- VT_BOOL</para>
                 /// <para>FormatID: (FMTID_Volume) {9B174B35-40FF-11D2-A27E-00C04FC30871}, 10  (Filesystem Volume Properties)</para>
@@ -12296,8 +12189,6 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
                     }
                 }
                 #endregion
-
-
 
             }
             #endregion

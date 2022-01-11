@@ -1,9 +1,9 @@
-//Copyright (c) Microsoft Corporation.  All rights reserved.
-
-using System;
+// Copyright (c) Microsoft Corporation.  All rights reserved.
 
 namespace Microsoft.WindowsAPICodePack.Shell
 {
+    using System;
+
     /// <summary>
     /// Contains special retrieval options for known folders.
     /// </summary>
@@ -16,6 +16,6 @@ namespace Microsoft.WindowsAPICodePack.Shell
         NoAlias = 0x00001000,
         Init = 0x00000800,
         DefaultPath = 0x00000400,
-        NotParentRelative = 0x00000200
+        NotParentRelative = 0x00000200,
     }
 }

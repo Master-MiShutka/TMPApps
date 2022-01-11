@@ -1,8 +1,9 @@
-﻿//Copyright (c) Microsoft Corporation.  All rights reserved.
+﻿// Copyright (c) Microsoft Corporation.  All rights reserved.
 
-using System.Security.Permissions;
 namespace MS.WindowsAPICodePack.Internal
 {
+    using System.Security.Permissions;
+
     /// <summary>
     /// Safe Window Handle
     /// </summary>
@@ -14,12 +15,12 @@ namespace MS.WindowsAPICodePack.Internal
         /// <returns>true if handled is release successfully, false otherwise</returns>
         protected override bool ReleaseHandle()
         {
-            if (IsInvalid)
+            if (this.IsInvalid)
             {
                 return true;
             }
 
-            if (CoreNativeMethods.DestroyWindow(handle) != 0)
+            if (CoreNativeMethods.DestroyWindow(this.handle) != 0)
             {
                 return true;
             }

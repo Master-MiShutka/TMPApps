@@ -1,22 +1,22 @@
-﻿//Copyright (c) Microsoft Corporation.  All rights reserved.
-
-using System;
-using System.Collections.Generic;
-using System.Runtime.InteropServices;
-using Microsoft.WindowsAPICodePack.Shell.PropertySystem;
-using Microsoft.WindowsAPICodePack.Shell.Resources;
-using MS.WindowsAPICodePack.Internal;
-using System.Linq;
+﻿// Copyright (c) Microsoft Corporation.  All rights reserved.
 
 namespace Microsoft.WindowsAPICodePack.Shell
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Runtime.InteropServices;
+    using Microsoft.WindowsAPICodePack.Shell.PropertySystem;
+    using Microsoft.WindowsAPICodePack.Shell.Resources;
+    using MS.WindowsAPICodePack.Internal;
+
     /// <summary>
     /// Create and modify search folders.
     /// </summary>
     public class ShellSearchFolder : ShellSearchCollection
     {
         /// <summary>
-        /// Create a simple search folder. Once the appropriate parameters are set, 
+        /// Create a simple search folder. Once the appropriate parameters are set,
         /// the search folder can be enumerated to get the search results.
         /// </summary>
         /// <param name="searchCondition">Specific condition on which to perform the search (property and expected value)</param>
@@ -25,7 +25,7 @@ namespace Microsoft.WindowsAPICodePack.Shell
         {
             CoreHelpers.ThrowIfNotVista();
 
-            NativeSearchFolderItemFactory = (ISearchFolderItemFactory)new SearchFolderItemFactoryCoClass();
+            this.NativeSearchFolderItemFactory = (ISearchFolderItemFactory)new SearchFolderItemFactoryCoClass();
 
             this.SearchCondition = searchCondition;
 
@@ -36,7 +36,7 @@ namespace Microsoft.WindowsAPICodePack.Shell
         }
 
         /// <summary>
-        /// Create a simple search folder. Once the appropiate parameters are set, 
+        /// Create a simple search folder. Once the appropiate parameters are set,
         /// the search folder can be enumerated to get the search results.
         /// </summary>
         /// <param name="searchCondition">Specific condition on which to perform the search (property and expected value)</param>
@@ -45,7 +45,7 @@ namespace Microsoft.WindowsAPICodePack.Shell
         {
             CoreHelpers.ThrowIfNotVista();
 
-            NativeSearchFolderItemFactory = (ISearchFolderItemFactory)new SearchFolderItemFactoryCoClass();
+            this.NativeSearchFolderItemFactory = (ISearchFolderItemFactory)new SearchFolderItemFactoryCoClass();
 
             if (searchScopePath != null && searchScopePath.Length > 0 && searchScopePath[0] != null)
             {
@@ -58,60 +58,70 @@ namespace Microsoft.WindowsAPICodePack.Shell
         internal ISearchFolderItemFactory NativeSearchFolderItemFactory { get; set; }
 
         private SearchCondition searchCondition;
+
         /// <summary>
-        /// Gets the <see cref="Microsoft.WindowsAPICodePack.Shell.SearchCondition"/> of the search. 
+        /// Gets the <see cref="Microsoft.WindowsAPICodePack.Shell.SearchCondition"/> of the search.
         /// When this property is not set, the resulting search will have no filters applied.
         /// </summary>
         public SearchCondition SearchCondition
         {
-            get { return searchCondition; }
+            get => this.searchCondition;
+
             private set
             {
-                searchCondition = value;
+                this.searchCondition = value;
 
-                NativeSearchFolderItemFactory.SetCondition(searchCondition.NativeSearchCondition);
+                this.NativeSearchFolderItemFactory.SetCondition(this.searchCondition.NativeSearchCondition);
             }
         }
 
         private string[] searchScopePaths;
+
         /// <summary>
-        /// Gets the search scope, as specified using an array of locations to search. 
+        /// Gets the search scope, as specified using an array of locations to search.
         /// The search will include this location and all its subcontainers. The default is FOLDERID_Profile
         /// </summary>
         public IEnumerable<string> SearchScopePaths
         {
             get
             {
-                foreach (var scopePath in searchScopePaths)
+                foreach (var scopePath in this.searchScopePaths)
                 {
                     yield return scopePath;
                 }
             }
+
             private set
             {
-                searchScopePaths = value.ToArray();
-                List<IShellItem> shellItems = new List<IShellItem>(searchScopePaths.Length);
+                this.searchScopePaths = value.ToArray();
+                List<IShellItem> shellItems = new List<IShellItem>(this.searchScopePaths.Length);
 
                 Guid shellItemGuid = new Guid(ShellIIDGuid.IShellItem);
                 Guid shellItemArrayGuid = new Guid(ShellIIDGuid.IShellItemArray);
 
                 // Create IShellItem for all the scopes we were given
-                foreach (string path in searchScopePaths)
+                foreach (string path in this.searchScopePaths)
                 {
                     IShellItem scopeShellItem;
 
                     int hr = ShellNativeMethods.SHCreateItemFromParsingName(path, IntPtr.Zero, ref shellItemGuid, out scopeShellItem);
 
-                    if (CoreErrorHelper.Succeeded(hr)) { shellItems.Add(scopeShellItem); }
+                    if (CoreErrorHelper.Succeeded(hr))
+                    {
+                        shellItems.Add(scopeShellItem);
+                    }
                 }
 
                 // Create a new IShellItemArray
                 IShellItemArray scopeShellItemArray = new ShellItemArray(shellItems.ToArray());
 
                 // Set the scope on the native ISearchFolderItemFactory
-                HResult hResult = NativeSearchFolderItemFactory.SetScope(scopeShellItemArray);
+                HResult hResult = this.NativeSearchFolderItemFactory.SetScope(scopeShellItemArray);
 
-                if (!CoreErrorHelper.Succeeded((int)hResult)) { throw new ShellException((int)hResult); }
+                if (!CoreErrorHelper.Succeeded((int)hResult))
+                {
+                    throw new ShellException((int)hResult);
+                }
             }
         }
 
@@ -121,27 +131,36 @@ namespace Microsoft.WindowsAPICodePack.Shell
             {
                 Guid guid = new Guid(ShellIIDGuid.IShellItem);
 
-                if (NativeSearchFolderItemFactory == null) { return null; }
+                if (this.NativeSearchFolderItemFactory == null)
+                {
+                    return null;
+                }
 
                 IShellItem shellItem;
-                int hr = NativeSearchFolderItemFactory.GetShellItem(ref guid, out shellItem);
+                int hr = this.NativeSearchFolderItemFactory.GetShellItem(ref guid, out shellItem);
 
-                if (!CoreErrorHelper.Succeeded(hr)) { throw new ShellException(hr); }
+                if (!CoreErrorHelper.Succeeded(hr))
+                {
+                    throw new ShellException(hr);
+                }
 
                 return shellItem;
             }
         }
 
-
         /// <summary>
-        /// Creates a list of stack keys, as specified. If this method is not called, 
+        /// Creates a list of stack keys, as specified. If this method is not called,
         /// by default the folder will not be stacked.
         /// </summary>
         /// <param name="canonicalNames">Array of canonical names for properties on which the folder is stacked.</param>
         /// <exception cref="System.ArgumentException">If one of the given canonical names is invalid.</exception>
         public void SetStacks(params string[] canonicalNames)
         {
-            if (canonicalNames == null) { throw new ArgumentNullException("canonicalNames"); }
+            if (canonicalNames == null)
+            {
+                throw new ArgumentNullException(nameof(canonicalNames));
+            }
+
             List<PropertyKey> propertyKeyList = new List<PropertyKey>();
 
             foreach (string prop in canonicalNames)
@@ -152,7 +171,7 @@ namespace Microsoft.WindowsAPICodePack.Shell
 
                 if (!CoreErrorHelper.Succeeded(result))
                 {
-                    throw new ArgumentException(LocalizedMessages.ShellInvalidCanonicalName, "canonicalNames", Marshal.GetExceptionForHR(result));
+                    throw new ArgumentException(LocalizedMessages.ShellInvalidCanonicalName, nameof(canonicalNames), Marshal.GetExceptionForHR(result));
                 }
 
                 propertyKeyList.Add(propKey);
@@ -160,12 +179,12 @@ namespace Microsoft.WindowsAPICodePack.Shell
 
             if (propertyKeyList.Count > 0)
             {
-                SetStacks(propertyKeyList.ToArray());
+                this.SetStacks(propertyKeyList.ToArray());
             }
         }
 
         /// <summary>
-        /// Creates a list of stack keys, as specified. If this method is not called, 
+        /// Creates a list of stack keys, as specified. If this method is not called,
         /// by default the folder will not be stacked.
         /// </summary>
         /// <param name="propertyKeys">Array of property keys on which the folder is stacked.</param>
@@ -173,7 +192,7 @@ namespace Microsoft.WindowsAPICodePack.Shell
         {
             if (propertyKeys != null && propertyKeys.Length > 0)
             {
-                NativeSearchFolderItemFactory.SetStacks((uint)propertyKeys.Length, propertyKeys);
+                this.NativeSearchFolderItemFactory.SetStacks((uint)propertyKeys.Length, propertyKeys);
             }
         }
 
@@ -182,55 +201,65 @@ namespace Microsoft.WindowsAPICodePack.Shell
         /// </summary>
         public void SetDisplayName(string displayName)
         {
-            HResult hr = NativeSearchFolderItemFactory.SetDisplayName(displayName);
+            HResult hr = this.NativeSearchFolderItemFactory.SetDisplayName(displayName);
 
-            if (!CoreErrorHelper.Succeeded(hr)) { throw new ShellException(hr); }
+            if (!CoreErrorHelper.Succeeded(hr))
+            {
+                throw new ShellException(hr);
+            }
         }
-
-
 
         /// <summary>
         /// Sets the search folder icon size.
-        /// The default settings are based on the FolderTypeID which is set by the 
+        /// The default settings are based on the FolderTypeID which is set by the
         /// SearchFolder::SetFolderTypeID method.
         /// </summary>
         public void SetIconSize(int value)
         {
-            HResult hr = NativeSearchFolderItemFactory.SetIconSize(value);
+            HResult hr = this.NativeSearchFolderItemFactory.SetIconSize(value);
 
-            if (!CoreErrorHelper.Succeeded(hr)) { throw new ShellException(hr); }
+            if (!CoreErrorHelper.Succeeded(hr))
+            {
+                throw new ShellException(hr);
+            }
         }
 
         /// <summary>
-        /// Sets a search folder type ID, as specified. 
+        /// Sets a search folder type ID, as specified.
         /// </summary>
         public void SetFolderTypeID(Guid value)
         {
-            HResult hr = NativeSearchFolderItemFactory.SetFolderTypeID(value);
+            HResult hr = this.NativeSearchFolderItemFactory.SetFolderTypeID(value);
 
-            if (!CoreErrorHelper.Succeeded(hr)) { throw new ShellException(hr); }
+            if (!CoreErrorHelper.Succeeded(hr))
+            {
+                throw new ShellException(hr);
+            }
         }
 
         /// <summary>
-        /// Sets folder logical view mode. The default settings are based on the FolderTypeID which is set 
-        /// by the SearchFolder::SetFolderTypeID method.        
+        /// Sets folder logical view mode. The default settings are based on the FolderTypeID which is set
+        /// by the SearchFolder::SetFolderTypeID method.
         /// </summary>
         /// <param name="mode">The logical view mode to set.</param>
         public void SetFolderLogicalViewMode(FolderLogicalViewMode mode)
         {
-            HResult hr = NativeSearchFolderItemFactory.SetFolderLogicalViewMode(mode);
+            HResult hr = this.NativeSearchFolderItemFactory.SetFolderLogicalViewMode(mode);
 
-            if (!CoreErrorHelper.Succeeded(hr)) { throw new ShellException(hr); }
+            if (!CoreErrorHelper.Succeeded(hr))
+            {
+                throw new ShellException(hr);
+            }
         }
 
         /// <summary>
-        /// Creates a new column list whose columns are all visible, 
+        /// Creates a new column list whose columns are all visible,
         /// given an array of PropertyKey structures. The default is based on FolderTypeID.
         /// </summary>
         /// <remarks>This property may not work correctly with the ExplorerBrowser control.</remarks>
         public void SetVisibleColumns(PropertyKey[] value)
         {
-            HResult hr = NativeSearchFolderItemFactory.SetVisibleColumns(value == null ? 0 : (uint)value.Length, value);
+            HResult hr = this.NativeSearchFolderItemFactory.SetVisibleColumns(value == null ? 0 : (uint)value.Length, value);
 
             if (!CoreErrorHelper.Succeeded(hr))
             {
@@ -244,7 +273,7 @@ namespace Microsoft.WindowsAPICodePack.Shell
         /// <remarks>This property may not work correctly with the ExplorerBrowser control.</remarks>
         public void SortColumns(SortColumn[] value)
         {
-            HResult hr = NativeSearchFolderItemFactory.SetSortColumns(value == null ? 0 : (uint)value.Length, value);
+            HResult hr = this.NativeSearchFolderItemFactory.SetSortColumns(value == null ? 0 : (uint)value.Length, value);
 
             if (!CoreErrorHelper.Succeeded(hr))
             {
@@ -253,14 +282,17 @@ namespace Microsoft.WindowsAPICodePack.Shell
         }
 
         /// <summary>
-        /// Sets a group column, as specified. If no group column is specified, no grouping occurs. 
+        /// Sets a group column, as specified. If no group column is specified, no grouping occurs.
         /// </summary>
         /// <remarks>This property may not work correctly with the ExplorerBrowser control.</remarks>
         public void SetGroupColumn(PropertyKey propertyKey)
         {
-            HResult hr = NativeSearchFolderItemFactory.SetGroupColumn(ref propertyKey);
+            HResult hr = this.NativeSearchFolderItemFactory.SetGroupColumn(ref propertyKey);
 
-            if (!CoreErrorHelper.Succeeded(hr)) { throw new ShellException(hr); }
+            if (!CoreErrorHelper.Succeeded(hr))
+            {
+                throw new ShellException(hr);
+            }
         }
     }
 }

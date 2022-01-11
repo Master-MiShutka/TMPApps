@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows.Data;
-using System.Globalization;
-using System.Windows;
-
-namespace WpfApplicationTest.Windows.Converters
+﻿namespace WpfApplicationTest.Windows.Converters
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Globalization;
+    using System.Linq;
+    using System.Text;
+    using System.Windows;
+    using System.Windows.Data;
+
     /// <summary>
     /// Converts a null or empty string value to Visibility.Visible and any other value to Visibility.Collapsed
     /// </summary>
@@ -31,15 +31,16 @@ namespace WpfApplicationTest.Windows.Converters
             {
                 flag = string.IsNullOrEmpty((string)value);
             }
+
             var inverse = (parameter as string) == "inverse";
 
             if (inverse)
             {
-                return (flag ? Visibility.Collapsed : Visibility.Visible);
+                return flag ? Visibility.Collapsed : Visibility.Visible;
             }
             else
             {
-                return (flag ? Visibility.Visible : Visibility.Collapsed);
+                return flag ? Visibility.Visible : Visibility.Collapsed;
             }
         }
 

@@ -5,7 +5,7 @@ using System.Linq;
 namespace TMP.Work.Emcos.Export
 {
     using OfficeOpenXml;
-    using TMP.Work.Emcos.Model.Balans;
+    using TMP.Work.Emcos.Model.Balance;
 
     public class FiderAnaliz : BaseExport
     {
@@ -50,7 +50,8 @@ namespace TMP.Work.Emcos.Export
                 IList<Substation> list = grouping.Cast<Substation>()
                     .OrderBy(x => x.Voltage)
                     .ToList<Substation>();
-
+                if (list == null)
+                    continue;
                 var departament = list.FirstOrDefault().Departament;
                 sheet = book.Worksheets.Add(departament);
                 CreateSheetHeader(departament);
@@ -64,14 +65,15 @@ namespace TMP.Work.Emcos.Export
                 {
                     var substation = list[index];
 
-                    IList<IBalansItem> sections = substation.Children.Where((c) => c.ElementType == Model.ElementTypes.SECTION && (c as SubstationSection).IsLowVoltage).ToList();
-                    foreach (IBalansItem section in sections)
+                    IList<Model.IHierarchicalEmcosPoint> sections = substation.Children
+                        .Where((c) => c.ElementType == Model.ElementTypes.SECTION && (c as SubstationSection).IsLowVoltage).ToList();
+                    foreach (IBalanceItem section in sections)
                     {
                         var bss = section as SubstationSection;
                         if (bss == null)
                             continue;
                         if (bss.Children != null)
-                            foreach (IBalansItem item in bss.Children)
+                            foreach (IBalanceItem item in bss.Children)
                                 if (item is Fider)
                                 {
                                     var name = item.Name;
@@ -79,7 +81,7 @@ namespace TMP.Work.Emcos.Export
                                     if (commaPos > 0)
                                         name = "яч." + name.Substring(commaPos + 1, name.Length - commaPos - 1);
                                     CreateCell(rowIndex, 1, name);
-                                    CreateCell(rowIndex, 2, item.EnergyOut);
+                                    CreateCell(rowIndex, 2, item.ActiveEnergy.Plus.Value);
                                     CreateCell(rowIndex, 4, 0);
                                     rowIndex++;
                                 }

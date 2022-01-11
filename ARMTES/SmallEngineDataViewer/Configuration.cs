@@ -24,8 +24,8 @@ namespace TMP.ARMTES
         public Configuration()
         {
             if (Instance != null) return;
-            if (SmallEngineViewerApp.Current.MainWindow != null)
-                _mainWindow = SmallEngineViewerApp.Current.MainWindow;
+            if (App.Current.MainWindow != null)
+                _mainWindow = App.Current.MainWindow;
 
             //Settings = new Data();
             DataViewsSettings = new Dictionary<string, object>();
@@ -48,7 +48,7 @@ namespace TMP.ARMTES
             }
             catch (Exception e)
             {
-                System.Diagnostics.Debug.Fail(SmallEngineViewerApp.GetExceptionDetails(e));
+                System.Diagnostics.Debug.Fail(App.GetExceptionDetails(e));
             }
         }
 
@@ -77,7 +77,7 @@ namespace TMP.ARMTES
                     _task.ContinueWith(t =>
                         {
                             _mainWindow.Dispatcher.BeginInvoke((Action)(() => _mainWindow.TaskbarItemInfo.ProgressState = System.Windows.Shell.TaskbarItemProgressState.Error));
-                            MessageBox.Show("Не удалось загрузить ранее сохраненные данные.\n" + SmallEngineViewerApp.GetExceptionDetails(t.Exception), "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                            MessageBox.Show("Не удалось загрузить ранее сохраненные данные.\n" + App.GetExceptionDetails(t.Exception), "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                             _mainWindow.Dispatcher.BeginInvoke((Action)(() => _mainWindow.TaskbarItemInfo.ProgressState = System.Windows.Shell.TaskbarItemProgressState.None));
                             vm.IsBusy = false;
                             vm.Status = String.Empty;
@@ -102,7 +102,7 @@ namespace TMP.ARMTES
                 catch (Exception ex)
                 {
 #if DEBUG
-                    SmallEngineViewerApp.ToDebug(ex);
+                    App.ToDebug(ex);
 #endif
                 }
 
@@ -131,7 +131,7 @@ namespace TMP.ARMTES
                 task.ContinueWith(t =>
                     {
                         _mainWindow.Dispatcher.BeginInvoke((Action)(() => _mainWindow.TaskbarItemInfo.ProgressState = System.Windows.Shell.TaskbarItemProgressState.Error));
-                        MessageBox.Show("Не удалось сохранить данные." + Environment.NewLine + SmallEngineViewerApp.GetExceptionDetails(t.Exception), "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                        MessageBox.Show("Не удалось сохранить данные." + Environment.NewLine + App.GetExceptionDetails(t.Exception), "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                         _mainWindow.Dispatcher.BeginInvoke((Action)(() => _mainWindow.TaskbarItemInfo.ProgressState = System.Windows.Shell.TaskbarItemProgressState.None));
                         vm.IsBusy = false;
                         vm.Status = String.Empty;
@@ -151,7 +151,7 @@ namespace TMP.ARMTES
             catch (Exception ex)
             {
 #if DEBUG
-                SmallEngineViewerApp.ToDebug(ex);
+                App.ToDebug(ex);
 #endif
             }
         }

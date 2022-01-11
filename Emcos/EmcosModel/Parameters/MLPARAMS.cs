@@ -3,7 +3,7 @@
     /// <summary>
     /// Измерения
     /// </summary>
-    public static class MLPARAMS
+    public static class MlParamsFactory
     {
         #region За сутки
 

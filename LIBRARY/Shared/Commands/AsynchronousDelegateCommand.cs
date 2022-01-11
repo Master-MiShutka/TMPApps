@@ -1,10 +1,10 @@
-﻿using System;
-using System.ComponentModel;
-using System.Threading;
-using System.Windows.Threading;
-
-namespace TMP.Shared.Commands
+﻿namespace TMP.Shared.Commands
 {
+    using System;
+    using System.ComponentModel;
+    using System.Threading;
+    using System.Windows.Threading;
+
     /// <summary>
     /// Асинхронная команда, исполняющаяся в потоке из пула потоков
     /// </summary>
@@ -17,11 +17,12 @@ namespace TMP.Shared.Commands
         private bool isExecuting = false;
         private bool isCancellationRequested;
 
-        private Action _onCompleted;
-        private Action _onCanceled;
+        private Action onCompleted;
+        private Action onCanceled;
 
         #endregion
         #region Constructors
+
         /// <summary>
         /// Создание нового экземпляра класса <see cref="AsynchronousDelegateCommand"/>
         /// </summary>
@@ -30,23 +31,26 @@ namespace TMP.Shared.Commands
         public AsynchronousDelegateCommand(Action action, Predicate<object> canExecute) : base(action, canExecute)
         {
             // инициализация
-            Initialise();
+            this.Initialise();
         }
+
         public AsynchronousDelegateCommand(Action action, Predicate<object> canExecute, string header) : base(action, canExecute, header)
         {
             // инициализация
-            Initialise();
+            this.Initialise();
         }
+
         /// <summary>
         /// Создание нового экземпляра класса <see cref="AsynchronousDelegateCommand"/>
         /// </summary>
-        public AsynchronousDelegateCommand(Action action, Predicate<object> canExecute, Action completed, Action canceled = null) 
+        public AsynchronousDelegateCommand(Action action, Predicate<object> canExecute, Action completed, Action canceled = null)
             : base(action, canExecute)
         {
-            _onCompleted = completed;
-            _onCanceled = canceled;
+            this.onCompleted = completed;
+            this.onCanceled = canceled;
+
             // инициализация
-            Initialise();
+            this.Initialise();
         }
 
         /// <summary>
@@ -58,35 +62,40 @@ namespace TMP.Shared.Commands
             : base(parameterizedAction, canExecute)
         {
             // инициализация
-            Initialise();
+            this.Initialise();
         }
+
         public AsynchronousDelegateCommand(Action<object> parameterizedAction, Predicate<object> canExecute, string header)
             : base(parameterizedAction, canExecute, header)
         {
             // инициализация
-            Initialise();
+            this.Initialise();
         }
+
         public AsynchronousDelegateCommand(Action<object> parameterizedAction, Predicate<object> canExecute, Func<string> getHeader)
             : base(parameterizedAction, canExecute, getHeader)
         {
             // инициализация
-            Initialise();
+            this.Initialise();
         }
+
         /// <summary>
         /// Создание нового экземпляра класса <see cref="AsynchronousDelegateCommand"/>
         /// </summary>
         public AsynchronousDelegateCommand(Action<object> parameterizedAction, Predicate<object> canExecute, Action completed, Action canceled = null)
             : base(parameterizedAction, canExecute)
         {
-            _onCompleted = completed;
-            _onCanceled = canceled;
+            this.onCompleted = completed;
+            this.onCanceled = canceled;
+
             // инициализация
-            Initialise();
+            this.Initialise();
         }
+
         public AsynchronousDelegateCommand(Action<object> parameterizedAction, Predicate<object> canExecute, Func<string> getHeader, Action completed, Action canceled = null)
             : this(parameterizedAction, canExecute, completed, canceled)
         {
-            _getHeaderFunc = getHeader;
+            this.getHeaderFunc = getHeader;
         }
         #endregion
 
@@ -96,11 +105,11 @@ namespace TMP.Shared.Commands
         private void Initialise()
         {
             // создание команды отмены
-            cancelCommand = new DelegateCommand(
+            this.cancelCommand = new DelegateCommand(
               () =>
               {
-                  //  установка флага
-                  IsCancellationRequested = true;
+                  // установка флага
+                  this.IsCancellationRequested = true;
               });
         }
 
@@ -111,76 +120,95 @@ namespace TMP.Shared.Commands
         public override void DoExecute(object param)
         {
             // Уже исполняется
-            if (IsExecuting)
+            if (this.IsExecuting)
+            {
                 return;
+            }
 
             // Вызов команды
             CancelCommandEventArgs args = new CancelCommandEventArgs() { Parameter = param, Cancel = false };
-            InvokeExecuting(args);
+            this.InvokeExecuting(args);
             param = args.Parameter;
 
             // Отменена?
             if (args.Cancel)
+            {
                 return;
+            }
 
             // Выполняется
-            IsExecuting = true;
+            this.IsExecuting = true;
 
             // Сохранение диспетчера потока
-            callingDispatcher = Dispatcher.CurrentDispatcher;
+            this.callingDispatcher = Dispatcher.CurrentDispatcher;
 
             // Запуск действия в новом потоке из пула
             ThreadPool.QueueUserWorkItem(
               (state) =>
               {
-                  InvokeAction(param);
+                  this.InvokeAction(param);
+
                   // вызов событий и установка состояния
-                  ReportProgress(
+                  this.ReportProgress(
                   () =>
                     {
-                      // выполнение заверешено
-                      IsExecuting = false;
+                        // выполнение заверешено
+                        this.IsExecuting = false;
 
                         // если выполнение отменено, вызов события отмены, иначе события исполнения
-                        if (IsCancellationRequested)
+                        if (this.IsCancellationRequested)
                         {
-                            InvokeCancelled(new CommandEventArgs() { Parameter = param });
-                            if (_onCanceled != null) _onCanceled();
+                            this.InvokeCancelled(new CommandEventArgs() { Parameter = param });
+                            if (this.onCanceled != null)
+                            {
+                                this.onCanceled();
+                            }
                         }
                         else
                         {
-                            InvokeExecuted(new CommandEventArgs() { Parameter = param });
-                            if (_onCompleted != null) _onCompleted();
+                            this.InvokeExecuted(new CommandEventArgs() { Parameter = param });
+                            if (this.onCompleted != null)
+                            {
+                                this.onCompleted();
+                            }
                         }
 
-                      // сброс флага
-                      IsCancellationRequested = false;
-                    }
-              );
-              }
-            );
+                        // сброс флага
+                        this.IsCancellationRequested = false;
+                    });
+              });
         }
+
         private void ReportProgress(Action action)
         {
-            if (IsExecuting)
+            if (this.IsExecuting)
             {
-                if (callingDispatcher.CheckAccess())
+                if (this.callingDispatcher.CheckAccess())
+                {
                     action();
+                }
                 else
-                    callingDispatcher.BeginInvoke(((Action)(() => { action(); })));
+                {
+                    this.callingDispatcher.BeginInvoke((Action)(() => { action(); }));
+                }
             }
         }
         #region Properties
+
         /// <summary>
         /// Отмена выполнения, если был запрос
         /// </summary>
         /// <returns>True если команда была отменена</returns>
         public bool CancelIfRequested()
         {
-            if (IsCancellationRequested == false)
+            if (this.IsCancellationRequested == false)
+            {
                 return false;
+            }
+
             return true;
         }
+
         /// <summary>
         /// Возвращает или устанавливает значение, определяющее выполняется ли команда
         /// </summary>
@@ -189,14 +217,9 @@ namespace TMP.Shared.Commands
         /// </value>
         public bool IsExecuting
         {
-            get
-            {
-                return isExecuting;
-            }
-            set
-            {
-                SetProperty(ref isExecuting, value, "IsExecuting");
-            }
+            get => this.isExecuting;
+
+            set => this.SetProperty(ref this.isExecuting, value, nameof(this.IsExecuting));
         }
 
         /// <summary>
@@ -207,25 +230,16 @@ namespace TMP.Shared.Commands
         /// </value>
         public bool IsCancellationRequested
         {
-            get
-            {
-                return isCancellationRequested;
-            }
-            set
-            {
-                SetProperty(ref isCancellationRequested, value, "IsCancellationRequested");
-            }
+            get => this.isCancellationRequested;
+
+            set => this.SetProperty(ref this.isCancellationRequested, value, nameof(this.IsCancellationRequested));
         }
 
         /// <summary>
         /// Возвращает команду отмены
         /// </summary>
-        public DelegateCommand CancelCommand
-        {
-            get { return cancelCommand; }
-        }
+        public DelegateCommand CancelCommand => this.cancelCommand;
         #endregion
-
 
         /// <summary>
         /// Вызов события отмены
@@ -233,9 +247,11 @@ namespace TMP.Shared.Commands
         /// <param name="args">Экземпляр <see cref="Apex.MVVM.CommandEventArgs"/> содержащего данные отмены</param>
         protected void InvokeCancelled(CommandEventArgs args)
         {
-            CommandEventHandler cancelled = Cancelled;
+            CommandEventHandler cancelled = this.Cancelled;
             if (cancelled != null)
+            {
                 cancelled(this, args);
+            }
         }
 
         /// <summary>

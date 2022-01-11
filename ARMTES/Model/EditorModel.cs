@@ -12,13 +12,7 @@ namespace TMP.ARMTES.Model
     public class EditorModel : INotifyPropertyChanged
     {
         #region | Properties  |
-        private string numberOfOrder;
-        private string house;
-        private string modemType;
-        private string modemNetAddr;
-        private string gsmNumber;
-        private string city;
-        private string street;
+
         #endregion
         public EditorModel()
         {

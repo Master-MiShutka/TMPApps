@@ -160,7 +160,7 @@ namespace TMP.Wpf.CommonControls
 
         public TMPWindow ParentWindow
         {
-            get { return _parentWindow; }
+            get => _parentWindow;
             set
             {
                 if (Equals(_parentWindow, value))
@@ -168,7 +168,7 @@ namespace TMP.Wpf.CommonControls
                     return;
                 }
                 _parentWindow = value;
-                this.RaisePropertyChanged("ParentWindow");
+                this.RaisePropertyChanged(nameof(ParentWindow));
             }
         }
 

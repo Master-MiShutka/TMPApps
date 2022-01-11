@@ -1,15 +1,15 @@
 // Copyright (c) Microsoft Corporation.  All rights reserved.
 
-using System;
-using System.Runtime.InteropServices;
-using System.Windows.Media.Imaging;
-
 namespace Microsoft.WindowsAPICodePack.Shell
 {
+    using System;
+    using System.Runtime.InteropServices;
+    using System.Windows.Media.Imaging;
+
     /// <summary>
-    /// Structure used internally to store property values for 
+    /// Structure used internally to store property values for
     /// a known folder. This structure holds the information
-    /// returned in the FOLDER_DEFINITION structure, and 
+    /// returned in the FOLDER_DEFINITION structure, and
     /// resources referenced by fields in NativeFolderDefinition,
     /// such as icon and tool tip.
     /// </summary>

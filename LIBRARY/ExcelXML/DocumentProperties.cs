@@ -1,188 +1,254 @@
-using System;
-using System.Xml;
-using TMP.Extensions;
-
 namespace TMP.ExcelXml
 {
-	/// <summary>
-	/// Gets or sets document properties
-	/// </summary>
-	public class DocumentProperties
-	{
-		#region Public Properties
-		/// <summary>
-		/// Gets or sets the author of the workbook
-		/// </summary>
-		public string Author { get; set; }
-		/// <summary>
-		/// Gets or sets the last author of the workbook
-		/// </summary>
-		public string LastAuthor { get; set; }
-		/// <summary>
-		/// Gets or sets the manager of the workbook
-		/// </summary>
-		public string Manager { get; set; }
-		/// <summary>
-		/// Gets or sets the company of the workbook
-		/// </summary>
-		public string Company { get; set; }
-		/// <summary>
-		/// Gets or sets the subject of the workbook
-		/// </summary>
-		public string Subject { get; set; }
-		/// <summary>
-		/// Gets or sets the title of the workbook
-		/// </summary>
-		public string Title { get; set; }
-		/// <summary>
-		/// Gets or sets the date and time creation workbook
-		/// </summary>
-		public DateTime? Created { get; set; }
-		#endregion
+    using System;
+    using System.Xml;
+    using TMP.Extensions;
 
-		#region Constructor
-		/// <summary>
-		/// Creates an instance with empty document properties
-		/// </summary>
-		public DocumentProperties()
-		{
-			Author = "";
-			LastAuthor = "";
-			Manager = "";
-			Company = "";
-			Subject = "";
-			Title = "";
-			Created = DateTime.UtcNow;
-		}
-		#endregion
+    /// <summary>
+    /// Gets or sets document properties
+    /// </summary>
+    public class DocumentProperties
+    {
+        #region Public Properties
 
-		#region Export
-		internal void Export(XmlWriter writer)
-		{
-			// DocumentProperties
-			writer.WriteStartElement("", "DocumentProperties", "urn:schemas-microsoft-com:office:office");
+        /// <summary>
+        /// Gets or sets the author of the workbook
+        /// </summary>
+        public string Author { get; set; }
 
-			if (!Author.IsNullOrEmpty())
-				writer.WriteElementString("Author", Author);
-			if (!LastAuthor.IsNullOrEmpty())
-				writer.WriteElementString("LastAuthor", LastAuthor);
-			if (!Manager.IsNullOrEmpty())
-				writer.WriteElementString("Manager", Manager);
-			if (!Company.IsNullOrEmpty())
-				writer.WriteElementString("Company", Company);
-			if (!Subject.IsNullOrEmpty())
-				writer.WriteElementString("Subject", Subject);
-			if (!Title.IsNullOrEmpty())
-				writer.WriteElementString("Title", Title);
-			if (Created.HasValue)
-			{
-				DateTime date = Created.Value;
-				date = date.ToUniversalTime();
-				writer.WriteElementString("Created", date.ToString("yyyy-MM-ddTHH:mm:ssZ"));
-			}
-			else
-				writer.WriteElementString("Created", String.Empty);
-			writer.WriteEndElement();
-		}
-		#endregion
+        /// <summary>
+        /// Gets or sets the last author of the workbook
+        /// </summary>
+        public string LastAuthor { get; set; }
 
-		#region Import
-		internal void Import(XmlReader reader)
-		{
-			while (reader.Read() && !(reader.Name == "DocumentProperties" && reader.NodeType == XmlNodeType.EndElement))
-			{
-				if (reader.NodeType == XmlNodeType.Element)
-				{
-					switch (reader.Name)
-					{
-						// Document Properties
-						case "Author":
-							{
-								if (reader.IsEmptyElement)
-									continue;
+        /// <summary>
+        /// Gets or sets the manager of the workbook
+        /// </summary>
+        public string Manager { get; set; }
 
-								reader.Read();
-								if (reader.NodeType == XmlNodeType.Text)
-									Author = reader.Value;
+        /// <summary>
+        /// Gets or sets the company of the workbook
+        /// </summary>
+        public string Company { get; set; }
 
-								break;
-							}
-						case "LastAuthor":
-							{
-								if (reader.IsEmptyElement)
-									continue;
+        /// <summary>
+        /// Gets or sets the subject of the workbook
+        /// </summary>
+        public string Subject { get; set; }
 
-								reader.Read();
-								if (reader.NodeType == XmlNodeType.Text)
-									LastAuthor = reader.Value;
+        /// <summary>
+        /// Gets or sets the title of the workbook
+        /// </summary>
+        public string Title { get; set; }
 
-								break;
-							}
-						case "Manager":
-							{
-								if (reader.IsEmptyElement)
-									continue;
+        /// <summary>
+        /// Gets or sets the date and time creation workbook
+        /// </summary>
+        public DateTime? Created { get; set; }
+        #endregion
 
-								reader.Read();
-								if (reader.NodeType == XmlNodeType.Text)
-									Manager = reader.Value;
+        #region Constructor
 
-								break;
-							}
-						case "Company":
-							{
-								if (reader.IsEmptyElement)
-									continue;
+        /// <summary>
+        /// Creates an instance with empty document properties
+        /// </summary>
+        public DocumentProperties()
+        {
+            this.Author = string.Empty;
+            this.LastAuthor = string.Empty;
+            this.Manager = string.Empty;
+            this.Company = string.Empty;
+            this.Subject = string.Empty;
+            this.Title = string.Empty;
+            this.Created = DateTime.UtcNow;
+        }
+        #endregion
 
-								reader.Read();
-								if (reader.NodeType == XmlNodeType.Text)
-									Company = reader.Value;
+        #region Export
+        internal void Export(XmlWriter writer)
+        {
+            // DocumentProperties
+            writer.WriteStartElement(string.Empty, "DocumentProperties", "urn:schemas-microsoft-com:office:office");
 
-								break;
-							}
-						case "Subject":
-							{
-								if (reader.IsEmptyElement)
-									continue;
+            if (!this.Author.IsNullOrEmpty())
+            {
+                writer.WriteElementString("Author", this.Author);
+            }
 
-								reader.Read();
-								if (reader.NodeType == XmlNodeType.Text)
-									Subject = reader.Value;
+            if (!this.LastAuthor.IsNullOrEmpty())
+            {
+                writer.WriteElementString("LastAuthor", this.LastAuthor);
+            }
 
-								break;
-							}
-						case "Title":
-							{
-								if (reader.IsEmptyElement)
-									continue;
+            if (!this.Manager.IsNullOrEmpty())
+            {
+                writer.WriteElementString("Manager", this.Manager);
+            }
 
-								reader.Read();
-								if (reader.NodeType == XmlNodeType.Text)
-									Title = reader.Value;
+            if (!this.Company.IsNullOrEmpty())
+            {
+                writer.WriteElementString("Company", this.Company);
+            }
 
-								break;
-							}
-						case "Created":
-							{
-								if (reader.IsEmptyElement)
-									continue;
+            if (!this.Subject.IsNullOrEmpty())
+            {
+                writer.WriteElementString("Subject", this.Subject);
+            }
 
-								reader.Read();
-								if (reader.NodeType == XmlNodeType.Text)
-								{
-									DateTime date = DateTime.MinValue;
-									bool flag = DateTime.TryParse(reader.Value, out date);
-									if (flag)
-										Created = date;
-									else
-										Created = null;
-								}
-								break;
-							}
-					}
-				}
-			}
-		}
-		#endregion
-	}
+            if (!this.Title.IsNullOrEmpty())
+            {
+                writer.WriteElementString("Title", this.Title);
+            }
+
+            if (this.Created.HasValue)
+            {
+                DateTime date = this.Created.Value;
+                date = date.ToUniversalTime();
+                writer.WriteElementString("Created", date.ToString("yyyy-MM-ddTHH:mm:ssZ"));
+            }
+            else
+            {
+                writer.WriteElementString("Created", string.Empty);
+            }
+
+            writer.WriteEndElement();
+        }
+        #endregion
+
+        #region Import
+        internal void Import(XmlReader reader)
+        {
+            while (reader.Read() && !(reader.Name == "DocumentProperties" && reader.NodeType == XmlNodeType.EndElement))
+            {
+                if (reader.NodeType == XmlNodeType.Element)
+                {
+                    switch (reader.Name)
+                    {
+                        // Document Properties
+                        case "Author":
+                            {
+                                if (reader.IsEmptyElement)
+                                {
+                                    continue;
+                                }
+
+                                reader.Read();
+                                if (reader.NodeType == XmlNodeType.Text)
+                                {
+                                    this.Author = reader.Value;
+                                }
+
+                                break;
+                            }
+
+                        case "LastAuthor":
+                            {
+                                if (reader.IsEmptyElement)
+                                {
+                                    continue;
+                                }
+
+                                reader.Read();
+                                if (reader.NodeType == XmlNodeType.Text)
+                                {
+                                    this.LastAuthor = reader.Value;
+                                }
+
+                                break;
+                            }
+
+                        case "Manager":
+                            {
+                                if (reader.IsEmptyElement)
+                                {
+                                    continue;
+                                }
+
+                                reader.Read();
+                                if (reader.NodeType == XmlNodeType.Text)
+                                {
+                                    this.Manager = reader.Value;
+                                }
+
+                                break;
+                            }
+
+                        case "Company":
+                            {
+                                if (reader.IsEmptyElement)
+                                {
+                                    continue;
+                                }
+
+                                reader.Read();
+                                if (reader.NodeType == XmlNodeType.Text)
+                                {
+                                    this.Company = reader.Value;
+                                }
+
+                                break;
+                            }
+
+                        case "Subject":
+                            {
+                                if (reader.IsEmptyElement)
+                                {
+                                    continue;
+                                }
+
+                                reader.Read();
+                                if (reader.NodeType == XmlNodeType.Text)
+                                {
+                                    this.Subject = reader.Value;
+                                }
+
+                                break;
+                            }
+
+                        case "Title":
+                            {
+                                if (reader.IsEmptyElement)
+                                {
+                                    continue;
+                                }
+
+                                reader.Read();
+                                if (reader.NodeType == XmlNodeType.Text)
+                                {
+                                    this.Title = reader.Value;
+                                }
+
+                                break;
+                            }
+
+                        case "Created":
+                            {
+                                if (reader.IsEmptyElement)
+                                {
+                                    continue;
+                                }
+
+                                reader.Read();
+                                if (reader.NodeType == XmlNodeType.Text)
+                                {
+                                    DateTime date = DateTime.MinValue;
+                                    bool flag = DateTime.TryParse(reader.Value, out date);
+                                    if (flag)
+                                    {
+                                        this.Created = date;
+                                    }
+                                    else
+                                    {
+                                        this.Created = null;
+                                    }
+                                }
+
+                                break;
+                            }
+                    }
+                }
+            }
+        }
+        #endregion
+    }
 }

@@ -1,19 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.Text.RegularExpressions;
-namespace TMP.ElectricMeterComm
+﻿namespace TMP.ElectricMeterComm
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Text.RegularExpressions;
+    using System.Windows;
+    using System.Windows.Controls;
+    using System.Windows.Data;
+    using System.Windows.Documents;
+    using System.Windows.Input;
+    using System.Windows.Media;
+    using System.Windows.Media.Imaging;
+    using System.Windows.Navigation;
+    using System.Windows.Shapes;
+
     /// <summary>
     /// Interaction logic for IPAddressControl.xaml
     /// </summary>
@@ -21,15 +22,16 @@ namespace TMP.ElectricMeterComm
     {
         private const string NOT_IP_ADDRESS = "Введенный текст не является IP адресом.";
 
-       #region Constructor
+        #region Constructor
 
         /// <summary>
         ///  Constructor for the control.
         /// </summary>
         public IPAddressControl()
         {
-            InitializeComponent();
-            this.Loaded += new RoutedEventHandler(IPAddressControl_Loaded);
+            this.InitializeComponent();
+            this.Loaded += new RoutedEventHandler(this.IPAddressControl_Loaded);
+
             // txtboxFirstPart.Text = "0";
         }
 
@@ -72,6 +74,7 @@ namespace TMP.ElectricMeterComm
                     numberBuilder.Append(c);
                 }
             }
+
             return numberBuilder.ToString();
         }
 
@@ -79,9 +82,9 @@ namespace TMP.ElectricMeterComm
 
         #region Private Events
 
-        void IPAddressControl_Loaded(object sender, RoutedEventArgs e)
+        private void IPAddressControl_Loaded(object sender, RoutedEventArgs e)
         {
-            txtboxFirstPart.Focus();
+            this.txtboxFirstPart.Focus();
         }
 
         private void txtbox_TextChanged(object sender, TextChangedEventArgs e)
@@ -102,33 +105,36 @@ namespace TMP.ElectricMeterComm
             {
                 if (e.Key == Key.OemPeriod)
                 {
-                    txtboxSecondPart.Focus();
-                    focusMoved = true;
+                    this.txtboxSecondPart.Focus();
+                    this.focusMoved = true;
                 }
                 else
                 {
-                    focusMoved = false;
+                    this.focusMoved = false;
                 }
             }
-            catch { }
-
+            catch
+            {
+            }
         }
 
         private void txtboxSecondPart_KeyDown(object sender, KeyEventArgs e)
         {
             try
             {
-                if (e.Key == Key.OemPeriod && !focusMoved)
+                if (e.Key == Key.OemPeriod && !this.focusMoved)
                 {
-                    txtboxThridPart.Focus();
-                    focusMoved = true;
+                    this.txtboxThridPart.Focus();
+                    this.focusMoved = true;
                 }
                 else
                 {
-                    focusMoved = false;
+                    this.focusMoved = false;
                 }
             }
-            catch { }
+            catch
+            {
+            }
         }
 
         private void txtboxThridPart_KeyDown(object sender, KeyEventArgs e)
@@ -137,16 +143,19 @@ namespace TMP.ElectricMeterComm
             {
                 if (e.Key == Key.OemPeriod)
                 {
-                    txtboxFourthPart.Focus();
+                    this.txtboxFourthPart.Focus();
                 }
             }
-            catch { }
+            catch
+            {
+            }
         }
 
         #endregion
 
         #region Public Properties
-        private string _text;
+        private string text;
+
         /// <summary>
         /// Gets or Sets the text of the control.
         /// If input text is not of IP type type then throws and argument exception.
@@ -155,19 +164,20 @@ namespace TMP.ElectricMeterComm
         {
             get
             {
-                _text = txtboxFirstPart.Text + "." + txtboxSecondPart.Text + "." + txtboxThridPart.Text + "." + txtboxFourthPart.Text;
-                return _text;
+                this.text = this.txtboxFirstPart.Text + "." + this.txtboxSecondPart.Text + "." + this.txtboxThridPart.Text + "." + this.txtboxFourthPart.Text;
+                return this.text;
             }
+
             set
             {
                 try
                 {
                     string[] splitValues = value.Split('.');
-                    txtboxFirstPart.Text = splitValues[0];
-                    txtboxSecondPart.Text = splitValues[1];
-                    txtboxThridPart.Text = splitValues[2];
-                    txtboxFourthPart.Text = splitValues[3];
-                    _text = value;
+                    this.txtboxFirstPart.Text = splitValues[0];
+                    this.txtboxSecondPart.Text = splitValues[1];
+                    this.txtboxThridPart.Text = splitValues[2];
+                    this.txtboxFourthPart.Text = splitValues[3];
+                    this.text = value;
                 }
                 catch (Exception ex)
                 {
@@ -184,10 +194,12 @@ namespace TMP.ElectricMeterComm
                 TextBox txtbox = (TextBox)sender;
                 if (txtbox.Text.Length == 3)
                 {
-                    txtboxSecondPart.Focus();
+                    this.txtboxSecondPart.Focus();
                 }
             }
-            catch { }
+            catch
+            {
+            }
         }
 
         private void txtboxSecondPart_PreviewKeyUp(object sender, KeyEventArgs e)
@@ -197,10 +209,12 @@ namespace TMP.ElectricMeterComm
                 TextBox txtbox = (TextBox)sender;
                 if (txtbox.Text.Length == 3)
                 {
-                    txtboxThridPart.Focus();
+                    this.txtboxThridPart.Focus();
                 }
             }
-            catch { }
+            catch
+            {
+            }
         }
 
         private void txtboxThridPart_PreviewKeyUp(object sender, KeyEventArgs e)
@@ -210,10 +224,12 @@ namespace TMP.ElectricMeterComm
                 TextBox txtbox = (TextBox)sender;
                 if (txtbox.Text.Length == 3)
                 {
-                    txtboxFourthPart.Focus();
+                    this.txtboxFourthPart.Focus();
                 }
             }
-            catch { }
+            catch
+            {
+            }
         }
     }
 }

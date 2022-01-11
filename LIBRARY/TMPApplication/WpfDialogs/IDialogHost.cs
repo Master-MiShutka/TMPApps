@@ -1,11 +1,13 @@
-using System.Windows;
-
 namespace TMPApplication.WpfDialogs
 {
-	interface IDialogHost
-	{
-		void ShowDialog(DialogBaseControl dialog);
-		void HideDialog(DialogBaseControl dialog);
-		FrameworkElement GetCurrentContent();
-	}
+    using System.Windows;
+
+    internal interface IDialogHost
+    {
+        void ShowDialog(DialogBaseControl dialog);
+
+        void HideDialog(DialogBaseControl dialog);
+
+        FrameworkElement GetCurrentContent();
+    }
 }

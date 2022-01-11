@@ -1,131 +1,184 @@
-﻿using ItemsFilter.ViewModel;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Linq;
+﻿namespace ItemsFilter.Model
+{
+    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel;
+    using System.Diagnostics;
+    using System.Linq;
+    using ItemsFilter.ViewModel;
 
-namespace ItemsFilter.Model {
     /// <summary>
     /// Base class for a filter.
     /// </summary>
-    public abstract class Filter : IFilter,INotifyPropertyChanged {
+    public abstract class Filter : IFilter, INotifyPropertyChanged
+    {
         private string name = ItemsFilter.Resources.Strings.FilterText;
         private bool isActive;
         private FilterPresenter filterPresenter;
         private readonly List<FilterControlVm> attachedFilterControlVmodels = new List<FilterControlVm>();
+
         /// <summary>
         /// Get attached FilterPresenter.
         /// </summary>
-        public FilterPresenter FilterPresenter {
-            get { return filterPresenter; }
-        }
-        
+        public FilterPresenter FilterPresenter => this.filterPresenter;
+
         /// <summary>
         /// Represent action that determine is item match filter.
         /// </summary>
         /// <param name="sender">FilterPresenter that contains filter.</param>
         /// <param name="e">FilterEventArgs include Item and Accepted fields.</param>
         public abstract void IsMatch(FilterPresenter sender, FilterEventArgs e);
+
         /// <summary>
         /// Get or set Name of filter.
         /// </summary>
-        public string Name {
-            get {
-                return name;
-            }
-            set {
-                if (name != value) {
-                    name = value;
-                    RaisePropertyChanged("Name");
+        public string Name
+        {
+            get => this.name;
+
+            set
+            {
+                if (this.name != value)
+                {
+                    this.name = value;
+                    this.RaisePropertyChanged(nameof(this.Name));
                 }
             }
         }
+
         /// <summary>
         /// Get or set value, determines is filter IsMatch action include in parentCollection filter.
         /// </summary>
-        public bool IsActive {
-            get {
-                return isActive;
-            }
-            set {
-                if (isActive != value) {
-                    isActive = value;
-                    IDisposable defer = this.FilterPresenter == null ? null : this.FilterPresenter.DeferRefresh();
-                    OnIsActiveChanged();
+        public bool IsActive
+        {
+            get => this.isActive;
+
+            set
+            {
+                if (this.isActive != value)
+                {
+                    this.isActive = value;
+                    IDisposable defer = this.FilterPresenter?.DeferRefresh();
+                    this.OnIsActiveChanged();
                     if (defer != null)
+                    {
                         defer.Dispose();
-                    RaisePropertyChanged("IsActive");
+                    }
+
+                    this.RaisePropertyChanged(nameof(this.IsActive));
                 }
             }
         }
+
         /// <summary>
         /// Provides class handling for the AttachPresenter event that occurs when FilterPresenter is attached.
         /// </summary>
-        protected virtual void OnAttachPresenter(FilterPresenter presenter){
-            
+        protected virtual void OnAttachPresenter(FilterPresenter presenter)
+        {
         }
+
         /// <summary>
         /// Provides class handling for the DetachPresenter event that occurs when FilterPresenter is detached.
         /// </summary>
-        protected virtual void OnDetachPresenter(FilterPresenter presenter) {
+        protected virtual void OnDetachPresenter(FilterPresenter presenter)
+        {
         }
+
         /// <summary>
         /// Provide derived class IsActiveChanged event.
         /// </summary>
-        protected virtual void OnIsActiveChanged() {
-            RaiseFilterChanged();
+        protected virtual void OnIsActiveChanged()
+        {
+            this.RaiseFilterStateChanged();
         }
+
         /// <summary>
         /// Report attached listeners that filter changed.
         /// </summary>
-        protected void RaiseFilterChanged() {
-            if (filterPresenter != null)
-                filterPresenter.ReceiveFilterChanged(this);
-            foreach (var vm in attachedFilterControlVmodels) {
-                vm.FilterChanged(this);
+        protected void RaiseFilterStateChanged()
+        {
+            if (this.filterPresenter != null)
+            {
+                this.filterPresenter.ReceiveFilterChanged(this);
+            }
+
+            foreach (var vm in this.attachedFilterControlVmodels)
+            {
+                vm.OnFilterStateChanged();
             }
         }
+
+        /// <summary>
+        /// Report attached listeners that filter changed.
+        /// </summary>
+        protected void RaiseFilterChanged()
+        {
+            foreach (var vm in this.attachedFilterControlVmodels)
+            {
+                vm.OnFilterChanged(this);
+            }
+        }
+
         /// <summary>
         /// Number attached to filter instances FilterControlVm.
         /// </summary>
-       public int CountAttachedFilterControls {
-            get { return attachedFilterControlVmodels.Count; }
-        }
-        internal void Attach(FilterControlVm vm) {
-            if(!attachedFilterControlVmodels.Contains(vm))
-                attachedFilterControlVmodels.Add(vm);
-        }
-        internal void Detach(FilterPresenter presenter) {
-            if (presenter != null)
-                presenter.Filter -= IsMatch;
-            if(presenter== filterPresenter)
-                filterPresenter= null;
-            OnDetachPresenter(presenter);
-        }
-        internal void Attach(FilterPresenter presenter) {
-            filterPresenter = presenter;
-            if (filterPresenter != null)
-                filterPresenter.ReceiveFilterChanged(this);
-            OnAttachPresenter(presenter);
-        }
-        internal void Detach(FilterControlVm vm) {
-            attachedFilterControlVmodels.Remove(vm);
-        }
-      #region Члены INotifyPropertyChanged
-       public event PropertyChangedEventHandler PropertyChanged;
-       protected virtual void RaisePropertyChanged(string propertyName) {
-           VerifyPropertyName(propertyName);
+        public int CountAttachedFilterControls => this.attachedFilterControlVmodels.Count;
 
-           var handler = PropertyChanged;
-           if (handler != null) {
-               handler(this, new PropertyChangedEventArgs(propertyName));
-           }
-       }
-       [Conditional("DEBUG")]
-       [DebuggerStepThrough]
-       protected void VerifyPropertyName(string propertyName) {
-           var myType = this.GetType();
+        public void Attach(FilterControlVm vm)
+        {
+            if (!this.attachedFilterControlVmodels.Contains(vm))
+            {
+                this.attachedFilterControlVmodels.Add(vm);
+            }
+        }
+
+        public void Detach(FilterPresenter presenter)
+        {
+            if (presenter != null)
+            {
+                presenter.Filter -= this.IsMatch;
+            }
+
+            if (presenter == this.filterPresenter)
+            {
+                this.filterPresenter = null;
+            }
+
+            this.OnDetachPresenter(presenter);
+        }
+
+        public void Attach(FilterPresenter presenter)
+        {
+            this.filterPresenter = presenter;
+            if (this.filterPresenter != null)
+            {
+                this.filterPresenter.ReceiveFilterChanged(this);
+            }
+
+            this.OnAttachPresenter(presenter);
+        }
+
+        public void Detach(FilterControlVm vm)
+        {
+            this.attachedFilterControlVmodels.Remove(vm);
+        }
+
+        #region Члены INotifyPropertyChanged
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void RaisePropertyChanged(string propertyName)
+        {
+            this.VerifyPropertyName(propertyName);
+
+            this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        [Conditional("DEBUG")]
+        [DebuggerStepThrough]
+        protected void VerifyPropertyName(string propertyName)
+        {
+            var myType = this.GetType();
 
 #if NETFX_CORE
             if (!string.IsNullOrEmpty(propertyName)
@@ -134,27 +187,28 @@ namespace ItemsFilter.Model {
                 throw new ArgumentException("Property not found", propertyName);
             }
 #else
-           if (!string.IsNullOrEmpty(propertyName)
-               && myType.GetProperty(propertyName) == null) {
+            if (!string.IsNullOrEmpty(propertyName)
+                && myType.GetProperty(propertyName) == null)
+            {
 #if !SILVERLIGHT
-               var descriptor = this as ICustomTypeDescriptor;
+                var descriptor = this as ICustomTypeDescriptor;
 
-               if (descriptor != null) {
-                   if (descriptor.GetProperties()
-                       .Cast<PropertyDescriptor>()
-                       .Any(property => property.Name == propertyName)) {
-                       return;
-                   }
-               }
+                if (descriptor != null)
+                {
+                    if (descriptor.GetProperties()
+                        .Cast<PropertyDescriptor>()
+                        .Any(property => property.Name == propertyName))
+                    {
+                        return;
+                    }
+                }
 #endif
 
-               throw new ArgumentException("Property not found", propertyName);
-           }
+                throw new ArgumentException("Property not found", propertyName);
+            }
 #endif
-       }
-       #endregion
+        }
 
+        #endregion Члены INotifyPropertyChanged
     }
-    
-   
 }

@@ -12,7 +12,7 @@ namespace TMP.Work.Emcos.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "15.5.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "15.6.0.0")]
     internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
@@ -25,61 +25,13 @@ namespace TMP.Work.Emcos.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("10.96.18.16")]
-        public string ServerAddress {
-            get {
-                return ((string)(this["ServerAddress"]));
-            }
-            set {
-                this["ServerAddress"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("sbyt")]
-        public string UserName {
-            get {
-                return ((string)(this["UserName"]));
-            }
-            set {
-                this["UserName"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("sbyt")]
-        public string Password {
-            get {
-                return ((string)(this["Password"]));
-            }
-            set {
-                this["Password"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("1800")]
-        public int NetTimeOutInSeconds {
-            get {
-                return ((int)(this["NetTimeOutInSeconds"]));
-            }
-            set {
-                this["NetTimeOutInSeconds"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("DataModel.json.gz")]
-        public string BalansPointsFileName {
+        public string BalancePointsFileName {
             get {
-                return ((string)(this["BalansPointsFileName"]));
+                return ((string)(this["BalancePointsFileName"]));
             }
             set {
-                this["BalansPointsFileName"] = value;
+                this["BalancePointsFileName"] = value;
             }
         }
         
@@ -159,48 +111,36 @@ namespace TMP.Work.Emcos.Properties {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("d:\\Документы ОС\\«БАЛАНСЫ, ПЕРЕТОКИ, ПОТЕРИ»\\ОДС\\Расчёт баланса 6-10кВ по ПС 35-11" +
             "0кВ")]
-        public string ReportBalansPSFolder {
+        public string ReportBalancePSFolder {
             get {
-                return ((string)(this["ReportBalansPSFolder"]));
+                return ((string)(this["ReportBalancePSFolder"]));
             }
             set {
-                this["ReportBalansPSFolder"] = value;
+                this["ReportBalancePSFolder"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("Расчёт баланса 6-10 за {0:MM - yyyy}")]
-        public string ReportBalansPSFileNameTemplate {
+        public string ReportBalancePSFileNameTemplate {
             get {
-                return ((string)(this["ReportBalansPSFileNameTemplate"]));
+                return ((string)(this["ReportBalancePSFileNameTemplate"]));
             }
             set {
-                this["ReportBalansPSFileNameTemplate"] = value;
+                this["ReportBalancePSFileNameTemplate"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("testWebService/Service.asmx")]
-        public string ServiceName {
+        [global::System.Configuration.DefaultSettingValueAttribute("143")]
+        public int RootEmcosPointCode {
             get {
-                return ((string)(this["ServiceName"]));
+                return ((int)(this["RootEmcosPointCode"]));
             }
             set {
-                this["ServiceName"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("emcos")]
-        public string SiteName {
-            get {
-                return ((string)(this["SiteName"]));
-            }
-            set {
-                this["SiteName"] = value;
+                this["RootEmcosPointCode"] = value;
             }
         }
     }

@@ -1,0 +1,56 @@
+﻿<settings_pages:SettingsPage
+    x:Class="TMP.WORK.AramisChetchiki.Controls.SettingsPages.SummaryInfosSettings"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:properties="clr-namespace:TMP.WORK.AramisChetchiki.Properties"
+    xmlns:controls="clr-namespace:TMP.UI.Controls.WPF;assembly=ui.controls.wpf"
+    xmlns:settings_pages="clr-namespace:TMP.WORK.AramisChetchiki.Controls.SettingsPages"
+    xmlns:converters="clr-namespace:TMP.UI.Controls.WPF.Converters;assembly=ui.controls.wpf"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:dd="urn:gong-wpf-dragdrop"
+    xmlns:local_controls="clr-namespace:TMP.WORK.AramisChetchiki.Controls"
+    xmlns:local_extensions="clr-namespace:TMP.WORK.AramisChetchiki.Extensions"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Header="Сводная информация"
+    mc:Ignorable="d">
+    <settings_pages:SettingsPage.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="SettingsStyles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </settings_pages:SettingsPage.Resources>
+    <Grid Margin="10" IsSharedSizeScope="True">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <controls:LabelledContent Label="Вид по умолчанию">
+            <ComboBox HorizontalAlignment="Left" MinWidth="200"
+                      IsEditable="False"
+                      ItemsSource="{local_extensions:SettingBinding Path=SelectedSummaryView,
+                      Converter={converters:EnumBindingConverter}}"
+                      SelectedItem="{local_extensions:SettingBinding Path=SelectedSummaryView,
+                      Converter={converters:EnumBindingConverter},
+                      UpdateSourceTrigger=PropertyChanged}" />
+        </controls:LabelledContent>
+        <Separator Grid.Row="1"  />
+
+        <local_controls:PropertyTransfer Tag="SummaryInfoItemPropertiesTransfer" Grid.Row="2" SourceCollection="{Binding Source={StaticResource SummaryInfoItemPropertiesNamesList}}"  
+                                         TargetCollection="{local_extensions:SettingBinding Path=SummaryInfoFields, Converter={StaticResource PlusPropertyDescriptorsCollectionConverter}}"/>
+
+        <ListBox x:Name="lstBox" dd:DragDrop.IsDragSource="True"
+                dd:DragDrop.IsDropTarget="True" Grid.Row="3" ItemsSource="{local_extensions:SettingBinding Path=SummaryInfoFields}">
+            <ListBox.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="Выше" Click="MoveUp_Click"/>
+                    <MenuItem Header="Ниже" Click="MoveDown_Click"/>
+                    <MenuItem Header="Удалить" Click="Delete_Click"/>
+                </ContextMenu>
+            </ListBox.ContextMenu>
+        </ListBox>
+        
+    </Grid>
+</settings_pages:SettingsPage>

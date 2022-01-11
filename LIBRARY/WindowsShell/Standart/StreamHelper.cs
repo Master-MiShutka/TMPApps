@@ -3,7 +3,7 @@
 // so this provides an immutable stream implementation.
 // The volatile functions are implemented (not tested)
 // in case a separate ReadonlyStream needs to be implemented.
-//#define FEATURE_MUTABLE_COM_STREAMS
+// #define FEATURE_MUTABLE_COM_STREAMS
 
 namespace Standard
 {
@@ -12,11 +12,11 @@ namespace Standard
     using System.IO;
     using System.Runtime.InteropServices;
     using System.Runtime.InteropServices.ComTypes;
-
     // disambiguate with System.Runtime.InteropServices.STATSTG
     using STATSTG = System.Runtime.InteropServices.ComTypes.STATSTG;
 
     // This is adapted from Microsoft KB article 321340
+
     /// <summary>
     /// Wraps an IStream interface pointer from COM into a form consumable by .Net.
     /// </summary>
@@ -24,16 +24,16 @@ namespace Standard
     /// This implementation is immutable, though it's possible that the underlying
     /// stream can be changed in another context.
     /// </remarks>
-    [SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedInternalClasses")]
+    [SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedInternalClasses", Justification = "ToDo")]
     public sealed class ComStream : Stream
     {
         private const int STATFLAG_NONAME = 1;
 
-        private IStream _source;
+        private IStream source;
 
         private void _Validate()
         {
-            if (null == _source)
+            if (null == this.source)
             {
                 throw new ObjectDisposedException("this");
             }
@@ -53,7 +53,8 @@ namespace Standard
         public ComStream(ref IStream stream)
         {
             Verify.IsNotNull(stream, "stream");
-            _source = stream;
+            this.source = stream;
+
             // Zero out caller's reference to this.  The object now owns the memory.
             stream = null;
         }
@@ -64,44 +65,29 @@ namespace Standard
         // Overridden implementations aren't called, but Close is as part of the Dispose call.
         public override void Close()
         {
-            if (null != _source)
+            if (null != this.source)
             {
 #if FEATURE_MUTABLE_COM_STREAMS
                 Flush();
 #endif
-                Utility.SafeRelease(ref _source);
+                Utility.SafeRelease(ref this.source);
             }
         }
 
-        public override bool CanRead
-        {
-            get
-            {
+        public override bool CanRead =>
                 // For the context of this class, this should be true...
-                return true;
-            }
-        }
+                true;
 
-        public override bool CanSeek
-        {
-            get
-            {
+        public override bool CanSeek =>
                 // This should be true...
-                return true;
-            }
-        }
+                true;
 
-        public override bool CanWrite
-        {
-            get
-            {
+        public override bool CanWrite =>
 #if FEATURE_MUTABLE_COM_STREAMS
                 // Really don't know that this is true...
                 return true;
 #endif
-                return false;
-            }
-        }
+                false;
 
         public override void Flush()
         {
@@ -120,33 +106,33 @@ namespace Standard
         {
             get
             {
-                _Validate();
+                this._Validate();
 
                 STATSTG statstg;
-                _source.Stat(out statstg, STATFLAG_NONAME);
+                this.source.Stat(out statstg, STATFLAG_NONAME);
                 return statstg.cbSize;
             }
         }
 
         public override long Position
         {
-            get { return Seek(0, SeekOrigin.Current); }
-            set { Seek(value, SeekOrigin.Begin); }
+            get => this.Seek(0, SeekOrigin.Current);
+            set => this.Seek(value, SeekOrigin.Begin);
         }
 
         public override int Read(byte[] buffer, int offset, int count)
         {
-            _Validate();
+            this._Validate();
 
             IntPtr pcbRead = IntPtr.Zero;
 
             try
             {
-                pcbRead = Marshal.AllocHGlobal(sizeof(Int32));
+                pcbRead = Marshal.AllocHGlobal(sizeof(int));
 
                 // PERFORMANCE NOTE: This buffer doesn't need to be allocated if offset == 0
                 var tempBuffer = new byte[count];
-                _source.Read(tempBuffer, count, pcbRead);
+                this.source.Read(tempBuffer, count, pcbRead);
                 Array.Copy(tempBuffer, 0, buffer, offset, Marshal.ReadInt32(pcbRead));
 
                 return Marshal.ReadInt32(pcbRead);
@@ -159,14 +145,14 @@ namespace Standard
 
         public override long Seek(long offset, SeekOrigin origin)
         {
-            _Validate();
+            this._Validate();
 
             IntPtr plibNewPosition = IntPtr.Zero;
 
             try
             {
-                plibNewPosition = Marshal.AllocHGlobal(sizeof(Int64));
-                _source.Seek(offset, (int)origin, plibNewPosition);
+                plibNewPosition = Marshal.AllocHGlobal(sizeof(long));
+                this.source.Seek(offset, (int)origin, plibNewPosition);
 
                 return Marshal.ReadInt64(plibNewPosition);
             }
@@ -202,17 +188,18 @@ namespace Standard
     }
 
     // All these methods return void.  Does the standard marshaller convert them to HRESULTs?
+
     /// <summary>
     /// Wraps a managed stream instance into an interface pointer consumable by COM.
     /// </summary>
-    [SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedInternalClasses")]
+    [SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedInternalClasses", Justification = "ToDo")]
     public sealed class ManagedIStream : IStream, IDisposable
     {
         private const int STGTY_STREAM = 2;
         private const int STGM_READWRITE = 2;
         private const int LOCK_EXCLUSIVE = 2;
 
-        private Stream _source;
+        private Stream source;
 
         /// <summary>
         /// Initializes a new instance of the ManagedIStream class with the specified managed Stream object.
@@ -220,23 +207,22 @@ namespace Standard
         /// <param name="source">
         /// The stream that this IStream reference is wrapping.
         /// </param>
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "ToDo")]
         public ManagedIStream(Stream source)
         {
             Verify.IsNotNull(source, "source");
-            _source = source;
+            this.source = source;
         }
 
         private void _Validate()
         {
-            if (null == _source)
+            if (null == this.source)
             {
                 throw new ObjectDisposedException("this");
             }
         }
 
         // Comments are taken from MSDN IStream documentation.
-
         #region IStream Members
 
         /// <summary>
@@ -250,7 +236,7 @@ namespace Standard
         /// For more information, see the existing documentation for IStream::Clone in the MSDN library.
         /// This class doesn't implement Clone.  A COMException is thrown if it is used.
         /// </remarks>
-        [SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Standard.HRESULT.ThrowIfFailed(System.String)")]
+        [SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Standard.HRESULT.ThrowIfFailed(System.String)", Justification = "ToDo")]
         [Obsolete("The method is not implemented", true)]
         public void Clone(out IStream ppstm)
         {
@@ -270,8 +256,8 @@ namespace Standard
         /// </remarks>
         public void Commit(int grfCommitFlags)
         {
-            _Validate();
-            _source.Flush();
+            this._Validate();
+            this.source.Flush();
         }
 
         /// <summary>
@@ -294,13 +280,13 @@ namespace Standard
         /// (Note the native signature is to a ULARGE_INTEGER*, so 64 bits are written
         /// to this parameter on success.)
         /// </param>
-        [SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-        [SuppressMessage("Microsoft.Security", "CA2122:DoNotIndirectlyExposeMethodsWithLinkDemands")]
+        [SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "ToDo")]
+        [SuppressMessage("Microsoft.Security", "CA2122:DoNotIndirectlyExposeMethodsWithLinkDemands", Justification = "ToDo")]
         public void CopyTo(IStream pstm, long cb, IntPtr pcbRead, IntPtr pcbWritten)
         {
             Verify.IsNotNull(pstm, "pstm");
 
-            _Validate();
+            this._Validate();
 
             // Reasonbly sized buffer, don't try to copy large streams in bulk.
             var buffer = new byte[4096];
@@ -308,7 +294,7 @@ namespace Standard
 
             while (cbWritten < cb)
             {
-                int cbRead = _source.Read(buffer, 0, buffer.Length);
+                int cbRead = this.source.Read(buffer, 0, buffer.Length);
                 if (0 == cbRead)
                 {
                     break;
@@ -348,7 +334,8 @@ namespace Standard
         /// For more information, see the existing documentation for IStream::LockRegion in the MSDN library.
         /// This class doesn't implement LockRegion.  A COMException is thrown if it is used.
         /// </remarks>
-        [SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Standard.HRESULT.ThrowIfFailed(System.String)"), Obsolete("The method is not implemented", true)]
+        [SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Standard.HRESULT.ThrowIfFailed(System.String)", Justification = "ToDo")]
+        [Obsolete("The method is not implemented", true)]
         public void LockRegion(long libOffset, long cb, int dwLockType)
         {
             HRESULT.STG_E_INVALIDFUNCTION.ThrowIfFailed("The method is not implemented.");
@@ -369,12 +356,12 @@ namespace Standard
         /// <remarks>
         /// For more information, see the existing documentation for ISequentialStream::Read in the MSDN library.
         /// </remarks>
-        [SuppressMessage("Microsoft.Security", "CA2122:DoNotIndirectlyExposeMethodsWithLinkDemands")]
+        [SuppressMessage("Microsoft.Security", "CA2122:DoNotIndirectlyExposeMethodsWithLinkDemands", Justification = "ToDo")]
         public void Read(byte[] pv, int cb, IntPtr pcbRead)
         {
-            _Validate();
+            this._Validate();
 
-            int cbRead = _source.Read(pv, 0, cb);
+            int cbRead = this.source.Read(pv, 0, cb);
 
             if (IntPtr.Zero != pcbRead)
             {
@@ -388,7 +375,8 @@ namespace Standard
         /// <remarks>
         /// This class doesn't implement Revert.  A COMException is thrown if it is used.
         /// </remarks>
-        [SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Standard.HRESULT.ThrowIfFailed(System.String)"), Obsolete("The method is not implemented", true)]
+        [SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Standard.HRESULT.ThrowIfFailed(System.String)", Justification = "ToDo")]
+        [Obsolete("The method is not implemented", true)]
         public void Revert()
         {
             HRESULT.STG_E_INVALIDFUNCTION.ThrowIfFailed("The method is not implemented.");
@@ -412,12 +400,12 @@ namespace Standard
         /// <remarks>
         /// For more information, see the existing documentation for IStream::Seek in the MSDN library.
         /// </remarks>
-        [SuppressMessage("Microsoft.Security", "CA2122:DoNotIndirectlyExposeMethodsWithLinkDemands")]
+        [SuppressMessage("Microsoft.Security", "CA2122:DoNotIndirectlyExposeMethodsWithLinkDemands", Justification = "ToDo")]
         public void Seek(long dlibMove, int dwOrigin, IntPtr plibNewPosition)
         {
-            _Validate();
+            this._Validate();
 
-            long position = _source.Seek(dlibMove, (SeekOrigin)dwOrigin);
+            long position = this.source.Seek(dlibMove, (SeekOrigin)dwOrigin);
 
             if (IntPtr.Zero != plibNewPosition)
             {
@@ -436,8 +424,8 @@ namespace Standard
         /// </remarks>
         public void SetSize(long libNewSize)
         {
-            _Validate();
-            _source.SetLength(libNewSize);
+            this._Validate();
+            this.source.SetLength(libNewSize);
         }
 
         /// <summary>
@@ -453,10 +441,10 @@ namespace Standard
         public void Stat(out STATSTG pstatstg, int grfStatFlag)
         {
             pstatstg = default(STATSTG);
-            _Validate();
+            this._Validate();
 
             pstatstg.type = STGTY_STREAM;
-            pstatstg.cbSize = _source.Length;
+            pstatstg.cbSize = this.source.Length;
             pstatstg.grfMode = STGM_READWRITE;
             pstatstg.grfLocksSupported = LOCK_EXCLUSIVE;
         }
@@ -476,7 +464,7 @@ namespace Standard
         /// For more information, see the existing documentation for IStream::UnlockRegion in the MSDN library.
         /// This class doesn't implement UnlockRegion.  A COMException is thrown if it is used.
         /// </remarks>
-        [SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Standard.HRESULT.ThrowIfFailed(System.String)")]
+        [SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Standard.HRESULT.ThrowIfFailed(System.String)", Justification = "ToDo")]
         [Obsolete("The method is not implemented", true)]
         public void UnlockRegion(long libOffset, long cb, int dwLockType)
         {
@@ -497,12 +485,12 @@ namespace Standard
         /// If the caller sets this pointer to null, this method does not provide the actual number
         /// of bytes written.
         /// </param>
-        [SuppressMessage("Microsoft.Security", "CA2122:DoNotIndirectlyExposeMethodsWithLinkDemands")]
+        [SuppressMessage("Microsoft.Security", "CA2122:DoNotIndirectlyExposeMethodsWithLinkDemands", Justification = "ToDo")]
         public void Write(byte[] pv, int cb, IntPtr pcbWritten)
         {
-            _Validate();
+            this._Validate();
 
-            _source.Write(pv, 0, cb);
+            this.source.Write(pv, 0, cb);
 
             if (IntPtr.Zero != pcbWritten)
             {
@@ -523,7 +511,7 @@ namespace Standard
         /// </remarks>
         public void Dispose()
         {
-            _source = null;
+            this.source = null;
         }
 
         #endregion IDisposable Members

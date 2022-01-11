@@ -67,8 +67,8 @@ namespace TMP.Wpf.CommonControls
         /// </summary>
         public double EllipseDiameter
         {
-            get { return (double)GetValue(EllipseDiameterProperty); }
-            set { SetValue(EllipseDiameterProperty, value); }
+            get => (double)GetValue(EllipseDiameterProperty);
+            set => SetValue(EllipseDiameterProperty, value);
         }
 
         /// <summary>
@@ -76,8 +76,8 @@ namespace TMP.Wpf.CommonControls
         /// </summary>
         public double EllipseOffset
         {
-            get { return (double)GetValue(EllipseOffsetProperty); }
-            set { SetValue(EllipseOffsetProperty, value); }
+            get => (double)GetValue(EllipseOffsetProperty);
+            set => SetValue(EllipseOffsetProperty, value);
         }
 
         private void SizeChangedHandler(object sender, SizeChangedEventArgs e)

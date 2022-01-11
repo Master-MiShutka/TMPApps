@@ -8,7 +8,7 @@ namespace TMP.MessageStructure.Model
 {
     using System;
     using System.Linq;
-    using Utilities;
+    using TMP.MessageStructure.Utilities;
 
     /// <summary>
     /// The field.
@@ -145,9 +145,9 @@ namespace TMP.MessageStructure.Model
 
         #region Public Methods
 
-        //public static implicit operator Field(int rhs)
-        //{
-        //}
+        // public static implicit operator Field(int rhs)
+        // {
+        // }
 
         /// <summary>
         /// Sets value of field.
@@ -249,7 +249,7 @@ namespace TMP.MessageStructure.Model
             }
             else
             {
-               throw new ArgumentException("value", "Invalid type.");
+                throw new ArgumentException("value", "Invalid type.");
             }
 
             if (this.ValueUpdated != null)
@@ -327,8 +327,8 @@ namespace TMP.MessageStructure.Model
             {
                 var value = (byte)(this.Data[0] * this.Resolution);
                 return (T)Convert.ChangeType(value, typeof(T));
-            } 
-            
+            }
+
             if (typeof(T) == typeof(char))
             {
                 var value = (char)this.Data[0];

@@ -4,7 +4,6 @@
 
 namespace MS.Windows.Shell
 {
-    using Standard;
     using System;
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
@@ -14,11 +13,12 @@ namespace MS.Windows.Shell
     using System.Windows.Interop;
     using System.Windows.Media;
     using System.Windows.Threading;
+    using Standard;
     using HANDLE_MESSAGE = System.Collections.Generic.KeyValuePair<Standard.WM, Standard.MessageHandler>;
 
     public class WindowChromeWorker : DependencyObject
     {
-        private static readonly Version _presentationFrameworkVersion = Assembly.GetAssembly(typeof(Window)).GetName().Version;
+        private static readonly Version presentationFrameworkVersion = Assembly.GetAssembly(typeof(Window)).GetName().Version;
 
         /// <summary>
         /// Is this using WPF4?
@@ -27,22 +27,19 @@ namespace MS.Windows.Shell
         /// There are a few specific bugs in Window in 3.5SP1 and below that require workarounds
         /// when handling WM_NCCALCSIZE on the HWND.
         /// </remarks>
-        private static bool _IsPresentationFrameworkVersionLessThan4
-        {
-            get { return _presentationFrameworkVersion < new Version(4, 0); }
-        }
+        private static bool _IsPresentationFrameworkVersionLessThan4 => presentationFrameworkVersion < new Version(4, 0);
 
         // Delegate signature used for Dispatcher.BeginInvoke.
         private delegate void _Action();
 
         #region Fields
 
-        private const SWP _SwpFlags = SWP.FRAMECHANGED | SWP.NOSIZE | SWP.NOMOVE | SWP.NOZORDER | SWP.NOOWNERZORDER | SWP.NOACTIVATE;
+        private const SWP SwpFlags = SWP.FRAMECHANGED | SWP.NOSIZE | SWP.NOMOVE | SWP.NOZORDER | SWP.NOOWNERZORDER | SWP.NOACTIVATE;
 
         private readonly List<HANDLE_MESSAGE> _messageTable;
 
         /// <summary>The Window that's chrome is being modified.</summary>
-        private Window _window;
+        private Window window;
 
         /// <summary>Underlying HWND for the _window.</summary>
         private IntPtr _hwnd;
@@ -73,65 +70,65 @@ namespace MS.Windows.Shell
 
         public WindowChromeWorker()
         {
-            _messageTable = new List<HANDLE_MESSAGE>
+            this._messageTable = new List<HANDLE_MESSAGE>
             {
-                new HANDLE_MESSAGE(WM.SETTEXT,               _HandleSetTextOrIcon),
-                new HANDLE_MESSAGE(WM.SETICON,               _HandleSetTextOrIcon),
-                new HANDLE_MESSAGE(WM.SYSCOMMAND,            _HandleRestoreWindow),
-                new HANDLE_MESSAGE(WM.NCACTIVATE,            _HandleNCActivate),
-                new HANDLE_MESSAGE(WM.NCCALCSIZE,            _HandleNCCalcSize),
-                new HANDLE_MESSAGE(WM.NCHITTEST,             _HandleNCHitTest),
-                new HANDLE_MESSAGE(WM.NCRBUTTONUP,           _HandleNCRButtonUp),
-                new HANDLE_MESSAGE(WM.SIZE,                  _HandleSize),
-                new HANDLE_MESSAGE(WM.WINDOWPOSCHANGING,     _HandleWindowPosChanging),
-                new HANDLE_MESSAGE(WM.WINDOWPOSCHANGED,      _HandleWindowPosChanged),
-                new HANDLE_MESSAGE(WM.GETMINMAXINFO,         _HandleGetMinMaxInfo),
-                new HANDLE_MESSAGE(WM.DWMCOMPOSITIONCHANGED, _HandleDwmCompositionChanged),
-                new HANDLE_MESSAGE(WM.ENTERSIZEMOVE,         _HandleEnterSizeMoveForAnimation),
-                new HANDLE_MESSAGE(WM.MOVE,                  _HandleMoveForRealSize),
-                new HANDLE_MESSAGE(WM.EXITSIZEMOVE,          _HandleExitSizeMoveForAnimation),
+                new HANDLE_MESSAGE(WM.SETTEXT,               this._HandleSetTextOrIcon),
+                new HANDLE_MESSAGE(WM.SETICON,               this._HandleSetTextOrIcon),
+                new HANDLE_MESSAGE(WM.SYSCOMMAND,            this._HandleRestoreWindow),
+                new HANDLE_MESSAGE(WM.NCACTIVATE,            this._HandleNCActivate),
+                new HANDLE_MESSAGE(WM.NCCALCSIZE,            this._HandleNCCalcSize),
+                new HANDLE_MESSAGE(WM.NCHITTEST,             this._HandleNCHitTest),
+                new HANDLE_MESSAGE(WM.NCRBUTTONUP,           this._HandleNCRButtonUp),
+                new HANDLE_MESSAGE(WM.SIZE,                  this._HandleSize),
+                new HANDLE_MESSAGE(WM.WINDOWPOSCHANGING,     this._HandleWindowPosChanging),
+                new HANDLE_MESSAGE(WM.WINDOWPOSCHANGED,      this._HandleWindowPosChanged),
+                new HANDLE_MESSAGE(WM.GETMINMAXINFO,         this._HandleGetMinMaxInfo),
+                new HANDLE_MESSAGE(WM.DWMCOMPOSITIONCHANGED, this._HandleDwmCompositionChanged),
+                new HANDLE_MESSAGE(WM.ENTERSIZEMOVE,         this._HandleEnterSizeMoveForAnimation),
+                new HANDLE_MESSAGE(WM.MOVE,                  this._HandleMoveForRealSize),
+                new HANDLE_MESSAGE(WM.EXITSIZEMOVE,          this._HandleExitSizeMoveForAnimation),
             };
 
             if (_IsPresentationFrameworkVersionLessThan4)
             {
-                _messageTable.AddRange(new[]
+                this._messageTable.AddRange(new[]
                 {
-                   new HANDLE_MESSAGE(WM.SETTINGCHANGE,         _HandleSettingChange),
-                   new HANDLE_MESSAGE(WM.ENTERSIZEMOVE,         _HandleEnterSizeMove),
-                   new HANDLE_MESSAGE(WM.EXITSIZEMOVE,          _HandleExitSizeMove),
-                   new HANDLE_MESSAGE(WM.MOVE,                  _HandleMove),
+                   new HANDLE_MESSAGE(WM.SETTINGCHANGE,         this._HandleSettingChange),
+                   new HANDLE_MESSAGE(WM.ENTERSIZEMOVE,         this._HandleEnterSizeMove),
+                   new HANDLE_MESSAGE(WM.EXITSIZEMOVE,          this._HandleExitSizeMove),
+                   new HANDLE_MESSAGE(WM.MOVE,                  this._HandleMove),
                 });
             }
         }
 
         public void SetWindowChrome(WindowChrome newChrome)
         {
-            VerifyAccess();
-            Assert.IsNotNull(_window);
+            this.VerifyAccess();
+            Assert.IsNotNull(this.window);
 
-            if (newChrome == _chromeInfo)
+            if (newChrome == this._chromeInfo)
             {
                 // Nothing's changed.
                 return;
             }
 
-            if (_chromeInfo != null)
+            if (this._chromeInfo != null)
             {
-                _chromeInfo.PropertyChangedThatRequiresRepaint -= _OnChromePropertyChangedThatRequiresRepaint;
+                this._chromeInfo.PropertyChangedThatRequiresRepaint -= this._OnChromePropertyChangedThatRequiresRepaint;
             }
 
-            _chromeInfo = newChrome;
-            if (_chromeInfo != null)
+            this._chromeInfo = newChrome;
+            if (this._chromeInfo != null)
             {
-                _chromeInfo.PropertyChangedThatRequiresRepaint += _OnChromePropertyChangedThatRequiresRepaint;
+                this._chromeInfo.PropertyChangedThatRequiresRepaint += this._OnChromePropertyChangedThatRequiresRepaint;
             }
 
-            _ApplyNewCustomChrome();
+            this._ApplyNewCustomChrome();
         }
 
         private void _OnChromePropertyChangedThatRequiresRepaint(object sender, EventArgs e)
         {
-            _UpdateFrameState(true);
+            this._UpdateFrameState(true);
         }
 
         public static readonly DependencyProperty WindowChromeWorkerProperty = DependencyProperty.RegisterAttached(
@@ -148,60 +145,60 @@ namespace MS.Windows.Shell
             // The WindowChromeWorker object should only be set on the window once, and never to null.
             Assert.IsNotNull(w);
             Assert.IsNotNull(cw);
-            Assert.IsNull(cw._window);
+            Assert.IsNull(cw.window);
 
             cw._SetWindow(w);
         }
 
         private void _SetWindow(Window window)
         {
-            Assert.IsNull(_window);
+            Assert.IsNull(this.window);
             Assert.IsNotNull(window);
 
-            _window = window;
+            this.window = window;
 
             // There are potentially a couple funny states here.
             // The window may have been shown and closed, in which case it's no longer usable.
             // We shouldn't add any hooks in that case, just exit early.
             // If the window hasn't yet been shown, then we need to make sure to remove hooks after it's closed.
-            _hwnd = new WindowInteropHelper(_window).Handle;
+            this._hwnd = new WindowInteropHelper(this.window).Handle;
 
             // On older versions of the framework the client size of the window is incorrectly calculated.
             // We need to modify the template to fix this on behalf of the user.
 
             // This should only be required on older versions of the framework, but because of a DWM bug in Windows 7 we're exposing
             // the SacrificialEdge property which requires this kind of fixup to be a bit more ubiquitous.
-            Utility.AddDependencyPropertyChangeListener(_window, Window.TemplateProperty, _OnWindowPropertyChangedThatRequiresTemplateFixup);
-            Utility.AddDependencyPropertyChangeListener(_window, Window.FlowDirectionProperty, _OnWindowPropertyChangedThatRequiresTemplateFixup);
+            Utility.AddDependencyPropertyChangeListener(this.window, Window.TemplateProperty, this._OnWindowPropertyChangedThatRequiresTemplateFixup);
+            Utility.AddDependencyPropertyChangeListener(this.window, Window.FlowDirectionProperty, this._OnWindowPropertyChangedThatRequiresTemplateFixup);
 
-            _window.Closed += _UnsetWindow;
+            this.window.Closed += this._UnsetWindow;
 
             // Use whether we can get an HWND to determine if the Window has been loaded.
-            if (IntPtr.Zero != _hwnd)
+            if (IntPtr.Zero != this._hwnd)
             {
                 // We've seen that the HwndSource can't always be retrieved from the HWND, so cache it early.
                 // Specifically it seems to sometimes disappear when the OS theme is changing.
-                _hwndSource = HwndSource.FromHwnd(_hwnd);
-                Assert.IsNotNull(_hwndSource);
-                _window.ApplyTemplate();
+                this._hwndSource = HwndSource.FromHwnd(this._hwnd);
+                Assert.IsNotNull(this._hwndSource);
+                this.window.ApplyTemplate();
 
-                if (_chromeInfo != null)
+                if (this._chromeInfo != null)
                 {
-                    _ApplyNewCustomChrome();
+                    this._ApplyNewCustomChrome();
                 }
             }
             else
             {
-                _window.SourceInitialized += (sender, e) =>
+                this.window.SourceInitialized += (sender, e) =>
                 {
-                    _hwnd = new WindowInteropHelper(_window).Handle;
-                    Assert.IsNotDefault(_hwnd);
-                    _hwndSource = HwndSource.FromHwnd(_hwnd);
-                    Assert.IsNotNull(_hwndSource);
+                    this._hwnd = new WindowInteropHelper(this.window).Handle;
+                    Assert.IsNotDefault(this._hwnd);
+                    this._hwndSource = HwndSource.FromHwnd(this._hwnd);
+                    Assert.IsNotNull(this._hwndSource);
 
-                    if (_chromeInfo != null)
+                    if (this._chromeInfo != null)
                     {
-                        _ApplyNewCustomChrome();
+                        this._ApplyNewCustomChrome();
                     }
                 };
             }
@@ -209,25 +206,25 @@ namespace MS.Windows.Shell
 
         private void _UnsetWindow(object sender, EventArgs e)
         {
-            Utility.RemoveDependencyPropertyChangeListener(_window, Window.TemplateProperty, _OnWindowPropertyChangedThatRequiresTemplateFixup);
-            Utility.RemoveDependencyPropertyChangeListener(_window, Window.FlowDirectionProperty, _OnWindowPropertyChangedThatRequiresTemplateFixup);
+            Utility.RemoveDependencyPropertyChangeListener(this.window, Window.TemplateProperty, this._OnWindowPropertyChangedThatRequiresTemplateFixup);
+            Utility.RemoveDependencyPropertyChangeListener(this.window, Window.FlowDirectionProperty, this._OnWindowPropertyChangedThatRequiresTemplateFixup);
 
-            if (_chromeInfo != null)
+            if (this._chromeInfo != null)
             {
-                _chromeInfo.PropertyChangedThatRequiresRepaint -= _OnChromePropertyChangedThatRequiresRepaint;
+                this._chromeInfo.PropertyChangedThatRequiresRepaint -= this._OnChromePropertyChangedThatRequiresRepaint;
             }
 
-            _RestoreStandardChromeState(true);
+            this._RestoreStandardChromeState(true);
         }
 
-        [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
+        [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters", Justification = "ToDo")]
         public static WindowChromeWorker GetWindowChromeWorker(Window window)
         {
             Verify.IsNotNull(window, "window");
             return (WindowChromeWorker)window.GetValue(WindowChromeWorkerProperty);
         }
 
-        [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
+        [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters", Justification = "ToDo")]
         public static void SetWindowChromeWorker(Window window, WindowChromeWorker chrome)
         {
             Verify.IsNotNull(window, "window");
@@ -236,66 +233,66 @@ namespace MS.Windows.Shell
 
         private void _OnWindowPropertyChangedThatRequiresTemplateFixup(object sender, EventArgs e)
         {
-            if (_chromeInfo != null && _hwnd != IntPtr.Zero)
+            if (this._chromeInfo != null && this._hwnd != IntPtr.Zero)
             {
                 // Assume that when the template changes it's going to be applied.
                 // We don't have a good way to externally hook into the template
                 // actually being applied, so we asynchronously post the fixup operation
                 // at Loaded priority, so it's expected that the visual tree will be
                 // updated before _FixupTemplateIssues is called.
-                _window.Dispatcher.BeginInvoke(DispatcherPriority.Loaded, (_Action)_FixupTemplateIssues);
+                this.window.Dispatcher.BeginInvoke(DispatcherPriority.Loaded, (_Action)this._FixupTemplateIssues);
             }
         }
 
         private void _ApplyNewCustomChrome()
         {
-            if (_hwnd == IntPtr.Zero)
+            if (this._hwnd == IntPtr.Zero)
             {
                 // Not yet hooked.
                 return;
             }
 
-            if (_chromeInfo == null)
+            if (this._chromeInfo == null)
             {
-                _RestoreStandardChromeState(false);
+                this._RestoreStandardChromeState(false);
                 return;
             }
 
-            if (!_isHooked)
+            if (!this._isHooked)
             {
-                _hwndSource.AddHook(_WndProc);
-                _isHooked = true;
+                this._hwndSource.AddHook(this._WndProc);
+                this._isHooked = true;
             }
 
             // allow animation
-            _ModifyStyle(0, WS.CAPTION);
+            this._ModifyStyle(0, WS.CAPTION);
 
-            _FixupTemplateIssues();
+            this._FixupTemplateIssues();
 
             // Force this the first time.
-            _UpdateSystemMenu(_window.WindowState);
-            _UpdateFrameState(true);
+            this._UpdateSystemMenu(this.window.WindowState);
+            this._UpdateFrameState(true);
 
-            NativeMethods.SetWindowPos(_hwnd, IntPtr.Zero, 0, 0, 0, 0, _SwpFlags);
+            NativeMethods.SetWindowPos(this._hwnd, IntPtr.Zero, 0, 0, 0, 0, SwpFlags);
         }
 
         private void _FixupTemplateIssues()
         {
-            Assert.IsNotNull(_chromeInfo);
-            Assert.IsNotNull(_window);
+            Assert.IsNotNull(this._chromeInfo);
+            Assert.IsNotNull(this.window);
 
-            if (_window.Template == null)
+            if (this.window.Template == null)
             {
                 // Nothing to fixup yet.  This will get called again when a template does get set.
                 return;
             }
 
             // Guard against the visual tree being empty.
-            if (VisualTreeHelper.GetChildrenCount(_window) == 0)
+            if (VisualTreeHelper.GetChildrenCount(this.window) == 0)
             {
                 // The template isn't null, but we don't have a visual tree.
                 // Hope that ApplyTemplate is in the queue and repost this, because there's not much we can do right now.
-                _window.Dispatcher.BeginInvoke(DispatcherPriority.Loaded, (_Action)_FixupTemplateIssues);
+                this.window.Dispatcher.BeginInvoke(DispatcherPriority.Loaded, (_Action)this._FixupTemplateIssues);
                 return;
             }
 
@@ -304,8 +301,8 @@ namespace MS.Windows.Shell
 
             if (_IsPresentationFrameworkVersionLessThan4)
             {
-                RECT rcWindow = NativeMethods.GetWindowRect(_hwnd);
-                RECT rcAdjustedClient = _GetAdjustedWindowRect(rcWindow);
+                RECT rcWindow = NativeMethods.GetWindowRect(this._hwnd);
+                RECT rcAdjustedClient = this._GetAdjustedWindowRect(rcWindow);
 
                 Rect rcLogicalWindow = DpiHelper.DeviceRectToLogical(new Rect(rcWindow.Left, rcWindow.Top, rcWindow.Width, rcWindow.Height));
                 Rect rcLogicalClient = DpiHelper.DeviceRectToLogical(new Rect(rcAdjustedClient.Left, rcAdjustedClient.Top, rcAdjustedClient.Width, rcAdjustedClient.Height));
@@ -328,7 +325,7 @@ namespace MS.Windows.Shell
                 // This works fine, but if the window is dynamically changing its FlowDirection then this can have really bizarre side effects.
                 // This will mostly work if the FlowDirection is dynamically changed, but there aren't many real scenarios that would call for
                 // that so I'm not addressing the rest of the quirkiness.
-                if (_window.FlowDirection == FlowDirection.RightToLeft)
+                if (this.window.FlowDirection == FlowDirection.RightToLeft)
                 {
                     templateFixupTransform = new MatrixTransform(1, 0, 0, 1, -(nonClientThickness.Left + nonClientThickness.Right), 0);
                 }
@@ -338,38 +335,41 @@ namespace MS.Windows.Shell
                 }
             }
 
-            if (_chromeInfo.SacrificialEdge != SacrificialEdge.None)
+            if (this._chromeInfo.SacrificialEdge != SacrificialEdge.None)
             {
-                if (Utility.IsFlagSet((int)_chromeInfo.SacrificialEdge, (int)SacrificialEdge.Top))
+                if (Utility.IsFlagSet((int)this._chromeInfo.SacrificialEdge, (int)SacrificialEdge.Top))
                 {
                     templateFixupMargin.Top -= SystemParameters2.Current.WindowResizeBorderThickness.Top;
                 }
-                if (Utility.IsFlagSet((int)_chromeInfo.SacrificialEdge, (int)SacrificialEdge.Left))
+
+                if (Utility.IsFlagSet((int)this._chromeInfo.SacrificialEdge, (int)SacrificialEdge.Left))
                 {
                     templateFixupMargin.Left -= SystemParameters2.Current.WindowResizeBorderThickness.Left;
                 }
-                if (Utility.IsFlagSet((int)_chromeInfo.SacrificialEdge, (int)SacrificialEdge.Bottom))
+
+                if (Utility.IsFlagSet((int)this._chromeInfo.SacrificialEdge, (int)SacrificialEdge.Bottom))
                 {
                     templateFixupMargin.Bottom -= SystemParameters2.Current.WindowResizeBorderThickness.Bottom;
                 }
-                if (Utility.IsFlagSet((int)_chromeInfo.SacrificialEdge, (int)SacrificialEdge.Right))
+
+                if (Utility.IsFlagSet((int)this._chromeInfo.SacrificialEdge, (int)SacrificialEdge.Right))
                 {
                     templateFixupMargin.Right -= SystemParameters2.Current.WindowResizeBorderThickness.Right;
                 }
             }
 
-            var rootElement = (FrameworkElement)VisualTreeHelper.GetChild(_window, 0);
+            var rootElement = (FrameworkElement)VisualTreeHelper.GetChild(this.window, 0);
             rootElement.Margin = templateFixupMargin;
             rootElement.RenderTransform = templateFixupTransform;
 
             if (_IsPresentationFrameworkVersionLessThan4)
             {
-                if (!_isFixedUp)
+                if (!this._isFixedUp)
                 {
-                    _hasUserMovedWindow = false;
-                    _window.StateChanged += _FixupRestoreBounds;
+                    this._hasUserMovedWindow = false;
+                    this.window.StateChanged += this._FixupRestoreBounds;
 
-                    _isFixedUp = true;
+                    this._isFixedUp = true;
                 }
             }
         }
@@ -377,24 +377,24 @@ namespace MS.Windows.Shell
         private void _FixupRestoreBounds(object sender, EventArgs e)
         {
             Assert.IsTrue(_IsPresentationFrameworkVersionLessThan4);
-            if (_window.WindowState == WindowState.Maximized || _window.WindowState == WindowState.Minimized)
+            if (this.window.WindowState == WindowState.Maximized || this.window.WindowState == WindowState.Minimized)
             {
                 // Old versions of WPF sometimes force their incorrect idea of the Window's location
                 // on the Win32 restore bounds.  If we have reason to think this is the case, then
                 // try to undo what WPF did after it has done its thing.
-                if (_hasUserMovedWindow)
+                if (this._hasUserMovedWindow)
                 {
-                    _hasUserMovedWindow = false;
-                    WINDOWPLACEMENT wp = NativeMethods.GetWindowPlacement(_hwnd);
+                    this._hasUserMovedWindow = false;
+                    WINDOWPLACEMENT wp = NativeMethods.GetWindowPlacement(this._hwnd);
 
-                    RECT adjustedDeviceRc = _GetAdjustedWindowRect(new RECT { Bottom = 100, Right = 100 });
+                    RECT adjustedDeviceRc = this._GetAdjustedWindowRect(new RECT { Bottom = 100, Right = 100 });
                     Point adjustedTopLeft = DpiHelper.DevicePixelsToLogical(
                         new Point(
                             wp.rcNormalPosition.Left - adjustedDeviceRc.Left,
                             wp.rcNormalPosition.Top - adjustedDeviceRc.Top));
 
-                    _window.Top = adjustedTopLeft.Y;
-                    _window.Left = adjustedTopLeft.X;
+                    this.window.Top = adjustedTopLeft.Y;
+                    this.window.Left = adjustedTopLeft.X;
                 }
             }
         }
@@ -404,8 +404,8 @@ namespace MS.Windows.Shell
             // This should only be used to work around issues in the Framework that were fixed in 4.0
             Assert.IsTrue(_IsPresentationFrameworkVersionLessThan4);
 
-            var style = (WS)NativeMethods.GetWindowLongPtr(_hwnd, GWL.STYLE);
-            var exstyle = (WS_EX)NativeMethods.GetWindowLongPtr(_hwnd, GWL.EXSTYLE);
+            var style = (WS)NativeMethods.GetWindowLongPtr(this._hwnd, GWL.STYLE);
+            var exstyle = (WS_EX)NativeMethods.GetWindowLongPtr(this._hwnd, GWL.EXSTYLE);
 
             return NativeMethods.AdjustWindowRectEx(rcWindow, style, false, exstyle);
         }
@@ -423,80 +423,76 @@ namespace MS.Windows.Shell
                 // This logic won't work correctly when those issues are fixed.
                 Assert.IsTrue(_IsPresentationFrameworkVersionLessThan4);
 
-                if (_window.WindowState != WindowState.Normal)
+                if (this.window.WindowState != WindowState.Normal)
                 {
                     return false;
                 }
 
-                RECT adjustedOffset = _GetAdjustedWindowRect(new RECT { Bottom = 100, Right = 100 });
-                Point windowTopLeft = new Point(_window.Left, _window.Top);
+                RECT adjustedOffset = this._GetAdjustedWindowRect(new RECT { Bottom = 100, Right = 100 });
+                Point windowTopLeft = new Point(this.window.Left, this.window.Top);
                 windowTopLeft -= (Vector)DpiHelper.DevicePixelsToLogical(new Point(adjustedOffset.Left, adjustedOffset.Top));
 
-                return _window.RestoreBounds.Location != windowTopLeft;
+                return this.window.RestoreBounds.Location != windowTopLeft;
             }
         }
 
         /// A borderless window lost his animation, with this we bring it back.
-        private bool _MinimizeAnimation
-        {
-            get
-            {
-                return SystemParameters.MinimizeAnimation && _chromeInfo.IgnoreTaskbarOnMaximize == false;// && _chromeInfo.UseNoneWindowStyle == false;
-            }
-        }
+        private bool _MinimizeAnimation => SystemParameters.MinimizeAnimation && this._chromeInfo.IgnoreTaskbarOnMaximize == false; // && _chromeInfo.UseNoneWindowStyle == false;
 
         #region WindowProc and Message Handlers
 
         private IntPtr _WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
         {
             // Only expecting messages for our cached HWND.
-            Assert.AreEqual(hwnd, _hwnd);
+            Assert.AreEqual(hwnd, this._hwnd);
 
             var message = (WM)msg;
-            foreach (var handlePair in _messageTable)
+            foreach (var handlePair in this._messageTable)
             {
                 if (handlePair.Key == message)
                 {
                     return handlePair.Value(message, wParam, lParam, out handled);
                 }
             }
+
             return IntPtr.Zero;
         }
 
         private IntPtr _HandleSetTextOrIcon(WM uMsg, IntPtr wParam, IntPtr lParam, out bool handled)
         {
-            bool modified = _ModifyStyle(WS.VISIBLE, 0);
+            bool modified = this._ModifyStyle(WS.VISIBLE, 0);
 
             // Setting the caption text and icon cause Windows to redraw the caption.
             // Letting the default WndProc handle the message without the WS_VISIBLE
             // style applied bypasses the redraw.
-            IntPtr lRet = NativeMethods.DefWindowProc(_hwnd, uMsg, wParam, lParam);
+            IntPtr lRet = NativeMethods.DefWindowProc(this._hwnd, uMsg, wParam, lParam);
 
             // Put back the style we removed.
             if (modified)
             {
-                _ModifyStyle(0, WS.VISIBLE);
+                this._ModifyStyle(0, WS.VISIBLE);
             }
+
             handled = true;
             return lRet;
         }
 
         private IntPtr _HandleRestoreWindow(WM uMsg, IntPtr wParam, IntPtr lParam, out bool handled)
         {
-            WINDOWPLACEMENT wpl = NativeMethods.GetWindowPlacement(_hwnd);
-            if (SC.RESTORE == (SC)wParam.ToInt32() && wpl.showCmd == SW.SHOWMAXIMIZED && _MinimizeAnimation)
+            WINDOWPLACEMENT wpl = NativeMethods.GetWindowPlacement(this._hwnd);
+            if (SC.RESTORE == (SC)wParam.ToInt32() && wpl.showCmd == SW.SHOWMAXIMIZED && this._MinimizeAnimation)
             {
-                bool modified = _ModifyStyle(WS.DLGFRAME, 0);
+                bool modified = this._ModifyStyle(WS.DLGFRAME, 0);
 
-                IntPtr lRet = NativeMethods.DefWindowProc(_hwnd, uMsg, wParam, lParam);
+                IntPtr lRet = NativeMethods.DefWindowProc(this._hwnd, uMsg, wParam, lParam);
 
                 // Put back the style we removed.
                 if (modified)
                 {
                     // allow animation
-                    if (_ModifyStyle(0, WS.DLGFRAME))
+                    if (this._ModifyStyle(0, WS.DLGFRAME))
                     {
-                        _UpdateFrameState(true);
+                        this._UpdateFrameState(true);
                     }
                 }
 
@@ -517,7 +513,7 @@ namespace MS.Windows.Shell
 
             // Directly call DefWindowProc with a custom parameter
             // which bypasses any other handling of the message.
-            IntPtr lRet = NativeMethods.DefWindowProc(_hwnd, WM.NCACTIVATE, wParam, new IntPtr(-1));
+            IntPtr lRet = NativeMethods.DefWindowProc(this._hwnd, WM.NCACTIVATE, wParam, new IntPtr(-1));
             handled = true;
             return lRet;
         }
@@ -563,6 +559,7 @@ namespace MS.Windows.Shell
                 default:
                     return area;
             }
+
             return area;
         }
 
@@ -577,49 +574,52 @@ namespace MS.Windows.Shell
             // lParam is an [in, out] that can be either a RECT* (wParam == FALSE) or an NCCALCSIZE_PARAMS*.
             // Since the first field of NCCALCSIZE_PARAMS is a RECT and is the only field we care about
             // we can unconditionally treat it as a RECT.
-
             var redraw = false;
 
-            if (NativeMethods.GetWindowPlacement(_hwnd).showCmd == SW.MAXIMIZE)
+            if (NativeMethods.GetWindowPlacement(this._hwnd).showCmd == SW.MAXIMIZE)
             {
-                if (_MinimizeAnimation)
+                if (this._MinimizeAnimation)
                 {
-                    IntPtr mon = NativeMethods.MonitorFromWindow(_hwnd, (uint)MonitorOptions.MONITOR_DEFAULTTONEAREST);
+                    IntPtr mon = NativeMethods.MonitorFromWindow(this._hwnd, (uint)MonitorOptions.MONITOR_DEFAULTTONEAREST);
                     MONITORINFO mi = NativeMethods.GetMonitorInfo(mon);
 
                     RECT rc = (RECT)Marshal.PtrToStructure(lParam, typeof(RECT));
-                    NativeMethods.DefWindowProc(_hwnd, WM.NCCALCSIZE, wParam, lParam);
+                    NativeMethods.DefWindowProc(this._hwnd, WM.NCCALCSIZE, wParam, lParam);
                     RECT def = (RECT)Marshal.PtrToStructure(lParam, typeof(RECT));
-                    def.Top = (int)(rc.Top + NativeMethods.GetWindowInfo(_hwnd).cyWindowBorders);
+                    def.Top = (int)(rc.Top + NativeMethods.GetWindowInfo(this._hwnd).cyWindowBorders);
 
                     // monitor an work area will be equal if taskbar is hidden
                     if (mi.rcMonitor.Height == mi.rcWork.Height && mi.rcMonitor.Width == mi.rcWork.Width)
                     {
                         def = AdjustWorkingAreaForAutoHide(mon, def);
                     }
+
                     Marshal.StructureToPtr(def, lParam, true);
 
                     redraw = true;
                 }
             }
 
-            if (_chromeInfo.SacrificialEdge != SacrificialEdge.None)
+            if (this._chromeInfo.SacrificialEdge != SacrificialEdge.None)
             {
                 Thickness windowResizeBorderThicknessDevice = DpiHelper.LogicalThicknessToDevice(SystemParameters2.Current.WindowResizeBorderThickness);
                 var rcClientArea = (RECT)Marshal.PtrToStructure(lParam, typeof(RECT));
-                if (Utility.IsFlagSet((int)_chromeInfo.SacrificialEdge, (int)SacrificialEdge.Top))
+                if (Utility.IsFlagSet((int)this._chromeInfo.SacrificialEdge, (int)SacrificialEdge.Top))
                 {
                     rcClientArea.Top += (int)windowResizeBorderThicknessDevice.Top;
                 }
-                if (Utility.IsFlagSet((int)_chromeInfo.SacrificialEdge, (int)SacrificialEdge.Left))
+
+                if (Utility.IsFlagSet((int)this._chromeInfo.SacrificialEdge, (int)SacrificialEdge.Left))
                 {
                     rcClientArea.Left += (int)windowResizeBorderThicknessDevice.Left;
                 }
-                if (Utility.IsFlagSet((int)_chromeInfo.SacrificialEdge, (int)SacrificialEdge.Bottom))
+
+                if (Utility.IsFlagSet((int)this._chromeInfo.SacrificialEdge, (int)SacrificialEdge.Bottom))
                 {
                     rcClientArea.Bottom -= (int)windowResizeBorderThicknessDevice.Bottom;
                 }
-                if (Utility.IsFlagSet((int)_chromeInfo.SacrificialEdge, (int)SacrificialEdge.Right))
+
+                if (Utility.IsFlagSet((int)this._chromeInfo.SacrificialEdge, (int)SacrificialEdge.Right))
                 {
                     rcClientArea.Right -= (int)windowResizeBorderThicknessDevice.Right;
                 }
@@ -635,7 +635,7 @@ namespace MS.Windows.Shell
 
         private HT _GetHTFromResizeGripDirection(ResizeGripDirection direction)
         {
-            bool compliment = _window.FlowDirection == FlowDirection.RightToLeft;
+            bool compliment = this.window.FlowDirection == FlowDirection.RightToLeft;
             switch (direction)
             {
                 case ResizeGripDirection.Bottom:
@@ -674,7 +674,7 @@ namespace MS.Windows.Shell
         {
             // Let the system know if we consider the mouse to be in our effective non-client area.
             var mousePosScreen = new Point(Utility.GET_X_LPARAM(lParam), Utility.GET_Y_LPARAM(lParam));
-            Rect windowPosition = _GetWindowRect();
+            Rect windowPosition = this._GetWindowRect();
 
             Point mousePosWindow = mousePosScreen;
             mousePosWindow.Offset(-windowPosition.X, -windowPosition.Y);
@@ -683,7 +683,7 @@ namespace MS.Windows.Shell
             // If the app is asking for content to be treated as client then that takes precedence over _everything_, even DWM caption buttons.
             // This allows apps to set the glass frame to be non-empty, still cover it with WPF content to hide all the glass,
             // yet still get DWM to draw a drop shadow.
-            IInputElement inputElement = _window.InputHitTest(mousePosWindow);
+            IInputElement inputElement = this.window.InputHitTest(mousePosWindow);
             if (inputElement != null)
             {
                 if (WindowChrome.GetIsHitTestVisibleInChrome(inputElement))
@@ -696,18 +696,18 @@ namespace MS.Windows.Shell
                 if (direction != ResizeGripDirection.None)
                 {
                     handled = true;
-                    return new IntPtr((int)_GetHTFromResizeGripDirection(direction));
+                    return new IntPtr((int)this._GetHTFromResizeGripDirection(direction));
                 }
             }
 
             // It's not opted out, so offer up the hittest to DWM, then to our custom non-client area logic.
-            if (_chromeInfo.UseAeroCaptionButtons)
+            if (this._chromeInfo.UseAeroCaptionButtons)
             {
                 IntPtr lRet;
-                if (Utility.IsOSVistaOrNewer && _chromeInfo.GlassFrameThickness != default(Thickness) && _isGlassEnabled)
+                if (Utility.IsOSVistaOrNewer && this._chromeInfo.GlassFrameThickness != default(Thickness) && this._isGlassEnabled)
                 {
                     // If we're on Vista, give the DWM a chance to handle the message first.
-                    handled = NativeMethods.DwmDefWindowProc(_hwnd, uMsg, wParam, lParam, out lRet);
+                    handled = NativeMethods.DwmDefWindowProc(this._hwnd, uMsg, wParam, lParam, out lRet);
 
                     if (IntPtr.Zero != lRet)
                     {
@@ -717,7 +717,7 @@ namespace MS.Windows.Shell
                 }
             }
 
-            HT ht = _HitTestNca(
+            HT ht = this._HitTestNca(
                 DpiHelper.DeviceRectToLogical(windowPosition),
                 DpiHelper.DevicePixelsToLogical(mousePosScreen));
 
@@ -731,8 +731,9 @@ namespace MS.Windows.Shell
             // to bring up the system menu.
             if (HT.CAPTION == (HT)wParam.ToInt32())
             {
-                SystemCommands.ShowSystemMenuPhysicalCoordinates(_window, new Point(Utility.GET_X_LPARAM(lParam), Utility.GET_Y_LPARAM(lParam)));
+                SystemCommands.ShowSystemMenuPhysicalCoordinates(this.window, new Point(Utility.GET_X_LPARAM(lParam), Utility.GET_Y_LPARAM(lParam)));
             }
+
             handled = false;
             return IntPtr.Zero;
         }
@@ -750,7 +751,8 @@ namespace MS.Windows.Shell
             {
                 state = WindowState.Maximized;
             }
-            _UpdateSystemMenu(state);
+
+            this._UpdateSystemMenu(state);
 
             // Still let the default WndProc handle this.
             handled = false;
@@ -763,7 +765,7 @@ namespace MS.Windows.Shell
 
             // we don't do bitwise operations cuz we're checking for this flag being the only one there
             // I have no clue why this works, I tried this because VS2013 has this flag removed on fullscreen window movws
-            if (_chromeInfo.IgnoreTaskbarOnMaximize && _GetHwndState() == WindowState.Maximized && wp.flags == (int)SWP.FRAMECHANGED)
+            if (this._chromeInfo.IgnoreTaskbarOnMaximize && this._GetHwndState() == WindowState.Maximized && wp.flags == (int)SWP.FRAMECHANGED)
             {
                 wp.flags = 0;
                 Marshal.StructureToPtr(wp, lParam, true);
@@ -781,26 +783,25 @@ namespace MS.Windows.Shell
             // notifications, WM_MOVE, WM_SIZE, and WM_SHOWWINDOW. But it doesn't
             // suffer from the same limitations as WM_SHOWWINDOW, so you can
             // reliably use it to react to the window being shown or hidden.
+            this._UpdateSystemMenu(null);
 
-            _UpdateSystemMenu(null);
-
-            if (!_isGlassEnabled)
+            if (!this._isGlassEnabled)
             {
                 Assert.IsNotDefault(lParam);
                 var wp = (WINDOWPOS)Marshal.PtrToStructure(lParam, typeof(WINDOWPOS));
 
-                if (!wp.Equals(_previousWP))
+                if (!wp.Equals(this._previousWP))
                 {
-                    _previousWP = wp;
-                    _SetRoundingRegion(wp);
+                    this._previousWP = wp;
+                    this._SetRoundingRegion(wp);
                 }
 
-                //                if (wp.Equals(_previousWP) && wp.flags.Equals(_previousWP.flags))
+                // if (wp.Equals(_previousWP) && wp.flags.Equals(_previousWP.flags))
                 //                {
                 //                    handled = true;
                 //                    return IntPtr.Zero;
                 //                }
-                _previousWP = wp;
+                this._previousWP = wp;
             }
 
             // Still want to pass this to DefWndProc
@@ -818,12 +819,12 @@ namespace MS.Windows.Shell
              * This fix is not really a full fix. Moving the Window back gives us the wrong size, because
              * MonitorFromWindow gives us the wrong (old) monitor! This is fixed in _HandleMoveForRealSize.
              */
-            var ignoreTaskBar = _chromeInfo.IgnoreTaskbarOnMaximize;// || _chromeInfo.UseNoneWindowStyle;
-            WindowState state = _GetHwndState();
+            var ignoreTaskBar = this._chromeInfo.IgnoreTaskbarOnMaximize; // || _chromeInfo.UseNoneWindowStyle;
+            WindowState state = this._GetHwndState();
             if (ignoreTaskBar && state == WindowState.Maximized)
             {
                 MINMAXINFO mmi = (MINMAXINFO)Marshal.PtrToStructure(lParam, typeof(MINMAXINFO));
-                IntPtr monitor = NativeMethods.MonitorFromWindow(_hwnd, (uint)MonitorOptions.MONITOR_DEFAULTTONEAREST);
+                IntPtr monitor = NativeMethods.MonitorFromWindow(this._hwnd, (uint)MonitorOptions.MONITOR_DEFAULTTONEAREST);
                 if (monitor != IntPtr.Zero)
                 {
                     MONITORINFO monitorInfo = NativeMethods.GetMonitorInfoW(monitor);
@@ -838,6 +839,7 @@ namespace MS.Windows.Shell
                     mmi.ptMaxTrackSize.x = mmi.ptMaxSize.x;
                     mmi.ptMaxTrackSize.y = mmi.ptMaxSize.y;
                 }
+
                 Marshal.StructureToPtr(mmi, lParam, true);
             }
 
@@ -849,7 +851,7 @@ namespace MS.Windows.Shell
 
         private IntPtr _HandleDwmCompositionChanged(WM uMsg, IntPtr wParam, IntPtr lParam, out bool handled)
         {
-            _UpdateFrameState(false);
+            this._UpdateFrameState(false);
 
             handled = false;
             return IntPtr.Zero;
@@ -861,7 +863,7 @@ namespace MS.Windows.Shell
             // These shouldn't be required on the v4 framework.
             Assert.IsTrue(_IsPresentationFrameworkVersionLessThan4);
 
-            _FixupTemplateIssues();
+            this._FixupTemplateIssues();
 
             handled = false;
             return IntPtr.Zero;
@@ -872,19 +874,20 @@ namespace MS.Windows.Shell
             // This is only intercepted to deal with bugs in Window in .Net 3.5 and below.
             Assert.IsTrue(_IsPresentationFrameworkVersionLessThan4);
 
-            _isUserResizing = true;
+            this._isUserResizing = true;
 
             // On Win7 if the user is dragging the window out of the maximized state then we don't want to use that location
             // as a restore point.
-            Assert.Implies(_window.WindowState == WindowState.Maximized, Utility.IsOSWindows7OrNewer);
-            if (_window.WindowState != WindowState.Maximized)
+            Assert.Implies(this.window.WindowState == WindowState.Maximized, Utility.IsOSWindows7OrNewer);
+            if (this.window.WindowState != WindowState.Maximized)
             {
                 // Check for the docked window case.  The window can still be restored when it's in this position so
                 // try to account for that and not update the start position.
-                if (!_IsWindowDocked)
+                if (!this._IsWindowDocked)
                 {
-                    _windowPosAtStartOfUserMove = new Point(_window.Left, _window.Top);
+                    this._windowPosAtStartOfUserMove = new Point(this.window.Left, this.window.Top);
                 }
+
                 // Realistically we also don't want to update the start position when moving from one docked state to another (or to and from maximized),
                 // but it's tricky to detect and this is already a workaround for a bug that's fixed in newer versions of the framework.
                 // Not going to try to handle all cases.
@@ -896,7 +899,7 @@ namespace MS.Windows.Shell
 
         private IntPtr _HandleEnterSizeMoveForAnimation(WM uMsg, IntPtr wParam, IntPtr lParam, out bool handled)
         {
-            if (_MinimizeAnimation && _GetHwndState() == WindowState.Maximized)
+            if (this._MinimizeAnimation && this._GetHwndState() == WindowState.Maximized)
             {
                 /* we only need to remove DLGFRAME ( CAPTION = BORDER | DLGFRAME )
                  * to prevent nasty drawing
@@ -905,8 +908,9 @@ namespace MS.Windows.Shell
                  * will call this method, resulting in a 2px black border on the side
                  * when maximized.
                  */
-                _ModifyStyle(WS.DLGFRAME, 0);
+                this._ModifyStyle(WS.DLGFRAME, 0);
             }
+
             handled = false;
             return IntPtr.Zero;
         }
@@ -919,13 +923,13 @@ namespace MS.Windows.Shell
              * we can move the Window to different monitor with maybe different dimension.
              * But after moving to the previous monitor we got a wrong size (from the old monitor dimension).
              */
-            WindowState state = _GetHwndState();
+            WindowState state = this._GetHwndState();
             if (state == WindowState.Maximized)
             {
-                IntPtr monitorFromWindow = NativeMethods.MonitorFromWindow(_hwnd, (uint)MonitorOptions.MONITOR_DEFAULTTONEAREST);
+                IntPtr monitorFromWindow = NativeMethods.MonitorFromWindow(this._hwnd, (uint)MonitorOptions.MONITOR_DEFAULTTONEAREST);
                 if (monitorFromWindow != IntPtr.Zero)
                 {
-                    var ignoreTaskBar = _chromeInfo.IgnoreTaskbarOnMaximize;// || _chromeInfo.UseNoneWindowStyle;
+                    var ignoreTaskBar = this._chromeInfo.IgnoreTaskbarOnMaximize; // || _chromeInfo.UseNoneWindowStyle;
                     MONITORINFO monitorInfo = NativeMethods.GetMonitorInfoW(monitorFromWindow);
                     RECT rcMonitorArea = ignoreTaskBar ? monitorInfo.rcMonitor : monitorInfo.rcWork;
                     /*
@@ -944,7 +948,7 @@ namespace MS.Windows.Shell
                      * area are saved and copied back into the client area after the window is sized or repositioned.
                      *
                      */
-                    NativeMethods.SetWindowPos(_hwnd, IntPtr.Zero, rcMonitorArea.Left, rcMonitorArea.Top, rcMonitorArea.Width, rcMonitorArea.Height, SWP.ASYNCWINDOWPOS | SWP.FRAMECHANGED | SWP.NOCOPYBITS);
+                    NativeMethods.SetWindowPos(this._hwnd, IntPtr.Zero, rcMonitorArea.Left, rcMonitorArea.Top, rcMonitorArea.Width, rcMonitorArea.Height, SWP.ASYNCWINDOWPOS | SWP.FRAMECHANGED | SWP.NOCOPYBITS);
                 }
             }
 
@@ -954,12 +958,12 @@ namespace MS.Windows.Shell
 
         private IntPtr _HandleExitSizeMoveForAnimation(WM uMsg, IntPtr wParam, IntPtr lParam, out bool handled)
         {
-            if (_MinimizeAnimation)
+            if (this._MinimizeAnimation)
             {
                 // restore DLGFRAME
-                if (_ModifyStyle(0, WS.DLGFRAME))
+                if (this._ModifyStyle(0, WS.DLGFRAME))
                 {
-                    _UpdateFrameState(true);
+                    this._UpdateFrameState(true);
                 }
             }
 
@@ -972,15 +976,15 @@ namespace MS.Windows.Shell
             // This is only intercepted to deal with bugs in Window in .Net 3.5 and below.
             Assert.IsTrue(_IsPresentationFrameworkVersionLessThan4);
 
-            _isUserResizing = false;
+            this._isUserResizing = false;
 
             // On Win7 the user can change the Window's state by dragging the window to the top of the monitor.
             // If they did that, then we need to try to update the restore bounds or else WPF will put the window at the maximized location (e.g. (-8,-8)).
-            if (_window.WindowState == WindowState.Maximized)
+            if (this.window.WindowState == WindowState.Maximized)
             {
                 Assert.IsTrue(Utility.IsOSWindows7OrNewer);
-                _window.Top = _windowPosAtStartOfUserMove.Y;
-                _window.Left = _windowPosAtStartOfUserMove.X;
+                this.window.Top = this._windowPosAtStartOfUserMove.Y;
+                this.window.Left = this._windowPosAtStartOfUserMove.X;
             }
 
             handled = false;
@@ -992,9 +996,9 @@ namespace MS.Windows.Shell
             // This is only intercepted to deal with bugs in Window in .Net 3.5 and below.
             Assert.IsTrue(_IsPresentationFrameworkVersionLessThan4);
 
-            if (_isUserResizing)
+            if (this._isUserResizing)
             {
-                _hasUserMovedWindow = true;
+                this._hasUserMovedWindow = true;
             }
 
             handled = false;
@@ -1009,15 +1013,15 @@ namespace MS.Windows.Shell
         /// <returns>Whether the styles of the HWND were modified as a result of this call.</returns>
         private bool _ModifyStyle(WS removeStyle, WS addStyle)
         {
-            Assert.IsNotDefault(_hwnd);
-            var dwStyle = (WS)NativeMethods.GetWindowLongPtr(_hwnd, GWL.STYLE).ToInt32();
+            Assert.IsNotDefault(this._hwnd);
+            var dwStyle = (WS)NativeMethods.GetWindowLongPtr(this._hwnd, GWL.STYLE).ToInt32();
             var dwNewStyle = (dwStyle & ~removeStyle) | addStyle;
             if (dwStyle == dwNewStyle)
             {
                 return false;
             }
 
-            NativeMethods.SetWindowLongPtr(_hwnd, GWL.STYLE, new IntPtr((int)dwNewStyle));
+            NativeMethods.SetWindowLongPtr(this._hwnd, GWL.STYLE, new IntPtr((int)dwNewStyle));
             return true;
         }
 
@@ -1026,12 +1030,13 @@ namespace MS.Windows.Shell
         /// </summary>
         private WindowState _GetHwndState()
         {
-            var wpl = NativeMethods.GetWindowPlacement(_hwnd);
+            var wpl = NativeMethods.GetWindowPlacement(this._hwnd);
             switch (wpl.showCmd)
             {
                 case SW.SHOWMINIMIZED: return WindowState.Minimized;
                 case SW.SHOWMAXIMIZED: return WindowState.Maximized;
             }
+
             return WindowState.Normal;
         }
 
@@ -1042,7 +1047,7 @@ namespace MS.Windows.Shell
         private Rect _GetWindowRect()
         {
             // Get the window rectangle.
-            RECT windowPosition = NativeMethods.GetWindowRect(_hwnd);
+            RECT windowPosition = NativeMethods.GetWindowRect(this._hwnd);
             return new Rect(windowPosition.Left, windowPosition.Top, windowPosition.Width, windowPosition.Height);
         }
 
@@ -1060,16 +1065,16 @@ namespace MS.Windows.Shell
             const MF mfEnabled = MF.ENABLED | MF.BYCOMMAND;
             const MF mfDisabled = MF.GRAYED | MF.DISABLED | MF.BYCOMMAND;
 
-            WindowState state = assumeState ?? _GetHwndState();
+            WindowState state = assumeState ?? this._GetHwndState();
 
-            if (null != assumeState || _lastMenuState != state)
+            if (null != assumeState || this._lastMenuState != state)
             {
-                _lastMenuState = state;
+                this._lastMenuState = state;
 
-                IntPtr hmenu = NativeMethods.GetSystemMenu(_hwnd, false);
+                IntPtr hmenu = NativeMethods.GetSystemMenu(this._hwnd, false);
                 if (IntPtr.Zero != hmenu)
                 {
-                    var dwStyle = (WS)NativeMethods.GetWindowLongPtr(_hwnd, GWL.STYLE).ToInt32();
+                    var dwStyle = (WS)NativeMethods.GetWindowLongPtr(this._hwnd, GWL.STYLE).ToInt32();
 
                     bool canMinimize = Utility.IsFlagSet((int)dwStyle, (int)WS.MINIMIZEBOX);
                     bool canMaximize = Utility.IsFlagSet((int)dwStyle, (int)WS.MAXIMIZEBOX);
@@ -1107,7 +1112,7 @@ namespace MS.Windows.Shell
 
         private void _UpdateFrameState(bool force)
         {
-            if (IntPtr.Zero == _hwnd)
+            if (IntPtr.Zero == this._hwnd)
             {
                 return;
             }
@@ -1115,40 +1120,40 @@ namespace MS.Windows.Shell
             // Don't rely on SystemParameters2 for this, just make the check ourselves.
             bool frameState = NativeMethods.DwmIsCompositionEnabled();
 
-            if (force || frameState != _isGlassEnabled)
+            if (force || frameState != this._isGlassEnabled)
             {
-                _isGlassEnabled = frameState && _chromeInfo.GlassFrameThickness != default(Thickness);
+                this._isGlassEnabled = frameState && this._chromeInfo.GlassFrameThickness != default(Thickness);
 
-                if (!_isGlassEnabled)
+                if (!this._isGlassEnabled)
                 {
-                    _SetRoundingRegion(null);
+                    this._SetRoundingRegion(null);
                 }
                 else
                 {
-                    _ClearRoundingRegion();
+                    this._ClearRoundingRegion();
                 }
 
-                if (_MinimizeAnimation)
+                if (this._MinimizeAnimation)
                 {
                     // allow animation
-                    _ModifyStyle(0, WS.CAPTION);
+                    this._ModifyStyle(0, WS.CAPTION);
                 }
                 else
                 {
                     // no animation
-                    _ModifyStyle(WS.CAPTION, 0);
+                    this._ModifyStyle(WS.CAPTION, 0);
                 }
 
                 // update the glass frame too, if the user sets the glass frame thickness to 0 at run time
-                _ExtendGlassFrame();
+                this._ExtendGlassFrame();
 
-                NativeMethods.SetWindowPos(_hwnd, IntPtr.Zero, 0, 0, 0, 0, _SwpFlags);
+                NativeMethods.SetWindowPos(this._hwnd, IntPtr.Zero, 0, 0, 0, 0, SwpFlags);
             }
         }
 
         private void _ClearRoundingRegion()
         {
-            NativeMethods.SetWindowRgn(_hwnd, IntPtr.Zero, NativeMethods.IsWindowVisible(_hwnd));
+            NativeMethods.SetWindowRgn(this._hwnd, IntPtr.Zero, NativeMethods.IsWindowVisible(this._hwnd));
         }
 
         private static RECT _GetClientRectRelativeToWindowRect(IntPtr hWnd)
@@ -1166,14 +1171,14 @@ namespace MS.Windows.Shell
         {
             // We're early - WPF hasn't necessarily updated the state of the window.
             // Need to query it ourselves.
-            WINDOWPLACEMENT wpl = NativeMethods.GetWindowPlacement(_hwnd);
+            WINDOWPLACEMENT wpl = NativeMethods.GetWindowPlacement(this._hwnd);
 
             if (wpl.showCmd == SW.SHOWMAXIMIZED)
             {
                 RECT rcMax;
-                if (_MinimizeAnimation)
+                if (this._MinimizeAnimation)
                 {
-                    rcMax = _GetClientRectRelativeToWindowRect(_hwnd);
+                    rcMax = _GetClientRectRelativeToWindowRect(this._hwnd);
                 }
                 else
                 {
@@ -1187,15 +1192,16 @@ namespace MS.Windows.Shell
                     }
                     else
                     {
-                        Rect r = _GetWindowRect();
+                        Rect r = this._GetWindowRect();
                         left = (int)r.Left;
                         top = (int)r.Top;
                     }
 
-                    IntPtr hMon = NativeMethods.MonitorFromWindow(_hwnd, (uint)MonitorOptions.MONITOR_DEFAULTTONEAREST);
+                    IntPtr hMon = NativeMethods.MonitorFromWindow(this._hwnd, (uint)MonitorOptions.MONITOR_DEFAULTTONEAREST);
 
                     MONITORINFO mi = NativeMethods.GetMonitorInfo(hMon);
-                    rcMax = _chromeInfo.IgnoreTaskbarOnMaximize ? mi.rcMonitor : mi.rcWork;
+                    rcMax = this._chromeInfo.IgnoreTaskbarOnMaximize ? mi.rcMonitor : mi.rcWork;
+
                     // The location of maximized window takes into account the border that Windows was
                     // going to remove, so we also need to consider it.
                     rcMax.Offset(-left, -top);
@@ -1205,7 +1211,7 @@ namespace MS.Windows.Shell
                 try
                 {
                     hrgn = NativeMethods.CreateRectRgnIndirect(rcMax);
-                    NativeMethods.SetWindowRgn(_hwnd, hrgn, NativeMethods.IsWindowVisible(_hwnd));
+                    NativeMethods.SetWindowRgn(this._hwnd, hrgn, NativeMethods.IsWindowVisible(this._hwnd));
                     hrgn = IntPtr.Zero;
                 }
                 finally
@@ -1222,26 +1228,26 @@ namespace MS.Windows.Shell
                 {
                     windowSize = new Size((double)wp.Value.cx, (double)wp.Value.cy);
                 }
-                else if (null != wp && (_lastRoundingState == _window.WindowState))
+                else if (null != wp && (this._lastRoundingState == this.window.WindowState))
                 {
                     return;
                 }
                 else
                 {
-                    windowSize = _GetWindowRect().Size;
+                    windowSize = this._GetWindowRect().Size;
                 }
 
-                _lastRoundingState = _window.WindowState;
+                this._lastRoundingState = this.window.WindowState;
 
                 IntPtr hrgn = IntPtr.Zero;
                 try
                 {
                     double shortestDimension = Math.Min(windowSize.Width, windowSize.Height);
 
-                    double topLeftRadius = DpiHelper.LogicalPixelsToDevice(new Point(_chromeInfo.CornerRadius.TopLeft, 0)).X;
+                    double topLeftRadius = DpiHelper.LogicalPixelsToDevice(new Point(this._chromeInfo.CornerRadius.TopLeft, 0)).X;
                     topLeftRadius = Math.Min(topLeftRadius, shortestDimension / 2);
 
-                    if (_IsUniform(_chromeInfo.CornerRadius))
+                    if (_IsUniform(this._chromeInfo.CornerRadius))
                     {
                         // RoundedRect HRGNs require an additional pixel of padding.
                         hrgn = _CreateRoundRectRgn(new Rect(windowSize), topLeftRadius);
@@ -1252,35 +1258,35 @@ namespace MS.Windows.Shell
                         // Create one for each quadrant, but let it overlap into the two adjacent ones
                         // by the radius amount to ensure that there aren't corners etched into the middle
                         // of the window.
-                        hrgn = _CreateRoundRectRgn(new Rect(0, 0, windowSize.Width / 2 + topLeftRadius, windowSize.Height / 2 + topLeftRadius), topLeftRadius);
+                        hrgn = _CreateRoundRectRgn(new Rect(0, 0, (windowSize.Width / 2) + topLeftRadius, (windowSize.Height / 2) + topLeftRadius), topLeftRadius);
 
-                        double topRightRadius = DpiHelper.LogicalPixelsToDevice(new Point(_chromeInfo.CornerRadius.TopRight, 0)).X;
+                        double topRightRadius = DpiHelper.LogicalPixelsToDevice(new Point(this._chromeInfo.CornerRadius.TopRight, 0)).X;
                         topRightRadius = Math.Min(topRightRadius, shortestDimension / 2);
-                        Rect topRightRegionRect = new Rect(0, 0, windowSize.Width / 2 + topRightRadius, windowSize.Height / 2 + topRightRadius);
-                        topRightRegionRect.Offset(windowSize.Width / 2 - topRightRadius, 0);
+                        Rect topRightRegionRect = new Rect(0, 0, (windowSize.Width / 2) + topRightRadius, (windowSize.Height / 2) + topRightRadius);
+                        topRightRegionRect.Offset((windowSize.Width / 2) - topRightRadius, 0);
                         Assert.AreEqual(topRightRegionRect.Right, windowSize.Width);
 
                         _CreateAndCombineRoundRectRgn(hrgn, topRightRegionRect, topRightRadius);
 
-                        double bottomLeftRadius = DpiHelper.LogicalPixelsToDevice(new Point(_chromeInfo.CornerRadius.BottomLeft, 0)).X;
+                        double bottomLeftRadius = DpiHelper.LogicalPixelsToDevice(new Point(this._chromeInfo.CornerRadius.BottomLeft, 0)).X;
                         bottomLeftRadius = Math.Min(bottomLeftRadius, shortestDimension / 2);
-                        Rect bottomLeftRegionRect = new Rect(0, 0, windowSize.Width / 2 + bottomLeftRadius, windowSize.Height / 2 + bottomLeftRadius);
-                        bottomLeftRegionRect.Offset(0, windowSize.Height / 2 - bottomLeftRadius);
+                        Rect bottomLeftRegionRect = new Rect(0, 0, (windowSize.Width / 2) + bottomLeftRadius, (windowSize.Height / 2) + bottomLeftRadius);
+                        bottomLeftRegionRect.Offset(0, (windowSize.Height / 2) - bottomLeftRadius);
                         Assert.AreEqual(bottomLeftRegionRect.Bottom, windowSize.Height);
 
                         _CreateAndCombineRoundRectRgn(hrgn, bottomLeftRegionRect, bottomLeftRadius);
 
-                        double bottomRightRadius = DpiHelper.LogicalPixelsToDevice(new Point(_chromeInfo.CornerRadius.BottomRight, 0)).X;
+                        double bottomRightRadius = DpiHelper.LogicalPixelsToDevice(new Point(this._chromeInfo.CornerRadius.BottomRight, 0)).X;
                         bottomRightRadius = Math.Min(bottomRightRadius, shortestDimension / 2);
-                        Rect bottomRightRegionRect = new Rect(0, 0, windowSize.Width / 2 + bottomRightRadius, windowSize.Height / 2 + bottomRightRadius);
-                        bottomRightRegionRect.Offset(windowSize.Width / 2 - bottomRightRadius, windowSize.Height / 2 - bottomRightRadius);
+                        Rect bottomRightRegionRect = new Rect(0, 0, (windowSize.Width / 2) + bottomRightRadius, (windowSize.Height / 2) + bottomRightRadius);
+                        bottomRightRegionRect.Offset((windowSize.Width / 2) - bottomRightRadius, (windowSize.Height / 2) - bottomRightRadius);
                         Assert.AreEqual(bottomRightRegionRect.Right, windowSize.Width);
                         Assert.AreEqual(bottomRightRegionRect.Bottom, windowSize.Height);
 
                         _CreateAndCombineRoundRectRgn(hrgn, bottomRightRegionRect, bottomRightRadius);
                     }
 
-                    NativeMethods.SetWindowRgn(_hwnd, hrgn, NativeMethods.IsWindowVisible(_hwnd));
+                    NativeMethods.SetWindowRgn(this._hwnd, hrgn, NativeMethods.IsWindowVisible(this._hwnd));
                     hrgn = IntPtr.Zero;
                 }
                 finally
@@ -1294,7 +1300,6 @@ namespace MS.Windows.Shell
         private static IntPtr _CreateRoundRectRgn(Rect region, double radius)
         {
             // Round outwards.
-
             if (DoubleUtilities.AreClose(0, radius))
             {
                 return NativeMethods.CreateRectRgn(
@@ -1314,7 +1319,7 @@ namespace MS.Windows.Shell
                 (int)Math.Ceiling(radius));
         }
 
-        [SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "HRGNs")]
+        [SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "HRGNs", Justification = "ToDo")]
         private static void _CreateAndCombineRoundRectRgn(IntPtr hrgnSource, Rect region, double radius)
         {
             IntPtr hrgn = IntPtr.Zero;
@@ -1355,7 +1360,7 @@ namespace MS.Windows.Shell
 
         private void _ExtendGlassFrame()
         {
-            Assert.IsNotNull(_window);
+            Assert.IsNotNull(this.window);
 
             // Expect that this might be called on OSes other than Vista.
             if (!Utility.IsOSVistaOrNewer)
@@ -1364,7 +1369,7 @@ namespace MS.Windows.Shell
                 return;
             }
 
-            if (IntPtr.Zero == _hwnd)
+            if (IntPtr.Zero == this._hwnd)
             {
                 // Can't do anything with this call until the Window has been shown.
                 return;
@@ -1375,13 +1380,13 @@ namespace MS.Windows.Shell
             {
                 // Apply the transparent background to the HWND for disabled DwmIsComposition too
                 // but only if the window has the flag AllowsTransparency turned on
-                if (_window.AllowsTransparency)
+                if (this.window.AllowsTransparency)
                 {
-                    _hwndSource.CompositionTarget.BackgroundColor = Colors.Transparent;
+                    this._hwndSource.CompositionTarget.BackgroundColor = Colors.Transparent;
                 }
                 else
                 {
-                    _hwndSource.CompositionTarget.BackgroundColor = SystemColors.WindowColor;
+                    this._hwndSource.CompositionTarget.BackgroundColor = SystemColors.WindowColor;
                 }
             }
             else
@@ -1391,33 +1396,36 @@ namespace MS.Windows.Shell
 
                 // Apply the transparent background to the HWND
                 // but only if the window has the flag AllowsTransparency turned on
-                if (_window.AllowsTransparency)
+                if (this.window.AllowsTransparency)
                 {
-                    _hwndSource.CompositionTarget.BackgroundColor = Colors.Transparent;
+                    this._hwndSource.CompositionTarget.BackgroundColor = Colors.Transparent;
                 }
 
                 // Thickness is going to be DIPs, need to convert to system coordinates.
-                Thickness deviceGlassThickness = DpiHelper.LogicalThicknessToDevice(_chromeInfo.GlassFrameThickness);
+                Thickness deviceGlassThickness = DpiHelper.LogicalThicknessToDevice(this._chromeInfo.GlassFrameThickness);
 
-                if (_chromeInfo.SacrificialEdge != SacrificialEdge.None)
+                if (this._chromeInfo.SacrificialEdge != SacrificialEdge.None)
                 {
                     Thickness windowResizeBorderThicknessDevice = DpiHelper.LogicalThicknessToDevice(SystemParameters2.Current.WindowResizeBorderThickness);
-                    if (Utility.IsFlagSet((int)_chromeInfo.SacrificialEdge, (int)SacrificialEdge.Top))
+                    if (Utility.IsFlagSet((int)this._chromeInfo.SacrificialEdge, (int)SacrificialEdge.Top))
                     {
                         deviceGlassThickness.Top -= windowResizeBorderThicknessDevice.Top;
                         deviceGlassThickness.Top = Math.Max(0, deviceGlassThickness.Top);
                     }
-                    if (Utility.IsFlagSet((int)_chromeInfo.SacrificialEdge, (int)SacrificialEdge.Left))
+
+                    if (Utility.IsFlagSet((int)this._chromeInfo.SacrificialEdge, (int)SacrificialEdge.Left))
                     {
                         deviceGlassThickness.Left -= windowResizeBorderThicknessDevice.Left;
                         deviceGlassThickness.Left = Math.Max(0, deviceGlassThickness.Left);
                     }
-                    if (Utility.IsFlagSet((int)_chromeInfo.SacrificialEdge, (int)SacrificialEdge.Bottom))
+
+                    if (Utility.IsFlagSet((int)this._chromeInfo.SacrificialEdge, (int)SacrificialEdge.Bottom))
                     {
                         deviceGlassThickness.Bottom -= windowResizeBorderThicknessDevice.Bottom;
                         deviceGlassThickness.Bottom = Math.Max(0, deviceGlassThickness.Bottom);
                     }
-                    if (Utility.IsFlagSet((int)_chromeInfo.SacrificialEdge, (int)SacrificialEdge.Right))
+
+                    if (Utility.IsFlagSet((int)this._chromeInfo.SacrificialEdge, (int)SacrificialEdge.Right))
                     {
                         deviceGlassThickness.Right -= windowResizeBorderThicknessDevice.Right;
                         deviceGlassThickness.Right = Math.Max(0, deviceGlassThickness.Right);
@@ -1433,14 +1441,14 @@ namespace MS.Windows.Shell
                     cyBottomHeight = (int)Math.Ceiling(deviceGlassThickness.Bottom),
                 };
 
-                NativeMethods.DwmExtendFrameIntoClientArea(_hwnd, ref dwmMargin);
+                NativeMethods.DwmExtendFrameIntoClientArea(this._hwnd, ref dwmMargin);
             }
         }
 
         /// <summary>
         /// Matrix of the HT values to return when responding to NC window messages.
         /// </summary>
-        [SuppressMessage("Microsoft.Performance", "CA1814:PreferJaggedArraysOverMultidimensional", MessageId = "Member")]
+        [SuppressMessage("Microsoft.Performance", "CA1814:PreferJaggedArraysOverMultidimensional", MessageId = "Member", Justification = "ToDo")]
         private static readonly HT[,] _HitTestBorders = new[,]
         {
             { HT.TOPLEFT,    HT.TOP,     HT.TOPRIGHT    },
@@ -1456,22 +1464,22 @@ namespace MS.Windows.Shell
             bool onResizeBorder = false;
 
             // Determine if the point is at the top or bottom of the window.
-            if (mousePosition.Y >= windowPosition.Top && mousePosition.Y < windowPosition.Top + _chromeInfo.ResizeBorderThickness.Top + _chromeInfo.CaptionHeight)
+            if (mousePosition.Y >= windowPosition.Top && mousePosition.Y < windowPosition.Top + this._chromeInfo.ResizeBorderThickness.Top + this._chromeInfo.CaptionHeight)
             {
-                onResizeBorder = (mousePosition.Y < (windowPosition.Top + _chromeInfo.ResizeBorderThickness.Top));
+                onResizeBorder = mousePosition.Y < (windowPosition.Top + this._chromeInfo.ResizeBorderThickness.Top);
                 uRow = 0; // top (caption or resize border)
             }
-            else if (mousePosition.Y < windowPosition.Bottom && mousePosition.Y >= windowPosition.Bottom - (int)_chromeInfo.ResizeBorderThickness.Bottom)
+            else if (mousePosition.Y < windowPosition.Bottom && mousePosition.Y >= windowPosition.Bottom - (int)this._chromeInfo.ResizeBorderThickness.Bottom)
             {
                 uRow = 2; // bottom
             }
 
             // Determine if the point is at the left or right of the window.
-            if (mousePosition.X >= windowPosition.Left && mousePosition.X < windowPosition.Left + (int)_chromeInfo.ResizeBorderThickness.Left)
+            if (mousePosition.X >= windowPosition.Left && mousePosition.X < windowPosition.Left + (int)this._chromeInfo.ResizeBorderThickness.Left)
             {
                 uCol = 0; // left side
             }
-            else if (mousePosition.X < windowPosition.Right && mousePosition.X >= windowPosition.Right - _chromeInfo.ResizeBorderThickness.Right)
+            else if (mousePosition.X < windowPosition.Right && mousePosition.X >= windowPosition.Right - this._chromeInfo.ResizeBorderThickness.Right)
             {
                 uCol = 2; // right side
             }
@@ -1497,31 +1505,31 @@ namespace MS.Windows.Shell
 
         private void _RestoreStandardChromeState(bool isClosing)
         {
-            VerifyAccess();
+            this.VerifyAccess();
 
-            _UnhookCustomChrome();
+            this._UnhookCustomChrome();
 
             if (!isClosing)
             {
-                _RestoreTemplateFixups();
-                _RestoreGlassFrame();
-                _RestoreHrgn();
+                this._RestoreTemplateFixups();
+                this._RestoreGlassFrame();
+                this._RestoreHrgn();
 
-                _window.InvalidateMeasure();
+                this.window.InvalidateMeasure();
             }
         }
 
         private void _UnhookCustomChrome()
         {
-            Assert.IsNotNull(_window);
+            Assert.IsNotNull(this.window);
 
-            if (_isHooked)
+            if (this._isHooked)
             {
-                Assert.IsNotDefault(_hwnd);
-                Assert.IsNotNull(_hwndSource);
+                Assert.IsNotDefault(this._hwnd);
+                Assert.IsNotNull(this._hwndSource);
 
-                _hwndSource.RemoveHook(_WndProc);
-                _isHooked = false;
+                this._hwndSource.RemoveHook(this._WndProc);
+                this._isHooked = false;
             }
         }
 
@@ -1531,44 +1539,44 @@ namespace MS.Windows.Shell
             // This bug was fixed in V4 of the framework.
             // But it still needs to happen if there was a SacrificialEdge.
 
-            //Assert.IsTrue(_isFixedUp);
+            // Assert.IsTrue(_isFixedUp);
+            Assert.Implies(_IsPresentationFrameworkVersionLessThan4, () => this._isFixedUp);
 
-            Assert.Implies(_IsPresentationFrameworkVersionLessThan4, () => _isFixedUp);
+            var rootElement = (FrameworkElement)VisualTreeHelper.GetChild(this.window, 0);
 
-            var rootElement = (FrameworkElement)VisualTreeHelper.GetChild(_window, 0);
             // Undo anything that was done before.
             rootElement.Margin = new Thickness();
 
-            _window.StateChanged -= _FixupRestoreBounds;
-            _isFixedUp = false;
+            this.window.StateChanged -= this._FixupRestoreBounds;
+            this._isFixedUp = false;
         }
 
         private void _RestoreGlassFrame()
         {
-            Assert.IsNull(_chromeInfo);
-            Assert.IsNotNull(_window);
+            Assert.IsNull(this._chromeInfo);
+            Assert.IsNotNull(this.window);
 
             // Expect that this might be called on OSes other than Vista
             // and if the window hasn't yet been shown, then we don't need to undo anything.
-            if (!Utility.IsOSVistaOrNewer || _hwnd == IntPtr.Zero)
+            if (!Utility.IsOSVistaOrNewer || this._hwnd == IntPtr.Zero)
             {
                 return;
             }
 
-            _hwndSource.CompositionTarget.BackgroundColor = SystemColors.WindowColor;
+            this._hwndSource.CompositionTarget.BackgroundColor = SystemColors.WindowColor;
 
             if (NativeMethods.DwmIsCompositionEnabled())
             {
                 // If glass is enabled, push it back to the normal bounds.
                 var dwmMargin = new MARGINS();
-                NativeMethods.DwmExtendFrameIntoClientArea(_hwnd, ref dwmMargin);
+                NativeMethods.DwmExtendFrameIntoClientArea(this._hwnd, ref dwmMargin);
             }
         }
 
         private void _RestoreHrgn()
         {
-            _ClearRoundingRegion();
-            NativeMethods.SetWindowPos(_hwnd, IntPtr.Zero, 0, 0, 0, 0, _SwpFlags);
+            this._ClearRoundingRegion();
+            NativeMethods.SetWindowPos(this._hwnd, IntPtr.Zero, 0, 0, 0, 0, SwpFlags);
         }
 
         #endregion Remove Custom Chrome Methods

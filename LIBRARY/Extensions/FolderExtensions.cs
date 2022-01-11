@@ -1,8 +1,8 @@
-﻿using System;
-using System.IO;
-
-namespace TMP.Extensions
+﻿namespace TMP.Extensions
 {
+    using System;
+    using System.IO;
+
     /// <summary>
     /// Static folder helper methods
     /// </summary>
@@ -17,6 +17,7 @@ namespace TMP.Extensions
         {
             return FolderExtensions.GetFileList(rootPath, null);
         }
+
         /// <summary>
         /// Returns all files in a directory and its subdirectories as a string array matching to a pattern
         /// </summary>
@@ -29,6 +30,7 @@ namespace TMP.Extensions
             {
                 pattern = "*.*";
             }
+
             string[] result;
             try
             {
@@ -38,6 +40,7 @@ namespace TMP.Extensions
             catch
             {
             }
+
             result = null;
             return result;
         }

@@ -92,7 +92,7 @@
         public void SetProgress(double value)
         {
             if (value < 0.0 || value > 1.0)
-                throw new ArgumentOutOfRangeException("value");
+                throw new ArgumentOutOfRangeException(nameof(value));
 
             Action action = () =>
             {

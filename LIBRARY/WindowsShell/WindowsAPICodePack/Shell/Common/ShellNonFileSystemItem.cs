@@ -1,4 +1,4 @@
-﻿//Copyright (c) Microsoft Corporation.  All rights reserved.
+﻿// Copyright (c) Microsoft Corporation.  All rights reserved.
 
 namespace Microsoft.WindowsAPICodePack.Shell
 {
@@ -9,7 +9,7 @@ namespace Microsoft.WindowsAPICodePack.Shell
     {
         internal ShellNonFileSystemItem(IShellItem2 shellItem)
         {
-            nativeShellItem = shellItem;
+            this.nativeShellItem = shellItem;
         }
     }
 }

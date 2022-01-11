@@ -1,51 +1,82 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using System.IO;
-using System.Globalization;
-using TMP.Common.JsonUtils.JsonClassGenerator.CodeWriters;
-
-namespace TMP.Common.JsonUtils.JsonClassGenerator
+﻿namespace TMP.Common.JsonUtils.JsonClassGenerator
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Globalization;
+    using System.IO;
+    using System.Linq;
+    using System.Text;
+    using Newtonsoft.Json;
+    using Newtonsoft.Json.Linq;
+    using TMP.Common.JsonUtils.JsonClassGenerator.CodeWriters;
+
     public class JsonClassGenerator : IJsonClassGeneratorConfig
     {
         public string Example { get; set; }
+
         public string TargetFolder { get; set; }
+
         public string Namespace { get; set; }
+
         public string SecondaryNamespace { get; set; }
+
         public bool UseProperties { get; set; }
+
         public bool InternalVisibility { get; set; }
+
         public bool ExplicitDeserialization { get; set; }
+
         public bool NoHelperClass { get; set; }
+
         public string MainClass { get; set; }
+
         public bool UsePascalCase { get; set; }
+
         public bool UseNestedClasses { get; set; }
+
         public bool ApplyObfuscationAttributes { get; set; }
+
         public bool SingleFile { get; set; }
+
         public ICodeWriter CodeWriter { get; set; }
+
         public TextWriter OutputStream { get; set; }
+
         public bool AlwaysUseNullableValues { get; set; }
+
         public bool ExamplesInDocumentation { get; set; }
 
         private bool used = false;
-        public bool UseNamespaces { get { return Namespace != null; } }
+
+        public bool UseNamespaces => this.Namespace != null;
 
         public void GenerateClasses()
         {
-            if (CodeWriter == null) CodeWriter = new CSharpCodeWriter();
-            if (ExplicitDeserialization && !(CodeWriter is CSharpCodeWriter)) throw new ArgumentException("Explicit deserialization is obsolete and is only supported by the C# provider.");
+            if (this.CodeWriter == null)
+            {
+                this.CodeWriter = new CSharpCodeWriter();
+            }
 
-            if (used) throw new InvalidOperationException("This instance of JsonClassGenerator has already been used. Please create a new instance.");
-            used = true;
+            if (this.ExplicitDeserialization && !(this.CodeWriter is CSharpCodeWriter))
+            {
+                throw new ArgumentException("Explicit deserialization is obsolete and is only supported by the C# provider.");
+            }
 
-            var writeToDisk = TargetFolder != null;
-            if (writeToDisk && !Directory.Exists(TargetFolder)) Directory.CreateDirectory(TargetFolder);
+            if (this.used)
+            {
+                throw new InvalidOperationException("This instance of JsonClassGenerator has already been used. Please create a new instance.");
+            }
+
+            this.used = true;
+
+            var writeToDisk = this.TargetFolder != null;
+            if (writeToDisk && !Directory.Exists(this.TargetFolder))
+            {
+                Directory.CreateDirectory(this.TargetFolder);
+            }
 
             JObject[] examples;
-            var example = Example.StartsWith("HTTP/") ? Example.Substring(Example.IndexOf("\r\n\r\n")) : Example;
+            var example = this.Example.StartsWith("HTTP/") ? this.Example.Substring(this.Example.IndexOf("\r\n\r\n")) : this.Example;
             using (var sr = new StringReader(example))
             using (var reader = new JsonTextReader(sr))
             {
@@ -64,42 +95,50 @@ namespace TMP.Common.JsonUtils.JsonClassGenerator
                 }
             }
 
-            Types = new List<JsonType>();
-            Names.Add(MainClass);
+            this.Types = new List<JsonType>();
+            this.Names.Add(this.MainClass);
             var rootType = new JsonType(this, examples[0]);
             rootType.IsRoot = true;
-            rootType.AssignName(MainClass);
-            GenerateClass(examples, rootType);
+            rootType.AssignName(this.MainClass);
+            this.GenerateClass(examples, rootType);
 
             if (writeToDisk)
             {
 
                 var parentFolder = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
-                if (writeToDisk && !NoHelperClass && ExplicitDeserialization)
-                    File.WriteAllBytes(Path.Combine(TargetFolder, "JsonClassHelper.cs"), Properties.Resources.JsonClassHelper);
-                if (SingleFile)
+                if (writeToDisk && !this.NoHelperClass && this.ExplicitDeserialization)
                 {
-                    WriteClassesToFile(Path.Combine(TargetFolder, MainClass + CodeWriter.FileExtension), Types);
+                    File.WriteAllBytes(Path.Combine(this.TargetFolder, "JsonClassHelper.cs"), Properties.Resources.JsonClassHelper);
+                }
+
+                if (this.SingleFile)
+                {
+                    this.WriteClassesToFile(Path.Combine(this.TargetFolder, this.MainClass + this.CodeWriter.FileExtension), this.Types);
                 }
                 else
                 {
-                    foreach (var type in Types)
+                    foreach (var type in this.Types)
                     {
-                        var folder = TargetFolder;
-                        if (!UseNestedClasses && !type.IsRoot && SecondaryNamespace != null)
+                        var folder = this.TargetFolder;
+                        if (!this.UseNestedClasses && !type.IsRoot && this.SecondaryNamespace != null)
                         {
-                            var s = SecondaryNamespace;
-                            if (s.StartsWith(Namespace + ".")) s = s.Substring(Namespace.Length + 1);
+                            var s = this.SecondaryNamespace;
+                            if (s.StartsWith(this.Namespace + "."))
+                            {
+                                s = s.Substring(this.Namespace.Length + 1);
+                            }
+
                             folder = Path.Combine(folder, s);
                             Directory.CreateDirectory(folder);
                         }
-                        WriteClassesToFile(Path.Combine(folder, (UseNestedClasses && !type.IsRoot ? MainClass + "." : string.Empty) + type.AssignedName + CodeWriter.FileExtension), new[] { type });
+
+                        this.WriteClassesToFile(Path.Combine(folder, (this.UseNestedClasses && !type.IsRoot ? this.MainClass + "." : string.Empty) + type.AssignedName + this.CodeWriter.FileExtension), new[] { type });
                     }
                 }
             }
-            else if (OutputStream != null)
+            else if (this.OutputStream != null)
             {
-                WriteClassesToFile(OutputStream, Types);
+                this.WriteClassesToFile(this.OutputStream, this.Types);
             }
         }
 
@@ -107,7 +146,7 @@ namespace TMP.Common.JsonUtils.JsonClassGenerator
         {
             using (var sw = new StreamWriter(path, false, Encoding.UTF8))
             {
-                WriteClassesToFile(sw, types);
+                this.WriteClassesToFile(sw, types);
             }
         }
 
@@ -116,15 +155,31 @@ namespace TMP.Common.JsonUtils.JsonClassGenerator
             var inNamespace = false;
             var rootNamespace = false;
 
-            CodeWriter.WriteFileStart(this, sw);
+            this.CodeWriter.WriteFileStart(this, sw);
             foreach (var type in types)
             {
-                if (UseNamespaces && inNamespace && rootNamespace != type.IsRoot && SecondaryNamespace != null) { CodeWriter.WriteNamespaceEnd(this, sw, rootNamespace); inNamespace = false; }
-                if (UseNamespaces && !inNamespace) { CodeWriter.WriteNamespaceStart(this, sw, type.IsRoot); inNamespace = true; rootNamespace = type.IsRoot; }
-                CodeWriter.WriteClass(this, sw, type);
+                if (this.UseNamespaces && inNamespace && rootNamespace != type.IsRoot && this.SecondaryNamespace != null)
+                {
+                    this.CodeWriter.WriteNamespaceEnd(this, sw, rootNamespace);
+                    inNamespace = false;
+                }
+
+                if (this.UseNamespaces && !inNamespace)
+                {
+                    this.CodeWriter.WriteNamespaceStart(this, sw, type.IsRoot);
+                    inNamespace = true;
+                    rootNamespace = type.IsRoot;
+                }
+
+                this.CodeWriter.WriteClass(this, sw, type);
             }
-            if (UseNamespaces && inNamespace) CodeWriter.WriteNamespaceEnd(this, sw, rootNamespace);
-            CodeWriter.WriteFileEnd(this, sw);
+
+            if (this.UseNamespaces && inNamespace)
+            {
+                this.CodeWriter.WriteNamespaceEnd(this, sw, rootNamespace);
+            }
+
+            this.CodeWriter.WriteFileEnd(this, sw);
         }
 
         private void GenerateClass(JObject[] examples, JsonType type)
@@ -149,11 +204,19 @@ namespace TMP.Common.JsonUtils.JsonClassGenerator
                     else
                     {
                         var commonType = currentType;
-                        if (first) commonType = commonType.MaybeMakeNullable(this);
-                        else commonType = commonType.GetCommonType(JsonType.GetNull(this));
+                        if (first)
+                        {
+                            commonType = commonType.MaybeMakeNullable(this);
+                        }
+                        else
+                        {
+                            commonType = commonType.GetCommonType(JsonType.GetNull(this));
+                        }
+
                         jsonFields.Add(propName, commonType);
                         fieldExamples[propName] = new List<object>();
                     }
+
                     var fe = fieldExamples[propName];
                     var val = prop.Value;
                     if (val.Type == JTokenType.Null || val.Type == JTokenType.Undefined)
@@ -167,17 +230,20 @@ namespace TMP.Common.JsonUtils.JsonClassGenerator
                     {
                         var v = val.Type == JTokenType.Array || val.Type == JTokenType.Object ? val : val.Value<object>();
                         if (!fe.Any(x => v.Equals(x)))
+                        {
                             fe.Add(v);
+                        }
                     }
                 }
+
                 first = false;
             }
 
-            if (UseNestedClasses)
+            if (this.UseNestedClasses)
             {
                 foreach (var field in jsonFields)
                 {
-                    Names.Add(field.Key.ToLower());
+                    this.Names.Add(field.Key.ToLower());
                 }
             }
 
@@ -199,8 +265,8 @@ namespace TMP.Common.JsonUtils.JsonClassGenerator
                         }
                     }
 
-                    fieldType.AssignName(CreateUniqueClassName(field.Key));
-                    GenerateClass(subexamples.ToArray(), fieldType);
+                    fieldType.AssignName(this.CreateUniqueClassName(field.Key));
+                    this.GenerateClass(subexamples.ToArray(), fieldType);
                 }
 
                 if (fieldType.InternalType != null && fieldType.InternalType.Type == JsonTypeEnum.Object)
@@ -215,7 +281,11 @@ namespace TMP.Common.JsonUtils.JsonClassGenerator
                             {
                                 foreach (var item in (JArray)value)
                                 {
-                                    if (!(item is JObject)) throw new NotSupportedException("Arrays of non-objects are not supported yet.");
+                                    if (!(item is JObject))
+                                    {
+                                        throw new NotSupportedException("Arrays of non-objects are not supported yet.");
+                                    }
+
                                     subexamples.Add((JObject)item);
                                 }
                             }
@@ -223,7 +293,10 @@ namespace TMP.Common.JsonUtils.JsonClassGenerator
                             {
                                 foreach (var item in (JObject)value)
                                 {
-                                    if (!(item.Value is JObject)) throw new NotSupportedException("Arrays of non-objects are not supported yet.");
+                                    if (!(item.Value is JObject))
+                                    {
+                                        throw new NotSupportedException("Arrays of non-objects are not supported yet.");
+                                    }
 
                                     subexamples.Add((JObject)item.Value);
                                 }
@@ -231,16 +304,17 @@ namespace TMP.Common.JsonUtils.JsonClassGenerator
                         }
                     }
 
-                    field.Value.InternalType.AssignName(CreateUniqueClassNameFromPlural(field.Key));
-                    GenerateClass(subexamples.ToArray(), field.Value.InternalType);
+                    field.Value.InternalType.AssignName(this.CreateUniqueClassNameFromPlural(field.Key));
+                    this.GenerateClass(subexamples.ToArray(), field.Value.InternalType);
                 }
             }
 
-            type.Fields = jsonFields.Select(x => new FieldInfo(this, x.Key, x.Value, UsePascalCase, fieldExamples[x.Key])).ToArray();
-            Types.Add(type);
+            type.Fields = jsonFields.Select(x => new FieldInfo(this, x.Key, x.Value, this.UsePascalCase, fieldExamples[x.Key])).ToArray();
+            this.Types.Add(type);
         }
 
         public IList<JsonType> Types { get; private set; }
+
         private HashSet<string> Names = new HashSet<string>();
 
         private string CreateUniqueClassName(string name)
@@ -249,19 +323,20 @@ namespace TMP.Common.JsonUtils.JsonClassGenerator
 
             var finalName = name;
             var i = 2;
-            while (Names.Any(x => x.Equals(finalName, StringComparison.OrdinalIgnoreCase)))
+            while (this.Names.Any(x => x.Equals(finalName, StringComparison.OrdinalIgnoreCase)))
             {
                 finalName = name + i.ToString();
                 i++;
             }
-            Names.Add(finalName);
+
+            this.Names.Add(finalName);
             return finalName;
         }
 
         private string CreateUniqueClassNameFromPlural(string plural)
         {
             plural = ToTitleCase(plural);
-            return CreateUniqueClassName(plural);
+            return this.CreateUniqueClassName(plural);
         }
 
         internal static string ToTitleCase(string str)
@@ -282,12 +357,10 @@ namespace TMP.Common.JsonUtils.JsonClassGenerator
                     flag = true;
                 }
             }
+
             return sb.ToString();
         }
 
-        public bool HasSecondaryClasses
-        {
-            get { return Types.Count > 1; }
-        }
+        public bool HasSecondaryClasses => this.Types.Count > 1;
     }
 }

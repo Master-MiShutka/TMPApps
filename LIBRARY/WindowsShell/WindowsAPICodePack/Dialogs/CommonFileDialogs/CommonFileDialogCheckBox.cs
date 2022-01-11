@@ -1,29 +1,31 @@
-﻿//Copyright (c) Microsoft Corporation.  All rights reserved.
-
-using System;
-using System.Diagnostics;
+﻿// Copyright (c) Microsoft Corporation.  All rights reserved.
 
 namespace Microsoft.WindowsAPICodePack.Dialogs.Controls
 {
+    using System;
+    using System.Diagnostics;
+
     /// <summary>
     /// Creates the check button controls used by the Common File Dialog.
     /// </summary>
     public class CommonFileDialogCheckBox : CommonFileDialogProminentControl
     {
         private bool isChecked;
+
         /// <summary>
         /// Gets or sets the state of the check box.
         /// </summary>
         public bool IsChecked
         {
-            get { return isChecked; }
+            get => this.isChecked;
+
             set
             {
                 // Check if property has changed
-                if (isChecked != value)
+                if (this.isChecked != value)
                 {
-                    isChecked = value;
-                    ApplyPropertyChange("IsChecked");
+                    this.isChecked = value;
+                    this.ApplyPropertyChange("IsChecked");
                 }
             }
         }
@@ -31,20 +33,26 @@ namespace Microsoft.WindowsAPICodePack.Dialogs.Controls
         /// <summary>
         /// Creates a new instance of this class.
         /// </summary>
-        public CommonFileDialogCheckBox() { }
+        public CommonFileDialogCheckBox()
+        {
+        }
 
         /// <summary>
         /// Creates a new instance of this class with the specified text.
         /// </summary>
         /// <param name="text">The text to display for this control.</param>
-        public CommonFileDialogCheckBox(string text) : base(text) { }
+        public CommonFileDialogCheckBox(string text) : base(text)
+        {
+        }
 
         /// <summary>
         /// Creates a new instance of this class with the specified name and text.
         /// </summary>
         /// <param name="name">The name of this control.</param>
         /// <param name="text">The text to display for this control.</param>
-        public CommonFileDialogCheckBox(string name, string text) : base(name, text) { }
+        public CommonFileDialogCheckBox(string name, string text) : base(name, text)
+        {
+        }
 
         /// <summary>
         /// Creates a new instance of this class with the specified text and check state.
@@ -73,10 +81,11 @@ namespace Microsoft.WindowsAPICodePack.Dialogs.Controls
         /// Occurs when the user changes the check state.
         /// </summary>
         public event EventHandler CheckedChanged = delegate { };
+
         internal void RaiseCheckedChangedEvent()
         {
             // Make sure that this control is enabled and has a specified delegate
-            if (Enabled)
+            if (this.Enabled)
             {
                 this.CheckedChanged(this, EventArgs.Empty);
             }
@@ -94,13 +103,16 @@ namespace Microsoft.WindowsAPICodePack.Dialogs.Controls
             dialog.AddCheckButton(this.Id, this.Text, this.isChecked);
 
             // Make this control prominent if needed
-            if (IsProminent) { dialog.MakeProminent(this.Id); }
+            if (this.IsProminent)
+            {
+                dialog.MakeProminent(this.Id);
+            }
 
             // Make sure this property is set
-            ApplyPropertyChange("IsChecked");
+            this.ApplyPropertyChange("IsChecked");
 
             // Sync unmanaged properties with managed properties
-            SyncUnmanagedProperties();
+            this.SyncUnmanagedProperties();
         }
     }
 }

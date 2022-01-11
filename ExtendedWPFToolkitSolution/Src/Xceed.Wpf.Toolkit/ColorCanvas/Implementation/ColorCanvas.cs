@@ -1,14 +1,14 @@
 ﻿/*************************************************************************************
+   
+   Toolkit for WPF
 
-   Extended WPF Toolkit
-
-   Copyright (C) 2007-2013 Xceed Software Inc.
+   Copyright (C) 2007-2018 Xceed Software Inc.
 
    This program is provided to you under the terms of the Microsoft Public
    License (Ms-PL) as published at http://wpftoolkit.codeplex.com/license 
 
    For more features, controls, and fast professional support,
-   pick up the Plus Edition at http://xceed.com/wpf_toolkit
+   pick up the Plus Edition at https://xceed.com/xceed-toolkit-plus-for-wpf/
 
    Stay informed: follow @datagrid on Twitter or Like http://facebook.com/datagrids
 
@@ -16,7 +16,6 @@
 
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
 using Xceed.Wpf.Toolkit.Core.Utilities;
@@ -268,7 +267,13 @@ namespace Xceed.Wpf.Toolkit
       {
         if( !string.IsNullOrEmpty( retValue ) )
         {
-          ColorConverter.ConvertFromString( value );
+          int outValue;
+          // User has entered an hexadecimal value (without the "#" character)... add it.
+          if( Int32.TryParse( retValue, System.Globalization.NumberStyles.HexNumber, null, out outValue ) )
+          {
+            retValue = "#" + retValue;
+          }
+          ColorConverter.ConvertFromString( retValue );
         }
       }
       catch
@@ -318,6 +323,10 @@ namespace Xceed.Wpf.Toolkit
     static ColorCanvas()
     {
       DefaultStyleKeyProperty.OverrideMetadata( typeof( ColorCanvas ), new FrameworkPropertyMetadata( typeof( ColorCanvas ) ) );
+    }
+
+    public ColorCanvas()
+    {
     }
 
     #endregion //Constructors
@@ -386,6 +395,9 @@ namespace Xceed.Wpf.Toolkit
           SetHexadecimalStringProperty( textBox.Text, true );
       }
     }
+
+
+
 
     #endregion //Base Class Overrides
 
@@ -536,11 +548,11 @@ namespace Xceed.Wpf.Toolkit
 
       _currentColorPosition = null;
 
-      HsvColor hsv = ColorUtilities.ConvertRgbToHsv( color.Value.R, color.Value.G, color.Value.B );
+      var hsv = ColorUtilities.ConvertRgbToHsv( color.Value.R, color.Value.G, color.Value.B );
 
       if( _updateSpectrumSliderValue )
       {
-        _spectrumSlider.Value = hsv.H;
+        _spectrumSlider.Value = 360 - hsv.H;
       }
 
       Point p = new Point( hsv.S, 1 - hsv.V );
@@ -589,6 +601,12 @@ namespace Xceed.Wpf.Toolkit
         {
           if( !string.IsNullOrEmpty( newValue ) )
           {
+            int outValue;
+            // User has entered an hexadecimal value (without the "#" character)... add it.
+            if( Int32.TryParse( newValue, System.Globalization.NumberStyles.HexNumber, null, out outValue ) )
+            {
+              newValue = "#" + newValue;
+            }
             ColorConverter.ConvertFromString( newValue );
           }
           HexadecimalString = newValue;

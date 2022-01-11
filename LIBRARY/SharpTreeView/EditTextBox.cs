@@ -1,82 +1,86 @@
 ﻿// Copyright (c) AlphaSierraPapa for the SharpDevelop Team (for details please see \doc\copyright.txt)
 // This code is distributed under the GNU LGPL (for details please see \doc\license.txt)
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows.Controls;
-using System.Windows.Input;
-using System.Windows.Data;
-using System.Windows;
-
 namespace ICSharpCode.TreeView
 {
-	class EditTextBox : TextBox
-	{
-		static EditTextBox()
-		{
-			DefaultStyleKeyProperty.OverrideMetadata(typeof(EditTextBox),
-				new FrameworkPropertyMetadata(typeof(EditTextBox)));
-		}
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Windows;
+    using System.Windows.Controls;
+    using System.Windows.Data;
+    using System.Windows.Input;
 
-		public EditTextBox()
-		{
-			Loaded += delegate { Init(); };
-		}
+    internal class EditTextBox : TextBox
+    {
+        static EditTextBox()
+        {
+            DefaultStyleKeyProperty.OverrideMetadata(typeof(EditTextBox),
+                new FrameworkPropertyMetadata(typeof(EditTextBox)));
+        }
 
-		public SharpTreeViewItem Item { get; set; }
+        public EditTextBox()
+        {
+            this.Loaded += delegate { this.Init(); };
+        }
 
-		public SharpTreeNode Node {
-			get { return Item.Node; }
-		}
+        public SharpTreeViewItem Item { get; set; }
 
-		void Init()
-		{
-			Text = Node.LoadEditText();
-			Focus();
-			SelectAll();
-		}
+        public SharpTreeNode Node => this.Item.Node;
 
-		protected override void OnKeyDown(KeyEventArgs e)
-		{
-			if (e.Key == Key.Enter) {
-				Commit();
-			} else if (e.Key == Key.Escape) {
-				Node.IsEditing = false;
-			}
-		}
+        private void Init()
+        {
+            this.Text = this.Node.LoadEditText();
+            this.Focus();
+            this.SelectAll();
+        }
 
-		protected override void OnLostKeyboardFocus(KeyboardFocusChangedEventArgs e)
-		{
-			if (Node.IsEditing) {
-				Commit();
-			}
-		}
+        protected override void OnKeyDown(KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                this.Commit();
+            }
+            else if (e.Key == Key.Escape)
+            {
+                this.Node.IsEditing = false;
+            }
+        }
 
-		bool commiting;
+        protected override void OnLostKeyboardFocus(KeyboardFocusChangedEventArgs e)
+        {
+            if (this.Node.IsEditing)
+            {
+                this.Commit();
+            }
+        }
 
-		void Commit()
-		{
-			if (!commiting) {
-				commiting = true;
+        private bool commiting;
 
-				Node.IsEditing = false;
-				if (!Node.SaveEditText(Text)) {
-					Item.Focus();
-				}
-				Node.RaisePropertyChanged("Text");
+        private void Commit()
+        {
+            if (!this.commiting)
+            {
+                this.commiting = true;
 
-				//if (Node.SaveEditText(Text)) {
-				//    Node.IsEditing = false;
-				//    Node.RaisePropertyChanged("Text");
-				//}
-				//else {
-				//    Init();
-				//}
+                this.Node.IsEditing = false;
+                if (!this.Node.SaveEditText(this.Text))
+                {
+                    this.Item.Focus();
+                }
 
-				commiting = false;
-			}
-		}
-	}
+                this.Node.RaisePropertyChanged("Text");
+
+                // if (Node.SaveEditText(Text)) {
+                //    Node.IsEditing = false;
+                //    Node.RaisePropertyChanged("Text");
+                // }
+                // else {
+                //    Init();
+                // }
+                this.commiting = false;
+            }
+        }
+    }
 }

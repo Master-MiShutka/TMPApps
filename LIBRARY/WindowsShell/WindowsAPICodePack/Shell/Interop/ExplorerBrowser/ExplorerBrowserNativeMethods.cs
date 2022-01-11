@@ -1,15 +1,15 @@
-﻿//Copyright (c) Microsoft Corporation.  All rights reserved.
-
-using System;
-using System.Runtime.InteropServices;
-using System.Security;
-using MS.WindowsAPICodePack.Internal;
+﻿// Copyright (c) Microsoft Corporation.  All rights reserved.
 
 namespace Microsoft.WindowsAPICodePack.Controls
 {
+    using System;
+    using System.Runtime.InteropServices;
+    using System.Security;
+    using MS.WindowsAPICodePack.Internal;
+
     /// <summary>
-    /// Internal class that contains interop declarations for 
-    /// functions that are not benign and are performance critical. 
+    /// Internal class that contains interop declarations for
+    /// functions that are not benign and are performance critical.
     /// </summary>
     [SuppressUnmanagedCodeSecurity]
     internal static class ExplorerBrowserNativeMethods
@@ -19,7 +19,6 @@ namespace Microsoft.WindowsAPICodePack.Controls
             [In, MarshalAs(UnmanagedType.IUnknown)] object punk,
             [In, MarshalAs(UnmanagedType.IUnknown)] object punkSite);
 
-
         [DllImport("SHLWAPI.DLL", CharSet = CharSet.Unicode, SetLastError = true)]
         internal static extern HResult ConnectToConnectionPoint(
             [In, MarshalAs(UnmanagedType.IUnknown)] object punk,
@@ -28,6 +27,5 @@ namespace Microsoft.WindowsAPICodePack.Controls
             [In, MarshalAs(UnmanagedType.IUnknown)] object punkTarget,
             ref uint pdwCookie,
             ref IntPtr ppcpOut);
-
     }
 }

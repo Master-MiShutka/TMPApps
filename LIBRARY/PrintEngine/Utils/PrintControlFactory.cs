@@ -1,18 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Printing;
-using System.Text;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Media;
-
-using TMP.PrintEngine.Extensions;
-using TMP.PrintEngine.ViewModels;
-
-namespace TMP.PrintEngine.Utils
+﻿namespace TMP.PrintEngine.Utils
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Data;
+    using System.Linq;
+    using System.Printing;
+    using System.Text;
+    using System.Windows;
+    using System.Windows.Controls;
+    using System.Windows.Media;
+    using TMP.PrintEngine.Extensions;
+    using TMP.PrintEngine.ViewModels;
+
     public class PrintControlFactory
     {
         public static IPrintControlViewModel Create(Size visualSize, Visual visual)
@@ -38,7 +37,6 @@ namespace TMP.PrintEngine.Utils
             var printControlPresenter = new DataTablePrintControlViewModel(view);
             SetupDataTablePrintControlPresenter(dataTable, printControlPresenter, columnWidths, string.Empty);
             return printControlPresenter;
-
         }
 
         public static IPrintControlViewModel Create(DataTable dataTable, List<double> columnWidths, string headerTemplate)
@@ -47,7 +45,6 @@ namespace TMP.PrintEngine.Utils
             var printControlPresenter = new DataTablePrintControlViewModel(view);
             SetupDataTablePrintControlPresenter(dataTable, printControlPresenter, columnWidths, headerTemplate);
             return printControlPresenter;
-
         }
 
         private static void SetupDataTablePrintControlPresenter(DataTable dataTable, DataTablePrintControlViewModel printControlPresenter, List<double> columnWidths, string headerTemplate)
@@ -82,7 +79,7 @@ namespace TMP.PrintEngine.Utils
                 ColumnHeaderFontSize = 12,
                 ColumnHeaderBrush = Brushes.Black,
                 ColumnHeaderHeight = 22,
-                HeaderTemplate = headerTemplate
+                HeaderTemplate = headerTemplate,
             };
 
             printControlPresenter.PrintTableDefination = printTableDefination;
@@ -98,20 +95,20 @@ namespace TMP.PrintEngine.Utils
             {
                 rowHeights.Add(child.ActualHeight);
             }
+
             return rowHeights;
         }
 
         private static Border CreateDocument(DataTable dataTable, double pageAcrossWidth, List<double> columnWidths)
         {
             Application.Current.DoEvents();
-            var spBorder = new Border { BorderBrush = Brushes.Gray, BorderThickness = new Thickness(0.25), Background = Brushes.White};
+            var spBorder = new Border { BorderBrush = Brushes.Gray, BorderThickness = new Thickness(0.25), Background = Brushes.White };
             var stackPanel = new StackPanel
             {
                 VerticalAlignment = VerticalAlignment.Top,
                 HorizontalAlignment = HorizontalAlignment.Left,
-                Orientation = Orientation.Vertical
+                Orientation = Orientation.Vertical,
             };
-
 
             foreach (DataRow dataRow in dataTable.Rows) // loop for all propertyOwners
             {
@@ -121,11 +118,11 @@ namespace TMP.PrintEngine.Utils
                 {
                     Orientation = Orientation.Horizontal,
                     VerticalAlignment = VerticalAlignment.Top,
-                    HorizontalAlignment = HorizontalAlignment.Left
+                    HorizontalAlignment = HorizontalAlignment.Left,
                 };
 
                 var columnIndex = 0;
-                foreach (DataColumn dataColumn in dataTable.Columns) //loop for all properties of the owners
+                foreach (DataColumn dataColumn in dataTable.Columns) // loop for all properties of the owners
                 {
                     {
 
@@ -138,9 +135,11 @@ namespace TMP.PrintEngine.Utils
                         columnIndex++;
                     }
                 }
+
                 border.Child = sp;
                 stackPanel.Children.Add(border);
             }
+
             spBorder.Child = stackPanel;
 
             UiUtil.UpdateSize(spBorder, pageAcrossWidth);
@@ -155,7 +154,7 @@ namespace TMP.PrintEngine.Utils
                 FontSize = 12,
                 Width = columnWidth - 0.5,
                 TextWrapping = TextWrapping.Wrap,
-                Padding = new Thickness(5)
+                Padding = new Thickness(5),
             };
             textBlock.Text = dataRow[dataColumn].ToString();
             return textBlock;
@@ -173,7 +172,7 @@ namespace TMP.PrintEngine.Utils
                     X = 0,
                     Y = 0,
                     Width = pageSize.Width.Value,
-                    Height = pageSize.Height.Value
+                    Height = pageSize.Height.Value,
                 };
 
                 var stretch = Stretch.None;
@@ -182,6 +181,7 @@ namespace TMP.PrintEngine.Utils
                 drawingContext.DrawRectangle(visualBrush, null, rect);
                 drawingContext.PushOpacityMask(Brushes.White);
             }
+
             return drawingVisual;
         }
 
@@ -201,6 +201,7 @@ namespace TMP.PrintEngine.Utils
                 dc.DrawRectangle(Brushes.White, null, rectangle);
                 dc.DrawRectangle(vb, null, rectangle);
             }
+
             return drawingVisual;
         }
     }

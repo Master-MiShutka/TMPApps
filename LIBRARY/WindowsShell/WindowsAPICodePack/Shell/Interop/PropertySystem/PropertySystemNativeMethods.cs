@@ -1,11 +1,11 @@
-﻿//Copyright (c) Microsoft Corporation.  All rights reserved.
-
-using System;
-using System.Runtime.InteropServices;
-using MS.WindowsAPICodePack.Internal;
+﻿// Copyright (c) Microsoft Corporation.  All rights reserved.
 
 namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 {
+    using System;
+    using System.Runtime.InteropServices;
+    using MS.WindowsAPICodePack.Internal;
+
     internal static class PropertySystemNativeMethods
     {
         #region Property Definitions
@@ -22,7 +22,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
             Speed,
             Rate,
             Rating,
-            Priority
+            Priority,
         }
 
         #endregion
@@ -32,30 +32,24 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
         [DllImport("propsys.dll", CharSet = CharSet.Unicode, SetLastError = true)]
         internal static extern int PSGetNameFromPropertyKey(
             ref PropertyKey propkey,
-            [Out, MarshalAs(UnmanagedType.LPWStr)] out string ppszCanonicalName
-        );
+            [Out, MarshalAs(UnmanagedType.LPWStr)] out string ppszCanonicalName);
 
         [DllImport("propsys.dll", CharSet = CharSet.Unicode, SetLastError = true)]
         internal static extern HResult PSGetPropertyDescription(
             ref PropertyKey propkey,
             ref Guid riid,
-            [Out, MarshalAs(UnmanagedType.Interface)] out IPropertyDescription ppv
-        );
+            [Out, MarshalAs(UnmanagedType.Interface)] out IPropertyDescription ppv);
 
         [DllImport("propsys.dll", CharSet = CharSet.Unicode, SetLastError = true)]
         internal static extern int PSGetPropertyKeyFromName(
             [In, MarshalAs(UnmanagedType.LPWStr)] string pszCanonicalName,
-            out PropertyKey propkey
-        );
+            out PropertyKey propkey);
 
         [DllImport("propsys.dll", CharSet = CharSet.Unicode, SetLastError = true)]
         internal static extern int PSGetPropertyDescriptionListFromString(
             [In, MarshalAs(UnmanagedType.LPWStr)] string pszPropList,
             [In] ref Guid riid,
-            out IPropertyDescriptionList ppv
-        );
-
-
+            out IPropertyDescriptionList ppv);
 
         #endregion
     }

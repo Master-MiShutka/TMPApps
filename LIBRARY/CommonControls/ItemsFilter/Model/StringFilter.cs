@@ -58,15 +58,16 @@ namespace TMP.Wpf.CommonControls.ItemsFilter.Model {
         /// Gets or sets the string filter mode.
         /// </summary>
         /// <value>The mode.</value>
-        public StringFilterMode Mode {
-            get {
-                return _filterMode;
-            }
-            set {
-                if (_filterMode!=value) {
+        public StringFilterMode Mode
+        {
+            get => _filterMode;
+            set
+            {
+                if (_filterMode != value)
+                {
                     _filterMode = value;
                     OnIsActiveChanged();
-                    RaisePropertyChanged("Mode");
+                    RaisePropertyChanged(nameof(Mode));
                 }
             }
         }
@@ -75,16 +76,17 @@ namespace TMP.Wpf.CommonControls.ItemsFilter.Model {
         /// Gets or sets the value to look for.
         /// </summary>
         /// <value>The value.</value>
-        public string Value {
-            get {
-                return _value;
-            }
-            set {
-                if (_value != value) {
+        public string Value
+        {
+            get => _value;
+            set
+            {
+                if (_value != value)
+                {
                     _value = value;
                     base.IsActive = !String.IsNullOrEmpty(value);
                     OnIsActiveChanged();
-                    RaisePropertyChanged("Value");
+                    RaisePropertyChanged(nameof(Value));
                 }
             }
         }

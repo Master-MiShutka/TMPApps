@@ -1,17 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Xml.Serialization;
-using System.Text;
-
-namespace TMP.Shared.Serialization
+﻿namespace TMP.Shared.Serialization
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Text;
+    using System.Xml.Serialization;
+
     public interface IXmlDeserializationCallback
     {
         void OnXmlDeserialization(object sender);
     }
+
     public class CustomXmlSerializer : XmlSerializer
     {
-        public CustomXmlSerializer(Type type) : base(type) { }
+        public CustomXmlSerializer(Type type) : base(type)
+        {
+        }
+
         protected override object Deserialize(XmlSerializationReader reader)
         {
             var result = base.Deserialize(reader);

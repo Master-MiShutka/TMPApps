@@ -1,38 +1,36 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace TemplateEngine.Docx
+﻿namespace TemplateEngine.Docx
 {
-    public class TableRowContent:Container, IEquatable<TableRowContent>
+    using System;
+    using System.Collections.Generic;
+
+    public class TableRowContent : Container, IEquatable<TableRowContent>
     {
         public TableRowContent()
         {
-            
         }
 
-		public TableRowContent(params IContentItem[] contentItems)
-			: base(contentItems)
-		{
-			
-		}
+        public TableRowContent(params IContentItem[] contentItems)
+            : base(contentItems)
+        {
+        }
 
-	    public TableRowContent(List<FieldContent> fields)
-	    {
-		    Fields = fields;
-	    }
+        public TableRowContent(List<FieldContent> fields)
+        {
+            this.Fields = fields;
+        }
 
-		#region Equals
+        #region Equals
 
-		public bool Equals(TableRowContent other)
-	    {
-		    return base.Equals(other);
-	    }
+        public bool Equals(TableRowContent other)
+        {
+            return base.Equals(other);
+        }
 
-	    public override int GetHashCode()
-	    {
-		    return base.GetHashCode();
-		}
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
 
-		#endregion
-	}
+        #endregion
+    }
 }

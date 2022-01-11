@@ -1,12 +1,12 @@
-//Copyright (c) Microsoft Corporation.  All rights reserved.
-
-using System;
-using System.Collections.Generic;
-using System.Reflection;
-using Microsoft.WindowsAPICodePack.Shell.Resources;
+// Copyright (c) Microsoft Corporation.  All rights reserved.
 
 namespace Microsoft.WindowsAPICodePack.Shell
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Reflection;
+    using Microsoft.WindowsAPICodePack.Shell.Resources;
+
     /// <summary>
     /// Contains the GUID identifiers for well-known folders.
     /// </summary>
@@ -31,6 +31,7 @@ namespace Microsoft.WindowsAPICodePack.Shell
                 }
             }
         }
+
         /// <summary>
         /// Returns the friendly name for a specified folder.
         /// </summary>
@@ -41,12 +42,14 @@ namespace Microsoft.WindowsAPICodePack.Shell
             string folder;
             if (!folders.TryGetValue(folderId, out folder))
             {
-                throw new ArgumentException(LocalizedMessages.FolderIdsUnknownGuid, "folderId");
+                throw new ArgumentException(LocalizedMessages.FolderIdsUnknownGuid, nameof(folderId));
             }
+
             return folder;
         }
+
         /// <summary>
-        /// Returns a sorted list of name, guid pairs for 
+        /// Returns a sorted list of name, guid pairs for
         /// all known folders.
         /// </summary>
         /// <returns></returns>

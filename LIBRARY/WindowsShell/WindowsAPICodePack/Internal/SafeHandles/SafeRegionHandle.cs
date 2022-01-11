@@ -1,8 +1,9 @@
-﻿//Copyright (c) Microsoft Corporation.  All rights reserved.
+﻿// Copyright (c) Microsoft Corporation.  All rights reserved.
 
-using System.Security.Permissions;
 namespace MS.WindowsAPICodePack.Internal
 {
+    using System.Security.Permissions;
+
     /// <summary>
     /// Safe Region Handle
     /// </summary>
@@ -14,7 +15,7 @@ namespace MS.WindowsAPICodePack.Internal
         /// <returns>true if handled is release successfully, false otherwise</returns>
         protected override bool ReleaseHandle()
         {
-            if (CoreNativeMethods.DeleteObject(handle))
+            if (CoreNativeMethods.DeleteObject(this.handle))
             {
                 return true;
             }

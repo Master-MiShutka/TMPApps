@@ -1,14 +1,14 @@
-﻿//Copyright (c) Microsoft Corporation.  All rights reserved.
-
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Runtime.InteropServices;
-using System.Runtime.InteropServices.ComTypes;
-using MS.WindowsAPICodePack.Internal;
+﻿// Copyright (c) Microsoft Corporation.  All rights reserved.
 
 namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+    using System.Runtime.InteropServices;
+    using System.Runtime.InteropServices.ComTypes;
+    using MS.WindowsAPICodePack.Internal;
+
     /// <summary>
     /// Defines the shell property description information for a property.
     /// </summary>
@@ -40,32 +40,26 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
         #region Public Properties
 
         /// <summary>
-        /// Gets the case-sensitive name of a property as it is known to the system, 
+        /// Gets the case-sensitive name of a property as it is known to the system,
         /// regardless of its localized name.
         /// </summary>
         public string CanonicalName
         {
             get
             {
-                if (canonicalName == null)
+                if (this.canonicalName == null)
                 {
-                    PropertySystemNativeMethods.PSGetNameFromPropertyKey(ref propertyKey, out canonicalName);
+                    PropertySystemNativeMethods.PSGetNameFromPropertyKey(ref this.propertyKey, out this.canonicalName);
                 }
 
-                return canonicalName;
+                return this.canonicalName;
             }
         }
 
         /// <summary>
         /// Gets the property key identifying the underlying property.
         /// </summary>
-        public PropertyKey PropertyKey
-        {
-            get
-            {
-                return propertyKey;
-            }
-        }
+        public PropertyKey PropertyKey => this.propertyKey;
 
         /// <summary>
         /// Gets the display name of the property as it is shown in any user interface (UI).
@@ -74,22 +68,22 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
         {
             get
             {
-                if (NativePropertyDescription != null && displayName == null)
+                if (this.NativePropertyDescription != null && this.displayName == null)
                 {
                     IntPtr dispNameptr = IntPtr.Zero;
 
-                    HResult hr = NativePropertyDescription.GetDisplayName(out dispNameptr);
+                    HResult hr = this.NativePropertyDescription.GetDisplayName(out dispNameptr);
 
                     if (CoreErrorHelper.Succeeded(hr) && dispNameptr != IntPtr.Zero)
                     {
-                        displayName = Marshal.PtrToStringUni(dispNameptr);
+                        this.displayName = Marshal.PtrToStringUni(dispNameptr);
 
                         // Free the string
                         Marshal.FreeCoTaskMem(dispNameptr);
                     }
                 }
 
-                return displayName;
+                return this.displayName;
             }
         }
 
@@ -100,22 +94,23 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
         {
             get
             {
-                if (NativePropertyDescription != null && editInvitation == null)
+                if (this.NativePropertyDescription != null && this.editInvitation == null)
                 {
                     // EditInvitation can be empty, so ignore the HR value, but don't throw an exception
                     IntPtr ptr = IntPtr.Zero;
 
-                    HResult hr = NativePropertyDescription.GetEditInvitation(out ptr);
+                    HResult hr = this.NativePropertyDescription.GetEditInvitation(out ptr);
 
                     if (CoreErrorHelper.Succeeded(hr) && ptr != IntPtr.Zero)
                     {
-                        editInvitation = Marshal.PtrToStringUni(ptr);
+                        this.editInvitation = Marshal.PtrToStringUni(ptr);
+
                         // Free the string
                         Marshal.FreeCoTaskMem(ptr);
                     }
                 }
 
-                return editInvitation;
+                return this.editInvitation;
             }
         }
 
@@ -126,19 +121,19 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
         {
             get
             {
-                if (NativePropertyDescription != null && varEnumType == null)
+                if (this.NativePropertyDescription != null && this.varEnumType == null)
                 {
                     VarEnum tempType;
 
-                    HResult hr = NativePropertyDescription.GetPropertyType(out tempType);
+                    HResult hr = this.NativePropertyDescription.GetPropertyType(out tempType);
 
                     if (CoreErrorHelper.Succeeded(hr))
                     {
-                        varEnumType = tempType;
+                        this.varEnumType = tempType;
                     }
                 }
 
-                return varEnumType.HasValue ? varEnumType.Value : default(VarEnum);
+                return this.varEnumType.HasValue ? this.varEnumType.Value : default(VarEnum);
             }
         }
 
@@ -150,12 +145,12 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
         {
             get
             {
-                if (valueType == null)
+                if (this.valueType == null)
                 {
-                    valueType = ShellPropertyFactory.VarEnumToSystemType(VarEnumType);
+                    this.valueType = ShellPropertyFactory.VarEnumToSystemType(this.VarEnumType);
                 }
 
-                return valueType;
+                return this.valueType;
             }
         }
 
@@ -166,19 +161,19 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
         {
             get
             {
-                if (NativePropertyDescription != null && displayType == null)
+                if (this.NativePropertyDescription != null && this.displayType == null)
                 {
                     PropertyDisplayType tempDisplayType;
 
-                    HResult hr = NativePropertyDescription.GetDisplayType(out tempDisplayType);
+                    HResult hr = this.NativePropertyDescription.GetDisplayType(out tempDisplayType);
 
                     if (CoreErrorHelper.Succeeded(hr))
                     {
-                        displayType = tempDisplayType;
+                        this.displayType = tempDisplayType;
                     }
                 }
 
-                return displayType.HasValue ? displayType.Value : default(PropertyDisplayType);
+                return this.displayType.HasValue ? this.displayType.Value : default(PropertyDisplayType);
             }
         }
 
@@ -189,43 +184,43 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
         {
             get
             {
-                if (NativePropertyDescription != null && !defaultColumWidth.HasValue)
+                if (this.NativePropertyDescription != null && !this.defaultColumWidth.HasValue)
                 {
                     uint tempDefaultColumWidth;
 
-                    HResult hr = NativePropertyDescription.GetDefaultColumnWidth(out tempDefaultColumWidth);
+                    HResult hr = this.NativePropertyDescription.GetDefaultColumnWidth(out tempDefaultColumWidth);
 
                     if (CoreErrorHelper.Succeeded(hr))
                     {
-                        defaultColumWidth = tempDefaultColumWidth;
+                        this.defaultColumWidth = tempDefaultColumWidth;
                     }
                 }
 
-                return defaultColumWidth.HasValue ? defaultColumWidth.Value : default(uint);
+                return this.defaultColumWidth.HasValue ? this.defaultColumWidth.Value : default(uint);
             }
         }
 
         /// <summary>
-        /// Gets a value that describes how the property values are displayed when 
+        /// Gets a value that describes how the property values are displayed when
         /// multiple items are selected in the user interface (UI).
         /// </summary>
         public PropertyAggregationType AggregationTypes
         {
             get
             {
-                if (NativePropertyDescription != null && aggregationTypes == null)
+                if (this.NativePropertyDescription != null && this.aggregationTypes == null)
                 {
                     PropertyAggregationType tempAggregationTypes;
 
-                    HResult hr = NativePropertyDescription.GetAggregationType(out tempAggregationTypes);
+                    HResult hr = this.NativePropertyDescription.GetAggregationType(out tempAggregationTypes);
 
                     if (CoreErrorHelper.Succeeded(hr))
                     {
-                        aggregationTypes = tempAggregationTypes;
+                        this.aggregationTypes = tempAggregationTypes;
                     }
                 }
 
-                return aggregationTypes.HasValue ? aggregationTypes.Value : default(PropertyAggregationType);
+                return this.aggregationTypes.HasValue ? this.aggregationTypes.Value : default(PropertyAggregationType);
             }
         }
 
@@ -236,13 +231,13 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
         {
             get
             {
-                if (NativePropertyDescription != null && propertyEnumTypes == null)
+                if (this.NativePropertyDescription != null && this.propertyEnumTypes == null)
                 {
                     List<ShellPropertyEnumType> propEnumTypeList = new List<ShellPropertyEnumType>();
 
                     Guid guid = new Guid(ShellIIDGuid.IPropertyEnumTypeList);
                     IPropertyEnumTypeList nativeList;
-                    HResult hr = NativePropertyDescription.GetEnumTypeList(ref guid, out nativeList);
+                    HResult hr = this.NativePropertyDescription.GetEnumTypeList(ref guid, out nativeList);
 
                     if (nativeList != null && CoreErrorHelper.Succeeded(hr))
                     {
@@ -259,16 +254,15 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
                         }
                     }
 
-                    propertyEnumTypes = new ReadOnlyCollection<ShellPropertyEnumType>(propEnumTypeList);
+                    this.propertyEnumTypes = new ReadOnlyCollection<ShellPropertyEnumType>(propEnumTypeList);
                 }
 
-                return propertyEnumTypes;
-
+                return this.propertyEnumTypes;
             }
         }
 
         /// <summary>
-        /// Gets the column state flag, which describes how the property 
+        /// Gets the column state flag, which describes how the property
         /// should be treated by interfaces or APIs that use this flag.
         /// </summary>
         public PropertyColumnStateOptions ColumnState
@@ -276,160 +270,161 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
             get
             {
                 // If default/first value, try to get it again, otherwise used the cached one.
-                if (NativePropertyDescription != null && columnState == null)
+                if (this.NativePropertyDescription != null && this.columnState == null)
                 {
                     PropertyColumnStateOptions state;
 
-                    HResult hr = NativePropertyDescription.GetColumnState(out state);
+                    HResult hr = this.NativePropertyDescription.GetColumnState(out state);
 
                     if (CoreErrorHelper.Succeeded(hr))
                     {
-                        columnState = state;
+                        this.columnState = state;
                     }
                 }
 
-                return columnState.HasValue ? columnState.Value : default(PropertyColumnStateOptions);
+                return this.columnState.HasValue ? this.columnState.Value : default(PropertyColumnStateOptions);
             }
         }
 
         /// <summary>
-        /// Gets the condition type to use when displaying the property in 
-        /// the query builder user interface (UI). This influences the list 
-        /// of predicate conditions (for example, equals, less than, and 
+        /// Gets the condition type to use when displaying the property in
+        /// the query builder user interface (UI). This influences the list
+        /// of predicate conditions (for example, equals, less than, and
         /// contains) that are shown for this property.
         /// </summary>
-        /// <remarks>For more information, see the <c>conditionType</c> attribute 
+        /// <remarks>For more information, see the <c>conditionType</c> attribute
         /// of the <c>typeInfo</c> element in the property's .propdesc file.</remarks>
         public PropertyConditionType ConditionType
         {
             get
             {
                 // If default/first value, try to get it again, otherwise used the cached one.
-                if (NativePropertyDescription != null && conditionType == null)
+                if (this.NativePropertyDescription != null && this.conditionType == null)
                 {
                     PropertyConditionType tempConditionType;
                     PropertyConditionOperation tempConditionOperation;
 
-                    HResult hr = NativePropertyDescription.GetConditionType(out tempConditionType, out tempConditionOperation);
+                    HResult hr = this.NativePropertyDescription.GetConditionType(out tempConditionType, out tempConditionOperation);
 
                     if (CoreErrorHelper.Succeeded(hr))
                     {
-                        conditionOperation = tempConditionOperation;
-                        conditionType = tempConditionType;
+                        this.conditionOperation = tempConditionOperation;
+                        this.conditionType = tempConditionType;
                     }
                 }
 
-                return conditionType.HasValue ? conditionType.Value : default(PropertyConditionType);
+                return this.conditionType.HasValue ? this.conditionType.Value : default(PropertyConditionType);
             }
         }
 
         /// <summary>
-        /// Gets the default condition operation to use 
-        /// when displaying the property in the query builder user 
-        /// interface (UI). This influences the list of predicate conditions 
-        /// (for example, equals, less than, and contains) that are shown 
+        /// Gets the default condition operation to use
+        /// when displaying the property in the query builder user
+        /// interface (UI). This influences the list of predicate conditions
+        /// (for example, equals, less than, and contains) that are shown
         /// for this property.
         /// </summary>
-        /// <remarks>For more information, see the <c>conditionType</c> attribute of the 
+        /// <remarks>For more information, see the <c>conditionType</c> attribute of the
         /// <c>typeInfo</c> element in the property's .propdesc file.</remarks>
         public PropertyConditionOperation ConditionOperation
         {
             get
             {
                 // If default/first value, try to get it again, otherwise used the cached one.
-                if (NativePropertyDescription != null && conditionOperation == null)
+                if (this.NativePropertyDescription != null && this.conditionOperation == null)
                 {
                     PropertyConditionType tempConditionType;
                     PropertyConditionOperation tempConditionOperation;
 
-                    HResult hr = NativePropertyDescription.GetConditionType(out tempConditionType, out tempConditionOperation);
+                    HResult hr = this.NativePropertyDescription.GetConditionType(out tempConditionType, out tempConditionOperation);
 
                     if (CoreErrorHelper.Succeeded(hr))
                     {
-                        conditionOperation = tempConditionOperation;
-                        conditionType = tempConditionType;
+                        this.conditionOperation = tempConditionOperation;
+                        this.conditionType = tempConditionType;
                     }
                 }
 
-                return conditionOperation.HasValue ? conditionOperation.Value : default(PropertyConditionOperation);
+                return this.conditionOperation.HasValue ? this.conditionOperation.Value : default(PropertyConditionOperation);
             }
         }
 
         /// <summary>
         /// Gets the method used when a view is grouped by this property.
         /// </summary>
-        /// <remarks>The information retrieved by this method comes from 
-        /// the <c>groupingRange</c> attribute of the <c>typeInfo</c> element in the 
+        /// <remarks>The information retrieved by this method comes from
+        /// the <c>groupingRange</c> attribute of the <c>typeInfo</c> element in the
         /// property's .propdesc file.</remarks>
         public PropertyGroupingRange GroupingRange
         {
             get
             {
                 // If default/first value, try to get it again, otherwise used the cached one.
-                if (NativePropertyDescription != null && groupingRange == null)
+                if (this.NativePropertyDescription != null && this.groupingRange == null)
                 {
                     PropertyGroupingRange tempGroupingRange;
 
-                    HResult hr = NativePropertyDescription.GetGroupingRange(out tempGroupingRange);
+                    HResult hr = this.NativePropertyDescription.GetGroupingRange(out tempGroupingRange);
 
                     if (CoreErrorHelper.Succeeded(hr))
                     {
-                        groupingRange = tempGroupingRange;
+                        this.groupingRange = tempGroupingRange;
                     }
                 }
 
-                return groupingRange.HasValue ? groupingRange.Value : default(PropertyGroupingRange);
+                return this.groupingRange.HasValue ? this.groupingRange.Value : default(PropertyGroupingRange);
             }
         }
 
         /// <summary>
-        /// Gets the current sort description flags for the property, 
+        /// Gets the current sort description flags for the property,
         /// which indicate the particular wordings of sort offerings.
         /// </summary>
-        /// <remarks>The settings retrieved by this method are set 
-        /// through the <c>sortDescription</c> attribute of the <c>labelInfo</c> 
+        /// <remarks>The settings retrieved by this method are set
+        /// through the <c>sortDescription</c> attribute of the <c>labelInfo</c>
         /// element in the property's .propdesc file.</remarks>
         public PropertySortDescription SortDescription
         {
             get
             {
                 // If default/first value, try to get it again, otherwise used the cached one.
-                if (NativePropertyDescription != null && sortDescription == null)
+                if (this.NativePropertyDescription != null && this.sortDescription == null)
                 {
                     PropertySortDescription tempSortDescription;
 
-                    HResult hr = NativePropertyDescription.GetSortDescription(out tempSortDescription);
+                    HResult hr = this.NativePropertyDescription.GetSortDescription(out tempSortDescription);
 
                     if (CoreErrorHelper.Succeeded(hr))
                     {
-                        sortDescription = tempSortDescription;
+                        this.sortDescription = tempSortDescription;
                     }
                 }
 
-                return sortDescription.HasValue ? sortDescription.Value : default(PropertySortDescription);
+                return this.sortDescription.HasValue ? this.sortDescription.Value : default(PropertySortDescription);
             }
         }
 
         /// <summary>
         /// Gets the localized display string that describes the current sort order.
         /// </summary>
-        /// <param name="descending">Indicates the sort order should 
+        /// <param name="descending">Indicates the sort order should
         /// reference the string "Z on top"; otherwise, the sort order should reference the string "A on top".</param>
         /// <returns>The sort description for this property.</returns>
-        /// <remarks>The string retrieved by this method is determined by flags set in the 
+        /// <remarks>The string retrieved by this method is determined by flags set in the
         /// <c>sortDescription</c> attribute of the <c>labelInfo</c> element in the property's .propdesc file.</remarks>
         public string GetSortDescriptionLabel(bool descending)
         {
             IntPtr ptr = IntPtr.Zero;
             string label = string.Empty;
 
-            if (NativePropertyDescription != null)
+            if (this.NativePropertyDescription != null)
             {
-                HResult hr = NativePropertyDescription.GetSortDescriptionLabel(descending, out ptr);
+                HResult hr = this.NativePropertyDescription.GetSortDescriptionLabel(descending, out ptr);
 
                 if (CoreErrorHelper.Succeeded(hr) && ptr != IntPtr.Zero)
                 {
                     label = Marshal.PtrToStringUni(ptr);
+
                     // Free the string
                     Marshal.FreeCoTaskMem(ptr);
                 }
@@ -445,16 +440,16 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
         {
             get
             {
-                if (NativePropertyDescription != null && propertyTypeFlags == null)
+                if (this.NativePropertyDescription != null && this.propertyTypeFlags == null)
                 {
                     PropertyTypeOptions tempFlags;
 
-                    HResult hr = NativePropertyDescription.GetTypeFlags(PropertyTypeOptions.MaskAll, out tempFlags);
+                    HResult hr = this.NativePropertyDescription.GetTypeFlags(PropertyTypeOptions.MaskAll, out tempFlags);
 
-                    propertyTypeFlags = CoreErrorHelper.Succeeded(hr) ? tempFlags : default(PropertyTypeOptions);
+                    this.propertyTypeFlags = CoreErrorHelper.Succeeded(hr) ? tempFlags : default(PropertyTypeOptions);
                 }
 
-                return propertyTypeFlags.HasValue ? propertyTypeFlags.Value : default(PropertyTypeOptions);
+                return this.propertyTypeFlags.HasValue ? this.propertyTypeFlags.Value : default(PropertyTypeOptions);
             }
         }
 
@@ -465,25 +460,22 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
         {
             get
             {
-                if (NativePropertyDescription != null && propertyViewFlags == null)
+                if (this.NativePropertyDescription != null && this.propertyViewFlags == null)
                 {
                     PropertyViewOptions tempFlags;
-                    HResult hr = NativePropertyDescription.GetViewFlags(out tempFlags);
+                    HResult hr = this.NativePropertyDescription.GetViewFlags(out tempFlags);
 
-                    propertyViewFlags = CoreErrorHelper.Succeeded(hr) ? tempFlags : default(PropertyViewOptions);
+                    this.propertyViewFlags = CoreErrorHelper.Succeeded(hr) ? tempFlags : default(PropertyViewOptions);
                 }
 
-                return propertyViewFlags.HasValue ? propertyViewFlags.Value : default(PropertyViewOptions);
+                return this.propertyViewFlags.HasValue ? this.propertyViewFlags.Value : default(PropertyViewOptions);
             }
         }
 
         /// <summary>
         /// Gets a value that determines if the native property description is present on the system.
         /// </summary>
-        public bool HasSystemDescription
-        {
-            get { return NativePropertyDescription != null; }
-        }
+        public bool HasSystemDescription => this.NativePropertyDescription != null;
 
         #endregion
 
@@ -505,13 +497,13 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
         {
             get
             {
-                if (nativePropertyDescription == null)
+                if (this.nativePropertyDescription == null)
                 {
                     Guid guid = new Guid(ShellIIDGuid.IPropertyDescription);
-                    PropertySystemNativeMethods.PSGetPropertyDescription(ref propertyKey, ref guid, out nativePropertyDescription);
+                    PropertySystemNativeMethods.PSGetPropertyDescription(ref this.propertyKey, ref guid, out this.nativePropertyDescription);
                 }
 
-                return nativePropertyDescription;
+                return this.nativePropertyDescription;
             }
         }
 
@@ -525,21 +517,21 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
         /// <param name="disposing">Indicates that this is being called from Dispose(), rather than the finalizer.</param>
         protected virtual void Dispose(bool disposing)
         {
-            if (nativePropertyDescription != null)
+            if (this.nativePropertyDescription != null)
             {
-                Marshal.ReleaseComObject(nativePropertyDescription);
-                nativePropertyDescription = null;
+                Marshal.ReleaseComObject(this.nativePropertyDescription);
+                this.nativePropertyDescription = null;
             }
 
             if (disposing)
             {
                 // and the managed ones
-                canonicalName = null;
-                displayName = null;
-                editInvitation = null;
-                defaultColumWidth = null;
-                valueType = null;
-                propertyEnumTypes = null;
+                this.canonicalName = null;
+                this.displayName = null;
+                this.editInvitation = null;
+                this.defaultColumWidth = null;
+                this.valueType = null;
+                this.propertyEnumTypes = null;
             }
         }
 
@@ -548,7 +540,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
         /// </summary>
         public void Dispose()
         {
-            Dispose(true);
+            this.Dispose(true);
             GC.SuppressFinalize(this);
         }
 
@@ -557,7 +549,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
         /// </summary>
         ~ShellPropertyDescription()
         {
-            Dispose(false);
+            this.Dispose(false);
         }
 
         #endregion

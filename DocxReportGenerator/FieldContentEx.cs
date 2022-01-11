@@ -1,18 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-using TemplateEngine.Docx;
-
-namespace TMP.Work.DocxReportGenerator
+﻿namespace TMP.Work.DocxReportGenerator
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using TemplateEngine.Docx;
+
     public class FieldContentEx
     {
         public FieldContentEx(FieldContentEx parent, IContentItem contentItem)
         {
-            Parent = parent;
-            AssociatedField = contentItem;
+            this.Parent = parent;
+            this.AssociatedField = contentItem;
         }
 
         public bool IsEnabled { get; set; } = false;
@@ -23,18 +22,18 @@ namespace TMP.Work.DocxReportGenerator
 
         public FieldContentEx Parent { get; set; }
 
-        public FieldTypes ParentFieldType => Parent == null ? FieldTypes.Content : Parent.FieldType;
+        public FieldTypes ParentFieldType => this.Parent == null ? FieldTypes.Content : this.Parent.FieldType;
 
         public IList<FieldContentEx> Children { get; set; }
 
-        public bool HasChildren => Children != null && Children.Count > 0;
-
+        public bool HasChildren => this.Children != null && this.Children.Count > 0;
     }
+
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public enum FieldTypes
     {
-        Content, List, Table, Image
+        Content, List, Table, Image,
     }
 }

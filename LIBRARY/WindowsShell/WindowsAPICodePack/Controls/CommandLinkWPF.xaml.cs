@@ -1,14 +1,14 @@
-//Copyright (c) Microsoft Corporation.  All rights reserved.
-
-using System.ComponentModel;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
-using System.Windows.Media;
-using MS.WindowsAPICodePack.Internal;
+// Copyright (c) Microsoft Corporation.  All rights reserved.
 
 namespace Microsoft.WindowsAPICodePack.Controls.WindowsPresentationFoundation
 {
+    using System.ComponentModel;
+    using System.Windows;
+    using System.Windows.Controls;
+    using System.Windows.Input;
+    using System.Windows.Media;
+    using MS.WindowsAPICodePack.Internal;
+
     /// <summary>
     /// Implements a CommandLink button that can be used in WPF user interfaces.
     /// </summary>
@@ -23,16 +23,16 @@ namespace Microsoft.WindowsAPICodePack.Controls.WindowsPresentationFoundation
             CoreHelpers.ThrowIfNotVista();
 
             this.DataContext = this;
-            InitializeComponent();
-            this.button.Click += new RoutedEventHandler(button_Click);
+            this.InitializeComponent();
+            this.button.Click += new RoutedEventHandler(this.button_Click);
         }
 
-        void button_Click(object sender, RoutedEventArgs e)
+        private void button_Click(object sender, RoutedEventArgs e)
         {
             e.Source = this;
-            if (Click != null)
+            if (this.Click != null)
             {
-                Click(sender, e);
+                this.Click(sender, e);
             }
         }
 
@@ -53,17 +53,19 @@ namespace Microsoft.WindowsAPICodePack.Controls.WindowsPresentationFoundation
         /// </summary>
         public string Link
         {
-            get { return link; }
+            get => this.link;
+
             set
             {
-                link = value;
+                this.link = value;
 
-                if (PropertyChanged != null)
+                if (this.PropertyChanged != null)
                 {
-                    PropertyChanged(this, new PropertyChangedEventArgs("Link"));
+                    this.PropertyChanged(this, new PropertyChangedEventArgs(nameof(this.Link)));
                 }
             }
         }
+
         private string note;
 
         /// <summary>
@@ -71,16 +73,18 @@ namespace Microsoft.WindowsAPICodePack.Controls.WindowsPresentationFoundation
         /// </summary>
         public string Note
         {
-            get { return note; }
+            get => this.note;
+
             set
             {
-                note = value;
-                if (PropertyChanged != null)
+                this.note = value;
+                if (this.PropertyChanged != null)
                 {
-                    PropertyChanged(this, new PropertyChangedEventArgs("Note"));
+                    this.PropertyChanged(this, new PropertyChangedEventArgs(nameof(this.Note)));
                 }
             }
         }
+
         private ImageSource icon;
 
         /// <summary>
@@ -88,13 +92,14 @@ namespace Microsoft.WindowsAPICodePack.Controls.WindowsPresentationFoundation
         /// </summary>
         public ImageSource Icon
         {
-            get { return icon; }
+            get => this.icon;
+
             set
             {
-                icon = value;
-                if (PropertyChanged != null)
+                this.icon = value;
+                if (this.PropertyChanged != null)
                 {
-                    PropertyChanged(this, new PropertyChangedEventArgs("Icon"));
+                    this.PropertyChanged(this, new PropertyChangedEventArgs(nameof(this.Icon)));
                 }
             }
         }
@@ -104,10 +109,9 @@ namespace Microsoft.WindowsAPICodePack.Controls.WindowsPresentationFoundation
         /// </summary>
         public bool? IsCheck
         {
-            get { return button.IsChecked; }
-            set { button.IsChecked = value; }
+            get => this.button.IsChecked;
+            set => this.button.IsChecked = value;
         }
-
 
         #region INotifyPropertyChanged Members
 
@@ -121,12 +125,6 @@ namespace Microsoft.WindowsAPICodePack.Controls.WindowsPresentationFoundation
         /// <summary>
         /// Indicates whether this feature is supported on the current platform.
         /// </summary>
-        public static bool IsPlatformSupported
-        {
-            get
-            {                
-                return CoreHelpers.RunningOnVista;
-            }
-        }
+        public static bool IsPlatformSupported => CoreHelpers.RunningOnVista;
     }
 }

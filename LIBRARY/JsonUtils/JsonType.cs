@@ -1,10 +1,10 @@
-﻿using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-
-namespace TMP.Common.JsonUtils.JsonClassGenerator
+﻿namespace TMP.Common.JsonUtils.JsonClassGenerator
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using Newtonsoft.Json.Linq;
+
     public class JsonType
     {
         private JsonType(IJsonClassGeneratorConfig generator)
@@ -16,12 +16,12 @@ namespace TMP.Common.JsonUtils.JsonClassGenerator
             : this(generator)
         {
 
-            Type = GetFirstTypeEnum(token);
+            this.Type = GetFirstTypeEnum(token);
 
-            if (Type == JsonTypeEnum.Array)
+            if (this.Type == JsonTypeEnum.Array)
             {
                 var array = (JArray)token;
-                InternalType = GetCommonType(generator, array.ToArray());
+                this.InternalType = GetCommonType(generator, array.ToArray());
             }
         }
 
@@ -40,7 +40,10 @@ namespace TMP.Common.JsonUtils.JsonClassGenerator
 
         public static JsonType GetCommonType(IJsonClassGeneratorConfig generator, JToken[] tokens)
         {
-            if (tokens.Length == 0) return new JsonType(generator, JsonTypeEnum.NonConstrained);
+            if (tokens.Length == 0)
+            {
+                return new JsonType(generator, JsonTypeEnum.NonConstrained);
+            }
 
             var common = new JsonType(generator, tokens[0]).MaybeMakeNullable(generator);
 
@@ -55,24 +58,30 @@ namespace TMP.Common.JsonUtils.JsonClassGenerator
 
         internal JsonType MaybeMakeNullable(IJsonClassGeneratorConfig generator)
         {
-            if (!generator.AlwaysUseNullableValues) return this;
+            if (!generator.AlwaysUseNullableValues)
+            {
+                return this;
+            }
+
             return this.GetCommonType(JsonType.GetNull(generator));
         }
 
         public JsonTypeEnum Type { get; private set; }
+
         public JsonType InternalType { get; private set; }
+
         public string AssignedName { get; private set; }
 
         public void AssignName(string name)
         {
-            AssignedName = name;
+            this.AssignedName = name;
         }
 
         public bool MustCache
         {
             get
             {
-                switch (Type)
+                switch (this.Type)
                 {
                     case JsonTypeEnum.Array: return true;
                     case JsonTypeEnum.Object: return true;
@@ -86,39 +95,48 @@ namespace TMP.Common.JsonUtils.JsonClassGenerator
 
         public string GetReaderName()
         {
-            if (Type == JsonTypeEnum.Anything || Type == JsonTypeEnum.NullableSomething || Type == JsonTypeEnum.NonConstrained)
+            if (this.Type == JsonTypeEnum.Anything || this.Type == JsonTypeEnum.NullableSomething || this.Type == JsonTypeEnum.NonConstrained)
             {
                 return "ReadObject";
             }
-            if (Type == JsonTypeEnum.Object)
+
+            if (this.Type == JsonTypeEnum.Object)
             {
-                return string.Format("ReadStronglyTypedObject<{0}>", AssignedName);
+                return string.Format("ReadStronglyTypedObject<{0}>", this.AssignedName);
             }
-            else if (Type == JsonTypeEnum.Array)
+            else if (this.Type == JsonTypeEnum.Array)
             {
-                return string.Format("ReadArray<{0}>", InternalType.GetTypeName());
+                return string.Format("ReadArray<{0}>", this.InternalType.GetTypeName());
             }
             else
             {
-                return string.Format("Read{0}", Enum.GetName(typeof(JsonTypeEnum), Type));
+                return string.Format("Read{0}", Enum.GetName(typeof(JsonTypeEnum), this.Type));
             }
         }
 
         public JsonType GetInnermostType()
         {
-            if (Type != JsonTypeEnum.Array) throw new InvalidOperationException();
-            if (InternalType.Type != JsonTypeEnum.Array) return InternalType;
-            return InternalType.GetInnermostType();
+            if (this.Type != JsonTypeEnum.Array)
+            {
+                throw new InvalidOperationException();
+            }
+
+            if (this.InternalType.Type != JsonTypeEnum.Array)
+            {
+                return this.InternalType;
+            }
+
+            return this.InternalType.GetInnermostType();
         }
 
         public string GetTypeName()
         {
-            return generator.CodeWriter.GetTypeName(this, generator);
+            return this.generator.CodeWriter.GetTypeName(this, this.generator);
         }
 
         public string GetJTokenType()
         {
-            switch (Type)
+            switch (this.Type)
             {
                 case JsonTypeEnum.Boolean:
                 case JsonTypeEnum.Integer:
@@ -145,24 +163,38 @@ namespace TMP.Common.JsonUtils.JsonClassGenerator
 
         public JsonType GetCommonType(JsonType type2)
         {
-            var commonType = GetCommonTypeEnum(this.Type, type2.Type);
+            var commonType = this.GetCommonTypeEnum(this.Type, type2.Type);
 
             if (commonType == JsonTypeEnum.Array)
             {
-                if (type2.Type == JsonTypeEnum.NullableSomething) return this;
-                if (this.Type == JsonTypeEnum.NullableSomething) return type2;
-                var commonInternalType = InternalType.GetCommonType(type2.InternalType).MaybeMakeNullable(generator);
-                if (commonInternalType != InternalType) return new JsonType(generator, JsonTypeEnum.Array) { InternalType = commonInternalType };
+                if (type2.Type == JsonTypeEnum.NullableSomething)
+                {
+                    return this;
+                }
+
+                if (this.Type == JsonTypeEnum.NullableSomething)
+                {
+                    return type2;
+                }
+
+                var commonInternalType = this.InternalType.GetCommonType(type2.InternalType).MaybeMakeNullable(this.generator);
+                if (commonInternalType != this.InternalType)
+                {
+                    return new JsonType(this.generator, JsonTypeEnum.Array) { InternalType = commonInternalType };
+                }
             }
 
-            //if (commonType == JsonTypeEnum.Dictionary)
-            //{
+            // if (commonType == JsonTypeEnum.Dictionary)
+            // {
             //    var commonInternalType = InternalType.GetCommonType(type2.InternalType);
             //    if (commonInternalType != InternalType) return new JsonType(JsonTypeEnum.Dictionary) { InternalType = commonInternalType };
-            //}
+            // }
+            if (this.Type == commonType)
+            {
+                return this;
+            }
 
-            if (this.Type == commonType) return this;
-            return new JsonType(generator, commonType).MaybeMakeNullable(generator);
+            return new JsonType(this.generator, commonType).MaybeMakeNullable(this.generator);
         }
 
         private static bool IsNull(JsonTypeEnum type)
@@ -172,93 +204,290 @@ namespace TMP.Common.JsonUtils.JsonClassGenerator
 
         private JsonTypeEnum GetCommonTypeEnum(JsonTypeEnum type1, JsonTypeEnum type2)
         {
-            if (type1 == JsonTypeEnum.NonConstrained) return type2;
-            if (type2 == JsonTypeEnum.NonConstrained) return type1;
+            if (type1 == JsonTypeEnum.NonConstrained)
+            {
+                return type2;
+            }
+
+            if (type2 == JsonTypeEnum.NonConstrained)
+            {
+                return type1;
+            }
 
             switch (type1)
             {
                 case JsonTypeEnum.Boolean:
-                    if (IsNull(type2)) return JsonTypeEnum.NullableBoolean;
-                    if (type2 == JsonTypeEnum.Boolean) return type1;
+                    if (IsNull(type2))
+                    {
+                        return JsonTypeEnum.NullableBoolean;
+                    }
+
+                    if (type2 == JsonTypeEnum.Boolean)
+                    {
+                        return type1;
+                    }
+
                     break;
                 case JsonTypeEnum.NullableBoolean:
-                    if (IsNull(type2)) return type1;
-                    if (type2 == JsonTypeEnum.Boolean) return type1;
+                    if (IsNull(type2))
+                    {
+                        return type1;
+                    }
+
+                    if (type2 == JsonTypeEnum.Boolean)
+                    {
+                        return type1;
+                    }
+
                     break;
                 case JsonTypeEnum.Integer:
-                    if (IsNull(type2)) return JsonTypeEnum.NullableInteger;
-                    if (type2 == JsonTypeEnum.Float) return JsonTypeEnum.Float;
-                    if (type2 == JsonTypeEnum.Long) return JsonTypeEnum.Long;
-                    if (type2 == JsonTypeEnum.Integer) return type1;
+                    if (IsNull(type2))
+                    {
+                        return JsonTypeEnum.NullableInteger;
+                    }
+
+                    if (type2 == JsonTypeEnum.Float)
+                    {
+                        return JsonTypeEnum.Float;
+                    }
+
+                    if (type2 == JsonTypeEnum.Long)
+                    {
+                        return JsonTypeEnum.Long;
+                    }
+
+                    if (type2 == JsonTypeEnum.Integer)
+                    {
+                        return type1;
+                    }
+
                     break;
                 case JsonTypeEnum.NullableInteger:
-                    if (IsNull(type2)) return type1;
-                    if (type2 == JsonTypeEnum.Float) return JsonTypeEnum.NullableFloat;
-                    if (type2 == JsonTypeEnum.Long) return JsonTypeEnum.NullableLong;
-                    if (type2 == JsonTypeEnum.Integer) return type1;
+                    if (IsNull(type2))
+                    {
+                        return type1;
+                    }
+
+                    if (type2 == JsonTypeEnum.Float)
+                    {
+                        return JsonTypeEnum.NullableFloat;
+                    }
+
+                    if (type2 == JsonTypeEnum.Long)
+                    {
+                        return JsonTypeEnum.NullableLong;
+                    }
+
+                    if (type2 == JsonTypeEnum.Integer)
+                    {
+                        return type1;
+                    }
+
                     break;
                 case JsonTypeEnum.Float:
-                    if (IsNull(type2)) return JsonTypeEnum.NullableFloat;
-                    if (type2 == JsonTypeEnum.Float) return type1;
-                    if (type2 == JsonTypeEnum.Integer) return type1;
-                    if (type2 == JsonTypeEnum.Long) return type1;
+                    if (IsNull(type2))
+                    {
+                        return JsonTypeEnum.NullableFloat;
+                    }
+
+                    if (type2 == JsonTypeEnum.Float)
+                    {
+                        return type1;
+                    }
+
+                    if (type2 == JsonTypeEnum.Integer)
+                    {
+                        return type1;
+                    }
+
+                    if (type2 == JsonTypeEnum.Long)
+                    {
+                        return type1;
+                    }
+
                     break;
                 case JsonTypeEnum.NullableFloat:
-                    if (IsNull(type2)) return type1;
-                    if (type2 == JsonTypeEnum.Float) return type1;
-                    if (type2 == JsonTypeEnum.Integer) return type1;
-                    if (type2 == JsonTypeEnum.Long) return type1;
+                    if (IsNull(type2))
+                    {
+                        return type1;
+                    }
+
+                    if (type2 == JsonTypeEnum.Float)
+                    {
+                        return type1;
+                    }
+
+                    if (type2 == JsonTypeEnum.Integer)
+                    {
+                        return type1;
+                    }
+
+                    if (type2 == JsonTypeEnum.Long)
+                    {
+                        return type1;
+                    }
+
                     break;
                 case JsonTypeEnum.Long:
-                    if (IsNull(type2)) return JsonTypeEnum.NullableLong;
-                    if (type2 == JsonTypeEnum.Float) return JsonTypeEnum.Float;
-                    if (type2 == JsonTypeEnum.Integer) return type1;
+                    if (IsNull(type2))
+                    {
+                        return JsonTypeEnum.NullableLong;
+                    }
+
+                    if (type2 == JsonTypeEnum.Float)
+                    {
+                        return JsonTypeEnum.Float;
+                    }
+
+                    if (type2 == JsonTypeEnum.Integer)
+                    {
+                        return type1;
+                    }
+
                     break;
                 case JsonTypeEnum.NullableLong:
-                    if (IsNull(type2)) return type1;
-                    if (type2 == JsonTypeEnum.Float) return JsonTypeEnum.NullableFloat;
-                    if (type2 == JsonTypeEnum.Integer) return type1;
-                    if (type2 == JsonTypeEnum.Long) return type1;
+                    if (IsNull(type2))
+                    {
+                        return type1;
+                    }
+
+                    if (type2 == JsonTypeEnum.Float)
+                    {
+                        return JsonTypeEnum.NullableFloat;
+                    }
+
+                    if (type2 == JsonTypeEnum.Integer)
+                    {
+                        return type1;
+                    }
+
+                    if (type2 == JsonTypeEnum.Long)
+                    {
+                        return type1;
+                    }
+
                     break;
                 case JsonTypeEnum.Date:
-                    if (IsNull(type2)) return JsonTypeEnum.NullableDate;
-                    if (type2 == JsonTypeEnum.Date) return JsonTypeEnum.Date;
+                    if (IsNull(type2))
+                    {
+                        return JsonTypeEnum.NullableDate;
+                    }
+
+                    if (type2 == JsonTypeEnum.Date)
+                    {
+                        return JsonTypeEnum.Date;
+                    }
+
                     break;
                 case JsonTypeEnum.NullableDate:
-                    if (IsNull(type2)) return type1;
-                    if (type2 == JsonTypeEnum.Date) return type1;
+                    if (IsNull(type2))
+                    {
+                        return type1;
+                    }
+
+                    if (type2 == JsonTypeEnum.Date)
+                    {
+                        return type1;
+                    }
+
                     break;
                 case JsonTypeEnum.NullableSomething:
-                    if (IsNull(type2)) return type1;
-                    if (type2 == JsonTypeEnum.String) return JsonTypeEnum.String;
-                    if (type2 == JsonTypeEnum.Integer) return JsonTypeEnum.NullableInteger;
-                    if (type2 == JsonTypeEnum.Float) return JsonTypeEnum.NullableFloat;
-                    if (type2 == JsonTypeEnum.Long) return JsonTypeEnum.NullableLong;
-                    if (type2 == JsonTypeEnum.Boolean) return JsonTypeEnum.NullableBoolean;
-                    if (type2 == JsonTypeEnum.Date) return JsonTypeEnum.NullableDate;
-                    if (type2 == JsonTypeEnum.Array) return JsonTypeEnum.Array;
-                    if (type2 == JsonTypeEnum.Object) return JsonTypeEnum.Object;
+                    if (IsNull(type2))
+                    {
+                        return type1;
+                    }
+
+                    if (type2 == JsonTypeEnum.String)
+                    {
+                        return JsonTypeEnum.String;
+                    }
+
+                    if (type2 == JsonTypeEnum.Integer)
+                    {
+                        return JsonTypeEnum.NullableInteger;
+                    }
+
+                    if (type2 == JsonTypeEnum.Float)
+                    {
+                        return JsonTypeEnum.NullableFloat;
+                    }
+
+                    if (type2 == JsonTypeEnum.Long)
+                    {
+                        return JsonTypeEnum.NullableLong;
+                    }
+
+                    if (type2 == JsonTypeEnum.Boolean)
+                    {
+                        return JsonTypeEnum.NullableBoolean;
+                    }
+
+                    if (type2 == JsonTypeEnum.Date)
+                    {
+                        return JsonTypeEnum.NullableDate;
+                    }
+
+                    if (type2 == JsonTypeEnum.Array)
+                    {
+                        return JsonTypeEnum.Array;
+                    }
+
+                    if (type2 == JsonTypeEnum.Object)
+                    {
+                        return JsonTypeEnum.Object;
+                    }
+
                     break;
                 case JsonTypeEnum.Object:
-                    if (IsNull(type2)) return type1;
-                    if (type2 == JsonTypeEnum.Object) return type1;
-                    if (type2 == JsonTypeEnum.Dictionary) throw new ArgumentException();
+                    if (IsNull(type2))
+                    {
+                        return type1;
+                    }
+
+                    if (type2 == JsonTypeEnum.Object)
+                    {
+                        return type1;
+                    }
+
+                    if (type2 == JsonTypeEnum.Dictionary)
+                    {
+                        throw new ArgumentException();
+                    }
+
                     break;
                 case JsonTypeEnum.Dictionary:
                     throw new ArgumentException();
-                //if (IsNull(type2)) return type1;
-                //if (type2 == JsonTypeEnum.Object) return type1;
-                //if (type2 == JsonTypeEnum.Dictionary) return type1;
+
+                // if (IsNull(type2)) return type1;
+                // if (type2 == JsonTypeEnum.Object) return type1;
+                // if (type2 == JsonTypeEnum.Dictionary) return type1;
                 //  break;
                 case JsonTypeEnum.Array:
-                    if (IsNull(type2)) return type1;
-                    if (type2 == JsonTypeEnum.Array) return type1;
+                    if (IsNull(type2))
+                    {
+                        return type1;
+                    }
+
+                    if (type2 == JsonTypeEnum.Array)
+                    {
+                        return type1;
+                    }
+
                     break;
                 case JsonTypeEnum.String:
-                    if (IsNull(type2)) return type1;
-                    if (type2 == JsonTypeEnum.String) return type1;
+                    if (IsNull(type2))
+                    {
+                        return type1;
+                    }
+
+                    if (type2 == JsonTypeEnum.String)
+                    {
+                        return type1;
+                    }
+
                     break;
             }
+
             return JsonTypeEnum.Anything;
         }
 
@@ -272,9 +501,16 @@ namespace TMP.Common.JsonUtils.JsonClassGenerator
             var type = token.Type;
             if (type == JTokenType.Integer)
             {
-                if ((long)((JValue)token).Value < int.MaxValue) return JsonTypeEnum.Integer;
-                else return JsonTypeEnum.Long;
+                if ((long)((JValue)token).Value < int.MaxValue)
+                {
+                    return JsonTypeEnum.Integer;
+                }
+                else
+                {
+                    return JsonTypeEnum.Long;
+                }
             }
+
             switch (type)
             {
                 case JTokenType.Array: return JsonTypeEnum.Array;
@@ -291,6 +527,7 @@ namespace TMP.Common.JsonUtils.JsonClassGenerator
         }
 
         public IList<FieldInfo> Fields { get; internal set; }
+
         public bool IsRoot { get; internal set; }
     }
 }

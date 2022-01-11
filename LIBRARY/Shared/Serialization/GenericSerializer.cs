@@ -1,11 +1,11 @@
-﻿using System;
-using System.Xml;
-using System.Text;
-using System.Xml.Serialization;
-using System.IO;
-
-namespace TMP.Shared
+﻿namespace TMP.Shared
 {
+    using System;
+    using System.IO;
+    using System.Text;
+    using System.Xml;
+    using System.Xml.Serialization;
+
     /// <summary>
     /// A generic class used to serialize objects.
     /// </summary>
@@ -42,6 +42,7 @@ namespace TMP.Shared
                 }
             }
         }
+
         public static string Serialize<T>(T obj, Type[] extraTypes)
         {
             XmlSerializer xs = null;
@@ -67,6 +68,7 @@ namespace TMP.Shared
                 }
             }
         }
+
         /// <summary>
         /// Serializes the given object.
         /// </summary>
@@ -78,6 +80,7 @@ namespace TMP.Shared
             XmlSerializer xs = new XmlSerializer(typeof(T));
             xs.Serialize(writer, obj);
         }
+
         /// <summary>
         /// Serializes the given object.
         /// </summary>
@@ -91,6 +94,7 @@ namespace TMP.Shared
             XmlSerializer xs = new XmlSerializer(typeof(T), extraTypes);
             xs.Serialize(writer, obj);
         }
+
         /// <summary>
         /// Deserializes the given object.
         /// </summary>
@@ -102,6 +106,7 @@ namespace TMP.Shared
             XmlSerializer xs = new XmlSerializer(typeof(T));
             return (T)xs.Deserialize(reader);
         }
+
         /// <summary>
         /// Deserializes the given object.
         /// </summary>
@@ -111,27 +116,30 @@ namespace TMP.Shared
         ///           of additional object types to deserialize.</param>
         /// <returns>The deserialized object of type T.</returns>
         public static T Deserialize<T>(XmlReader reader, Type[] extraTypes)
-
         {
             XmlSerializer xs = new XmlSerializer(typeof(T), extraTypes);
             return (T)xs.Deserialize(reader);
         }
+
         /// <summary>
         /// Deserializes the given object.
         /// </summary>
         /// <typeparam name="T">The type of the object to be deserialized.</typeparam>
-        /// <param name="XML">The XML file containing the serialized object.</param>
+        /// <param name="xML">The XML file containing the serialized object.</param>
         /// <returns>The deserialized object of type T.</returns>
-        public static T Deserialize<T>(string XML)
+        public static T Deserialize<T>(string xML)
         {
-            if (XML == null || XML == string.Empty)
+            if (xML == null || xML == string.Empty)
+            {
                 return default(T);
+            }
+
             XmlSerializer xs = null;
             StringReader sr = null;
             try
             {
                 xs = new XmlSerializer(typeof(T));
-                sr = new StringReader(XML);
+                sr = new StringReader(xML);
                 return (T)xs.Deserialize(sr);
             }
             catch (Exception ex)
@@ -147,16 +155,20 @@ namespace TMP.Shared
                 }
             }
         }
-        public static T Deserialize<T>(string XML, Type[] extraTypes)
+
+        public static T Deserialize<T>(string xML, Type[] extraTypes)
         {
-            if (XML == null || XML == string.Empty)
+            if (xML == null || xML == string.Empty)
+            {
                 return default(T);
+            }
+
             XmlSerializer xs = null;
             StringReader sr = null;
             try
             {
                 xs = new XmlSerializer(typeof(T), extraTypes);
-                sr = new StringReader(XML);
+                sr = new StringReader(xML);
                 return (T)xs.Deserialize(sr);
             }
             catch (Exception ex)
@@ -172,14 +184,21 @@ namespace TMP.Shared
                 }
             }
         }
-        public static void SaveAs<T>(T Obj, string FileName,
+
+        public static void SaveAs<T>(T obj, string FileName,
                            Encoding encoding, Type[] extraTypes)
         {
             if (File.Exists(FileName))
+            {
                 File.Delete(FileName);
+            }
+
             DirectoryInfo di = new DirectoryInfo(Path.GetDirectoryName(FileName));
             if (!di.Exists)
+            {
                 di.Create();
+            }
+
             XmlDocument document = new XmlDocument();
             XmlWriterSettings wSettings = new XmlWriterSettings();
             wSettings.Indent = true;
@@ -189,47 +208,62 @@ namespace TMP.Shared
             using (XmlWriter writer = XmlWriter.Create(FileName, wSettings))
             {
                 if (extraTypes != null)
-                    Serialize<T>(Obj, writer, extraTypes);
+                {
+                    GenericSerializer.Serialize<T>(obj, writer, extraTypes);
+                }
                 else
-                    Serialize<T>(Obj, writer);
+                {
+                    Serialize<T>(obj, writer);
+                }
+
                 writer.Flush();
                 document.Save(writer);
             }
         }
-        public static void SaveAs<T>(T Obj, string FileName, Type[] extraTypes)
+
+        public static void SaveAs<T>(T obj, string FileName, Type[] extraTypes)
         {
-            SaveAs<T>(Obj, FileName, Encoding.UTF8, extraTypes);
+            SaveAs<T>(obj, FileName, Encoding.UTF8, extraTypes);
         }
-        public static void SaveAs<T>(T Obj, string FileName, Encoding encoding)
+
+        public static void SaveAs<T>(T obj, string FileName, Encoding encoding)
         {
-            SaveAs<T>(Obj, FileName, encoding, null);
+            SaveAs<T>(obj, FileName, encoding, null);
         }
-        public static void SaveAs<T>(T Obj, string FileName)
+
+        public static void SaveAs<T>(T obj, string FileName)
         {
-            SaveAs<T>(Obj, FileName, Encoding.UTF8);
+            SaveAs<T>(obj, FileName, Encoding.UTF8);
         }
-        public static T Open<T>(string FileName, Type[] extraTypes)
+
+        public static T Open<T>(string fileName, Type[] extraTypes)
         {
             T obj = default(T);
-            if (File.Exists(FileName))
+            if (File.Exists(fileName))
             {
                 XmlReaderSettings rSettings = new XmlReaderSettings();
                 rSettings.CloseInput = true;
                 rSettings.CheckCharacters = false;
-                using (XmlReader reader = XmlReader.Create(FileName, rSettings))
+                using (XmlReader reader = XmlReader.Create(fileName, rSettings))
                 {
                     reader.ReadOuterXml();
                     if (extraTypes != null)
+                    {
                         obj = Deserialize<T>(reader, extraTypes);
+                    }
                     else
+                    {
                         obj = Deserialize<T>(reader);
+                    }
                 }
             }
+
             return obj;
         }
-        public static T Open<T>(string FileName)
+
+        public static T Open<T>(string fileName)
         {
-            return Open<T>(FileName, null);
+            return Open<T>(fileName, null);
         }
     }
 }

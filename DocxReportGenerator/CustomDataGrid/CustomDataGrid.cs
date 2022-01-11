@@ -1,20 +1,20 @@
-﻿using System;
-using System.Linq;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Media;
-using System.Windows.Shapes;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Reflection;
-using System.Text;
-using System.Windows.Input;
-
-namespace TMP.Work.DocxReportGenerator.CustomControls
+﻿namespace TMP.Work.DocxReportGenerator.CustomControls
 {
+    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel;
+    using System.Diagnostics;
+    using System.Linq;
+    using System.Reflection;
+    using System.Text;
+    using System.Windows;
+    using System.Windows.Controls;
+    using System.Windows.Data;
+    using System.Windows.Documents;
+    using System.Windows.Input;
+    using System.Windows.Media;
+    using System.Windows.Shapes;
+
     public class CustomDataGrid : DataGrid
     {
         #region Constructors
@@ -29,12 +29,11 @@ namespace TMP.Work.DocxReportGenerator.CustomControls
 
         public CustomDataGrid()
         {
-            Loaded += CustomDataGridLoaded;
+            this.Loaded += this.CustomDataGridLoaded;
         }
 
         private void CustomDataGridLoaded(object sender, RoutedEventArgs e)
         {
-
         }
 
         #endregion
@@ -42,6 +41,7 @@ namespace TMP.Work.DocxReportGenerator.CustomControls
         #region Clipboard Paste
 
         public event ExecutedRoutedEventHandler ExecutePasteEvent;
+
         public event CanExecuteRoutedEventHandler CanExecutePasteEvent;
 
         private static void OnCanExecutePasteInternal(object target, CanExecuteRoutedEventArgs args)
@@ -55,16 +55,16 @@ namespace TMP.Work.DocxReportGenerator.CustomControls
         /// <param name="args"></param>
         protected virtual void OnCanExecutePaste(object target, CanExecuteRoutedEventArgs args)
         {
-            if (CanExecutePasteEvent != null)
+            if (this.CanExecutePasteEvent != null)
             {
-                CanExecutePasteEvent(target, args);
+                this.CanExecutePasteEvent(target, args);
                 if (args.Handled)
                 {
                     return;
                 }
             }
 
-            args.CanExecute = CurrentCell != null;
+            args.CanExecute = this.CurrentCell != null;
             args.Handled = true;
         }
 
@@ -73,16 +73,15 @@ namespace TMP.Work.DocxReportGenerator.CustomControls
             ((CustomDataGrid)target).OnExecutedPaste(target, args);
         }
 
-
         /// <summary>
         /// This virtual method is called when ApplicationCommands.Paste command is executed.
         /// </summary>
         /// <param name="args"></param>
         protected virtual void OnExecutedPaste(object target, ExecutedRoutedEventArgs args)
         {
-            if (ExecutePasteEvent != null)
+            if (this.ExecutePasteEvent != null)
             {
-                ExecutePasteEvent(target, args);
+                this.ExecutePasteEvent(target, args);
                 if (args.Handled)
                 {
                     return;
@@ -100,18 +99,18 @@ namespace TMP.Work.DocxReportGenerator.CustomControls
 #endif
 
             // call OnPastingCellClipboardContent for each cell
-            int minRowIndex = Math.Max(Items.IndexOf(CurrentItem), 0);
-            int maxRowIndex = Items.Count - 1;
-            int minColumnDisplayIndex = (SelectionUnit != DataGridSelectionUnit.FullRow) ? Columns.IndexOf(CurrentColumn) : 0;
-            int maxColumnDisplayIndex = Columns.Count - 1;
+            int minRowIndex = Math.Max(this.Items.IndexOf(this.CurrentItem), 0);
+            int maxRowIndex = this.Items.Count - 1;
+            int minColumnDisplayIndex = (this.SelectionUnit != DataGridSelectionUnit.FullRow) ? this.Columns.IndexOf(this.CurrentColumn) : 0;
+            int maxColumnDisplayIndex = this.Columns.Count - 1;
 
             int clipboardRowIndex = 0;
             for (int i = minRowIndex; i <= maxRowIndex && clipboardRowIndex < clipboardData.Count; i++, clipboardRowIndex++)
             {
-                if (CanUserAddRows && i == maxRowIndex)
+                if (this.CanUserAddRows && i == maxRowIndex)
                 {
                     // add a new row to be pasted to
-                    ICollectionView cv = CollectionViewSource.GetDefaultView(Items);
+                    ICollectionView cv = CollectionViewSource.GetDefaultView(this.Items);
                     IEditableCollectionView iecv = cv as IEditableCollectionView;
                     if (iecv != null)
                     {
@@ -120,7 +119,7 @@ namespace TMP.Work.DocxReportGenerator.CustomControls
                         if (clipboardRowIndex + 1 < clipboardData.Count)
                         {
                             // still has more items to paste, update the maxRowIndex
-                            maxRowIndex = Items.Count - 1;
+                            maxRowIndex = this.Items.Count - 1;
                         }
                     }
                 }
@@ -132,11 +131,11 @@ namespace TMP.Work.DocxReportGenerator.CustomControls
                 int columnDataIndex = 0;
                 for (int j = minColumnDisplayIndex; j < maxColumnDisplayIndex && columnDataIndex < clipboardData[clipboardRowIndex].Length; j++, columnDataIndex++)
                 {
-                    DataGridColumn column = ColumnFromDisplayIndex(j);
-                    object item = Items[i];
+                    DataGridColumn column = this.ColumnFromDisplayIndex(j);
+                    object item = this.Items[i];
                     if (column is DataGridBoundColumn dgbc && dgbc.Binding != null)
                     {
-                        string propertyName = (dgbc.Binding as Binding).Path.Path;                        
+                        string propertyName = (dgbc.Binding as Binding).Path.Path;
                         object value = clipboardData[clipboardRowIndex][columnDataIndex];
                         PropertyInfo pi = item.GetType().GetProperty(propertyName);
                         if (pi != null)
@@ -146,24 +145,26 @@ namespace TMP.Work.DocxReportGenerator.CustomControls
                         }
                     }
                     else
+                    {
                         column.OnPastingCellClipboardContent(item, clipboardData[clipboardRowIndex][columnDataIndex]);
+                    }
                 }
             }
 
             // update selection
             if (hasAddedNewRow)
             {
-                UnselectAll();
-                UnselectAllCells();
-                CurrentItem = Items[minRowIndex];
-                if (SelectionUnit == DataGridSelectionUnit.FullRow)
+                this.UnselectAll();
+                this.UnselectAllCells();
+                this.CurrentItem = this.Items[minRowIndex];
+                if (this.SelectionUnit == DataGridSelectionUnit.FullRow)
                 {
-                    SelectedItem = Items[minRowIndex];
+                    this.SelectedItem = this.Items[minRowIndex];
                 }
                 else
-                    if (SelectionUnit == DataGridSelectionUnit.CellOrRowHeader || SelectionUnit == DataGridSelectionUnit.Cell)
+                    if (this.SelectionUnit == DataGridSelectionUnit.CellOrRowHeader || this.SelectionUnit == DataGridSelectionUnit.Cell)
                 {
-                    SelectedCells.Add(new DataGridCellInfo(Items[minRowIndex], Columns[minColumnDisplayIndex]));
+                    this.SelectedCells.Add(new DataGridCellInfo(this.Items[minRowIndex], this.Columns[minColumnDisplayIndex]));
                 }
             }
         }
@@ -173,8 +174,8 @@ namespace TMP.Work.DocxReportGenerator.CustomControls
         /// </summary>
         public bool CanUserPasteToNewRows
         {
-            get { return (bool)GetValue(CanUserPasteToNewRowsProperty); }
-            set { SetValue(CanUserPasteToNewRowsProperty, value); }
+            get => (bool)this.GetValue(CanUserPasteToNewRowsProperty);
+            set => this.SetValue(CanUserPasteToNewRowsProperty, value);
         }
 
         /// <summary>
@@ -188,4 +189,4 @@ namespace TMP.Work.DocxReportGenerator.CustomControls
         #endregion Clipboard Paste
 
     }
-}
+}

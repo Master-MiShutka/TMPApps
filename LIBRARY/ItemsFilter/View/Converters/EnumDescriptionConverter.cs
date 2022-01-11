@@ -1,12 +1,11 @@
-﻿using ItemsFilter.ViewModel;
-using System;
-using System.ComponentModel;
-using System.Globalization;
-using System.Windows.Data;
-using System.Reflection;
-
-namespace ItemsFilter.View
+﻿namespace ItemsFilter.View
 {
+    using System;
+    using System.ComponentModel;
+    using System.Globalization;
+    using System.Reflection;
+    using System.Windows.Data;
+
     public class EnumDescriptionConverter : IValueConverter
     {
         private string GetEnumDescription(Enum enumObj)
@@ -28,8 +27,13 @@ namespace ItemsFilter.View
 
         object IValueConverter.Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
+            if (string.IsNullOrWhiteSpace(value?.ToString()))
+            {
+                return string.Empty;
+            }
+
             Enum myEnum = (Enum)value;
-            string description = GetEnumDescription(myEnum);
+            string description = this.GetEnumDescription(myEnum);
             return description;
         }
 
@@ -38,5 +42,4 @@ namespace ItemsFilter.View
             return string.Empty;
         }
     }
-
 }

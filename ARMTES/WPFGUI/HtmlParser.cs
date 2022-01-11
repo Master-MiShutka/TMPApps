@@ -13,6 +13,8 @@ namespace TMP.ARMTES
     using TMP.ARMTES.Model;
     public class HtmlParser
     {
+        protected static readonly NLog.Logger _logger = NLog.LogManager.GetCurrentClassLogger();
+
         #region View Element
 
         public static SelectElementModel ViewElement(string data, string parentId, ProgressDialogController progressController)
@@ -395,6 +397,7 @@ namespace TMP.ARMTES
 
         public static ViewDeviceModel ViewDevice(string data, ProgressDialogController progressController)
         {
+
             ViewDeviceModel result = new ViewDeviceModel();
 
             try
@@ -557,7 +560,7 @@ namespace TMP.ARMTES
             catch (Exception ex)
             {
                 //TODO: Добавить логирование
-                App.LogException(ex);
+                _logger?.Error(ex);
                 return null;
             }
 

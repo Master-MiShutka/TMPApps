@@ -1,6 +1,8 @@
-﻿using System;
-
-namespace TMP.ExcelOutput
+﻿namespace TMP.ExcelOutput
 {
-    public class WorksheetNameExistsException : Exception { }
+    using System;
+
+    public class WorksheetNameExistsException : Exception
+    {
+    }
 }

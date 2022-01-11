@@ -11,7 +11,8 @@ namespace TMP.Wpf.CommonControls.ItemsFilter.Model {
     /// <typeparam name="T"></typeparam>
     [View(typeof(ComparableFilterView))]
     public class LessOrEqualFilter<T> : PropertyFilter, IComparableFilter<T>
-        where T : struct,  IComparable {
+        where T : struct,  IComparable 
+    {
         protected readonly Func<object, T> getter;
         protected T? _compareTo = null;
 
@@ -22,8 +23,7 @@ namespace TMP.Wpf.CommonControls.ItemsFilter.Model {
         protected LessOrEqualFilter(Func<object, T> getter) {
             Debug.Assert(getter != null, "getter is null.");
             this.getter = getter;
-        }
-        
+        }        
 
         /// <summary>
         /// Initializes a new instance of the <see cref="LessOrEqualFilter&lt;T&gt;"/> class.
@@ -68,28 +68,25 @@ namespace TMP.Wpf.CommonControls.ItemsFilter.Model {
         /// <summary>
         /// Get or set the value used in the comparison. If assign null, filter deactivated.
         /// </summary>
-        public T? CompareTo {
-            get {
-                return _compareTo;
-            }
-            set {
-                if (!Object.ReferenceEquals(_compareTo, value)) {
+        public T? CompareTo
+        {
+            get => _compareTo;
+            set
+            {
+                if (!Object.ReferenceEquals(_compareTo, value))
+                {
                     _compareTo = value;
                     RefreshIsActive();
                     RaiseFilterChanged();
-                    RaisePropertyChanged("CompareTo");
+                    RaisePropertyChanged(nameof(CompareTo));
                 }
             }
         }
         #region IComparableFilter Members
 
         object IComparableFilter.CompareTo {
-            get {
-                return CompareTo;
-            }
-            set {
-                CompareTo = (T?)value;
-            }
+            get => CompareTo;
+            set => CompareTo = (T?)value;
         }
         #endregion
 
@@ -103,7 +100,7 @@ namespace TMP.Wpf.CommonControls.ItemsFilter.Model {
         }
         private void RefreshIsActive()
         {
-            base.IsActive = !Object.ReferenceEquals(_compareTo, null);
+            base.IsActive = _compareTo is not null;
         }
     }
 }

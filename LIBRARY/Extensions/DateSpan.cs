@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace TMP.Extensions
+﻿namespace TMP.Extensions
 {
+    using System;
+
     /// <summary>
     /// DateSpan class used to computer difference of two dates
     /// </summary>
@@ -15,6 +15,7 @@ namespace TMP.Extensions
             get;
             set;
         }
+
         /// <summary>
         /// Difference in months
         /// </summary>
@@ -23,6 +24,7 @@ namespace TMP.Extensions
             get;
             set;
         }
+
         /// <summary>
         /// Difference in years
         /// </summary>

@@ -1,59 +1,20 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{54AE601D-9493-4B34-A847-13BD53A07DC2}</ProjectGuid>
-    <OutputType>WinExe</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <TargetFramework>net5.0-windows</TargetFramework>
+    <OutputType>Exe</OutputType>
     <RootNamespace>TMP.ARMTES</RootNamespace>
     <AssemblyName>ARMTES</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <WarningLevel>4</WarningLevel>
-    <ExpressionBlendVersion>12.0.51020.0</ExpressionBlendVersion>
-    <NuGetPackageImportStamp>56156b67</NuGetPackageImportStamp>
-    <TargetFrameworkProfile>
-    </TargetFrameworkProfile>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
-    <PublishUrl>publish\</PublishUrl>
-    <Install>true</Install>
-    <InstallFrom>Disk</InstallFrom>
-    <UpdateEnabled>true</UpdateEnabled>
-    <UpdateMode>Foreground</UpdateMode>
-    <UpdateInterval>7</UpdateInterval>
-    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
-    <UpdatePeriodically>false</UpdatePeriodically>
-    <UpdateRequired>false</UpdateRequired>
-    <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>0</ApplicationRevision>
-    <ApplicationVersion>1.2.0.0</ApplicationVersion>
-    <UseApplicationTrust>false</UseApplicationTrust>
-    <PublishWizardCompleted>true</PublishWizardCompleted>
-    <BootstrapperEnabled>true</BootstrapperEnabled>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <OutputPath>..\..\out\$(Configuration)\</OutputPath>
+    <UseWindowsForms>true</UseWindowsForms>
+    <UseWPF>true</UseWPF>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
     <OutputPath>..\..\out\Debug\ARMTES\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
     <OutputPath>..\..\out\Release\ARMTES\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationManifest>app.manifest</ApplicationManifest>
@@ -61,197 +22,36 @@
   <PropertyGroup>
     <ApplicationIcon>Resources\MAINICON.ico</ApplicationIcon>
   </PropertyGroup>
-  <PropertyGroup>
-    <ManifestCertificateThumbprint>8801FCEA846CA8B7E532084BB6C6ECFFFE0B34FD</ManifestCertificateThumbprint>
-  </PropertyGroup>
-  <PropertyGroup>
-    <ManifestKeyFile>WPFGUI_TemporaryKey.pfx</ManifestKeyFile>
-  </PropertyGroup>
-  <PropertyGroup>
-    <GenerateManifests>false</GenerateManifests>
-  </PropertyGroup>
-  <PropertyGroup>
-    <TargetZone>LocalIntranet</TargetZone>
-  </PropertyGroup>
-  <PropertyGroup>
-    <SignManifests>false</SignManifests>
-  </PropertyGroup>
   <ItemGroup>
-    <Reference Include="HtmlAgilityPack, Version=1.5.5.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\HtmlAgilityPack.1.5.5\lib\Net45\HtmlAgilityPack.dll</HintPath>
-    </Reference>
+    <None Remove="Resources\background.png" />
+    <None Remove="Resources\back_image.png" />
+    <None Remove="Resources\MAINICON.ico" />
+    <None Remove="Resources\wrongSettings.png" />
+  </ItemGroup>
+  <ItemGroup>
     <Reference Include="PresentationFramework.Aero" />
-    <Reference Include="System" />
-    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.configuration" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Drawing" />
     <Reference Include="System.Net" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Extensions" />
-    <Reference Include="System.Xml" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Xaml">
-      <RequiredTargetFramework>4.0</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="WindowsBase" />
-    <Reference Include="PresentationCore" />
-    <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <ApplicationDefinition Include="App.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </ApplicationDefinition>
-    <Compile Include="BindableCollection.cs" />
-    <Compile Include="BindingErrorTraceListener.cs" />
-    <Compile Include="Controls\ObjectQualityIndicationsVisualizer.xaml.cs">
-      <DependentUpon>ObjectQualityIndicationsVisualizer.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\QualityIndicationsVisualizer.xaml.cs">
-      <DependentUpon>QualityIndicationsVisualizer.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Converters\DateConverter.cs" />
-    <Compile Include="Converters\ItemsToVisibilityConverter.cs" />
-    <Compile Include="Converters\ObjectToVisibilityConverter.cs" />
-    <Compile Include="Converters\TestConverter.cs" />
-    <Compile Include="EnumerationExtension.cs" />
-    <Compile Include="Export\BaseExport.cs" />
-    <Compile Include="Export\ExportCollectorListAsIs.cs" />
-    <Compile Include="Export\ExportObjectsList.cs" />
-    <Compile Include="Export\ExportCollectorListSimple.cs" />
-    <Compile Include="Export\ExportInfo.cs" />
-    <Compile Include="Export\IExport.cs" />
-    <Compile Include="GridUtils.cs" />
-    <Compile Include="MainWindowMessages.cs" />
-    <Compile Include="RelayCommand.cs" />
-    <Compile Include="View\CollectorsView.cs" />
-    <Page Include="Themes\CollectorList.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Themes\ContentControlStyles.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Themes\TextBoxStyles.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Controls\ObjectQualityIndicationsVisualizer.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Controls\QualityIndicationsVisualizer.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="MainWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Compile Include="App.xaml.cs">
-      <DependentUpon>App.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="ArmTESSiteWrapper.cs" />
-    <Compile Include="HtmlParser.cs" />
-    <Compile Include="SettingBindingExtension.cs" />
-    <Compile Include="ViewModel\MainViewModel.cs" />
-    <Compile Include="MainWindow.xaml.cs">
-      <DependentUpon>MainWindow.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Page Include="Resources\Icons.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Themes\generic.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Themes\WindowsResources.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
+    <ProjectReference Include="..\..\LIBRARY\CommonControls\CommonControls.csproj" />
+    <ProjectReference Include="..\..\LIBRARY\ExcelXML\TMP.ExcelXML.csproj" />
+    <ProjectReference Include="..\..\Library\Shared\Shared.csproj" />
+    <ProjectReference Include="..\..\LIBRARY\TMPApplication\TMPApplication.csproj" />
+    <ProjectReference Include="..\Model\ArmtesModel.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Properties\AssemblyInfo.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Properties\Settings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Settings.settings</DependentUpon>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-    </Compile>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <None Include="app.config" />
-    <None Include="app.manifest" />
-    <None Include="packages.config" />
-    <None Include="Properties\Settings.settings">
-      <Generator>PublicSettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
-    <AppDesigner Include="Properties\" />
+    <PackageReference Include="HtmlAgilityPack" Version="1.11.31" />
+    <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
+   <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+   <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\background.png" />
     <Resource Include="Resources\back_image.png" />
     <Resource Include="Resources\MAINICON.ico" />
+    <Resource Include="Resources\wrongSettings.png" />
   </ItemGroup>
-  <ItemGroup>
-    <BootstrapperPackage Include=".NETFramework,Version=v4.5">
-      <Visible>False</Visible>
-      <ProductName>Microsoft .NET Framework 4.5 %28x86 and x64%29</ProductName>
-      <Install>true</Install>
-    </BootstrapperPackage>
-    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
-      <Visible>False</Visible>
-      <ProductName>.NET Framework 3.5 SP1</ProductName>
-      <Install>false</Install>
-    </BootstrapperPackage>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\LIBRARY\CommonControls\CommonControls.csproj">
-      <Project>{8cf736c3-a421-4f44-8f9c-945a4391718b}</Project>
-      <Name>CommonControls</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\LIBRARY\ExcelXML\TMP.ExcelXML.csproj">
-      <Project>{e849ebc2-aac8-4b33-bc4d-626cded46c0d}</Project>
-      <Name>TMP.ExcelXML</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Library\Shared\Shared.csproj">
-      <Project>{07d019f1-5192-4b8e-9bcf-b040d36935c6}</Project>
-      <Name>Shared</Name>
-      <Private>False</Private>
-    </ProjectReference>
-    <ProjectReference Include="..\..\LIBRARY\TMPApplication\TMPApplication.csproj">
-      <Project>{dfe89862-64ef-44f8-98a8-07b410ec180e}</Project>
-      <Name>TMPApplication</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Model\ArmtesModel.csproj">
-      <Project>{30b75d4c-3615-4d6a-8f45-ee114efe3b3c}</Project>
-      <Name>Model</Name>
-      <Private>False</Private>
-    </ProjectReference>
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>

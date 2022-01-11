@@ -277,39 +277,39 @@ namespace TMP.Wpf.CommonControls.Dialogs
 
         public MessageDialogStyle ButtonStyle
         {
-            get { return (MessageDialogStyle)GetValue(ButtonStyleProperty); }
-            set { SetValue(ButtonStyleProperty, value); }
+            get => (MessageDialogStyle)GetValue(ButtonStyleProperty);
+            set => SetValue(ButtonStyleProperty, value);
         }
 
         public string Message
         {
-            get { return (string)GetValue(MessageProperty); }
-            set { SetValue(MessageProperty, value); }
+            get => (string)GetValue(MessageProperty);
+            set => SetValue(MessageProperty, value);
         }
 
         public string AffirmativeButtonText
         {
-            get { return (string)GetValue(AffirmativeButtonTextProperty); }
-            set { SetValue(AffirmativeButtonTextProperty, value); }
+            get => (string)GetValue(AffirmativeButtonTextProperty);
+            set => SetValue(AffirmativeButtonTextProperty, value);
         }
 
         public string NegativeButtonText
         {
-            get { return (string)GetValue(NegativeButtonTextProperty); }
-            set { SetValue(NegativeButtonTextProperty, value); }
+            get => (string)GetValue(NegativeButtonTextProperty);
+            set => SetValue(NegativeButtonTextProperty, value);
         }
 
         public string FirstAuxiliaryButtonText
         {
-            get { return (string)GetValue(FirstAuxiliaryButtonTextProperty); }
-            set { SetValue(FirstAuxiliaryButtonTextProperty, value); }
+            get => (string)GetValue(FirstAuxiliaryButtonTextProperty);
+            set => SetValue(FirstAuxiliaryButtonTextProperty, value);
         }
 
         public string SecondAuxiliaryButtonText
         {
-            get { return (string)GetValue(SecondAuxiliaryButtonTextProperty); }
-            set { SetValue(SecondAuxiliaryButtonTextProperty, value); }
-        }        
+            get => (string)GetValue(SecondAuxiliaryButtonTextProperty);
+            set => SetValue(SecondAuxiliaryButtonTextProperty, value);
+        }
     }
 
     /// <summary>

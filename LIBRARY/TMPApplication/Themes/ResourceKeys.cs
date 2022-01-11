@@ -26,6 +26,7 @@
         public static readonly ComponentResourceKey DialogButtonFontSizeKey = new ComponentResourceKey(typeof(ResourceKeys), "DialogButtonFontSizeKey");
 
         #region Accent Keys
+
         // Accent Color Key and Accent Brush Key
         // These keys are used to accent elements in the UI
         // (e.g.: Color of Activated Normal Window Frame, ResizeGrip, Focus or MouseOver input elements)
@@ -43,6 +44,7 @@
         #endregion Accent Keys
 
         #region Normal Control Foreground and Background Keys
+
         // Color Keys
         public static readonly ComponentResourceKey ControlNormalForegroundKey = new ComponentResourceKey(typeof(ResourceKeys), "ControlNormalForegroundKey");
         public static readonly ComponentResourceKey ControlNormalBackgroundKey = new ComponentResourceKey(typeof(ResourceKeys), "ControlNormalBackgroundKey");
@@ -89,7 +91,7 @@
         public static readonly ComponentResourceKey ControlItemTextKey = new ComponentResourceKey(typeof(ResourceKeys), "ControlItemTextKey");
         public static readonly ComponentResourceKey ControlInputTextDisabledKey = new ComponentResourceKey(typeof(ResourceKeys), "ControlInputTextDisabledKey");
         public static readonly ComponentResourceKey ControlItemBackgroundHoverKey = new ComponentResourceKey(typeof(ResourceKeys), "ControlItemBackgroundHoverKey");
-        public static readonly ComponentResourceKey ControlItemTextHoverKey    = new ComponentResourceKey(typeof(ResourceKeys), "ControlItemTextHoverKey");
+        public static readonly ComponentResourceKey ControlItemTextHoverKey = new ComponentResourceKey(typeof(ResourceKeys), "ControlItemTextHoverKey");
         public static readonly ComponentResourceKey ControlItemTextSelectedKey = new ComponentResourceKey(typeof(ResourceKeys), "ControlItemTextSelectedKey");
         public static readonly ComponentResourceKey ControlItemTextDisabledKey = new ComponentResourceKey(typeof(ResourceKeys), "ControlItemTextDisabledKey");
         public static readonly ComponentResourceKey ControlItemBackgroundSelectedKey = new ComponentResourceKey(typeof(ResourceKeys), "ControlItemBackgroundSelectedKey");
@@ -105,7 +107,6 @@
         public static readonly ComponentResourceKey ControlScrollBarThumbForegroundDraggingKey = new ComponentResourceKey(typeof(ResourceKeys), "ControlScrollBarThumbForegroundDraggingKey");
         public static readonly ComponentResourceKey ControlScrollBarBackgroundKey = new ComponentResourceKey(typeof(ResourceKeys), "ControlScrollBarBackgroundKey");
 
-        //
         public static readonly ComponentResourceKey ControlWindowBorderActiveKey = new ComponentResourceKey(typeof(ResourceKeys), "ControlWindowBorderActiveKey");
         public static readonly ComponentResourceKey ControlWindowBackgroundKey = new ComponentResourceKey(typeof(ResourceKeys), "ControlWindowBackgroundKey");
         public static readonly ComponentResourceKey ControlWindowTextKey = new ComponentResourceKey(typeof(ResourceKeys), "ControlWindowTextKey");
@@ -127,13 +128,12 @@
         // Black Color Definition
         public static readonly ComponentResourceKey BlackColorKey = new ComponentResourceKey(typeof(ResourceKeys), "BlackColorKey");
         public static readonly ComponentResourceKey BlackBrushKey = new ComponentResourceKey(typeof(ResourceKeys), "BlackBrushKey");
+
         // White Color Definition
         public static readonly ComponentResourceKey WhiteColorKey = new ComponentResourceKey(typeof(ResourceKeys), "WhiteColorKey");
         public static readonly ComponentResourceKey WhiteBrushKey = new ComponentResourceKey(typeof(ResourceKeys), "WhiteBrushKey");
 
-
         // Gray Brush/Color Defintions
-
         public static readonly ComponentResourceKey GrayNormalKey = new ComponentResourceKey(typeof(ResourceKeys), "GrayNormalKey");
         public static readonly ComponentResourceKey GrayHoverKey = new ComponentResourceKey(typeof(ResourceKeys), "GrayHoverKey");
 

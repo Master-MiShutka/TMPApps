@@ -1,26 +1,25 @@
-﻿using System;
-using System.IO;
-using System.Net;
-using System.Net.NetworkInformation;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using System.IO.Compression;
-
-using TMP.Common.Logger;
-
-namespace TMP.Common.NetHelper
+﻿namespace TMP.Common.NetHelper
 {
+    using System;
+    using System.IO;
+    using System.IO.Compression;
+    using System.Net;
+    using System.Net.NetworkInformation;
+    using System.Text;
+    using System.Threading;
+    using System.Threading.Tasks;
+    using NLog;
+
     public abstract class BaseSiteWrapper
     {
         #region Fields
 
+        protected readonly Logger logger = LogManager.GetCurrentClassLogger();
+
         protected const string _chromeUserAgent = "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36";
-        protected static ManualResetEvent _allDone = new ManualResetEvent(false);
+        protected static ManualResetEvent allDone = new ManualResetEvent(false);
 
-        protected ILoggerFacade Log;
-
-        protected CancellationTokenSource _cts;
+        protected CancellationTokenSource cts;
 
         public const int EMPTY_STATUS_CODE = -1;
 
@@ -30,11 +29,6 @@ namespace TMP.Common.NetHelper
 
         protected BaseSiteWrapper()
         {
-            var appWithLogger = System.Windows.Application.Current as IAppWithLogger;
-            if (appWithLogger != null)
-                Log = appWithLogger.Logger;
-            else
-                System.Diagnostics.Debug.WriteLine("Application as IAppWithLogger not found!");
         }
 
         #endregion Constructor
@@ -49,16 +43,21 @@ namespace TMP.Common.NetHelper
             httpWebRequest.Accept = "text/html, application/xhtml+xml, */*";
             httpWebRequest.UserAgent = _chromeUserAgent;
             httpWebRequest.AllowAutoRedirect = false;
-            //httpWebRequest.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
+
+            // httpWebRequest.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
             httpWebRequest.KeepAlive = true;
         }
 
         protected string GetDomain()
         {
-            if (ServerAddress.Contains(":"))
-                return ServerAddress.Substring(0, ServerAddress.IndexOf(':'));
+            if (this.ServerAddress.Contains(":"))
+            {
+                return this.ServerAddress.Substring(0, this.ServerAddress.IndexOf(':'));
+            }
             else
-                return ServerAddress;
+            {
+                return this.ServerAddress;
+            }
         }
 
         protected bool TryAddCookie(ref HttpWebRequest request)
@@ -67,17 +66,22 @@ namespace TMP.Common.NetHelper
             {
                 return false;
             }
+
             if (request.CookieContainer == null)
+            {
                 request.CookieContainer = new CookieContainer(1);
+            }
+
             try
             {
-                request.CookieContainer.Add(Cookie);
+                request.CookieContainer.Add(this.Cookie);
             }
             catch (Exception ex)
             {
-                Log?.Log("Не удалось добавить куки. Ошибка: " + ex.Message, Category.Exception, Priority.High);
+                this.logger?.Error("Не удалось добавить куки. Ошибка: " + ex.Message);
                 return true;
             }
+
             return true;
         }
 
@@ -87,37 +91,48 @@ namespace TMP.Common.NetHelper
 
         public bool IsServerOnline()
         {
-            if (String.IsNullOrEmpty(ServerAddress))
+            if (string.IsNullOrEmpty(this.ServerAddress))
+            {
                 throw new ArgumentNullException("ServerAddress");
+            }
 
             var pingSender = new Ping();
             PingReply reply;
 
             try
             {
-                if (ServerAddress.Contains(":"))
-                    reply = pingSender.Send(ServerAddress.Substring(0, ServerAddress.IndexOf(':')), 100);
+                if (this.ServerAddress.Contains(":"))
+                {
+                    reply = pingSender.Send(this.ServerAddress.Substring(0, this.ServerAddress.IndexOf(':')), 100);
+                }
                 else
-                    reply = pingSender.Send(ServerAddress, 100);
+                {
+                    reply = pingSender.Send(this.ServerAddress, 100);
+                }
+
                 if (reply.Status == IPStatus.Success)
                 {
-                    Log?.Log("Проверка доступности сервера - доступен", Category.Info, Priority.None);
+                    this.logger?.Error("Проверка доступности сервера - доступен");
                     return true;
                 }
                 else
                 {
-                    Log?.Log("Проверка доступности сервера - не доступен. Ответ: " + reply.Status, Category.Info, Priority.None);
+                    this.logger?.Error("Проверка доступности сервера - не доступен. Ответ: " + reply.Status);
                     return false;
                 }
             }
             catch (Exception ex)
             {
-                Log?.Log("Проверка доступности сервера - ошибка: " + ex.Message, Category.Exception, Priority.High);
+                this.logger?.Error("Проверка доступности сервера - ошибка: " + ex.Message);
                 return false;
             }
             finally
             {
-                if (pingSender != null) pingSender.Dispose();
+                if (pingSender != null)
+                {
+                    pingSender.Dispose();
+                }
+
                 pingSender = null;
                 reply = null;
             }
@@ -125,12 +140,17 @@ namespace TMP.Common.NetHelper
 
         public bool IsSiteOnline()
         {
-            if (Uri.CheckHostName(SiteAddress) == UriHostNameType.Unknown)
+            if (Uri.CheckHostName(this.SiteAddress) == UriHostNameType.Unknown)
+            {
                 throw new ArgumentNullException("SiteAddress");
-            if (String.IsNullOrEmpty(SiteAddress))
-                throw new ArgumentNullException("SiteAddress");
+            }
 
-            Boolean ret = false;
+            if (string.IsNullOrEmpty(this.SiteAddress))
+            {
+                throw new ArgumentNullException("SiteAddress");
+            }
+
+            bool ret = false;
 
             try
             {
@@ -148,13 +168,14 @@ namespace TMP.Common.NetHelper
                     // HTTP = 200 - Internet connection available, server online
                     ret = true;
                 }
+
                 resp.Close();
-                Log?.Log("Проверка доступности сайта, ответ:" + resp.StatusCode, Category.Info, Priority.None);
+                this.logger?.Error("Проверка доступности сайта, ответ:" + resp.StatusCode);
                 return ret;
             }
             catch (Exception ex)
             {
-                Log?.Log("Проверка доступности сайта, ошибка:" + ex.Message, Category.Exception, Priority.High);
+                this.logger?.Error("Проверка доступности сайта, ошибка:" + ex.Message);
                 return false;
             }
         }
@@ -165,14 +186,17 @@ namespace TMP.Common.NetHelper
             try
             {
                 HttpWebRequest httpWebRequest = (HttpWebRequest)WebRequest.Create(url);
+
                 // настройка запроса
-                ConfigureRequest(ref httpWebRequest);
+                this.ConfigureRequest(ref httpWebRequest);
                 httpWebRequest.Method = WebRequestMethods.Http.Post;
 
                 // содержимое запроса
                 httpWebRequest.ContentLength = data.Length;
                 using (Stream stream = httpWebRequest.GetRequestStream())
+                {
                     stream.Write(data, 0, data.Length);
+                }
 
                 using (HttpWebResponse response = (HttpWebResponse)httpWebRequest.GetResponse())
                 using (Stream responseStream = response.GetResponseStream())
@@ -191,7 +215,6 @@ namespace TMP.Common.NetHelper
                     {
                         string answer = streamReader.ReadToEnd();
                         result.SetData(answer, (int)response.StatusCode);
-
                     }
                 }
             }
@@ -209,6 +232,7 @@ namespace TMP.Common.NetHelper
                         message = reader.ReadToEnd();
                     }
                 }
+
                 result.SetError(we, (int)we.Status, message);
                 return result;
             }
@@ -220,22 +244,26 @@ namespace TMP.Common.NetHelper
             #endregion
             return result;
         }
+
         public async Task<ServiceResult> SendRequestWithBodyAsync(string url, byte[] data)
         {
             ServiceResult result = new ServiceResult();
             try
             {
                 HttpWebRequest httpWebRequest = (HttpWebRequest)WebRequest.Create(url);
+
                 // настройка запроса
-                ConfigureRequest(ref httpWebRequest);
+                this.ConfigureRequest(ref httpWebRequest);
                 httpWebRequest.Method = WebRequestMethods.Http.Post;
 
                 // содержимое запроса
                 httpWebRequest.ContentLength = data.Length;
                 using (Stream stream = httpWebRequest.GetRequestStream())
+                {
                     stream.Write(data, 0, data.Length);
+                }
 
-                using (HttpWebResponse response = (HttpWebResponse) await httpWebRequest.GetResponseAsync())
+                using (HttpWebResponse response = (HttpWebResponse)await httpWebRequest.GetResponseAsync())
                 using (Stream responseStream = response.GetResponseStream())
                 {
                     Stream streamToRead = responseStream;
@@ -252,7 +280,6 @@ namespace TMP.Common.NetHelper
                     {
                         string answer = streamReader.ReadToEnd();
                         result.SetData(answer, (int)response.StatusCode);
-
                     }
                 }
             }
@@ -270,6 +297,7 @@ namespace TMP.Common.NetHelper
                         message = reader.ReadToEnd();
                     }
                 }
+
                 result.SetError(we, (int)we.Status, message);
                 return result;
             }
@@ -288,8 +316,9 @@ namespace TMP.Common.NetHelper
             try
             {
                 HttpWebRequest httpWebRequest = (HttpWebRequest)WebRequest.Create(url);
+
                 // настройка запроса
-                ConfigureRequest(ref httpWebRequest);
+                this.ConfigureRequest(ref httpWebRequest);
                 httpWebRequest.Method = WebRequestMethods.Http.Get;
 
                 using (HttpWebResponse response = (HttpWebResponse)httpWebRequest.GetResponse())
@@ -335,6 +364,7 @@ namespace TMP.Common.NetHelper
                         message = reader.ReadToEnd();
                     }
                 }
+
                 result.SetError(we, (int)we.Status, message);
                 return result;
             }
@@ -346,14 +376,16 @@ namespace TMP.Common.NetHelper
             #endregion
             return result;
         }
+
         public async Task<ServiceResult> SendRequestAsync(string url)
         {
             ServiceResult result = new ServiceResult();
             try
             {
                 HttpWebRequest httpWebRequest = (HttpWebRequest)WebRequest.Create(url);
+
                 // настройка запроса
-                ConfigureRequest(ref httpWebRequest);
+                this.ConfigureRequest(ref httpWebRequest);
                 httpWebRequest.Method = WebRequestMethods.Http.Get;
 
                 using (HttpWebResponse response = (HttpWebResponse)await httpWebRequest.GetResponseAsync())
@@ -399,6 +431,7 @@ namespace TMP.Common.NetHelper
                         message = reader.ReadToEnd();
                     }
                 }
+
                 result.SetError(we, (int)we.Status, message);
                 return result;
             }
@@ -410,13 +443,15 @@ namespace TMP.Common.NetHelper
             #endregion
             return result;
         }
-        public async Task<System.Windows.Media.Imaging.BitmapImage> GetImage(string url)
+
+        public async Task<byte[]> GetImage(string url)
         {
             try
             {
                 HttpWebRequest httpWebRequest = (HttpWebRequest)WebRequest.Create(url);
+
                 // настройка запроса
-                ConfigureRequest(ref httpWebRequest);
+                this.ConfigureRequest(ref httpWebRequest);
                 httpWebRequest.Method = WebRequestMethods.Http.Get;
 
                 using (HttpWebResponse response = (HttpWebResponse)await httpWebRequest.GetResponseAsync())
@@ -425,17 +460,16 @@ namespace TMP.Common.NetHelper
                     Stream streamToRead = responseStream;
                     if (response.ContentType == "image/png")
                     {
-                        System.Windows.Media.Imaging.BitmapImage bitmap = new System.Windows.Media.Imaging.BitmapImage();
-                        bitmap.BeginInit();
-                        bitmap.StreamSource = streamToRead;
-                        bitmap.CacheOption = System.Windows.Media.Imaging.BitmapCacheOption.OnLoad;
-                        bitmap.EndInit();
-                        bitmap.Freeze();
+                        MemoryStream ms = new MemoryStream();
+                        streamToRead.CopyTo(ms);
 
-                        return bitmap;
+                        byte[] buffer = ms.ToArray();
+                        return buffer;
                     }
                     else
+                    {
                         return null;
+                    }
                 }
             }
             #region EXCEPTIONS
@@ -457,7 +491,8 @@ namespace TMP.Common.NetHelper
             {
                 var answer = streamReader.ReadToEnd();
                 return System.Web.HttpUtility.UrlDecode(answer);
-                //return Uri.UnescapeDataString(answer);
+
+                // return Uri.UnescapeDataString(answer);
             }
         }
 
@@ -467,8 +502,17 @@ namespace TMP.Common.NetHelper
 
         public CancellationTokenSource Cts
         {
-            get { if (_cts == null) _cts = new CancellationTokenSource(); return _cts; }
-            set { _cts = value; }
+            get
+            {
+                if (this.cts == null)
+                {
+                    this.cts = new CancellationTokenSource();
+                }
+
+                return this.cts;
+            }
+
+            set => this.cts = value;
         }
 
         public Cookie Cookie { get; set; }
@@ -477,23 +521,19 @@ namespace TMP.Common.NetHelper
         /// Имя пользователя
         /// </summary>
         public string UserName { get; set; } = "sbyt";
+
         /// <summary>
         /// Пароль
         /// </summary>
         public string Password { get; set; } = "sbyt";
 
         public string ServerAddress { get; set; }
-        public string ServiceName { get; set; }
-        public string WebServicePath { get; set; }
 
-        public string SiteAddress {
-            get
-            {
-                return @"http://" + ServerAddress + @"/" 
-                    + (String.IsNullOrEmpty(ServiceName) ? String.Empty : (ServiceName + @"/"))
-                    + (String.IsNullOrEmpty(WebServicePath) ? String.Empty : (WebServicePath + @"/"));
-            }
-        }
+        public string SiteName { get; set; }
+
+        // public string WebServicePath { get; set; }
+        public string SiteAddress => @"http://" + this.ServerAddress + @"/"
+                    + (string.IsNullOrEmpty(this.SiteName) ? string.Empty : (this.SiteName + @"/"));// + (String.IsNullOrEmpty(WebServicePath) ? String.Empty : (WebServicePath + @"/"));
 
         /// <summary>
         /// Таймаут в секундах

@@ -1,0 +1,58 @@
+﻿<Window
+    x:Class="WpfApp1.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:WpfApp1"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:xcdg="clr-namespace:Xceed.Wpf.DataGrid;assembly=DotNetProjects.Wpf.DataGrid"
+    xmlns:xcdgv="clr-namespace:Xceed.Wpf.DataGrid.Views;assembly=DotNetProjects.Wpf.DataGrid"
+    Title="MainWindow"
+    Width="800"
+    Height="450"
+    mc:Ignorable="d">
+    <Grid Margin="10">
+        <xcdg:DataGridControl x:Name="table">
+            <xcdg:DataGridControl.View>
+                <xcdgv:TableView
+                    xmlns:xcdgv="clr-namespace:Xceed.Wpf.DataGrid.Views;assembly=DotNetProjects.Wpf.DataGrid"
+                    ColumnStretchMode="All"
+                    DetailIndicatorWidth="30"
+                    IsAlternatingRowStyleEnabled="True"
+                    IsColumnVirtualizationEnabled="True"
+                    RemoveColumnStretchingOnResize="True"
+                    Theme="aeronormalcolortheme"
+                    UseDefaultHeadersFooters="True">
+                    <xcdgv:TableView.Headers>
+                        <DataTemplate>
+                            <DockPanel>
+                                <xcdg:HierarchicalGroupLevelIndicatorPane xcdg:GroupLevelIndicatorPane.ShowIndicators="True" DockPanel.Dock="Left" />
+                                <ContentPresenter />
+                            </DockPanel>
+                        </DataTemplate>
+                        <DataTemplate>
+                            <xcdg:ColumnManagerRow
+                                AllowColumnReorder="True"
+                                AllowColumnResize="True"
+                                AllowSort="True" />
+                        </DataTemplate>
+                    </xcdgv:TableView.Headers>
+                    <xcdgv:TableView.Footers>
+                        <DataTemplate>
+                            <Border
+                                MinWidth="200"
+                                MinHeight="25"
+                                Background="DarkOrange">
+                                <StackPanel>
+                                    <TextBlock Text="Test" />
+                                    <TextBlock Text="{Binding}" />
+                                    <TextBlock Text="{Binding Path=SelectedItem, RelativeSource={RelativeSource AncestorType=xcdg:DataGridControl}}" />
+                                </StackPanel>
+                            </Border>
+                        </DataTemplate>
+                    </xcdgv:TableView.Footers>
+                </xcdgv:TableView>
+            </xcdg:DataGridControl.View>
+        </xcdg:DataGridControl>
+    </Grid>
+</Window>

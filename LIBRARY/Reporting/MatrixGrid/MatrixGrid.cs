@@ -1,22 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-
-namespace TMP.UI.Controls.WPF.Reporting.MatrixGrid
+﻿namespace TMP.UI.Controls.WPF.Reporting.MatrixGrid
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Windows;
+    using System.Windows.Controls;
+    using System.Windows.Data;
+    using System.Windows.Threading;
+
     /// <summary>
     /// Панель для матрицы данных
     /// </summary>
-    class MatrixGrid : Grid
+    internal class MatrixGrid : Grid
     {
         #region Constructor
 
         public MatrixGrid()
         {
-            _childToMonitorMap = new Dictionary<DependencyObject, MatrixGridChildMonitor>();
-            _converter = new MatrixGridChildConverter(this);
+            this.childToMonitorMap = new Dictionary<DependencyObject, MatrixGridChildMonitor>();
+            this.converter = new MatrixGridChildConverter(this);
         }
 
         #endregion // Constructor
@@ -28,9 +29,13 @@ namespace TMP.UI.Controls.WPF.Reporting.MatrixGrid
             base.OnVisualChildrenChanged(visualAdded, visualRemoved);
 
             if (visualAdded != null)
+            {
                 this.StartMonitoringChildElement(visualAdded);
+            }
             else
+            {
                 this.StopMonitoringChildElement(visualRemoved);
+            }
         }
 
         #endregion // OnVisualChildrenChanged
@@ -39,46 +44,47 @@ namespace TMP.UI.Controls.WPF.Reporting.MatrixGrid
 
         internal void InspectRowIndex(int index)
         {
-            base.Dispatcher.BeginInvoke(new Action(delegate
+            DispatcherOperation o = base.Dispatcher.BeginInvoke(new Action(delegate
                 {
                     while (base.RowDefinitions.Count - 1 < index)
                     {
                         base.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(1, GridUnitType.Auto) });
                     }
                 }));
+            var s = o.Status;
         }
 
         internal void InspectColumnIndex(int index)
         {
-            base.Dispatcher.BeginInvoke(new Action(delegate
-                {
-                    while (base.ColumnDefinitions.Count - 1 < index)
-                    {
-                        base.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Auto) });
-                    }
-                }));
+            DispatcherOperation o = base.Dispatcher.BeginInvoke(new Action(delegate
+                 {
+                     while (base.ColumnDefinitions.Count - 1 < index)
+                     {
+                         base.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Auto) });
+                     }
+                 }));
+            var s = o.Status;
         }
 
         #endregion // Inspect Row/Column Index
 
         #region Private Helpers
 
-        Binding CreateMonitorBinding(DependencyObject childElement, DependencyProperty property)
+        private Binding CreateMonitorBinding(DependencyObject childElement, DependencyProperty property)
         {
             return new Binding
             {
-                Converter = _converter,
+                Converter = this.converter,
                 ConverterParameter = property,
                 Mode = BindingMode.OneWay,
                 Path = new PropertyPath(property),
-                Source = childElement
+                Source = childElement,
             };
         }
 
-        void StartMonitoringChildElement(DependencyObject childElement)
+        private void StartMonitoringChildElement(DependencyObject childElement)
         {
             // Создание объекта для отслеживания изменения прикрепленных свойств Grid.Row и Grid.Column у новых ячеек
-
             MatrixGridChildMonitor monitor = new MatrixGridChildMonitor();
 
             BindingOperations.SetBinding(
@@ -91,18 +97,17 @@ namespace TMP.UI.Controls.WPF.Reporting.MatrixGrid
                 MatrixGridChildMonitor.GridColumnProperty,
                 this.CreateMonitorBinding(childElement, Grid.ColumnProperty));
 
-            _childToMonitorMap.Add(childElement, monitor);
+            this.childToMonitorMap.Add(childElement, monitor);
         }
 
-        void StopMonitoringChildElement(DependencyObject childElement)
+        private void StopMonitoringChildElement(DependencyObject childElement)
         {
             // Удаление объекта для отслеживания изменения прикрепленных свойств Grid.Row и Grid.Column у новых ячеек
-
-            if (_childToMonitorMap.ContainsKey(childElement))
+            if (this.childToMonitorMap.ContainsKey(childElement))
             {
-                MatrixGridChildMonitor monitor = _childToMonitorMap[childElement];
+                MatrixGridChildMonitor monitor = this.childToMonitorMap[childElement];
                 BindingOperations.ClearAllBindings(monitor);
-                _childToMonitorMap.Remove(childElement);
+                this.childToMonitorMap.Remove(childElement);
             }
         }
 
@@ -110,8 +115,8 @@ namespace TMP.UI.Controls.WPF.Reporting.MatrixGrid
 
         #region Fields
 
-        readonly Dictionary<DependencyObject, MatrixGridChildMonitor> _childToMonitorMap;
-        readonly MatrixGridChildConverter _converter;
+        private readonly Dictionary<DependencyObject, MatrixGridChildMonitor> childToMonitorMap;
+        private readonly MatrixGridChildConverter converter;
 
         #endregion // Fields
     }

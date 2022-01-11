@@ -238,6 +238,7 @@
         // unused = 0x00000400,
         // unused = 0x00000800,
         // unused = 0x00001000,
+
         /// <summary>Object is encrypted (use alt color)</summary>
         ENCRYPTED = 0x00002000,
 
@@ -366,7 +367,7 @@
         CANONICAL = 0x10000000,
 
         TEST_FILESYSPATH_IF_NOT_EQUAL = 0x20000000,
-    };
+    }
 
     /// <summary>
     /// ShellItem enum.  SIGDN_*.
@@ -449,15 +450,15 @@
     public struct PKEY
     {
         /// <summary>fmtid</summary>
-        private readonly Guid _fmtid;
+        private readonly Guid fmtid;
 
         /// <summary>pid</summary>
-        private readonly uint _pid;
+        private readonly uint pid;
 
         public PKEY(Guid fmtid, uint pid)
         {
-            _fmtid = fmtid;
-            _pid = pid;
+            this.fmtid = fmtid;
+            this.pid = pid;
         }
 
         /// <summary>PKEY_Title</summary>
@@ -484,11 +485,9 @@
     #region Interfaces
 
     // Application File Extension and URL Protocol Registration
-    [
-        ComImport,
-        InterfaceType(ComInterfaceType.InterfaceIsIUnknown),
-        Guid(IID.ApplicationAssociationRegistration),
-    ]
+    [ComImport]
+    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+    [Guid(IID.ApplicationAssociationRegistration)]
     public interface IApplicationAssociationRegistration
     {
         [return: MarshalAs(UnmanagedType.LPWStr)]
@@ -519,11 +518,9 @@
         void ClearUserAssociations();
     }
 
-    [
-        ComImport,
-        InterfaceType(ComInterfaceType.InterfaceIsIUnknown),
-        Guid(IID.EnumIdList),
-    ]
+    [ComImport]
+    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+    [Guid(IID.EnumIdList)]
     public interface IEnumIDList
     {
         [PreserveSig()]
@@ -537,14 +534,12 @@
         void Clone([Out, MarshalAs(UnmanagedType.Interface)] out IEnumIDList ppenum);
     }
 
-    [
-        ComImport,
-        InterfaceType(ComInterfaceType.InterfaceIsIUnknown),
-        Guid(IID.EnumObjects),
-    ]
+    [ComImport]
+    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+    [Guid(IID.EnumObjects)]
     public interface IEnumObjects
     {
-        //[local]
+        // [local]
         // This signature might not work... Hopefully don't need this interface though.
         void Next(uint celt, [In] ref Guid riid, [Out, MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.IUnknown, IidParameterIndex = 1, SizeParamIndex = 0)] object[] rgelt, [Out] out uint pceltFetched);
 
@@ -564,11 +559,9 @@
     }
 
     /// <summary>Unknown Object Array</summary>
-    [
-        ComImport,
-        InterfaceType(ComInterfaceType.InterfaceIsIUnknown),
-        Guid(IID.ObjectArray),
-    ]
+    [ComImport]
+    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+    [Guid(IID.ObjectArray)]
     public interface IObjectArray
     {
         uint GetCount();
@@ -577,11 +570,9 @@
         object GetAt([In] uint uiIndex, [In] ref Guid riid);
     }
 
-    [
-        ComImport,
-        InterfaceType(ComInterfaceType.InterfaceIsIUnknown),
-        Guid(IID.ObjectArray),
-    ]
+    [ComImport]
+    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+    [Guid(IID.ObjectArray)]
     public interface IObjectCollection : IObjectArray
     {
         #region IObjectArray redeclarations
@@ -602,11 +593,9 @@
         void Clear();
     }
 
-    [
-        ComImport,
-        InterfaceType(ComInterfaceType.InterfaceIsIUnknown),
-        Guid(IID.PropertyStore)
-    ]
+    [ComImport]
+    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+    [Guid(IID.PropertyStore)]
     public interface IPropertyStore
     {
         uint GetCount();
@@ -620,11 +609,9 @@
         void Commit();
     }
 
-    [
-        ComImport,
-        InterfaceType(ComInterfaceType.InterfaceIsIUnknown),
-        Guid(IID.ShellFolder),
-    ]
+    [ComImport]
+    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+    [Guid(IID.ShellFolder)]
     public interface IShellFolder
     {
         void ParseDisplayName(
@@ -717,11 +704,9 @@
     /// <summary>
     /// Shell Namespace helper
     /// </summary>
-    [
-        ComImport,
-        InterfaceType(ComInterfaceType.InterfaceIsIUnknown),
-        Guid(IID.ShellItem),
-    ]
+    [ComImport]
+    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+    [Guid(IID.ShellItem)]
     public interface IShellItem
     {
         [return: MarshalAs(UnmanagedType.Interface)]
@@ -737,11 +722,9 @@
         int Compare(IShellItem psi, SICHINT hint);
     }
 
-    [
-        ComImport,
-        InterfaceType(ComInterfaceType.InterfaceIsIUnknown),
-        Guid(IID.ShellItemArray),
-    ]
+    [ComImport]
+    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+    [Guid(IID.ShellItemArray)]
     public interface IShellItemArray
     {
         [return: MarshalAs(UnmanagedType.Interface)]
@@ -766,11 +749,9 @@
     /// <summary>
     /// Shell Namespace helper 2
     /// </summary>
-    [
-        ComImport,
-        InterfaceType(ComInterfaceType.InterfaceIsIUnknown),
-        Guid(IID.ShellItem2),
-    ]
+    [ComImport]
+    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+    [Guid(IID.ShellItem2)]
     public interface IShellItem2 : IShellItem
     {
         #region IShellItem redeclarations
@@ -834,11 +815,9 @@
         void GetBool(IntPtr key);
     }
 
-    [
-        ComImport,
-        InterfaceTypeAttribute(ComInterfaceType.InterfaceIsIUnknown),
-        Guid(IID.ShellLink),
-    ]
+    [ComImport]
+    [InterfaceTypeAttribute(ComInterfaceType.InterfaceIsIUnknown)]
+    [Guid(IID.ShellLink)]
     public interface IShellLinkW
     {
         void GetPath([Out, MarshalAs(UnmanagedType.LPWStr)] StringBuilder pszFile, int cchMaxPath, [In, Out] WIN32_FIND_DATAW pfd, SLGP fFlags);
@@ -878,11 +857,9 @@
         void SetPath([MarshalAs(UnmanagedType.LPWStr)] string pszFile);
     }
 
-    [
-        ComImport,
-        InterfaceType(ComInterfaceType.InterfaceIsIUnknown),
-        Guid(IID.TaskbarList),
-    ]
+    [ComImport]
+    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+    [Guid(IID.TaskbarList)]
     public interface ITaskbarList
     {
         /// <summary>
@@ -915,11 +892,9 @@
         void SetActiveAlt(IntPtr hwnd);
     }
 
-    [
-        ComImport,
-        InterfaceType(ComInterfaceType.InterfaceIsIUnknown),
-        Guid(IID.TaskbarList2),
-    ]
+    [ComImport]
+    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+    [Guid(IID.TaskbarList2)]
     public interface ITaskbarList2 : ITaskbarList
     {
         #region ITaskbarList redeclaration
@@ -952,11 +927,9 @@
     }
 
     // Used to remove items from the automatic destination lists created when apps or the system call SHAddToRecentDocs to report usage of a document.
-    [
-        ComImport,
-        InterfaceType(ComInterfaceType.InterfaceIsIUnknown),
-        Guid(IID.ApplicationDestinations)
-    ]
+    [ComImport]
+    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+    [Guid(IID.ApplicationDestinations)]
     public interface IApplicationDestinations
     {
         // Set the App User Model ID for the application removing destinations from its list.  If an AppID is not provided
@@ -974,11 +947,9 @@
     /// <summary>
     /// Allows an application to retrieve the most recent and frequent documents opened in that app, as reported via SHAddToRecentDocs
     /// </summary>
-    [
-        ComImport,
-        InterfaceType(ComInterfaceType.InterfaceIsIUnknown),
-        Guid(IID.ApplicationDocumentLists)
-    ]
+    [ComImport]
+    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+    [Guid(IID.ApplicationDocumentLists)]
     public interface IApplicationDocumentLists
     {
         /// <summary>
@@ -998,11 +969,9 @@
     }
 
     // Custom Destination List
-    [
-        ComImport,
-        InterfaceType(ComInterfaceType.InterfaceIsIUnknown),
-        Guid(IID.CustomDestinationList)
-    ]
+    [ComImport]
+    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+    [Guid(IID.CustomDestinationList)]
     public interface ICustomDestinationList
     {
         void SetAppID([In, MarshalAs(UnmanagedType.LPWStr)] string pszAppID);
@@ -1035,40 +1004,34 @@
     /// <summary>
     /// Provides access to the App User Model ID on objects supporting this value.
     /// </summary>
-    [
-        ComImport,
-        InterfaceType(ComInterfaceType.InterfaceIsIUnknown),
-        Guid(IID.ObjectWithAppUserModelId)
-    ]
+    [ComImport]
+    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+    [Guid(IID.ObjectWithAppUserModelId)]
     public interface IObjectWithAppUserModelId
     {
         void SetAppID([MarshalAs(UnmanagedType.LPWStr)] string pszAppID);
 
         [return: MarshalAs(UnmanagedType.LPWStr)]
         string GetAppID();
-    };
+    }
 
     /// <summary>
     /// Provides access to the ProgID associated with an object
     /// </summary>
-    [
-        ComImport,
-        InterfaceType(ComInterfaceType.InterfaceIsIUnknown),
-        Guid(IID.ObjectWithProgId)
-    ]
+    [ComImport]
+    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+    [Guid(IID.ObjectWithProgId)]
     public interface IObjectWithProgId
     {
         void SetProgID([MarshalAs(UnmanagedType.LPWStr)] string pszProgID);
 
         [return: MarshalAs(UnmanagedType.LPWStr)]
         string GetProgID();
-    };
+    }
 
-    [
-        ComImport,
-        InterfaceType(ComInterfaceType.InterfaceIsIUnknown),
-        Guid(IID.TaskbarList3),
-    ]
+    [ComImport]
+    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+    [Guid(IID.TaskbarList3)]
     public interface ITaskbarList3 : ITaskbarList2
     {
         #region ITaskbarList2 redeclaration
@@ -1129,11 +1092,9 @@
         HRESULT SetThumbnailClip(IntPtr hwnd, RefRECT prcClip);
     }
 
-    [
-        ComImport,
-        InterfaceType(ComInterfaceType.InterfaceIsIUnknown),
-        Guid(IID.TaskbarList3),
-    ]
+    [ComImport]
+    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+    [Guid(IID.TaskbarList3)]
     public interface ITaskbarList4 : ITaskbarList3
     {
         #region ITaskbarList3 redeclaration
@@ -1200,11 +1161,9 @@
         void SetTabProperties(IntPtr hwndTab, STPF stpFlags);
     }
 
-    [
-    ComImport,
-    InterfaceType(ComInterfaceType.InterfaceIsIUnknown),
-    Guid(IID.FileDialogEvents),
-]
+    [ComImport]
+    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+    [Guid(IID.FileDialogEvents)]
     public interface IFileDialogEvents
     {
         [PreserveSig]
@@ -1229,22 +1188,18 @@
         HRESULT OnOverwrite(IFileDialog pfd, IShellItem psi, out FDEOR pResponse);
     }
 
-    [
-        ComImport,
-        InterfaceType(ComInterfaceType.InterfaceIsIUnknown),
-        Guid(IID.ModalWindow),
-    ]
+    [ComImport]
+    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+    [Guid(IID.ModalWindow)]
     public interface IModalWindow
     {
         [PreserveSig]
         HRESULT Show(IntPtr parent);
     }
 
-    [
-        ComImport,
-        InterfaceType(ComInterfaceType.InterfaceIsIUnknown),
-        Guid(IID.FileDialog),
-    ]
+    [ComImport]
+    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+    [Guid(IID.FileDialog)]
     public interface IFileDialog : IModalWindow
     {
         #region IModalWindow redeclarations
@@ -1302,11 +1257,9 @@
         void SetFilter([MarshalAs(UnmanagedType.Interface)] object pFilter);
     }
 
-    [
-        ComImport,
-        InterfaceType(ComInterfaceType.InterfaceIsIUnknown),
-        Guid(IID.FileOpenDialog),
-    ]
+    [ComImport]
+    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+    [Guid(IID.FileOpenDialog)]
     public interface IFileOpenDialog : IFileDialog
     {
         #region IFileDialog redeclarations
@@ -1372,11 +1325,9 @@
         IShellItemArray GetSelectedItems();
     }
 
-    [
-        ComImport,
-        InterfaceType(ComInterfaceType.InterfaceIsIUnknown),
-        Guid(IID.FileSaveDialog),
-    ]
+    [ComImport]
+    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+    [Guid(IID.FileSaveDialog)]
     public interface IFileSaveDialog : IFileDialog
     {
         #region IFileDialog redeclarations
@@ -1451,13 +1402,13 @@
 
     public static class ShellUtil
     {
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "ToDo")]
         public static string GetPathFromShellItem(IShellItem item)
         {
             return item.GetDisplayName(SIGDN.DESKTOPABSOLUTEPARSING);
         }
 
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "ToDo")]
         public static IShellItem2 GetShellItemForPath(string path)
         {
             if (string.IsNullOrEmpty(path))

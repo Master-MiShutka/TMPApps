@@ -1,9 +1,13 @@
-using System;
 namespace TMPApplication.WpfDialogs.Contracts
 {
-	public interface IProgressDialog : IWaitDialog
-	{
-		int Progress { get; set; }
+    using System;
+
+    public interface IProgressDialog : IWaitDialog
+    {
+        double Progress { get; set; }
+
+        bool IsIndeterminate { get; set; }
+
         void Show(Action<IProgressDialog> workerMethod);
     }
 }

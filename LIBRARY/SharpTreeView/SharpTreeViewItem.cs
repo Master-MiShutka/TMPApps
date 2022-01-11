@@ -1,134 +1,143 @@
 ﻿// Copyright (c) AlphaSierraPapa for the SharpDevelop Team (for details please see \doc\copyright.txt)
 // This code is distributed under the GNU LGPL (for details please see \doc\license.txt)
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows.Controls;
-using System.Windows;
-using System.Windows.Media;
-using System.Windows.Input;
-using System.Diagnostics;
-
 namespace ICSharpCode.TreeView
 {
-	public class SharpTreeViewItem : ListViewItem
-	{
-		static SharpTreeViewItem()
-		{
-			DefaultStyleKeyProperty.OverrideMetadata(typeof(SharpTreeViewItem),
-			                                         new FrameworkPropertyMetadata(typeof(SharpTreeViewItem)));
-		}
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics;
+    using System.Linq;
+    using System.Text;
+    using System.Windows;
+    using System.Windows.Controls;
+    using System.Windows.Input;
+    using System.Windows.Media;
 
-		public SharpTreeNode Node
-		{
-			get { return DataContext as SharpTreeNode; }
-		}
+    public class SharpTreeViewItem : ListViewItem
+    {
+        static SharpTreeViewItem()
+        {
+            DefaultStyleKeyProperty.OverrideMetadata(typeof(SharpTreeViewItem),
+                                                     new FrameworkPropertyMetadata(typeof(SharpTreeViewItem)));
+        }
 
-		public SharpTreeNodeView NodeView { get; internal set; }
-		public SharpTreeView ParentTreeView { get; internal set; }
+        public SharpTreeNode Node => this.DataContext as SharpTreeNode;
 
-		protected override void OnKeyDown(KeyEventArgs e)
-		{
-			switch (e.Key) {
-				case Key.F2:
-//					if (SharpTreeNode.ActiveNodes.Count == 1 && Node.IsEditable) {
-//						Node.IsEditing = true;
-//						e.Handled = true;
-//					}
-					break;
-				case Key.Escape:
-					Node.IsEditing = false;
-					break;
-			}
-		}
+        public SharpTreeNodeView NodeView { get; internal set; }
 
-		protected override System.Windows.Automation.Peers.AutomationPeer OnCreateAutomationPeer()
-		{
-			return new SharpTreeViewItemAutomationPeer(this);
-		}
+        public SharpTreeView ParentTreeView { get; internal set; }
 
-		#region Mouse
+        protected override void OnKeyDown(KeyEventArgs e)
+        {
+            switch (e.Key)
+            {
+                case Key.F2:
+                    // if (SharpTreeNode.ActiveNodes.Count == 1 && Node.IsEditable) {
+                    // Node.IsEditing = true;
+                    // e.Handled = true;
+                    // }
+                    break;
+                case Key.Escape:
+                    this.Node.IsEditing = false;
+                    break;
+            }
+        }
 
-		Point startPoint;
-		bool wasSelected;
-		bool wasDoubleClick;
+        protected override System.Windows.Automation.Peers.AutomationPeer OnCreateAutomationPeer()
+        {
+            return new SharpTreeViewItemAutomationPeer(this);
+        }
 
-		protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
-		{
-			wasSelected = IsSelected;
-			if (!IsSelected) {
-				base.OnMouseLeftButtonDown(e);
-			}
+        #region Mouse
 
-			if (Mouse.LeftButton == MouseButtonState.Pressed) {
-				startPoint = e.GetPosition(null);
-				CaptureMouse();
+        private Point startPoint;
+        private bool wasSelected;
+        private bool wasDoubleClick;
 
-				if (e.ClickCount == 2) {
-					wasDoubleClick = true;
-				}
-			}
-		}
+        protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
+        {
+            this.wasSelected = this.IsSelected;
+            if (!this.IsSelected)
+            {
+                base.OnMouseLeftButtonDown(e);
+            }
 
-		protected override void OnMouseMove(MouseEventArgs e)
-		{
-			if (IsMouseCaptured) {
-				var currentPoint = e.GetPosition(null);
-				if (Math.Abs(currentPoint.X - startPoint.X) >= SystemParameters.MinimumHorizontalDragDistance ||
-				    Math.Abs(currentPoint.Y - startPoint.Y) >= SystemParameters.MinimumVerticalDragDistance) {
+            if (Mouse.LeftButton == MouseButtonState.Pressed)
+            {
+                this.startPoint = e.GetPosition(null);
+                this.CaptureMouse();
 
-					var selection = ParentTreeView.GetTopLevelSelection().ToArray();
-					if (Node.CanDrag(selection)) {
-						Node.StartDrag(this, selection);
-					}
-				}
-			}
-		}
+                if (e.ClickCount == 2)
+                {
+                    this.wasDoubleClick = true;
+                }
+            }
+        }
 
-		protected override void OnMouseLeftButtonUp(MouseButtonEventArgs e)
-		{
-			if (wasDoubleClick) {
-				wasDoubleClick = false;
-				Node.ActivateItem(e);
-				if (!e.Handled) {
-					if (!Node.IsRoot || ParentTreeView.ShowRootExpander) {
-						Node.IsExpanded = !Node.IsExpanded;
-					}
-				}
-			}
-			
-			ReleaseMouseCapture();
-			if (wasSelected) {
-				base.OnMouseLeftButtonDown(e);
-			}
-		}
+        protected override void OnMouseMove(MouseEventArgs e)
+        {
+            if (this.IsMouseCaptured)
+            {
+                var currentPoint = e.GetPosition(null);
+                if (Math.Abs(currentPoint.X - this.startPoint.X) >= SystemParameters.MinimumHorizontalDragDistance ||
+                    Math.Abs(currentPoint.Y - this.startPoint.Y) >= SystemParameters.MinimumVerticalDragDistance)
+                {
 
-		#endregion
-		
-		#region Drag and Drop
+                    var selection = this.ParentTreeView.GetTopLevelSelection().ToArray();
+                    if (this.Node.CanDrag(selection))
+                    {
+                        this.Node.StartDrag(this, selection);
+                    }
+                }
+            }
+        }
 
-		protected override void OnDragEnter(DragEventArgs e)
-		{
-			ParentTreeView.HandleDragEnter(this, e);
-		}
+        protected override void OnMouseLeftButtonUp(MouseButtonEventArgs e)
+        {
+            if (this.wasDoubleClick)
+            {
+                this.wasDoubleClick = false;
+                this.Node.ActivateItem(e);
+                if (!e.Handled)
+                {
+                    if (!this.Node.IsRoot || this.ParentTreeView.ShowRootExpander)
+                    {
+                        this.Node.IsExpanded = !this.Node.IsExpanded;
+                    }
+                }
+            }
 
-		protected override void OnDragOver(DragEventArgs e)
-		{
-			ParentTreeView.HandleDragOver(this, e);
-		}
+            this.ReleaseMouseCapture();
+            if (this.wasSelected)
+            {
+                base.OnMouseLeftButtonDown(e);
+            }
+        }
 
-		protected override void OnDrop(DragEventArgs e)
-		{
-			ParentTreeView.HandleDrop(this, e);
-		}
+        #endregion
 
-		protected override void OnDragLeave(DragEventArgs e)
-		{
-			ParentTreeView.HandleDragLeave(this, e);
-		}
+        #region Drag and Drop
 
-		#endregion
-	}
+        protected override void OnDragEnter(DragEventArgs e)
+        {
+            this.ParentTreeView.HandleDragEnter(this, e);
+        }
+
+        protected override void OnDragOver(DragEventArgs e)
+        {
+            this.ParentTreeView.HandleDragOver(this, e);
+        }
+
+        protected override void OnDrop(DragEventArgs e)
+        {
+            this.ParentTreeView.HandleDrop(this, e);
+        }
+
+        protected override void OnDragLeave(DragEventArgs e)
+        {
+            this.ParentTreeView.HandleDragLeave(this, e);
+        }
+
+        #endregion
+    }
 }

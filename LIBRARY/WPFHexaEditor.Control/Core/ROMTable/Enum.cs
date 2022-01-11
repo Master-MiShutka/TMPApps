@@ -1,11 +1,11 @@
-using System;
-
-//Enumeration du Namespace VRS.Library.DTE
+// Enumeration du Namespace VRS.Library.DTE
 namespace WPFHexaEditor.Core.ROMTable
 {
+    using System;
+
     /// <summary>
     /// Type de DTE qui sera utilisé dans les classe de DTE
-    /// 
+    ///
     /// Derek Tremblay 2003-2017
     /// </summary>
     public enum DTEType
@@ -16,7 +16,6 @@ namespace WPFHexaEditor.Core.ROMTable
         DualTitleEncoding,
         MultipleTitleEncoding,
         EndLine,
-        EndBlock
-
+        EndBlock,
     }
 }

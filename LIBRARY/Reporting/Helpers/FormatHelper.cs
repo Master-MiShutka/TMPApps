@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Windows;
-
-namespace TMP.UI.Controls.WPF.Reporting.Helpers
+﻿namespace TMP.UI.Controls.WPF.Reporting.Helpers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Globalization;
+    using System.IO;
+    using System.Linq;
+    using System.Text;
+    using System.Windows;
+
     /// <summary>
     /// Тип разделителя в Csv файле
     /// </summary>
@@ -16,22 +16,31 @@ namespace TMP.UI.Controls.WPF.Reporting.Helpers
         Comma,
         Tab,
         Semicolon,
-        Custom
+        Custom,
     }
+
     /// <summary>
     /// Интерфейс, определяющий параметры форматирования данных
     /// </summary>
     public interface IFormatSettings
     {
         string DateTimeFormat { get; set; }
+
         string NumericFormat { get; set; }
+
         string FloatingPointFormat { get; set; }
+
         CsvValueSeparatorType SeparatorType { get; set; }
+
         char Separator { get; set; }
+
         char TextQualifier { get; set; }
+
         string NewLine { get; set; }
+
         CultureInfo Culture { get; set; }
     }
+
     /// <summary>
     /// Ячейка HTML таблицы
     /// </summary>
@@ -40,38 +49,45 @@ namespace TMP.UI.Controls.WPF.Reporting.Helpers
         public enum ThScope
         {
             none,
+
             /// <summary>
             /// Specifies that the cell is a header for a column
             /// </summary>
             col,
+
             /// <summary>
             /// Specifies that the cell is a header for a row
             /// </summary>
             row,
+
             /// <summary>
             /// Specifies that the cell is a header for a group of columns
             /// </summary>
             colgroup,
+
             /// <summary>
             /// Specifies that the cell is a header for a group of rows
             /// </summary>
-            rowgroup
+            rowgroup,
         }
 
         public object Value { get; set; }
+
         public int RowSpan { get; set; }
+
         public int ColSpan { get; set; }
 
         public ThScope Scope { get; set; }
 
         public HtmlTableCell(object o)
         {
-            Value = String.Empty;
-            RowSpan = 1;
-            ColSpan = 1;
-            Scope = ThScope.none;
+            this.Value = string.Empty;
+            this.RowSpan = 1;
+            this.ColSpan = 1;
+            this.Scope = ThScope.none;
         }
     }
+
     /// <summary>
     /// Вспомогательный класс для преобразования данных и экспорта в другие форматы
     /// </summary>
@@ -80,11 +96,15 @@ namespace TMP.UI.Controls.WPF.Reporting.Helpers
         public static string GetMatrixCellValueAsString(MatrixGrid.IMatrixCell cell)
         {
             if (cell == null)
+            {
                 return string.Empty;
+            }
             else
+            {
                 return (cell is MatrixGrid.IMatrixHeader header)
                         ? header.Header
-                        : ((cell is MatrixGrid.IMatrixDataCell data) ? string.Format(String.Format("{{0:{0}}}", data.ContentFormat), data.Value) : null);
+                        : ((cell is MatrixGrid.IMatrixDataCell data) ? string.Format(string.Format("{{0:{0}}}", data.ContentFormat), data.Value) : null);
+            }
         }
 
         /// <summary>
@@ -101,28 +121,38 @@ namespace TMP.UI.Controls.WPF.Reporting.Helpers
                     if (headerCell.CellType == MatrixGrid.MatrixCellType.ColumnHeader || headerCell.CellType == MatrixGrid.MatrixCellType.ColumnsGroupHeader || headerCell.CellType == MatrixGrid.MatrixCellType.ColumnSummaryHeader)
                     {
                         if (headerCell.ChildrenCount > 0)
+                        {
                             return HtmlTableCell.ThScope.colgroup;
+                        }
                         else
+                        {
                             return HtmlTableCell.ThScope.col;
+                        }
                     }
                     else
                     {
                         if (headerCell.CellType == MatrixGrid.MatrixCellType.RowHeader || headerCell.CellType == MatrixGrid.MatrixCellType.RowsGroupHeader || headerCell.CellType == MatrixGrid.MatrixCellType.RowSummaryHeader)
                         {
                             if (headerCell.ChildrenCount > 0)
+                            {
                                 return HtmlTableCell.ThScope.rowgroup;
+                            }
                             else
+                            {
                                 return HtmlTableCell.ThScope.row;
+                            }
                         }
                         else
+                        {
                             return HtmlTableCell.ThScope.none;
+                        }
                     }
-
                 }
                 else
+                {
                     return HtmlTableCell.ThScope.none;
+                }
             };
-
 
             Func<MatrixGrid.IMatrixCell, HtmlTableCell> matrixCellToHtmlCell = (matrixCell) => new HtmlTableCell()
             {
@@ -130,7 +160,7 @@ namespace TMP.UI.Controls.WPF.Reporting.Helpers
                 RowSpan = matrixCell.GridRowSpan,
                 ColSpan = matrixCell.GridColumnSpan,
 
-                Scope = setCellScope(matrixCell)
+                Scope = setCellScope(matrixCell),
             };
 
             Func<MatrixGrid.IMatrixCell, string> getMatrixCellStyleForHtml = (matrixCell) =>
@@ -140,14 +170,13 @@ namespace TMP.UI.Controls.WPF.Reporting.Helpers
                string borderColor = "gray";
 
                return string.Format("border-top: {1}pt solid {0}; border-bottom: {2}pt solid {0}; border-left: {3}pt solid {0}; border-right: {4}pt solid {0}; {5};",
-                   borderColor, 
-                   (thickness.Top/2).ToString("N1", System.Globalization.CultureInfo.InvariantCulture), 
-                   (thickness.Bottom/2).ToString("N1", System.Globalization.CultureInfo.InvariantCulture),
-                   (thickness.Left/2).ToString("N1", System.Globalization.CultureInfo.InvariantCulture),
-                   (thickness.Right/2).ToString("N1", System.Globalization.CultureInfo.InvariantCulture),
-                   matrixCell is MatrixGrid.IMatrixSummaryCell summaryCell ? (summaryCell.SummaryType == MatrixGrid.MatrixSummaryType.TotalSummary ? "font-weight: bolder; background-color: Gray; color: White" : "font-weight: bold; background-color: LightGray") 
-                    : (matrixCell is MatrixGrid.IMatrixHeader headerCell ? (headerCell.CellType == MatrixGrid.MatrixCellType.RowHeader || headerCell.CellType == MatrixGrid.MatrixCellType.RowsGroupHeader || headerCell.CellType == MatrixGrid.MatrixCellType.RowSummaryHeader ? "font-weight: bold" : string.Empty) : string.Empty)
-                   );
+                   borderColor,
+                   (thickness.Top / 2).ToString("N1", System.Globalization.CultureInfo.InvariantCulture),
+                   (thickness.Bottom / 2).ToString("N1", System.Globalization.CultureInfo.InvariantCulture),
+                   (thickness.Left / 2).ToString("N1", System.Globalization.CultureInfo.InvariantCulture),
+                   (thickness.Right / 2).ToString("N1", System.Globalization.CultureInfo.InvariantCulture),
+                   matrixCell is MatrixGrid.IMatrixSummaryCell summaryCell ? (summaryCell.SummaryType == MatrixGrid.MatrixSummaryType.TotalSummary ? "font-weight: bolder; background-color: Gray; color: White" : "font-weight: bold; background-color: LightGray")
+                    : (matrixCell is MatrixGrid.IMatrixHeader headerCell ? (headerCell.CellType is MatrixGrid.MatrixCellType.RowHeader or MatrixGrid.MatrixCellType.RowsGroupHeader or MatrixGrid.MatrixCellType.RowSummaryHeader ? "font-weight: bold" : string.Empty) : string.Empty));
            };
 
             StringBuilder sb = new StringBuilder();
@@ -187,9 +216,13 @@ namespace TMP.UI.Controls.WPF.Reporting.Helpers
                         FormatHelper.HtmlFormatTableCell(matrixCellToHtmlCell(cell), index == 0 && flag, index == columnsCount - 1, sb, cellTag: "TH", cellStyle: getMatrixCellStyleForHtml(cell));
                         index++;
                     }
+
                     if (flag == false)
+                    {
                         flag = true;
+                    }
                 }
+
                 sb.AppendLine("</THEAD>");
             }
 
@@ -220,11 +253,13 @@ namespace TMP.UI.Controls.WPF.Reporting.Helpers
                     index++;
                 }
             }
+
             sb.AppendLine("</TBODY>");
             sb.Append("</TABLE>");
-            // 
+
             return sb.ToString().Replace("\r", string.Empty).Replace("\n", Environment.NewLine).Replace("\r\n", Environment.NewLine);
         }
+
         /// <summary>
         /// Преобразует матрицу в текст
         /// </summary>
@@ -233,7 +268,9 @@ namespace TMP.UI.Controls.WPF.Reporting.Helpers
         public static string MatrixToPlainText(MatrixGrid.IMatrix matrix)
         {
             if (matrix == null || matrix.Cells == null)
+            {
                 return string.Empty;
+            }
 
             int matrixHeight = (int)matrix.Size.Height, matrixWidth = (int)matrix.Size.Width;
             string[,] data = new string[matrixHeight, matrixWidth];
@@ -242,21 +279,33 @@ namespace TMP.UI.Controls.WPF.Reporting.Helpers
             Action<MatrixGrid.IMatrixCell> fillSpanningCells = (cell) =>
             {
                 for (int rowIndex = cell.GridRow + 1; rowIndex < cell.GridRow + cell.GridRowSpan; rowIndex++)
+                {
                     for (int columnIndex = cell.GridColumn + 1; columnIndex < cell.GridColumn + cell.GridColumnSpan; columnIndex++)
+                    {
                         data[rowIndex, columnIndex] = "\t";
+                    }
+                }
             };
 
             for (int rowIndex = 0; rowIndex < matrixHeight; rowIndex++)
+            {
                 for (int columnIndex = 0; columnIndex < matrixWidth; columnIndex++)
                 {
                     MatrixGrid.IMatrixCell cell = matrix.Cells[rowIndex, columnIndex];
-                    if (cell == null) continue;
+                    if (cell == null)
+                    {
+                        continue;
+                    }
 
                     data[rowIndex, columnIndex] = GetMatrixCellValueAsString(cell);
                     if (columnIndex < matrixWidth - 1)
+                    {
                         data[rowIndex, columnIndex] += "\t";
+                    }
+
                     fillSpanningCells(cell);
                 }
+            }
 
             StringBuilder sb = new StringBuilder();
             for (int rowIndex = 0; rowIndex < matrixHeight; rowIndex++)
@@ -265,11 +314,13 @@ namespace TMP.UI.Controls.WPF.Reporting.Helpers
                 {
                     sb.Append(data[rowIndex, columnIndex]);
                 }
+
                 sb.AppendLine();
             }
 
             return sb.ToString();
         }
+
         /// <summary>
         /// Преобразует матрицу во System.Windows.Documents.Section, содержащий Table
         /// </summary>
@@ -278,7 +329,9 @@ namespace TMP.UI.Controls.WPF.Reporting.Helpers
         public static System.Windows.Documents.Section MatrixToFlowDocumentSectionWithTable(MatrixGrid.IMatrix matrix)
         {
             if (matrix == null || matrix.Cells == null)
+            {
                 return new System.Windows.Documents.Section();
+            }
 
             int matrixHeight = (int)matrix.Size.Height, matrixWidth = (int)matrix.Size.Width;
             int matrixColumnHeadersHeight = matrix.Cells[0, 0].GridRowSpan;
@@ -296,10 +349,10 @@ namespace TMP.UI.Controls.WPF.Reporting.Helpers
             rd.Source = new Uri("/ui.controls.wpf.reporting;component/Themes/FlowDocumentTableStyles.xaml", UriKind.RelativeOrAbsolute);
             table.Resources = rd;
             #endregion
-            // добавление колонок
-            //for (int columnIndex = 0; columnIndex < matrixWidth; columnIndex++)
-            //    table.Columns.Add(new System.Windows.Documents.TableColumn());
 
+            // добавление колонок
+            // for (int columnIndex = 0; columnIndex < matrixWidth; columnIndex++)
+            //    table.Columns.Add(new System.Windows.Documents.TableColumn());
             #region шапка таблицы
             System.Windows.Documents.TableRowGroup headerRowGroup = new System.Windows.Documents.TableRowGroup();
             for (int rowIndex = 0; rowIndex < matrixColumnHeadersHeight; rowIndex++)
@@ -309,7 +362,10 @@ namespace TMP.UI.Controls.WPF.Reporting.Helpers
                 for (int columnIndex = 0; columnIndex < matrixWidth; columnIndex++)
                 {
                     MatrixGrid.IMatrixCell cell = matrix.Cells[rowIndex, columnIndex];
-                    if (cell == null) continue;
+                    if (cell == null)
+                    {
+                        continue;
+                    }
 
                     System.Windows.Documents.TableCell tableCell = new System.Windows.Documents.TableCell();
                     setBorders(cell, tableCell);
@@ -336,8 +392,10 @@ namespace TMP.UI.Controls.WPF.Reporting.Helpers
 
                     row.Cells.Add(tableCell);
                 }
+
                 headerRowGroup.Rows.Add(row);
             }
+
             table.RowGroups.Add(headerRowGroup);
             #endregion
 
@@ -351,11 +409,14 @@ namespace TMP.UI.Controls.WPF.Reporting.Helpers
                 for (int columnIndex = 0; columnIndex < matrixWidth; columnIndex++)
                 {
                     MatrixGrid.IMatrixCell cell = matrix.Cells[rowIndex, columnIndex];
-                    if (cell == null) continue;
+                    if (cell == null)
+                    {
+                        continue;
+                    }
 
                     System.Windows.Documents.TableCell tableCell = new System.Windows.Documents.TableCell();
                     setBorders(cell, tableCell);
-                    
+
                     if (cell is MatrixGrid.IMatrixHeader headerCell)
                     {
                         tableCell.Background = System.Windows.Media.Brushes.LightGray;
@@ -378,8 +439,10 @@ namespace TMP.UI.Controls.WPF.Reporting.Helpers
 
                     row.Cells.Add(tableCell);
                 }
+
                 dataRowGroup.Rows.Add(row);
             }
+
             table.RowGroups.Add(dataRowGroup);
             #endregion
 
@@ -393,7 +456,10 @@ namespace TMP.UI.Controls.WPF.Reporting.Helpers
                 for (int columnIndex = 0; columnIndex < matrixWidth; columnIndex++)
                 {
                     MatrixGrid.IMatrixCell cell = matrix.Cells[matrixHeight - 1, columnIndex];
-                    if (cell == null) continue;
+                    if (cell == null)
+                    {
+                        continue;
+                    }
 
                     System.Windows.Documents.TableCell tableCell = new System.Windows.Documents.TableCell();
                     setBorders(cell, tableCell);
@@ -408,14 +474,16 @@ namespace TMP.UI.Controls.WPF.Reporting.Helpers
                         }
                         else
                             if (summaryCell.SummaryType == MatrixGrid.MatrixSummaryType.TotalSummary)
-                            {
-                                tableCell.Background = System.Windows.Media.Brushes.Gray;
-                                tableCell.Foreground = System.Windows.Media.Brushes.White;
-                                tableCell.FontWeight = FontWeights.ExtraBold;
-                            }
+                        {
+                            tableCell.Background = System.Windows.Media.Brushes.Gray;
+                            tableCell.Foreground = System.Windows.Media.Brushes.White;
+                            tableCell.FontWeight = FontWeights.ExtraBold;
+                        }
                     }
                     else
+                    {
                         tableCell.Background = System.Windows.Media.Brushes.LightGray;
+                    }
 
                     tableCell.RowSpan = cell.GridRowSpan;
                     tableCell.ColumnSpan = cell.GridColumnSpan;
@@ -423,6 +491,7 @@ namespace TMP.UI.Controls.WPF.Reporting.Helpers
 
                     row.Cells.Add(tableCell);
                 }
+
                 totalRowGroup.Rows.Add(row);
                 table.RowGroups.Add(totalRowGroup);
             }
@@ -435,12 +504,13 @@ namespace TMP.UI.Controls.WPF.Reporting.Helpers
 
             return section;
         }
+
         /// <summary>
         /// Преобразование матрицы в различные форматы и отправка их в буфер обмена
         /// </summary>
         /// <param name="matrix">Матрица</param>
         public static void MatrixToClipboard(MatrixGrid.IMatrix matrix)
-        { 
+        {
             IDataObject dataObject = new DataObject();
 
             ((IDataObject)dataObject).SetData(DataFormats.Html, CreateHtmlDataFormatFromMatrix(matrix));
@@ -463,15 +533,30 @@ namespace TMP.UI.Controls.WPF.Reporting.Helpers
             sb.AppendFormat("\t<{0}", cellTag);
             sb.Append(" align=center valign=middle");
             if (cellClassname != null)
+            {
                 sb.AppendFormat(" class={0}", cellClassname);
+            }
+
             if (cellStyle != null)
+            {
                 sb.AppendFormat(" style='{0}'", cellStyle);
+            }
+
             if (cell.RowSpan > 1)
+            {
                 sb.AppendFormat(" rowspan='{0}'", cell.RowSpan);
+            }
+
             if (cell.ColSpan > 1)
+            {
                 sb.AppendFormat(" colspan='{0}'", cell.ColSpan);
+            }
+
             if (cell.Scope != HtmlTableCell.ThScope.none)
+            {
                 sb.AppendFormat(" scope='{0}'", cell.Scope);
+            }
+
             sb.Append(">");
 
             if (cell.Value != null)
@@ -500,7 +585,9 @@ namespace TMP.UI.Controls.WPF.Reporting.Helpers
             }
             else
             if (string.IsNullOrWhiteSpace(cellClassname) == false)
-                style = String.Format(" class={0}", cellClassname);
+            {
+                style = string.Format(" class={0}", cellClassname);
+            }
 
             if (firstCell)
             {
@@ -571,11 +658,12 @@ namespace TMP.UI.Controls.WPF.Reporting.Helpers
                         output.Write("<br>");
                         break;
 
-                    // 
                     default:
                         // The seemingly arbitrary 160 comes from RFC
                         if (ch == 160)
+                        {
                             output.Write(' ');
+                        }
                         else
                         if (ch > 160 && ch < 256)
                         {
@@ -604,7 +692,8 @@ namespace TMP.UI.Controls.WPF.Reporting.Helpers
         {
             var richTextBox = new System.Windows.Controls.RichTextBox();
             var textRange = new System.Windows.Documents.TextRange(richTextBox.Document.ContentStart, richTextBox.Document.ContentEnd);
-            //Create a MemoryStream of the xaml content
+
+            // Create a MemoryStream of the xaml content
             using (var xamlMemoryStream = new MemoryStream())
             {
                 using (var xamlStreamWriter = new StreamWriter(xamlMemoryStream))
@@ -613,7 +702,7 @@ namespace TMP.UI.Controls.WPF.Reporting.Helpers
                     xamlStreamWriter.Flush();
                     xamlMemoryStream.Seek(0, SeekOrigin.Begin);
 
-                    //Load the MemoryStream into TextRange ranging from start to end of RichTextBox.
+                    // Load the MemoryStream into TextRange ranging from start to end of RichTextBox.
                     textRange.Load(xamlMemoryStream, DataFormats.Xaml);
                 }
             }
@@ -646,15 +735,15 @@ namespace TMP.UI.Controls.WPF.Reporting.Helpers
 
             // каждое из шести чисел заголовка представлено как "{0:D10}" в строке формата
             // т.е. число представляется 10-ю разрядами ("0123456789")
-            int startHTML = HtmlHeader.Length + 4 * ("0123456789".Length - "{0:D10}".Length);
+            int startHTML = HtmlHeader.Length + (4 * ("0123456789".Length - "{0:D10}".Length));
 
             StringBuilder sbHtml = new StringBuilder();
             sbHtml.AppendLine(@"<html xmlns:o=""urn:schemas-microsoft-com:office:office"" xmlns:x=""urn:schemas-microsoft-com:office:excel"" xmlns=""http://www.w3.org/TR/REC-html40"">");
             sbHtml.AppendLine("<head>");
             sbHtml.AppendLine(@"<meta http-equiv=Content-Type content=""text/html; charset=utf-8"" >");
             sbHtml.AppendLine("<title></title>");
-            sbHtml.AppendFormat("<style type=\"text/css\">\r\n{0}\r\n</style>\r\n", 
-                style 
+            sbHtml.AppendFormat("<style type=\"text/css\">\r\n{0}\r\n</style>\r\n",
+                style
                 ??
 @"table {mso-displayed-decimal-separator:""\,"";mso-displayed-thousand-separator:"" ""; width:100%;}
 br {mso-data-placement:same-cell;}
@@ -666,10 +755,13 @@ td {font-size:11.0pt; font-family:Calibri, sans-serif; border: 0.5pt solid windo
 
             int fragmentStart = startHTML + GetByteCount(sbHtml);
 
-            string htmlTable = MatrixToHtmlTable(matrix) ?? String.Empty;
+            string htmlTable = MatrixToHtmlTable(matrix) ?? string.Empty;
+
             // re-encode the string so it will work  correctly (fixed in CLR 4.0)
             if (Environment.Version.Major < 4 && htmlTable.Length != Encoding.UTF8.GetByteCount(htmlTable))
+            {
                 htmlTable = Encoding.Default.GetString(Encoding.UTF8.GetBytes(htmlTable));
+            }
 
             sbHtml.AppendLine(htmlTable);
 
@@ -680,13 +772,13 @@ td {font-size:11.0pt; font-family:Calibri, sans-serif; border: 0.5pt solid windo
 
             int endHTML = startHTML + GetByteCount(sbHtml);
 
-            sbHtml.Insert(0, String.Format(HtmlHeader, startHTML, endHTML, fragmentStart, fragmentEnd));
+            sbHtml.Insert(0, string.Format(HtmlHeader, startHTML, endHTML, fragmentStart, fragmentEnd));
 
             string result = sbHtml.ToString();
 
             byte[] bytes = System.Text.Encoding.UTF8.GetBytes(result);
-//            result = System.Text.Encoding.UTF8.GetString(bytes);
 
+            // result = System.Text.Encoding.UTF8.GetString(bytes);
             var b = bytes.Length == System.Text.Encoding.UTF8.GetByteCount(result);
 
             return result;
@@ -695,7 +787,7 @@ td {font-size:11.0pt; font-family:Calibri, sans-serif; border: 0.5pt solid windo
         /// <summary>
         /// Used to calculate characters byte count  in UTF-8
         /// </summary>
-        private static readonly char[] _byteCount = new char[1];
+        private static readonly char[] byteCount = new char[1];
 
         /// <summary>
         /// Calculates the number of bytes produced  by encoding the string in the string builder in UTF-8 and not .NET default string encoding.
@@ -710,11 +802,11 @@ td {font-size:11.0pt; font-family:Calibri, sans-serif; border: 0.5pt solid windo
             end = end > -1 ? end : sb.Length;
             for (int i = start; i < end; i++)
             {
-                _byteCount[0] = sb[i];
-                count += Encoding.UTF8.GetByteCount(_byteCount);
+                byteCount[0] = sb[i];
+                count += Encoding.UTF8.GetByteCount(byteCount);
             }
+
             return count;
         }
-
     }
 }

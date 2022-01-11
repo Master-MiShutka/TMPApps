@@ -7,7 +7,7 @@
     <tmpapp:TMPApp.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/WpfApplicationTest;component/Themes/Generic.xaml" />
+                <!--  ResourceDictionary Source="/WpfApplicationTest;component/Themes/Generic.xaml" /  -->
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </tmpapp:TMPApp.Resources>

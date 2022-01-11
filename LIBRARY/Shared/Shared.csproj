@@ -1,92 +1,24 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{07D019F1-5192-4B8E-9BCF-B040D36935C6}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>TMP.Shared</RootNamespace>
-    <AssemblyName>Shared</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile>
-    </TargetFrameworkProfile>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>..\..\out\Debug\Libs\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>..\..\out\Release\Libs\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
+    <UseWpf>True</UseWpf>
+    <UseWindowsForms>True</UseWindowsForms>
+    <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="PresentationCore" />
-    <Reference Include="PresentationFramework" />
-    <Reference Include="System" />
-    <Reference Include="System.configuration" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
-    <Reference Include="System.Xaml" />
-    <Reference Include="WindowsBase" />
+    <PackageReference Include="Binaron.Serializer" Version="4.1.0" />
+    <PackageReference Include="NLog" Version="4.7.13" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AsyncObservableCollection.cs" />
-    <Compile Include="Commands\AsynchronousDelegateCommand.cs" />
-    <Compile Include="ObjectsBuilder\Field.cs" />
-    <Compile Include="ObjectsBuilder\ObjectBuilder.cs" />
-    <Compile Include="ObservableCollectionSafe.cs" />
-    <Compile Include="Util.cs" />
-    <Compile Include="Clipboard\ClipBoardHelper.cs" />
-    <Compile Include="EnumUtilities.cs" />
-    <Compile Include="Serialization\CustomSerializer.cs" />
-    <Compile Include="Serialization\GenericSerializer.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="PropertyChangedBase.cs" />
-    <Compile Include="Commands\RelayCommand.cs" />
-    <Compile Include="Serialization\CustomXmlSerializer.cs" />
-    <Compile Include="Settings\AppSettings.cs" />
-    <Compile Include="Strings.cs" />
-    <Compile Include="Utilities\Utilities.cs" />
-    <Compile Include="Commands\DelegateCommand.cs" />
-    <Compile Include="EnumDescriptionTypeConverter.cs" />
-    <Compile Include="EnumBindingSourceExtension.cs" />
-    <Compile Include="ICancelable.cs" />
-    <Compile Include="IStateObject.cs" />
-    <Compile Include="IWaitableObject.cs" />
-    <Compile Include="State.cs" />
-    <Compile Include="WaitObject.cs" />
+    <PackageReference Update="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
+    <PackageReference Update="StyleCop.Analyzers" Version="1.1.118">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>build; analyzers</IncludeAssets>
+    </PackageReference>
+    <PackageReference Update="WpfAnalyzers" Version="4.0.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>build; analyzers</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
-  <ItemGroup>
-    <None Include="Snippets\.vscontent" />
-    <None Include="Snippets\InsertAttachedProperty.snippet" />
-    <None Include="Snippets\InsertDependencyProperty.snippet" />
-    <None Include="Snippets\InsertNotifyingProperty.snippet" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>

@@ -13,6 +13,6 @@
         Time,
         Currency,
         Accounting,
-        Custom
+        Custom,
     }
 }

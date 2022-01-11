@@ -36,8 +36,9 @@
             {
                 return new Version((int)v.dwMajorVersion, (int)v.dwMinorVersion, (int)v.dwBuildNumber, 0);
             }
+
             // didn't work ???
-            return default(Version);//Environment.OSVersion.Version;
+            return default(Version); // Environment.OSVersion.Version;
         }
     }
 }

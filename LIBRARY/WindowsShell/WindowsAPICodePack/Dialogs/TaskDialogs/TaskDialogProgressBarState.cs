@@ -1,10 +1,10 @@
-//Copyright (c) Microsoft Corporation.  All rights reserved.
+// Copyright (c) Microsoft Corporation.  All rights reserved.
 
 namespace Microsoft.WindowsAPICodePack.Dialogs
 {
     /// <summary>
     /// Sets the state of a task dialog progress bar.
-    /// </summary>        
+    /// </summary>
     public enum TaskDialogProgressBarState
     {
         /// <summary>
@@ -30,6 +30,6 @@ namespace Microsoft.WindowsAPICodePack.Dialogs
         /// <summary>
         /// Displays marquee (indeterminate) style progress
         /// </summary>
-        Marquee
+        Marquee,
     }
 }

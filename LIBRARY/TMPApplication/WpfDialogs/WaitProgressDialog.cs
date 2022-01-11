@@ -1,215 +1,234 @@
-﻿using System;
-using System.Threading;
-using System.Windows;
-using System.Windows.Threading;
-using TMPApplication.WpfDialogs.Contracts;
-
-namespace TMPApplication.WpfDialogs
+﻿namespace TMPApplication.WpfDialogs
 {
-	class WaitProgressDialog : DialogBase, IProgressDialog
-	{
-		#region Factory
+    using System;
+    using System.Threading;
+    using System.Windows;
+    using System.Windows.Threading;
+    using TMPApplication.WpfDialogs.Contracts;
 
-		public static IWaitDialog CreateWaitDialog(
-			IDialogHost dialogHost,
-			DialogMode dialogMode,
-			Dispatcher dispatcher,
-			bool isIndeterminate)
-		{
-			IWaitDialog dialog = null;
-			dispatcher.Invoke(
-				new Action(() => dialog = new WaitProgressDialog(
-					dialogHost, dialogMode, isIndeterminate, dispatcher)),
-				DispatcherPriority.DataBind);
-			return dialog;
-		}
+    internal class WaitProgressDialog : DialogBase, IProgressDialog
+    {
+        #region Factory
 
-		public static IProgressDialog CreateProgressDialog(
-			IDialogHost dialogHost,
-			DialogMode dialogMode,
-			Dispatcher dispatcher,
+        public static IWaitDialog CreateWaitDialog(
+            IDialogHost dialogHost,
+            DialogMode dialogMode,
+            Dispatcher dispatcher,
             bool isIndeterminate)
-		{
-			IProgressDialog dialog = null;
-			dispatcher.Invoke(
-				new Action(() => dialog = new WaitProgressDialog(
-					dialogHost, dialogMode, isIndeterminate, dispatcher)),
-				DispatcherPriority.DataBind);
-			return dialog;
-		}
+        {
+            IWaitDialog dialog = null;
+            dispatcher.Invoke(
+                new Action(() => dialog = new WaitProgressDialog(
+                    dialogHost, dialogMode, isIndeterminate, dispatcher)),
+                DispatcherPriority.DataBind);
+            return dialog;
+        }
 
-		#endregion
+        public static IProgressDialog CreateProgressDialog(
+            IDialogHost dialogHost,
+            DialogMode dialogMode,
+            Dispatcher dispatcher,
+            bool isIndeterminate)
+        {
+            IProgressDialog dialog = null;
+            dispatcher.Invoke(
+                new Action(() => dialog = new WaitProgressDialog(
+                    dialogHost, dialogMode, isIndeterminate, dispatcher)),
+                DispatcherPriority.DataBind);
+            return dialog;
+        }
 
-		private WaitProgressDialog(
-			IDialogHost dialogHost,
-			DialogMode dialogMode,
-			bool isIndeterminate,
-			Dispatcher dispatcher,
+        #endregion
+
+        private WaitProgressDialog(
+            IDialogHost dialogHost,
+            DialogMode dialogMode,
+            bool isIndeterminate,
+            Dispatcher dispatcher,
             System.Windows.MessageBoxImage image = MessageBoxImage.None)
-			: base(dialogHost, dialogMode, dispatcher, image)
-		{
-			_waitProgressDialogControl = new WaitProgressDialogControl(isIndeterminate);
-			SetContent(_waitProgressDialogControl);
-		}
+            : base(dialogHost, dialogMode, dispatcher, image)
+        {
+            this.HorizontalDialogAlignment = HorizontalAlignment.Center;
+            this.VerticalDialogAlignment = VerticalAlignment.Center;
 
-		private readonly WaitProgressDialogControl _waitProgressDialogControl;
-		private bool _isReady;
+            this.waitProgressDialogControl = new WaitProgressDialogControl(isIndeterminate);
+            this.SetContent(this.waitProgressDialogControl);
+        }
 
-		#region Implementation of IMessageDialog
+        private readonly WaitProgressDialogControl waitProgressDialogControl;
+        private bool isReady;
 
-		public string Message
-		{
-			get
-			{
-				var text = string.Empty;
-				InvokeUICall(
-					() => text = _waitProgressDialogControl.DisplayText);
-				return text;
-			}
-			set
-			{
-				InvokeUICall(
-					() => _waitProgressDialogControl.DisplayText = value);
-			}
-		}
+        #region Implementation of IMessageDialog
 
-		#endregion
+        public string Message
+        {
+            get
+            {
+                var text = string.Empty;
+                this.InvokeUICall(
+                    () => text = this.waitProgressDialogControl.DisplayText);
+                return text;
+            }
+            set => this.InvokeUICall(
+                    () => this.waitProgressDialogControl.DisplayText = value);
+        }
 
-		#region Implementation of IWaitDialog
+        #endregion
 
-		public Action WorkerReady { get; set; }
-		public bool CloseWhenWorkerFinished { get; set; }
+        #region Implementation of IWaitDialog
 
-		private string _readyMessage;
-		public string ReadyMessage
-		{
-			get { return _readyMessage; }
-			set
-			{
-				_readyMessage = value;
-				if (_isReady)
-					InvokeUICall(
-						() => _waitProgressDialogControl.DisplayText = value);
-			}
-		}
+        public Action WorkerReady { get; set; }
 
-		private readonly ManualResetEvent _beginWork =
-			new ManualResetEvent(false);
+        public bool CloseWhenWorkerFinished { get; set; }
 
-		public void Show(Action workerMethod)
-		{
-			ThreadPool.QueueUserWorkItem(o =>
-			{
-				try
-				{
-					_beginWork.WaitOne(-1);
+        private string _readyMessage;
 
-					workerMethod();
+        public string ReadyMessage
+        {
+            get => this._readyMessage;
+            set
+            {
+                this._readyMessage = value;
+                if (this.isReady)
+                {
+                    this.InvokeUICall(
+                        () => this.waitProgressDialogControl.DisplayText = value);
+                }
+            }
+        }
 
-					InvokeUICall(() =>
-					{
-						_isReady = true;
+        private readonly ManualResetEvent _beginWork =
+            new ManualResetEvent(false);
 
-						if (WorkerReady != null)
-							WorkerReady();
+        public void Show(Action workerMethod)
+        {
+            ThreadPool.QueueUserWorkItem(o =>
+            {
+                try
+                {
+                    this._beginWork.WaitOne(-1);
 
-						if (CloseWhenWorkerFinished)
-						{
-							Close();
-							return;
-						}
+                    workerMethod();
 
-						_waitProgressDialogControl.DisplayText = ReadyMessage;
-						_waitProgressDialogControl.Finish();
+                    this.InvokeUICall(() =>
+                    {
+                        this.isReady = true;
 
-						DialogBaseControl.RemoveButtons();
-						DialogBaseControl.AddOkButton();
-					});
-				}
-				catch (Exception ex)
-				{
-					InvokeUICall(() =>
-					{
-						Close();
-						throw ex;
-					});
-				}
-			});
+                        if (this.WorkerReady != null)
+                        {
+                            this.WorkerReady();
+                        }
 
-			Show();
+                        if (this.CloseWhenWorkerFinished)
+                        {
+                            this.Close();
+                            return;
+                        }
 
-			_beginWork.Set();
-		}
-		public void Show(Action<IProgressDialog> workerMethod)
-		{
-			ThreadPool.QueueUserWorkItem(o =>
-			{
-				try
-				{
-					_beginWork.WaitOne(-1);
+                        this.waitProgressDialogControl.DisplayText = this.ReadyMessage;
+                        this.waitProgressDialogControl.Finish();
 
-					workerMethod(this);
+                        this.DialogBaseControl.RemoveButtons();
+                        this.DialogBaseControl.AddOkButton();
+                    });
+                }
+                catch (Exception ex)
+                {
+                    this.InvokeUICall(() =>
+                    {
+                        this.Close();
+                        throw ex;
+                    });
+                }
+            });
 
-					InvokeUICall(() =>
-					{
-						_isReady = true;
+            this.Show();
 
-						if (WorkerReady != null)
-							WorkerReady();
+            this._beginWork.Set();
+        }
 
-						if (CloseWhenWorkerFinished)
-						{
-							Close();
-							return;
-						}
+        public void Show(Action<IProgressDialog> workerMethod)
+        {
+            ThreadPool.QueueUserWorkItem(o =>
+            {
+                try
+                {
+                    this._beginWork.WaitOne(-1);
 
-						_waitProgressDialogControl.DisplayText = ReadyMessage;
-						_waitProgressDialogControl.Finish();
+                    workerMethod(this);
 
-						DialogBaseControl.RemoveButtons();
-						DialogBaseControl.AddOkButton();
-					});
-				}
-				catch (Exception ex)
-				{
-					InvokeUICall(() =>
-					{
-						Close();
-						throw ex;
-					});
-				}
-			});
+                    this.InvokeUICall(() =>
+                    {
+                        this.isReady = true;
 
-			Show();
+                        if (this.WorkerReady != null)
+                        {
+                            this.WorkerReady();
+                        }
 
-			_beginWork.Set();
-		}
+                        if (this.CloseWhenWorkerFinished)
+                        {
+                            this.Close();
+                            return;
+                        }
 
-		public new void InvokeUICall(Action uiWorker)
-		{
-			base.InvokeUICall(uiWorker);
-		}
+                        this.waitProgressDialogControl.DisplayText = this.ReadyMessage;
+                        this.waitProgressDialogControl.Finish();
 
-		#endregion
+                        this.DialogBaseControl.RemoveButtons();
+                        this.DialogBaseControl.AddOkButton();
+                    });
+                }
+                catch (Exception ex)
+                {
+                    this.InvokeUICall(() =>
+                    {
+                        this.Close();
+                        throw ex;
+                    });
+                }
+            });
 
-		#region Implementation of IProgressDialog
+            this.Show();
 
-		public int Progress
-		{
-			get
-			{
-				var progress = 0;
-				InvokeUICall(
-					() => progress = _waitProgressDialogControl.Progress);
-				return progress;
-			}
-			set
-			{
-				InvokeUICall(
-					() => _waitProgressDialogControl.Progress = value);
-			}
-		}
+            this._beginWork.Set();
+        }
 
-		#endregion
-	}
+        public new void InvokeUICall(Action uiWorker)
+        {
+            base.InvokeUICall(uiWorker);
+        }
+
+        #endregion
+
+        #region Implementation of IProgressDialog
+
+        public double Progress
+        {
+            get
+            {
+                double progress = 0;
+                this.InvokeUICall(
+                    () => progress = this.waitProgressDialogControl.Progress);
+                return progress;
+            }
+            set => this.InvokeUICall(
+                    () => this.waitProgressDialogControl.Progress = value);
+        }
+
+        public bool IsIndeterminate
+        {
+            get
+            {
+                bool isIndeterminate = false;
+                this.InvokeUICall(
+                    () => isIndeterminate = this.waitProgressDialogControl.IsIndeterminate);
+                return isIndeterminate;
+            }
+            set => this.InvokeUICall(
+                    () => this.waitProgressDialogControl.IsIndeterminate = value);
+        }
+
+        #endregion
+    }
 }

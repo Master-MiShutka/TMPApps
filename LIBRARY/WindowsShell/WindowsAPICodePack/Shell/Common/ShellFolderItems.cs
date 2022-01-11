@@ -1,20 +1,20 @@
-﻿//Copyright (c) Microsoft Corporation.  All rights reserved.
-
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.InteropServices;
-using MS.WindowsAPICodePack.Internal;
+﻿// Copyright (c) Microsoft Corporation.  All rights reserved.
 
 namespace Microsoft.WindowsAPICodePack.Shell
 {
-    class ShellFolderItems : IEnumerator<ShellObject>
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Runtime.InteropServices;
+    using MS.WindowsAPICodePack.Internal;
+
+    internal class ShellFolderItems : IEnumerator<ShellObject>
     {
         #region Private Fields
 
         private IEnumIDList nativeEnumIdList;
         private ShellObject currentItem;
-        ShellContainer nativeShellFolder;
+        private ShellContainer nativeShellFolder;
 
         #endregion
 
@@ -27,8 +27,7 @@ namespace Microsoft.WindowsAPICodePack.Shell
             HResult hr = nativeShellFolder.NativeShellFolder.EnumObjects(
                 IntPtr.Zero,
                 ShellNativeMethods.ShellFolderEnumerationOptions.Folders | ShellNativeMethods.ShellFolderEnumerationOptions.NonFolders,
-                out nativeEnumIdList);
-
+                out this.nativeEnumIdList);
 
             if (!CoreErrorHelper.Succeeded(hr))
             {
@@ -41,21 +40,13 @@ namespace Microsoft.WindowsAPICodePack.Shell
                     throw new ShellException(hr);
                 }
             }
-
-
         }
 
         #endregion
 
         #region IEnumerator<ShellObject> Members
 
-        public ShellObject Current
-        {
-            get
-            {
-                return currentItem;
-            }
-        }
+        public ShellObject Current => this.currentItem;
 
         #endregion
 
@@ -63,54 +54,55 @@ namespace Microsoft.WindowsAPICodePack.Shell
 
         public void Dispose()
         {
-            if (nativeEnumIdList != null)
+            if (this.nativeEnumIdList != null)
             {
-                Marshal.ReleaseComObject(nativeEnumIdList);
-                nativeEnumIdList = null;                
-            }            
+                Marshal.ReleaseComObject(this.nativeEnumIdList);
+                this.nativeEnumIdList = null;
+            }
         }
 
         #endregion
 
         #region IEnumerator Members
 
-        object IEnumerator.Current
-        {
-            get { return currentItem; }
-
-        }
+        object IEnumerator.Current => this.currentItem;
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <returns></returns>
         public bool MoveNext()
         {
-            if (nativeEnumIdList == null) { return false; }
+            if (this.nativeEnumIdList == null)
+            {
+                return false;
+            }
 
             IntPtr item;
             uint numItemsReturned;
             uint itemsRequested = 1;
-            HResult hr = nativeEnumIdList.Next(itemsRequested, out item, out numItemsReturned);
+            HResult hr = this.nativeEnumIdList.Next(itemsRequested, out item, out numItemsReturned);
 
-            if (numItemsReturned < itemsRequested || hr != HResult.Ok) { return false; }
+            if (numItemsReturned < itemsRequested || hr != HResult.Ok)
+            {
+                return false;
+            }
 
-            currentItem = ShellObjectFactory.Create(item, nativeShellFolder);
+            this.currentItem = ShellObjectFactory.Create(item, this.nativeShellFolder);
 
             return true;
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public void Reset()
         {
-            if (nativeEnumIdList != null)
+            if (this.nativeEnumIdList != null)
             {
-                nativeEnumIdList.Reset();
+                this.nativeEnumIdList.Reset();
             }
         }
-
 
         #endregion
     }

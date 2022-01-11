@@ -1,27 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Linq.Expressions;
-
-namespace TMP.Extensions
+﻿namespace TMP.Extensions
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Data;
+    using System.Linq;
+    using System.Linq.Expressions;
+
     public static class LinqExtenions
     {
         /// <summary>
         /// Pivot
         /// <paramref name="source"/>
         /// class Program {
-        ///  
+        ///
         ///     internal class Employee {
         ///         public string Name { get; set; }
         ///         public string Department { get; set; }
         ///         public string Function { get; set; }
         ///         public decimal Salary { get; set; }
         ///     }
-        ///  
+        ///
         ///     static void Main(string[] args) {
-        ///  
+        ///
         ///         var l = new List<Employee>() {
         ///             new Employee() { Name = "Fons", Department = "R&D", Function = "Trainer", Salary = 2000 },
         ///             new Employee() { Name = "Jim", Department = "R&D", Function = "Trainer", Salary = 3000 },
@@ -29,29 +29,29 @@ namespace TMP.Extensions
         ///             new Employee() { Name = "Mike", Department = "Dev", Function = "Consultant", Salary = 5000 },
         ///             new Employee() { Name = "Jack", Department = "R&D", Function = "Developer", Salary = 6000 },
         ///             new Employee() { Name = "Demy", Department = "Dev", Function = "Consultant", Salary = 2000 }};
-        ///  
+        ///
         ///         var result1 = l.Pivot(emp => emp.Department, emp2 => emp2.Function, lst => lst.Sum(emp => emp.Salary));
-        ///  
+        ///
         ///         foreach (var row in result1) {
         ///             Console.WriteLine(row.Key);
         ///             foreach (var column in row.Value) {
         ///                 Console.WriteLine("  " + column.Key + "\t" + column.Value);
-        ///  
+        ///
         ///             }
         ///         }
-        ///  
+        ///
         ///         Console.WriteLine("----");
-        ///  
+        ///
         ///         var result2 = l.Pivot(emp => emp.Function, emp2 => emp2.Department, lst => lst.Count());
-        ///  
+        ///
         ///         foreach (var row in result2) {
         ///             Console.WriteLine(row.Key);
         ///             foreach (var column in row.Value) {
         ///                 Console.WriteLine("  " + column.Key + "\t" + column.Value);
-        ///  
+        ///
         ///             }
         ///         }
-        ///  
+        ///
         ///         Console.WriteLine("----");
         ///     }
         /// }
@@ -90,7 +90,7 @@ namespace TMP.Extensions
             Func<T, TColumn> columnSelector,
             Expression<Func<T, TRow>> rowSelector,
             Func<IEnumerable<T>, TData> dataSelector,
-             Func<object, bool> funcRowSelector = null)
+            Func<object, bool> funcRowSelector = null)
         {
             DataTable table = new DataTable();
             var rowName = ((MemberExpression)rowSelector.Body).Member.Name;
@@ -100,7 +100,9 @@ namespace TMP.Extensions
                 .OrderBy(i => i.ToString());
 
             foreach (var column in columns)
+            {
                 table.Columns.Add(new DataColumn(column.ToString()));
+            }
 
             var rows = source.GroupBy(rowSelector.Compile())
                              .Select(rowGroup => new
@@ -110,7 +112,7 @@ namespace TMP.Extensions
                                      rowGroup,
                                      c => c,
                                      r => columnSelector(r),
-                                     (c, columnGroup) => dataSelector(columnGroup))
+                                     (c, columnGroup) => dataSelector(columnGroup)),
                              });
 
             foreach (var row in rows)
@@ -146,9 +148,10 @@ namespace TMP.Extensions
                     Key = g.Key,
                     Count = g.Count(),
                     Items = g,
-                    SubGroups = subGroupsSelector(g)
+                    SubGroups = subGroupsSelector(g),
                 });
             }
+
             return groupBy(elements);
         }
 
@@ -159,10 +162,17 @@ namespace TMP.Extensions
         public class GroupResult<T>
         {
             public object Key { get; set; }
+
             public int Count { get; set; }
+
             public IEnumerable<T> Items { get; set; }
+
             public IEnumerable<GroupResult<T>> SubGroups { get; set; }
-            public override string ToString() { return string.Format("{0} ({1})", Key, Count); }
+
+            public override string ToString()
+            {
+                return string.Format("{0} ({1})", this.Key, this.Count);
+            }
         }
     }
 }

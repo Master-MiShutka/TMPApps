@@ -1,20 +1,19 @@
-﻿using MS.Windows.Shell;
-using System;
-using System.ComponentModel;
-using System.Linq;
-using System.Reflection;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
-using System.Windows.Input;
-using System.Windows.Interop;
-using System.Windows.Media;
-using System.Windows.Media.Animation;
-using Native;
-
-namespace TMPApplication.CustomWpfWindow
+﻿namespace TMPApplication.CustomWpfWindow
 {
+    using System;
+    using System.ComponentModel;
+    using System.Linq;
+    using System.Reflection;
+    using System.Threading.Tasks;
+    using System.Windows;
+    using System.Windows.Controls;
+    using System.Windows.Controls.Primitives;
+    using System.Windows.Input;
+    using System.Windows.Interop;
+    using System.Windows.Media;
+    using System.Windows.Media.Animation;
+    using MS.Windows.Shell;
+    using Native;
     using TMPApplication.WpfDialogs;
     using TMPApplication.WpfDialogs.Contracts;
 
@@ -29,17 +28,19 @@ namespace TMPApplication.CustomWpfWindow
     [TemplatePart(Name = PART_OverlayBox, Type = typeof(Grid))]
     [TemplatePart(Name = PART_DialogsContainer, Type = typeof(Grid))]
     [TemplatePart(Name = PART_WindowTitleThumb, Type = typeof(Thumb))]
+
+    [TemplatePart(Name = PART_Window_Content, Type = typeof(ContentPresenter))]
     public class WindowWithDialogs : Window, IWindowWithDialogs
     {
         #region fields
 
-        private UIElement _icon;
-        private UIElement _titleBar;
+        private readonly NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
 
-        internal WindowButtonCommands _windowButtonCommands;
-        internal Grid _overlayBox;
-        internal Grid _dialogsContainer;
-        private Thumb _windowTitleThumb;
+        internal WindowButtonCommands windowButtonCommands;
+        internal Grid overlayBox;
+        internal Grid dialogsContainer;
+        internal ContentPresenter contentPresenter;
+        private Thumb windowTitleThumb;
 
         private const string PART_Icon = "PART_Icon";
         private const string PART_TitleBar = "PART_TitleBar";
@@ -49,8 +50,10 @@ namespace TMPApplication.CustomWpfWindow
         private const string PART_DialogsContainer = "PART_DialogsContainer";
         private const string PART_WindowTitleThumb = "PART_WindowTitleThumb";
 
-        private IInputElement _restoreFocus;
-        private Storyboard _overlayStoryboard;
+        private const string PART_Window_Content = "PART_Window_Content";
+
+        private IInputElement restoreFocus;
+        private Storyboard overlayStoryboard;
 
         #endregion
 
@@ -63,29 +66,23 @@ namespace TMPApplication.CustomWpfWindow
 
         public WindowWithDialogs()
         {
-            this.CommandBindings.Add(new CommandBinding(SystemCommands.CloseWindowCommand, this.OnCloseWindow));
-            this.CommandBindings.Add(new CommandBinding(SystemCommands.MaximizeWindowCommand, this.OnMaximizeWindow, this.OnCanResizeWindow));
-            this.CommandBindings.Add(new CommandBinding(SystemCommands.MinimizeWindowCommand, this.OnMinimizeWindow, this.OnCanMinimizeWindow));
-            this.CommandBindings.Add(new CommandBinding(SystemCommands.RestoreWindowCommand, this.OnRestoreWindow, this.OnCanResizeWindow));
+            this.CommandBindings.Add(new CommandBinding(MS.Windows.Shell.SystemCommands.CloseWindowCommand, this.OnCloseWindow));
+            this.CommandBindings.Add(new CommandBinding(MS.Windows.Shell.SystemCommands.MaximizeWindowCommand, this.OnMaximizeWindow, this.OnCanResizeWindow));
+            this.CommandBindings.Add(new CommandBinding(MS.Windows.Shell.SystemCommands.MinimizeWindowCommand, this.OnMinimizeWindow, this.OnCanMinimizeWindow));
+            this.CommandBindings.Add(new CommandBinding(MS.Windows.Shell.SystemCommands.RestoreWindowCommand, this.OnRestoreWindow, this.OnCanResizeWindow));
 
-            this.SourceInitialized += new EventHandler(Window_SourceInitialized);
+            this.SourceInitialized += new EventHandler(this.Window_SourceInitialized);
 
-            this.Loaded += WindowWithDialogs_Loaded;
+            this.Loaded += this.WindowWithDialogs_Loaded;
         }
 
         #endregion
 
         #region properties
 
-        public Grid OverlayBox
-        {
-            get { return _overlayBox; }
-        }
+        public Grid OverlayBox => this.overlayBox;
 
-        public Grid DialogsContainer
-        {
-            get { return _dialogsContainer; }
-        }
+        public Grid DialogsContainer => this.dialogsContainer;
 
         #region Show Window Icon
         private static readonly DependencyProperty ShowIconProperty = DependencyProperty.Register("ShowIcon", typeof(bool), typeof(WindowWithDialogs), new PropertyMetadata(true));
@@ -95,9 +92,10 @@ namespace TMPApplication.CustomWpfWindow
         /// </summary>
         public bool ShowIcon
         {
-            get { return (bool)GetValue(ShowIconProperty); }
-            set { SetValue(ShowIconProperty, value); }
+            get => (bool)this.GetValue(ShowIconProperty);
+            set => this.SetValue(ShowIconProperty, value);
         }
+
         #endregion
         #region Icon Edge Mode
         private static readonly DependencyProperty IconEdgeModeProperty = DependencyProperty.Register("IconEdgeMode", typeof(EdgeMode), typeof(WindowWithDialogs), new PropertyMetadata(EdgeMode.Aliased));
@@ -107,9 +105,10 @@ namespace TMPApplication.CustomWpfWindow
         /// </summary>
         public EdgeMode IconEdgeMode
         {
-            get { return (EdgeMode)GetValue(IconEdgeModeProperty); }
-            set { SetValue(IconEdgeModeProperty, value); }
+            get => (EdgeMode)this.GetValue(IconEdgeModeProperty);
+            set => this.SetValue(IconEdgeModeProperty, value);
         }
+
         #endregion
         #region Icon Bitmap Scaling Mode
         private static readonly DependencyProperty IconBitmapScalingModeProperty = DependencyProperty.Register("IconBitmapScalingMode", typeof(BitmapScalingMode), typeof(WindowWithDialogs), new PropertyMetadata(BitmapScalingMode.HighQuality));
@@ -119,9 +118,10 @@ namespace TMPApplication.CustomWpfWindow
         /// </summary>
         public BitmapScalingMode IconBitmapScalingMode
         {
-            get { return (BitmapScalingMode)GetValue(IconBitmapScalingModeProperty); }
-            set { SetValue(IconBitmapScalingModeProperty, value); }
+            get => (BitmapScalingMode)this.GetValue(IconBitmapScalingModeProperty);
+            set => this.SetValue(IconBitmapScalingModeProperty, value);
         }
+
         #endregion
         #region Icon Template
         private static readonly DependencyProperty IconTemplateProperty = DependencyProperty.Register("IconTemplate", typeof(DataTemplate), typeof(WindowWithDialogs), new PropertyMetadata(null));
@@ -131,8 +131,8 @@ namespace TMPApplication.CustomWpfWindow
         /// </summary>
         public DataTemplate IconTemplate
         {
-            get { return (DataTemplate)GetValue(IconTemplateProperty); }
-            set { SetValue(IconTemplateProperty, value); }
+            get => (DataTemplate)this.GetValue(IconTemplateProperty);
+            set => this.SetValue(IconTemplateProperty, value);
         }
         #endregion
 
@@ -144,9 +144,10 @@ namespace TMPApplication.CustomWpfWindow
         /// </summary>
         public bool ShowDialogsOverTitleBar
         {
-            get { return (bool)GetValue(ShowDialogsOverTitleBarProperty); }
-            set { SetValue(ShowDialogsOverTitleBarProperty, value); }
+            get => (bool)this.GetValue(ShowDialogsOverTitleBarProperty);
+            set => this.SetValue(ShowDialogsOverTitleBarProperty, value);
         }
+
         #endregion
         #region Show TitleBar
         private static readonly DependencyProperty ShowTitleBarProperty = DependencyProperty.Register("ShowTitleBar", typeof(bool), typeof(WindowWithDialogs), new PropertyMetadata(true, OnShowTitleBarPropertyChangedCallback, OnShowTitleBarCoerceValueCallback));
@@ -156,8 +157,8 @@ namespace TMPApplication.CustomWpfWindow
         /// </summary>
         public bool ShowTitleBar
         {
-            get { return (bool)GetValue(ShowTitleBarProperty); }
-            set { SetValue(ShowTitleBarProperty, value); }
+            get => (bool)this.GetValue(ShowTitleBarProperty);
+            set => this.SetValue(ShowTitleBarProperty, value);
         }
 
         private static void OnShowTitleBarPropertyChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -176,8 +177,10 @@ namespace TMPApplication.CustomWpfWindow
             {
                 return false;
             }
+
             return value;
         }
+
         #endregion
         #region Title Foreground
         private static readonly DependencyProperty TitleForegroundProperty = DependencyProperty.Register("TitleForeground", typeof(Brush), typeof(WindowWithDialogs));
@@ -187,9 +190,10 @@ namespace TMPApplication.CustomWpfWindow
         /// </summary>
         public Brush TitleForeground
         {
-            get { return (Brush)GetValue(TitleForegroundProperty); }
-            set { SetValue(TitleForegroundProperty, value); }
+            get => (Brush)this.GetValue(TitleForegroundProperty);
+            set => this.SetValue(TitleForegroundProperty, value);
         }
+
         #endregion
         #region Title Brush
         private static readonly DependencyProperty TitleBrushProperty = DependencyProperty.Register("TitleBrush", typeof(Brush), typeof(WindowWithDialogs), new PropertyMetadata(Brushes.Transparent));
@@ -199,9 +203,10 @@ namespace TMPApplication.CustomWpfWindow
         /// </summary>
         public Brush TitleBrush
         {
-            get { return (Brush)GetValue(TitleBrushProperty); }
-            set { SetValue(TitleBrushProperty, value); }
+            get => (Brush)this.GetValue(TitleBrushProperty);
+            set => this.SetValue(TitleBrushProperty, value);
         }
+
         #endregion
         #region Title Template
         private static readonly DependencyProperty TitleTemplateProperty = DependencyProperty.Register("TitleTemplate", typeof(DataTemplate), typeof(WindowWithDialogs), new PropertyMetadata(null));
@@ -211,20 +216,22 @@ namespace TMPApplication.CustomWpfWindow
         /// </summary>
         public DataTemplate TitleTemplate
         {
-            get { return (DataTemplate)GetValue(TitleTemplateProperty); }
-            set { SetValue(TitleTemplateProperty, value); }
+            get => (DataTemplate)this.GetValue(TitleTemplateProperty);
+            set => this.SetValue(TitleTemplateProperty, value);
         }
+
         #endregion
         #region NonActiveWindowTitleBrush
         private static readonly DependencyProperty NonActiveWindowTitleBrushProperty =
             DependencyProperty.Register("NonActiveWindowTitleBrush", typeof(Brush), typeof(WindowWithDialogs), new PropertyMetadata(Brushes.Gray));
+
         /// <summary>
         /// Возвращает или задаёт кисть для панели заголовка окна, когда оно в не активном состоянии
         /// </summary>
         public Brush NonActiveWindowTitleBrush
         {
-            get { return (Brush)GetValue(NonActiveWindowTitleBrushProperty); }
-            set { SetValue(NonActiveWindowTitleBrushProperty, value); }
+            get => (Brush)this.GetValue(NonActiveWindowTitleBrushProperty);
+            set => this.SetValue(NonActiveWindowTitleBrushProperty, value);
         }
         #endregion
 
@@ -236,9 +243,10 @@ namespace TMPApplication.CustomWpfWindow
         /// </summary>
         public bool ShowMinButton
         {
-            get { return (bool)GetValue(ShowMinButtonProperty); }
-            set { SetValue(ShowMinButtonProperty, value); }
+            get => (bool)this.GetValue(ShowMinButtonProperty);
+            set => this.SetValue(ShowMinButtonProperty, value);
         }
+
         #endregion
         #region Is Window Min Button Enabled
         private static readonly DependencyProperty IsMinButtonEnabledProperty = DependencyProperty.Register("IsMinButtonEnabled", typeof(bool), typeof(WindowWithDialogs), new PropertyMetadata(true));
@@ -248,9 +256,10 @@ namespace TMPApplication.CustomWpfWindow
         /// </summary>
         public bool IsMinButtonEnabled
         {
-            get { return (bool)GetValue(IsMinButtonEnabledProperty); }
-            set { SetValue(IsMinButtonEnabledProperty, value); }
+            get => (bool)this.GetValue(IsMinButtonEnabledProperty);
+            set => this.SetValue(IsMinButtonEnabledProperty, value);
         }
+
         #endregion
         #region Min Button Style
         private static readonly DependencyProperty MinButtonStyleProperty = DependencyProperty.Register("MinButtonStyle", typeof(Style), typeof(WindowWithDialogs), new PropertyMetadata(null));
@@ -260,8 +269,8 @@ namespace TMPApplication.CustomWpfWindow
         /// </summary>
         public Style MinButtonStyle
         {
-            get { return (Style)GetValue(MinButtonStyleProperty); }
-            set { SetValue(MinButtonStyleProperty, value); }
+            get => (Style)this.GetValue(MinButtonStyleProperty);
+            set => this.SetValue(MinButtonStyleProperty, value);
         }
         #endregion
 
@@ -273,9 +282,10 @@ namespace TMPApplication.CustomWpfWindow
         /// </summary>
         public bool ShowMaxRestoreButton
         {
-            get { return (bool)GetValue(ShowMaxRestoreButtonProperty); }
-            set { SetValue(ShowMaxRestoreButtonProperty, value); }
+            get => (bool)this.GetValue(ShowMaxRestoreButtonProperty);
+            set => this.SetValue(ShowMaxRestoreButtonProperty, value);
         }
+
         #endregion
         #region Is Window Min Button Enabled
         private static readonly DependencyProperty IsMaxRestoreButtonEnabledProperty = DependencyProperty.Register("IsMaxRestoreButtonEnabled", typeof(bool), typeof(WindowWithDialogs), new PropertyMetadata(true));
@@ -285,9 +295,10 @@ namespace TMPApplication.CustomWpfWindow
         /// </summary>
         public bool IsMaxRestoreButtonEnabled
         {
-            get { return (bool)GetValue(IsMaxRestoreButtonEnabledProperty); }
-            set { SetValue(IsMaxRestoreButtonEnabledProperty, value); }
+            get => (bool)this.GetValue(IsMaxRestoreButtonEnabledProperty);
+            set => this.SetValue(IsMaxRestoreButtonEnabledProperty, value);
         }
+
         #endregion
         #region MaxRestore Button Style
         private static readonly DependencyProperty MaxRestoreButtonStyleProperty = DependencyProperty.Register("MaxRestoreButtonStyle", typeof(Style), typeof(WindowWithDialogs), new PropertyMetadata(null));
@@ -297,8 +308,8 @@ namespace TMPApplication.CustomWpfWindow
         /// </summary>
         public Style MaxRestoreButtonStyle
         {
-            get { return (Style)GetValue(MaxRestoreButtonStyleProperty); }
-            set { SetValue(MaxRestoreButtonStyleProperty, value); }
+            get => (Style)this.GetValue(MaxRestoreButtonStyleProperty);
+            set => this.SetValue(MaxRestoreButtonStyleProperty, value);
         }
         #endregion
 
@@ -310,9 +321,10 @@ namespace TMPApplication.CustomWpfWindow
         /// </summary>
         public bool ShowCloseButton
         {
-            get { return (bool)GetValue(ShowCloseButtonProperty); }
-            set { SetValue(ShowCloseButtonProperty, value); }
+            get => (bool)this.GetValue(ShowCloseButtonProperty);
+            set => this.SetValue(ShowCloseButtonProperty, value);
         }
+
         #endregion
         #region Is Window Min Button Enabled
         private static readonly DependencyProperty IsCloseButtonEnabledProperty = DependencyProperty.Register("IsCloseButtonEnabled", typeof(bool), typeof(WindowWithDialogs), new PropertyMetadata(true));
@@ -322,9 +334,10 @@ namespace TMPApplication.CustomWpfWindow
         /// </summary>
         public bool IsCloseButtonEnabled
         {
-            get { return (bool)GetValue(IsCloseButtonEnabledProperty); }
-            set { SetValue(IsCloseButtonEnabledProperty, value); }
+            get => (bool)this.GetValue(IsCloseButtonEnabledProperty);
+            set => this.SetValue(IsCloseButtonEnabledProperty, value);
         }
+
         #endregion
         #region Close Button Style
         private static readonly DependencyProperty CloseButtonStyleProperty = DependencyProperty.Register("CloseButtonStyle", typeof(Style), typeof(WindowWithDialogs), new PropertyMetadata(null));
@@ -334,8 +347,8 @@ namespace TMPApplication.CustomWpfWindow
         /// </summary>
         public Style CloseButtonStyle
         {
-            get { return (Style)GetValue(CloseButtonStyleProperty); }
-            set { SetValue(CloseButtonStyleProperty, value); }
+            get => (Style)this.GetValue(CloseButtonStyleProperty);
+            set => this.SetValue(CloseButtonStyleProperty, value);
         }
         #endregion
 
@@ -347,8 +360,8 @@ namespace TMPApplication.CustomWpfWindow
         /// </summary>
         public Style WindowButtonStyle
         {
-            get { return (Style)GetValue(WindowButtonStyleProperty); }
-            set { SetValue(WindowButtonStyleProperty, value); }
+            get => (Style)this.GetValue(WindowButtonStyleProperty);
+            set => this.SetValue(WindowButtonStyleProperty, value);
         }
         #endregion
 
@@ -360,9 +373,10 @@ namespace TMPApplication.CustomWpfWindow
         /// </summary>
         public ICommand AboutCommand
         {
-            get { return (ICommand)GetValue(AboutCommandProperty); }
-            set { SetValue(AboutCommandProperty, value); }
+            get => (ICommand)this.GetValue(AboutCommandProperty);
+            set => this.SetValue(AboutCommandProperty, value);
         }
+
         #endregion
         #region Is About Button Enabled
         private static readonly DependencyProperty IsAboutButtonEnabledProperty = DependencyProperty.Register("IsAboutButtonEnabled", typeof(bool), typeof(WindowWithDialogs), new PropertyMetadata(true));
@@ -372,9 +386,10 @@ namespace TMPApplication.CustomWpfWindow
         /// </summary>
         public bool IsAboutButtonEnabled
         {
-            get { return (bool)GetValue(IsAboutButtonEnabledProperty); }
-            set { SetValue(IsAboutButtonEnabledProperty, value); }
+            get => (bool)this.GetValue(IsAboutButtonEnabledProperty);
+            set => this.SetValue(IsAboutButtonEnabledProperty, value);
         }
+
         #endregion
         #region Is About Button Visible
         private static readonly DependencyProperty IsAboutButtonVisibleProperty = DependencyProperty.Register("IsAboutButtonVisible", typeof(bool), typeof(WindowWithDialogs), new PropertyMetadata(true));
@@ -384,9 +399,10 @@ namespace TMPApplication.CustomWpfWindow
         /// </summary>
         public bool IsAboutButtonVisible
         {
-            get { return (bool)GetValue(IsAboutButtonVisibleProperty); }
-            set { SetValue(IsAboutButtonVisibleProperty, value); }
+            get => (bool)this.GetValue(IsAboutButtonVisibleProperty);
+            set => this.SetValue(IsAboutButtonVisibleProperty, value);
         }
+
         #endregion
         #region Settings Command
         private static readonly DependencyProperty SettingsCommandProperty = DependencyProperty.Register("SettingsCommand", typeof(ICommand), typeof(WindowWithDialogs), new PropertyMetadata(null));
@@ -396,9 +412,10 @@ namespace TMPApplication.CustomWpfWindow
         /// </summary>
         public ICommand SettingsCommand
         {
-            get { return (ICommand)GetValue(SettingsCommandProperty); }
-            set { SetValue(SettingsCommandProperty, value); }
+            get => (ICommand)this.GetValue(SettingsCommandProperty);
+            set => this.SetValue(SettingsCommandProperty, value);
         }
+
         #endregion
         #region Is Settings Button Enabled
         private static readonly DependencyProperty IsSettingsButtonEnabledProperty = DependencyProperty.Register("IsSettingsButtonEnabled", typeof(bool), typeof(WindowWithDialogs), new PropertyMetadata(true));
@@ -408,9 +425,10 @@ namespace TMPApplication.CustomWpfWindow
         /// </summary>
         public bool IsSettingsButtonEnabled
         {
-            get { return (bool)GetValue(IsSettingsButtonEnabledProperty); }
-            set { SetValue(IsSettingsButtonEnabledProperty, value); }
+            get => (bool)this.GetValue(IsSettingsButtonEnabledProperty);
+            set => this.SetValue(IsSettingsButtonEnabledProperty, value);
         }
+
         #endregion
         #region Is Settings Button Visible
         private static readonly DependencyProperty IsSettingsButtonVisibleProperty = DependencyProperty.Register("IsSettingsButtonVisible", typeof(bool), typeof(WindowWithDialogs), new PropertyMetadata(true));
@@ -420,11 +438,10 @@ namespace TMPApplication.CustomWpfWindow
         /// </summary>
         public bool IsSettingsButtonVisible
         {
-            get { return (bool)GetValue(IsSettingsButtonVisibleProperty); }
-            set { SetValue(IsSettingsButtonVisibleProperty, value); }
+            get => (bool)this.GetValue(IsSettingsButtonVisibleProperty);
+            set => this.SetValue(IsSettingsButtonVisibleProperty, value);
         }
         #endregion
-
 
         #region UseNoneWindowStyle
         public static readonly DependencyProperty UseNoneWindowStyleProperty = DependencyProperty.Register("UseNoneWindowStyle", typeof(bool), typeof(WindowWithDialogs), new PropertyMetadata(false, OnUseNoneWindowStylePropertyChangedCallback));
@@ -436,8 +453,8 @@ namespace TMPApplication.CustomWpfWindow
         /// </summary>
         public bool UseNoneWindowStyle
         {
-            get { return (bool)GetValue(UseNoneWindowStyleProperty); }
-            set { SetValue(UseNoneWindowStyleProperty, value); }
+            get => (bool)this.GetValue(UseNoneWindowStyleProperty);
+            set => this.SetValue(UseNoneWindowStyleProperty, value);
         }
 
         private static void OnUseNoneWindowStylePropertyChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -456,7 +473,7 @@ namespace TMPApplication.CustomWpfWindow
             // UseNoneWindowStyle means no title bar
             if (useNoneWindowStyle)
             {
-                ShowTitleBar = false;
+                this.ShowTitleBar = false;
             }
         }
         #endregion UseNoneWindowStyle
@@ -466,8 +483,8 @@ namespace TMPApplication.CustomWpfWindow
 
         public bool IsWindowDraggable
         {
-            get { return (bool)GetValue(IsWindowDraggableProperty); }
-            set { SetValue(IsWindowDraggableProperty, value); }
+            get => (bool)this.GetValue(IsWindowDraggableProperty);
+            set => this.SetValue(IsWindowDraggableProperty, value);
         }
         #endregion IsWindowDraggable
 
@@ -479,19 +496,20 @@ namespace TMPApplication.CustomWpfWindow
         /// </summary>
         public bool ShowSystemMenuOnRightClick
         {
-            get { return (bool)GetValue(ShowSystemMenuOnRightClickProperty); }
-            set { SetValue(ShowSystemMenuOnRightClickProperty, value); }
+            get => (bool)this.GetValue(ShowSystemMenuOnRightClickProperty);
+            set => this.SetValue(ShowSystemMenuOnRightClickProperty, value);
         }
         #endregion ShowSystemMenuOnRightClick
 
         #region IsContentDialogVisible
+
         /// <summary>
         /// Determine whether a ContentDialog is currenlty shown inside the <seealso cref="MetroWindow"/> or not.
         /// </summary>
         public bool IsContentDialogVisible
         {
-            get { return (bool)GetValue(IsContentDialogVisibleProperty); }
-            set { SetValue(IsContentDialogVisibleProperty, value); }
+            get => (bool)this.GetValue(IsContentDialogVisibleProperty);
+            set => this.SetValue(IsContentDialogVisibleProperty, value);
         }
 
         /// <summary>
@@ -504,65 +522,72 @@ namespace TMPApplication.CustomWpfWindow
         #region IgnoreTaskbarOnMaximize
         public static readonly DependencyProperty IgnoreTaskbarOnMaximizeProperty =
             DependencyProperty.Register("IgnoreTaskbarOnMaximize", typeof(bool), typeof(WindowWithDialogs), new PropertyMetadata(false));
+
         /// <summary>
         /// Возвращает или задаёт игнорировать ли панель задач при разворачивании окна
         /// </summary>
         public bool IgnoreTaskbarOnMaximize
         {
-            get { return (bool)GetValue(IgnoreTaskbarOnMaximizeProperty); }
-            set { SetValue(IgnoreTaskbarOnMaximizeProperty, value); }
+            get => (bool)this.GetValue(IgnoreTaskbarOnMaximizeProperty);
+            set => this.SetValue(IgnoreTaskbarOnMaximizeProperty, value);
         }
         #endregion
 
         #region GlowBrush
         private static readonly DependencyProperty GlowBrushProperty =
             DependencyProperty.Register("GlowBrush", typeof(SolidColorBrush), typeof(WindowWithDialogs), new PropertyMetadata(null));
+
         /// <summary>
         /// Возвращает или задаёт кисть для эффекта свечения
         /// </summary>
         public SolidColorBrush GlowBrush
         {
-            get { return (SolidColorBrush)GetValue(GlowBrushProperty); }
-            set { SetValue(GlowBrushProperty, value); }
+            get => (SolidColorBrush)this.GetValue(GlowBrushProperty);
+            set => this.SetValue(GlowBrushProperty, value);
         }
+
         #endregion
         #region NonActiveGlowBrush
         private static readonly DependencyProperty NonActiveGlowBrushProperty =
             DependencyProperty.Register("NonActiveGlowBrush", typeof(SolidColorBrush), typeof(WindowWithDialogs), new PropertyMetadata(new SolidColorBrush(Color.FromRgb(153, 153, 153)))); // #999999
+
         /// <summary>
         /// Возвращает или задаёт кисть для эффекта свечения, когда окно в не активном состоянии
         /// </summary>
         public SolidColorBrush NonActiveGlowBrush
         {
-            get { return (SolidColorBrush)GetValue(NonActiveGlowBrushProperty); }
-            set { SetValue(NonActiveGlowBrushProperty, value); }
+            get => (SolidColorBrush)this.GetValue(NonActiveGlowBrushProperty);
+            set => this.SetValue(NonActiveGlowBrushProperty, value);
         }
         #endregion
 
         #region NonActiveBorderBrush
         private static readonly DependencyProperty NonActiveBorderBrushProperty =
             DependencyProperty.Register("NonActiveBorderBrush", typeof(Brush), typeof(WindowWithDialogs), new PropertyMetadata(Brushes.Gray));
+
         /// <summary>
         /// Возвращает или задаёт кисть для границы окна, когда оно в не активном состоянии
         /// </summary>
         public Brush NonActiveBorderBrush
         {
-            get { return (Brush)GetValue(NonActiveBorderBrushProperty); }
-            set { SetValue(NonActiveBorderBrushProperty, value); }
+            get => (Brush)this.GetValue(NonActiveBorderBrushProperty);
+            set => this.SetValue(NonActiveBorderBrushProperty, value);
         }
         #endregion
 
         #region ToggleFullScreen
         private static readonly DependencyProperty ToggleFullScreenProperty =
             DependencyProperty.Register("ToggleFullScreen", typeof(bool), typeof(WindowWithDialogs), new PropertyMetadata(false, ToggleFullScreenPropertyChangedCallback));
+
         /// <summary>
         /// Возвращает или задаёт отображение окна во весь экран
         /// </summary>
         public bool ToggleFullScreen
         {
-            get { return (bool)GetValue(ToggleFullScreenProperty); }
-            set { SetValue(ToggleFullScreenProperty, value); }
+            get => (bool)this.GetValue(ToggleFullScreenProperty);
+            set => this.SetValue(ToggleFullScreenProperty, value);
         }
+
         private static void ToggleFullScreenPropertyChangedCallback(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs e)
         {
             var WindowWithDialogs = (WindowWithDialogs)dependencyObject;
@@ -592,7 +617,7 @@ namespace TMPApplication.CustomWpfWindow
             {
                 var value = typeof(Window)
                     .GetProperty("CriticalHandle", BindingFlags.NonPublic | BindingFlags.Instance)
-                    .GetValue(this, new object[0]);
+                    .GetValue(this, Array.Empty<object>());
                 return (IntPtr)value;
             }
         }
@@ -619,18 +644,17 @@ namespace TMPApplication.CustomWpfWindow
         {
             base.OnApplyTemplate();
 
-            _icon = GetTemplateChild(PART_Icon) as UIElement;
-            _titleBar = GetTemplateChild(PART_TitleBar) as UIElement;
+            this.windowButtonCommands = this.GetTemplateChild(PART_WindowButtonCommands) as WindowButtonCommands;
 
-            _windowButtonCommands = GetTemplateChild(PART_WindowButtonCommands) as WindowButtonCommands;
+            this.overlayBox = this.GetTemplateChild(PART_OverlayBox) as Grid;
+            this.dialogsContainer = this.GetTemplateChild(PART_DialogsContainer) as Grid;
+            this.windowTitleThumb = this.GetTemplateChild(PART_WindowTitleThumb) as Thumb;
 
-            _overlayBox = GetTemplateChild(PART_OverlayBox) as Grid;
-            _dialogsContainer = GetTemplateChild(PART_DialogsContainer) as Grid;
-            _windowTitleThumb = GetTemplateChild(PART_WindowTitleThumb) as Thumb;
+            this.SetVisibiltyForAllTitleElements(this.ShowTitleBar);
 
-            SetVisibiltyForAllTitleElements(this.ShowTitleBar);
+            this.contentPresenter = this.GetTemplateChild(PART_Window_Content) as ContentPresenter;
 
-            DialogManager = new WpfDialogs.DialogManager(this.DialogsContainer, this.Dispatcher);
+            this.DialogManager = new WpfDialogs.DialogManager(this.DialogsContainer, this.Dispatcher, this.contentPresenter);
         }
 
         /// <summary>
@@ -644,7 +668,7 @@ namespace TMPApplication.CustomWpfWindow
 
             if (windowTitleThumb != null)
             {
-                windowTitleThumb.PreviewMouseLeftButtonUp += WindowTitleThumbOnPreviewMouseLeftButtonUp;
+                windowTitleThumb.PreviewMouseLeftButtonUp += this.WindowTitleThumbOnPreviewMouseLeftButtonUp;
                 windowTitleThumb.DragDelta += this.WindowTitleThumbMoveOnDragDelta;
                 windowTitleThumb.MouseDoubleClick += this.WindowTitleThumbChangeWindowStateOnMouseDoubleClick;
                 windowTitleThumb.MouseRightButtonUp += this.WindowTitleThumbSystemMenuOnMouseRightButtonUp;
@@ -652,25 +676,27 @@ namespace TMPApplication.CustomWpfWindow
                 // Replace old referenc to Thumb since we seem to be looking at another instance
                 // This could be a Thumb that overlays the window, for example, in a view
                 // So, the Thumb may live in a view placed into the window to support dragging from there.
-                if (_windowTitleThumb != windowTitleThumb)
-                    _windowTitleThumb = windowTitleThumb;
+                if (this.windowTitleThumb != windowTitleThumb)
+                {
+                    this.windowTitleThumb = windowTitleThumb;
+                }
             }
         }
 
         private void SetVisibiltyForAllTitleElements(bool visible)
         {
-            SetWindowEvents(this._windowTitleThumb);
+            this.SetWindowEvents(this.windowTitleThumb);
         }
 
         private void ClearWindowEvents()
         {
             // clear all event handlers first:
-            if (this._windowTitleThumb != null)
+            if (this.windowTitleThumb != null)
             {
-                this._windowTitleThumb.PreviewMouseLeftButtonUp -= this.WindowTitleThumbOnPreviewMouseLeftButtonUp;
-                this._windowTitleThumb.DragDelta -= this.WindowTitleThumbMoveOnDragDelta;
-                this._windowTitleThumb.MouseDoubleClick -= this.WindowTitleThumbChangeWindowStateOnMouseDoubleClick;
-                this._windowTitleThumb.MouseRightButtonUp -= this.WindowTitleThumbSystemMenuOnMouseRightButtonUp;
+                this.windowTitleThumb.PreviewMouseLeftButtonUp -= this.WindowTitleThumbOnPreviewMouseLeftButtonUp;
+                this.windowTitleThumb.DragDelta -= this.WindowTitleThumbMoveOnDragDelta;
+                this.windowTitleThumb.MouseDoubleClick -= this.WindowTitleThumbChangeWindowStateOnMouseDoubleClick;
+                this.windowTitleThumb.MouseRightButtonUp -= this.WindowTitleThumbSystemMenuOnMouseRightButtonUp;
             }
         }
 
@@ -679,9 +705,10 @@ namespace TMPApplication.CustomWpfWindow
         /// </summary>
         /// <typeparam name="T">The interface type inheirted from DependencyObject.</typeparam>
         /// <param name="name">The name of the template child.</param>
-        internal T GetPart<T>(string name) where T : class
+        internal T GetPart<T>(string name)
+            where T : class
         {
-            return GetTemplateChild(name) as T;
+            return this.GetTemplateChild(name) as T;
         }
 
         /// <summary>
@@ -690,7 +717,7 @@ namespace TMPApplication.CustomWpfWindow
         /// <param name="name">The name of the template child.</param>
         internal DependencyObject GetPart(string name)
         {
-            return GetTemplateChild(name);
+            return this.GetTemplateChild(name);
         }
 
         private void OnCanResizeWindow(object sender, CanExecuteRoutedEventArgs e)
@@ -705,22 +732,22 @@ namespace TMPApplication.CustomWpfWindow
 
         private void OnCloseWindow(object target, ExecutedRoutedEventArgs e)
         {
-            SystemCommands.CloseWindow(this);
+            MS.Windows.Shell.SystemCommands.CloseWindow(this);
         }
 
         private void OnMaximizeWindow(object target, ExecutedRoutedEventArgs e)
         {
-            SystemCommands.MaximizeWindow(this);
+            MS.Windows.Shell.SystemCommands.MaximizeWindow(this);
         }
 
         private void OnMinimizeWindow(object target, ExecutedRoutedEventArgs e)
         {
-            SystemCommands.MinimizeWindow(this);
+            MS.Windows.Shell.SystemCommands.MinimizeWindow(this);
         }
 
         private void OnRestoreWindow(object target, ExecutedRoutedEventArgs e)
         {
-            SystemCommands.RestoreWindow(this);
+            MS.Windows.Shell.SystemCommands.RestoreWindow(this);
         }
 
         #region WindowTitleThumbEvents
@@ -738,6 +765,7 @@ namespace TMPApplication.CustomWpfWindow
             {
                 throw new ArgumentNullException(nameof(thumb));
             }
+
             if (window == null)
             {
                 throw new ArgumentNullException(nameof(window));
@@ -772,9 +800,8 @@ namespace TMPApplication.CustomWpfWindow
                 EventHandler windowOnStateChanged = null;
                 windowOnStateChanged = (sender, args) =>
                 {
-                    //window.Top = 2;
-                    //window.Left = Math.Max(cursorXPos - window.RestoreBounds.Width / 2, 0);
-
+                    // window.Top = 2;
+                    // window.Left = Math.Max(cursorXPos - window.RestoreBounds.Width / 2, 0);
                     window.StateChanged -= windowOnStateChanged;
                     if (window.WindowState == WindowState.Normal)
                     {
@@ -785,6 +812,7 @@ namespace TMPApplication.CustomWpfWindow
             }
 
             var criticalHandle = window.CriticalHandle;
+
             // DragMove works too
             // window.DragMove();
             // instead this 2 lines
@@ -799,36 +827,44 @@ namespace TMPApplication.CustomWpfWindow
             {
                 // we can maximize or restore the window if the title bar height is set (also if title bar is hidden)
                 var canResize = window.ResizeMode == ResizeMode.CanResizeWithGrip || window.ResizeMode == ResizeMode.CanResize;
-                var mousePos = Mouse.GetPosition(window);
                 var isMouseOnTitlebar = true; //// var isMouseOnTitlebar = mousePos.Y <= window.TitlebarHeight && window.TitlebarHeight > 0;
                 if (canResize && isMouseOnTitlebar)
                 {
                     if (window.WindowState == WindowState.Maximized)
                     {
-                        SystemCommands.RestoreWindow(window);
+                        MS.Windows.Shell.SystemCommands.RestoreWindow(window);
                     }
                     else
                     {
-                        SystemCommands.MaximizeWindow(window);
+                        MS.Windows.Shell.SystemCommands.MaximizeWindow(window);
                     }
+
                     mouseButtonEventArgs.Handled = true;
                 }
             }
         }
+
         private static void ShowSystemMenuPhysicalCoordinates(Window window, Point physicalScreenLocation)
         {
-            if (window == null) return;
+            if (window == null)
+            {
+                return;
+            }
 
             var hwnd = new WindowInteropHelper(window).Handle;
             if (hwnd == IntPtr.Zero || !UnsafeNativeMethods.IsWindow(hwnd))
+            {
                 return;
+            }
 
             var hmenu = UnsafeNativeMethods.GetSystemMenu(hwnd, false);
 
             var cmd = UnsafeNativeMethods.TrackPopupMenuEx(hmenu, Constants.TPM_LEFTBUTTON | Constants.TPM_RETURNCMD,
                 (int)physicalScreenLocation.X, (int)physicalScreenLocation.Y, hwnd, IntPtr.Zero);
             if (0 != cmd)
+            {
                 UnsafeNativeMethods.PostMessage(hwnd, Constants.SYSCOMMAND, new IntPtr(cmd), IntPtr.Zero);
+            }
         }
 
         internal static void DoWindowTitleThumbSystemMenuOnMouseRightButtonUp(WindowWithDialogs window, MouseButtonEventArgs e)
@@ -839,7 +875,7 @@ namespace TMPApplication.CustomWpfWindow
                 var mousePos = e.GetPosition(window);
                 ////if ((mousePos.Y <= window.TitlebarHeight && window.TitlebarHeight > 0) || (window.UseNoneWindowStyle && window.TitlebarHeight <= 0))
                 ////{
-                    ShowSystemMenuPhysicalCoordinates(window, window.PointToScreen(mousePos));
+                ShowSystemMenuPhysicalCoordinates(window, window.PointToScreen(mousePos));
                 ////}
             }
         }
@@ -873,20 +909,23 @@ namespace TMPApplication.CustomWpfWindow
         /// <returns>A task representing the process.</returns>
         public System.Threading.Tasks.Task ShowOverlayAsync()
         {
-            if (_overlayBox == null) throw new InvalidOperationException("OverlayBox can not be founded in this MetroWindow's template. Are you calling this before the window has loaded?");
+            if (this.overlayBox == null)
+            {
+                throw new InvalidOperationException("OverlayBox can not be founded in this MetroWindow's template. Are you calling this before the window has loaded?");
+            }
 
             var tcs = new System.Threading.Tasks.TaskCompletionSource<object>();
 
-            if (IsOverlayVisible() && _overlayStoryboard == null)
+            if (this.IsOverlayVisible() && this.overlayStoryboard == null)
             {
-                //No Task.FromResult in .NET 4.
+                // No Task.FromResult in .NET 4.
                 tcs.SetResult(null);
                 return tcs.Task;
             }
 
-            Dispatcher.VerifyAccess();
+            this.Dispatcher.VerifyAccess();
 
-            _overlayBox.Visibility = Visibility.Visible;
+            this.overlayBox.Visibility = Visibility.Visible;
 
             var sb = (Storyboard)this.Template.Resources["OverlayFastSemiFadeIn"];
 
@@ -897,12 +936,14 @@ namespace TMPApplication.CustomWpfWindow
             {
                 sb.Completed -= completionHandler;
 
-                if (_overlayStoryboard == sb)
+                if (this.overlayStoryboard == sb)
                 {
-                    _overlayStoryboard = null;
+                    this.overlayStoryboard = null;
 
-                    if (IsContentDialogVisible == false)
-                        IsContentDialogVisible = true;
+                    if (this.IsContentDialogVisible == false)
+                    {
+                        this.IsContentDialogVisible = true;
+                    }
                 }
 
                 tcs.TrySetResult(null);
@@ -910,9 +951,9 @@ namespace TMPApplication.CustomWpfWindow
 
             sb.Completed += completionHandler;
 
-            _overlayBox.BeginStoryboard(sb);
+            this.overlayBox.BeginStoryboard(sb);
 
-            _overlayStoryboard = sb;
+            this.overlayStoryboard = sb;
 
             return tcs.Task;
         }
@@ -923,19 +964,21 @@ namespace TMPApplication.CustomWpfWindow
         /// <returns>A task representing the process.</returns>
         public System.Threading.Tasks.Task HideOverlayAsync()
         {
-            if (_overlayBox == null)
+            if (this.overlayBox == null)
+            {
                 throw new InvalidOperationException("OverlayBox can not be founded in this MetroWindow's template. Are you calling this before the window has loaded?");
+            }
 
             var tcs = new System.Threading.Tasks.TaskCompletionSource<object>();
 
-            if (_overlayBox.Visibility == Visibility.Visible && _overlayBox.Opacity == 0.0)
+            if (this.overlayBox.Visibility == Visibility.Visible && this.overlayBox.Opacity == 0.0)
             {
-                //No Task.FromResult in .NET 4.
+                // No Task.FromResult in .NET 4.
                 tcs.SetResult(null);
                 return tcs.Task;
             }
 
-            Dispatcher.VerifyAccess();
+            this.Dispatcher.VerifyAccess();
 
             var sb = (Storyboard)this.Template.Resources["OverlayFastSemiFadeOut"];
 
@@ -946,13 +989,15 @@ namespace TMPApplication.CustomWpfWindow
             {
                 sb.Completed -= completionHandler;
 
-                if (_overlayStoryboard == sb)
+                if (this.overlayStoryboard == sb)
                 {
-                    _overlayBox.Visibility = Visibility.Hidden;
-                    _overlayStoryboard = null;
+                    this.overlayBox.Visibility = Visibility.Hidden;
+                    this.overlayStoryboard = null;
 
-                    if (IsContentDialogVisible == true)
-                        IsContentDialogVisible = false;
+                    if (this.IsContentDialogVisible == true)
+                    {
+                        this.IsContentDialogVisible = false;
+                    }
                 }
 
                 tcs.TrySetResult(null);
@@ -960,61 +1005,68 @@ namespace TMPApplication.CustomWpfWindow
 
             sb.Completed += completionHandler;
 
-            _overlayBox.BeginStoryboard(sb);
+            this.overlayBox.BeginStoryboard(sb);
 
-            _overlayStoryboard = sb;
+            this.overlayStoryboard = sb;
 
             return tcs.Task;
         }
 
         public bool IsOverlayVisible()
         {
-            if (_overlayBox == null)
+            if (this.overlayBox == null)
+            {
                 throw new InvalidOperationException("OverlayBox can not be founded in this MetroWindow's template. Are you calling this before the window has loaded?");
+            }
 
-            return _overlayBox.Visibility == Visibility.Visible && _overlayBox.Opacity >= 0.7;
+            return this.overlayBox.Visibility == Visibility.Visible && this.overlayBox.Opacity >= 0.7;
         }
 
         public void ShowOverlay()
         {
-            _overlayBox.Visibility = Visibility.Visible;
-            //overlayBox.Opacity = 0.7;
-            _overlayBox.SetCurrentValue(Grid.OpacityProperty, 0.5);
+            this.overlayBox.Visibility = Visibility.Visible;
 
-            if (IsContentDialogVisible == false)
-                IsContentDialogVisible = true;
+            // overlayBox.Opacity = 0.7;
+            this.overlayBox.SetCurrentValue(Grid.OpacityProperty, 0.5);
+
+            if (this.IsContentDialogVisible == false)
+            {
+                this.IsContentDialogVisible = true;
+            }
         }
 
         public void HideOverlay()
         {
-            //overlayBox.Opacity = 0.0;
-            _overlayBox.SetCurrentValue(Grid.OpacityProperty, 0.0);
-            _overlayBox.Visibility = System.Windows.Visibility.Hidden;
+            // overlayBox.Opacity = 0.0;
+            this.overlayBox.SetCurrentValue(Grid.OpacityProperty, 0.0);
+            this.overlayBox.Visibility = System.Windows.Visibility.Hidden;
 
-            if (IsContentDialogVisible == true)
-                IsContentDialogVisible = false;
+            if (this.IsContentDialogVisible == true)
+            {
+                this.IsContentDialogVisible = false;
+            }
         }
 
         /// <summary>
         /// Stores the given element, or the last focused element via FocusManager, for restoring the focus after closing a dialog.
         /// </summary>
         /// <param name="thisElement">The element which will be focused again.</param>
-        public void StoreFocus(IInputElement thisElement = null) // [CanBeNull] 
+        public void StoreFocus(IInputElement thisElement = null) // [CanBeNull]
         {
-            Dispatcher.BeginInvoke(new Action(() =>
+            this.Dispatcher.BeginInvoke(new Action(() =>
             {
-                _restoreFocus = thisElement ?? (this._restoreFocus ?? FocusManager.GetFocusedElement(this));
+                this.restoreFocus = thisElement ?? this.restoreFocus ?? FocusManager.GetFocusedElement(this);
             }));
         }
 
         public void RestoreFocus()
         {
-            if (_restoreFocus != null)
+            if (this.restoreFocus != null)
             {
-                Dispatcher.BeginInvoke(new Action(() =>
+                this.Dispatcher.BeginInvoke(new Action(() =>
                 {
-                    Keyboard.Focus(_restoreFocus);
-                    _restoreFocus = null;
+                    Keyboard.Focus(this.restoreFocus);
+                    this.restoreFocus = null;
                 }));
             }
         }
@@ -1024,84 +1076,102 @@ namespace TMPApplication.CustomWpfWindow
         /// </summary>
         public void ResetStoredFocus()
         {
-            _restoreFocus = null;
+            this.restoreFocus = null;
         }
 
         #endregion
 
         #region | IWindowWithDialogs implementation |
 
+        public IDialog LastDialog { get; protected set; }
+
         public IDialogManager DialogManager { get; private set; }
 
         public IDialog DialogError(string message, string caption = null, Action ok = null)
         {
-            TMPApp.LogError(message);
+            this.logger?.Error(message);
 
-            if (DialogManager == null)
+            if (this.DialogManager == null)
+            {
                 throw new ArgumentNullException("DialogManager must be not null!");
-
+            }
+#if Windows
             System.Media.SystemSounds.Exclamation.Play();
+#endif
+            if (string.IsNullOrEmpty(caption))
+                caption = this.Title;
 
-            if (String.IsNullOrEmpty(caption))
-                caption = Title;
-
-            var dialog = DialogManager.CreateMessageDialog(message, caption, DialogMode.Ok, System.Windows.MessageBoxImage.Error);
+            var dialog = this.DialogManager.CreateMessageDialog(message, caption, DialogMode.Ok, System.Windows.MessageBoxImage.Error);
             dialog.Ok = ok;
-            return dialog;
+            return this.LastDialog = dialog;
         }
+
         public IDialog DialogError(Exception e)
         {
-            return DialogError(TMPApp.GetExceptionDetails(e));
+            return this.LastDialog = this.DialogError(TMPApp.GetExceptionDetails(e));
         }
+
         public IDialog DialogError(Exception e, string format)
         {
-            return DialogError(String.Format(format, TMPApp.GetExceptionDetails(e)));
+            return this.LastDialog = this.DialogError(string.Format(format, TMPApp.GetExceptionDetails(e)));
         }
+
         public IDialog DialogWarning(string message, string caption = null, Action ok = null)
         {
-            TMPApp.LogWarning(message);
+            this.logger?.Warn(message);
 
-            if (DialogManager == null)
+            if (this.DialogManager == null)
+            {
                 throw new ArgumentNullException("DialogManager must be not null!");
-
+            }
+#if Windows
             System.Media.SystemSounds.Hand.Play();
+#endif
+            if (string.IsNullOrEmpty(caption))
+                caption = this.Title;
 
-            if (String.IsNullOrEmpty(caption))
-                caption = Title;
-
-            var dialog = DialogManager.CreateMessageDialog(message, caption, DialogMode.Ok, System.Windows.MessageBoxImage.Warning);
+            var dialog = this.DialogManager.CreateMessageDialog(message, caption, DialogMode.Ok, System.Windows.MessageBoxImage.Warning);
             dialog.Ok = ok;
-            return dialog;
+            return this.LastDialog = dialog;
         }
-        public IDialog DialogInfo(string message)
+
+        public IDialog DialogInfo(string message, string caption = null)
         {
-            if (DialogManager == null)
+            if (this.DialogManager == null)
+            {
                 throw new ArgumentNullException("DialogManager must be not null!");
-
+            }
+#if Windows
             System.Media.SystemSounds.Asterisk.Play();
-
-            var dialog = DialogManager.CreateMessageDialog(message, null, DialogMode.Ok, System.Windows.MessageBoxImage.Information);
-            return dialog;
+#endif
+            var dialog = this.DialogManager.CreateMessageDialog(message, caption, DialogMode.Ok, System.Windows.MessageBoxImage.Information);
+            return this.LastDialog = dialog;
         }
+
         public IDialog DialogInfo(string message, string caption = null, Action ok = null)
         {
-            if (DialogManager == null)
+            if (this.DialogManager == null)
+            {
                 throw new ArgumentNullException("DialogManager must be not null!");
-
+            }
+#if Windows
             System.Media.SystemSounds.Asterisk.Play();
+#endif
+            if (string.IsNullOrEmpty(caption))
+                caption = this.Title;
 
-            if (String.IsNullOrEmpty(caption))
-                caption = Title;
-
-            var dialog = DialogManager.CreateMessageDialog(message, caption, DialogMode.Ok, System.Windows.MessageBoxImage.Information);
+            var dialog = this.DialogManager.CreateMessageDialog(message, caption, DialogMode.Ok, System.Windows.MessageBoxImage.Information);
             dialog.Ok = ok;
-            return dialog;
+            return this.LastDialog = dialog;
         }
+
         public IDialog DialogInfo(string message, string caption = null, System.Windows.MessageBoxImage image = System.Windows.MessageBoxImage.None, DialogMode mode = DialogMode.Ok)
         {
-            if (DialogManager == null)
+            if (this.DialogManager == null)
+            {
                 throw new ArgumentNullException("DialogManager must be not null!");
-
+            }
+#if Windows
             switch (image)
             {
                 case MessageBoxImage.None:
@@ -1120,98 +1190,178 @@ namespace TMPApplication.CustomWpfWindow
                     System.Media.SystemSounds.Question.Play();
                     break;
             }
-
-            var dialog = DialogManager.CreateMessageDialog(message, caption, mode, image);
-            return dialog;
+#endif
+            var dialog = this.DialogManager.CreateMessageDialog(message, caption, mode, image);
+            return this.LastDialog = dialog;
         }
+
         public IDialog DialogQuestion(string message, string caption = null, DialogMode mode = DialogMode.YesNo)
         {
-            if (DialogManager == null)
+            if (this.DialogManager == null)
+            {
                 throw new ArgumentNullException("DialogManager must be not null!");
-
+            }
+#if Windows
             System.Media.SystemSounds.Question.Play();
+#endif
+            if (string.IsNullOrEmpty(caption))
+                caption = this.Title;
 
-            if (String.IsNullOrEmpty(caption))
-                caption = Title;
+            var dialog = this.DialogManager.CreateMessageDialog(message, caption, mode, System.Windows.MessageBoxImage.Question);
+            return this.LastDialog = dialog;
+        }
 
-            var dialog = DialogManager.CreateMessageDialog(message, caption, mode, System.Windows.MessageBoxImage.Question);
+        public IWaitDialog DialogWaitingScreen(string message, string caption = null, bool indeterminate = true, DialogMode mode = DialogMode.None)
+        {
+            if (this.DialogManager == null)
+            {
+                throw new ArgumentNullException("DialogManager must be not null!");
+            }
+
+            var dialog = this.DialogManager.CreateWaitDialog(message, mode, indeterminate);
+            this.LastDialog = dialog;
             return dialog;
         }
 
-        public IDialog DialogWaitingScreen(string message, bool indeterminate = true, DialogMode mode = DialogMode.None)
+        public ICustomContentDialog DialogCustom(System.Windows.Controls.Control content, string caption = null, DialogMode mode = DialogMode.None)
         {
-            if (DialogManager == null)
+            if (this.DialogManager == null)
+            {
                 throw new ArgumentNullException("DialogManager must be not null!");
+            }
 
-            var dialog = DialogManager.CreateWaitDialog(message, mode, indeterminate);
+            var dialog = this.DialogManager.CreateCustomContentDialog(content, caption, mode);
+            this.LastDialog = dialog;
             return dialog;
         }
-        public IDialog DialogCustom(System.Windows.Controls.Control content, DialogMode mode = DialogMode.None)
-        {
-            if (DialogManager == null)
-                throw new ArgumentNullException("DialogManager must be not null!");
 
-            var dialog = DialogManager.CreateCustomContentDialog(content, mode);
-            return dialog;
-        }
-        public IDialog DialogProgress(string message, Action action,
-            DialogMode mode = DialogMode.None, bool indeterminate = true)
+        public IProgressDialog DialogProgress(string message, string caption = null, DialogMode mode = DialogMode.None, bool indeterminate = true)
         {
-            if (DialogManager == null)
+            if (this.DialogManager == null)
+            {
                 throw new ArgumentNullException("DialogManager must be not null!");
+            }
 
-            var dialog = DialogManager.CreateProgressDialog(message, mode, indeterminate);
+            var dialog = this.DialogManager.CreateProgressDialog(message, caption, mode, indeterminate);
+            this.LastDialog = dialog;
             return dialog;
         }
 
         public void ShowDialogError(string message, string caption = null, Action ok = null)
         {
-            DialogError(message, caption, ok).Show();
+            this.LastDialog = this.DialogError(message, caption, ok);
+            this.LastDialog.Show();
         }
+
         public void ShowDialogError(Exception e)
         {
-            DialogError(e).Show();
+            this.LastDialog = this.DialogError(e);
+            this.LastDialog.Show();
         }
+
         public void ShowDialogError(Exception e, string format)
         {
-            DialogError(e, format).Show();
+            this.LastDialog = this.DialogError(e, format);
+            this.LastDialog.Show();
         }
 
         public void ShowDialogWarning(string message, string caption = null, Action ok = null)
         {
-            DialogWarning(message, caption, ok).Show();
+            this.LastDialog = this.DialogWarning(message, caption, ok);
+            this.LastDialog.Show();
         }
-        public void ShowDialogInfo(string message)
+
+        public void ShowDialogInfo(string message, string caption = null)
         {
-            DialogInfo(message).Show();
+            this.LastDialog = this.DialogInfo(message, caption);
+            this.LastDialog.Show();
         }
+
         public void ShowDialogInfo(string message, string caption = null, Action ok = null)
         {
-            DialogInfo(message, caption, ok).Show();
+            this.LastDialog = this.DialogInfo(message, caption, ok);
+            this.LastDialog.Show();
         }
+
         public void ShowDialogInfo(string message, string caption = null, System.Windows.MessageBoxImage image = System.Windows.MessageBoxImage.None, DialogMode mode = DialogMode.Ok)
         {
-            DialogInfo(message, caption, image, mode).Show();
+            this.LastDialog = this.DialogInfo(message, caption, image, mode);
+            this.LastDialog.Show();
         }
+
         public void ShowDialogQuestion(string message, string caption = null, DialogMode mode = DialogMode.YesNo)
         {
-            DialogQuestion(message, caption, mode).Show();
+            this.LastDialog = this.DialogQuestion(message, caption, mode);
+            this.LastDialog.Show();
         }
-        public void ShowDialogWaitingScreen(string message, bool indeterminate = true, DialogMode mode = DialogMode.None)
+
+        public void ShowDialogWaitingScreen(string message, string caption = null, bool indeterminate = true, DialogMode mode = DialogMode.None)
         {
-            DialogWaitingScreen(message, indeterminate, mode).Show();
+            this.LastDialog = this.DialogWaitingScreen(message, caption, indeterminate, mode);
+            this.LastDialog.Show();
         }
-        public void ShowDialogCustom(System.Windows.Controls.Control content, DialogMode mode = DialogMode.None)
+
+        public void ShowDialogCustom(System.Windows.Controls.Control content, string caption = null, DialogMode mode = DialogMode.None)
         {
-            DialogCustom(content, mode).Show();
+            this.LastDialog = this.DialogCustom(content, caption, mode);
+            this.LastDialog.Show();
         }
-        public void ShowDialogProgress(string message, Action action,
-            DialogMode mode = DialogMode.None, bool indeterminate = true)
+
+        public void ShowDialogProgress(string message, string caption = null, DialogMode mode = DialogMode.None, bool indeterminate = true)
         {
-            DialogProgress(message, action, mode, indeterminate).Show();
+            this.LastDialog = this.DialogProgress(message, caption, mode, indeterminate);
+            this.LastDialog.Show();
         }
 
         #endregion
+
+        #endregion
+
+        #region | TaskbarItemInfo implementation |
+
+        private TaskbarItemInfo taskbarItemInfo;
+
+        TaskbarItemInfo IWindowWithDialogs.TaskbarItemInfo
+        {
+            get => this.taskbarItemInfo;
+            set
+            {
+                if (ValueType.Equals(value, this.taskbarItemInfo))
+                {
+                    return;
+                }
+
+                if (this.TaskbarItemInfo == null)
+                {
+                    this.TaskbarItemInfo = new System.Windows.Shell.TaskbarItemInfo();
+                }
+
+                this.TaskbarItemInfo.Description = value.Description;
+                switch (value.ProgressState)
+                {
+                    case TaskbarItemProgressState.None:
+                        this.TaskbarItemInfo.ProgressState = System.Windows.Shell.TaskbarItemProgressState.None;
+                        break;
+                    case TaskbarItemProgressState.Indeterminate:
+                        this.TaskbarItemInfo.ProgressState = System.Windows.Shell.TaskbarItemProgressState.Indeterminate;
+                        break;
+                    case TaskbarItemProgressState.Normal:
+                        this.TaskbarItemInfo.ProgressState = System.Windows.Shell.TaskbarItemProgressState.Normal;
+                        this.TaskbarItemInfo.ProgressValue = value.ProgressValue;
+                        break;
+                    case TaskbarItemProgressState.Error:
+                        this.TaskbarItemInfo.ProgressState = System.Windows.Shell.TaskbarItemProgressState.Error;
+                        break;
+                    case TaskbarItemProgressState.Paused:
+                        this.TaskbarItemInfo.ProgressState = System.Windows.Shell.TaskbarItemProgressState.Paused;
+                        break;
+                    default:
+                        break;
+                }
+
+                this.TaskbarItemInfo.Description = value.Description;
+            }
+        }
 
         #endregion
     }

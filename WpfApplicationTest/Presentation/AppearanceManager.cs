@@ -1,17 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Input;
-using System.Windows.Media;
-
-using WpfApplicationTest.Windows.Helpers;
-
-namespace WpfApplicationTest.Presentation
+﻿namespace WpfApplicationTest.Presentation
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+    using System.Windows;
+    using System.Windows.Input;
+    using System.Windows.Media;
+    using WpfApplicationTest.Windows.Helpers;
+
     /// <summary>
     /// Manages the theme, font size and accent colors for a Modern UI application.
     /// </summary>
@@ -22,6 +21,7 @@ namespace WpfApplicationTest.Presentation
         /// The location of the dark theme resource dictionary.
         /// </summary>
         public static readonly Uri DarkThemeSource = new Uri("/WpfApplicationTest;component/Themes/ui.dark.xaml", UriKind.Relative);
+
         /// <summary>
         /// The location of the light theme resource dictionary.
         /// </summary>
@@ -31,14 +31,17 @@ namespace WpfApplicationTest.Presentation
         /// The resource key for the accent color.
         /// </summary>
         public const string KeyAccentColor = "AccentColor";
+
         /// <summary>
         /// The resource key for the accent brush.
         /// </summary>
         public const string KeyAccent = "Accent";
+
         /// <summary>
         /// The resource key for the default font size.
         /// </summary>
         public const string KeyDefaultFontSize = "DefaultFontSize";
+
         /// <summary>
         /// The resource key for the fixed font size.
         /// </summary>
@@ -51,21 +54,23 @@ namespace WpfApplicationTest.Presentation
         /// </summary>
         private AppearanceManager()
         {
-            DarkThemeCommand = new RelayCommand(o => ThemeSource = DarkThemeSource, o => !DarkThemeSource.Equals(ThemeSource));
-            LightThemeCommand = new RelayCommand(o => ThemeSource = LightThemeSource, o => !LightThemeSource.Equals(ThemeSource));
-            SetThemeCommand = new RelayCommand(o => {
+            this.DarkThemeCommand = new RelayCommand(o => this.ThemeSource = DarkThemeSource, o => !DarkThemeSource.Equals(this.ThemeSource));
+            this.LightThemeCommand = new RelayCommand(o => this.ThemeSource = LightThemeSource, o => !LightThemeSource.Equals(this.ThemeSource));
+            this.SetThemeCommand = new RelayCommand(o =>
+            {
                 var uri = NavigationHelper.ToUri(o);
                 if (uri != null)
                 {
-                    ThemeSource = uri;
+                    this.ThemeSource = uri;
                 }
             }, o => o is Uri || o is string);
-            LargeFontSizeCommand = new RelayCommand(o => FontSize = FontSize.Large);
-            SmallFontSizeCommand = new RelayCommand(o => FontSize = FontSize.Small);
-            AccentColorCommand = new RelayCommand(o => {
+            this.LargeFontSizeCommand = new RelayCommand(o => this.FontSize = FontSize.Large);
+            this.SmallFontSizeCommand = new RelayCommand(o => this.FontSize = FontSize.Small);
+            this.AccentColorCommand = new RelayCommand(o =>
+            {
                 if (o is Color)
                 {
-                    AccentColor = (Color)o;
+                    this.AccentColor = (Color)o;
                 }
                 else
                 {
@@ -73,7 +78,7 @@ namespace WpfApplicationTest.Presentation
                     var str = o as string;
                     if (str != null)
                     {
-                        AccentColor = (Color)ColorConverter.ConvertFromString(str);
+                        this.AccentColor = (Color)ColorConverter.ConvertFromString(str);
                     }
                 }
             }, o => o is Color || o is string);
@@ -89,7 +94,7 @@ namespace WpfApplicationTest.Presentation
 
         private Uri GetThemeSource()
         {
-            var dict = GetThemeDictionary();
+            var dict = this.GetThemeDictionary();
             if (dict != null)
             {
                 return dict.Source;
@@ -103,10 +108,10 @@ namespace WpfApplicationTest.Presentation
         {
             if (source == null)
             {
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             }
 
-            var oldThemeDict = GetThemeDictionary();
+            var oldThemeDict = this.GetThemeDictionary();
             var dictionaries = Application.Current.Resources.MergedDictionaries;
             var themeDict = new ResourceDictionary { Source = source };
 
@@ -119,7 +124,7 @@ namespace WpfApplicationTest.Presentation
 
                 if (useThemeAccentColor)
                 {
-                    ApplyAccentColor(accentColor.Value);
+                    this.ApplyAccentColor(accentColor.Value);
                 }
             }
 
@@ -132,7 +137,7 @@ namespace WpfApplicationTest.Presentation
                 dictionaries.Remove(oldThemeDict);
             }
 
-            OnPropertyChanged("ThemeSource");
+            this.OnPropertyChanged(nameof(this.ThemeSource));
         }
 
         private void ApplyAccentColor(Color accentColor)
@@ -157,7 +162,7 @@ namespace WpfApplicationTest.Presentation
 
         private void SetFontSize(FontSize fontSize)
         {
-            if (GetFontSize() == fontSize)
+            if (this.GetFontSize() == fontSize)
             {
                 return;
             }
@@ -165,7 +170,7 @@ namespace WpfApplicationTest.Presentation
             Application.Current.Resources[KeyDefaultFontSize] = fontSize == FontSize.Small ? 12D : 13D;
             Application.Current.Resources[KeyFixedFontSize] = fontSize == FontSize.Small ? 10.667D : 13.333D;
 
-            OnPropertyChanged("FontSize");
+            this.OnPropertyChanged(nameof(this.FontSize));
         }
 
         private Color GetAccentColor()
@@ -183,46 +188,48 @@ namespace WpfApplicationTest.Presentation
 
         private void SetAccentColor(Color value)
         {
-            ApplyAccentColor(value);
+            this.ApplyAccentColor(value);
 
             // re-apply theme to ensure brushes referencing AccentColor are updated
-            var themeSource = GetThemeSource();
+            var themeSource = this.GetThemeSource();
             if (themeSource != null)
             {
-                SetThemeSource(themeSource, false);
+                this.SetThemeSource(themeSource, false);
             }
 
-            OnPropertyChanged("AccentColor");
+            this.OnPropertyChanged(nameof(this.AccentColor));
         }
 
         /// <summary>
         /// Gets the current <see cref="AppearanceManager"/> instance.
         /// </summary>
-        public static AppearanceManager Current
-        {
-            get { return current; }
-        }
+        public static AppearanceManager Current => current;
 
         /// <summary>
         /// The command that sets the dark theme.
         /// </summary>
         public ICommand DarkThemeCommand { get; private set; }
+
         /// <summary>
         /// The command that sets the light color theme.
         /// </summary>
         public ICommand LightThemeCommand { get; private set; }
+
         /// <summary>
         /// The command that sets a custom theme.
         /// </summary>
         public ICommand SetThemeCommand { get; private set; }
+
         /// <summary>
         /// The command that sets the large font size.
         /// </summary>
         public ICommand LargeFontSizeCommand { get; private set; }
+
         /// <summary>
         /// The command that sets the small font size.
         /// </summary>
         public ICommand SmallFontSizeCommand { get; private set; }
+
         /// <summary>
         /// The command that sets the accent color.
         /// </summary>
@@ -233,8 +240,8 @@ namespace WpfApplicationTest.Presentation
         /// </summary>
         public Uri ThemeSource
         {
-            get { return GetThemeSource(); }
-            set { SetThemeSource(value, true); }
+            get => this.GetThemeSource();
+            set => this.SetThemeSource(value, true);
         }
 
         /// <summary>
@@ -242,8 +249,8 @@ namespace WpfApplicationTest.Presentation
         /// </summary>
         public FontSize FontSize
         {
-            get { return GetFontSize(); }
-            set { SetFontSize(value); }
+            get => this.GetFontSize();
+            set => this.SetFontSize(value);
         }
 
         /// <summary>
@@ -251,8 +258,8 @@ namespace WpfApplicationTest.Presentation
         /// </summary>
         public Color AccentColor
         {
-            get { return GetAccentColor(); }
-            set { SetAccentColor(value); }
+            get => this.GetAccentColor();
+            set => this.SetAccentColor(value);
         }
     }
 }

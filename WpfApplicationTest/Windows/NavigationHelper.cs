@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-
-namespace WpfApplicationTest.Windows.Helpers
+﻿namespace WpfApplicationTest.Windows.Helpers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Globalization;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+    using System.Windows;
+
     /// <summary>
     /// Provides helper function for navigation.
     /// </summary>
@@ -29,6 +29,7 @@ namespace WpfApplicationTest.Windows.Helpers
                     return null; // no valid uri found
                 }
             }
+
             return uri;
         }
     }

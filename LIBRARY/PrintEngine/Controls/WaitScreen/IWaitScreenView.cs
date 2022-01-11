@@ -1,8 +1,8 @@
-﻿using TMP.PrintEngine.Views;
-
-namespace TMP.PrintEngine.Controls.WaitScreen
+﻿namespace TMP.PrintEngine.Controls.WaitScreen
 {
-    public interface IWaitScreenView:IView
+    using TMP.PrintEngine.Views;
+
+    public interface IWaitScreenView : IView
     {
     }
 }

@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace TMP.Extensions
+﻿namespace TMP.Extensions
 {
+    using System;
+
     /// <summary>
     /// Define the name of a property, or force encryption or both
     /// </summary>
@@ -9,16 +9,12 @@ namespace TMP.Extensions
     public sealed class XmlSettingAttribute : Attribute
     {
         private string nameValue;
+
         /// <summary>
         /// Description of the property which will be shown in the settings file
         /// </summary>
-        public string Name
-        {
-            get
-            {
-                return this.nameValue;
-            }
-        }
+        public string Name => this.nameValue;
+
         /// <summary>
         /// If true, the value of the property will be encrypted
         /// </summary>
@@ -27,14 +23,16 @@ namespace TMP.Extensions
             get;
             set;
         }
+
         /// <summary>
         /// Default constructor
         /// </summary>
         public XmlSettingAttribute()
         {
-            this.nameValue = "";
+            this.nameValue = string.Empty;
             this.Encrypt = false;
         }
+
         /// <summary>
         /// Define the name of a property
         /// </summary>

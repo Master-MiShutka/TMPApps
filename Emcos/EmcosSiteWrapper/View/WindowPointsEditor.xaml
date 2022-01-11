@@ -2,9 +2,7 @@
     x:Class="TMP.Work.Emcos.View.WindowPointsEditor"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:common_controls="clr-namespace:TMP.Wpf.Common.Controls;assembly=TMP.Wpf.Common"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:icons="clr-namespace:TMP.Wpf.Common.Icons;assembly=TMP.Wpf.Common"
     xmlns:local="clr-namespace:TMP.Work.Emcos.View"
     xmlns:local_controls="clr-namespace:TMP.Work.Emcos.Controls"
     xmlns:local_converters="clr-namespace:TMP.Work.Emcos.Converters"
@@ -12,8 +10,8 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:model="clr-namespace:TMP.Work.Emcos.Model"
     xmlns:sharptreeview="clr-namespace:ICSharpCode.TreeView;assembly=ICSharpCode.TreeView"
-    xmlns:treeListView="clr-namespace:TMP.Wpf.Common.Controls.TreeListView;assembly=TMP.Wpf.Common"
-    xmlns:vtreeview="clr-namespace:TMP.Work.Emcos.Controls.VTreeView"
+    xmlns:treeListView="clr-namespace:TMP.UI.Controls.WPF;assembly=ui.controls.wpf"
+    xmlns:ui="clr-namespace:TMP.UI.Controls.WPF;assembly=ui.controls.wpf"
     xmlns:wpfDialogs="clr-namespace:TMPApplication.CustomWpfWindow;assembly=TMPApplication"
     Title="Редактор списка точек"
     FontFamily="Calibri,Verdana,Tahoma"
@@ -32,7 +30,7 @@
                             <ControlTemplate>
                                 <Grid>
                                     <Rectangle Fill="Black" Opacity="0.5" />
-                                    <local_controls:NoData x:Name="nodata" />
+                                    <ui:NoData x:Name="nodata" />
                                 </Grid>
                             </ControlTemplate>
                         </Setter.Value>

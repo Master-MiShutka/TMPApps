@@ -26,7 +26,7 @@ namespace TMP.Wpf.CommonControls
                 throw new ArgumentException("name");
 
             if (resourceAddress == null)
-                throw new ArgumentNullException("resourceAddress");
+                throw new ArgumentNullException(nameof(resourceAddress));
 
             this.Name = name;
             this.Resources = new ResourceDictionary { Source = resourceAddress };

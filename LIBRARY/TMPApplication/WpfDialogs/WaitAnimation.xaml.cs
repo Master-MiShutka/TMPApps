@@ -1,12 +1,12 @@
 ﻿namespace TMPApplication.WpfDialogs
 {
-	partial class WaitAnimation
-	{
-		public WaitAnimation()
-		{
-			InitializeComponent();
+    public partial class WaitAnimation
+    {
+        public WaitAnimation()
+        {
+            this.InitializeComponent();
 
-			/*
+            /*
 
 			NameScope.SetNameScope(this, new NameScope());
 
@@ -62,12 +62,12 @@
 				l.Loaded += new RoutedEventHandler((s, e) =>
 					colorAnimatedStoryboard.Begin(l));
 			}
-			 
-			*/
-		}
 
-		/*
-		
+			*/
+        }
+
+        /*
+
 		#region LineThickness
 
 		public double LineThickness
@@ -98,7 +98,7 @@
 		{
 			return 2 * Math.PI * degrees / 360d;
 		}
-		 
+
 		*/
-	}
+    }
 }

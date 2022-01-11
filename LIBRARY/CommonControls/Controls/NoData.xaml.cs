@@ -32,11 +32,8 @@ namespace TMP.Wpf.CommonControls
            );
         public string Message
         {
-            get { return (string)GetValue(MessageProperty); }
-            set
-            {
-                SetValue(MessageProperty, value);
-            }
+            get => (string)GetValue(MessageProperty);
+            set => SetValue(MessageProperty, value);
         }
     }
 }

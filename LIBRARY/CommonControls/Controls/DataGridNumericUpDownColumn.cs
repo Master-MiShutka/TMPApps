@@ -165,32 +165,32 @@ namespace TMP.Wpf.CommonControls
 
         public double Minimum
         {
-            get { return minimum; }
-            set { minimum = value; }
+            get => minimum;
+            set => minimum = value;
         }
 
         public double Maximum
         {
-            get { return maximum; }
-            set { maximum = value; }
+            get => maximum;
+            set => maximum = value;
         }
 
         public double Interval
         {
-            get { return interval; }
-            set { interval = value; }
+            get => interval;
+            set => interval = value;
         }
 
         public string StringFormat
         {
-            get { return stringFormat; }
-            set { stringFormat = value; }
+            get => stringFormat;
+            set => stringFormat = value;
         }
 
         public bool HideUpDownButtons
         {
-            get { return hideUpDownButtons; }
-            set { hideUpDownButtons = value; }
+            get => hideUpDownButtons;
+            set => hideUpDownButtons = value;
         }
     }
 }

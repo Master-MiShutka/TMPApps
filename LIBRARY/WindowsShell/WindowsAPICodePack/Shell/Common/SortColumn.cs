@@ -1,13 +1,13 @@
 // Copyright (c) Microsoft Corporation.  All rights reserved.
 
-using System.Runtime.InteropServices;
-using Microsoft.WindowsAPICodePack.Shell.PropertySystem;
-
 namespace Microsoft.WindowsAPICodePack.Shell
 {
+    using System.Runtime.InteropServices;
+    using Microsoft.WindowsAPICodePack.Shell.PropertySystem;
+
     /// <summary>
     /// Stores information about how to sort a column that is displayed in the folder view.
-    /// </summary>    
+    /// </summary>
     [StructLayout(LayoutKind.Sequential)]
     public struct SortColumn
     {
@@ -25,19 +25,26 @@ namespace Microsoft.WindowsAPICodePack.Shell
         }
 
         /// <summary>
-        /// The ID of the column by which the user will sort. A PropertyKey structure. 
+        /// The ID of the column by which the user will sort. A PropertyKey structure.
         /// For example, for the "Name" column, the property key is PKEY_ItemNameDisplay or
         /// <see cref="Microsoft.WindowsAPICodePack.Shell.PropertySystem.SystemProperties.System.ItemName"/>.
-        /// </summary>                
-        public PropertyKey PropertyKey { get { return propertyKey; } set { propertyKey = value; } }
+        /// </summary>
+        public PropertyKey PropertyKey
+        {
+            get => this.propertyKey; set => this.propertyKey = value;
+        }
+
         private PropertyKey propertyKey;
 
         /// <summary>
         /// The direction in which the items are sorted.
-        /// </summary>                        
-        public SortDirection Direction { get { return direction; } set { direction = value; } }
-        private SortDirection direction;
+        /// </summary>
+        public SortDirection Direction
+        {
+            get => this.direction; set => this.direction = value;
+        }
 
+        private SortDirection direction;
 
         /// <summary>
         /// Implements the == (equality) operator.
@@ -69,8 +76,12 @@ namespace Microsoft.WindowsAPICodePack.Shell
         /// <returns>Returns true if the objects are equal; false otherwise.</returns>
         public override bool Equals(object obj)
         {
-            if (obj == null || obj.GetType() != typeof(SortColumn)) { return false; }
-            return (this == (SortColumn)obj);
+            if (obj == null || obj.GetType() != typeof(SortColumn))
+            {
+                return false;
+            }
+
+            return this == (SortColumn)obj;
         }
 
         /// <summary>
@@ -80,10 +91,8 @@ namespace Microsoft.WindowsAPICodePack.Shell
         public override int GetHashCode()
         {
             int hash = this.direction.GetHashCode();
-            hash = hash * 31 + this.propertyKey.GetHashCode();
+            hash = (hash * 31) + this.propertyKey.GetHashCode();
             return hash;
         }
-
     }
-
 }

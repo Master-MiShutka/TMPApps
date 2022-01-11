@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace TMP.DWRES.GUI.Properties {
+namespace TMP.DWRES.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]

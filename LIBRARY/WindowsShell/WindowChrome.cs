@@ -4,12 +4,12 @@
 
 namespace MS.Windows.Shell
 {
-    using Standard;
     using System;
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
     using System.Windows;
     using System.Windows.Data;
+    using Standard;
 
     public enum ResizeGripDirection
     {
@@ -51,7 +51,7 @@ namespace MS.Windows.Shell
         }
 
         // Named property available for fully extending the glass frame.
-        public static Thickness GlassFrameCompleteThickness { get { return new Thickness(-1); } }
+        public static Thickness GlassFrameCompleteThickness => new Thickness(-1);
 
         #region Attached Properties
 
@@ -91,16 +91,16 @@ namespace MS.Windows.Shell
             chromeWorker.SetWindowChrome(newChrome);
         }
 
-        [SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-        [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
+        [SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "ToDo")]
+        [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters", Justification = "ToDo")]
         public static WindowChrome GetWindowChrome(Window window)
         {
             Verify.IsNotNull(window, "window");
             return (WindowChrome)window.GetValue(WindowChromeProperty);
         }
 
-        [SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-        [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
+        [SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "ToDo")]
+        [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters", Justification = "ToDo")]
         public static void SetWindowChrome(Window window, WindowChrome chrome)
         {
             Verify.IsNotNull(window, "window");
@@ -113,29 +113,31 @@ namespace MS.Windows.Shell
             typeof(WindowChrome),
             new FrameworkPropertyMetadata(false, FrameworkPropertyMetadataOptions.Inherits));
 
-        [SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-        [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
+        [SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "ToDo")]
+        [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters", Justification = "ToDo")]
         public static bool GetIsHitTestVisibleInChrome(IInputElement inputElement)
         {
             Verify.IsNotNull(inputElement, "inputElement");
             var dobj = inputElement as DependencyObject;
             if (dobj == null)
             {
-                throw new ArgumentException("The element must be a DependencyObject", "inputElement");
+                throw new ArgumentException("The element must be a DependencyObject", nameof(inputElement));
             }
+
             return (bool)dobj.GetValue(IsHitTestVisibleInChromeProperty);
         }
 
-        [SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-        [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
+        [SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "ToDo")]
+        [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters", Justification = "ToDo")]
         public static void SetIsHitTestVisibleInChrome(IInputElement inputElement, bool hitTestVisible)
         {
             Verify.IsNotNull(inputElement, "inputElement");
             var dobj = inputElement as DependencyObject;
             if (dobj == null)
             {
-                throw new ArgumentException("The element must be a DependencyObject", "inputElement");
+                throw new ArgumentException("The element must be a DependencyObject", nameof(inputElement));
             }
+
             dobj.SetValue(IsHitTestVisibleInChromeProperty, hitTestVisible);
         }
 
@@ -145,29 +147,31 @@ namespace MS.Windows.Shell
             typeof(WindowChrome),
             new FrameworkPropertyMetadata(ResizeGripDirection.None, FrameworkPropertyMetadataOptions.Inherits));
 
-        [SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-        [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
+        [SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "ToDo")]
+        [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters", Justification = "ToDo")]
         public static ResizeGripDirection GetResizeGripDirection(IInputElement inputElement)
         {
             Verify.IsNotNull(inputElement, "inputElement");
             var dobj = inputElement as DependencyObject;
             if (dobj == null)
             {
-                throw new ArgumentException("The element must be a DependencyObject", "inputElement");
+                throw new ArgumentException("The element must be a DependencyObject", nameof(inputElement));
             }
+
             return (ResizeGripDirection)dobj.GetValue(ResizeGripDirectionProperty);
         }
 
-        [SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-        [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
+        [SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "ToDo")]
+        [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters", Justification = "ToDo")]
         public static void SetResizeGripDirection(IInputElement inputElement, ResizeGripDirection direction)
         {
             Verify.IsNotNull(inputElement, "inputElement");
             var dobj = inputElement as DependencyObject;
             if (dobj == null)
             {
-                throw new ArgumentException("The element must be a DependencyObject", "inputElement");
+                throw new ArgumentException("The element must be a DependencyObject", nameof(inputElement));
             }
+
             dobj.SetValue(ResizeGripDirectionProperty, direction);
         }
 
@@ -187,8 +191,8 @@ namespace MS.Windows.Shell
         /// <summary>The extent of the top of the window to treat as the caption.</summary>
         public double CaptionHeight
         {
-            get { return (double)GetValue(CaptionHeightProperty); }
-            set { SetValue(CaptionHeightProperty, value); }
+            get => (double)this.GetValue(CaptionHeightProperty);
+            set => this.SetValue(CaptionHeightProperty, value);
         }
 
         public static readonly DependencyProperty ResizeBorderThicknessProperty = DependencyProperty.Register(
@@ -200,8 +204,8 @@ namespace MS.Windows.Shell
 
         public Thickness ResizeBorderThickness
         {
-            get { return (Thickness)GetValue(ResizeBorderThicknessProperty); }
-            set { SetValue(ResizeBorderThicknessProperty, value); }
+            get => (Thickness)this.GetValue(ResizeBorderThicknessProperty);
+            set => this.SetValue(ResizeBorderThicknessProperty, value);
         }
 
         public static readonly DependencyProperty GlassFrameThicknessProperty = DependencyProperty.Register(
@@ -227,8 +231,8 @@ namespace MS.Windows.Shell
 
         public Thickness GlassFrameThickness
         {
-            get { return (Thickness)GetValue(GlassFrameThicknessProperty); }
-            set { SetValue(GlassFrameThicknessProperty, value); }
+            get => (Thickness)this.GetValue(GlassFrameThicknessProperty);
+            set => this.SetValue(GlassFrameThicknessProperty, value);
         }
 
         public static readonly DependencyProperty UseAeroCaptionButtonsProperty = DependencyProperty.Register(
@@ -239,22 +243,22 @@ namespace MS.Windows.Shell
 
         public bool UseAeroCaptionButtons
         {
-            get { return (bool)GetValue(UseAeroCaptionButtonsProperty); }
-            set { SetValue(UseAeroCaptionButtonsProperty, value); }
+            get => (bool)this.GetValue(UseAeroCaptionButtonsProperty);
+            set => this.SetValue(UseAeroCaptionButtonsProperty, value);
         }
 
         public static readonly DependencyProperty IgnoreTaskbarOnMaximizeProperty = DependencyProperty.Register(
             "IgnoreTaskbarOnMaximize",
             typeof(bool),
             typeof(WindowChrome),
-            new FrameworkPropertyMetadata(false, 
-                (d, e) => 
+            new FrameworkPropertyMetadata(false,
+                (d, e) =>
                 ((WindowChrome)d)._OnPropertyChangedThatRequiresRepaint()));
 
         public bool IgnoreTaskbarOnMaximize
         {
-            get { return (bool)GetValue(IgnoreTaskbarOnMaximizeProperty); }
-            set { SetValue(IgnoreTaskbarOnMaximizeProperty, value); }
+            get => (bool)this.GetValue(IgnoreTaskbarOnMaximizeProperty);
+            set => this.SetValue(IgnoreTaskbarOnMaximizeProperty, value);
         }
 
         public static readonly DependencyProperty UseNoneWindowStyleProperty = DependencyProperty.Register(
@@ -265,8 +269,8 @@ namespace MS.Windows.Shell
 
         public bool UseNoneWindowStyle
         {
-            get { return (bool)GetValue(UseNoneWindowStyleProperty); }
-            set { SetValue(UseNoneWindowStyleProperty, value); }
+            get => (bool)this.GetValue(UseNoneWindowStyleProperty);
+            set => this.SetValue(UseNoneWindowStyleProperty, value);
         }
 
         public static readonly DependencyProperty CornerRadiusProperty = DependencyProperty.Register(
@@ -280,8 +284,8 @@ namespace MS.Windows.Shell
 
         public CornerRadius CornerRadius
         {
-            get { return (CornerRadius)GetValue(CornerRadiusProperty); }
-            set { SetValue(CornerRadiusProperty, value); }
+            get => (CornerRadius)this.GetValue(CornerRadiusProperty);
+            set => this.SetValue(CornerRadiusProperty, value);
         }
 
         public static readonly DependencyProperty SacrificialEdgeProperty = DependencyProperty.Register(
@@ -291,7 +295,7 @@ namespace MS.Windows.Shell
             new PropertyMetadata(
                 SacrificialEdge.None,
                 (d, e) => ((WindowChrome)d)._OnPropertyChangedThatRequiresRepaint()),
-                _IsValidSacrificialEdge);
+            _IsValidSacrificialEdge);
 
         private static readonly SacrificialEdge SacrificialEdge_All = SacrificialEdge.Bottom | SacrificialEdge.Top | SacrificialEdge.Left | SacrificialEdge.Right;
 
@@ -329,8 +333,8 @@ namespace MS.Windows.Shell
 
         public SacrificialEdge SacrificialEdge
         {
-            get { return (SacrificialEdge)GetValue(SacrificialEdgeProperty); }
-            set { SetValue(SacrificialEdgeProperty, value); }
+            get => (SacrificialEdge)this.GetValue(SacrificialEdgeProperty);
+            set => this.SetValue(SacrificialEdgeProperty, value);
         }
 
         #endregion Dependency Properties
@@ -340,7 +344,7 @@ namespace MS.Windows.Shell
             return new WindowChrome();
         }
 
-        private static readonly List<_SystemParameterBoundProperty> _BoundProperties = new List<_SystemParameterBoundProperty>
+        private static readonly List<_SystemParameterBoundProperty> BoundProperties = new List<_SystemParameterBoundProperty>
         {
             new _SystemParameterBoundProperty { DependencyProperty = CornerRadiusProperty, SystemParameterPropertyName = "WindowCornerRadius" },
             new _SystemParameterBoundProperty { DependencyProperty = CaptionHeightProperty, SystemParameterPropertyName = "WindowCaptionHeight" },
@@ -355,7 +359,7 @@ namespace MS.Windows.Shell
             // A more correct way to do this would be to Coerce the value iff the source of the DP was the default value.
             // Unfortunately with the current property system we can't detect whether the value being applied at the time
             // of the coersion is the default.
-            foreach (var bp in _BoundProperties)
+            foreach (var bp in BoundProperties)
             {
                 // This list must be declared after the DP's are assigned.
                 Assert.IsNotNull(bp.DependencyProperty);
@@ -374,7 +378,7 @@ namespace MS.Windows.Shell
 
         private void _OnPropertyChangedThatRequiresRepaint()
         {
-            var handler = PropertyChangedThatRequiresRepaint;
+            var handler = this.PropertyChangedThatRequiresRepaint;
             if (handler != null)
             {
                 handler(this, EventArgs.Empty);

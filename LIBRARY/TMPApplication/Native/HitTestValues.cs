@@ -30,6 +30,6 @@
         HTSIZELAST = HTBOTTOMRIGHT,
         HTOBJECT = 19,
         HTCLOSE = 20,
-        HTHELP = 21
+        HTHELP = 21,
     }
 }

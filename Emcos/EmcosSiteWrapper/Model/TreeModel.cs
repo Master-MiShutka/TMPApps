@@ -7,6 +7,9 @@ using System.Windows.Media.Imaging;
 
 namespace TMP.Work.Emcos.Model
 {
+    /// <summary>
+    /// Обертка над <see cref="IHierarchicalEmcosPoint"/> для описания иерархической структуры
+    /// </summary>
     [Serializable]
     [DataContract]
     public class TreeModel : ICSharpCode.TreeView.SharpTreeNode
@@ -15,7 +18,7 @@ namespace TMP.Work.Emcos.Model
 
         public TreeModel()
         {
-            Point = new TreeEmcosPoint();
+            Point = new EmcosPoint();
         }
         public TreeModel(IHierarchicalEmcosPoint point) : this()
         {
@@ -97,7 +100,7 @@ namespace TMP.Work.Emcos.Model
         }
         public override bool Equals(object obj)
         {
-            TreeEmcosPoint o = obj as TreeEmcosPoint;
+            EmcosPoint o = obj as EmcosPoint;
             if (o == null) return false;
 
             return this.Point.Id == o.Id && this.Point.Name == o.Name;

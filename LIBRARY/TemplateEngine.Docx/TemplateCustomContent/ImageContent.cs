@@ -1,20 +1,19 @@
-﻿using System;
-using System.Linq;
-
-namespace TemplateEngine.Docx
+﻿namespace TemplateEngine.Docx
 {
-	[ContentItemName("Image")]
-	public class ImageContent : HiddenContent<ImageContent>, IEquatable<ImageContent>
+    using System;
+    using System.Linq;
+
+    [ContentItemName("Image")]
+    public class ImageContent : HiddenContent<ImageContent>, IEquatable<ImageContent>
     {
         public ImageContent()
         {
-            
         }
 
         public ImageContent(string name, byte[] binary)
         {
-            Name = name;
-            Binary = binary;
+            this.Name = name;
+            this.Binary = binary;
         }
 
         public byte[] Binary { get; set; }
@@ -22,25 +21,31 @@ namespace TemplateEngine.Docx
         #region Equals
 
         public bool Equals(ImageContent other)
-		{
-			if (other == null) return false;
+        {
+            if (other == null)
+            {
+                return false;
+            }
 
-			return Name.Equals(other.Name, StringComparison.InvariantCultureIgnoreCase) &&
-			       Binary.SequenceEqual(other.Binary);
-		}
+            return this.Name.Equals(other.Name, StringComparison.InvariantCultureIgnoreCase) &&
+                   this.Binary.SequenceEqual(other.Binary);
+        }
 
-		public override bool Equals(IContentItem other)
-		{
-			if (!(other is ImageContent)) return false;
+        public override bool Equals(IContentItem other)
+        {
+            if (!(other is ImageContent))
+            {
+                return false;
+            }
 
-			return Equals((ImageContent)other);
-		}
+            return this.Equals((ImageContent)other);
+        }
 
-		public override int GetHashCode()
-		{
-			return new {Name, Binary}.GetHashCode();
-		}
+        public override int GetHashCode()
+        {
+            return new { this.Name, this.Binary }.GetHashCode();
+        }
 
-		#endregion
-	}
+        #endregion
+    }
 }

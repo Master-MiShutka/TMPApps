@@ -1,14 +1,14 @@
 ﻿/*************************************************************************************
+   
+   Toolkit for WPF
 
-   Extended WPF Toolkit
-
-   Copyright (C) 2007-2013 Xceed Software Inc.
+   Copyright (C) 2007-2018 Xceed Software Inc.
 
    This program is provided to you under the terms of the Microsoft Public
    License (Ms-PL) as published at http://wpftoolkit.codeplex.com/license 
 
    For more features, controls, and fast professional support,
-   pick up the Plus Edition at http://xceed.com/wpf_toolkit
+   pick up the Plus Edition at https://xceed.com/xceed-toolkit-plus-for-wpf/
 
    Stay informed: follow @datagrid on Twitter or Like http://facebook.com/datagrids
 
@@ -59,6 +59,10 @@ namespace Xceed.Wpf.Toolkit
 
     private void Element_MouseLeave( object sender, MouseEventArgs e )
     {
+      var magnifier = MagnifierManager.GetMagnifier( _element ) as Magnifier;
+      if( ( magnifier != null ) && magnifier.IsFrozen )
+        return;
+
       HideAdorner();
     }
 
@@ -94,16 +98,16 @@ namespace Xceed.Wpf.Toolkit
       }
     }
 
-#endregion //Event Handlers
+    #endregion //Event Handlers
 
-#region Methods
+    #region Methods
 
     private void AttachToMagnifier( UIElement element, Magnifier magnifier )
     {
       _element = element;
-      _element.MouseEnter += Element_MouseEnter;
-      _element.MouseLeave += Element_MouseLeave;
-      _element.MouseWheel += Element_MouseWheel;
+      _element.MouseEnter += this.Element_MouseEnter;
+      _element.MouseLeave += this.Element_MouseLeave;
+      _element.MouseWheel += this.Element_MouseWheel;
 
       magnifier.Target = _element;
 

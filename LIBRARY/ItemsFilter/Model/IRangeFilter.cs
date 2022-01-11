@@ -1,6 +1,7 @@
-﻿using System;
+﻿namespace ItemsFilter.Model
+{
+    using System;
 
-namespace ItemsFilter.Model {
     /// <summary>
     /// Defines the contract for a range filter.
     /// </summary>
@@ -9,7 +10,8 @@ namespace ItemsFilter.Model {
         /// <summary>
         /// Gets or sets the minimum value.
         /// </summary>
-        object CompareFrom {
+        object CompareFrom
+        {
             get;
             set;
         }
@@ -17,7 +19,8 @@ namespace ItemsFilter.Model {
         /// <summary>
         /// Gets or sets the maximum value.
         /// </summary>
-        object CompareTo {
+        object CompareTo
+        {
             get;
             set;
         }
@@ -27,13 +30,15 @@ namespace ItemsFilter.Model {
     /// Defines the contract for a range filter.
     /// </summary>
     /// <typeparam name="T">Comparable value Type.</typeparam>
-    public interface IRangeFilter<T> : IRangeFilter//, INotifyPropertyChanged
-        where T :struct, IComparable {
+    public interface IRangeFilter<T> : IRangeFilter// , INotifyPropertyChanged
+        where T : struct, IComparable
+    {
         /// <summary>
         /// Gets or sets the minimum value.
         /// </summary>
         /// <value>From.</value>
-        new T? CompareFrom {
+        new T? CompareFrom
+        {
             get;
             set;
         }
@@ -42,7 +47,8 @@ namespace ItemsFilter.Model {
         /// Gets or sets the maximum value.
         /// </summary>
         /// <value>To.</value>
-        new T? CompareTo {
+        new T? CompareTo
+        {
             get;
             set;
         }

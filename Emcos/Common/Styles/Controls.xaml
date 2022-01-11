@@ -10,8 +10,8 @@
 
         <ResourceDictionary Source="pack://application:,,,/TMP.Wpf.Common;component/Styles/ValidationErrorTemplate.xaml" />
         <ResourceDictionary Source="pack://application:,,,/TMP.Wpf.Common;component/Styles/ScrollBars.xaml" />
-        <ResourceDictionary Source="pack://application:,,,/TMP.Wpf.Common;component/Styles/Buttons.xaml" />
-        <ResourceDictionary Source="pack://application:,,,/TMP.Wpf.Common;component/Styles/Button.xaml" />
+        <!-- ResourceDictionary Source="pack://application:,,,/TMP.Wpf.Common;component/Styles/Buttons.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/TMP.Wpf.Common;component/Styles/Button.xaml" /-->
         <ResourceDictionary Source="pack://application:,,,/TMP.Wpf.Common;component/Styles/Calendar.xaml" />
         <ResourceDictionary Source="pack://application:,,,/TMP.Wpf.Common;component/Styles/CheckBox.xaml" />
         <ResourceDictionary Source="pack://application:,,,/TMP.Wpf.Common;component/Styles/ContextMenu.xaml" />

@@ -12,9 +12,9 @@
             <local:Background />
         </ContentControl>
         <Border
-            Margin="20,10"
-            HorizontalAlignment="{Binding HorizontalDialogAlignment}"
-            VerticalAlignment="{Binding VerticalDialogAlignment}"
+            Margin="20,40,20,10"
+            HorizontalAlignment="{Binding HorizontalDialogAlignment, ElementName=root}"
+            VerticalAlignment="{Binding VerticalDialogAlignment, ElementName=root}"
             Background="{x:Static SystemColors.WindowBrush}"
             BorderBrush="{x:Static SystemColors.ActiveBorderBrush}"
             BorderThickness="1"
@@ -27,8 +27,8 @@
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
                 <Border
-                    Margin="0,0,0,5"
-                    Background="{DynamicResource {x:Static SystemColors.ActiveCaptionBrushKey}}"
+                    Margin="-1,-1,-1,5"
+                    Background="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"
                     CornerRadius="5 5 0 0"
                     DockPanel.Dock="Top"
                     Visibility="{Binding CaptionVisibility}">
@@ -36,17 +36,67 @@
                         Padding="10,5"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"
-                        Foreground="{DynamicResource {x:Static SystemColors.ActiveCaptionTextBrushKey}}"
+                        FontWeight="Bold"
+                        Foreground="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}"
                         Text="{Binding Caption, FallbackValue=THIS_IS_CAPTION}"
+                        TextAlignment="Center"
                         TextTrimming="CharacterEllipsis"
                         TextWrapping="Wrap" />
                 </Border>
                 <DockPanel Grid.Row="1">
-                    <local:Icon DockPanel.Dock="Left" />
-                    <ContentControl x:Name="CustomContent" Margin="10" />
+                    <Border
+                        xmlns:windows="clr-namespace:System.Windows;assembly=PresentationFramework"
+                        Width="64"
+                        Height="64"
+                        DockPanel.Dock="Left"
+                        Visibility="{Binding ImageVisibility, FallbackValue=Collapsed}">
+                        <Border.Resources>
+                            <ResourceDictionary Source="Images.xaml" />
+                        </Border.Resources>
+                        <Image Stretch="Uniform">
+                            <Image.Style>
+                                <Style TargetType="Image">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Path=Image}" Value="{x:Static windows:MessageBoxImage.Information}">
+                                            <Setter Property="Source" Value="{StaticResource appbar_information}" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Path=Image}" Value="{x:Static windows:MessageBoxImage.Asterisk}">
+                                            <Setter Property="Source" Value="{StaticResource appbar_information}" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Path=Image}" Value="{x:Static windows:MessageBoxImage.Question}">
+                                            <Setter Property="Source" Value="{StaticResource appbar_question}" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Path=Image}" Value="{x:Static windows:MessageBoxImage.Hand}">
+                                            <Setter Property="Source" Value="{StaticResource appbar_stop}" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Path=Image}" Value="{x:Static windows:MessageBoxImage.Stop}">
+                                            <Setter Property="Source" Value="{StaticResource appbar_stop}" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Path=Image}" Value="{x:Static windows:MessageBoxImage.Error}">
+                                            <Setter Property="Source" Value="{StaticResource appbar_stop}" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Path=Image}" Value="{x:Static windows:MessageBoxImage.Warning}">
+                                            <Setter Property="Source" Value="{StaticResource appbar_warning}" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Path=Image}" Value="{x:Static windows:MessageBoxImage.Exclamation}">
+                                            <Setter Property="Source" Value="{StaticResource appbar_warning}" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Image.Style>
+                        </Image>
+                    </Border>
+                    <Grid Margin="10,10" >
+                        <ContentControl x:Name="CustomContent"   />
+                        <ScrollViewer x:Name="ScrollContent">
+                            <ContentControl x:Name="StringContent" />
+                        </ScrollViewer>
+                    </Grid>
                 </DockPanel>
                 <Border
                     Grid.Row="2"
+                    Margin="0,5,0,0"
+                    Padding="5"
                     Background="{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}"
                     CornerRadius="0,0,5,5"
                     Visibility="{Binding ButtonsVisibility}">

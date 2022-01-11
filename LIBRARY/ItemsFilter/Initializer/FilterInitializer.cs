@@ -1,15 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using ItemsFilter.Model;
+﻿namespace ItemsFilter.Initializer
+{
+    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel;
+    using System.Linq;
+    using System.Text;
+    using ItemsFilter.Model;
 
-namespace ItemsFilter.Initializer {
     /// <summary>
     /// Base class for filter initializer.
     /// </summary>
-    public abstract class FilterInitializer  {
+    public abstract class FilterInitializer
+    {
         /// <summary>
         /// Generate new instance of Filter class, if it is possible for filterPresenter and key.
         /// </summary>
@@ -18,5 +20,4 @@ namespace ItemsFilter.Initializer {
         /// <returns>Instance of Filter class or null.</returns>
         public abstract Filter NewFilter(FilterPresenter filterPresenter, object key);
     }
-   
 }

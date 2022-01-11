@@ -6,7 +6,7 @@
         xmlns:graph="clr-namespace:TMP.DWRES.Graph;assembly=TMP.DWRES.Graph"
         xmlns:helper="clr-namespace:TMP.DWRES.Helper.Controls;assembly=TMP.Helper"
         xmlns:local="clr-namespace:TMP.DWRES.GUI"
-        xmlns:local_converters="clr-namespace:TMP.DWRES.GUI.Converters"
+        xmlns:local_converters="clr-namespace:TMP.DWRES.Converters"
         xmlns:model="clr-namespace:TMP.DWRES.Objects;assembly=TMP.DWRES.Objects"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:vm="clr-namespace:TMP.DWRES.ViewModel"

@@ -1,282 +1,45 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{DFE89862-64EF-44F8-98A8-07B410EC180E}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>TMPApplication</RootNamespace>
-    <AssemblyName>TMPApplication</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <UseWindowsForms>true</UseWindowsForms>
+    <UseWPF>true</UseWPF>
+    <IsWindows Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Windows)))' == 'true'">true</IsWindows>
+    <IsOSX Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::OSX)))' == 'true'">true</IsOSX>
+    <IsLinux Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' == 'true'">true</IsLinux>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>..\..\out\Debug\Libs\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
+  <PropertyGroup Condition="'$(IsWindows)'=='true'">
+    <DefineConstants>Windows</DefineConstants>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>..\..\out\Release\Libs\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
+  <PropertyGroup Condition="'$(IsOSX)'=='true'">
+    <DefineConstants>OSX</DefineConstants>
   </PropertyGroup>
-  <PropertyGroup>
-    <SignAssembly>true</SignAssembly>
-  </PropertyGroup>
-  <PropertyGroup>
-    <AssemblyOriginatorKeyFile>TMPDevLabs.pfx</AssemblyOriginatorKeyFile>
+  <PropertyGroup Condition="'$(IsLinux)'=='true'">
+    <DefineConstants>Linux</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Management" />
-    <Reference Include="System.Xml" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Xaml">
-      <RequiredTargetFramework>4.0</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="WindowsBase" />
-    <Reference Include="PresentationCore" />
-    <Reference Include="PresentationFramework" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Behaviours\BorderlessWindowBehavior.cs" />
-    <Compile Include="Behaviours\GlowWindowBehavior.cs" />
-    <Compile Include="Behaviours\MergeStyleBehaviour.cs" />
-    <Compile Include="Behaviours\StylizedBehaviorCollection.cs" />
-    <Compile Include="Behaviours\StylizedBehaviors.cs" />
-    <Compile Include="BindingErrorListener.cs" />
-    <Compile Include="BindingException.cs" />
-    <Compile Include="Extensions.cs" />
-    <Compile Include="Converters\IsNullConverter.cs" />
-    <Compile Include="Converters\ResizeModeMinMaxButtonVisibilityConverter.cs" />
-    <Compile Include="CustomWpfWindow\ClosingWindowEventHandlerArgs.cs" />
-    <Compile Include="CustomWpfWindow\Glow.cs" />
-    <Compile Include="CustomWpfWindow\GlowDirection.cs" />
-    <Compile Include="CustomWpfWindow\GlowWindow.xaml.cs">
-      <DependentUpon>GlowWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="CustomWpfWindow\WindowCommands.cs" />
-    <Compile Include="Interactivity\AttachableCollection.cs" />
-    <Compile Include="Interactivity\Behavior.cs" />
-    <Compile Include="Interactivity\BehaviorCollection.cs" />
-    <Compile Include="Interactivity\IAttachedObject.cs" />
-    <Compile Include="Interactivity\Interaction.cs" />
-    <Compile Include="Native\Debug.cs" />
-    <Compile Include="Native\APPBARDATA.cs" />
-    <Compile Include="Native\DwmApi.cs" />
-    <Compile Include="Native\ErrorCodes.cs" />
-    <Compile Include="Native\HitTestValues.cs" />
-    <Compile Include="Native\MARGINS.cs" />
-    <Compile Include="Native\NativeMethods.cs" />
-    <Compile Include="Native\NtDll.cs" />
-    <Compile Include="Native\RECT.cs" />
-    <Compile Include="Native\Constants.cs" />
-    <Compile Include="Native\MONITORINFO.cs" />
-    <Compile Include="Native\SafeLibraryHandle.cs" />
-    <Compile Include="Native\SWP.cs" />
-    <Compile Include="Native\UnsafeNativeMethods.cs" />
-    <Compile Include="Native\WINDOWPLACEMENT.cs" />
-    <Compile Include="Native\WS.cs" />
-    <Compile Include="Native\WSEX.cs" />
-    <Compile Include="ServiceInjector.cs" />
-    <Compile Include="Themes\ColorChangedEventArgs.cs" />
-    <Compile Include="Themes\IThemeInfo.cs" />
-    <Compile Include="Themes\IThemeInfos.cs" />
-    <Compile Include="Themes\IAppearanceManager.cs" />
-    <Compile Include="Themes\MenuKeys.cs" />
-    <Compile Include="Themes\ResourceKeys.cs" />
-    <Compile Include="Themes\ThemeInfo.cs" />
-    <Compile Include="Themes\ThemeInfos.cs" />
-    <Compile Include="Themes\AppearanceManager.cs" />
-    <Compile Include="TreeHelper.cs" />
-    <Compile Include="Utils\DpiHelper.cs" />
-    <Compile Include="Utils\PropertyChangeNotifier.cs" />
-    <Compile Include="Utils\WindowSizing.cs" />
-    <Compile Include="CustomWpfWindow\WindowWithDialogsHelper.cs" />
-    <Compile Include="WindowHelper.cs" />
-    <Compile Include="WpfDialogs\Background.xaml.cs">
-      <DependentUpon>Background.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="WpfDialogs\Contracts\ICustomContentDialog.cs" />
-    <Compile Include="WpfDialogs\Contracts\IDialog.cs" />
-    <Compile Include="WpfDialogs\Contracts\IDialogConfig.cs" />
-    <Compile Include="WpfDialogs\Contracts\IDialogManager.cs" />
-    <Compile Include="WpfDialogs\Contracts\IWindowWithDialogs.cs" />
-    <Compile Include="WpfDialogs\Contracts\IMessageDialog.cs" />
-    <Compile Include="WpfDialogs\Contracts\IProgressDialog.cs" />
-    <Compile Include="WpfDialogs\Contracts\IWaitDialog.cs" />
-    <Compile Include="WpfDialogs\CustomContentDialog.cs" />
-    <Compile Include="WpfDialogs\DialogBase.cs" />
-    <Compile Include="WpfDialogs\DialogBaseControl.xaml.cs">
-      <DependentUpon>DialogBaseControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="WpfDialogs\DialogCloseBehavior.cs" />
-    <Compile Include="WpfDialogs\DialogLayeringHelper.cs" />
-    <Compile Include="WpfDialogs\DialogManager.cs" />
-    <Compile Include="WpfDialogs\DialogMode.cs" />
-    <Compile Include="WpfDialogs\DialogResultState.cs" />
-    <Compile Include="WpfDialogs\Icon.xaml.cs">
-      <DependentUpon>Icon.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="WpfDialogs\IDialogHost.cs" />
-    <Compile Include="WpfDialogs\ImagingExtensions.cs" />
-    <Compile Include="WpfDialogs\MessageDialog.cs" />
-    <Compile Include="CustomWpfWindow\MetroThumb.cs" />
-    <Compile Include="WpfDialogs\Strings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Strings.resx</DependentUpon>
-    </Compile>
-    <Compile Include="WpfDialogs\WaitAnimation.xaml.cs">
-      <DependentUpon>WaitAnimation.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="WpfDialogs\WaitProgressDialog.cs" />
-    <Compile Include="WpfDialogs\WaitProgressDialogControl.xaml.cs">
-      <DependentUpon>WaitProgressDialogControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="DispatcherExtensions.cs" />
-    <Compile Include="HConsoleHelper.cs" />
-    <Compile Include="Logger\Category.cs" />
-    <Compile Include="Logger\ConsoleLogger.cs" />
-    <Compile Include="Logger\IAppWithLogger.cs" />
-    <Compile Include="Logger\ILoggerFacade.cs" />
-    <Compile Include="Logger\Priority.cs" />
-    <Compile Include="Logger\TextLogger.cs" />
-    <Compile Include="Logger\TraceLogger.cs" />
-    <Compile Include="ObservableTraceListener.cs" />
-    <Compile Include="TMPApp.cs" />
-    <Compile Include="TMPApp.Dialogs.cs">
-      <DependentUpon>TMPApp.cs</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="TMPApp.ErrorHandles.cs">
-      <DependentUpon>TMPApp.cs</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="TMPApp.Log.cs">
-      <DependentUpon>TMPApp.cs</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CustomWpfWindow\WindowButtonCommands.cs" />
-    <Compile Include="CustomWpfWindow\WindowWithDialogs.xaml.cs">
-      <DependentUpon>WindowWithDialogs.xaml</DependentUpon>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="SplashScreen.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Page Include="CustomWpfWindow\GlowWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Styles\FocusVisualStyleKey.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Styles\Glow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Styles\WindowButtonCommands.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Styles\WindowButtonStyle.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Themes\DarkBrushs.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Themes\DarkTheme.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Themes\LightBrushs.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Themes\LightTheme.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="WpfDialogs\Background.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="WpfDialogs\DialogBaseControl.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="WpfDialogs\Icon.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="WpfDialogs\Images.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="WpfDialogs\WaitAnimation.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="WpfDialogs\WaitProgressDialogControl.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Themes\Generic.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="CustomWpfWindow\WindowWithDialogs.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Compile Include="Properties\AssemblyInfo.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\WindowsShell\WindowsShell.csproj">
-      <Project>{6733a572-4d4f-4733-908d-e9db4765e245}</Project>
-      <Name>WindowsShell</Name>
-    </ProjectReference>
+    <ProjectReference Include="..\Shared\Shared.csproj" />
+    <ProjectReference Include="..\WindowsShell\WindowsShell.csproj" />
+    <PackageReference Include="NLog" Version="4.7.13" />
+    <PackageReference Include="System.Management" Version="6.0.0" />
+    <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
+    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="WpfDialogs\Strings.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Strings.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
+    <Compile Remove="AppCore.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Controls\" />
-    <Folder Include="Resources\" />
+    <PackageReference Update="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
+    <PackageReference Update="StyleCop.Analyzers" Version="1.1.118">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>build; analyzers</IncludeAssets>
+    </PackageReference>
+    <PackageReference Update="WpfAnalyzers" Version="4.0.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>build; analyzers</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
-  <ItemGroup>
-    <None Include="TMPDevLabs.pfx" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>

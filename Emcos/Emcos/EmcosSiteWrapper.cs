@@ -15,8 +15,6 @@ using TMP.Common.NetHelper;
 
 namespace TMP.Work.Emcos
 {
-    using ServiceLocator;
-    using System.Windows;
     using TMPApplication;
 
     public class EmcosSiteWrapper : BaseSiteWrapper, IDisposable
@@ -47,14 +45,7 @@ namespace TMP.Work.Emcos
         /// <summary>
         /// Настройки
         /// </summary>
-        private static EmcosSettings _settings;
-        public static void SetSettings(EmcosSettings settings)
-        {
-            _settings = settings;
-            if (_settings == null)
-                throw new ArgumentNullException("EmcosSettings must be not null");
-            //_settings.PropertyChanged += _settings_PropertyChanged;
-        }
+        private EmcosSettings _settings;
 
         #region Constructor
         /// <summary>
@@ -62,15 +53,16 @@ namespace TMP.Work.Emcos
         /// </summary>
         private EmcosSiteWrapper()
         {
+            _settings = TMPApp.Services.GetService<EmcosSettings>();
             if (_settings == null)
-                throw new ArgumentNullException("EmcosSettings must be not null");
+                throw new ArgumentNullException("TMPApp.Services.GetService not found EmcosSettings!");
 
             Cookie = new Cookie("ASPSESSIONIDQSATBDCD", string.Empty);
 
             UserName = _settings.UserName;
             Password = _settings.Password;
             ServerAddress = _settings.ServerAddress;
-            ServiceName = _settings.ServiceName;
+            SiteName = _settings.SiteName;
             //_serverAddress = "localhost:1000";
             // в секундах
             TimeOut = _settings.NetTimeOutInSeconds;
@@ -113,7 +105,6 @@ namespace TMP.Work.Emcos
             if (Log != null)
                 Log.Log(message, Category.Warn, Priority.Medium);
         }
-
         private void SetOKResult(State state = State.Online)
         {
             LastException = null;
@@ -880,4 +871,4 @@ namespace TMP.Work.Emcos
         public string ErrorMessage { get; private set; }
         #endregion
     }
-}
+}

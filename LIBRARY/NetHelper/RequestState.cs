@@ -1,15 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Net;
-using System.Text;
-
-namespace TMP.Common.NetHelper
+﻿namespace TMP.Common.NetHelper
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Net;
+    using System.Text;
+
     // The RequestState class passes data across async calls.
     public class RequestState
     {
         public int BUFFER_SIZE { get; private set; }
+
         public StringBuilder RequestData;
         public byte[] BufferRead;
         public HttpWebRequest Request;
@@ -22,24 +23,25 @@ namespace TMP.Common.NetHelper
 
         public long BytesReaded;
         public long BytesToRead;
+
         public int Progress
         {
             get
             {
-                long pos = BytesToRead == 0 ? 0 : BytesReaded * 100 / BytesToRead;
+                long pos = this.BytesToRead == 0 ? 0 : this.BytesReaded * 100 / this.BytesToRead;
                 return Math.Min(100, (int)pos);
             }
         }
 
         public RequestState(int buffeSize = 10240)
         {
-            BUFFER_SIZE = buffeSize;
-            BufferRead = new byte[buffeSize];
-            RequestData = new StringBuilder(String.Empty);
-            Request = null;
-            ResponseStream = null;
+            this.BUFFER_SIZE = buffeSize;
+            this.BufferRead = new byte[buffeSize];
+            this.RequestData = new StringBuilder(string.Empty);
+            this.Request = null;
+            this.ResponseStream = null;
 
-            ListOfBuffers = new List<byte[]>();
+            this.ListOfBuffers = new List<byte[]>();
         }
     }
 }

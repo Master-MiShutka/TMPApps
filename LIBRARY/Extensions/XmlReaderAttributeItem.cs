@@ -1,6 +1,7 @@
-﻿using System;
-namespace TMP.Extensions
+﻿namespace TMP.Extensions
 {
+    using System;
+
     /// <summary>
     /// Extended xml attribute
     /// </summary>
@@ -14,6 +15,7 @@ namespace TMP.Extensions
             get;
             set;
         }
+
         /// <summary>
         /// Local name of attribute
         /// </summary>
@@ -22,6 +24,7 @@ namespace TMP.Extensions
             get;
             set;
         }
+
         /// <summary>
         /// Value of attribute
         /// </summary>
@@ -30,6 +33,7 @@ namespace TMP.Extensions
             get;
             set;
         }
+
         /// <summary>
         /// Prefix if any
         /// </summary>
@@ -38,6 +42,7 @@ namespace TMP.Extensions
             get;
             set;
         }
+
         /// <summary>
         /// Has a value?
         /// </summary>

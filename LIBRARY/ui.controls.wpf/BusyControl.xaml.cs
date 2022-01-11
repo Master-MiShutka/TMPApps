@@ -1,28 +1,38 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-
-namespace TMP.UI.Controls.WPF
+﻿namespace TMP.UI.Controls.WPF
 {
+    using System.ComponentModel;
+    using System.Windows;
+    using System.Windows.Controls;
+    using System.Windows.Media;
+
     /// <summary>
     /// Interaction logic for BusyControl.xaml
     /// </summary>
-    public partial class BusyControl : UserControl
+    public class BusyControl : ContentControl
     {
-        public BusyControl()
+
+        public static readonly DependencyProperty BackgroundFillBrushProperty = DependencyProperty.Register(nameof(BackgroundFillBrush), typeof(Brush), typeof(BusyControl),
+            new PropertyMetadata(Brushes.Black));
+
+        [Bindable(true)]
+        [DefaultValue(null)]
+        [Category("Behavior")]
+        public Brush BackgroundFillBrush
         {
-            InitializeComponent();
-            Visibility = Visibility.Collapsed;
+            get => (Brush)this.GetValue(BackgroundFillBrushProperty);
+            set => this.SetValue(BackgroundFillBrushProperty, value);
+        }
+
+        public static readonly DependencyProperty BackgroundFillOpacityProperty = DependencyProperty.Register(nameof(BackgroundFillOpacity), typeof(double), typeof(BusyControl),
+            new PropertyMetadata(0.7d));
+
+        [Bindable(true)]
+        [DefaultValue(null)]
+        [Category("Behavior")]
+        public double BackgroundFillOpacity
+        {
+            get => (double)this.GetValue(BackgroundFillOpacityProperty);
+            set => this.SetValue(BackgroundFillOpacityProperty, value);
         }
     }
 }

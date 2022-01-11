@@ -1,19 +1,21 @@
-﻿using System;
-using System.IO;
-using System.Text;
-using System.Reflection;
-using System.Xml;
-
-namespace TMP.Shared.Settings
+﻿namespace TMP.Shared.Settings
 {
+    using System;
+    using System.IO;
+    using System.Reflection;
+    using System.Text;
+    using System.Xml;
+
     public class ClassAppSettings
     {
         private string filePath;
+
         public ClassAppSettings(string strPath)
         {
             this.filePath = strPath;
             this.InitializeConfigFile();
         }
+
         private void InitializeConfigFile()
         {
             StringBuilder stringBuilder = new StringBuilder();
@@ -35,6 +37,7 @@ namespace TMP.Shared.Settings
                 streamWriter.Close();
             }
         }
+
         public string GetSetting(string key)
         {
             XmlDocument xmlDocument = new XmlDocument();
@@ -50,8 +53,10 @@ namespace TMP.Shared.Settings
             {
                 result = null;
             }
+
             return result;
         }
+
         public void SaveSetting(string key, string value)
         {
             XmlDocument xmlDocument = new XmlDocument();
@@ -68,7 +73,7 @@ namespace TMP.Shared.Settings
                 xmlElement.SetAttribute("key", key);
                 xmlElement.SetAttribute("value", value);
                 XmlNode xmlNode = xmlDocument.DocumentElement.SelectSingleNode("/configuration/appSettings");
-                flag = (xmlNode != null);
+                flag = xmlNode != null;
                 if (flag)
                 {
                     xmlNode.AppendChild(xmlElement);
@@ -84,12 +89,13 @@ namespace TMP.Shared.Settings
                     }
                     catch (Exception expr_ED)
                     {
-                       // ProjectData.SetProjectError(expr_ED);
+                        // ProjectData.SetProjectError(expr_ED);
                         Exception innerException = expr_ED;
                         throw new Exception("Could not set value", innerException);
                     }
                 }
             }
+
             xmlDocument.Save(this.filePath);
         }
     }

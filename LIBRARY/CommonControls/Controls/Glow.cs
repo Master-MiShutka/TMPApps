@@ -18,26 +18,26 @@ namespace TMP.Wpf.CommonControls
 
         public SolidColorBrush GlowBrush
         {
-            get { return (SolidColorBrush)this.GetValue(GlowBrushProperty); }
-            set { this.SetValue(GlowBrushProperty, value); }
+            get => (SolidColorBrush)this.GetValue(GlowBrushProperty);
+            set => this.SetValue(GlowBrushProperty, value);
         }
 
         public SolidColorBrush NonActiveGlowBrush
         {
-            get { return (SolidColorBrush)this.GetValue(NonActiveGlowBrushProperty); }
-            set { this.SetValue(NonActiveGlowBrushProperty, value); }
+            get => (SolidColorBrush)this.GetValue(NonActiveGlowBrushProperty);
+            set => this.SetValue(NonActiveGlowBrushProperty, value);
         }
 
         public bool IsGlow
         {
-            get { return (bool)this.GetValue(IsGlowProperty); }
-            set { this.SetValue(IsGlowProperty, value); }
+            get => (bool)this.GetValue(IsGlowProperty);
+            set => this.SetValue(IsGlowProperty, value);
         }
 
         public Orientation Orientation
         {
-            get { return (Orientation)this.GetValue(OrientationProperty); }
-            set { this.SetValue(OrientationProperty, value); }
+            get => (Orientation)this.GetValue(OrientationProperty);
+            set => this.SetValue(OrientationProperty, value);
         }
     }
 }

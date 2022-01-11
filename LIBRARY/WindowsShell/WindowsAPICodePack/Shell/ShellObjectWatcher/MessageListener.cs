@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Runtime.InteropServices;
-using System.Threading;
-using MS.WindowsAPICodePack.Internal;
-using Microsoft.WindowsAPICodePack.Shell.Interop;
-using Microsoft.WindowsAPICodePack.Shell.Resources;
-
-namespace Microsoft.WindowsAPICodePack.Shell
+﻿namespace Microsoft.WindowsAPICodePack.Shell
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Runtime.InteropServices;
+    using System.Threading;
+    using Microsoft.WindowsAPICodePack.Shell.Interop;
+    using Microsoft.WindowsAPICodePack.Shell.Resources;
+    using MS.WindowsAPICodePack.Internal;
+
     internal class MessageListener : IDisposable
     {
         public const uint CreateWindowMessage = (uint)WindowMessage.User + 1;
@@ -16,12 +16,13 @@ namespace Microsoft.WindowsAPICodePack.Shell
 
         private const string MessageWindowClassName = "MessageListenerClass";
 
-        private static readonly object _threadlock = new object();
+        private static readonly object threadlock = new object();
         private static uint _atom;
-        private static Thread _windowThread = null;
+        private static Thread windowThread = null;
         private static volatile bool _running = false;
 
         private static ShellObjectWatcherNativeMethods.WndProcDelegate wndProc = WndProc;
+
         // Dictionary relating window's hwnd to its message window
         private static Dictionary<IntPtr, MessageListener> _listeners = new Dictionary<IntPtr, MessageListener>();
         private static IntPtr _firstWindowHandle = IntPtr.Zero;
@@ -33,34 +34,34 @@ namespace Microsoft.WindowsAPICodePack.Shell
 
         public MessageListener()
         {
-            lock (_threadlock)
+            lock (threadlock)
             {
-                if (_windowThread == null)
+                if (windowThread == null)
                 {
-                    _windowThread = new Thread(ThreadMethod);
-                    _windowThread.SetApartmentState(ApartmentState.STA);
-                    _windowThread.Name = "ShellObjectWatcherMessageListenerHelperThread";
+                    windowThread = new Thread(this.ThreadMethod);
+                    windowThread.SetApartmentState(ApartmentState.STA);
+                    windowThread.Name = "ShellObjectWatcherMessageListenerHelperThread";
 
                     lock (_crossThreadWindowLock)
                     {
-                        _windowThread.Start();
+                        windowThread.Start();
                         Monitor.Wait(_crossThreadWindowLock);
                     }
 
-                    _firstWindowHandle = WindowHandle;
+                    _firstWindowHandle = this.WindowHandle;
                 }
                 else
                 {
-                    CrossThreadCreateWindow();
+                    this.CrossThreadCreateWindow();
                 }
 
-                if (WindowHandle == IntPtr.Zero)
+                if (this.WindowHandle == IntPtr.Zero)
                 {
                     throw new ShellException(LocalizedMessages.MessageListenerCannotCreateWindow,
                         Marshal.GetExceptionForHR(Marshal.GetHRForLastWin32Error()));
                 }
 
-                _listeners.Add(WindowHandle, this);
+                _listeners.Add(this.WindowHandle, this);
             }
         }
 
@@ -77,7 +78,7 @@ namespace Microsoft.WindowsAPICodePack.Shell
                 Monitor.Wait(_crossThreadWindowLock);
             }
 
-            WindowHandle = _tempHandle;
+            this.WindowHandle = _tempHandle;
         }
 
         private static void RegisterWindowClass()
@@ -94,16 +95,17 @@ namespace Microsoft.WindowsAPICodePack.Shell
                 throw new ShellException(LocalizedMessages.MessageListenerClassNotRegistered,
                     Marshal.GetExceptionForHR(Marshal.GetHRForLastWin32Error()));
             }
+
             _atom = atom;
         }
 
         private static IntPtr CreateWindow()
         {
             IntPtr handle = ShellObjectWatcherNativeMethods.CreateWindowEx(
-                0, //extended style
-                MessageWindowClassName, //class name
-                "MessageListenerWindow", //title
-                0, //style
+                0, // extended style
+                MessageWindowClassName, // class name
+                "MessageListenerWindow", // title
+                0, // style
                 0, 0, 0, 0, // x,y,width,height
                 new IntPtr(-3), // -3 = Message-Only window
                 IntPtr.Zero, IntPtr.Zero, IntPtr.Zero);
@@ -120,7 +122,8 @@ namespace Microsoft.WindowsAPICodePack.Shell
                 {
                     RegisterWindowClass();
                 }
-                WindowHandle = CreateWindow();
+
+                this.WindowHandle = CreateWindow();
 
                 Monitor.Pulse(_crossThreadWindowLock);
             }
@@ -145,6 +148,7 @@ namespace Microsoft.WindowsAPICodePack.Shell
                         _tempHandle = CreateWindow();
                         Monitor.Pulse(_crossThreadWindowLock);
                     }
+
                     break;
                 case (uint)WindowMessage.Destroy:
                     break;
@@ -155,6 +159,7 @@ namespace Microsoft.WindowsAPICodePack.Shell
                         Message message = new Message(hwnd, msg, wparam, lparam, 0, new NativePoint());
                         listener.MessageReceived.SafeRaise(listener, new WindowMessageEventArgs(message));
                     }
+
                     break;
             }
 
@@ -162,18 +167,19 @@ namespace Microsoft.WindowsAPICodePack.Shell
         }
 
         public IntPtr WindowHandle { get; private set; }
-        public static bool Running { get { return _running; } }
+
+        public static bool Running => _running;
 
         #region IDisposable Members
 
         ~MessageListener()
         {
-            Dispose(false);
+            this.Dispose(false);
         }
 
         public void Dispose()
         {
-            Dispose(true);
+            this.Dispose(true);
             GC.SuppressFinalize(this);
         }
 
@@ -181,12 +187,12 @@ namespace Microsoft.WindowsAPICodePack.Shell
         {
             if (disposing)
             {
-                lock (_threadlock)
+                lock (threadlock)
                 {
-                    _listeners.Remove(WindowHandle);
+                    _listeners.Remove(this.WindowHandle);
                     if (_listeners.Count == 0)
                     {
-                        CoreNativeMethods.PostMessage(WindowHandle, WindowMessage.Destroy, IntPtr.Zero, IntPtr.Zero);
+                        CoreNativeMethods.PostMessage(this.WindowHandle, WindowMessage.Destroy, IntPtr.Zero, IntPtr.Zero);
                     }
                 }
             }
@@ -195,9 +201,8 @@ namespace Microsoft.WindowsAPICodePack.Shell
         #endregion
     }
 
-
     /// <summary>
-    /// Encapsulates the data about a window message 
+    /// Encapsulates the data about a window message
     /// </summary>
     public class WindowMessageEventArgs : EventArgs
     {
@@ -208,9 +213,7 @@ namespace Microsoft.WindowsAPICodePack.Shell
 
         internal WindowMessageEventArgs(Message msg)
         {
-            Message = msg;
+            this.Message = msg;
         }
     }
-
-
 }

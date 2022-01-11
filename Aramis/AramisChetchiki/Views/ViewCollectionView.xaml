@@ -1,0 +1,110 @@
+﻿<UserControl
+    x:Class="TMP.WORK.AramisChetchiki.Views.ViewCollectionView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:System="clr-namespace:System;assembly=mscorlib"
+    xmlns:controls="clr-namespace:TMP.UI.Controls.WPF;assembly=ui.controls.wpf"
+    xmlns:controls_helper="clr-namespace:TMP.UI.Controls.WPF.Helpers;assembly=ui.controls.wpf"
+    xmlns:converters="clr-namespace:TMP.UI.Controls.WPF.Converters;assembly=ui.controls.wpf"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:extensions="clr-namespace:TMP.Extensions;assembly=TMP.Extensions"
+    xmlns:itemsfilter="clr-namespace:ItemsFilter;assembly=ItemsFilter"
+    xmlns:itemsfilter_view="clr-namespace:ItemsFilter.View;assembly=ItemsFilter"
+    xmlns:local="clr-namespace:TMP.WORK.AramisChetchiki"
+    xmlns:local_controls="clr-namespace:TMP.WORK.AramisChetchiki.Controls"
+    xmlns:local_extensions="clr-namespace:TMP.WORK.AramisChetchiki.Extensions"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:model="clr-namespace:TMP.WORK.AramisChetchiki.Model"
+    xmlns:view="clr-namespace:TMP.WORK.AramisChetchiki.Views"
+    xmlns:vm="clr-namespace:TMP.WORK.AramisChetchiki.ViewModel"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    FontSize="{local_extensions:SettingBinding Path=FontSize,
+                                               FallbackValue=13.0}"
+    TextOptions.TextFormattingMode="Ideal"
+    mc:Ignorable="d">
+    <view:BaseView HeaderPanelVisible="True">
+        <view:BaseView.HeaderPanel>
+            <StackPanel Margin="2" Orientation="Horizontal">
+                <controls:DropDownButton Content="{Binding SelectedViewKind, Converter={converters:EnumBindingConverter}}" ItemsSource="{Binding Source={StaticResource TableViewKindSelectMenu}}"
+                                         MenuStyle="{StaticResource baseContextMenuStyle}" StayMenuOpen="True">
+                    <controls:DropDownButton.Icon>
+                        <controls:Icons Height="16" Kind="ListSelect" />
+                    </controls:DropDownButton.Icon>
+                    <controls:DropDownButton.Resources>
+                        <Style BasedOn="{StaticResource baseMenuItemStyle}" TargetType="MenuItem">
+                            <Setter Property="Header" Value="{Binding Converter={converters:EnumBindingConverter}}" />
+                            <Setter Property="Command" Value="{Binding Path=DataContext.CommandChangeViewKind, RelativeSource={RelativeSource AncestorType=UserControl}}" />
+                            <Setter Property="CommandParameter" Value="{Binding}" />
+                        </Style>
+                    </controls:DropDownButton.Resources>
+                </controls:DropDownButton>
+                <Separator Style="{StaticResource dotedSeparator}" />
+                <TextBlock
+                    Grid.Row="1"
+                    Text="{Binding SortingFields, Mode=OneWay, StringFormat=Отсортировано по: {0}}"
+                    Visibility="{Binding SortingFields, Mode=OneWay, Converter={StaticResource NullOrEmptyToVisibilityConverter}}" />
+                <Separator />
+                <TextBlock
+                    Grid.Row="2"
+                    Text="{Binding GroupingFields, Mode=OneWay, StringFormat=Сгруппировано по: {0}}"
+                    Visibility="{Binding GroupingFields, Mode=OneWay, Converter={StaticResource NullOrEmptyToVisibilityConverter}}" />
+                <Separator Style="{StaticResource dotedSeparator}" />
+                <Button
+                    HorizontalAlignment="Right"
+                    Command="{Binding CommandShowFilters}">
+                    <StackPanel Orientation="Horizontal">
+                        <controls:Icons  Kind="FilterAlphabetical" Width="16    " />
+                        <TextBlock Margin="5,0,0,0" Text="{Binding CommandShowFilters.Header}" />
+                    </StackPanel>
+                </Button>
+                <Separator Grid.Column="3" Margin="5,0" Style="{StaticResource dotedSeparator}"/>
+                <ToggleButton IsChecked="True" Content="Скрывать удалённые" Command="{Binding CommandNotShowDeleted}"/>
+                <Separator Style="{StaticResource dotedSeparator}" />
+                <local_controls:ShowFilters DockPanel.Dock="Right" />
+
+            </StackPanel>
+        </view:BaseView.HeaderPanel>
+        <view:BaseView.Content>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <ItemsControl
+                    Margin="0"
+                    Background="{extensions:ValueFromStyle StyleKey={x:Type ToolBar},
+                                                           Property=Control.Background}"
+                    ItemsSource="{Binding Filters}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <controls:StackPanel 
+                                IsItemsHost="True" 
+                                MarginBetweenChildren="5"
+                                Orientation="Horizontal" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <HeaderedContentControl Header="{Binding Path=PropertyInfo.Name}"  Style="{StaticResource FilterHeaderedContentControlStyle}">
+                                <itemsfilter_view:StringFilterView
+                                    MinWidth="115" itemsfilter:FilterListExtensions.IsActive="True"
+                                    Style="{StaticResource CompactSearchPanel}"
+                                    ViewModel="{Binding}" />
+                            </HeaderedContentControl>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+                <!--    -->
+                <local_controls:DataGridControl
+                    x:Name="table"
+                    Grid.Row="1"
+                    DataRowStyle="{StaticResource MeterRowStyle}"
+                    NoItemsMessage="{Binding DataGridMessage}" />
+                <!--    -->
+                <local_controls:TableDetailsView Grid.Row="2"/>
+            </Grid>
+        </view:BaseView.Content>
+    </view:BaseView>
+</UserControl>

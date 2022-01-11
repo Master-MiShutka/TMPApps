@@ -1,4 +1,4 @@
-//Copyright (c) Microsoft Corporation.  All rights reserved.
+// Copyright (c) Microsoft Corporation.  All rights reserved.
 
 namespace Microsoft.WindowsAPICodePack.Dialogs
 {
@@ -10,7 +10,7 @@ namespace Microsoft.WindowsAPICodePack.Dialogs
         /// <summary>
         /// Do not show the content.
         /// </summary>
-        Hide, 
+        Hide,
 
         /// <summary>
         /// Show the content.
@@ -20,6 +20,6 @@ namespace Microsoft.WindowsAPICodePack.Dialogs
         /// <summary>
         /// Expand the footer content.
         /// </summary>
-        ExpandFooter
+        ExpandFooter,
     }
 }

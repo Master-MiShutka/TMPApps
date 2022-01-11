@@ -30,7 +30,7 @@ namespace TMP.Wpf.CommonControls.Controls.TreeListView
             protected override void InsertItem(int index, TreeNode item)
             {
                 if (item == null)
-                    throw new ArgumentNullException("item");
+                    throw new ArgumentNullException(nameof(item));
 
                 if (item.Parent != _owner)
                 {
@@ -57,7 +57,7 @@ namespace TMP.Wpf.CommonControls.Controls.TreeListView
             protected override void SetItem(int index, TreeNode item)
             {
                 if (item == null)
-                    throw new ArgumentNullException("item");
+                    throw new ArgumentNullException(nameof(item));
                 RemoveAt(index);
                 InsertItem(index, item);
             }
@@ -86,7 +86,7 @@ namespace TMP.Wpf.CommonControls.Controls.TreeListView
         private INotifyCollectionChanged _childrenSource;
         internal INotifyCollectionChanged ChildrenSource
         {
-            get { return _childrenSource; }
+            get => _childrenSource;
             set
             {
                 if (_childrenSource != null)
@@ -141,7 +141,7 @@ namespace TMP.Wpf.CommonControls.Controls.TreeListView
         private bool _isExpanded = false;
         public bool IsExpanded
         {
-            get { return _isExpanded; }
+            get => _isExpanded;
             set
             {
                 if (value != IsExpanded)
@@ -169,7 +169,7 @@ namespace TMP.Wpf.CommonControls.Controls.TreeListView
         private bool _isSelected;
         public bool IsSelected
         {
-            get { return _isSelected; }
+            get => _isSelected;
             set
             {
                 if (value != _isSelected)
@@ -307,7 +307,7 @@ namespace TMP.Wpf.CommonControls.Controls.TreeListView
         internal TreeNode(TreeListView tree, object tag)
         {
             if (tree == null)
-                throw new ArgumentNullException("tree");
+                throw new ArgumentNullException(nameof(tree));
 
             _tree = tree;
             _children = new NodeCollection(this);

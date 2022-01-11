@@ -1,17 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Diagnostics;
-using System.Threading;
-
-namespace Microsoft.WindowsAPICodePack.Shell
+﻿namespace Microsoft.WindowsAPICodePack.Shell
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics;
+    using System.Linq;
+    using System.Text;
+    using System.Threading;
+
     /// <summary>
     /// Provides extension methods for raising events safely.
     /// </summary>
     public static class EventHandlerExtensionMethods
-    {       
+    {
         /// <summary>
         /// Safely raises an event using EventArgs.Empty
         /// </summary>
@@ -32,11 +32,12 @@ namespace Microsoft.WindowsAPICodePack.Shell
         /// <param name="eventHandler">EventHandler&lt;T&gt; to raise</param>
         /// <param name="sender">Event sender</param>
         /// <param name="args">Event args</param>
-        public static void SafeRaise<T>(this EventHandler<T> eventHandler, object sender, T args) where T : EventArgs
+        public static void SafeRaise<T>(this EventHandler<T> eventHandler, object sender, T args)
+            where T : EventArgs
         {
             if (eventHandler != null)
             {
-                eventHandler(sender, args);                                
+                eventHandler(sender, args);
             }
         }
 

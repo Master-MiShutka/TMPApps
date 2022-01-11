@@ -1,20 +1,22 @@
 ﻿/*************************************************************************************
+   
+   Toolkit for WPF
 
-   Extended WPF Toolkit
-
-   Copyright (C) 2007-2013 Xceed Software Inc.
+   Copyright (C) 2007-2018 Xceed Software Inc.
 
    This program is provided to you under the terms of the Microsoft Public
    License (Ms-PL) as published at http://wpftoolkit.codeplex.com/license 
 
    For more features, controls, and fast professional support,
-   pick up the Plus Edition at http://xceed.com/wpf_toolkit
+   pick up the Plus Edition at https://xceed.com/xceed-toolkit-plus-for-wpf/
 
    Stay informed: follow @datagrid on Twitter or Like http://facebook.com/datagrids
 
   ***********************************************************************************/
 
 using System;
+using System.ComponentModel;
+using System.Linq;
 using System.Windows.Data;
 
 namespace Xceed.Wpf.Toolkit.Core.Converters
@@ -25,12 +27,21 @@ namespace Xceed.Wpf.Toolkit.Core.Converters
     {
       if( value != null )
       {
-        string valueString = value.ToString();
-        if( string.IsNullOrEmpty( valueString )
-         || ( valueString == value.GetType().UnderlyingSystemType.ToString() ) )
+        if( value is Type )
         {
-          return value.GetType().Name;
+          var displayNameAttribute = ( ( Type )value ).GetCustomAttributes( false ).OfType<DisplayNameAttribute>().FirstOrDefault();
+          return ( displayNameAttribute != null ) ? displayNameAttribute.DisplayName : ( ( Type )value ).Name;
         }
+
+        var type = value.GetType();
+        var valueString = value.ToString();
+        if( string.IsNullOrEmpty( valueString )
+         || ( valueString == type.UnderlyingSystemType.ToString() ) )
+        {
+          var displayNameAttribute = type.GetCustomAttributes( false ).OfType<DisplayNameAttribute>().FirstOrDefault();
+          return ( displayNameAttribute != null ) ? displayNameAttribute.DisplayName : type.Name;
+        }
+
         return value; 
       }
       return null;

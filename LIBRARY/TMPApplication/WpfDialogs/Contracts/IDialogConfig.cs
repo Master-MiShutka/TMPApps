@@ -1,31 +1,39 @@
-using System;
-using System.Windows;
-
 namespace TMPApplication.WpfDialogs.Contracts
 {
-	/// <summary>
-	/// Not used so far...
-	/// </summary>
-	public interface IDialogConfig
-	{
-		IDialogConfig Mode(DialogMode mode);
-		IDialogConfig CloseBehavior(DialogCloseBehavior closeBehavior);
+    using System;
+    using System.Windows;
 
-		IDialogConfig Ok(Action del);
-		IDialogConfig Cancel(Action del);
-		IDialogConfig Yes(Action del);
-		IDialogConfig No(Action del);
+    /// <summary>
+    /// Not used so far...
+    /// </summary>
+    public interface IDialogConfig
+    {
+        IDialogConfig Mode(DialogMode mode);
 
-		IDialogConfig OkText(string value);
-		IDialogConfig CancelText(string value);
-		IDialogConfig YesText(string value);
-		IDialogConfig NoText(string value);
+        IDialogConfig CloseBehavior(DialogCloseBehavior closeBehavior);
 
-		IDialogConfig Caption(string value);
+        IDialogConfig Ok(Action del);
 
-		IDialogConfig VerticalDialogAlignment(VerticalAlignment verticalAlignment);
-		IDialogConfig HorizontalDialogAlignment(HorizontalAlignment horizontalAlignment);
+        IDialogConfig Cancel(Action del);
 
-		IDialog CreateDialog();
-	}
+        IDialogConfig Yes(Action del);
+
+        IDialogConfig No(Action del);
+
+        IDialogConfig OkText(string value);
+
+        IDialogConfig CancelText(string value);
+
+        IDialogConfig YesText(string value);
+
+        IDialogConfig NoText(string value);
+
+        IDialogConfig Caption(string value);
+
+        IDialogConfig VerticalDialogAlignment(VerticalAlignment verticalAlignment);
+
+        IDialogConfig HorizontalDialogAlignment(HorizontalAlignment horizontalAlignment);
+
+        IDialog CreateDialog();
+    }
 }

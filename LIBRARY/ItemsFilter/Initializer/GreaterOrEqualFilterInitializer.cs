@@ -1,12 +1,14 @@
-﻿using System;
-using System.ComponentModel;
-using ItemsFilter.Model;
+﻿namespace ItemsFilter.Initializer
+{
+    using System;
+    using System.ComponentModel;
+    using ItemsFilter.Model;
 
-namespace ItemsFilter.Initializer {
     /// <summary>
     /// Define GreaterOrEqualFilter Initializer.
     /// </summary>
-    public class GreaterOrEqualFilterInitializer : LessOrEqualFilterInitializer {         
+    public class GreaterOrEqualFilterInitializer : LessOrEqualFilterInitializer
+    {
         /// <summary>
         /// Create PropertyFilter for instance of FilterPresenter, if it is possible.
         /// </summary>
@@ -22,22 +24,27 @@ namespace ItemsFilter.Initializer {
         protected override PropertyFilter NewFilter(FilterPresenter filterPresenter, ItemPropertyInfo key)
         {
             if (filterPresenter == null)
+            {
                 return null;
+            }
+
             if (key == null)
+            {
                 return null;
+            }
+
             ItemPropertyInfo propertyInfo = (ItemPropertyInfo)key;
             Type propertyType = propertyInfo.PropertyType;
-            if (filterPresenter.ItemProperties.Contains(propertyInfo) 
+            if (filterPresenter.ItemProperties.Contains(propertyInfo)
                 && typeof(IComparable).IsAssignableFrom(propertyInfo.PropertyType)
-                && propertyInfo.PropertyType!=typeof(String)
+                && propertyInfo.PropertyType != typeof(string)
                 && propertyInfo.PropertyType != typeof(bool)
-                && !propertyType.IsEnum
-               )
+                && !propertyType.IsEnum)
             {
                 return (PropertyFilter)Activator.CreateInstance(typeof(GreaterOrEqualFilter<>).MakeGenericType(propertyInfo.PropertyType), propertyInfo);
             }
+
             return null;
         }
-
     }
 }

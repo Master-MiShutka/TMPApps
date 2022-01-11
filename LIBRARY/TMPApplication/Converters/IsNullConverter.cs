@@ -1,11 +1,11 @@
-﻿using System;
-using System.Windows.Data;
-
-namespace TMPApplication.Converters
+﻿namespace TMPApplication.Converters
 {
+    using System;
+    using System.Windows.Data;
+
     public sealed class IsNullConverter : IValueConverter
     {
-        private static IsNullConverter _instance;
+        private static IsNullConverter instance;
 
         // Explicit static constructor to tell C# compiler
         // not to mark type as beforefieldinit
@@ -17,10 +17,7 @@ namespace TMPApplication.Converters
         {
         }
 
-        public static IsNullConverter Instance
-        {
-            get { return _instance ?? (_instance = new IsNullConverter()); }
-        }
+        public static IsNullConverter Instance => instance ?? (instance = new IsNullConverter());
 
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
@@ -32,5 +29,4 @@ namespace TMPApplication.Converters
             return Binding.DoNothing;
         }
     }
-
 }

@@ -1,11 +1,10 @@
-using System.Windows;
-using System.Windows.Media;
-
-using TMP.PrintEngine.Paginators;
-using TMP.PrintEngine.Views;
-
 namespace TMP.PrintEngine.ViewModels
 {
+    using System.Windows;
+    using System.Windows.Media;
+    using TMP.PrintEngine.Paginators;
+    using TMP.PrintEngine.Views;
+
     public class DataTablePrintControlViewModel : ItemsPrintControlViewModel, IDataTablePrintControlViewModel
     {
         public DataTablePrintControlViewModel(PrintControlView view)
@@ -17,8 +16,11 @@ namespace TMP.PrintEngine.ViewModels
         {
             Thickness _margin = margin;
             if (_margin == null)
-                _margin = PrintUtility.GetPageMargin(CurrentPrinterName);
-            Paginator = new DataTablePaginator(visual, printSize, _margin, PrintTableDefination);
+            {
+                _margin = this.PrintUtility.GetPageMargin(this.CurrentPrinterName);
+            }
+
+            this.Paginator = new DataTablePaginator(visual, printSize, _margin, this.PrintTableDefination);
         }
     }
 }

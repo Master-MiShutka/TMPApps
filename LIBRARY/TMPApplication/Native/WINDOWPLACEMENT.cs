@@ -1,8 +1,8 @@
-﻿using System;
-using System.Runtime.InteropServices;
-
-namespace Native
+﻿namespace Native
 {
+    using System;
+    using System.Runtime.InteropServices;
+
     [Serializable]
     [StructLayout(LayoutKind.Sequential)]
     public struct WINDOWPLACEMENT

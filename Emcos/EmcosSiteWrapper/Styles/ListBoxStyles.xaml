@@ -11,6 +11,13 @@
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="VirtualizingStackPanel.IsVirtualizing" Value="True" />
+        <Setter Property="ItemsPanel">
+            <Setter.Value>
+                <ItemsPanelTemplate>
+                    <StackPanel VerticalAlignment="Stretch" Orientation="Horizontal" />
+                </ItemsPanelTemplate>
+            </Setter.Value>
+        </Setter>
     </Style>
 
     <!--  Список подразделений  -->
@@ -59,13 +66,6 @@
         BasedOn="{StaticResource HorizontalListBox}"
         TargetType="{x:Type ListBox}">
         <Setter Property="ItemContainerStyle" Value="{StaticResource DepartamentsListBoxItem}" />
-        <Setter Property="ItemsPanel">
-            <Setter.Value>
-                <ItemsPanelTemplate>
-                    <StackPanel VerticalAlignment="Stretch" Orientation="Horizontal" />
-                </ItemsPanelTemplate>
-            </Setter.Value>
-        </Setter>
     </Style>
 
 </ResourceDictionary>

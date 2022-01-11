@@ -37,8 +37,8 @@ namespace Xceed.Wpf.DataGrid.Markup
       if( targetViewType == null )
         throw new ArgumentNullException( "targetViewType" );
 
-            if (!typeof(UIViewBase).IsAssignableFrom(targetViewType))
-        throw new ArgumentException("The specified view type must derive from ViewBase. Found " + targetViewType.Name, "targetViewType" );
+      if( !typeof( ViewBase ).IsAssignableFrom( targetViewType ) )
+        throw new ArgumentException( "The specified view type must derive from ViewBase.", "targetViewType" );
 
       m_targetViewType = targetViewType;
       m_targetViewTypeInitialized = true;
@@ -67,8 +67,8 @@ namespace Xceed.Wpf.DataGrid.Markup
         if( value == null )
           throw new ArgumentNullException( "TargetViewType" );
 
-        /*if (!typeof(UIViewBase).IsAssignableFrom(value))
-            throw new ArgumentException( "The specified view type must derive from ViewBase. Value " + value.Name, "TargetViewType" );*/
+          if( !typeof( ViewBase ).IsAssignableFrom( value ) )
+            throw new ArgumentException( "The specified view type must derive from ViewBase.", "TargetViewType" );
 
         if( m_targetViewTypeInitialized )
           throw new InvalidOperationException( "An attempt was made to set the TargetViewType property when it has already been initialized." );
@@ -159,19 +159,29 @@ namespace Xceed.Wpf.DataGrid.Markup
 
     public override int GetHashCode()
     {
+      var hashCode = 0;
+
       var elementType = this.TargetElementType;
       if( elementType != null )
-        return elementType.GetHashCode();
+      {
+        hashCode += elementType.GetHashCode();
+      }
 
       var viewType = this.TargetViewType;
       if( viewType != null )
-        return viewType.GetHashCode();
+      {
+        hashCode *= 11;
+        hashCode += viewType.GetHashCode();
+      }
 
       var themeType = this.ThemeType;
       if( themeType != null )
-        return themeType.GetHashCode();
+      {
+        hashCode *= 17;
+        hashCode += themeType.GetHashCode();
+      }
 
-      return 0;
+      return hashCode;
     }
   }
 }

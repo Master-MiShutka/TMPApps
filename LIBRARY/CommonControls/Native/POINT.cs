@@ -18,14 +18,14 @@ namespace TMP.Native
 
         public int X
         {
-            get { return _x; }
-            set { _x = value; }
+            get => _x;
+            set => _x = value;
         }
 
         public int Y
         {
-            get { return _y; }
-            set { _y = value; }
+            get => _y;
+            set => _y = value;
         }
 
         public override bool Equals(object obj)

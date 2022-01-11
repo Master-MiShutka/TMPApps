@@ -25,17 +25,17 @@ namespace Standard
 
     public static partial class Utility
     {
-        private static readonly Random _randomNumberGenerator = new Random();
+        private static readonly Random randomNumberGenerator = new Random();
 
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "ToDo")]
         private static bool _MemCmp(IntPtr left, IntPtr right, long cb)
         {
             int offset = 0;
 
-            for (; offset < (cb - sizeof(Int64)); offset += sizeof(Int64))
+            for (; offset < (cb - sizeof(long)); offset += sizeof(long))
             {
-                Int64 left64 = Marshal.ReadInt64(left, offset);
-                Int64 right64 = Marshal.ReadInt64(right, offset);
+                long left64 = Marshal.ReadInt64(left, offset);
+                long right64 = Marshal.ReadInt64(right, offset);
 
                 if (left64 != right64)
                 {
@@ -57,13 +57,13 @@ namespace Standard
             return true;
         }
 
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "ToDo")]
         public static Exception FailableFunction<T>(Func<T> function, out T result)
         {
             return FailableFunction(5, function, out result);
         }
 
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "ToDo")]
         public static T FailableFunction<T>(Func<T> function)
         {
             T result;
@@ -72,10 +72,11 @@ namespace Standard
             {
                 throw e;
             }
+
             return result;
         }
 
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "ToDo")]
         public static T FailableFunction<T>(int maxRetries, Func<T> function)
         {
             T result;
@@ -84,11 +85,12 @@ namespace Standard
             {
                 throw e;
             }
+
             return result;
         }
 
-        [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "ToDo")]
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "ToDo")]
         public static Exception FailableFunction<T>(int maxRetries, Func<T> function, out T result)
         {
             Assert.IsNotNull(function);
@@ -109,11 +111,12 @@ namespace Standard
                         return e;
                     }
                 }
+
                 ++i;
             }
         }
 
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "ToDo")]
         public static string GetHashString(string value)
         {
             using (MD5 md5 = MD5.Create())
@@ -126,38 +129,39 @@ namespace Standard
             }
         }
 
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "ToDo")]
         public static int GET_X_LPARAM(IntPtr lParam)
         {
             return LOWORD(lParam.ToInt32());
         }
 
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "ToDo")]
         public static int GET_Y_LPARAM(IntPtr lParam)
         {
             return HIWORD(lParam.ToInt32());
         }
 
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "ToDo")]
         public static int HIWORD(int i)
         {
             return (short)(i >> 16);
         }
 
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "ToDo")]
         public static int LOWORD(int i)
         {
             return (short)(i & 0xFFFF);
         }
 
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        [SuppressMessage("Microsoft.Security", "CA2122:DoNotIndirectlyExposeMethodsWithLinkDemands")]
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "ToDo")]
+        [SuppressMessage("Microsoft.Security", "CA2122:DoNotIndirectlyExposeMethodsWithLinkDemands", Justification = "ToDo")]
         public static bool AreStreamsEqual(Stream left, Stream right)
         {
             if (null == left)
             {
                 return right == null;
             }
+
             if (null == right)
             {
                 return false;
@@ -236,7 +240,7 @@ namespace Standard
             }
         }
 
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "ToDo")]
         public static bool GuidTryParse(string guidString, out Guid guid)
         {
             Verify.IsNeitherNullNorEmpty(guidString, "guidString");
@@ -252,36 +256,37 @@ namespace Standard
             catch (OverflowException)
             {
             }
+
             // Doesn't seem to be a valid guid.
             guid = default(Guid);
             return false;
         }
 
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "ToDo")]
         public static bool IsFlagSet(int value, int mask)
         {
             return 0 != (value & mask);
         }
 
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "ToDo")]
         public static bool IsFlagSet(uint value, uint mask)
         {
             return 0 != (value & mask);
         }
 
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "ToDo")]
         public static bool IsFlagSet(long value, long mask)
         {
             return 0 != (value & mask);
         }
 
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "ToDo")]
         public static bool IsFlagSet(ulong value, ulong mask)
         {
             return 0 != (value & mask);
         }
 
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "ToDo")]
         public static bool IsInterfaceImplemented(Type objectType, Type interfaceType)
         {
             Assert.IsNotNull(objectType);
@@ -295,7 +300,7 @@ namespace Standard
         /// Wrapper around File.Copy to provide feedback as to whether the file wasn't copied because it didn't exist.
         /// </summary>
         /// <returns></returns>
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "ToDo")]
         public static string SafeCopyFile(string sourceFileName, string destFileName, SafeCopyFileOptions options)
         {
             switch (options)
@@ -306,6 +311,7 @@ namespace Standard
                         File.Copy(sourceFileName, destFileName);
                         return destFileName;
                     }
+
                     return null;
 
                 case SafeCopyFileOptions.Overwrite:
@@ -324,9 +330,11 @@ namespace Standard
                             return path;
                         }
                     }
+
                     return null;
             }
-            throw new ArgumentException("Invalid enumeration value", "options");
+
+            throw new ArgumentException("Invalid enumeration value", nameof(options));
         }
 
         /// <summary>
@@ -337,7 +345,7 @@ namespace Standard
         /// Note that File.Delete, and by extension SafeDeleteFile, does not throw an exception
         /// if the file does not exist.
         /// </remarks>
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "ToDo")]
         public static void SafeDeleteFile(string path)
         {
             if (!string.IsNullOrEmpty(path))
@@ -346,8 +354,9 @@ namespace Standard
             }
         }
 
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        public static void SafeDispose<T>(ref T disposable) where T : IDisposable
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "ToDo")]
+        public static void SafeDispose<T>(ref T disposable)
+            where T : IDisposable
         {
             // Dispose can safely be called on an object multiple times.
             IDisposable t = disposable;
@@ -364,7 +373,7 @@ namespace Standard
         /// <param name="source">The StringBuilder to catenate the results into.</param>
         /// <param name="propertyName">The name of the property to be catenated.</param>
         /// <param name="value">The value of the property to be catenated.</param>
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "ToDo")]
         public static void GeneratePropertyString(StringBuilder source, string propertyName, string value)
         {
             Assert.IsNotNull(source);
@@ -398,9 +407,10 @@ namespace Standard
         /// <typeparam name="T"></typeparam>
         /// <param name="object"></param>
         /// <returns></returns>
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "ToDo")]
         [Obsolete]
-        public static string GenerateToString<T>(T @object) where T : struct
+        public static string GenerateToString<T>(T @object)
+            where T : struct
         {
             var sbRet = new StringBuilder();
             foreach (PropertyInfo property in typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance))
@@ -409,15 +419,17 @@ namespace Standard
                 {
                     sbRet.Append(", ");
                 }
+
                 Assert.AreEqual(0, property.GetIndexParameters().Length);
                 object value = property.GetValue(@object, null);
                 string format = null == value ? "{0}: <null>" : "{0}: \"{1}\"";
                 sbRet.AppendFormat(format, property.Name, value);
             }
+
             return sbRet.ToString();
         }
 
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "ToDo")]
         public static void CopyStream(Stream destination, Stream source)
         {
             Assert.IsNotNull(source);
@@ -452,7 +464,7 @@ namespace Standard
             destination.Position = 0;
         }
 
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "ToDo")]
         public static string HashStreamMD5(Stream stm)
         {
             stm.Position = 0;
@@ -468,7 +480,7 @@ namespace Standard
             return hashBuilder.ToString();
         }
 
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "ToDo")]
         public static void EnsureDirectory(string path)
         {
             if (!path.EndsWith(@"\", StringComparison.Ordinal))
@@ -484,7 +496,7 @@ namespace Standard
             }
         }
 
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "ToDo")]
         public static bool MemCmp(byte[] left, byte[] right, int cb)
         {
             Assert.IsNotNull(left);
@@ -510,56 +522,57 @@ namespace Standard
 
         private class _UrlDecoder
         {
-            private readonly Encoding _encoding;
+            private readonly Encoding encoding;
             private readonly char[] _charBuffer;
             private readonly byte[] _byteBuffer;
             private int _byteCount;
             private int _charCount;
 
-            [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+            [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "ToDo")]
             public _UrlDecoder(int size, Encoding encoding)
             {
-                _encoding = encoding;
-                _charBuffer = new char[size];
-                _byteBuffer = new byte[size];
+                this.encoding = encoding;
+                this._charBuffer = new char[size];
+                this._byteBuffer = new byte[size];
             }
 
-            [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+            [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "ToDo")]
             public void AddByte(byte b)
             {
-                _byteBuffer[_byteCount++] = b;
+                this._byteBuffer[this._byteCount++] = b;
             }
 
-            [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+            [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "ToDo")]
             public void AddChar(char ch)
             {
-                _FlushBytes();
-                _charBuffer[_charCount++] = ch;
+                this._FlushBytes();
+                this._charBuffer[this._charCount++] = ch;
             }
 
-            [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+            [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "ToDo")]
             private void _FlushBytes()
             {
-                if (_byteCount > 0)
+                if (this._byteCount > 0)
                 {
-                    _charCount += _encoding.GetChars(_byteBuffer, 0, _byteCount, _charBuffer, _charCount);
-                    _byteCount = 0;
+                    this._charCount += this.encoding.GetChars(this._byteBuffer, 0, this._byteCount, this._charBuffer, this._charCount);
+                    this._byteCount = 0;
                 }
             }
 
-            [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+            [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "ToDo")]
             public string GetString()
             {
-                _FlushBytes();
-                if (_charCount > 0)
+                this._FlushBytes();
+                if (this._charCount > 0)
                 {
-                    return new string(_charBuffer, 0, _charCount);
+                    return new string(this._charBuffer, 0, this._charCount);
                 }
-                return "";
+
+                return string.Empty;
             }
         }
 
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "ToDo")]
         public static string UrlDecode(string url)
         {
             if (url == null)
@@ -638,7 +651,7 @@ namespace Standard
         /// They are the 7-bit ASCII alphanumerics and the mark characters "-_.!~*'()".
         /// This implementation does not treat '~' as a safe character to be consistent with the System.Web version.
         /// </remarks>
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "ToDo")]
         public static string UrlEncode(string url)
         {
             if (url == null)
@@ -684,6 +697,7 @@ namespace Standard
                         buffer[writeIndex++] = _IntToHex(b & 0xF);
                     }
                 }
+
                 bytes = buffer;
                 Assert.AreEqual(buffer.Length, writeIndex);
             }
@@ -696,7 +710,7 @@ namespace Standard
         // the list "-" | "_" | "." | "!" | "~" | "*" | "'" | "(" | ")"
         // The System.Web version unnecessarily escapes '~', which should be okay...
         // Keeping that same pattern here just to be consistent.
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "ToDo")]
         private static bool _UrlEncodeIsSafe(byte b)
         {
             if (_IsAsciiAlphaNumeric(b))
@@ -710,7 +724,7 @@ namespace Standard
                 case '_':
                 case '.':
                 case '!':
-                //case '~':
+                // case '~':
                 case '*':
                 case '\'':
                 case '(':
@@ -721,7 +735,7 @@ namespace Standard
             return false;
         }
 
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "ToDo")]
         private static bool _IsAsciiAlphaNumeric(byte b)
         {
             return (b >= 'a' && b <= 'z')
@@ -729,7 +743,7 @@ namespace Standard
                 || (b >= '0' && b <= '9');
         }
 
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "ToDo")]
         private static byte _IntToHex(int n)
         {
             Assert.BoundedInteger(0, n, 16);
@@ -737,10 +751,11 @@ namespace Standard
             {
                 return (byte)(n + '0');
             }
+
             return (byte)(n - 10 + 'A');
         }
 
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "ToDo")]
         private static int _HexToInt(char h)
         {
             if (h >= '0' && h <= '9')
@@ -762,7 +777,7 @@ namespace Standard
             return -1;
         }
 
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "ToDo")]
         public static string MakeValidFileName(string invalidPath)
         {
             return invalidPath
@@ -777,7 +792,7 @@ namespace Standard
                 .Replace('|', '_');
         }
 
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "ToDo")]
         public static IEnumerable<string> GenerateFileNames(string directory, string primaryFileName, string extension)
         {
             Verify.IsNeitherNullNorEmpty(directory, "directory");
@@ -799,12 +814,12 @@ namespace Standard
                 {
                     // At this point we're hitting pathological cases.  This should stir things up enough that it works.
                     // If this fails because of naming conflicts after an extra 10 tries, then I don't care.
-                    yield return Path.Combine(directory, primaryFileName) + " (" + _randomNumberGenerator.Next(41, 9999) + ")" + extension;
+                    yield return Path.Combine(directory, primaryFileName) + " (" + randomNumberGenerator.Next(41, 9999) + ")" + extension;
                 }
             }
         }
 
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "ToDo")]
         public static bool TryFileMove(string sourceFileName, string destFileName)
         {
             if (!File.Exists(destFileName))
@@ -817,8 +832,10 @@ namespace Standard
                 {
                     return false;
                 }
+
                 return true;
             }
+
             return false;
         }
     }

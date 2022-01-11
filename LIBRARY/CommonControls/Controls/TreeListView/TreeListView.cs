@@ -30,8 +30,8 @@ namespace TMP.Wpf.CommonControls.Controls.TreeListView
 
         public ITreeModel Model
         {
-            get { return (ITreeModel)GetValue(ModelProperty); }
-            set { SetValue(ModelProperty, value);}
+            get => (ITreeModel)GetValue(ModelProperty);
+            set => SetValue(ModelProperty, value);
         }
         public static readonly DependencyProperty ModelProperty = DependencyProperty.Register(
             "Model", typeof(ITreeModel), typeof(TreeListView));

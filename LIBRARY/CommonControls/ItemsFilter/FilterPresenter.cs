@@ -76,12 +76,13 @@ namespace TMP.Wpf.CommonControls.ItemsFilter {
         /// <summary>
         /// Get or set a value that indicates whether the defined filter set to attached ItemsControl.Items.PropertyFilter.
         /// </summary>
-        public bool IsFilterActive {
-            get {
-                return isFilterActive;
-            }
-            set {
-                if (isFilterActive != value) {
+        public bool IsFilterActive
+        {
+            get => isFilterActive;
+            set
+            {
+                if (isFilterActive != value)
+                {
                     isFilterActive = value;
                     DeferRefresh().Dispose();
                 }
@@ -193,11 +194,14 @@ namespace TMP.Wpf.CommonControls.ItemsFilter {
         /// Gets a collection that contains information about the properties that are
         //     available on the items in a collection.
         /// </summary>
-        public ReadOnlyCollection<ItemPropertyInfo> ItemProperties {
-            get { return itemProperties; }
-            private set {
-                if (itemProperties != value) {
-                     itemProperties = value;
+        public ReadOnlyCollection<ItemPropertyInfo> ItemProperties
+        {
+            get => itemProperties;
+            private set
+            {
+                if (itemProperties != value)
+                {
+                    itemProperties = value;
                 }
             }
         }

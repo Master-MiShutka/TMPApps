@@ -8,8 +8,11 @@
         MatrixCellType CellType { get; }
 
         int GridRow { get; }
+
         int GridRowSpan { get; }
+
         int GridColumn { get; }
+
         int GridColumnSpan { get; }
 
         string ToolTip { get; set; }

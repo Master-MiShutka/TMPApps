@@ -1,14 +1,14 @@
-﻿//Copyright (c) Microsoft Corporation.  All rights reserved.
-
-using System;
-using System.IO;
-using System.Runtime.InteropServices;
-using Microsoft.WindowsAPICodePack.Shell.PropertySystem;
-using Microsoft.WindowsAPICodePack.Shell.Resources;
-using MS.WindowsAPICodePack.Internal;
+﻿// Copyright (c) Microsoft Corporation.  All rights reserved.
 
 namespace Microsoft.WindowsAPICodePack.Shell
 {
+    using System;
+    using System.IO;
+    using System.Runtime.InteropServices;
+    using Microsoft.WindowsAPICodePack.Shell.PropertySystem;
+    using Microsoft.WindowsAPICodePack.Shell.Resources;
+    using MS.WindowsAPICodePack.Internal;
+
     /// <summary>
     /// A helper class for Shell Objects
     /// </summary>
@@ -16,7 +16,10 @@ namespace Microsoft.WindowsAPICodePack.Shell
     {
         internal static string GetParsingName(IShellItem shellItem)
         {
-            if (shellItem == null) { return null; }
+            if (shellItem == null)
+            {
+                return null;
+            }
 
             string path = null;
 
@@ -36,7 +39,6 @@ namespace Microsoft.WindowsAPICodePack.Shell
             }
 
             return path;
-
         }
 
         internal static string GetAbsolutePath(string path)
@@ -45,7 +47,8 @@ namespace Microsoft.WindowsAPICodePack.Shell
             {
                 return path;
             }
-            return Path.GetFullPath((path));
+
+            return Path.GetFullPath(path);
         }
 
         internal static PropertyKey ItemTypePropertyKey = new PropertyKey(new Guid("28636AA6-953D-11D2-B5D6-00C04FD918D0"), 11);
@@ -54,9 +57,12 @@ namespace Microsoft.WindowsAPICodePack.Shell
         {
             if (shellItem != null)
             {
-                string itemType = null;                
+                string itemType = null;
                 HResult hr = shellItem.GetString(ref ItemTypePropertyKey, out itemType);
-                if (hr == HResult.Ok) { return itemType; }
+                if (hr == HResult.Ok)
+                {
+                    return itemType;
+                }
             }
 
             return null;
@@ -71,7 +77,7 @@ namespace Microsoft.WindowsAPICodePack.Shell
                 name, IntPtr.Zero, out pidl, (ShellNativeMethods.ShellFileGetAttributesOptions)0,
                 out sfgao);
 
-            return (CoreErrorHelper.Succeeded(retCode) ? pidl : IntPtr.Zero);
+            return CoreErrorHelper.Succeeded(retCode) ? pidl : IntPtr.Zero;
         }
 
         internal static IntPtr PidlFromShellItem(IShellItem nativeShellItem)
@@ -84,8 +90,7 @@ namespace Microsoft.WindowsAPICodePack.Shell
         {
             IntPtr pidl;
             int retCode = ShellNativeMethods.SHGetIDListFromObject(unknown, out pidl);
-            return (CoreErrorHelper.Succeeded(retCode) ? pidl : IntPtr.Zero);
+            return CoreErrorHelper.Succeeded(retCode) ? pidl : IntPtr.Zero;
         }
-
     }
 }

@@ -1,58 +1,76 @@
-﻿using ItemsFilter.View;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Reflection;
+﻿namespace ItemsFilter.Model
+{
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+    using System.ComponentModel;
+    using System.Diagnostics;
+    using System.Reflection;
+    using ItemsFilter.View;
 
-namespace ItemsFilter.Model {
     /// <summary>
     /// Base class for filter that using list of values.
     /// </summary>
     [View(typeof(MultiValueFilterView))]
-    public abstract class EqualFilter : PropertyFilter, IMultiValueFilter, IFilter {
+    public abstract class EqualFilter : PropertyFilter, IMultiValueFilter, IFilter
+    {
         private readonly ObservableCollection<object> selectedValues;
-        private readonly ReadOnlyObservableCollection<object> _selectedValues;
+        private readonly ReadOnlyObservableCollection<object> readonlySelectedValues;
+
         /// <summary>
         /// Initialize new instance of EqualFilter from deriver class.
         /// </summary>
-        protected EqualFilter() {
-            selectedValues = new ObservableCollection<object>();
-            _selectedValues = new ReadOnlyObservableCollection<object>(selectedValues);
+        protected EqualFilter()
+        {
+            this.selectedValues = new ObservableCollection<object>();
+            this.readonlySelectedValues = new ReadOnlyObservableCollection<object>(this.selectedValues);
             base.Name = ItemsFilter.Resources.Strings.EqualText;
         }
 
-        public ReadOnlyObservableCollection<object> SelectedValues {
-            get { return _selectedValues; }
-        }
-        
+        public ReadOnlyObservableCollection<object> SelectedValues => this.readonlySelectedValues;
 
-        public abstract IEnumerable AvailableValues {
+        public abstract IEnumerable AvailableValues
+        {
             get;
             set;
         }
-        
-        protected override void OnIsActiveChanged() {
-            if (!IsActive)
-                selectedValues.Clear();
+
+        protected override void OnIsActiveChanged()
+        {
+            if (!this.IsActive)
+            {
+                this.selectedValues.Clear();
+            }
+
             base.OnIsActiveChanged();
         }
-        public void SelectedValuesChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e) {
-            if (e.AddedItems != null) {
-                foreach (var item in e.AddedItems) {
-                    selectedValues.Add(item);
+
+        public void SelectedValuesChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            if (e.AddedItems != null)
+            {
+                foreach (var item in e.AddedItems)
+                {
+                    if (this.selectedValues.Contains(item) == false)
+                        this.selectedValues.Add(item);
                 }
-                IsActive = true;
+
+                this.IsActive = true;
             }
-            if (e.RemovedItems != null) {
-                foreach (var item in e.RemovedItems) {
-                    selectedValues.Remove(item);
+
+            if (e.RemovedItems != null)
+            {
+                foreach (var item in e.RemovedItems)
+                {
+                    this.selectedValues.Remove(item);
                 }
-                IsActive = selectedValues.Count > 0;
+
+                this.IsActive = this.selectedValues.Count > 0;
             }
-            OnIsActiveChanged();
+
+            this.OnIsActiveChanged();
+            this.RaiseFilterChanged();
         }
     }
 
@@ -60,70 +78,87 @@ namespace ItemsFilter.Model {
     /// Defines the logic for equality filter.
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class EqualFilter<T> : EqualFilter, IMultiValueFilter {
-        IEnumerable availableValues;
+    public class EqualFilter<T> : EqualFilter, IMultiValueFilter
+    {
+        private IEnumerable availableValues;
         protected readonly Func<object, object> getter;
-        
+
         /// <summary>
         /// Initializes a new instance of the <see cref="EqualFilter&lt;T&gt;"/> class.
         /// </summary>
         /// <param name="getter">Func that return from item values to compare.</param>
-        protected EqualFilter(Func<object, object> getter) {
+        protected EqualFilter(Func<object, object> getter)
+        {
             Debug.Assert(getter != null, "getter is null.");
             this.getter = getter;
         }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="EqualFilter&lt;T&gt;"/> class.
         /// </summary>
         /// <param name="getter">Func that return values to compare from item.</param>
         /// <param name="availableValues">Predefined set of available values.</param>
         protected internal EqualFilter(Func<object, object> getter, IEnumerable availableValues)
-            : this(getter) {
+            : this(getter)
+        {
             this.availableValues = availableValues;
         }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="EqualFilter&lt;T&gt;"/> class.
         /// </summary>
         /// <param name="propertyInfo">The property info.</param>
         public EqualFilter(ItemPropertyInfo propertyInfo)
-            : base() {
+            : base()
+        {
             Debug.Assert(propertyInfo != null, "propertyInfo is null.");
             Debug.Assert(propertyInfo.PropertyType == typeof(T), "Invalid propertyInfo.PropertyType, the return type is not matching the class generic type.");
             base.PropertyInfo = propertyInfo;
-            getter = ((PropertyDescriptor)(PropertyInfo.Descriptor)).GetValue;
+            this.getter = ((PropertyDescriptor)this.PropertyInfo.Descriptor).GetValue;
         }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="EqualFilter&lt;T&gt;"/> class
         /// </summary>
         /// <param name="propertyInfo">The property info.</param>
         /// <param name="availableValues">Predefined set of available values.</param>
         public EqualFilter(ItemPropertyInfo propertyInfo, IEnumerable availableValues)
-            : this(propertyInfo) {
+            : this(propertyInfo)
+        {
             this.availableValues = availableValues;
         }
+
         /// <summary>
         /// Set of available values that can be include in filter.
         /// </summary>
-        public override IEnumerable AvailableValues {
-            get {
-                return availableValues;
-            }
-            set {
-                if (availableValues != value) {
-                    availableValues = value;
+        public override IEnumerable AvailableValues
+        {
+            get => this.availableValues;
+
+            set
+            {
+                if (this.availableValues != value)
+                {
+                    this.availableValues = value;
                 }
             }
         }
+
         /// <summary>
         /// Determines whether the specified target is a match.
         /// </summary>
-        public override void IsMatch(FilterPresenter sender, FilterEventArgs e) {
-            if (e.Accepted) {
+        public override void IsMatch(FilterPresenter sender, FilterEventArgs e)
+        {
+            if (e.Accepted)
+            {
                 if (e.Item == null)
+                {
                     e.Accepted = false;
-                else {
-                    object value = getter(e.Item);
-                    e.Accepted = SelectedValues.Contains(value);
+                }
+                else
+                {
+                    object value = this.getter(e.Item);
+                    e.Accepted = this.SelectedValues.Contains(value);
                 }
             }
         }

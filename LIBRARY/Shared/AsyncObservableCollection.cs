@@ -1,15 +1,15 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using System.Collections.Specialized;
-using System.Collections.Generic;
-using System.Threading;
-using System.ComponentModel;
-
-namespace TMP.Shared
+﻿namespace TMP.Shared
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+    using System.Collections.Specialized;
+    using System.ComponentModel;
+    using System.Threading;
+
     public class AsyncObservableCollection<T> : ObservableCollection<T>
     {
-        private SynchronizationContext _synchronizationContext = SynchronizationContext.Current;
+        private SynchronizationContext synchronizationContext = SynchronizationContext.Current;
 
         public AsyncObservableCollection()
         {
@@ -22,15 +22,15 @@ namespace TMP.Shared
 
         protected override void OnCollectionChanged(NotifyCollectionChangedEventArgs e)
         {
-            if (SynchronizationContext.Current == _synchronizationContext)
+            if (SynchronizationContext.Current == this.synchronizationContext)
             {
                 // Execute the CollectionChanged event on the current thread
-                RaiseCollectionChanged(e);
+                this.RaiseCollectionChanged(e);
             }
             else
             {
                 // Raises the CollectionChanged event on the creator thread
-                _synchronizationContext.Send(RaiseCollectionChanged, e);
+                this.synchronizationContext.Send(this.RaiseCollectionChanged, e);
             }
         }
 
@@ -42,15 +42,15 @@ namespace TMP.Shared
 
         protected override void OnPropertyChanged(PropertyChangedEventArgs e)
         {
-            if (SynchronizationContext.Current == _synchronizationContext)
+            if (SynchronizationContext.Current == this.synchronizationContext)
             {
                 // Execute the PropertyChanged event on the current thread
-                RaisePropertyChanged(e);
+                this.RaisePropertyChanged(e);
             }
             else
             {
                 // Raises the PropertyChanged event on the creator thread
-                _synchronizationContext.Send(RaisePropertyChanged, e);
+                this.synchronizationContext.Send(this.RaisePropertyChanged, e);
             }
         }
 

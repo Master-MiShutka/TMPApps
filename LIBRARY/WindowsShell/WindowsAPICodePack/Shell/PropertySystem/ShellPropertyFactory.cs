@@ -1,14 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Reflection;
-using System.Runtime.InteropServices;
-using System.Runtime.InteropServices.ComTypes;
-using Microsoft.WindowsAPICodePack.Shell.Resources;
-
-namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
+﻿namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Linq.Expressions;
+    using System.Reflection;
+    using System.Runtime.InteropServices;
+    using System.Runtime.InteropServices.ComTypes;
+    using Microsoft.WindowsAPICodePack.Shell.Resources;
 
     /// <summary>
     /// Factory class for creating typed ShellProperties.
@@ -17,7 +16,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
     internal static class ShellPropertyFactory
     {
         // Constructor cache.  It takes object as the third param so a single function will suffice for both constructors.
-        private static Dictionary<int, Func<PropertyKey, ShellPropertyDescription, object, IShellProperty>> _storeCache
+        private static Dictionary<int, Func<PropertyKey, ShellPropertyDescription, object, IShellProperty>> storeCache
             = new Dictionary<int, Func<PropertyKey, ShellPropertyDescription, object, IShellProperty>>();
 
         /// <summary>
@@ -55,11 +54,11 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
             int hash = GetTypeHash(type, thirdType);
 
             Func<PropertyKey, ShellPropertyDescription, object, IShellProperty> ctor;
-            if (!_storeCache.TryGetValue(hash, out ctor))
+            if (!storeCache.TryGetValue(hash, out ctor))
             {
                 Type[] argTypes = { typeof(PropertyKey), typeof(ShellPropertyDescription), thirdType };
                 ctor = ExpressConstructor(type, argTypes);
-                _storeCache.Add(hash, ctor);
+                storeCache.Add(hash, ctor);
             }
 
             return ctor(propKey, propDesc, thirdArg);
@@ -68,76 +67,76 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
         /// <summary>
         /// Converts VarEnum to its associated .net Type.
         /// </summary>
-        /// <param name="VarEnumType">VarEnum value</param>
+        /// <param name="varEnumType">VarEnum value</param>
         /// <returns>Associated .net equivelent.</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity")]
-        public static Type VarEnumToSystemType(VarEnum VarEnumType)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity", Justification = "ToDo")]
+        public static Type VarEnumToSystemType(VarEnum varEnumType)
         {
-            switch (VarEnumType)
+            switch (varEnumType)
             {
-                case (VarEnum.VT_EMPTY):
-                case (VarEnum.VT_NULL):
-                    return typeof(Object);
-                case (VarEnum.VT_UI1):
-                    return typeof(Byte?);
-                case (VarEnum.VT_I2):
-                    return typeof(Int16?);
-                case (VarEnum.VT_UI2):
-                    return typeof(UInt16?);
-                case (VarEnum.VT_I4):
-                    return typeof(Int32?);
-                case (VarEnum.VT_UI4):
-                    return typeof(UInt32?);
-                case (VarEnum.VT_I8):
-                    return typeof(Int64?);
-                case (VarEnum.VT_UI8):
-                    return typeof(UInt64?);
-                case (VarEnum.VT_R8):
-                    return typeof(Double?);
-                case (VarEnum.VT_BOOL):
-                    return typeof(Boolean?);
-                case (VarEnum.VT_FILETIME):
+                case VarEnum.VT_EMPTY:
+                case VarEnum.VT_NULL:
+                    return typeof(object);
+                case VarEnum.VT_UI1:
+                    return typeof(byte?);
+                case VarEnum.VT_I2:
+                    return typeof(short?);
+                case VarEnum.VT_UI2:
+                    return typeof(ushort?);
+                case VarEnum.VT_I4:
+                    return typeof(int?);
+                case VarEnum.VT_UI4:
+                    return typeof(uint?);
+                case VarEnum.VT_I8:
+                    return typeof(long?);
+                case VarEnum.VT_UI8:
+                    return typeof(ulong?);
+                case VarEnum.VT_R8:
+                    return typeof(double?);
+                case VarEnum.VT_BOOL:
+                    return typeof(bool?);
+                case VarEnum.VT_FILETIME:
                     return typeof(DateTime?);
-                case (VarEnum.VT_CLSID):
+                case VarEnum.VT_CLSID:
                     return typeof(IntPtr?);
-                case (VarEnum.VT_CF):
+                case VarEnum.VT_CF:
                     return typeof(IntPtr?);
-                case (VarEnum.VT_BLOB):
-                    return typeof(Byte[]);
-                case (VarEnum.VT_LPWSTR):
-                    return typeof(String);
-                case (VarEnum.VT_UNKNOWN):
+                case VarEnum.VT_BLOB:
+                    return typeof(byte[]);
+                case VarEnum.VT_LPWSTR:
+                    return typeof(string);
+                case VarEnum.VT_UNKNOWN:
                     return typeof(IntPtr?);
-                case (VarEnum.VT_STREAM):
+                case VarEnum.VT_STREAM:
                     return typeof(IStream);
-                case (VarEnum.VT_VECTOR | VarEnum.VT_UI1):
-                    return typeof(Byte[]);
-                case (VarEnum.VT_VECTOR | VarEnum.VT_I2):
-                    return typeof(Int16[]);
-                case (VarEnum.VT_VECTOR | VarEnum.VT_UI2):
-                    return typeof(UInt16[]);
-                case (VarEnum.VT_VECTOR | VarEnum.VT_I4):
-                    return typeof(Int32[]);
-                case (VarEnum.VT_VECTOR | VarEnum.VT_UI4):
-                    return typeof(UInt32[]);
-                case (VarEnum.VT_VECTOR | VarEnum.VT_I8):
-                    return typeof(Int64[]);
-                case (VarEnum.VT_VECTOR | VarEnum.VT_UI8):
-                    return typeof(UInt64[]);
-                case (VarEnum.VT_VECTOR | VarEnum.VT_R8):
-                    return typeof(Double[]);
-                case (VarEnum.VT_VECTOR | VarEnum.VT_BOOL):
-                    return typeof(Boolean[]);
-                case (VarEnum.VT_VECTOR | VarEnum.VT_FILETIME):
+                case VarEnum.VT_VECTOR | VarEnum.VT_UI1:
+                    return typeof(byte[]);
+                case VarEnum.VT_VECTOR | VarEnum.VT_I2:
+                    return typeof(short[]);
+                case VarEnum.VT_VECTOR | VarEnum.VT_UI2:
+                    return typeof(ushort[]);
+                case VarEnum.VT_VECTOR | VarEnum.VT_I4:
+                    return typeof(int[]);
+                case VarEnum.VT_VECTOR | VarEnum.VT_UI4:
+                    return typeof(uint[]);
+                case VarEnum.VT_VECTOR | VarEnum.VT_I8:
+                    return typeof(long[]);
+                case VarEnum.VT_VECTOR | VarEnum.VT_UI8:
+                    return typeof(ulong[]);
+                case VarEnum.VT_VECTOR | VarEnum.VT_R8:
+                    return typeof(double[]);
+                case VarEnum.VT_VECTOR | VarEnum.VT_BOOL:
+                    return typeof(bool[]);
+                case VarEnum.VT_VECTOR | VarEnum.VT_FILETIME:
                     return typeof(DateTime[]);
-                case (VarEnum.VT_VECTOR | VarEnum.VT_CLSID):
+                case VarEnum.VT_VECTOR | VarEnum.VT_CLSID:
                     return typeof(IntPtr[]);
-                case (VarEnum.VT_VECTOR | VarEnum.VT_CF):
+                case VarEnum.VT_VECTOR | VarEnum.VT_CF:
                     return typeof(IntPtr[]);
-                case (VarEnum.VT_VECTOR | VarEnum.VT_LPWSTR):
-                    return typeof(String[]);
+                case VarEnum.VT_VECTOR | VarEnum.VT_LPWSTR:
+                    return typeof(string[]);
                 default:
-                    return typeof(Object);
+                    return typeof(object);
             }
         }
 
@@ -154,12 +153,12 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
             if (ctorInfo == null)
             {
-                throw new ArgumentException(LocalizedMessages.ShellPropertyFactoryConstructorNotFound, "type");
+                throw new ArgumentException(LocalizedMessages.ShellPropertyFactoryConstructorNotFound, nameof(type));
             }
 
             var key = Expression.Parameter(argTypes[0], "propKey");
             var desc = Expression.Parameter(argTypes[1], "desc");
-            var third = Expression.Parameter(typeof(object), "third"); //needs to be object to avoid casting later
+            var third = Expression.Parameter(typeof(object), "third"); // needs to be object to avoid casting later
 
             var create = Expression.New(ctorInfo, key, desc,
                 Expression.Convert(third, argTypes[2]));
@@ -179,8 +178,9 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
             int hash = 0;
             foreach (Type type in types)
             {
-                hash = hash * 31 + type.GetHashCode();
+                hash = (hash * 31) + type.GetHashCode();
             }
+
             return hash;
         }
 

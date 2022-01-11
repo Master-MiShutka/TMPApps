@@ -1,9 +1,9 @@
-using System.Windows;
-using System.Windows.Media;
-using TMP.PrintEngine.Utils;
-
 namespace TMP.PrintEngine.Paginators
 {
+    using System.Windows;
+    using System.Windows.Media;
+    using TMP.PrintEngine.Utils;
+
     public class DataTablePaginator : ItemsPaginator
     {
         public DataTablePaginator(DrawingVisual source, Size printSize, Thickness pageMargins, PrintTableDefination printTableDefination)
@@ -12,37 +12,38 @@ namespace TMP.PrintEngine.Paginators
         }
 
         protected override int GetHorizontalPageCount()
-        {            
+        {
             var pageCountX = 0;
             double totalWidth = 0;
             double lastTotalWidth = 0;
             int columnCount = 0;
-            for (var i = 0; i < PrintTableDefination.ColumnWidths.Count; i++)
+            for (var i = 0; i < this.PrintTableDefination.ColumnWidths.Count; i++)
             {
-                lastTotalWidth = totalWidth + PrintTableDefination.ColumnWidths[i];
-                if (totalWidth + PrintTableDefination.ColumnWidths[i] <= PrintablePageWidth)
+                lastTotalWidth = totalWidth + this.PrintTableDefination.ColumnWidths[i];
+                if (totalWidth + this.PrintTableDefination.ColumnWidths[i] <= this.PrintablePageWidth)
                 {
-                    totalWidth += PrintTableDefination.ColumnWidths[i];
+                    totalWidth += this.PrintTableDefination.ColumnWidths[i];
                     columnCount++;
                 }
                 else
                 {
                     pageCountX++;
-                    ColumnCount.Add(columnCount);
-                    AdjustedPageWidths.Add(totalWidth);
+                    this.ColumnCount.Add(columnCount);
+                    this.AdjustedPageWidths.Add(totalWidth);
                     columnCount = 0;
                     totalWidth = 0;
                     i--;
                 }
-
             }
-            ColumnCount.Add(columnCount);
-            AdjustedPageWidths.Add(lastTotalWidth);
+
+            this.ColumnCount.Add(columnCount);
+            this.AdjustedPageWidths.Add(lastTotalWidth);
             return pageCountX + 1;
         }
+
         protected override double GetPageWidth(int pageNumber)
         {
-            return AdjustedPageWidths[pageNumber];
+            return this.AdjustedPageWidths[pageNumber];
         }
     }
 }

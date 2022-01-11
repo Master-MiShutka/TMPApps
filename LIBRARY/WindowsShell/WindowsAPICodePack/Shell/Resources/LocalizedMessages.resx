@@ -295,7 +295,7 @@
     <value>Users Libraries</value>
   </data>
   <data name="FolderTypeVideos" xml:space="preserve">
-    <value>Videos</value>
+    <value>Videos </value>
   </data>
   <data name="IsExpandedModeCannotBeChanged" xml:space="preserve">
     <value>IsExpandedMode cannot be changed while dialog is showing.</value>

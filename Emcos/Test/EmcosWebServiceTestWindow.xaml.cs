@@ -38,12 +38,12 @@ namespace Test
 
             var s = SystemParameters.VerticalScrollBarWidth;
 
-            ParseGR();
+            //ParseGR();
         }
 
         private void ParseGR()
         {
-            XDocument xdoc = XDocument.Load(@"y:\GetGRInfo.xml");
+            XDocument xdoc = XDocument.Load(@"t:\GetGRInfo.xml");
 
             if (xdoc.Root == null) throw new ArgumentException("Invalid xml format");
 
@@ -258,13 +258,13 @@ namespace Test
 
         private void BtnDialogTest_Progress_Click(object sender, RoutedEventArgs e)
         {
-            var msg = this.DialogProgress("efefef", null, TMPApplication.WpfDialogs.DialogMode.Ok, false);
+            var msg = this.DialogProgress("efefef", TMPApplication.WpfDialogs.DialogMode.Ok, false);
             msg.Show();
         }
 
         private void BtnDialogTest_ProgressIntermediate_Click(object sender, RoutedEventArgs e)
         {
-            var msg = this.DialogProgress("efefef", null, TMPApplication.WpfDialogs.DialogMode.Ok, true);
+            var msg = this.DialogProgress("efefef", TMPApplication.WpfDialogs.DialogMode.Ok, true);
             msg.Show();
         }
 

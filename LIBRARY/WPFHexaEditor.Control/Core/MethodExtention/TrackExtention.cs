@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
-
-namespace WPFHexaEditor.Core.MethodExtention
+﻿namespace WPFHexaEditor.Core.MethodExtention
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Windows.Controls;
+    using System.Windows.Controls.Primitives;
+
     public static class TrackExtention
     {
         /// <summary>
@@ -24,13 +24,13 @@ namespace WPFHexaEditor.Core.MethodExtention
         /// Get actual bottom position of track
         /// </summary>
         public static double Bottom(this Track s)
-        {            
+        {
             Grid parent = s.Parent as Grid;
 
             Track TrackControl = (Track)parent.Children[2];
 
-            return TrackControl.Top() + 
-                TrackControl.ActualHeight + 
+            return TrackControl.Top() +
+                TrackControl.ActualHeight +
                 parent.Margin.Top + 1;
         }
 
@@ -39,10 +39,9 @@ namespace WPFHexaEditor.Core.MethodExtention
         /// </summary>
         public static double ButtonHeight(this Track s)
         {
-            //Grid parent = s.Parent as Grid;
+            // Grid parent = s.Parent as Grid;
 
-            //Track TrackControl = (Track)parent.Children[2];
-            
+            // Track TrackControl = (Track)parent.Children[2];
             return s.Top() - 1;
         }
 
@@ -61,6 +60,5 @@ namespace WPFHexaEditor.Core.MethodExtention
         {
             return s.ActualHeight / maximum;
         }
-
     }
 }

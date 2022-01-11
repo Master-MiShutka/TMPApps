@@ -1,15 +1,15 @@
-﻿using System;
-using System.Runtime.InteropServices;
-using System.Windows;
-
-namespace TMPApplication.Utils
+﻿namespace TMPApplication.Utils
 {
+    using System;
+    using System.Runtime.InteropServices;
+    using System.Windows;
+
     /// <summary>
     /// Source: https://codekong.wordpress.com/2010/11/10/custom-window-style-and-accounting-for-the-taskbar/
     /// </summary>
     internal static class WindowSizing
     {
-        const int MONITOR_DEFAULTTONEAREST = 0x00000002;
+        private const int MONITOR_DEFAULTTONEAREST = 0x00000002;
 
         #region DLLImports
 
@@ -17,7 +17,7 @@ namespace TMPApplication.Utils
         public static extern int SHAppBarMessage(int dwMessage, ref APPBARDATA pData);
 
         [DllImport("user32", SetLastError = true)]
-        static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
+        private static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
 
         [DllImport("user32")]
         internal static extern bool GetMonitorInfo(IntPtr hMonitor, MONITORINFO lpmi);
@@ -38,9 +38,17 @@ namespace TMPApplication.Utils
         private static MINMAXINFO AdjustWorkingAreaForAutoHide(IntPtr monitorContainingApplication, MINMAXINFO mmi)
         {
             IntPtr hwnd = FindWindow("Shell_TrayWnd", null);
-            if (hwnd == null) return mmi;
+            if (hwnd == null)
+            {
+                return mmi;
+            }
+
             IntPtr monitorWithTaskbarOnIt = MonitorFromWindow(hwnd, MONITOR_DEFAULTTONEAREST);
-            if (!monitorContainingApplication.Equals(monitorWithTaskbarOnIt)) return mmi;
+            if (!monitorContainingApplication.Equals(monitorWithTaskbarOnIt))
+            {
+                return mmi;
+            }
+
             APPBARDATA abd = new APPBARDATA();
             abd.cbSize = Marshal.SizeOf(abd);
             abd.hWnd = hwnd;
@@ -48,7 +56,10 @@ namespace TMPApplication.Utils
             int uEdge = GetEdge(abd.rc);
             bool autoHide = System.Convert.ToBoolean(SHAppBarMessage((int)ABMsg.ABM_GETSTATE, ref abd));
 
-            if (!autoHide) return mmi;
+            if (!autoHide)
+            {
+                return mmi;
+            }
 
             switch (uEdge)
             {
@@ -73,6 +84,7 @@ namespace TMPApplication.Utils
                 default:
                     return mmi;
             }
+
             return mmi;
         }
 
@@ -80,19 +92,28 @@ namespace TMPApplication.Utils
         {
             int uEdge = -1;
             if (rc.top == rc.left && rc.bottom > rc.right)
+            {
                 uEdge = (int)ABEdge.ABE_LEFT;
+            }
             else if (rc.top == rc.left && rc.bottom < rc.right)
+            {
                 uEdge = (int)ABEdge.ABE_TOP;
+            }
             else if (rc.top > rc.left)
+            {
                 uEdge = (int)ABEdge.ABE_BOTTOM;
+            }
             else
+            {
                 uEdge = (int)ABEdge.ABE_RIGHT;
+            }
+
             return uEdge;
         }
 
         public static void WindowInitialized(Window window)
         {
-            IntPtr handle = (new System.Windows.Interop.WindowInteropHelper(window)).Handle;
+            IntPtr handle = new System.Windows.Interop.WindowInteropHelper(window).Handle;
             System.Windows.Interop.HwndSource.FromHwnd(handle).AddHook(new System.Windows.Interop.HwndSourceHook(WindowProc));
         }
 
@@ -139,7 +160,7 @@ namespace TMPApplication.Utils
             ABE_LEFT = 0,
             ABE_TOP = 1,
             ABE_RIGHT = 2,
-            ABE_BOTTOM = 3
+            ABE_BOTTOM = 3,
         }
 
         public enum ABMsg
@@ -154,7 +175,7 @@ namespace TMPApplication.Utils
             ABM_GETAUTOHIDEBAR = 7,
             ABM_SETAUTOHIDEBAR = 8,
             ABM_WINDOWPOSCHANGED = 9,
-            ABM_SETSTATE = 10
+            ABM_SETSTATE = 10,
         }
 
         [StructLayout(LayoutKind.Sequential)]
@@ -176,7 +197,7 @@ namespace TMPApplication.Utils
             public POINT ptMaxPosition;
             public POINT ptMinTrackSize;
             public POINT ptMaxTrackSize;
-        };
+        }
 
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
         public class MONITORINFO

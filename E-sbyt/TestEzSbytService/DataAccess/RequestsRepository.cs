@@ -58,7 +58,7 @@ namespace TMP.Work.AmperM.TestApp.DataAccess
                     fileName = Properties.Settings.Default.DataFileName;
             App.ToLogInfo(String.Format("Чтение репозитория из файла <{0}>", fileName));
             fileName = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(Application.ResourceAssembly.Location), REPOSITORY_FILE_NAME);
-            IList<IRepositoryItem> list = BaseRepository<List<IRepositoryItem>>.GzJsonDeSerialize(
+            IList<IRepositoryItem> list = BaseDeserializer<List<IRepositoryItem>>.GzJsonDeSerialize(
                 fileName,
                 (e) =>
                 {
@@ -76,7 +76,7 @@ namespace TMP.Work.AmperM.TestApp.DataAccess
             if (fileName == null)
                 fileName = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(Application.ResourceAssembly.Location), REPOSITORY_FILE_NAME);
             App.ToLogInfo(String.Format("Запись репозитория в файл <{0}>", fileName));
-            BaseRepository<List<IRepositoryItem>>.GzJsonSerialize(
+            BaseDeserializer<List<IRepositoryItem>>.GzJsonSerialize(
                 _repositoryItems.ToList(),
                 fileName,
                 (e) =>

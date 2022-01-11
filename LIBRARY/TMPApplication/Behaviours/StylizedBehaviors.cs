@@ -1,15 +1,16 @@
-﻿using System.ComponentModel;
-using System.Windows;
-using Interactivity;
-
-namespace TMPApplication.Behaviours
+﻿namespace TMPApplication.Behaviours
 {
+    using System.ComponentModel;
+    using System.Windows;
+    using Interactivity;
+
     public class StylizedBehaviors
     {
         public static readonly DependencyProperty BehaviorsProperty = DependencyProperty.RegisterAttached("Behaviors",
                                           typeof(StylizedBehaviorCollection),
                                           typeof(StylizedBehaviors),
                                           new FrameworkPropertyMetadata(null, OnPropertyChanged));
+
         public static StylizedBehaviorCollection GetBehaviors(DependencyObject uie)
         {
             return (StylizedBehaviorCollection)uie.GetValue(BehaviorsProperty);
@@ -69,12 +70,12 @@ namespace TMPApplication.Behaviours
             {
                 element.Unloaded += FrameworkElementUnloaded;
             }
+
             element.Dispatcher.ShutdownStarted += Dispatcher_ShutdownStarted;
         }
 
         private static void Dispatcher_ShutdownStarted(object sender, System.EventArgs e)
         {
-            ;
         }
 
         private static void FrameworkElementUnloaded(object sender, RoutedEventArgs e)
@@ -85,11 +86,13 @@ namespace TMPApplication.Behaviours
             {
                 return;
             }
+
             BehaviorCollection itemBehaviors = Interaction.GetBehaviors(element);
             foreach (var behavior in itemBehaviors)
             {
                 behavior.Detach();
             }
+
             element.Loaded += FrameworkElementLoaded;
         }
 
@@ -100,6 +103,7 @@ namespace TMPApplication.Behaviours
             {
                 return;
             }
+
             element.Loaded -= FrameworkElementLoaded;
             BehaviorCollection itemBehaviors = Interaction.GetBehaviors(element);
             foreach (var behavior in itemBehaviors)

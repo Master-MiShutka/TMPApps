@@ -14,9 +14,9 @@ using System.Windows.Shapes;
 
 namespace TMP.Work.Emcos.Controls
 {
-    using Model.Balans;
+    using Model.Balance;
     /// <summary>
-    /// Interaction logic for BalansItemDataVisualizer.xaml
+    /// Interaction logic for BalanceItemDataVisualizer.xaml
     /// </summary>
     public partial class ArchiveDataVisualizer : UserControl
     {
@@ -24,5 +24,21 @@ namespace TMP.Work.Emcos.Controls
         {
             InitializeComponent();
         }
+
+        public IEnergy Energy
+        {
+            get { return (IEnergy)GetValue(EnergyProperty); }
+            set { SetValue(EnergyProperty, value); }
+        }
+        public static readonly DependencyProperty EnergyProperty =
+            DependencyProperty.Register("Energy", typeof(IEnergy), typeof(ArchiveDataVisualizer), new PropertyMetadata(null));
+
+        public IList<DateTime> Dates
+        {
+            get { return (IList<DateTime>)GetValue(DatesProperty); }
+            set { SetValue(DatesProperty, value); }
+        }
+        public static readonly DependencyProperty DatesProperty =
+            DependencyProperty.Register("Dates", typeof(IList<DateTime>), typeof(ArchiveDataVisualizer), new PropertyMetadata(null));
     }
 }

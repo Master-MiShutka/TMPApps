@@ -1,48 +1,50 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Windows;
-
-namespace TMPApplication
+﻿namespace TMPApplication
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics;
+    using System.Linq;
+    using System.Text;
+    using System.Windows;
+
     partial class TMPApp
     {
-        BindingErrorListener errorListener;
+        private BindingErrorListener errorListener;
+
         /// <summary>
         /// Запуск отслеживания ошибок привязки
         /// </summary>
         public void AttachBindingErrorListener()
         {
-            errorListener = new BindingErrorListener();
-            errorListener.ErrorCatched += OnBindingErrorCatched;
+            this.errorListener = new BindingErrorListener();
+            this.errorListener.ErrorCatched += this.OnBindingErrorCatched;
         }
+
         /// <summary>
         /// Прекращение отслеживания ошибок привязки
         /// </summary>
         public void DetachBindingErrorListener()
         {
-            if (IsAttached)
+            if (this.IsAttached)
             {
-                errorListener.ErrorCatched -= OnBindingErrorCatched;
-                errorListener.Dispose();
-                errorListener = null;
+                this.errorListener.ErrorCatched -= this.OnBindingErrorCatched;
+                this.errorListener.Dispose();
+                this.errorListener = null;
             }
         }
+
         [DebuggerStepThrough]
-        void OnBindingErrorCatched(string message)
+        private void OnBindingErrorCatched(string message)
         {
-            LogError(message);
-            //throw new BindingException(message);
+            logger?.Error(message);
+
+            // throw new BindingException(message);
         }
+
         /// <summary>
         /// Включено ли отслеживание ошибок привязки
         /// </summary>
-        public bool IsAttached
-        {
-            get { return errorListener != null; }
-        }
+        public bool IsAttached => this.errorListener != null;
 
         private static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
@@ -55,7 +57,7 @@ namespace TMPApplication
 #if DEBUG
             System.Diagnostics.Debug.WriteLine(TMPApp.GetExceptionDetails(e.Exception));
 #endif
-            LogException(e.Exception);
+            logger?.Error(e.Exception);
             if (e.Exception.GetType() == typeof(System.IO.FileNotFoundException))
             {
                 ShowError("Не удалось найти файл.\n" + e.Exception.Message + "\nПопробуйте переустановить приложение.");
@@ -68,30 +70,56 @@ namespace TMPApplication
             {
                 ShowError(e.Exception);
             }
+
             e.Handled = true;
         }
 
         public static string GetExceptionDetails(Exception exp)
         {
             string message = string.Empty;
-            try
+            if (exp is AggregateException)
             {
-                // Write Message tree of inner exception into textual representation
-                message = exp.Message;
-
-                Exception innerEx = exp.InnerException;
-
-                for (int i = 0; innerEx != null; i++, innerEx = innerEx.InnerException)
+                AggregateException ae = exp as AggregateException;
+                foreach (var e in ae.InnerExceptions)
                 {
-                    string spaces = string.Empty;
+                    message += Environment.NewLine + e.Message + Environment.NewLine;
+                }
 
-                    for (int j = 0; j < i; j++)
-                        spaces += "  ";
+                ParseException(ae.InnerExceptions.LastOrDefault());
+            }
+            else
+            {
+                ParseException(exp);
+            }
 
-                    message += "\n" + spaces + "└─>" + innerEx.Message;
+            message += "\n" + exp.StackTrace;
+
+            void ParseException(Exception e)
+            {
+                try
+                {
+                    // Write Message tree of inner exception into textual representation
+                    message = e.Message;
+
+                    Exception innerEx = e.InnerException;
+
+                    for (int i = 0; innerEx != null; i++, innerEx = innerEx.InnerException)
+                    {
+                        string spaces = string.Empty;
+
+                        for (int j = 0; j < i; j++)
+                        {
+                            spaces += "  ";
+                        }
+
+                        message += "\n" + spaces + "└─>" + innerEx.Message;
+                    }
+                }
+                catch
+                {
                 }
             }
-            catch { }
+
             return message;
         }
     }

@@ -16,7 +16,7 @@ namespace Standard
 
     public static partial class Utility
     {
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "ToDo")]
         public static byte[] GetBytesFromBitmapSource(BitmapSource bmp)
         {
             int width = bmp.PixelWidth;
@@ -30,13 +30,13 @@ namespace Standard
             return pixels;
         }
 
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "ToDo")]
         public static BitmapSource GenerateBitmapSource(ImageSource img)
         {
             return GenerateBitmapSource(img, img.Width, img.Height);
         }
 
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "ToDo")]
         public static BitmapSource GenerateBitmapSource(ImageSource img, double renderWidth, double renderHeight)
         {
             var dv = new DrawingVisual();
@@ -44,12 +44,13 @@ namespace Standard
             {
                 dc.DrawImage(img, new Rect(0, 0, renderWidth, renderHeight));
             }
+
             var bmp = new RenderTargetBitmap((int)renderWidth, (int)renderHeight, 96, 96, PixelFormats.Pbgra32);
             bmp.Render(dv);
             return bmp;
         }
 
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "ToDo")]
         public static BitmapSource GenerateBitmapSource(UIElement element, double renderWidth, double renderHeight, bool performLayout)
         {
             if (performLayout)
@@ -64,11 +65,12 @@ namespace Standard
             {
                 dc.DrawRectangle(new VisualBrush(element), null, new Rect(0, 0, renderWidth, renderHeight));
             }
+
             bmp.Render(dv);
             return bmp;
         }
 
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "ToDo")]
         public static void SaveToPng(BitmapSource source, string fileName)
         {
             var encoder = new PngBitmapEncoder();
@@ -83,7 +85,7 @@ namespace Standard
         // This can be cached.  It's not going to change under reasonable circumstances.
         private static int s_bitDepth; // = 0;
 
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "ToDo")]
         private static int _GetBitDepth()
         {
             if (s_bitDepth == 0)
@@ -93,29 +95,30 @@ namespace Standard
                     s_bitDepth = NativeMethods.GetDeviceCaps(dc, DeviceCap.BITSPIXEL) * NativeMethods.GetDeviceCaps(dc, DeviceCap.PLANES);
                 }
             }
+
             return s_bitDepth;
         }
 
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "ToDo")]
         public static BitmapFrame GetBestMatch(IList<BitmapFrame> frames, int width, int height)
         {
             return _GetBestMatch(frames, _GetBitDepth(), width, height);
         }
 
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "ToDo")]
         private static int _MatchImage(BitmapFrame frame, int bitDepth, int width, int height, int bpp)
         {
-            int score = 2 * _WeightedAbs(bpp, bitDepth, false) +
+            int score = (2 * _WeightedAbs(bpp, bitDepth, false)) +
                     _WeightedAbs(frame.PixelWidth, width, true) +
                     _WeightedAbs(frame.PixelHeight, height, true);
 
             return score;
         }
 
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "ToDo")]
         private static int _WeightedAbs(int valueHave, int valueWant, bool fPunish)
         {
-            int diff = (valueHave - valueWant);
+            int diff = valueHave - valueWant;
 
             if (diff < 0)
             {
@@ -128,7 +131,7 @@ namespace Standard
         /// From a list of BitmapFrames find the one that best matches the requested dimensions.
         /// The methods used here are copied from Win32 sources.  We want to be consistent with
         /// system behaviors.
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "ToDo")]
         private static BitmapFrame _GetBestMatch(IList<BitmapFrame> frames, int bitDepth, int width, int height)
         {
             int bestScore = int.MaxValue;
@@ -167,13 +170,13 @@ namespace Standard
             return frames[bestIndex];
         }
 
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "ToDo")]
         public static int RGB(Color c)
         {
             return c.B | (c.G << 8) | (c.R << 16);
         }
 
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "ToDo")]
         public static int AlphaRGB(Color c)
         {
             return c.B | (c.G << 8) | (c.R << 16) | (c.A << 24);
@@ -182,7 +185,7 @@ namespace Standard
         /// <summary>Convert a native integer that represent a color with an alpha channel into a Color struct.</summary>
         /// <param name="color">The integer that represents the color.  Its bits are of the format 0xAARRGGBB.</param>
         /// <returns>A Color representation of the parameter.</returns>
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "ToDo")]
         public static Color ColorFromArgbDword(uint color)
         {
             return Color.FromArgb(
@@ -192,13 +195,14 @@ namespace Standard
                 (byte)((color & 0x000000FF) >> 0));
         }
 
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "ToDo")]
         public static bool AreImageSourcesEqual(ImageSource left, ImageSource right)
         {
             if (null == left)
             {
                 return right == null;
             }
+
             if (null == right)
             {
                 return false;
@@ -220,8 +224,8 @@ namespace Standard
 
         // Caller is responsible for destroying the HICON
         // Caller is responsible to ensure that GDI+ has been initialized.
-        [SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times")]
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        [SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times", Justification = "ToDo")]
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "ToDo")]
         public static IntPtr GenerateHICON(ImageSource image, Size dimensions)
         {
             if (image == null)
@@ -253,12 +257,12 @@ namespace Standard
                 }
                 else if (renderRatio > aspectRatio)
                 {
-                    double scaledRenderWidth = (image.Width / image.Height) * dimensions.Width;
+                    double scaledRenderWidth = image.Width / image.Height * dimensions.Width;
                     drawingDimensions = new Rect((dimensions.Width - scaledRenderWidth) / 2, 0, scaledRenderWidth, dimensions.Height);
                 }
                 else if (renderRatio < aspectRatio)
                 {
-                    double scaledRenderHeight = (image.Height / image.Width) * dimensions.Height;
+                    double scaledRenderHeight = image.Height / image.Width * dimensions.Height;
                     drawingDimensions = new Rect(0, (dimensions.Height - scaledRenderHeight) / 2, dimensions.Width, scaledRenderHeight);
                 }
 
@@ -310,13 +314,14 @@ namespace Standard
             }
         }
 
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "ToDo")]
         public static void AddDependencyPropertyChangeListener(object component, DependencyProperty property, EventHandler listener)
         {
             if (component == null)
             {
                 return;
             }
+
             Assert.IsNotNull(property);
             Assert.IsNotNull(listener);
 
@@ -324,13 +329,14 @@ namespace Standard
             dpd.AddValueChanged(component, listener);
         }
 
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "ToDo")]
         public static void RemoveDependencyPropertyChangeListener(object component, DependencyProperty property, EventHandler listener)
         {
             if (component == null)
             {
                 return;
             }
+
             Assert.IsNotNull(property);
             Assert.IsNotNull(listener);
 
@@ -338,7 +344,7 @@ namespace Standard
             dpd.RemoveValueChanged(component, listener);
         }
 
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "ToDo")]
         public static bool IsNonNegative(this Thickness thickness)
         {
             if (!thickness.Top.IsFiniteAndNonNegative())
@@ -364,7 +370,7 @@ namespace Standard
             return true;
         }
 
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "ToDo")]
         public static bool IsValid(this CornerRadius cornerRadius)
         {
             if (!cornerRadius.TopLeft.IsFiniteAndNonNegative())

@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace TMP.UI.Controls.WPF.Reporting.MatrixGrid
+﻿namespace TMP.UI.Controls.WPF.Reporting.MatrixGrid
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+
     /// <summary>
     /// Представляет ячейку с данными матрицы
     /// </summary>
@@ -15,17 +15,22 @@ namespace TMP.UI.Controls.WPF.Reporting.MatrixGrid
         {
             this.CellType = MatrixCellType.DataCell;
             this.Value = value;
-            if (String.IsNullOrWhiteSpace(contentFormat) == false)
-                ContentFormat = contentFormat;
+            if (string.IsNullOrWhiteSpace(contentFormat) == false)
+            {
+                this.ContentFormat = contentFormat;
+            }
         }
+
         /// <summary>
         /// Значение ячейки
         /// </summary>
         public object Value { get; set; }
+
         /// <summary>
         /// Формат для отображения содержимого
         /// </summary>
         public string ContentFormat { get; set; } = "N0";
+
         /// <summary>
         /// Преобразование значения в числе, если неудачно возврат 0
         /// </summary>
@@ -33,13 +38,13 @@ namespace TMP.UI.Controls.WPF.Reporting.MatrixGrid
         public int ValueToInt()
         {
             int result = 0;
-            int.TryParse(Value.ToString(), out result);
+            int.TryParse(this.Value.ToString(), out result);
             return result;
         }
 
         public override string ToString()
         {
-            return string.Format(String.Format("MatrixDataCell - {{0:{0}}}", ContentFormat), Value);
+            return string.Format(string.Format("MatrixDataCell - {{0:{0}}}", this.ContentFormat), this.Value);
         }
     }
 }

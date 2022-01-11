@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace WpfApplicationTest.Win32
+﻿namespace WpfApplicationTest.Win32
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Runtime.InteropServices;
+    using System.Text;
+    using System.Threading.Tasks;
+
     // Taken from http://www.codeproject.com/Articles/707502/Version-Helper-API-for-NET
     // License: The Code Project Open License
 
@@ -77,7 +77,7 @@ namespace WpfApplicationTest.Win32
             /// <summary>
             /// Windows 8.1.
             /// </summary>
-            Windows8Point1
+            Windows8Point1,
         }
 
         /// <summary>
@@ -401,100 +401,67 @@ namespace WpfApplicationTest.Win32
         /// Indicates if the current OS version matches, or is greater than,
         /// the Windows XP version.
         /// </summary>
-        public static bool IsWindowsXPOrGreater
-        {
-            get { return IsWindowsVersionOrGreater(KnownOS.WindowsXP); }
-        }
+        public static bool IsWindowsXPOrGreater => IsWindowsVersionOrGreater(KnownOS.WindowsXP);
 
         /// <summary>
         /// Indicates if the current OS version matches, or is greater than,
         /// the Windows XP with Service Pack 1 (SP1) version.
         /// </summary>
-        public static bool IsWindowsXPSP1OrGreater
-        {
-            get { return IsWindowsVersionOrGreater(KnownOS.WindowsXPSP1); }
-        }
+        public static bool IsWindowsXPSP1OrGreater => IsWindowsVersionOrGreater(KnownOS.WindowsXPSP1);
 
         /// <summary>
         /// Indicates if the current OS version matches, or is greater than,
         /// the Windows XP with Service Pack 2 (SP2) version.
         /// </summary>
-        public static bool IsWindowsXPSP2OrGreater
-        {
-            get { return IsWindowsVersionOrGreater(KnownOS.WindowsXPSP2); }
-        }
+        public static bool IsWindowsXPSP2OrGreater => IsWindowsVersionOrGreater(KnownOS.WindowsXPSP2);
 
         /// <summary>
         /// Indicates if the current OS version matches, or is greater than,
         /// the Windows XP with Service Pack 3 (SP3) version.
         /// </summary>
-        public static bool IsWindowsXPSP3OrGreater
-        {
-            get { return IsWindowsVersionOrGreater(KnownOS.WindowsXPSP3); }
-        }
+        public static bool IsWindowsXPSP3OrGreater => IsWindowsVersionOrGreater(KnownOS.WindowsXPSP3);
 
         /// <summary>
         /// Indicates if the current OS version matches, or is greater than,
         /// the Windows Vista version.
         /// </summary>
-        public static bool IsWindowsVistaOrGreater
-        {
-            get { return IsWindowsVersionOrGreater(KnownOS.WindowsVista); }
-        }
+        public static bool IsWindowsVistaOrGreater => IsWindowsVersionOrGreater(KnownOS.WindowsVista);
 
         /// <summary>
         /// Indicates if the current OS version matches, or is greater than,
         /// the Windows Vista with Service Pack 1 (SP1) version.
         /// </summary>
-        public static bool IsWindowsVistaSP1OrGreater
-        {
-            get { return IsWindowsVersionOrGreater(KnownOS.WindowsVistaSP1); }
-        }
+        public static bool IsWindowsVistaSP1OrGreater => IsWindowsVersionOrGreater(KnownOS.WindowsVistaSP1);
 
         /// <summary>
         /// Indicates if the current OS version matches, or is greater than,
         /// the Windows Vista with Service Pack 2 (SP2) version.
         /// </summary>
-        public static bool IsWindowsVistaSP2OrGreater
-        {
-            get { return IsWindowsVersionOrGreater(KnownOS.WindowsVistaSP2); }
-        }
+        public static bool IsWindowsVistaSP2OrGreater => IsWindowsVersionOrGreater(KnownOS.WindowsVistaSP2);
 
         /// <summary>
         /// Indicates if the current OS version matches, or is greater than,
         /// the Windows 7 version.
         /// </summary>
-        public static bool IsWindows7OrGreater
-        {
-            get { return IsWindowsVersionOrGreater(KnownOS.Windows7); }
-        }
+        public static bool IsWindows7OrGreater => IsWindowsVersionOrGreater(KnownOS.Windows7);
 
         /// <summary>
         /// Indicates if the current OS version matches, or is greater than,
         /// the Windows 7 with Service Pack 1 (SP1) version.
         /// </summary>
-        public static bool IsWindows7SP1OrGreater
-        {
-            get { return IsWindowsVersionOrGreater(KnownOS.Windows7SP1); }
-        }
+        public static bool IsWindows7SP1OrGreater => IsWindowsVersionOrGreater(KnownOS.Windows7SP1);
 
         /// <summary>
         /// Indicates if the current OS version matches, or is greater than,
         /// the Windows 8 version.
         /// </summary>
-        public static bool IsWindows8OrGreater
-        {
-            get { return IsWindowsVersionOrGreater(KnownOS.Windows8); }
-        }
+        public static bool IsWindows8OrGreater => IsWindowsVersionOrGreater(KnownOS.Windows8);
 
         /// <summary>
         /// Indicates if the current OS version matches, or is greater than,
         /// the Windows 8.1 version.
         /// </summary>
-        public static bool IsWindows8Point1OrGreater
-        {
-            get { return IsWindowsVersionOrGreater(KnownOS.Windows8Point1); }
-        }
+        public static bool IsWindows8Point1OrGreater => IsWindowsVersionOrGreater(KnownOS.Windows8Point1);
 
         /// <summary>
         /// Indicates if the current OS is a Windows Server release.

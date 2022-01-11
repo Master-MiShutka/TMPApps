@@ -33,11 +33,8 @@ namespace TMP.Wpf.CommonControls
 
         public CollectionView View
         {
-            get { return _view; }
-            set
-            {
-                SetProperty(ref _view, value);
-            }
+            get => _view;
+            set => SetProperty(ref _view, value);
         }
 
         #endregion Properties

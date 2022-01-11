@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace TMP.UI.Controls.WPF.Reporting.MatrixGrid
+﻿namespace TMP.UI.Controls.WPF.Reporting.MatrixGrid
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+
     /// <summary>
     /// Тип ячейки матрицы
     /// </summary>
@@ -14,37 +14,45 @@ namespace TMP.UI.Controls.WPF.Reporting.MatrixGrid
         /// пустая, ничего не содержащая
         /// </summary>
         Empty,
+
         /// <summary>
         /// заголовок строки
         /// </summary>
         RowHeader,
+
         /// <summary>
         /// заголовок группы строк
         /// </summary>
         RowsGroupHeader,
+
         /// <summary>
         /// заголовок строки с итогом
         /// </summary>
         RowSummaryHeader,
+
         /// <summary>
         /// заголовок столбца
         /// </summary>
         ColumnHeader,
+
         /// <summary>
         /// заголовок группы столбцов
         /// </summary>
         ColumnsGroupHeader,
+
         /// <summary>
         /// заголовок столца с итогом
         /// </summary>
         ColumnSummaryHeader,
+
         /// <summary>
         /// ячейка с данными
         /// </summary>
         DataCell,
+
         /// <summary>
         /// ячейка с итогом
         /// </summary>
-        SummaryCell
+        SummaryCell,
     }
 }

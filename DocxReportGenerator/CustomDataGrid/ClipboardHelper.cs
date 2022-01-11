@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Diagnostics;
-using System.Windows;
-using System.IO;
-
-namespace TMP.Work.DocxReportGenerator.CustomControls
+﻿namespace TMP.Work.DocxReportGenerator.CustomControls
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics;
+    using System.IO;
+    using System.Linq;
+    using System.Text;
+    using System.Windows;
+
     public static class ClipboardHelper
     {
         public delegate string[] ParseFormat(string value);
@@ -17,7 +17,7 @@ namespace TMP.Work.DocxReportGenerator.CustomControls
             List<string[]> clipboardData = new List<string[]>();
 
             // get the data and set the parsing method based on the format
-            // currently works with CSV and Text DataFormats            
+            // currently works with CSV and Text DataFormats
             IDataObject dataObj = System.Windows.Clipboard.GetDataObject();
 
             if (dataObj != null)
@@ -59,7 +59,7 @@ namespace TMP.Work.DocxReportGenerator.CustomControls
             ParseFormat parseFormat = null;
 
             // get the data and set the parsing method based on the format
-            // currently works with CSV and Text DataFormats            
+            // currently works with CSV and Text DataFormats
             IDataObject dataObj = System.Windows.Clipboard.GetDataObject();
             if ((clipboardRawData = dataObj.GetData(DataFormats.CommaSeparatedValue)) != null)
             {
@@ -81,6 +81,7 @@ namespace TMP.Work.DocxReportGenerator.CustomControls
                     StreamReader sr = new StreamReader(ms);
                     rawDataStr = sr.ReadToEnd();
                 }
+
                 Debug.Assert(rawDataStr != null, string.Format("clipboardRawData: {0}, could not be converted to a string or memorystream.", clipboardRawData));
 
                 string[] rows = rawDataStr.Split(new string[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
@@ -137,9 +138,12 @@ namespace TMP.Work.DocxReportGenerator.CustomControls
                     {
                         throw new FormatException(string.Format("value: {0} had a format exception", value));
                     }
+
                     char tempCh = value[i];
                     while (tempCh != '\"' && i < value.Length)
+                    {
                         i++;
+                    }
 
                     endIndex = i;
                 }

@@ -1,14 +1,14 @@
 ﻿/*************************************************************************************
+   
+   Toolkit for WPF
 
-   Extended WPF Toolkit
-
-   Copyright (C) 2007-2013 Xceed Software Inc.
+   Copyright (C) 2007-2018 Xceed Software Inc.
 
    This program is provided to you under the terms of the Microsoft Public
    License (Ms-PL) as published at http://wpftoolkit.codeplex.com/license 
 
    For more features, controls, and fast professional support,
-   pick up the Plus Edition at http://xceed.com/wpf_toolkit
+   pick up the Plus Edition at https://xceed.com/xceed-toolkit-plus-for-wpf/
 
    Stay informed: follow @datagrid on Twitter or Like http://facebook.com/datagrids
 
@@ -295,6 +295,10 @@ namespace Xceed.Wpf.Toolkit.Zoombox
           Viewbox viewbox = ( Viewbox )_content;
 
           BindingOperations.ClearAllBindings( viewbox );
+          if( viewbox.Child is FrameworkElement )
+          {
+            ( viewbox.Child as FrameworkElement ).RemoveHandler( FrameworkElement.SizeChangedEvent, new SizeChangedEventHandler( this.OnContentSizeChanged ) );
+          }
           ( viewbox as Viewbox ).Child = null;
 
           this.RemoveLogicalChild( viewbox );
@@ -331,6 +335,11 @@ namespace Xceed.Wpf.Toolkit.Zoombox
           viewbox.HorizontalAlignment = HorizontalAlignment.Left;
           viewbox.VerticalAlignment = VerticalAlignment.Top;
           this.IsContentWrapped = true;
+        }
+
+        if( ( _content is Viewbox ) && ( this.IsContentWrapped ) && ( _trueContent is FrameworkElement ) )
+        {
+          ( _trueContent as FrameworkElement ).AddHandler( FrameworkElement.SizeChangedEvent, new SizeChangedEventHandler( this.OnContentSizeChanged ), true );
         }
 
         if( _contentPresenter != null )
@@ -2045,6 +2054,9 @@ namespace Xceed.Wpf.Toolkit.Zoombox
       base.OnRender( drawingContext );
     }
 
+
+
+
     private static void RefocusView( DependencyObject o, DependencyPropertyChangedEventArgs e )
     {
       Zoombox zoombox = o as Zoombox;
@@ -3236,7 +3248,7 @@ namespace Xceed.Wpf.Toolkit.Zoombox
 
     private void UpdateViewFinderDisplayContentBounds()
     {
-      if( _content == null || _trueContent == null || _viewFinderDisplay == null )
+      if( _content == null || _trueContent == null || _viewFinderDisplay == null || _viewFinderDisplay.AvailableSize.IsEmpty )
         return;
 
       this.UpdateViewboxFactor();

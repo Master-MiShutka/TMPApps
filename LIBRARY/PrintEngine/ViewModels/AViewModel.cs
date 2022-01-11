@@ -1,28 +1,24 @@
-﻿using System.Windows;
-using TMP.PrintEngine.Views;
-
-namespace TMP.PrintEngine.ViewModels
+﻿namespace TMP.PrintEngine.ViewModels
 {
-    public abstract class AViewModel:DependencyObject, IViewModel
+    using System.Windows;
+    using TMP.PrintEngine.Views;
+
+    public abstract class AViewModel : DependencyObject, IViewModel
     {
         protected AViewModel(IView view)
         {
-            View = view;
+            this.View = view;
             view.ViewModel = this;
         }
         #region IViewModel Members
 
         public IView View
         {
-            get
-            {
-                return (IView) GetValue(ViewProperty);
-            }
-            set
-            {
-                SetValue(ViewProperty, value);
-            }
+            get => (IView)this.GetValue(ViewProperty);
+
+            set => this.SetValue(ViewProperty, value);
         }
+
         public static readonly DependencyProperty ViewProperty =
            DependencyProperty.Register("View", typeof(IView), typeof(AViewModel));
         #endregion

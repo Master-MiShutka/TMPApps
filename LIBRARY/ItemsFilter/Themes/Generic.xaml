@@ -52,6 +52,40 @@
 
     <!--    -->
 
+    <Style x:Key="ColumnHeaderButtonStyle" TargetType="{x:Type Button}">
+        <Setter Property="Command" Value="{x:Static local:FilterCommand.Show}" />
+        <Setter Property="ToolTip" Value="{x:Static res:Strings.ShowCodemaidQuickFilterMenuText}" />
+        <Setter Property="HorizontalAlignment" Value="Right" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border
+                        x:Name="Chrome"
+                        Padding="{TemplateBinding Padding}"
+                        Background="{TemplateBinding Background}"
+                        BorderThickness="0">
+                        <ContentPresenter
+                            Margin="{TemplateBinding Padding}"
+                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                            Content="{TemplateBinding Content}"
+                            RecognizesAccessKey="True"
+                            SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="CommonStates">
+                                <VisualState x:Name="Normal" />
+                                <VisualState x:Name="MouseOver" />
+                                <VisualState x:Name="Pressed" />
+                                <VisualState x:Name="Disabled" />
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Background" Value="Transparent" />
+    </Style>
+
     <DrawingImage x:Key="ClearImage">
         <DrawingImage.Drawing>
             <GeometryDrawing Brush="{DynamicResource BlackBrush}" Geometry="M 1,1 15,15Z M 15,1 1,15Z" />
@@ -266,7 +300,7 @@
                                     Margin="2"
                                     Padding="1,1,1,1"
                                     HorizontalAlignment="Stretch"
-                                    SelectedValue="{Binding Model.Mode, RelativeSource={RelativeSource TemplatedParent}}">
+                                    SelectedValue="{Binding ViewModel.Mode, RelativeSource={RelativeSource TemplatedParent}}">
                                     <ComboBox.ItemTemplate>
                                         <DataTemplate>
                                             <TextBlock FontSize="{DynamicResource SmallFontSize}" Text="{Binding Converter={StaticResource EnumDescriptionConverter}}" />
@@ -288,7 +322,7 @@
                                     Padding="0"
                                     FontFamily="{TemplateBinding FontFamily}"
                                     FontSize="{TemplateBinding FontSize}"
-                                    Text="{Binding Model.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource TemplatedParent}}"
+                                    Text="{Binding ViewModel.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource TemplatedParent}}"
                                     TextWrapping="NoWrap" />
                             </DockPanel>
                         </StackPanel>
@@ -320,7 +354,7 @@
                                 x:Name="PART_FilterType"
                                 Margin="2"
                                 Padding="1,1,1,1"
-                                SelectedValue="{Binding Model.Mode, RelativeSource={RelativeSource TemplatedParent}}">
+                                SelectedValue="{Binding ViewModel.Mode, RelativeSource={RelativeSource TemplatedParent}}">
                                 <ComboBox.ItemTemplate>
                                     <DataTemplate>
                                         <TextBlock FontSize="{DynamicResource SmallFontSize}" Text="{Binding Converter={StaticResource EnumDescriptionConverter}}" />
@@ -340,10 +374,53 @@
                                 Padding="0"
                                 FontFamily="{TemplateBinding FontFamily}"
                                 FontSize="{TemplateBinding FontSize}"
-                                Text="{Binding Model.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource TemplatedParent}}"
+                                Text="{Binding ViewModel.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource TemplatedParent}}"
                                 TextWrapping="NoWrap" />
                             <Button Style="{StaticResource FilterClearButtonStyle}" />
                         </WrapPanel>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="CompactSearchPanel" TargetType="{x:Type view:StringFilterView}">
+        <Setter Property="Margin" Value="2" />
+        <Setter Property="FontSize" Value="{DynamicResource SmallFontSize}" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type view:StringFilterView}">
+                    <Border
+                        Height="Auto"
+                        Margin="{TemplateBinding Margin}"
+                        HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
+                        VerticalAlignment="{TemplateBinding VerticalAlignment}"
+                        Style="{StaticResource borderStyle}">
+                        <DockPanel>
+                            <ComboBox
+                                x:Name="PART_FilterType"
+                                Margin="2"
+                                Padding="1,1,1,1"
+                                DockPanel.Dock="Left"
+                                SelectedValue="{Binding ViewModel.Mode, RelativeSource={RelativeSource TemplatedParent}}"
+                                ToolTip="{x:Static res:Strings.ConditionText}">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock FontSize="{DynamicResource SmallFontSize}" Text="{Binding Converter={StaticResource EnumDescriptionConverter}}" />
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+                            <Button DockPanel.Dock="Right" Style="{StaticResource FilterClearButtonStyle}" />
+                            <TextBox
+                                x:Name="PART_Input"
+                                MinWidth="30"
+                                Margin="1" VerticalContentAlignment="Center"
+                                Padding="0"
+                                FontFamily="{TemplateBinding FontFamily}"
+                                FontSize="{TemplateBinding FontSize}"
+                                Text="{Binding ViewModel.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource TemplatedParent}}"
+                                TextWrapping="NoWrap"
+                                ToolTip="{x:Static res:Strings.Text}" />
+                        </DockPanel>
                     </Border>
                 </ControlTemplate>
             </Setter.Value>
@@ -386,7 +463,7 @@
                                     VerticalAlignment="Center"
                                     FontFamily="{TemplateBinding FontFamily}"
                                     FontSize="{TemplateBinding FontSize}"
-                                    Text="{Binding Model.CompareFrom, Converter={StaticResource SimplePropertyConverter}, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource TemplatedParent}}"
+                                    Text="{Binding ViewModel.CompareFrom, Converter={StaticResource SimplePropertyConverter}, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource TemplatedParent}}"
                                     TextWrapping="NoWrap" />
                             </DockPanel>
                             <DockPanel>
@@ -404,7 +481,7 @@
                                     VerticalAlignment="Center"
                                     FontFamily="{TemplateBinding FontFamily}"
                                     FontSize="{TemplateBinding FontSize}"
-                                    Text="{Binding Model.CompareTo, Converter={StaticResource SimplePropertyConverter}, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource TemplatedParent}}"
+                                    Text="{Binding ViewModel.CompareTo, Converter={StaticResource SimplePropertyConverter}, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource TemplatedParent}}"
                                     TextWrapping="NoWrap" />
                             </DockPanel>
                         </StackPanel>
@@ -433,7 +510,7 @@
                                 <TextBlock
                                     x:Name="PART_Name"
                                     Style="{StaticResource FilterNameStyle}"
-                                    Text="{Binding Model.Name, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}" />
+                                    Text="{Binding ViewModel.Name, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}" />
                                 <Button DockPanel.Dock="Right" Style="{StaticResource FilterClearButtonStyle}">
                                     <Image Source="{StaticResource ClearImage}" />
                                 </Button>
@@ -446,7 +523,7 @@
                                 VerticalAlignment="Center"
                                 FontFamily="{TemplateBinding FontFamily}"
                                 FontSize="{TemplateBinding FontSize}"
-                                Text="{Binding Model.CompareTo, UpdateSourceTrigger=Explicit, Converter={StaticResource SimplePropertyConverter}, RelativeSource={RelativeSource TemplatedParent}}"
+                                Text="{Binding ViewModel.CompareTo, UpdateSourceTrigger=Explicit, Converter={StaticResource SimplePropertyConverter}, RelativeSource={RelativeSource TemplatedParent}}"
                                 TextWrapping="NoWrap" />
                         </StackPanel>
                     </Border>
@@ -522,7 +599,7 @@
                     Grid.Row="0"
                     Grid.Column="0"
                     Style="{StaticResource FilterNameStyle}"
-                    Text="{Binding Model.Name, RelativeSource={RelativeSource TemplatedParent}}" />
+                    Text="{Binding ViewModel.Name, RelativeSource={RelativeSource TemplatedParent}}" />
                 <Button Grid.Column="1" Style="{StaticResource FilterClearButtonStyle}">
                     <Image Source="{StaticResource ClearImage}" />
                 </Button>
@@ -535,7 +612,7 @@
                     Padding="1"
                     BorderThickness="0"
                     ItemContainerStyle="{StaticResource MultivalueFilterItemStyle}"
-                    ItemsSource="{Binding Model.AvailableValues, RelativeSource={RelativeSource TemplatedParent}}"
+                    ItemsSource="{Binding ViewModel.AvailableValues, RelativeSource={RelativeSource TemplatedParent}}"
                     SelectedValuePath="{x:Null}"
                     SelectionMode="Multiple"
                     SnapsToDevicePixels="False"
@@ -589,7 +666,7 @@
                     <Grid
                         Width="Auto"
                         Height="{TemplateBinding Height}"
-                        Visibility="{TemplateBinding Model,
+                        Visibility="{TemplateBinding ViewModel,
                                                      Converter={StaticResource FilterControlVmToVisibilityConverter}}">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
@@ -615,7 +692,7 @@
                             HorizontalAlignment="Left"
                             VerticalAlignment="Top"
                             AllowsTransparency="True"
-                            IsOpen="{Binding Model.IsOpen, RelativeSource={RelativeSource TemplatedParent}}"
+                            IsOpen="{Binding ViewModel.IsOpen, RelativeSource={RelativeSource TemplatedParent}}"
                             Placement="Bottom"
                             PopupAnimation="Scroll"
                             StaysOpen="False">

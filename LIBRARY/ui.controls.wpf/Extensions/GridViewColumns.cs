@@ -1,13 +1,13 @@
-﻿using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.ComponentModel;
-using System.Reflection;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-
-namespace TMP.UI.Controls.WPF.Extensions
+﻿namespace TMP.UI.Controls.WPF.Extensions
 {
+    using System.Collections.Generic;
+    using System.Collections.Specialized;
+    using System.ComponentModel;
+    using System.Reflection;
+    using System.Windows;
+    using System.Windows.Controls;
+    using System.Windows.Data;
+
     public static class GridViewColumns
     {
         [AttachedPropertyBrowsableForType(typeof(GridView))]
@@ -31,7 +31,6 @@ namespace TMP.UI.Controls.WPF.Extensions
                     null,
                     ColumnsSourceChanged));
 
-
         [AttachedPropertyBrowsableForType(typeof(GridView))]
         public static string GetHeaderTextMember(DependencyObject obj)
         {
@@ -46,7 +45,6 @@ namespace TMP.UI.Controls.WPF.Extensions
         // Using a DependencyProperty as the backing store for HeaderTextMember.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty HeaderTextMemberProperty =
             DependencyProperty.RegisterAttached("HeaderTextMember", typeof(string), typeof(GridViewColumns), new UIPropertyMetadata(null));
-
 
         [AttachedPropertyBrowsableForType(typeof(GridView))]
         public static string GetDisplayMemberMember(DependencyObject obj)
@@ -63,7 +61,6 @@ namespace TMP.UI.Controls.WPF.Extensions
         public static readonly DependencyProperty DisplayMemberMemberProperty =
             DependencyProperty.RegisterAttached("DisplayMemberMember", typeof(string), typeof(GridViewColumns), new UIPropertyMetadata(null));
 
-
         private static void ColumnsSourceChanged(DependencyObject obj, DependencyPropertyChangedEventArgs e)
         {
             GridView gridView = obj as GridView;
@@ -75,7 +72,9 @@ namespace TMP.UI.Controls.WPF.Extensions
                 {
                     ICollectionView view = CollectionViewSource.GetDefaultView(e.OldValue);
                     if (view != null)
+                    {
                         RemoveHandlers(gridView, view);
+                    }
                 }
 
                 if (e.NewValue != null)
@@ -90,17 +89,18 @@ namespace TMP.UI.Controls.WPF.Extensions
             }
         }
 
-        private static IDictionary<ICollectionView, List<GridView>> _gridViewsByColumnsSource =
+        private static IDictionary<ICollectionView, List<GridView>> gridViewsByColumnsSource =
             new Dictionary<ICollectionView, List<GridView>>();
 
         private static List<GridView> GetGridViewsForColumnSource(ICollectionView columnSource)
         {
             List<GridView> gridViews;
-            if (!_gridViewsByColumnsSource.TryGetValue(columnSource, out gridViews))
+            if (!gridViewsByColumnsSource.TryGetValue(columnSource, out gridViews))
             {
                 gridViews = new List<GridView>();
-                _gridViewsByColumnsSource.Add(columnSource, gridViews);
+                gridViewsByColumnsSource.Add(columnSource, gridViews);
             }
+
             return gridViews;
         }
 
@@ -130,7 +130,9 @@ namespace TMP.UI.Controls.WPF.Extensions
             ICollectionView view = sender as ICollectionView;
             var gridViews = GetGridViewsForColumnSource(view);
             if (gridViews == null || gridViews.Count == 0)
+            {
                 return;
+            }
 
             switch (e.Action)
             {
@@ -143,6 +145,7 @@ namespace TMP.UI.Controls.WPF.Extensions
                             gridView.Columns.Insert(e.NewStartingIndex + i, column);
                         }
                     }
+
                     break;
                 case NotifyCollectionChangedAction.Move:
                     foreach (var gridView in gridViews)
@@ -153,12 +156,14 @@ namespace TMP.UI.Controls.WPF.Extensions
                             GridViewColumn column = gridView.Columns[e.OldStartingIndex + i];
                             columns.Add(column);
                         }
+
                         for (int i = 0; i < e.NewItems.Count; i++)
                         {
                             GridViewColumn column = columns[i];
                             gridView.Columns.Insert(e.NewStartingIndex + i, column);
                         }
                     }
+
                     break;
                 case NotifyCollectionChangedAction.Remove:
                     foreach (var gridView in gridViews)
@@ -168,6 +173,7 @@ namespace TMP.UI.Controls.WPF.Extensions
                             gridView.Columns.RemoveAt(e.OldStartingIndex);
                         }
                     }
+
                     break;
                 case NotifyCollectionChangedAction.Replace:
                     foreach (var gridView in gridViews)
@@ -178,6 +184,7 @@ namespace TMP.UI.Controls.WPF.Extensions
                             gridView.Columns[e.NewStartingIndex + i] = column;
                         }
                     }
+
                     break;
                 case NotifyCollectionChangedAction.Reset:
                     foreach (var gridView in gridViews)
@@ -185,6 +192,7 @@ namespace TMP.UI.Controls.WPF.Extensions
                         gridView.Columns.Clear();
                         CreateColumns(gridView, sender as ICollectionView);
                     }
+
                     break;
                 default:
                     break;
@@ -200,11 +208,13 @@ namespace TMP.UI.Controls.WPF.Extensions
             {
                 column.Header = GetPropertyValue(columnSource, headerTextMember);
             }
+
             if (!string.IsNullOrEmpty(displayMemberMember))
             {
                 string propertyName = GetPropertyValue(columnSource, displayMemberMember) as string;
                 column.DisplayMemberBinding = new Binding(propertyName);
             }
+
             return column;
         }
 
@@ -214,8 +224,11 @@ namespace TMP.UI.Controls.WPF.Extensions
             {
                 PropertyInfo prop = obj.GetType().GetProperty(propertyName);
                 if (prop != null)
+                {
                     return prop.GetValue(obj, null);
+                }
             }
+
             return null;
         }
     }

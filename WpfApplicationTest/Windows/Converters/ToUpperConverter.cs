@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows.Data;
-
-namespace WpfApplicationTest.Windows.Converters
+﻿namespace WpfApplicationTest.Windows.Converters
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Windows.Data;
+
     /// <summary>
     /// Converts string values to upper case.
     /// </summary>
@@ -30,6 +30,7 @@ namespace WpfApplicationTest.Windows.Converters
 
                 return strValue.ToUpperInvariant();
             }
+
             return null;
         }
 
@@ -48,5 +49,4 @@ namespace WpfApplicationTest.Windows.Converters
             throw new NotSupportedException();
         }
     }
-
 }

@@ -241,8 +241,8 @@ namespace TMP.Wpf.CommonControls
         [Bindable(true), Category("Behavior")]
         public Int32 Interval
         {
-            get { return (Int32)GetValue(IntervalProperty); }
-            set { SetValue(IntervalProperty, value); }
+            get => (Int32)GetValue(IntervalProperty);
+            set => SetValue(IntervalProperty, value);
         }
 
         /// <summary>
@@ -251,8 +251,8 @@ namespace TMP.Wpf.CommonControls
         [Bindable(true), Category("Appearance")]
         public Int32 AutoToolTipPrecision
         {
-            get { return (Int32)GetValue(AutoToolTipPrecisionProperty); }
-            set { SetValue(AutoToolTipPrecisionProperty, value); }
+            get => (Int32)GetValue(AutoToolTipPrecisionProperty);
+            set => SetValue(AutoToolTipPrecisionProperty, value);
         }
 
         /// <summary>
@@ -261,8 +261,8 @@ namespace TMP.Wpf.CommonControls
         [Bindable(true), Category("Behavior")]
         public AutoToolTipPlacement AutoToolTipPlacement
         {
-            get { return (AutoToolTipPlacement)GetValue(AutoToolTipPlacementProperty); }
-            set { SetValue(AutoToolTipPlacementProperty, value); }
+            get => (AutoToolTipPlacement)GetValue(AutoToolTipPlacementProperty);
+            set => SetValue(AutoToolTipPlacementProperty, value);
         }
 
         /// <summary>
@@ -271,8 +271,8 @@ namespace TMP.Wpf.CommonControls
         [Bindable(true), Category("Common")]
         public TickPlacement TickPlacement
         {
-            get { return (TickPlacement)GetValue(TickPlacementProperty); }
-            set { SetValue(TickPlacementProperty, value); }
+            get => (TickPlacement)GetValue(TickPlacementProperty);
+            set => SetValue(TickPlacementProperty, value);
         }
 
         /// <summary>
@@ -281,8 +281,8 @@ namespace TMP.Wpf.CommonControls
         [Bindable(true), Category("Common")]
         public Boolean IsMoveToPointEnabled
         {
-            get { return (Boolean)GetValue(IsMoveToPointEnabledProperty); }
-            set { SetValue(IsMoveToPointEnabledProperty, value); }
+            get => (Boolean)GetValue(IsMoveToPointEnabledProperty);
+            set => SetValue(IsMoveToPointEnabledProperty, value);
         }
 
         /// <summary>
@@ -291,8 +291,8 @@ namespace TMP.Wpf.CommonControls
         [Bindable(true), Category("Common")]
         public Double TickFrequency
         {
-            get { return (Double)GetValue(TickFrequencyProperty); }
-            set { SetValue(TickFrequencyProperty, value); }
+            get => (Double)GetValue(TickFrequencyProperty);
+            set => SetValue(TickFrequencyProperty, value);
         }
 
         /// <summary>
@@ -301,8 +301,8 @@ namespace TMP.Wpf.CommonControls
         [Bindable(true), Category("Common")]
         public Orientation Orientation
         {
-            get { return (Orientation)GetValue(OrientationProperty); }
-            set { SetValue(OrientationProperty, value); }
+            get => (Orientation)GetValue(OrientationProperty);
+            set => SetValue(OrientationProperty, value);
         }
 
         /// <summary>
@@ -311,8 +311,8 @@ namespace TMP.Wpf.CommonControls
         [Bindable(true), Category("Appearance")]
         public Boolean IsSnapToTickEnabled
         {
-            get { return (Boolean)GetValue(IsSnapToTickEnabledProperty); }
-            set { SetValue(IsSnapToTickEnabledProperty, value); }
+            get => (Boolean)GetValue(IsSnapToTickEnabledProperty);
+            set => SetValue(IsSnapToTickEnabledProperty, value);
         }
 
         /// <summary>
@@ -321,8 +321,8 @@ namespace TMP.Wpf.CommonControls
         [Bindable(true), Category("Behavior")]
         public Boolean ExtendedMode
         {
-            get { return (Boolean)GetValue(ExtendedModeProperty); }
-            set { SetValue(ExtendedModeProperty, value); }
+            get => (Boolean)GetValue(ExtendedModeProperty);
+            set => SetValue(ExtendedModeProperty, value);
         }
 
         /// <summary>
@@ -331,8 +331,8 @@ namespace TMP.Wpf.CommonControls
         [Bindable(true), Category("Behavior")]
         public Boolean MoveWholeRange
         {
-            get { return (Boolean)GetValue(MoveWholeRangeProperty); }
-            set { SetValue(MoveWholeRangeProperty, value); }
+            get => (Boolean)GetValue(MoveWholeRangeProperty);
+            set => SetValue(MoveWholeRangeProperty, value);
         }
 
         /// <summary>
@@ -341,8 +341,8 @@ namespace TMP.Wpf.CommonControls
         [Bindable(true), Category("Common")]
         public Double MinRangeWidth
         {
-            get { return (Double)GetValue(MinRangeWidthProperty); }
-            set { SetValue(MinRangeWidthProperty, value); }
+            get => (Double)GetValue(MinRangeWidthProperty);
+            set => SetValue(MinRangeWidthProperty, value);
         }
 
         /// <summary>
@@ -351,8 +351,8 @@ namespace TMP.Wpf.CommonControls
         [Bindable(true), Category("Common")]
         public Double LowerValue
         {
-            get { return (Double)GetValue(LowerValueProperty); }
-            set { SetValue(LowerValueProperty, value); }
+            get => (Double)GetValue(LowerValueProperty);
+            set => SetValue(LowerValueProperty, value);
         }
 
         /// <summary>
@@ -361,8 +361,8 @@ namespace TMP.Wpf.CommonControls
         [Bindable(true), Category("Common")]
         public Double UpperValue
         {
-            get { return (Double)GetValue(UpperValueProperty); }
-            set { SetValue(UpperValueProperty, value); }
+            get => (Double)GetValue(UpperValueProperty);
+            set => SetValue(UpperValueProperty, value);
         }
 
         /// <summary>
@@ -371,8 +371,8 @@ namespace TMP.Wpf.CommonControls
         [Bindable(true), Category("Common")]
         public Double MinRange
         {
-            get { return (Double)GetValue(MinRangeProperty); }
-            set { SetValue(MinRangeProperty, value); }
+            get => (Double)GetValue(MinRangeProperty);
+            set => SetValue(MinRangeProperty, value);
         }
 
         #endregion Dependency properties

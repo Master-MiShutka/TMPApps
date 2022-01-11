@@ -1,20 +1,20 @@
-﻿using System;
-using System.Globalization;
-using System.Windows.Controls;
-using System.Windows.Data;
-
-namespace TMP.UI.Controls.WPF.Reporting.MatrixGrid
+﻿namespace TMP.UI.Controls.WPF.Reporting.MatrixGrid
 {
+    using System;
+    using System.Globalization;
+    using System.Windows.Controls;
+    using System.Windows.Data;
+
     /// <summary>
     /// Конвертер значений для информирования MatrixGrid об измененных свойствах Grid.Row и Grid.Column у ячеек
     /// </summary>
-    class MatrixGridChildConverter : IValueConverter
+    internal class MatrixGridChildConverter : IValueConverter
     {
         #region Constructor
 
         public MatrixGridChildConverter(MatrixGrid matrixGrid)
         {
-            _matrixGrid = matrixGrid;
+            this.matrixGrid = matrixGrid;
         }
 
         #endregion // Constructor
@@ -28,13 +28,24 @@ namespace TMP.UI.Controls.WPF.Reporting.MatrixGrid
                 int index = (int)value;
 
                 if (parameter == Grid.RowProperty)
-                        _matrixGrid.InspectRowIndex(index);
+                {
+                    this.matrixGrid.InspectRowIndex(index);
+                }
+
                 if (parameter == Grid.ColumnProperty)
-                    _matrixGrid.InspectColumnIndex(index);
+                {
+                    this.matrixGrid.InspectColumnIndex(index);
+                }
+
                 if (parameter == Grid.RowSpanProperty)
-                    _matrixGrid.InspectRowIndex(index);
+                {
+                    this.matrixGrid.InspectRowIndex(index);
+                }
+
                 if (parameter == Grid.ColumnSpanProperty)
-                    _matrixGrid.InspectRowIndex(index);
+                {
+                    this.matrixGrid.InspectRowIndex(index);
+                }
             }
 
             return value;
@@ -49,7 +60,7 @@ namespace TMP.UI.Controls.WPF.Reporting.MatrixGrid
 
         #region Fields
 
-        readonly MatrixGrid _matrixGrid;
+        private readonly MatrixGrid matrixGrid;
 
         #endregion // Fields
     }

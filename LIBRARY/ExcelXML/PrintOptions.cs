@@ -1,295 +1,306 @@
-using System;
-using System.Globalization;
-using System.Text;
-using System.Xml;
-using TMP.Extensions;
-
 namespace TMP.ExcelXml
 {
-	/// <summary>
-	/// Gets or sets various sheet printing options
-	/// </summary>
-	public class PrintOptions
-	{
-		#region Private and Internal fields
-		internal double LeftMargin;
-		internal double RightMargin;
-		internal double TopMargin;
-		internal double BottomMargin;
-		internal double HeaderMargin;
-		internal double FooterMargin;
+    using System;
+    using System.Globalization;
+    using System.Text;
+    using System.Xml;
+    using TMP.Extensions;
 
-		internal bool FitToPage;
+    /// <summary>
+    /// Gets or sets various sheet printing options
+    /// </summary>
+    public class PrintOptions
+    {
+        #region Private and Internal fields
+        internal double LeftMargin;
+        internal double RightMargin;
+        internal double TopMargin;
+        internal double BottomMargin;
+        internal double HeaderMargin;
+        internal double FooterMargin;
 
-		internal int Scale;
-		internal int FitHeight;
-		internal int FitWidth;
+        internal bool FitToPage;
 
-		internal int TopPrintRow;
-		internal int BottomPrintRow;
+        internal int Scale;
+        internal int FitHeight;
+        internal int FitWidth;
 
-		internal int LeftPrintCol;
-		internal int RightPrintCol;
+        internal int TopPrintRow;
+        internal int BottomPrintRow;
 
-		internal bool PrintTitles;
-		#endregion
+        internal int LeftPrintCol;
+        internal int RightPrintCol;
 
-		#region Public Properties
-		private PageLayout layout;
-		private PaperSize paperSize = PaperSize.A4;
-		/// <summary>
-		/// Gets or sets page layout
-		/// </summary>
-		public PageLayout Layout
-		{
-			get
-			{
-				return layout;
-			}
-			set
-			{
-				layout = value;
+        internal bool PrintTitles;
+        #endregion
 
-				if (!layout.IsValid())
-					throw new ArgumentException("Invalid page layout defined");
-			}
-		}
-		/// <summary>
-		/// Gets or sets paper size
-		/// </summary>
-		public PaperSize PaperSize
-		{
-			get
-			{
-				return paperSize;
-			}
-			set
-			{
-				paperSize = value;
+        #region Public Properties
+        private PageLayout layout;
+        private PaperSize paperSize = PaperSize.A4;
 
-				if (!paperSize.IsValid())
-					throw new ArgumentException("Invalid paper size defined");
-			}
-		}
+        /// <summary>
+        /// Gets or sets page layout
+        /// </summary>
+        public PageLayout Layout
+        {
+            get => this.layout;
 
-		private PageOrientation orientation;
-		/// <summary>
-		/// Gets or sets page orientation
-		/// </summary>
-		public PageOrientation Orientation
-		{
-			get
-			{
-				return orientation;
-			}
-			set
-			{
-				orientation = value;
+            set
+            {
+                this.layout = value;
 
-				if (!orientation.IsValid())
-					throw new ArgumentException("Invalid page layout defined");
-			}
-		}
-		#endregion
+                if (!this.layout.IsValid())
+                {
+                    throw new ArgumentException("Invalid page layout defined");
+                }
+            }
+        }
 
-		#region Private and Internal methods
-		internal string GetPrintTitleRange(string workSheetName)
-		{
-			StringBuilder range = new StringBuilder();
+        /// <summary>
+        /// Gets or sets paper size
+        /// </summary>
+        public PaperSize PaperSize
+        {
+            get => this.paperSize;
 
-			if (PrintTitles)
-			{
-				if (LeftPrintCol != 0)
-				{
-					range.AppendFormat("'{0}'!C{1}", workSheetName, LeftPrintCol);
+            set
+            {
+                this.paperSize = value;
 
-					if (RightPrintCol != LeftPrintCol)
-					{
-						range.AppendFormat(":C{0}", RightPrintCol);
-					}
-				}
+                if (!this.paperSize.IsValid())
+                {
+                    throw new ArgumentException("Invalid paper size defined");
+                }
+            }
+        }
 
-				if (TopPrintRow != 0)
-				{
-					if (LeftPrintCol != 0)
-						range.Append(',');
+        private PageOrientation orientation;
 
-					range.AppendFormat("'{0}'!R{1}", workSheetName, TopPrintRow);
+        /// <summary>
+        /// Gets or sets page orientation
+        /// </summary>
+        public PageOrientation Orientation
+        {
+            get => this.orientation;
 
-					if (BottomPrintRow != TopPrintRow)
-					{
-						range.AppendFormat(":R{0}", BottomPrintRow);
-					}
-				}
-			}
+            set
+            {
+                this.orientation = value;
 
-			return range.ToString();
-		}
-		#endregion
+                if (!this.orientation.IsValid())
+                {
+                    throw new ArgumentException("Invalid page layout defined");
+                }
+            }
+        }
+        #endregion
 
-		#region Public methods
-		/// <summary>
-		/// Sets print header rows which are repeated at top on every page
-		/// </summary>
-		/// <param name="top">Top print row</param>
-		/// <param name="bottom">Bottom print row</param>
-		/// <remarks>Important Note: Top and bottom row parameters are <b>NOT</b> zero based like row 
-		/// and column indexers</remarks>
-		public void SetTitleRows(int top, int bottom)
-		{
-			TopPrintRow = Math.Max(1, top);
-			BottomPrintRow = Math.Max(1, Math.Max(top, bottom));
+        #region Private and Internal methods
+        internal string GetPrintTitleRange(string workSheetName)
+        {
+            StringBuilder range = new StringBuilder();
 
-			PrintTitles = true;
-		}
+            if (this.PrintTitles)
+            {
+                if (this.LeftPrintCol != 0)
+                {
+                    range.AppendFormat("'{0}'!C{1}", workSheetName, this.LeftPrintCol);
 
-		/// <summary>
-		/// Sets print header columns which are repeated at left on every page
-		/// </summary>
-		/// <param name="left">Left print column</param>
-		/// <param name="right">Right print column</param>
-		/// <remarks>Important Note: Left and right column parameters are <b>NOT</b> zero based like row 
-		/// and column indexers</remarks>
-		public void SetTitleColumns(int left, int right)
-		{
-			LeftPrintCol = Math.Max(1, left);
-			RightPrintCol = Math.Max(1, Math.Max(left, right));
+                    if (this.RightPrintCol != this.LeftPrintCol)
+                    {
+                        range.AppendFormat(":C{0}", this.RightPrintCol);
+                    }
+                }
 
-			PrintTitles = true;
-		}
+                if (this.TopPrintRow != 0)
+                {
+                    if (this.LeftPrintCol != 0)
+                    {
+                        range.Append(',');
+                    }
 
-		/// <summary>
-		/// Resets print margins
-		/// </summary>
-		public void ResetMargins()
-		{
-			LeftMargin = 0.70;
-			RightMargin = 0.70;
+                    range.AppendFormat("'{0}'!R{1}", workSheetName, this.TopPrintRow);
 
-			TopMargin = 0.75;
-			BottomMargin = 0.75;
+                    if (this.BottomPrintRow != this.TopPrintRow)
+                    {
+                        range.AppendFormat(":R{0}", this.BottomPrintRow);
+                    }
+                }
+            }
 
-			HeaderMargin = 0.30;
-			FooterMargin = 0.30;
-		}
+            return range.ToString();
+        }
+        #endregion
 
-		/// <summary>
-		/// Resets header rows/columns.
-		/// </summary>
-		public void ResetHeaders()
-		{
-			TopPrintRow = 0;
-			BottomPrintRow = 0;
+        #region Public methods
 
-			LeftPrintCol = 0;
-			RightPrintCol = 0;
-		}
+        /// <summary>
+        /// Sets print header rows which are repeated at top on every page
+        /// </summary>
+        /// <param name="top">Top print row</param>
+        /// <param name="bottom">Bottom print row</param>
+        /// <remarks>Important Note: Top and bottom row parameters are <b>NOT</b> zero based like row
+        /// and column indexers</remarks>
+        public void SetTitleRows(int top, int bottom)
+        {
+            this.TopPrintRow = Math.Max(1, top);
+            this.BottomPrintRow = Math.Max(1, Math.Max(top, bottom));
 
-		/// <summary>
-		/// Sets print margins
-		/// </summary>
-		/// <param name="left">Left margin</param>
-		/// <param name="top">Top margin</param>
-		/// <param name="right">Right margin</param>
-		/// <param name="bottom">Bottom margin</param>
-		public void SetMargins(double left, double top, double right, double bottom)
-		{
-			LeftMargin = Math.Max(0, left);
-			TopMargin = Math.Max(0, top);
-			RightMargin = Math.Max(0, right);
-			BottomMargin = Math.Max(0, bottom);
-		}
+            this.PrintTitles = true;
+        }
 
-		/// <summary>
-		/// Sets print header and footer margins
-		/// </summary>
-		/// <param name="header">Header margin</param>
-		/// <param name="footer">Footer margin</param>
-		public void SetHeaderFooterMargins(double header, double footer)
-		{
-			HeaderMargin = Math.Max(0, header);
-			FooterMargin = Math.Max(0, footer);
-		}
+        /// <summary>
+        /// Sets print header columns which are repeated at left on every page
+        /// </summary>
+        /// <param name="left">Left print column</param>
+        /// <param name="right">Right print column</param>
+        /// <remarks>Important Note: Left and right column parameters are <b>NOT</b> zero based like row
+        /// and column indexers</remarks>
+        public void SetTitleColumns(int left, int right)
+        {
+            this.LeftPrintCol = Math.Max(1, left);
+            this.RightPrintCol = Math.Max(1, Math.Max(left, right));
 
-		/// <summary>
-		/// Sets excel's fit to page property
-		/// </summary>
-		/// <param name="width">Number of pages to fit the page horizontally</param>
-		/// <param name="height">Number of pages to fit the page vertically</param>
-		public void SetFitToPage(int width, int height)
-		{
-			FitWidth = width;
-			FitHeight = height;
+            this.PrintTitles = true;
+        }
 
-			FitToPage = true;
-		}
+        /// <summary>
+        /// Resets print margins
+        /// </summary>
+        public void ResetMargins()
+        {
+            this.LeftMargin = 0.70;
+            this.RightMargin = 0.70;
 
-		/// <summary>
-		/// Sets excel's scale or zoom property
-		/// </summary>
-		/// <param name="scale">Scale to size</param>
-		public void SetScaleToSize(int scale)
-		{
-			Scale = scale;
+            this.TopMargin = 0.75;
+            this.BottomMargin = 0.75;
 
-			FitToPage = false;
-		}
-		#endregion
+            this.HeaderMargin = 0.30;
+            this.FooterMargin = 0.30;
+        }
 
-		#region Export
-		internal void Export(XmlWriter writer)
-		{
-			// PageSetup
-			writer.WriteStartElement("PageSetup");
-			// Layout
-			if (Orientation != PageOrientation.None)
-			{
-				writer.WriteStartElement("Layout");
-				writer.WriteAttributeString("", "Orientation", null, Orientation.ToString());
-				writer.WriteEndElement();
-			}
-			// Header
-			writer.WriteStartElement("Header");
-			writer.WriteAttributeString("", "Margin", null, HeaderMargin.ToString(
-				CultureInfo.InvariantCulture));
-			writer.WriteEndElement();
-			// Footer
-			writer.WriteStartElement("Footer");
-			writer.WriteAttributeString("", "Margin", null, FooterMargin.ToString(
-				CultureInfo.InvariantCulture));
-			writer.WriteEndElement();
-			// Pagemargins
-			writer.WriteStartElement("PageMargins");
-			writer.WriteAttributeString("", "Bottom", null, BottomMargin.ToString(
-				CultureInfo.InvariantCulture));
-			writer.WriteAttributeString("", "Left", null, LeftMargin.ToString(
-				CultureInfo.InvariantCulture));
-			writer.WriteAttributeString("", "Right", null, RightMargin.ToString(
-				CultureInfo.InvariantCulture));
-			writer.WriteAttributeString("", "Top", null, TopMargin.ToString(
-				CultureInfo.InvariantCulture));
-			writer.WriteEndElement();
-			writer.WriteEndElement();
+        /// <summary>
+        /// Resets header rows/columns.
+        /// </summary>
+        public void ResetHeaders()
+        {
+            this.TopPrintRow = 0;
+            this.BottomPrintRow = 0;
 
-			// Fit to page?
-			if (FitToPage)
-			{
-				writer.WriteStartElement("FitToPage");
-				writer.WriteEndElement();
-			}
+            this.LeftPrintCol = 0;
+            this.RightPrintCol = 0;
+        }
 
-			// Print options
-			writer.WriteStartElement("Print");
+        /// <summary>
+        /// Sets print margins
+        /// </summary>
+        /// <param name="left">Left margin</param>
+        /// <param name="top">Top margin</param>
+        /// <param name="right">Right margin</param>
+        /// <param name="bottom">Bottom margin</param>
+        public void SetMargins(double left, double top, double right, double bottom)
+        {
+            this.LeftMargin = Math.Max(0, left);
+            this.TopMargin = Math.Max(0, top);
+            this.RightMargin = Math.Max(0, right);
+            this.BottomMargin = Math.Max(0, bottom);
+        }
+
+        /// <summary>
+        /// Sets print header and footer margins
+        /// </summary>
+        /// <param name="header">Header margin</param>
+        /// <param name="footer">Footer margin</param>
+        public void SetHeaderFooterMargins(double header, double footer)
+        {
+            this.HeaderMargin = Math.Max(0, header);
+            this.FooterMargin = Math.Max(0, footer);
+        }
+
+        /// <summary>
+        /// Sets excel's fit to page property
+        /// </summary>
+        /// <param name="width">Number of pages to fit the page horizontally</param>
+        /// <param name="height">Number of pages to fit the page vertically</param>
+        public void SetFitToPage(int width, int height)
+        {
+            this.FitWidth = width;
+            this.FitHeight = height;
+
+            this.FitToPage = true;
+        }
+
+        /// <summary>
+        /// Sets excel's scale or zoom property
+        /// </summary>
+        /// <param name="scale">Scale to size</param>
+        public void SetScaleToSize(int scale)
+        {
+            this.Scale = scale;
+
+            this.FitToPage = false;
+        }
+        #endregion
+
+        #region Export
+        internal void Export(XmlWriter writer)
+        {
+            // PageSetup
+            writer.WriteStartElement("PageSetup");
+
+            // Layout
+            if (this.Orientation != PageOrientation.None)
+            {
+                writer.WriteStartElement("Layout");
+                writer.WriteAttributeString(string.Empty, "Orientation", null, this.Orientation.ToString());
+                writer.WriteEndElement();
+            }
+
+            // Header
+            writer.WriteStartElement("Header");
+            writer.WriteAttributeString(string.Empty, "Margin", null, this.HeaderMargin.ToString(
+                CultureInfo.InvariantCulture));
+            writer.WriteEndElement();
+
+            // Footer
+            writer.WriteStartElement("Footer");
+            writer.WriteAttributeString(string.Empty, "Margin", null, this.FooterMargin.ToString(
+                CultureInfo.InvariantCulture));
+            writer.WriteEndElement();
+
+            // Pagemargins
+            writer.WriteStartElement("PageMargins");
+            writer.WriteAttributeString(string.Empty, "Bottom", null, this.BottomMargin.ToString(
+                CultureInfo.InvariantCulture));
+            writer.WriteAttributeString(string.Empty, "Left", null, this.LeftMargin.ToString(
+                CultureInfo.InvariantCulture));
+            writer.WriteAttributeString(string.Empty, "Right", null, this.RightMargin.ToString(
+                CultureInfo.InvariantCulture));
+            writer.WriteAttributeString(string.Empty, "Top", null, this.TopMargin.ToString(
+                CultureInfo.InvariantCulture));
+            writer.WriteEndElement();
+            writer.WriteEndElement();
+
+            // Fit to page?
+            if (this.FitToPage)
+            {
+                writer.WriteStartElement("FitToPage");
+                writer.WriteEndElement();
+            }
+
+            // Print options
+            writer.WriteStartElement("Print");
+
             // Paper size
-            writer.WriteElementString("PaperSizeIndex", ((byte)PaperSize).ToString());
-            writer.WriteElementString("ValidPrinterInfo", "");
+            writer.WriteElementString("PaperSizeIndex", ((byte)this.PaperSize).ToString());
+            writer.WriteElementString("ValidPrinterInfo", string.Empty);
 
-			writer.WriteElementString("FitHeight", FitHeight.ToString(CultureInfo.InvariantCulture));
-			writer.WriteElementString("FitWidth", FitWidth.ToString(CultureInfo.InvariantCulture));
-			writer.WriteElementString("Scale", Scale.ToString(CultureInfo.InvariantCulture));
+            writer.WriteElementString("FitHeight", this.FitHeight.ToString(CultureInfo.InvariantCulture));
+            writer.WriteElementString("FitWidth", this.FitWidth.ToString(CultureInfo.InvariantCulture));
+            writer.WriteElementString("Scale", this.Scale.ToString(CultureInfo.InvariantCulture));
 
-			writer.WriteEndElement();
-		}
-		#endregion
-	}
+            writer.WriteEndElement();
+        }
+        #endregion
+    }
 }

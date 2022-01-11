@@ -1,285 +1,303 @@
-using System.Text.RegularExpressions;
-using TMP.Extensions;
-using System.Globalization;
-
 namespace TMP.ExcelXml
 {
-	internal static class FormulaParser
-	{
-		#region Patterns
-		const string RangePattern =
-			@"^((\[(?<File>[\w\.]+)\])?('?(?<Sheet>.+)'?!))?R(?<RowStart>\d+)?C(?<ColStart>\d+)?(:R(?<RowEnd>\d+)?C(?<ColEnd>\d+)?)?$";
+    using System.Globalization;
+    using System.Text.RegularExpressions;
+    using TMP.Extensions;
 
-		const string AbsoluteRangePattern =
-			@"^((\[(?<File>[\w\.]+)\])?('?(?<Sheet>.+)'?!))?R(\[(?<RowStart>[\-0-9]+)\])?C(\[(?<ColStart>[\-0-9]+)\])?(:R(\[(?<RowEnd>[\-0-9]+)\])?C(\[(?<ColEnd>[\-0-9]+)\])?)?$";
+    internal static class FormulaParser
+    {
+        #region Patterns
+        private const string RangePattern =
+            @"^((\[(?<File>[\w\.]+)\])?('?(?<Sheet>.+)'?!))?R(?<RowStart>\d+)?C(?<ColStart>\d+)?(:R(?<RowEnd>\d+)?C(?<ColEnd>\d+)?)?$";
 
-		const string FunctionPattern =
-			@"^(?<FunctionName>[\w\+\-]+)\((?<Parameters>.*)\)$";
+        private const string AbsoluteRangePattern =
+            @"^((\[(?<File>[\w\.]+)\])?('?(?<Sheet>.+)'?!))?R(\[(?<RowStart>[\-0-9]+)\])?C(\[(?<ColStart>[\-0-9]+)\])?(:R(\[(?<RowEnd>[\-0-9]+)\])?C(\[(?<ColEnd>[\-0-9]+)\])?)?$";
 
-		const string PrintRowPattern =
-			@"^('?(?<Sheet>.+)'?!)?R(?<RowStart>\d+)(:R(?<RowEnd>\d+))?$";
+        private const string FunctionPattern =
+            @"^(?<FunctionName>[\w\+\-]+)\((?<Parameters>.*)\)$";
 
-		const string PrintColumnsPattern =
-			@"^('?(?<Sheet>.+)'?!)?C(?<ColStart>\d+)(:C(?<ColEnd>\d+))?$";
+        private const string PrintRowPattern =
+            @"^('?(?<Sheet>.+)'?!)?R(?<RowStart>\d+)(:R(?<RowEnd>\d+))?$";
 
-		static Regex RangeRegex = new Regex(RangePattern);
-		static Regex AbsoluteRangeRegex = new Regex(AbsoluteRangePattern);
-		static Regex FunctionRegex = new Regex(FunctionPattern);
+        private const string PrintColumnsPattern =
+            @"^('?(?<Sheet>.+)'?!)?C(?<ColStart>\d+)(:C(?<ColEnd>\d+))?$";
 
-		static Regex PrintRowRegex = new Regex(PrintRowPattern);
-		static Regex PrintColumnsRegex = new Regex(PrintColumnsPattern);
-		#endregion
+        private static Regex RangeRegex = new Regex(RangePattern);
+        private static Regex AbsoluteRangeRegex = new Regex(AbsoluteRangePattern);
+        private static Regex FunctionRegex = new Regex(FunctionPattern);
 
-		#region Private and Internal methods
-		private static Cell GetCell(Worksheet ws, Cell cell, bool absolute, int row, int col)
-		{
-			if (absolute)
-			{
-				col = cell.CellIndex + col;
-				row = cell.ParentRow.RowIndex + row;
-			}
+        private static Regex PrintRowRegex = new Regex(PrintRowPattern);
+        private static Regex PrintColumnsRegex = new Regex(PrintColumnsPattern);
+        #endregion
 
-			return ws[col, row];
-		}
+        #region Private and Internal methods
+        private static Cell GetCell(Worksheet ws, Cell cell, bool absolute, int row, int col)
+        {
+            if (absolute)
+            {
+                col = cell.CellIndex + col;
+                row = cell.ParentRow.RowIndex + row;
+            }
 
-		private static void ParseFormula(Cell cell, Formula formula, string formulaText)
-		{
-			Match match;
-			ParseArgumentType pat = GetArgumentType(formulaText, out match);
+            return ws[col, row];
+        }
 
-			switch (pat)
-			{
-				case ParseArgumentType.Function:
-					{
-						string function = match.Groups["FunctionName"].Value;
-						Formula subFormula = new Formula();
+        private static void ParseFormula(Cell cell, Formula formula, string formulaText)
+        {
+            Match match;
+            ParseArgumentType pat = GetArgumentType(formulaText, out match);
 
-						subFormula.Add(function).StartGroup();
+            switch (pat)
+            {
+                case ParseArgumentType.Function:
+                    {
+                        string function = match.Groups["FunctionName"].Value;
+                        Formula subFormula = new Formula();
 
-						string[] parameters = match.Groups["Parameters"].Value.Split(new [] { ',' });
+                        subFormula.Add(function).StartGroup();
 
-						foreach (string parameter in parameters)
-							ParseFormula(cell, subFormula, parameter);
+                        string[] parameters = match.Groups["Parameters"].Value.Split(new[] { ',' });
 
-						subFormula.EndGroup();
+                        foreach (string parameter in parameters)
+                        {
+                            ParseFormula(cell, subFormula, parameter);
+                        }
 
-						formula.Add(subFormula);
+                        subFormula.EndGroup();
 
-						break;
-					}
+                        formula.Add(subFormula);
 
-				case ParseArgumentType.Range:
-				case ParseArgumentType.AbsoluteRange:
-					{
-						Range range = new Range(formulaText);
-						formula.Add(range);
+                        break;
+                    }
 
-						break;
-					}
+                case ParseArgumentType.Range:
+                case ParseArgumentType.AbsoluteRange:
+                    {
+                        Range range = new Range(formulaText);
+                        formula.Add(range);
 
-				case ParseArgumentType.None:
-					{
-						formula.Add(formulaText);
+                        break;
+                    }
 
-						break;
-					}
-			}
-		}
+                case ParseArgumentType.None:
+                    {
+                        formula.Add(formulaText);
 
-		internal static ParseArgumentType GetArgumentType(string argument, out Match match)
-		{
-			Match matchFunction = FunctionRegex.Match(argument);
-			if (matchFunction.Success)
-			{
-				match = matchFunction;
+                        break;
+                    }
+            }
+        }
 
-				return ParseArgumentType.Function;
-			}
+        internal static ParseArgumentType GetArgumentType(string argument, out Match match)
+        {
+            Match matchFunction = FunctionRegex.Match(argument);
+            if (matchFunction.Success)
+            {
+                match = matchFunction;
 
-			Match matchRange = RangeRegex.Match(argument);
-			if (matchRange.Success)
-			{
-				match = matchRange;
+                return ParseArgumentType.Function;
+            }
 
-				return ParseArgumentType.Range;
-			}
+            Match matchRange = RangeRegex.Match(argument);
+            if (matchRange.Success)
+            {
+                match = matchRange;
 
-			Match matchAbsoluteRange = AbsoluteRangeRegex.Match(argument);
-			if (matchAbsoluteRange.Success)
-			{
-				match = matchAbsoluteRange;
+                return ParseArgumentType.Range;
+            }
 
-				return ParseArgumentType.AbsoluteRange;
-			}
+            Match matchAbsoluteRange = AbsoluteRangeRegex.Match(argument);
+            if (matchAbsoluteRange.Success)
+            {
+                match = matchAbsoluteRange;
 
-			match = null;
+                return ParseArgumentType.AbsoluteRange;
+            }
 
-			return ParseArgumentType.None;
-		}
+            match = null;
 
-		internal static void Parse(Cell cell, string formulaText)
-		{
-			if (formulaText[0] != '=')
-			{
-				cell.Value = formulaText;
-				cell.Content = ContentType.UnresolvedValue;
-			}
+            return ParseArgumentType.None;
+        }
 
-			formulaText = formulaText.Substring(1);
+        internal static void Parse(Cell cell, string formulaText)
+        {
+            if (formulaText[0] != '=')
+            {
+                cell.Value = formulaText;
+                cell.Content = ContentType.UnresolvedValue;
+            }
 
-			Formula formula = new Formula();
-			ParseFormula(cell, formula, formulaText);
+            formulaText = formulaText.Substring(1);
 
-			if (formula.parameters[0].ParameterType == ParameterType.Formula)
-			{
-				cell.Value = formula.parameters[0].Value as Formula;
-				cell.Content = ContentType.Formula;
-			}
-			else
-			{
-				cell.Value = formula;
-				cell.Content = ContentType.Formula;
-			}
-		}
+            Formula formula = new Formula();
+            ParseFormula(cell, formula, formulaText);
 
-		internal static bool ParseRange(Cell cell, Match match, out Range range, bool absolute)
-		{
-			range = null;
+            if (formula.parameters[0].ParameterType == ParameterType.Formula)
+            {
+                cell.Value = formula.parameters[0].Value as Formula;
+                cell.Content = ContentType.Formula;
+            }
+            else
+            {
+                cell.Value = formula;
+                cell.Content = ContentType.Formula;
+            }
+        }
 
-			// If a file name exists, we assume that the file is not
-			// the same one as this one, as neither excel nor this
-			// library saves filenames for same file. And as external 
-			// file references are not supported, return false...
-			if (match.Groups["File"].Success)
-				return false;
+        internal static bool ParseRange(Cell cell, Match match, out Range range, bool absolute)
+        {
+            range = null;
 
-			Worksheet ws;
-			if (match.Groups["Sheet"].Success)
-			{
-				string sheet = match.Groups["Sheet"].Value;
-				if (sheet.Right(1) == "'")
-					sheet = sheet.Left(sheet.Length - 1);
+            // If a file name exists, we assume that the file is not
+            // the same one as this one, as neither excel nor this
+            // library saves filenames for same file. And as external
+            // file references are not supported, return false...
+            if (match.Groups["File"].Success)
+            {
+                return false;
+            }
 
-				ws = cell.GetParentBook()[sheet];
-			}
-			else
-				ws = cell.ParentRow.ParentSheet;
+            Worksheet ws;
+            if (match.Groups["Sheet"].Success)
+            {
+                string sheet = match.Groups["Sheet"].Value;
+                if (sheet.Right(1) == "'")
+                {
+                    sheet = sheet.Left(sheet.Length - 1);
+                }
 
-			if (ws == null)
-				return false;
+                ws = cell.GetParentBook()[sheet];
+            }
+            else
+            {
+                ws = cell.ParentRow.ParentSheet;
+            }
 
-			int cellFromRow = 0;
-			int cellFromCol = 0;
+            if (ws == null)
+            {
+                return false;
+            }
 
-			if (match.Groups["RowStart"].Success)
-			{
-				if (int.TryParse(match.Groups["RowStart"].Value, NumberStyles.Integer,
-					CultureInfo.InvariantCulture, out cellFromRow))
-				{
-					if (!absolute)
-						cellFromRow--;
-				}
-			}
+            int cellFromRow = 0;
+            int cellFromCol = 0;
 
-			if (match.Groups["ColStart"].Success)
-			{
-				if (int.TryParse(match.Groups["ColStart"].Value, NumberStyles.Integer,
-					CultureInfo.InvariantCulture, out cellFromCol))
-				{
-					if (!absolute)
-						cellFromCol--;
-				}
-			}
+            if (match.Groups["RowStart"].Success)
+            {
+                if (int.TryParse(match.Groups["RowStart"].Value, NumberStyles.Integer,
+                    CultureInfo.InvariantCulture, out cellFromRow))
+                {
+                    if (!absolute)
+                    {
+                        cellFromRow--;
+                    }
+                }
+            }
 
-			Cell cellTo = null;
-			Cell cellFrom = GetCell(ws, cell, absolute, cellFromRow, cellFromCol);
+            if (match.Groups["ColStart"].Success)
+            {
+                if (int.TryParse(match.Groups["ColStart"].Value, NumberStyles.Integer,
+                    CultureInfo.InvariantCulture, out cellFromCol))
+                {
+                    if (!absolute)
+                    {
+                        cellFromCol--;
+                    }
+                }
+            }
 
-			if (match.Groups["RowEnd"].Success)
-			{
-				int cellToRow = 0;
-				int cellToCol = 0;
+            Cell cellTo = null;
+            Cell cellFrom = GetCell(ws, cell, absolute, cellFromRow, cellFromCol);
 
-				if (match.Groups["RowEnd"].Success)
-				{
-					if (int.TryParse(match.Groups["RowEnd"].Value, NumberStyles.Integer,
-						CultureInfo.InvariantCulture, out cellToRow))
-					{
-						if (!absolute)
-							cellToRow--;
-					}
-				}
+            if (match.Groups["RowEnd"].Success)
+            {
+                int cellToRow = 0;
+                int cellToCol = 0;
 
-				if (match.Groups["ColEnd"].Success)
-				{
-					if (int.TryParse(match.Groups["ColEnd"].Value, NumberStyles.Integer,
-						CultureInfo.InvariantCulture, out cellToCol))
-					{
-						if (!absolute)
-							cellToCol--;
-					}
-				}
+                if (match.Groups["RowEnd"].Success)
+                {
+                    if (int.TryParse(match.Groups["RowEnd"].Value, NumberStyles.Integer,
+                        CultureInfo.InvariantCulture, out cellToRow))
+                    {
+                        if (!absolute)
+                        {
+                            cellToRow--;
+                        }
+                    }
+                }
 
-				cellTo = GetCell(ws, cell, absolute, cellToRow, cellToCol);
-			}
+                if (match.Groups["ColEnd"].Success)
+                {
+                    if (int.TryParse(match.Groups["ColEnd"].Value, NumberStyles.Integer,
+                        CultureInfo.InvariantCulture, out cellToCol))
+                    {
+                        if (!absolute)
+                        {
+                            cellToCol--;
+                        }
+                    }
+                }
 
-			range = new Range(cellFrom, cellTo);
+                cellTo = GetCell(ws, cell, absolute, cellToRow, cellToCol);
+            }
 
-			return true;
-		}
+            range = new Range(cellFrom, cellTo);
 
-		internal static void ParsePrintHeaders(Worksheet ws, string range)
-		{
-			string[] printOptions = range.Split(new [] { ',' });
+            return true;
+        }
 
-			foreach (string po in printOptions)
-			{
-				Match match = PrintRowRegex.Match(po);
+        internal static void ParsePrintHeaders(Worksheet ws, string range)
+        {
+            string[] printOptions = range.Split(new[] { ',' });
 
-				if (match.Success)
-				{
-					int start;
+            foreach (string po in printOptions)
+            {
+                Match match = PrintRowRegex.Match(po);
 
-					if (int.TryParse(match.Groups["RowStart"].Value, NumberStyles.Integer,
-						CultureInfo.InvariantCulture, out start))
-					{
-						int end = 0;
+                if (match.Success)
+                {
+                    int start;
 
-						if (!(match.Groups["RowEnd"].Success &&
-							int.TryParse(match.Groups["RowEnd"].Value, NumberStyles.Integer,
-								CultureInfo.InvariantCulture, out end)))
-						{
-							end = start;
-						}
+                    if (int.TryParse(match.Groups["RowStart"].Value, NumberStyles.Integer,
+                        CultureInfo.InvariantCulture, out start))
+                    {
+                        int end = 0;
 
-						ws.PrintOptions.SetTitleRows(start, end);
-					}
-				}
-				else
-				{
-					match = PrintColumnsRegex.Match(po);
+                        if (!(match.Groups["RowEnd"].Success &&
+                            int.TryParse(match.Groups["RowEnd"].Value, NumberStyles.Integer,
+                                CultureInfo.InvariantCulture, out end)))
+                        {
+                            end = start;
+                        }
 
-					if (match.Success)
-					{
-						int start;
+                        ws.PrintOptions.SetTitleRows(start, end);
+                    }
+                }
+                else
+                {
+                    match = PrintColumnsRegex.Match(po);
 
-						if (int.TryParse(match.Groups["ColStart"].Value, NumberStyles.Integer,
-							CultureInfo.InvariantCulture, out start))
-						{
-							int end = 0;
+                    if (match.Success)
+                    {
+                        int start;
 
-							if (!(match.Groups["ColEnd"].Success &&
-								int.TryParse(match.Groups["ColEnd"].Value, NumberStyles.Integer,
-									CultureInfo.InvariantCulture, out end)))
-							{
-								end = start;
-							}
+                        if (int.TryParse(match.Groups["ColStart"].Value, NumberStyles.Integer,
+                            CultureInfo.InvariantCulture, out start))
+                        {
+                            int end = 0;
 
-							ws.PrintOptions.SetTitleColumns(start, end);
-						}
-					}
-				}
-			}
-		}
-		#endregion
-	}
+                            if (!(match.Groups["ColEnd"].Success &&
+                                int.TryParse(match.Groups["ColEnd"].Value, NumberStyles.Integer,
+                                    CultureInfo.InvariantCulture, out end)))
+                            {
+                                end = start;
+                            }
+
+                            ws.PrintOptions.SetTitleColumns(start, end);
+                        }
+                    }
+                }
+            }
+        }
+        #endregion
+    }
 }

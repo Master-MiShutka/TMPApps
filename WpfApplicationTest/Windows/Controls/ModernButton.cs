@@ -1,14 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Media;
-
-namespace WpfApplicationTest.Windows.Controls
+﻿namespace WpfApplicationTest.Windows.Controls
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+    using System.Windows;
+    using System.Windows.Controls;
+    using System.Windows.Media;
+
     /// <summary>
     /// Adds icon content to a standard button.
     /// </summary>
@@ -19,18 +19,22 @@ namespace WpfApplicationTest.Windows.Controls
         /// Identifies the EllipseDiameter property.
         /// </summary>
         public static readonly DependencyProperty EllipseDiameterProperty = DependencyProperty.Register("EllipseDiameter", typeof(double), typeof(ModernButton), new PropertyMetadata(22D));
+
         /// <summary>
         /// Identifies the EllipseStrokeThickness property.
         /// </summary>
         public static readonly DependencyProperty EllipseStrokeThicknessProperty = DependencyProperty.Register("EllipseStrokeThickness", typeof(double), typeof(ModernButton), new PropertyMetadata(1D));
+
         /// <summary>
         /// Identifies the IconData property.
         /// </summary>
         public static readonly DependencyProperty IconDataProperty = DependencyProperty.Register("IconData", typeof(Geometry), typeof(ModernButton));
+
         /// <summary>
         /// Identifies the IconHeight property.
         /// </summary>
         public static readonly DependencyProperty IconHeightProperty = DependencyProperty.Register("IconHeight", typeof(double), typeof(ModernButton), new PropertyMetadata(12D));
+
         /// <summary>
         /// Identifies the IconWidth property.
         /// </summary>
@@ -49,8 +53,8 @@ namespace WpfApplicationTest.Windows.Controls
         /// </summary>
         public double EllipseDiameter
         {
-            get { return (double)GetValue(EllipseDiameterProperty); }
-            set { SetValue(EllipseDiameterProperty, value); }
+            get => (double)this.GetValue(EllipseDiameterProperty);
+            set => this.SetValue(EllipseDiameterProperty, value);
         }
 
         /// <summary>
@@ -58,8 +62,8 @@ namespace WpfApplicationTest.Windows.Controls
         /// </summary>
         public double EllipseStrokeThickness
         {
-            get { return (double)GetValue(EllipseStrokeThicknessProperty); }
-            set { SetValue(EllipseStrokeThicknessProperty, value); }
+            get => (double)this.GetValue(EllipseStrokeThicknessProperty);
+            set => this.SetValue(EllipseStrokeThicknessProperty, value);
         }
 
         /// <summary>
@@ -70,8 +74,8 @@ namespace WpfApplicationTest.Windows.Controls
         /// </value>
         public Geometry IconData
         {
-            get { return (Geometry)GetValue(IconDataProperty); }
-            set { SetValue(IconDataProperty, value); }
+            get => (Geometry)this.GetValue(IconDataProperty);
+            set => this.SetValue(IconDataProperty, value);
         }
 
         /// <summary>
@@ -82,8 +86,8 @@ namespace WpfApplicationTest.Windows.Controls
         /// </value>
         public double IconHeight
         {
-            get { return (double)GetValue(IconHeightProperty); }
-            set { SetValue(IconHeightProperty, value); }
+            get => (double)this.GetValue(IconHeightProperty);
+            set => this.SetValue(IconHeightProperty, value);
         }
 
         /// <summary>
@@ -94,9 +98,8 @@ namespace WpfApplicationTest.Windows.Controls
         /// </value>
         public double IconWidth
         {
-            get { return (double)GetValue(IconWidthProperty); }
-            set { SetValue(IconWidthProperty, value); }
+            get => (double)this.GetValue(IconWidthProperty);
+            set => this.SetValue(IconWidthProperty, value);
         }
     }
-
 }

@@ -1,19 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows;
-using System.Security;
-
-namespace TMP.UI.Controls.WPF.Reporting.Helpers
+﻿namespace TMP.UI.Controls.WPF.Reporting.Helpers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Security;
+    using System.Text;
+    using System.Windows;
+
     [SecurityCritical]
     [Serializable]
     internal class DataObject : IDataObject
     {
         public DataObject()
         {
-            m_formatToValue = new Dictionary<string, object>();
+            this.m_formatToValue = new Dictionary<string, object>();
         }
 
         #region PRIVATE FIELDS
@@ -38,7 +38,7 @@ namespace TMP.UI.Controls.WPF.Reporting.Helpers
         {
             object value = null;
 
-            m_formatToValue.TryGetValue(format, out value);
+            this.m_formatToValue.TryGetValue(format, out value);
 
             return value;
         }
@@ -55,7 +55,7 @@ namespace TMP.UI.Controls.WPF.Reporting.Helpers
 
         bool IDataObject.GetDataPresent(string format)
         {
-            return m_formatToValue.ContainsKey(format);
+            return this.m_formatToValue.ContainsKey(format);
         }
 
         string[] IDataObject.GetFormats(bool autoConvert)
@@ -65,7 +65,7 @@ namespace TMP.UI.Controls.WPF.Reporting.Helpers
 
         string[] IDataObject.GetFormats()
         {
-            return m_formatToValue.Keys.ToArray<string>();
+            return this.m_formatToValue.Keys.ToArray<string>();
         }
 
         void IDataObject.SetData(string format, object data, bool autoConvert)
@@ -80,13 +80,13 @@ namespace TMP.UI.Controls.WPF.Reporting.Helpers
 
         void IDataObject.SetData(string format, object data)
         {
-            if (m_formatToValue.ContainsKey(format))
+            if (this.m_formatToValue.ContainsKey(format))
             {
-                m_formatToValue[format] = data;
+                this.m_formatToValue[format] = data;
             }
             else
             {
-                m_formatToValue.Add(format, data);
+                this.m_formatToValue.Add(format, data);
             }
         }
 

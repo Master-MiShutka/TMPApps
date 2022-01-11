@@ -4,6 +4,6 @@
     {
         Idle,
         Busy,
-        Canceling
+        Canceling,
     }
 }

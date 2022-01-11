@@ -1,4 +1,4 @@
-﻿//Copyright (c) Microsoft Corporation.  All rights reserved.
+﻿// Copyright (c) Microsoft Corporation.  All rights reserved.
 
 namespace MS.WindowsAPICodePack.Internal
 {
@@ -13,7 +13,7 @@ namespace MS.WindowsAPICodePack.Internal
         /// <returns>true if handled is release successfully, false otherwise</returns>
         protected override bool ReleaseHandle()
         {
-            if (CoreNativeMethods.DestroyIcon(handle))
+            if (CoreNativeMethods.DestroyIcon(this.handle))
             {
                 return true;
             }

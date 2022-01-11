@@ -1,30 +1,26 @@
 ﻿/*************************************************************************************
+   
+   Toolkit for WPF
 
-   Extended WPF Toolkit
-
-   Copyright (C) 2007-2013 Xceed Software Inc.
+   Copyright (C) 2007-2018 Xceed Software Inc.
 
    This program is provided to you under the terms of the Microsoft Public
    License (Ms-PL) as published at http://wpftoolkit.codeplex.com/license 
 
    For more features, controls, and fast professional support,
-   pick up the Plus Edition at http://xceed.com/wpf_toolkit
+   pick up the Plus Edition at https://xceed.com/xceed-toolkit-plus-for-wpf/
 
    Stay informed: follow @datagrid on Twitter or Like http://facebook.com/datagrids
 
   ***********************************************************************************/
 
 using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Windows;
-using System.Windows.Data;
-using System.Windows.Input;
 using Xceed.Wpf.Toolkit.Primitives;
 using System.Windows.Controls;
-using System.Linq;
 using Xceed.Wpf.Toolkit.Core.Utilities;
-using System.Windows.Threading;
+using System.Windows.Input;
 
 namespace Xceed.Wpf.Toolkit
 {
@@ -38,6 +34,23 @@ namespace Xceed.Wpf.Toolkit
     #endregion
 
     #region Properties
+
+    #region AutoClipTimeParts
+
+    public static readonly DependencyProperty AutoClipTimePartsProperty = DependencyProperty.Register( "AutoClipTimeParts", typeof( bool ), typeof( DateTimeUpDown ), new UIPropertyMetadata( false ) );
+    public bool AutoClipTimeParts
+    {
+      get
+      {
+        return (bool)GetValue( AutoClipTimePartsProperty );
+      }
+      set
+      {
+        SetValue( AutoClipTimePartsProperty, value );
+      }
+    }
+
+    #endregion //AutoClipTimeParts
 
     #region Format
 
@@ -88,7 +101,7 @@ namespace Xceed.Wpf.Toolkit
       try
       {
         // Test the format string if it is used.
-        DateTime.MinValue.ToString( ( string )value, CultureInfo.CurrentCulture );
+        CultureInfo.CurrentCulture.DateTimeFormat.Calendar.MinSupportedDateTime.ToString( (string)value, CultureInfo.CurrentCulture );
       }
       catch
       {
@@ -188,8 +201,8 @@ namespace Xceed.Wpf.Toolkit
     static DateTimeUpDown()
     {
       DefaultStyleKeyProperty.OverrideMetadata( typeof( DateTimeUpDown ), new FrameworkPropertyMetadata( typeof( DateTimeUpDown ) ) );
-      MaximumProperty.OverrideMetadata( typeof( DateTimeUpDown ), new FrameworkPropertyMetadata( DateTime.MaxValue ) );
-      MinimumProperty.OverrideMetadata( typeof( DateTimeUpDown ), new FrameworkPropertyMetadata( DateTime.MinValue ) );
+      MaximumProperty.OverrideMetadata( typeof( DateTimeUpDown ), new FrameworkPropertyMetadata( CultureInfo.CurrentCulture.DateTimeFormat.Calendar.MaxSupportedDateTime ) );
+      MinimumProperty.OverrideMetadata( typeof( DateTimeUpDown ), new FrameworkPropertyMetadata( CultureInfo.CurrentCulture.DateTimeFormat.Calendar.MinSupportedDateTime ) );
       UpdateValueOnEnterKeyProperty.OverrideMetadata( typeof( DateTimeUpDown ), new FrameworkPropertyMetadata( true ) );
     }
 
@@ -668,7 +681,19 @@ namespace Xceed.Wpf.Toolkit
       throw new NotSupportedException( "DateTimeUpDown controls do not support modifying UpdateValueOnEnterKey property." );
     }
 
-    #endregion //Base Class Overrides
+    protected override void OnKeyDown( KeyEventArgs e )
+    {
+      if( e.Key == Key.Escape )
+      {
+        this.SyncTextAndValueProperties( false, null );
+        e.Handled = true;
+      }
+
+      base.OnKeyDown( e );
+    }
+
+
+#endregion //Base Class Overrides
 
     #region Methods
 
@@ -708,51 +733,39 @@ namespace Xceed.Wpf.Toolkit
 
     private void Increment( int step )
     {
-      // if UpdateValueOnEnterKey is true, 
-      // Sync Value on Text only when Enter Key is pressed.
-      if( this.UpdateValueOnEnterKey )
+      _fireSelectionChangedEvent = false;
+
+      var currentValue = this.ConvertTextToValue( this.TextBox.Text );
+      if( currentValue.HasValue )
       {
-        _fireSelectionChangedEvent = false;
-
-        var currentValue = this.ConvertTextToValue( this.TextBox.Text );
-        if( currentValue.HasValue )
-        {
-          var newValue = this.UpdateDateTime( currentValue, step );
-          this.TextBox.Text = newValue.Value.ToString( this.GetFormatString( this.Format ), this.CultureInfo );
-        }
-        else
-        {
-          this.TextBox.Text = (this.DefaultValue != null)
-                              ? this.DefaultValue.Value.ToString( this.GetFormatString( this.Format ), this.CultureInfo )
-                              : this.ContextNow.ToString( this.GetFormatString( this.Format ), this.CultureInfo );
-        }
-
-        if( this.TextBox != null )
-        {
-          DateTimeInfo info = _selectedDateTimeInfo;
-          //this only occurs when the user manually type in a value for the Value Property
-          if( info == null )
-            info = (this.CurrentDateTimePart != DateTimePart.Other) ? this.GetDateTimeInfo( this.CurrentDateTimePart ) : _dateTimeInfoList[ 0 ];
-
-          //whenever the value changes we need to parse out the value into out DateTimeInfo segments so we can keep track of the individual pieces
-          this.ParseValueIntoDateTimeInfo( this.ConvertTextToValue( this.TextBox.Text ) );
-
-          //we loose our selection when the Value is set so we need to reselect it without firing the selection changed event
-          this.TextBox.Select( info.StartPosition, info.Length );
-        }
-        _fireSelectionChangedEvent = true;
+        var newValue = this.UpdateDateTime( currentValue, step );
+        if( newValue == null )
+          return;
+        this.TextBox.Text = newValue.Value.ToString( this.GetFormatString( this.Format ), this.CultureInfo );
       }
       else
       {
-        if( this.Value.HasValue )
-        {
-          this.Value = this.UpdateDateTime( this.Value, step );
-        }
-        else
-        {
-          this.Value = this.DefaultValue ?? this.ContextNow;
-        }
+        this.TextBox.Text = ( this.DefaultValue != null )
+                            ? this.DefaultValue.Value.ToString( this.GetFormatString( this.Format ), this.CultureInfo )
+                            : this.ContextNow.ToString( this.GetFormatString( this.Format ), this.CultureInfo );
       }
+
+      if( this.TextBox != null )
+      {
+        DateTimeInfo info = _selectedDateTimeInfo;
+        //this only occurs when the user manually type in a value for the Value Property
+        if( info == null )
+          info = ( this.CurrentDateTimePart != DateTimePart.Other ) ? this.GetDateTimeInfo( this.CurrentDateTimePart ) : _dateTimeInfoList[ 0 ];
+
+        //whenever the value changes we need to parse out the value into out DateTimeInfo segments so we can keep track of the individual pieces
+        this.ParseValueIntoDateTimeInfo( this.ConvertTextToValue( this.TextBox.Text ) );
+
+        //we loose our selection when the Value is set so we need to reselect it without firing the selection changed event
+        this.TextBox.Select( info.StartPosition, info.Length );
+      }
+      _fireSelectionChangedEvent = true;
+
+      this.SyncTextAndValueProperties( true, Text );
     }
 
     private void ParseValueIntoDateTimeInfo( DateTime? newDate )
@@ -926,7 +939,7 @@ namespace Xceed.Wpf.Toolkit
                     ? this.Value.Value
                     : DateTime.Parse( this.ContextNow.ToString(), this.CultureInfo.DateTimeFormat );
 
-        isValid = DateTimeParser.TryParse( text, this.GetFormatString( Format ), current, this.CultureInfo, out result );
+        isValid = DateTimeParser.TryParse( text, this.GetFormatString( Format ), current, this.CultureInfo, this.AutoClipTimeParts, out result );
       }
       catch( FormatException )
       {

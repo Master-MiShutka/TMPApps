@@ -13,8 +13,8 @@ namespace TMP.Wpf.CommonControls.Behaviors
 
         public string GiveMeTheText
         {
-            get { return (string)GetValue(GiveMeTheTextProperty); }
-            set { SetValue(GiveMeTheTextProperty, value); }
+            get => (string)GetValue(GiveMeTheTextProperty);
+            set => SetValue(GiveMeTheTextProperty, value);
         }
 
         protected override void OnAttached()

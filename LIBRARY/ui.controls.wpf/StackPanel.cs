@@ -1,32 +1,38 @@
-﻿using System;
-using System.Linq;
-using System.Windows;
-using System.Windows.Controls;
-
-namespace TMP.UI.Controls.WPF
+﻿namespace TMP.UI.Controls.WPF
 {
+    using System;
+    using System.Linq;
+    using System.Windows;
+    using System.Windows.Controls;
+
     public class StackPanel : Panel
     {
         protected override Size MeasureOverride(Size constraint)
         {
-            UIElementCollection children = InternalChildren;
+            UIElementCollection children = this.InternalChildren;
 
             double parentWidth = 0;
             double parentHeight = 0;
             double accumulatedWidth = 0;
             double accumulatedHeight = 0;
 
-            var isHorizontal = Orientation == Orientation.Horizontal;
-            var totalMarginToAdd = CalculateTotalMarginToAdd(children, MarginBetweenChildren);
+            var isHorizontal = this.Orientation == Orientation.Horizontal;
+            var totalMarginToAdd = CalculateTotalMarginToAdd(children, this.MarginBetweenChildren);
 
             for (int i = 0; i < children.Count; i++)
             {
                 UIElement child = children[i];
 
-                if (child == null) { continue; }
+                if (child == null)
+                {
+                    continue;
+                }
 
                 // Handle only the Auto's first to calculate remaining space for Fill's
-                if (GetFill(child) != StackPanelFill.Auto) { continue; }
+                if (GetFill(child) != StackPanelFill.Auto)
+                {
+                    continue;
+                }
 
                 // Child constraint is the remaining size; this is total size minus size consumed by previous children.
                 var childConstraint = new Size(Math.Max(0.0, constraint.Width - accumulatedWidth),
@@ -76,10 +82,16 @@ namespace TMP.UI.Controls.WPF
             {
                 UIElement child = children[i];
 
-                if (child == null) { continue; }
+                if (child == null)
+                {
+                    continue;
+                }
 
                 // Handle all the Fill's giving them a portion of the remaining space
-                if (GetFill(child) != StackPanelFill.Fill) { continue; }
+                if (GetFill(child) != StackPanelFill.Fill)
+                {
+                    continue;
+                }
 
                 // Child constraint is the remaining size; this is total size minus size consumed by previous children.
                 var childConstraint = isHorizontal
@@ -104,7 +116,7 @@ namespace TMP.UI.Controls.WPF
                 }
             }
 
-            // Make sure the final accumulated size is reflected in parentSize. 
+            // Make sure the final accumulated size is reflected in parentSize.
             parentWidth = Math.Max(parentWidth, accumulatedWidth);
             parentHeight = Math.Max(parentHeight, accumulatedHeight);
             var parent = new Size(parentWidth, parentHeight);
@@ -114,14 +126,14 @@ namespace TMP.UI.Controls.WPF
 
         protected override Size ArrangeOverride(Size arrangeSize)
         {
-            UIElementCollection children = InternalChildren;
+            UIElementCollection children = this.InternalChildren;
             int totalChildrenCount = children.Count;
 
             double accumulatedLeft = 0;
             double accumulatedTop = 0;
 
-            var isHorizontal = Orientation == Orientation.Horizontal;
-            var marginBetweenChildren = MarginBetweenChildren;
+            var isHorizontal = this.Orientation == Orientation.Horizontal;
+            var marginBetweenChildren = this.MarginBetweenChildren;
 
             var totalMarginToAdd = CalculateTotalMarginToAdd(children, marginBetweenChildren);
 
@@ -133,7 +145,9 @@ namespace TMP.UI.Controls.WPF
                 if (fillType != StackPanelFill.Auto)
                 {
                     if (child.Visibility != Visibility.Collapsed && fillType != StackPanelFill.Ignored)
+                    {
                         countOfFillTypes += 1;
+                    }
                 }
                 else
                 {
@@ -150,7 +164,11 @@ namespace TMP.UI.Controls.WPF
             for (int i = 0; i < totalChildrenCount; ++i)
             {
                 UIElement child = children[i];
-                if (child == null) { continue; }
+                if (child == null)
+                {
+                    continue;
+                }
+
                 Size childDesiredSize = child.DesiredSize;
                 var fillType = GetFill(child);
                 var isCollapsed = child.Visibility == Visibility.Collapsed || fillType == StackPanelFill.Ignored;
@@ -182,7 +200,7 @@ namespace TMP.UI.Controls.WPF
             return arrangeSize;
         }
 
-        static double CalculateTotalMarginToAdd(UIElementCollection children, double marginBetweenChildren)
+        private static double CalculateTotalMarginToAdd(UIElementCollection children, double marginBetweenChildren)
         {
             var visibleChildrenCount = children
                 .OfType<UIElement>()
@@ -201,8 +219,8 @@ namespace TMP.UI.Controls.WPF
 
         public Orientation Orientation
         {
-            get { return (Orientation)GetValue(OrientationProperty); }
-            set { SetValue(OrientationProperty, value); }
+            get => (Orientation)this.GetValue(OrientationProperty);
+            set => this.SetValue(OrientationProperty, value);
         }
 
         public static readonly DependencyProperty MarginBetweenChildrenProperty = DependencyProperty.Register(
@@ -214,8 +232,8 @@ namespace TMP.UI.Controls.WPF
 
         public double MarginBetweenChildren
         {
-            get { return (double)GetValue(MarginBetweenChildrenProperty); }
-            set { SetValue(MarginBetweenChildrenProperty, value); }
+            get => (double)this.GetValue(MarginBetweenChildrenProperty);
+            set => this.SetValue(MarginBetweenChildrenProperty, value);
         }
 
         public static readonly DependencyProperty FillProperty = DependencyProperty.RegisterAttached(
@@ -240,6 +258,7 @@ namespace TMP.UI.Controls.WPF
 
     public enum StackPanelFill
     {
-        Auto, Fill, Ignored
+        Auto,
+        Fill, Ignored,
     }
 }

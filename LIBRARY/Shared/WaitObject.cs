@@ -1,32 +1,28 @@
-﻿using System;
-using System.ComponentModel;
-using System.Windows.Input;
-using System.Runtime.CompilerServices;
-using System.Windows;
-using System.Windows.Controls;
-
-namespace TMP.Shared
+﻿namespace TMP.Shared
 {
+    using System;
+    using System.Windows.Input;
+
     public class WaitObject : IDisposable
     {
-        private Cursor _previousCursor;
-        private IStateObject _stateObject;
+        private Cursor previousCursor;
+        private IStateObject stateObject;
 
         public WaitObject(IStateObject sender)
         {
-            _stateObject = sender;
-            _previousCursor = Mouse.OverrideCursor;
+            this.stateObject = sender;
+            this.previousCursor = Mouse.OverrideCursor;
 
             Mouse.OverrideCursor = Cursors.Wait;
-            _stateObject.State = State.Busy;
+            this.stateObject.State = State.Busy;
         }
 
         #region IDisposable Members
 
         public void Dispose()
         {
-            Mouse.OverrideCursor = _previousCursor;
-            _stateObject.State = State.Idle;
+            Mouse.OverrideCursor = this.previousCursor;
+            this.stateObject.State = State.Idle;
         }
 
         #endregion
