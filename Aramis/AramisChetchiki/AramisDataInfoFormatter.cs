@@ -73,15 +73,23 @@
 
             writer.WriteArrayHeader(4);
 
-            byte[] getBytes(string data)
+            void getBytesAndWrite(ref MessagePackWriter writer, object data)
             {
-                return System.Text.Encoding.UTF8.GetBytes(data);
+                if (data == null)
+                {
+                    writer.WriteNil();
+                }
+                else
+                {
+                    byte[] bytes = System.Text.Encoding.UTF8.GetBytes(data.ToString());
+                    writer.WriteString(bytes);
+                }
             }
 
-            writer.WriteString(getBytes(aramisDataInfo.Version.ToString()));
-            writer.WriteString(getBytes(aramisDataInfo.Period.ToString()));
-            writer.WriteString(getBytes(aramisDataInfo.DepartamentName));
-            writer.WriteString(getBytes(aramisDataInfo.AramisDbPath));
+            getBytesAndWrite(ref writer, aramisDataInfo.Version == null ? new Version(1, 1) : aramisDataInfo.Version);
+            getBytesAndWrite(ref writer, aramisDataInfo.Period == null ? new DatePeriod() : aramisDataInfo.Period);
+            getBytesAndWrite(ref writer, aramisDataInfo.DepartamentName);
+            getBytesAndWrite(ref writer, aramisDataInfo.AramisDbPath);
         }
     }
 

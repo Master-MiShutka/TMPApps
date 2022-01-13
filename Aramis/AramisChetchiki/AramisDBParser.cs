@@ -2088,9 +2088,28 @@
 
         private void StoreHashAndSaveData<T>(string fileName, ref WorkTask workTask, T[] data)
         {
-            workTask.UpdateStatus($"вычисление кэш-суммы файла ...");
+            string msg = "вычисление кэш-суммы файла ...";
+            workTask.UpdateStatus(msg);
             workTask.IsIndeterminate = true;
-            string hashAsString = this.CalculateSHA256(fileName);
+
+            string hashAsString = string.Empty;
+            bool isOk = false;
+            byte numberOfRetries = 1;
+            do
+            {
+                try
+                {
+                    hashAsString = this.CalculateSHA256(fileName);
+                    isOk = true;
+                }
+                catch (IOException ex)
+                {
+                    this.callBackAction(ex);
+                    workTask.UpdateStatus(string.Format("{0}\nфайл используется другим процессом, попытка #{1}", msg, numberOfRetries));
+                    Task.Delay(1_000);
+                }
+                numberOfRetries++;
+            } while (isOk == false);
 
             var fileInfo = new System.IO.FileInfo(fileName);
             DataFileRecord dataFileRecord = new DataFileRecord() { FileName = fileName, Hash = hashAsString, LastModified = fileInfo.LastWriteTime };
@@ -2157,7 +2176,7 @@
             string hashAsString = string.Empty;
 
             // Not sure if BufferedStream should be wrapped in using block
-            using (var stream = new BufferedStream(File.OpenRead(fileName), bufferedStreamBufferSize))
+            using (var stream = new BufferedStream(File.Open(fileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite), bufferedStreamBufferSize))
             {
                 using (System.Security.Cryptography.SHA256 mySHA256 = System.Security.Cryptography.SHA256.Create())
                 {

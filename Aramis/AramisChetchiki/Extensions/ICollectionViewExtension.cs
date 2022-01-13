@@ -16,7 +16,7 @@
 
         public static void Export<T>(
             this ICollectionView collectionView,
-            Dictionary<string, string> fieldsAndFormats,
+            Dictionary<string, Model.DataCellFormats> fieldsAndFormats,
             string reportTitle,
             string reportDescription,
             Func<T, string, string, object> getValueDelegate, Action<string> callBack = null)
@@ -45,7 +45,7 @@
 
             output[0, 0] = "№ п/п";
             int ind = 1;
-            foreach (KeyValuePair<string, string> field in fieldsAndFormats)
+            foreach (KeyValuePair<string, Model.DataCellFormats> field in fieldsAndFormats)
             {
                 output[0, ind++] = Utils.ConvertFromTitleCase(field.Key);
             }
@@ -59,7 +59,16 @@
                 ind = 1; // т.к. первый столбец номер по порядку
                 foreach (string field in fieldsAndFormats.Keys)
                 {
-                    object value = getValueDelegate(item, fieldsAndFormats[field], field);
+                    object value = string.Empty;
+                    if (string.IsNullOrWhiteSpace(fieldsAndFormats[field].ExcelFormat) == false)
+                    {
+                        value = getValueDelegate(item, string.Empty, field);
+                    }
+                    else
+                    {
+                        value = getValueDelegate(item, fieldsAndFormats[field].ContentDisplayFormat, field);
+                    }
+
                     output[rowIndex, ind++] = value;
                 }
 
@@ -134,6 +143,31 @@
                 data.NumberFormat = "@";
 
                 data.Value = output;
+
+                callBack?.Invoke("установка формата данных");
+
+                rowIndex = 1;
+                foreach (T item in collection)
+                {
+                    data[rowIndex, 0].NumberFormat = "0";
+                    ind = 1; // т.к. первый столбец номер по порядку
+                    foreach (string field in fieldsAndFormats.Keys)
+                    {
+                        object value = string.Empty;
+                        if (string.IsNullOrWhiteSpace(fieldsAndFormats[field].ExcelFormat) == false)
+                        {
+                            data[rowIndex, 0].NumberFormat = fieldsAndFormats[field].ExcelFormat;
+                        }
+                        else if (string.IsNullOrWhiteSpace(fieldsAndFormats[field].ContentDisplayFormat) == false)
+                        {
+                            data[rowIndex, 0].NumberFormat = "General";
+                        }
+
+                        ind++;
+                    }
+
+                    rowIndex++;
+                }
 
                 callBack?.Invoke("настройка книги MS Excel");
 
@@ -238,7 +272,7 @@
 
         public static DataTable ToDataTable<T>(
             this ICollectionView collectionView,
-            Dictionary<string, string> fieldsAndFormats,
+            Dictionary<string, Model.DataCellFormats> fieldsAndFormats,
             Func<T, string, string, object> getValueDelegate)
         {
             if (collectionView == null || getValueDelegate == null || fieldsAndFormats == null)
@@ -259,7 +293,7 @@
                 int index = 0;
                 foreach (string field in fieldsAndFormats.Keys)
                 {
-                    object value = getValueDelegate(item, fieldsAndFormats[field], field);
+                    object value = getValueDelegate(item, fieldsAndFormats[field].ContentDisplayFormat, field);
                     row[index++] = value;
                 }
 

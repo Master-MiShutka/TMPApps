@@ -695,6 +695,9 @@
             PropertyInfo pi = properties[property];
             object value = pi.GetValue(obj, null);
 
+            if (value == null)
+                return string.Empty;
+
             return pi.PropertyType switch
             {
                 Type t when t == typeof(bool) => (bool)value ? "да" : "нет",

@@ -821,12 +821,12 @@
         }
 
         /// <summary>
-        /// Возвращает словарь вида поле:формат данных
+        /// Возвращает словарь вида поле:форматы данных
         /// </summary>
         /// <returns></returns>
-        protected Dictionary<string, string> GetFieldsAndFormats()
+        protected Dictionary<string, DataCellFormats> GetFieldsAndFormats()
         {
-            var fieldsAndFormats = new Dictionary<string, string>();
+            var fieldsAndFormats = new Dictionary<string, DataCellFormats>();
             Application.Current.Dispatcher.Invoke((Action)(() =>
             {
                 var columns = this.TableColumns
@@ -835,11 +835,12 @@
                 var columnsFields = columns.Select(c => new
                 {
                     Key = c.FieldName,
-                    Format = c.CellContentStringFormat,
+                    ContentFormat = c.CellContentStringFormat,
+                    ExportFormat = c.CellContentExportStringFormat,
                 });
                 foreach (var item in columnsFields)
                 {
-                    fieldsAndFormats.Add(item.Key, item.Format);
+                    fieldsAndFormats.Add(item.Key, new DataCellFormats() { ContentDisplayFormat = item.ContentFormat, ExcelFormat = item.ExportFormat, ClipboardFormat = item.ExportFormat });
                 }
             }));
             return fieldsAndFormats;
