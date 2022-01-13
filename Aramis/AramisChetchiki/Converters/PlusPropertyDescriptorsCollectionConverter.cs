@@ -51,11 +51,11 @@
             }
         }
 
-        private StringCollection ConvertToFields(PlusPropertyDescriptorsCollection collection)
+        private IList ConvertToFields(PlusPropertyDescriptorsCollection collection)
         {
             Type type = collection.FirstOrDefault().ModelType;
 
-            StringCollection result = type switch
+            IList result = type switch
             {
                 Type t when t == typeof(Model.Meter) => new MeterFieldsCollection(),
                 Type t when t == typeof(Model.ChangeOfMeter) => new ChangesOfMetersFieldsCollection(),
