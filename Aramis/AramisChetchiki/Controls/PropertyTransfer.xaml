@@ -54,9 +54,7 @@
                                     <Setter Property="Template">
                                         <Setter.Value>
                                             <ControlTemplate>
-                                                <StackPanel>
-                                                    <controls:NoData Message="список&#x0A;пуст" />
-                                                </StackPanel>
+                                                <controls:NoData Message="список&#x0A;пуст" />
                                             </ControlTemplate>
                                         </Setter.Value>
                                     </Setter>
@@ -80,7 +78,7 @@
             </DockPanel>
         </HeaderedContentControl>
         <controls:StackPanel MarginBetweenChildren="10" Grid.Column="1" VerticalAlignment="Center" Margin="8,0,5,0">
-            <controls:ButtonWithIconKind ToolTip="Удалить из списка" ImageKind="Delete" Command="{Binding CommandDelete, ElementName=root}"/>
+            <controls:ButtonWithIconKind ToolTip="Удалить из списка" ImageKind="Delete" Command="{Binding CommandRemoveFromTarget, ElementName=root}"/>
             <controls:ButtonWithIconKind ToolTip="Очистить список" ImageKind="ClearReflectHorizontal" Command="{Binding CommandClear, ElementName=root}"/>
             <Separator/>
             <controls:ButtonWithIconKind ToolTip="Добавить поле в используемые" ImageKind="ChevronRight" Command="{Binding CommandAddToTarget, ElementName=root}"/>

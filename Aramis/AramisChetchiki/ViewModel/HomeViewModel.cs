@@ -414,12 +414,14 @@
             const int countOfMeterTypePerLocality = 15;
             const int countOfLocalities = 50;
 
-            #region Свод по установке или замене счётчиков за последние три года помесячно
+            #region Свод по установке или замене счётчиков за последние восемь лет помесячно
             int curYear = DateTime.Now.Year;
-            const int yearsCount = 3;
+            
+            // показывать данные за 8 лет
+            const int yearsCount = 8;
             add(new Matrix()
             {
-                Header = "Свод по установке или замене счётчиков за последние три года помесячно",
+                Header = "Свод по установке или замене счётчиков за последние восемь лет помесячно",
                 Description = "* количество счётчиков",
                 GetRowHeaderValuesFunc = () => Enumerable.Range(curYear - yearsCount + 1, yearsCount).Reverse().Select(i => MatrixHeaderCell.CreateRowHeader(i.ToString(AppSettings.CurrentCulture))),
                 GetColumnHeaderValuesFunc = () => System.Globalization.DateTimeFormatInfo.CurrentInfo.MonthNames.Take(12)
@@ -443,10 +445,10 @@
             });
             #endregion
 
-            #region Свод по установке или замене на электронный счётчик за последние три года помесячно
+            #region Свод по установке или замене на электронный счётчик за последние восемь лет помесячно
             add(new Matrix()
             {
-                Header = "Свод по установке или замене на электронный счётчик за последние три года помесячно",
+                Header = "Свод по установке или замене на электронный счётчик за последние восемь лет помесячно",
                 Description = "* количество электронных счётчиков",
                 GetRowHeaderValuesFunc = () => Enumerable.Range(curYear - yearsCount + 1, yearsCount).Reverse().Select(i => MatrixHeaderCell.CreateRowHeader(i.ToString(AppSettings.CurrentCulture))),
                 GetColumnHeaderValuesFunc = () => System.Globalization.DateTimeFormatInfo.CurrentInfo.MonthNames.Take(12)
@@ -542,7 +544,7 @@
                 Parameters = meterTypePerLocality.Select(i => i.Key),
                 SelectedParameter = meterTypePerLocality.First().Key,
                 Header = "Свод по н.п., преобладающим типам счетчиков и\nкол-ву фаз счетчика",
-                Description = "* количество счётчиков; \t* без АСКУЭ;\t* сплит-счётчики не учтены",
+                Description = "* количество счётчиков; \t* без АСКУЭ;\n* сплит-счётчики не учтены",
                 GetColumnHeaderValuesFunc = () => headerCells0,
             };
             matrix.GetRowHeaderValuesFunc = () => meterTypePerLocality[(string)matrix.SelectedParameter].MeterTypes.Select(meterType => MatrixHeaderCell.CreateRowHeader(meterType.Key, tag: meterType.Value.Count)).ToList();
@@ -607,7 +609,7 @@
                 Parameters = meterTypePerLocality2.Select(i => i.Key),
                 SelectedParameter = meterTypePerLocality2.First().Key,
                 Header = "Свод неповереных по н.п., преобладающим типам\nсчетчиков и кол-ву фаз счетчика",
-                Description = "* количество неповереных счётчиков;\t* без АСКУЭ;\t* сплит-счётчики не учтены",
+                Description = "* количество неповереных счётчиков;\t* без АСКУЭ;\n* сплит-счётчики не учтены",
                 GetColumnHeaderValuesFunc = () => headerCells2,
             };
             matrix2.GetRowHeaderValuesFunc = () => meterTypePerLocality2[(string)matrix2.SelectedParameter].MeterTypes.Select(meterType => MatrixHeaderCell.CreateRowHeader(meterType.Key, tag: meterType.Value.Count)).ToList();
@@ -690,6 +692,55 @@
                     {
                         int count = list.Count;
                         return new MatrixDataCell(count) { ToolTip = $"{100 * count / metersCount:N1}%" };
+                    }
+                    else
+                    {
+                        return new MatrixDataCell(string.Empty);
+                    }
+                },
+            });
+            #endregion
+
+            #region Свод по нас. пункту, количеству МЖД, наличию аскуэ
+            var listOfAnApartmentBuilding = Address.DictionaryStreetWithHouseNumber
+                .Where(i => i.Value >= AppSettings.Default.NumberOfApartmentsInAnApartmentBuilding)
+                .ToDictionary(key => key.Key, e => e.Value);
+            int countOfAnApartmentBuilding = listOfAnApartmentBuilding.Count;
+
+            var listOfAnApartmentBuildingCities = listOfAnApartmentBuilding
+                .Select(i => i.Key.Split(", ")[0]);
+
+            var citiesWithApartmentBuilding = localities
+                .Where(city => listOfAnApartmentBuildingCities.Contains(city));
+
+            IEnumerable<IMatrixHeader> headersHasAskue = new IMatrixHeader[]
+            {
+                MatrixHeaderCell.CreateColumnHeader("есть АСКУЭ", tag: true),
+                MatrixHeaderCell.CreateColumnHeader("нет АСКУЭ", tag: false),
+            };
+
+            add(new Matrix()
+            {
+                Header = "Свод по нас. пункту, количеству МЖД",
+                Description = "* количество МЖД",
+                GetRowHeaderValuesFunc = () => citiesWithApartmentBuilding.Select(i => MatrixHeaderCell.CreateRowHeader(i)),
+                GetColumnHeaderValuesFunc = () => headersHasAskue,
+                GetDataCellFunc = (row, column) =>
+                {
+                    var list = MainViewModel.Meters
+                        .Where(i => i.Адрес.НаселённыйПункт == row.Header)
+                        .Where(i => i.МестоУстановки == "Лестничная клетка")
+                        .Where(i => listOfAnApartmentBuilding.ContainsKey(i.НаселённыйПунктИУлицаСНомеромДома))
+                        .Where(i => i.Аскуэ == (bool)column.Tag);
+
+                    var listBuildings = list
+                        .Select(i => i.НаселённыйПунктИУлицаСНомеромДома)
+                        .Distinct();
+
+                    if (listBuildings.Any())
+                    {
+                        int count = listBuildings.Count();
+                        return new MatrixDataCell(count) { ToolTip = $"{100 * count / countOfAnApartmentBuilding:N1}%" };
                     }
                     else
                     {
@@ -996,87 +1047,22 @@
             });
             #endregion
 
-            #region Свод по категории счётчика, состоянию метрологической поверки и типу населённого пункта
-            IList<string> childsHeaderCells = MainViewModel.Meters
-                .Select(i => i.ТипНаселённойМестности)
-                .Distinct()
-                .Select(i => i)
-                .ToList<string>();
-
-            IEnumerable<IMatrixHeader> headerCells = new IMatrixHeader[]
-            {
-                MatrixHeaderCell.CreateColumnHeader("поверен",  children: childsHeaderCells.Select(i => MatrixHeaderCell.CreateColumnHeader(i)).ToList()),
-                MatrixHeaderCell.CreateColumnHeader("не поверен", children: childsHeaderCells.Select(i => MatrixHeaderCell.CreateColumnHeader(i)).ToList()),
-            };
+            #region Свод по типу счётчика и году будущей поверки
             add(new Matrix()
             {
-                Header = "Свод по категории счётчика,\n состоянию метрологической поверки\n и типу населённого пункта",
+                Header = "Перспективный план поверки счётчиков",
                 Description = "* количество счётчиков",
-                GetRowHeaderValuesFunc = () => MainViewModel.Meters
-                    .Select(i => i.ГруппаСчётчикаДляОтчётов).Distinct().Select(i => MatrixHeaderCell.CreateRowHeader(i)),
-                ShowColumnsTotal = true,
-                ShowRowsTotal = true,
-                GetColumnHeaderValuesFunc = () => headerCells,
+                GetRowHeaderValuesFunc = () => allMeterTypes.Select(i => MatrixHeaderCell.CreateRowHeader(i.Key.ToString())),
+                GetColumnHeaderValuesFunc = () => Enumerable.Range(curYear, yearsCount + 1).Select(i => MatrixHeaderCell.CreateColumnHeader(i.ToString(AppSettings.CurrentCulture))),
                 GetDataCellFunc = (row, column) =>
                 {
-                    var list = MainViewModel.Meters
-                        .Where(i => i.ГруппаСчётчикаДляОтчётов == row.Header)
-                        .Where(i => i.ТипНаселённойМестности == column.Header)
-                        .Where(i => i.Поверен == (column.Parent?.Header == "поверен"))
-                        .ToList();
+                    var group = allMeterTypes.FirstOrDefault(i => i.Key.ToString() == row.Header);
+                    int year = 0;
+                    int.TryParse(column.Header, out year);
+                    var list = group.Value.Where(i => (i.ГодПоверки + i.ПериодПоверки) == year).ToList();
                     if (list != null)
                     {
-                        int count = list.Count;
-                        return new MatrixDataCell(count) { ToolTip = $"{100 * count / metersCount:N1}%" };
-                    }
-                    else
-                    {
-                        return new MatrixDataCell(string.Empty);
-                    }
-                },
-            });
-            #endregion
-
-            #region Свод по нас. пункту, количеству МЖД, наличию аскуэ
-            var listOfAnApartmentBuilding = Address.DictionaryStreetWithHouseNumber
-                .Where(i => i.Value >= AppSettings.Default.NumberOfApartmentsInAnApartmentBuilding)
-                .ToDictionary(key => key.Key, e => e.Value);
-            int countOfAnApartmentBuilding = listOfAnApartmentBuilding.Count;
-
-            var listOfAnApartmentBuildingCities = listOfAnApartmentBuilding
-                .Select(i => i.Key.Split(", ")[0]);
-
-            var citiesWithApartmentBuilding = localities
-                .Where(city => listOfAnApartmentBuildingCities.Contains(city));
-
-            IEnumerable<IMatrixHeader> headersHasAskue = new IMatrixHeader[]
-            {
-                MatrixHeaderCell.CreateColumnHeader("есть АСКУЭ", tag: true),
-                MatrixHeaderCell.CreateColumnHeader("нет АСКУЭ", tag: false),
-            };
-
-            add(new Matrix()
-            {
-                Header = "Свод по нас. пункту, количеству МЖД",
-                Description = "* количество МЖД",
-                GetRowHeaderValuesFunc = () => citiesWithApartmentBuilding.Select(i => MatrixHeaderCell.CreateRowHeader(i)),
-                GetColumnHeaderValuesFunc = () => headersHasAskue,
-                GetDataCellFunc = (row, column) =>
-                {
-                    var list = MainViewModel.Meters
-                        .Where(i => i.Адрес.НаселённыйПункт == row.Header)
-                        .Where(i => i.МестоУстановки == "Лестничная клетка")
-                        .Where(i => listOfAnApartmentBuilding.ContainsKey(i.НаселённыйПунктИУлицаСНомеромДома))
-                        .Where(i => i.Аскуэ == (bool)column.Tag);
-
-                    var listBuildings = list
-                        .Select(i => i.НаселённыйПунктИУлицаСНомеромДома)
-                        .Distinct();
-
-                    if (listBuildings.Any())
-                    {
-                        int count = listBuildings.Count();
-                        return new MatrixDataCell(count) { ToolTip = $"{100 * count / countOfAnApartmentBuilding:N1}%" };
+                        return new MatrixDataCell(list.Count);
                     }
                     else
                     {

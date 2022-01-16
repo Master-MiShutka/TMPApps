@@ -7,6 +7,24 @@
 
     public class PlusPropertyDescriptorsCollection : ObservableCollection<PlusPropertyDescriptor>
     {
+        public PlusPropertyDescriptorsCollection()
+        {
+
+        }
+
+        public PlusPropertyDescriptorsCollection(IEnumerable<PlusPropertyDescriptor> plusPropertyDescriptors)
+        {
+            IList<PlusPropertyDescriptor> items = this.Items;
+            if (plusPropertyDescriptors != null && items != null)
+            {
+                System.Collections.IEnumerator enumerator = plusPropertyDescriptors.GetEnumerator();
+                while (enumerator.MoveNext())
+                {
+                    items.Add((PlusPropertyDescriptor)enumerator.Current);
+                }
+            }
+        }
+
         public void RemoveRange(int index, int count)
         {
             this.CheckReentrancy();

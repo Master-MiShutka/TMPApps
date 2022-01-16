@@ -630,7 +630,7 @@
             return keyValuePairs?.Values;
         }
 
-        public static MeterFieldsCollection GetMeterFieldsCollectionByTableViewKind(TableViewKinds tableViewKind)
+        public static PlusPropertyDescriptorsCollection GetMeterFieldsCollectionByTableViewKind(TableViewKinds tableViewKind)
         {
             return tableViewKind switch
             {
@@ -639,7 +639,7 @@
                 TableViewKinds.ShortView => AppSettings.Default.ShortViewColumns,
                 TableViewKinds.ОплатаView => AppSettings.Default.ОплатаViewColumns,
                 TableViewKinds.ПривязкаView => AppSettings.Default.ПривязкаViewColumns,
-                TableViewKinds.ПолныйView => Meter.GetSetOfColumns("ПолныйView"),
+                TableViewKinds.ПолныйView => AppSettings.Default.ПолныйViewColumns,
                 _ => throw new NotImplementedException("Unknown TableView"),
             };
         }
@@ -654,7 +654,7 @@
                 Type t when t == typeof(SummaryInfoItem) => null,
                 _ => throw new NotImplementedException($"Unknown type '{type}'"),
             };
-            MeterFieldsCollection fields = GetMeterFieldsCollectionByTableViewKind(tableViewKind);
+            MeterFieldsCollection fields = AppSettings.Default.GetMeterFieldsCollectionByTableViewKind(tableViewKind);
 
             return GetFields(keyValuePairs, fields);
         }
@@ -676,14 +676,21 @@
             }
 
             List<PlusPropertyDescriptor> result = new ();
-            foreach (string name in propertyNames)
+            foreach (var item in propertyNames)
             {
-                if (keyValuePairs.ContainsKey(name))
+                if (item is Shared.PlusPropertyDescriptor descriptor)
                 {
-                    result.Add(keyValuePairs[name]);
+                    if (keyValuePairs.ContainsKey(descriptor.Name))
+                    {
+                        result.Add(keyValuePairs[descriptor.Name]);
+                    }
                 }
-                else
+                else if (item is string name)
                 {
+                    if (keyValuePairs.ContainsKey(name))
+                    {
+                        result.Add(keyValuePairs[name]);
+                    }
                 }
             }
 

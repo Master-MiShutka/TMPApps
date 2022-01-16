@@ -88,6 +88,11 @@
             return collectionView;
         }
 
+        public override Predicate<Meter> DataFilter => (meter) =>
+        {
+            return true;
+        };
+
         protected override bool Filter(object obj)
         {
             Meter meter = (Meter)obj;
@@ -107,6 +112,12 @@
             this.CommandNotShowDeleted = new DelegateCommand(() =>
             {
                 this.notShowDeleted = !this.notShowDeleted;
+                if (this.View != null)
+                {
+                    this.View.Refresh();
+                }
+                //this.RaisePropertyChanged(nameof(this.Data));
+                //this.RaisePropertyChanged(nameof(this.View));
             },
             (o) => this.Data != null);
         }

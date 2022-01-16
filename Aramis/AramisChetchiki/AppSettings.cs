@@ -13,26 +13,28 @@
     {
         #region Fields
 
-        private readonly SummaryInfoFieldsCollection defaultSummaryInfoFields;
-        private readonly ChangesOfMetersFieldsCollection defaultChangesOfMetersFields;
-        private readonly MeterFieldsCollection defaultBaseViewColumns;
-        private readonly MeterFieldsCollection defaultShortViewColumns;
-        private readonly MeterFieldsCollection defaultDetailedViewColumns;
-        private readonly MeterFieldsCollection defaultОплатаViewColumns;
-        private readonly MeterFieldsCollection defaultПривязкаViewColumns;
+        private readonly PlusPropertyDescriptorsCollection defaultSummaryInfoFields;
+        private readonly PlusPropertyDescriptorsCollection defaultChangesOfMetersFields;
+        private readonly PlusPropertyDescriptorsCollection defaultBaseViewColumns;
+        private readonly PlusPropertyDescriptorsCollection defaultShortViewColumns;
+        private readonly PlusPropertyDescriptorsCollection defaultDetailedViewColumns;
+        private readonly PlusPropertyDescriptorsCollection defaultОплатаViewColumns;
+        private readonly PlusPropertyDescriptorsCollection defaultПривязкаViewColumns;
 
         private double fontSize = 14.0;
         private string aramisDBPath = "d:\\aramis\\Disks\\OSHM\\aramis";
         private string dataFilesStorePath = string.Empty;
-        private ChangesOfMetersFieldsCollection changesOfMetersFields;
+
+        private PlusPropertyDescriptorsCollection changesOfMetersFields;
+        private PlusPropertyDescriptorsCollection summaryInfoFields;
+        private PlusPropertyDescriptorsCollection baseViewColumns;
+        private PlusPropertyDescriptorsCollection shortViewColumns;
+        private PlusPropertyDescriptorsCollection detailedViewColumns;
+        private PlusPropertyDescriptorsCollection оплатаViewColumns;
+        private PlusPropertyDescriptorsCollection привязкаViewColumns;
+
         private Dictionary<ViewModel.IViewModel, List<DataGridWpf.DataGridWpfColumnViewModel>> viewModelsTableColumns;
-        private SummaryInfoFieldsCollection summaryInfoFields;
         private InfoViewType selectedSummaryView = InfoViewType.ViewAsDiagram;
-        private MeterFieldsCollection baseViewColumns;
-        private MeterFieldsCollection shortViewColumns;
-        private MeterFieldsCollection detailedViewColumns;
-        private MeterFieldsCollection оплатаViewColumns;
-        private MeterFieldsCollection привязкаViewColumns;
         private TableViewKinds selectedTableViewKind = TableViewKinds.BaseView;
         private TMPApplication.VisualTheme theme;
         private string lastUsedDataFileName;
@@ -57,55 +59,63 @@
         {
             this.ViewModelsTableColumns = new Dictionary<ViewModel.IViewModel, List<DataGridWpf.DataGridWpfColumnViewModel>>();
 
-            this.defaultSummaryInfoFields = new SummaryInfoFieldsCollection(
-                ModelHelper.MeterSummaryInfoPropertiesCollection.Values.Select(i => i.Name).ToList());
+            this.defaultSummaryInfoFields = new PlusPropertyDescriptorsCollection(ModelHelper.MeterSummaryInfoItemDescriptors);
             System.Diagnostics.Debug.Assert(this.defaultSummaryInfoFields.Count > 0, "DefaultSummaryInfoFields.Count <= 0");
-            this.defaultChangesOfMetersFields = new ChangesOfMetersFieldsCollection(
-                ModelHelper.ChangesOfMetersPropertiesCollection.Values.Select(i => i.Name).ToList());
+
+            this.defaultChangesOfMetersFields = new PlusPropertyDescriptorsCollection(ModelHelper.ChangesOfMetersDescriptors);
             if (this.defaultChangesOfMetersFields.Count == 0)
             {
                 System.Diagnostics.Debugger.Break();
             }
 
-            this.defaultBaseViewColumns = Meter.GetSetOfColumns("BaseView");
-            this.defaultShortViewColumns = Meter.GetSetOfColumns("ShortView");
-            this.defaultDetailedViewColumns = Meter.GetSetOfColumns("DetailedView");
-            this.defaultОплатаViewColumns = Meter.GetSetOfColumns("ОплатаView");
-            this.defaultПривязкаViewColumns = Meter.GetSetOfColumns("ПривязкаView");
+            this.Load();
+
+            this.ПолныйViewColumns = Meter.GetSetOfColumns("ПолныйView").ToPlusPropertyDescriptorsCollection();
+
+            this.defaultBaseViewColumns = Meter.GetSetOfColumns("BaseView").ToPlusPropertyDescriptorsCollection();
+            this.defaultShortViewColumns = Meter.GetSetOfColumns("ShortView").ToPlusPropertyDescriptorsCollection();
+            this.defaultDetailedViewColumns = Meter.GetSetOfColumns("DetailedView").ToPlusPropertyDescriptorsCollection();
+            this.defaultОплатаViewColumns = Meter.GetSetOfColumns("ОплатаView").ToPlusPropertyDescriptorsCollection();
+            this.defaultПривязкаViewColumns = Meter.GetSetOfColumns("ПривязкаView").ToPlusPropertyDescriptorsCollection();
 
             if (this.SummaryInfoFields == null || this.SummaryInfoFields.Count == 0)
             {
                 this.SummaryInfoFields = this.defaultSummaryInfoFields;
             }
 
-            if (this.Settings.ChangesOfMetersFields == null || this.Settings.ChangesOfMetersFields.Count == 0)
+            if (this.ChangesOfMetersFields == null || this.ChangesOfMetersFields.Count == 0)
             {
-                this.Settings.ChangesOfMetersFields = this.defaultChangesOfMetersFields;
+                this.ChangesOfMetersFields = this.defaultChangesOfMetersFields;
             }
 
-            if (this.Settings.BaseViewColumns == null || this.Settings.BaseViewColumns.Count == 0)
+            if (this.BaseViewColumns == null || this.BaseViewColumns.Count == 0)
             {
-                this.Settings.BaseViewColumns = this.defaultBaseViewColumns;
+                this.BaseViewColumns = this.defaultBaseViewColumns;
             }
 
-            if (this.Settings.ShortViewColumns == null || this.Settings.ShortViewColumns.Count == 0)
+            if (this.ShortViewColumns == null || this.ShortViewColumns.Count == 0)
             {
-                this.Settings.ShortViewColumns = this.defaultShortViewColumns;
+                this.ShortViewColumns = this.defaultShortViewColumns;
             }
 
-            if (this.Settings.DetailedViewColumns == null || this.Settings.DetailedViewColumns.Count == 0)
+            if (this.DetailedViewColumns == null || this.DetailedViewColumns.Count == 0)
             {
-                this.Settings.DetailedViewColumns = this.defaultDetailedViewColumns;
+                this.DetailedViewColumns = this.defaultDetailedViewColumns;
             }
 
-            if (this.Settings.ОплатаViewColumns == null || this.Settings.ОплатаViewColumns.Count == 0)
+            if (this.ОплатаViewColumns == null || this.ОплатаViewColumns.Count == 0)
             {
-                this.Settings.ОплатаViewColumns = this.defaultОплатаViewColumns;
+                this.ОплатаViewColumns = this.defaultОплатаViewColumns;
             }
 
-            if (this.Settings.ПривязкаViewColumns == null || this.Settings.ПривязкаViewColumns.Count == 0)
+            if (this.ПривязкаViewColumns == null || this.ПривязкаViewColumns.Count == 0)
             {
-                this.Settings.ПривязкаViewColumns = this.defaultПривязкаViewColumns;
+                this.ПривязкаViewColumns = this.defaultПривязкаViewColumns;
+            }
+
+            if (this.ViewModelsTableColumns == null)
+            {
+                this.ViewModelsTableColumns = new Dictionary<ViewModel.IViewModel, List<DataGridWpf.DataGridWpfColumnViewModel>>();
             }
         }
 
@@ -119,23 +129,25 @@
 
         public string DataFilesStorePath { get => this.dataFilesStorePath; set => this.SetProperty(ref this.dataFilesStorePath, value); }
 
-        public ChangesOfMetersFieldsCollection ChangesOfMetersFields { get => this.changesOfMetersFields; set => this.SetProperty(ref this.changesOfMetersFields, value); }
+        public PlusPropertyDescriptorsCollection ChangesOfMetersFields { get => this.changesOfMetersFields; set => this.SetProperty(ref this.changesOfMetersFields, value); }
 
         public Dictionary<ViewModel.IViewModel, List<DataGridWpf.DataGridWpfColumnViewModel>> ViewModelsTableColumns { get => this.viewModelsTableColumns; set => this.SetProperty(ref this.viewModelsTableColumns, value); }
 
-        public SummaryInfoFieldsCollection SummaryInfoFields { get => this.summaryInfoFields; set => this.SetProperty(ref this.summaryInfoFields, value); }
+        public PlusPropertyDescriptorsCollection SummaryInfoFields { get => this.summaryInfoFields; set => this.SetProperty(ref this.summaryInfoFields, value); }
 
         public InfoViewType SelectedSummaryView { get => this.selectedSummaryView; set => this.SetProperty(ref this.selectedSummaryView, value); }
 
-        public MeterFieldsCollection BaseViewColumns { get => this.baseViewColumns; set => this.SetProperty(ref this.baseViewColumns, value); }
+        public PlusPropertyDescriptorsCollection ПолныйViewColumns { get; }
 
-        public MeterFieldsCollection ShortViewColumns { get => this.shortViewColumns; set => this.SetProperty(ref this.shortViewColumns, value); }
+        public PlusPropertyDescriptorsCollection BaseViewColumns { get => this.baseViewColumns; set => this.SetProperty(ref this.baseViewColumns, value); }
 
-        public MeterFieldsCollection DetailedViewColumns { get => this.detailedViewColumns; set => this.SetProperty(ref this.detailedViewColumns, value); }
+        public PlusPropertyDescriptorsCollection ShortViewColumns { get => this.shortViewColumns; set => this.SetProperty(ref this.shortViewColumns, value); }
 
-        public MeterFieldsCollection ОплатаViewColumns { get => this.оплатаViewColumns; set => this.SetProperty(ref this.оплатаViewColumns, value); }
+        public PlusPropertyDescriptorsCollection DetailedViewColumns { get => this.detailedViewColumns; set => this.SetProperty(ref this.detailedViewColumns, value); }
 
-        public MeterFieldsCollection ПривязкаViewColumns { get => this.привязкаViewColumns; set => this.SetProperty(ref this.привязкаViewColumns, value); }
+        public PlusPropertyDescriptorsCollection ОплатаViewColumns { get => this.оплатаViewColumns; set => this.SetProperty(ref this.оплатаViewColumns, value); }
+
+        public PlusPropertyDescriptorsCollection ПривязкаViewColumns { get => this.привязкаViewColumns; set => this.SetProperty(ref this.привязкаViewColumns, value); }
 
         public TableViewKinds SelectedTableViewKind { get => this.selectedTableViewKind; set => this.SetProperty(ref this.selectedTableViewKind, value); }
 
@@ -160,18 +172,18 @@
             this.AramisDBPath = this.Settings.AramisDBPath;
             this.DataFilesStorePath = this.Settings.DataFilesStorePath;
 
-            this.ChangesOfMetersFields = this.Settings.ChangesOfMetersFields;
+            this.ChangesOfMetersFields = this.Settings.ChangesOfMetersFields.ToPlusPropertyDescriptorsCollection();
+            this.SummaryInfoFields = this.Settings.SummaryInfoFields.ToPlusPropertyDescriptorsCollection();
+            this.BaseViewColumns = this.Settings.BaseViewColumns.ToPlusPropertyDescriptorsCollection();
+            this.ShortViewColumns = this.Settings.ShortViewColumns.ToPlusPropertyDescriptorsCollection();
+            this.DetailedViewColumns = this.Settings.DetailedViewColumns.ToPlusPropertyDescriptorsCollection();
+            this.ОплатаViewColumns = this.Settings.ОплатаViewColumns.ToPlusPropertyDescriptorsCollection();
+            this.ПривязкаViewColumns = this.Settings.ПривязкаViewColumns.ToPlusPropertyDescriptorsCollection();
+
             this.ViewModelsTableColumns = this.Settings.ViewModelsTableColumns;
-            this.SummaryInfoFields = this.Settings.SummaryInfoFields;
 
             this.SelectedSummaryView = this.Settings.SelectedSummaryView;
             this.SelectedTableViewKind = this.Settings.SelectedTableViewKind;
-
-            this.BaseViewColumns = this.Settings.BaseViewColumns;
-            this.ShortViewColumns = this.Settings.ShortViewColumns;
-            this.DetailedViewColumns = this.Settings.DetailedViewColumns;
-            this.ОплатаViewColumns = this.Settings.ОплатаViewColumns;
-            this.ПривязкаViewColumns = this.Settings.ПривязкаViewColumns;
 
             this.Theme = this.Settings.Theme;
 
@@ -183,23 +195,26 @@
 
         public void Save()
         {
+            var dialog = (App.Current as TMPApplication.TMPApp).MainWindowWithDialogs.DialogWaitingScreen("сохранение настроек ...", indeterminate: true);
+            dialog.Show();
+
             this.Settings.FontSize = this.FontSize;
 
             this.Settings.AramisDBPath = this.AramisDBPath;
             this.Settings.DataFilesStorePath = this.DataFilesStorePath;
 
-            this.Settings.ChangesOfMetersFields = this.ChangesOfMetersFields;
+            this.Settings.ChangesOfMetersFields = new ChangesOfMetersFieldsCollection(this.ChangesOfMetersFields);
+            this.Settings.SummaryInfoFields = new SummaryInfoFieldsCollection(this.SummaryInfoFields);
+            this.Settings.BaseViewColumns = new MeterFieldsCollection(this.BaseViewColumns);
+            this.Settings.ShortViewColumns = new MeterFieldsCollection(this.ShortViewColumns);
+            this.Settings.DetailedViewColumns = new MeterFieldsCollection(this.DetailedViewColumns);
+            this.Settings.ОплатаViewColumns = new MeterFieldsCollection(this.ОплатаViewColumns);
+            this.Settings.ПривязкаViewColumns = new MeterFieldsCollection(this.ПривязкаViewColumns);
+
             this.Settings.ViewModelsTableColumns = this.ViewModelsTableColumns;
-            this.Settings.SummaryInfoFields = this.SummaryInfoFields;
 
             this.Settings.SelectedSummaryView = this.SelectedSummaryView;
             this.Settings.SelectedTableViewKind = this.SelectedTableViewKind;
-
-            this.Settings.BaseViewColumns = this.BaseViewColumns;
-            this.Settings.ShortViewColumns = this.ShortViewColumns;
-            this.Settings.DetailedViewColumns = this.DetailedViewColumns;
-            this.Settings.ОплатаViewColumns = this.ОплатаViewColumns;
-            this.Settings.ПривязкаViewColumns = this.ПривязкаViewColumns;
 
             this.Settings.Theme = this.Theme;
 
@@ -209,6 +224,8 @@
             this.Settings.NumberOfApartmentsInAnApartmentBuilding = this.NumberOfApartmentsInAnApartmentBuilding;
 
             this.Settings.Save();
+
+            dialog.Close();
         }
 
         public static IEnumerable<PlusPropertyDescriptor> GetElectricitySupplyPropertyDescriptors()
@@ -238,18 +255,18 @@
             return fields.OrderBy(i => i.Order);
         }
 
-        #endregion
-
-        #region Private methods
-
-        private static ICollection<PlusPropertyDescriptor> GetOnlyVisibleAndOrderedFields(ICollection<PlusPropertyDescriptor> props)
+        public MeterFieldsCollection GetMeterFieldsCollectionByTableViewKind(TableViewKinds tableViewKind)
         {
-            if (props == null)
+            return tableViewKind switch
             {
-                return null;
-            }
-
-            return new List<PlusPropertyDescriptor>(props.Where(i => i.IsVisible).OrderBy(i => i.Order));
+                TableViewKinds.BaseView => new MeterFieldsCollection(this.BaseViewColumns),
+                TableViewKinds.DetailedView => new MeterFieldsCollection(this.DetailedViewColumns),
+                TableViewKinds.ShortView => new MeterFieldsCollection(this.ShortViewColumns),
+                TableViewKinds.ОплатаView => new MeterFieldsCollection(this.ОплатаViewColumns),
+                TableViewKinds.ПривязкаView => new MeterFieldsCollection(this.ПривязкаViewColumns),
+                TableViewKinds.ПолныйView => new MeterFieldsCollection(this.ПолныйViewColumns),
+                _ => throw new NotImplementedException("Unknown TableView"),
+            };
         }
 
         #endregion

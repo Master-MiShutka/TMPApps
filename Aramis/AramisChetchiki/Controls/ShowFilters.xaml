@@ -66,16 +66,11 @@
             <Setter Property="Background" Value="Transparent"/>
         </Style>
 
-        <Style x:Key="contextMenuStyle" BasedOn="{StaticResource baseContextMenuStyle}" TargetType="{x:Type ContextMenu}">
-            <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.MenuBrushKey}}"/>
-        </Style>
-
     </UserControl.Resources>
         <controls:DropDownButton x:Name="btn"
                              VerticalAlignment="Center"
                              Content="Ещё фильтры" StayMenuOpen="True"
-                             ItemContainerStyle="{StaticResource groupMenuItemStyle}" 
-                             MenuStyle="{StaticResource contextMenuStyle}">
+                             ItemContainerStyle="{StaticResource groupMenuItemStyle}" >
         <controls:DropDownButton.Icon>
             <controls:Icons Height="18" Kind="Filter" />
         </controls:DropDownButton.Icon>

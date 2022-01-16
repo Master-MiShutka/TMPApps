@@ -9,7 +9,8 @@
     xmlns:local_converters="clr-namespace:TMP.WORK.AramisChetchiki.Converters"
     xmlns:local_controls="clr-namespace:TMP.WORK.AramisChetchiki.Controls"
     xmlns:custom_filters="clr-namespace:TMP.WORK.AramisChetchiki.CustomFilters"
-    xmlns:model="clr-namespace:TMP.WORK.AramisChetchiki.Model">
+    xmlns:model="clr-namespace:TMP.WORK.AramisChetchiki.Model"
+    xmlns:options="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options">
 
     <converters:NullOrEmptyToVisibilityConverter x:Key="NullOrEmptyToVisibilityConverter" />
     <converters:ParametersToOneConverter x:Key="ParametersToOneConverter" />
@@ -211,33 +212,6 @@
 
     <Style x:Key="{x:Type ToolTip}" BasedOn="{StaticResource baseToolTipStyle}" TargetType="{x:Type ToolTip}" />
 
-    <Style x:Key="baseMenuItemStyle" BasedOn="{StaticResource {x:Type MenuItem}}" TargetType="{x:Type MenuItem}">
-        <Setter Property="HorizontalAlignment" Value="Stretch" />
-        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-        <Setter Property="Padding" Value="0,0" />
-    </Style>
-
-    <Style BasedOn="{StaticResource baseMenuItemStyle}" TargetType="{x:Type MenuItem}">
-    </Style>
-
-    <Style x:Key="baseContextMenuStyle" BasedOn="{StaticResource {x:Type ContextMenu}}" TargetType="{x:Type ContextMenu}">
-        <Setter Property="FontSize" Value="{local_extensions:SettingBinding Path=FontSize, FallbackValue=14.0}" />
-        <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.MenuBrushKey}}"/>
-    </Style>
-
-    <Style BasedOn="{StaticResource baseContextMenuStyle}" TargetType="{x:Type ContextMenu}">
-        <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.MenuBrushKey}}"/>
-    </Style>
-
-    <Style x:Key="baseMenuStyle" BasedOn="{StaticResource {x:Type Menu}}" TargetType="{x:Type Menu}">
-        <Setter Property="FontSize" Value="{local_extensions:SettingBinding Path=FontSize, FallbackValue=14.0}" />
-        <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.MenuBrushKey}}"/>
-    </Style>
-
-    <Style BasedOn="{StaticResource baseMenuStyle}" TargetType="{x:Type Menu}">
-
-    </Style>
-
     <ObjectDataProvider
         x:Key="TableViewKindsList"
         MethodName="GetValues"
@@ -265,12 +239,12 @@
         </MenuItem.ItemContainerStyle>
     </MenuItem>
 
+    <Style BasedOn="{StaticResource {x:Type RichTextBox}}" TargetType="{x:Type RichTextBox}">
+        <Setter Property="ContextMenu" Value="{StaticResource TextBoxContextMenu}" />
+    </Style>
+    
     <Style BasedOn="{StaticResource {x:Type TextBox}}" TargetType="{x:Type TextBox}">
-        <Style.Resources>
-            <Style BasedOn="{StaticResource baseContextMenuStyle}" TargetType="{x:Type ContextMenu}">
-
-            </Style>
-        </Style.Resources>
+        <Setter Property="ContextMenu" Value="{StaticResource TextBoxContextMenu}" />
     </Style>
     
     <HierarchicalDataTemplate

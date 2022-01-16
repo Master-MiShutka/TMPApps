@@ -105,20 +105,9 @@
             <ItemsControl Margin="5"
                     x:Name="itemsControl" Style="{StaticResource SummaryInfosItemsControlStyle}"
                     ContextMenu="{StaticResource ItemsControlContextMenuKey}"
-                    ItemsSource="{Binding View}" 
-                              xmlns:mouseWheel="clr-namespace:WpfMouseWheel.Windows.Input;assembly=WpfMouseWheelLib"
-                                      mouseWheel:MouseWheel.Enhanced="True"
-                                      mouseWheel:MouseWheel.ScrollSmoothing="Smooth"
-                                      mouseWheel:MouseWheel.VScrollModifiers="Shift"
-                                      mouseWheel:MouseWheel.HScrollModifiers=""
-                                      mouseWheel:MouseWheel.ScrollMode="Physical">
-                <ItemsControl.Template>
-                    <ControlTemplate>
-                        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
-                            <ItemsPresenter />
-                        </ScrollViewer>
-                    </ControlTemplate>
-                </ItemsControl.Template>
+                    VirtualizingStackPanel.VirtualizationMode="Recycling"
+                    ScrollViewer.IsDeferredScrollingEnabled="True"
+                    ItemsSource="{Binding View}" >
             </ItemsControl>
         </view:BaseView.Content>
     </view:BaseView>

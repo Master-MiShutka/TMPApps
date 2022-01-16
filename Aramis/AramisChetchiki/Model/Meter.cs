@@ -79,7 +79,6 @@
 
         [MessagePack.IgnoreMember]
         [DisplayName("Тип населённой местности")]
-        [SummaryInfo]
         [Display(GroupName = "Адрес")]
         public string ТипНаселённойМестности => string.IsNullOrWhiteSpace(this.Адрес?.ТипНаселённогоПункта)
             ? UNKNOWN_STR
@@ -168,6 +167,12 @@
         public DateOnly? ДатаОтключения { get; set; }
 
         [MessagePack.IgnoreMember]
+        [DisplayName("Год отключения")]
+        [Display(GroupName = "Абонент")]
+        [SummaryInfo]
+        public int? ГодОтключения => this.Отключён ? this.ДатаОтключения.Value.Year : null;
+
+        [MessagePack.IgnoreMember]
         [Display(GroupName = "Абонент")]
         [DisplayName("Отключён")]
         [SummaryInfo]
@@ -181,7 +186,6 @@
 
         [DisplayName("Дата удаления из базы")]
         [Display(GroupName = "Абонент")]
-        [SummaryInfo]
         [MessagePack.Key(11)]
         public DateOnly ДатаУдаления { get; set; }
 
@@ -239,6 +243,7 @@
 
         [DisplayName("Мощность электроустановки, кВт")]
         [Display(GroupName = "Счётчик")]
+        [SummaryInfo]
         [MessagePack.Key(20)]
         public decimal? Мощность { get; set; }
 
@@ -590,6 +595,7 @@
         }
 
         [DisplayName("Контролёр")]
+        [SummaryInfo]
         [Display(GroupName = "Обход")]
         [DisplayFormat(DataFormatString = "{0}")]
         [MessagePack.Key(46)]
@@ -763,7 +769,6 @@
         #region Признаки
 
         [DisplayName("Признаки")]
-        [SummaryInfo]
         [Display(GroupName = "Признаки")]
         [MessagePack.Key(55)]
         public MeterSigns Signs { get; set; }
@@ -774,11 +779,13 @@
         public bool ГорячееВодоснабжение => this.Signs.HasFlag(MeterSigns.ГорячееВодоснабжение);
 
         [MessagePack.IgnoreMember]
+        [SummaryInfo]
         [DisplayName("НеблагополучнаяСемья")]
         [Display(GroupName = "Признаки")]
         public bool НеблагополучнаяСемья => this.Signs.HasFlag(MeterSigns.НеблагополучнаяСемья);
 
         [MessagePack.IgnoreMember]
+        [SummaryInfo]
         [DisplayName("МногодетнаяСемья")]
         [Display(GroupName = "Признаки")]
         public bool МногодетнаяСемья => this.Signs.HasFlag(MeterSigns.МногодетнаяСемья);

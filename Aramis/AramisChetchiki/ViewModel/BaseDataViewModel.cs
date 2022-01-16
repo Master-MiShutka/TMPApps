@@ -543,6 +543,8 @@
                             this.OnViewBuilded();
                         }
 
+                        this.view.Filter = this.Filter;
+
                         // Mouse.OverrideCursor = null;
                         this.isViewBuilding = false;
                     }

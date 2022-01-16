@@ -62,7 +62,7 @@
         </TabItem>
         <TabItem Header="Список замен счётчиков">
             <local_controls:PropertyTransfer Tag="ChangesOfMeterPropertiesTransfer" SourceCollection="{Binding Source={StaticResource ChangesOfMeterPropertiesNamesList}}"  
-                                                         TargetCollection="{local_extensions:SettingBinding Path=ChangesOfMetersFields, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource PlusPropertyDescriptorsCollectionConverter}}"/>
+                                                         TargetCollection="{local_extensions:SettingBinding Path=ChangesOfMetersFields}"/>
         </TabItem>
     </TabControl>
 </settings_pages:SettingsPage>

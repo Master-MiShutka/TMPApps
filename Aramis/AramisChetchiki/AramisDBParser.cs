@@ -911,9 +911,9 @@
             List<SummaryInfoItem> infos = new ();
 
             // по всем свойствам
-            foreach (string field in AppSettings.Default.SummaryInfoFields)
+            foreach (var field in AppSettings.Default.SummaryInfoFields)
             {
-                infos.Add(SummaryInfoHelper.BuildSummaryInfoItem(meters, field));
+                infos.Add(SummaryInfoHelper.BuildSummaryInfoItem(meters, field.Name));
                 workTask.UpdateUI(++processedRows, totalRows, stepNameString: "формирование свода");
             }
 

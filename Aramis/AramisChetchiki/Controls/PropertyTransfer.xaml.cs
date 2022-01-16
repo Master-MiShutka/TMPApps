@@ -33,6 +33,9 @@
                 typeof(PropertyTransfer),
                 new PropertyMetadata(default, OnTargetCollectionChanged));
 
+        private PlusPropertyDescriptor sourceSelectedItem;
+        private PlusPropertyDescriptor targetSelectedItem;
+
         public PropertyTransfer()
         {
             this.CommandMoveUp = new DelegateCommand(
@@ -85,6 +88,7 @@
                     this.SourceCollection?.Refresh();
                     this.RaisePropertyChanged(nameof(this.AllSourceCollectionItemsUsed));
                     this.RaisePropertyChanged(nameof(this.HasTargetItems));
+                    this.RaisePropertyChanged(nameof(this.HasSourceItems));
 
                     var binding = this.GetBindingExpression(PropertyTransfer.TargetCollectionProperty);
                     binding.UpdateSource();
@@ -98,6 +102,7 @@
                     this.SourceCollection?.Refresh();
                     this.RaisePropertyChanged(nameof(this.AllSourceCollectionItemsUsed));
                     this.RaisePropertyChanged(nameof(this.HasTargetItems));
+                    this.RaisePropertyChanged(nameof(this.HasSourceItems));
                 },
                 o => this.SourceSelectedItem != null && this.TargetCollection != null && this.TargetCollection.Contains(this.SourceSelectedItem) == false);
 
@@ -118,6 +123,7 @@
 
                 this.SetValue(SourceCollectionProperty, value);
                 this.sourceCollectionItemsCount = value.SourceCollection.Cast<object>().Count();
+                this.RaisePropertyChanged(nameof(this.AllSourceCollectionItemsUsed));
                 this.SetFilter(value);
             }
         }
@@ -132,15 +138,13 @@
 
         public bool AllSourceCollectionItemsUsed => this.SourceCollection.IsEmpty && this.sourceCollectionItemsCount > 0;
 
-        public PlusPropertyDescriptor SourceSelectedItem { get; set; }
+        public PlusPropertyDescriptor SourceSelectedItem { get => this.sourceSelectedItem; set => this.SetProperty(ref this.sourceSelectedItem, value); }
 
-        public PlusPropertyDescriptor TargetSelectedItem { get; set; }
+        public PlusPropertyDescriptor TargetSelectedItem { get => this.targetSelectedItem; set => this.SetProperty(ref this.targetSelectedItem, value); }
 
         public ICommand CommandMoveUp { get; }
 
         public ICommand CommandMoveDown { get; }
-
-        public ICommand CommandDelete { get; }
 
         public ICommand CommandClear { get; }
 
@@ -152,7 +156,7 @@
         {
             PropertyTransfer propertyTransfer = (PropertyTransfer)d;
 
-            propertyTransfer.sourceCollectionItemsCount = (e.NewValue is ICollection collection) ? collection.Count : ((IEnumerable)e.NewValue).Cast<object>().Count();
+            propertyTransfer.sourceCollectionItemsCount = (e.NewValue is ICollection collection) ? collection.Count : ((ICollectionView)e.NewValue).Cast<object>().Count();
 
             propertyTransfer.SetFilter(e.NewValue as ICollectionView);
 

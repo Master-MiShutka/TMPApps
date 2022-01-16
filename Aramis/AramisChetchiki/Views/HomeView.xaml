@@ -29,13 +29,6 @@
         <KeyBinding Key="F1" Command="{Binding CommandShowHelp}" />
     </UserControl.InputBindings>
 
-    <UserControl.Resources>
-        <Style BasedOn="{StaticResource {x:Type ContextMenu}}" TargetType="{x:Type ContextMenu}">
-            <Setter Property="FontSize" Value="{local_extensions:SettingBinding Path=FontSize, FallbackValue=14.0}" />
-            <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.MenuBrushKey}}"/>
-        </Style>
-    </UserControl.Resources>
-
     <view:BaseView HeaderPanelVisible="False">
         <view:BaseView.Content>
             <ScrollViewer VerticalScrollBarVisibility="Auto" Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}">

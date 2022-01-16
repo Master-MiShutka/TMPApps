@@ -39,7 +39,7 @@
         <Separator Grid.Row="1"  />
 
         <local_controls:PropertyTransfer Tag="SummaryInfoItemPropertiesTransfer" Grid.Row="2" SourceCollection="{Binding Source={StaticResource SummaryInfoItemPropertiesNamesList}}"  
-                                         TargetCollection="{local_extensions:SettingBinding Path=SummaryInfoFields, Converter={StaticResource PlusPropertyDescriptorsCollectionConverter}}"/>
+                                         TargetCollection="{local_extensions:SettingBinding Path=SummaryInfoFields}"/>
 
         <ListBox x:Name="lstBox" dd:DragDrop.IsDragSource="True"
                 dd:DragDrop.IsDropTarget="True" Grid.Row="3" ItemsSource="{local_extensions:SettingBinding Path=SummaryInfoFields}">

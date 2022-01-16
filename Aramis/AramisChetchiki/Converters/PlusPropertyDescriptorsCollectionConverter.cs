@@ -16,7 +16,7 @@
         {
             if (value != null && value is Model.TableViewKinds viewKind)
             {
-                return this.ConvertToProperties(ModelHelper.GetMeterFieldsCollectionByTableViewKind(viewKind));
+                return ModelHelper.GetMeterFieldsCollectionByTableViewKind(viewKind);
             }
             else
             if (value is PlusPropertyDescriptorsCollection collection)
@@ -24,7 +24,7 @@
                 return this.ConvertToFields(collection);
             }
             else
-            if (value is StringCollection fields)
+            if (value is ICollection<string> fields)
             {
                 return this.ConvertToProperties(fields);
             }
@@ -41,7 +41,7 @@
                 return this.ConvertToFields(collection);
             }
             else
-            if (value is StringCollection fields)
+            if (value is ICollection<string> fields)
             {
                 return this.ConvertToProperties(fields);
             }
@@ -71,7 +71,7 @@
             return result;
         }
 
-        private PlusPropertyDescriptorsCollection ConvertToProperties(ICollection collection)
+        private PlusPropertyDescriptorsCollection ConvertToProperties(ICollection<string> collection)
         {
             PlusPropertyDescriptorsCollection result = new ();
 

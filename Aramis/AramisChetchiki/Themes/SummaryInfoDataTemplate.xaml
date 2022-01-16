@@ -352,7 +352,7 @@
     </DataTemplate>
 
     <ControlTemplate x:Key="ItemsControlBaseTemplate" TargetType="{x:Type ItemsControl}">
-            <ItemsPresenter />
+        <ItemsPresenter />
     </ControlTemplate>
 
     <ControlTemplate x:Key="ItemsControlWithDiagrams" TargetType="{x:Type ItemsControl}">
@@ -362,7 +362,7 @@
                 Visibility="Collapsed" />
             <ContentControl
                 Name="contentPrepare"
-                Content="{StaticResource PrepareDataTemplate}"
+                Content="{DynamicResource PrepareDataTemplate}"
                 Visibility="Collapsed" />
             <Grid Name="root">
                 <Grid.RowDefinitions>
@@ -377,35 +377,37 @@
                 <Border Grid.Column="1" BorderThickness="1" CornerRadius="3"
                         Background="{extensions:ValueFromStyle StyleKey={x:Type ToolBar},
                         Property=Control.Background}" Padding="2">
-                <Grid >
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="Auto" />
-                    </Grid.ColumnDefinitions>
-                    <TextBlock Margin="2" Text="мельче" />
-                    <Slider
-                        Name="slider"
-                        Grid.Column="1"
-                        MinWidth="50"
-                        LargeChange="50"
-                        Maximum="1000"
-                        Minimum="50"
-                        SmallChange="10"
-                        Value="250" />
-                    <TextBlock
-                        Grid.Column="2"
-                        Margin="2"
-                        Text="крупнее" />
-                </Grid>
+                    <Grid >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Margin="2" Text="мельче" />
+                        <Slider
+                            Name="slider"
+                            Grid.Column="1"
+                            MinWidth="50"
+                            LargeChange="50"
+                            Maximum="1000"
+                            Minimum="50"
+                            SmallChange="10"
+                            Value="250" />
+                        <TextBlock
+                            Grid.Column="2"
+                            Margin="2"
+                            Text="крупнее" />
+                    </Grid>
                 </Border>
-
-                <WrapPanel
-                    x:Name="_wrapPanel"
-                    Grid.Row="1"
-                    Grid.ColumnSpan="3"
-                    IsItemsHost="True"
-                    ItemWidth="{Binding Path=Value, ElementName=slider}" />
+                <ScrollViewer Grid.Row="1" xmlns:mouseWheel="clr-namespace:WpfMouseWheel.Windows.Input;assembly=WpfMouseWheelLib"
+                                      mouseWheel:MouseWheel.Enhanced="True"
+                    Grid.ColumnSpan="3">
+                    <WrapPanel
+                        x:Name="_wrapPanel"
+                    
+                        IsItemsHost="True" ScrollViewer.VerticalScrollBarVisibility="Visible"
+                        ItemWidth="{Binding Path=Value, ElementName=slider}" />
+                </ScrollViewer>
             </Grid>
         </Grid>
         <ControlTemplate.Triggers>
@@ -431,7 +433,7 @@
         <Setter Property="Template" Value="{StaticResource ItemsControlBaseTemplate}"/>
         <Setter Property="ItemsPanel">
             <Setter.Value>
-                    <ItemsPanelTemplate>
+                <ItemsPanelTemplate>
                     <UniformGrid />
                 </ItemsPanelTemplate>
             </Setter.Value>

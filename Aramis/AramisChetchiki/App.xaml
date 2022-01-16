@@ -23,6 +23,8 @@
                 <ResourceDictionary Source="/Themes/VisualBrushes.xaml" />
                 <ResourceDictionary Source="/Themes/CollectionViewSources.xaml" />
                 <ResourceDictionary Source="/Themes/ImageDictionary.xaml" />
+
+                <ResourceDictionary Source="/Themes/ContextMenu.xaml" />
                 <ResourceDictionary Source="/Themes/Common.xaml" />
                 <ResourceDictionary Source="/Themes/SummaryInfoDataTemplate.xaml" />
                 <ResourceDictionary Source="/Themes/FilterResources.xaml" />

@@ -5,6 +5,7 @@
     using System.Collections.ObjectModel;
     using System.Collections.Specialized;
     using System.ComponentModel;
+    using TMP.WORK.AramisChetchiki.Model;
 
     [Serializable]
     public abstract class BaseFieldsCollection : Collection<string>, INotifyCollectionChanged, INotifyPropertyChanged
@@ -33,6 +34,18 @@
             this.CopyFrom(collection);
         }
 
+        public BaseFieldsCollection(IEnumerable<Shared.PlusPropertyDescriptor> plusPropertyDescriptors)
+        {
+            IList<string> items = this.Items;
+            if (plusPropertyDescriptors != null && items != null)
+            {
+                foreach (var item in plusPropertyDescriptors)
+                {
+                    items.Add(item.Name);
+                }
+            }
+        }
+
         private void CopyFrom(System.Collections.IEnumerable collection)
         {
             IList<string> items = this.Items;
@@ -54,6 +67,31 @@
         public void Move(int oldIndex, int newIndex)
         {
             this.MoveItem(oldIndex, newIndex);
+        }
+
+        public Shared.PlusPropertyDescriptorsCollection ToPlusPropertyDescriptorsCollection()
+        {
+            Shared.PlusPropertyDescriptorsCollection result = new Shared.PlusPropertyDescriptorsCollection();
+
+            IDictionary<string, Shared.PlusPropertyDescriptor> dictionary = this.ModelType switch
+            {
+                Type t when t == typeof(Meter) => ModelHelper.MeterPropertiesCollection,
+                Type t when t == typeof(ChangeOfMeter) => ModelHelper.ChangesOfMetersPropertiesCollection,
+                Type t when t == typeof(ElectricitySupply) => ModelHelper.ElectricitySupplyPropertiesCollection,
+                Type t when t == typeof(SummaryInfoItem) => ModelHelper.SummaryInfoItemPropertiesCollection,
+                _ => throw new NotImplementedException($"Unknown type '{this.ModelType}'"),
+            };
+
+            IList<string> items = this.Items;
+            foreach (var item in items)
+            {
+                if (dictionary.ContainsKey(item))
+                {
+                    result.Add(dictionary[item]);
+                }
+            }
+
+            return result;
         }
 
         #endregion Public Methods
@@ -310,6 +348,9 @@
             }
         }
 
+        public MeterFieldsCollection(IEnumerable<Shared.PlusPropertyDescriptor> plusPropertyDescriptors)
+            : base(plusPropertyDescriptors) { }
+
         public override Type ModelType => typeof(Model.Meter);
     }
 
@@ -328,6 +369,9 @@
             }
         }
 
+        public ChangesOfMetersFieldsCollection(IEnumerable<Shared.PlusPropertyDescriptor> plusPropertyDescriptors)
+            : base(plusPropertyDescriptors) { }
+
         public override Type ModelType => typeof(Model.ChangeOfMeter);
     }
 
@@ -345,6 +389,9 @@
                 this.Add(item);
             }
         }
+
+        public SummaryInfoFieldsCollection(IEnumerable<Shared.PlusPropertyDescriptor> plusPropertyDescriptors)
+            : base(plusPropertyDescriptors) { }
 
         public override Type ModelType => typeof(Model.SummaryInfoItem);
     }

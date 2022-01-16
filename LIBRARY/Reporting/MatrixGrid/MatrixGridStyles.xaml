@@ -131,7 +131,7 @@
                 <StackPanel x:Name="data" DataContext="{Binding Path=Matrix, RelativeSource={RelativeSource Mode=TemplatedParent}}">
                     <!--  Title  -->
                     <ContentControl x:Name="titlePresenter"
-                                        HorizontalAlignment="Center"
+                                        HorizontalAlignment="Center" HorizontalContentAlignment="Center" TextBlock.TextAlignment="Center"
                                         Content="{Binding Path=Header}" />
                     <DockPanel>
                         <ContentPresenter DockPanel.Dock="Left" Content="{Binding Path=LeftContent, RelativeSource={RelativeSource Mode=TemplatedParent}}"/>

@@ -18,6 +18,7 @@
     <ProjectReference Include="..\LIBRARY\WindowsShell\WindowsShell.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="FluentWPF" Version="0.10.2" />
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
   </ItemGroup>
   <ItemGroup>
