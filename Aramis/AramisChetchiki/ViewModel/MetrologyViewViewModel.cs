@@ -29,10 +29,6 @@
 
             this.CommandPrint = null;
 
-            var diffT = this.Data.GroupBy(d => (d.НомерСчетчика, d.БазовыйЛицевой)).Where(i => i.Count() >= 2).Distinct().ToArray();
-            var diffT2 = diffT.Where(i => i.Count() == 2).Count();
-            var diffT3 = diffT.Where(i => i.Count() == 3).Count();
-
             this.IsBusy = true;
             this.Status = "загрузка ...";
         }
@@ -83,12 +79,16 @@
                 nameof(Meter.Поверен),
             };
 
-            foreach (var filter in filters)
+            // добавление фильтров
+            TMPApplication.DispatcherExtensions.InUi(() =>
             {
-                this.Filters.Add((ItemsFilter.Model.IMultiValueFilter)this.FilterPresenter.TryGetFilter(filter, new ItemsFilter.Initializer.EqualFilterInitializer()));
-            }
+                foreach (var filter in filters)
+                {
+                    //this.Filters.Add((ItemsFilter.Model.IMultiValueFilter)this.FilterPresenter.TryGetFilter(filter, new ItemsFilter.Initializer.EqualFilterInitializer()));
+                }
 
-            this.IsBusy = false;
+                this.IsBusy = false;
+            });
         }
 
         #endregion

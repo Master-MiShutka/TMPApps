@@ -190,11 +190,12 @@
         uicontrols_behaviours:MouseDoubleClick.Command="{Binding Path=CommandViewDetailsBySelectedItem}"
         uicontrols_behaviours:MouseDoubleClick.CommandParameter="{Binding Path=SelectedItem, RelativeSource={RelativeSource Mode=Self}}"
         AutoGenerateColumns="False"
-        ColumnsViewModels="{Binding TableColumns, FallbackValue={x:Null}}"
+        ColumnsViewModels="{Binding TableColumns, IsAsync=True, FallbackValue={x:Null}}"
         DisplayRowNumber="True"
         IsReadOnly="True" 
         RowStyle="{Binding DataRowStyle, RelativeSource={RelativeSource AncestorType={x:Type local_controls:DataGridControl}}}"
-        ItemsSource="{Binding View, IsAsync=True, FallbackValue={x:Null}}">
+        ItemsSource="{Binding View, IsAsync=True, FallbackValue={x:Null}}"
+        VirtualizingPanel.IsVirtualizing="True">
         <Interactions:Interaction.Behaviors>
             <uicontrols_behaviours:ZoomFontSizeOnMouseWheelBehavior />
         </Interactions:Interaction.Behaviors>

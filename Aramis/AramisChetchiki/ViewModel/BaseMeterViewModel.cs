@@ -76,12 +76,15 @@
 
             this.FilterPresenter = ItemsFilter.FiltersManager.TryGetFilterPresenter(collectionView);
 
-            // добавление фильтров
-            string[] filterFields = { nameof(Meter.Лицевой), nameof(Meter.НаселённыйПунктИУлицаСНомеромДома), nameof(Meter.ФиоСокращ), nameof(Meter.НомерСчетчика), nameof(Meter.ТП) };
-            foreach (var filterField in filterFields)
+            TMPApplication.DispatcherExtensions.InUi(() =>
             {
-                this.Filters.Add((ItemsFilter.Model.IStringFilter)this.FilterPresenter.TryGetFilter(filterField, new ItemsFilter.Initializer.StringFilterInitializer()));
-            }
+                // добавление фильтров
+                string[] filterFields = { nameof(Meter.Лицевой), nameof(Meter.НаселённыйПунктИУлицаСНомеромДома), nameof(Meter.ФиоСокращ), nameof(Meter.НомерСчетчика), nameof(Meter.ТП) };
+                foreach (var filterField in filterFields)
+                {
+                    this.Filters.Add((ItemsFilter.Model.IStringFilter)this.FilterPresenter.TryGetFilter(filterField, new ItemsFilter.Initializer.StringFilterInitializer()));
+                }
+            });
 
             (collectionView as INotifyPropertyChanged).PropertyChanged += this.View_PropertyChanged;
 
@@ -90,18 +93,11 @@
 
         public override Predicate<Meter> DataFilter => (meter) =>
         {
-            return true;
-        };
-
-        protected override bool Filter(object obj)
-        {
-            Meter meter = (Meter)obj;
-
             if (meter != null & this.notShowDeleted && meter.Удалён == true)
                 return false;
             else
                 return true;
-        }
+        };
 
         #endregion
 
@@ -111,13 +107,19 @@
         {
             this.CommandNotShowDeleted = new DelegateCommand(() =>
             {
+                this.IsBusy = true;
+                this.Status = "обновление ...";
+
                 this.notShowDeleted = !this.notShowDeleted;
+                this.RaisePropertyChanged(nameof(this.DataFilter));
                 if (this.View != null)
                 {
                     this.View.Refresh();
                 }
                 //this.RaisePropertyChanged(nameof(this.Data));
                 //this.RaisePropertyChanged(nameof(this.View));
+
+                this.IsBusy = false;
             },
             (o) => this.Data != null);
         }

@@ -87,6 +87,8 @@ namespace DataGridWpf
             this.ClipboardCopyMode = DataGridClipboardCopyMode.IncludeHeader;
             this.SelectionUnit = DataGridSelectionUnit.FullRow;
 
+            this.Translate = new Loc() { Language = (int)this.FilterLanguage };
+
             this.Loaded += this.FilterDataGrid_Loaded;
 
             this.ColumnDisplayIndexChanged += this.FilterDataGrid_ColumnDisplayIndexChanged;

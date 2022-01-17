@@ -129,7 +129,7 @@
         {
             if (e.Accepted)
             {
-                if (e.Item == null)
+                if (e.Item == null || this.value == null)
                 {
                     e.Accepted = false;
                 }

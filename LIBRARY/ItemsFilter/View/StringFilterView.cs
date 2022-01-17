@@ -19,14 +19,14 @@
 
         static StringFilterView()
         {
-            DefaultStyleKeyProperty.OverrideMetadata(typeof(StringFilterView),
-                new FrameworkPropertyMetadata(typeof(StringFilterView)));
+            /*DefaultStyleKeyProperty.OverrideMetadata(typeof(StringFilterView),
+                new FrameworkPropertyMetadata(typeof(StringFilterView)));*/
         }
 
         /// <summary>
         /// Instance of a selector allowing to choose the filtering mode
         /// </summary>
-        private Selector selectorFilterType;
+        private ItemsControl selectorFilterType;
 
         /// <summary>
         /// Create new instance of StringFilterView.
@@ -50,7 +50,7 @@
         public override void OnApplyTemplate()
         {
             base.OnApplyTemplate();
-            this.selectorFilterType = this.GetTemplateChild(PART_FilterType) as Selector;
+            this.selectorFilterType = this.GetTemplateChild(PART_FilterType) as ItemsControl;
             if (this.selectorFilterType != null)
             {
                 this.selectorFilterType.ItemsSource = this.GetFilterModes();

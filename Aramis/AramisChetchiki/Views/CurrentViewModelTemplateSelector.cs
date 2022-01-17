@@ -9,10 +9,16 @@
     {
         public override DataTemplate SelectTemplate(object item, DependencyObject container)
         {
+            if (item is DataTemplate tmpl)
+            {
+                return tmpl;
+            }
+
             if (item is string msg)
             {
                 FrameworkElementFactory factory = new FrameworkElementFactory(typeof(TextBlock));
                 factory.SetValue(TextBlock.TextProperty, msg);
+                factory.SetValue(TextBlock.TextAlignmentProperty, TextAlignment.Center);
 
                 return new DataTemplate { VisualTree = factory };
             }

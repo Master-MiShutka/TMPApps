@@ -74,8 +74,8 @@
             <ContentControl ContentTemplateSelector="{StaticResource CurrentViewModelTemplateSelector}" >
                 <ContentControl.Content>
                     <PriorityBinding>
-                        <Binding Path="CurrentViewModel" FallbackValue="{x:Null}" IsAsync="True"/>
-                        <Binding Source="{StaticResource StringWaitIsAnalizing}" />
+                        <Binding Path="CurrentViewModel" IsAsync="True"/>
+                        <Binding Source="{StaticResource DataTemplateWaitIsAnalizing}" IsAsync="True"/>
                     </PriorityBinding>
                 </ContentControl.Content>
             </ContentControl>

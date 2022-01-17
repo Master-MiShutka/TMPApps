@@ -7,12 +7,70 @@
     <system:String x:Key="StringWaitIsAnalizing">
         Подождите,&#x0a;идёт анализ данных
     </system:String>
+    <system:String x:Key="StringWaitIsAnalizing1">
+        Подождите,&#x0a;идёт анализ данных .
+    </system:String>
+    <system:String x:Key="StringWaitIsAnalizing2">
+        Подождите,&#x0a;идёт анализ данных ..
+    </system:String>
+    <system:String x:Key="StringWaitIsAnalizing3">
+        Подождите,&#x0a;идёт анализ данных ...
+    </system:String>
+
+
+
     <system:String x:Key="StringNoData">
         Нет данных&#x0a;для отображения
     </system:String>
     <system:String x:Key="StringDataMissing">
         Данные&#x0a;отсутствуют
     </system:String>
+
+    <DataTemplate x:Key="DataTemplateWaitIsAnalizing">
+        <Border
+            Margin="20"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"
+            BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}"
+            BorderThickness="1"
+            CornerRadius="10">
+            <TextBlock
+                x:Name="status"
+                Padding="10"
+                VerticalAlignment="Center"
+                FontSize="{DynamicResource {x:Static SystemFonts.MessageFontSizeKey}}"
+                FontWeight="SemiBold"
+                Foreground="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"
+                Text="{Binding Source={StaticResource StringWaitIsAnalizing}}"
+                TextAlignment="Center"
+                TextOptions.TextFormattingMode="Ideal"
+                TextWrapping="Wrap">
+                <TextBlock.LayoutTransform>
+                    <ScaleTransform ScaleX="1.5" ScaleY="1.5" />
+                </TextBlock.LayoutTransform>
+            </TextBlock>
+        </Border>
+        <DataTemplate.Resources>
+            <Storyboard x:Key="statusStoryBoard">
+                <ObjectAnimationUsingKeyFrames
+                                RepeatBehavior="Forever"
+                                Storyboard.TargetName="status"
+                                Storyboard.TargetProperty="Text"
+                                Duration="00:00:04">
+                    <DiscreteObjectKeyFrame KeyTime="00:00:00" Value="{StaticResource StringWaitIsAnalizing}" />
+                    <DiscreteObjectKeyFrame KeyTime="00:00:01" Value="{StaticResource StringWaitIsAnalizing1}" />
+                    <DiscreteObjectKeyFrame KeyTime="00:00:02" Value="{StaticResource StringWaitIsAnalizing2}" />
+                    <DiscreteObjectKeyFrame KeyTime="00:00:03" Value="{StaticResource StringWaitIsAnalizing3}" />
+                </ObjectAnimationUsingKeyFrames>
+            </Storyboard>
+        </DataTemplate.Resources>
+        <DataTemplate.Triggers>
+            <EventTrigger RoutedEvent="FrameworkElement.Loaded" SourceName="status">
+                <BeginStoryboard Name="sb1" Storyboard="{StaticResource statusStoryBoard}" />
+            </EventTrigger>
+        </DataTemplate.Triggers>
+    </DataTemplate>
 
     <Border x:Key="PrepareDataTemplate" Background="{DynamicResource {x:Static SystemColors.ControlLightLightBrushKey}}">
         <Border
