@@ -61,7 +61,15 @@
     <SolidColorBrush
         x:Key="TopMenuItemSelectionStroke"
         options:Freeze="True"
-        Color="#90717070" />    
+        Color="#90717070" />
+    <SolidColorBrush
+        x:Key="RightArrowFill"
+        options:Freeze="True"
+        Color="#F0717070" />
+    <SolidColorBrush
+        x:Key="CheckmarkFill"
+        options:Freeze="True"
+        Color="#F0717070" />    
 
     <Style x:Key="{x:Static MenuItem.SeparatorStyleKey}" TargetType="{x:Type Separator}">
         <Setter Property="Background" Value="{DynamicResource MenuBackgroundBrush}" />
@@ -118,7 +126,7 @@
         <Setter Property="BorderThickness" Value="1" />
         <Setter Property="FontFamily" Value="{DynamicResource {x:Static SystemFonts.MenuFontFamilyKey}}" />
         <Setter Property="FontStyle" Value="{DynamicResource {x:Static SystemFonts.MenuFontStyleKey}}" />
-        <Setter Property="FontStyle" Value="{DynamicResource {x:Static SystemFonts.MenuFontStyleKey}}" />
+        <Setter Property="FontSize" Value="{DynamicResource NormalFontSize}" />
         <Setter Property="FontWeight" Value="{DynamicResource {x:Static SystemFonts.MenuFontWeightKey}}" />
         <Setter Property="Grid.IsSharedSizeScope" Value="True" />
         <Setter Property="HasDropShadow" Value="True" />
@@ -156,7 +164,7 @@
                     </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger Property="HasDropShadow" Value="True">
-                            <Setter TargetName="Border" Property="Margin" Value="0,0,6,6" />
+                            <Setter TargetName="Border" Property="Margin" Value="0,0,0,2" />
                             <Setter TargetName="LayoutRoot" Property="Effect">
                                 <Setter.Value>
                                     <DropShadowEffect
@@ -167,7 +175,7 @@
                                         Color="{DynamicResource BlackColor}" />
                                 </Setter.Value>
                             </Setter>
-                            <Setter TargetName="LayoutRoot" Property="Margin" Value="0,0,6,6" />
+                            <Setter TargetName="LayoutRoot" Property="Margin" Value="0,0,0,2" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -186,11 +194,11 @@
         <Setter Property="Template" Value="{DynamicResource {ComponentResourceKey ResourceId=SubmenuItemTemplateKey, TypeInTargetAssembly={x:Type MenuItem}}}" />
         <Style.Triggers>
             <Trigger Property="Role" Value="TopLevelHeader">
-                <Setter Property="Padding" Value="2,2,3,2" />
+                <Setter Property="Padding" Value="2,2,2,2" />
                 <Setter Property="Template" Value="{DynamicResource {ComponentResourceKey ResourceId=TopLevelHeaderTemplateKey, TypeInTargetAssembly={x:Type MenuItem}}}" />
             </Trigger>
             <Trigger Property="Role" Value="TopLevelItem">
-                <Setter Property="Padding" Value="2,2,3,2" />
+                <Setter Property="Padding" Value="2,2,2,2" />
                 <Setter Property="Template" Value="{DynamicResource {ComponentResourceKey ResourceId=TopLevelItemTemplateKey, TypeInTargetAssembly={x:Type MenuItem}}}" />
             </Trigger>
             <Trigger Property="Role" Value="SubmenuHeader">
@@ -421,8 +429,8 @@
                             Color="{DynamicResource MenuShadowColor}" />
                     </Setter.Value>
                 </Setter>
-                <Setter TargetName="LayoutRoot" Property="Margin" Value="0,0,2,6" />
-                <Setter TargetName="SubMenuBorder" Property="Margin" Value="0,0,2,6" />
+                <Setter TargetName="LayoutRoot" Property="Margin" Value="0,0,0,2" />
+                <Setter TargetName="SubMenuBorder" Property="Margin" Value="0,0,0,2" />
             </Trigger>
             <Trigger Property="IsHighlighted" Value="True">
                 <Setter TargetName="Bg" Property="Stroke" Value="{DynamicResource TopMenuItemSelectionStroke}" />
@@ -602,8 +610,8 @@
                             Color="{DynamicResource MenuShadowColor}" />
                     </Setter.Value>
                 </Setter>
-                <Setter TargetName="LayoutRoot" Property="Margin" Value="0,0,2,6" />
-                <Setter TargetName="SubMenuBorder" Property="Margin" Value="0,0,2,6" />
+                <Setter TargetName="LayoutRoot" Property="Margin" Value="0,0,0,2" />
+                <Setter TargetName="SubMenuBorder" Property="Margin" Value="0,0,0,2" />
             </Trigger>
             <Trigger Property="IsHighlighted" Value="True">
                 <Setter TargetName="Bg" Property="Fill" Value="{DynamicResource MenuItemSelectionFill}" />

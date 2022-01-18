@@ -102,7 +102,7 @@ namespace DataGridWpf
                 // raise event to update the date tree, see FilterCommon class
                 // only type date type fields are subscribed to the OnDateStatusChanged event
                 // OnDateStatusChanged is not triggered at tree initialization
-                if (this.FieldType == typeof(DateTime))
+                if (this.FieldType == typeof(DateTime) || this.FieldType == typeof(DateOnly))
                 {
                     this.OnDateStatusChanged?.Invoke(this, value);
                 }

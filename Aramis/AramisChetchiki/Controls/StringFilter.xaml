@@ -9,13 +9,17 @@
     xmlns:local_controls="clr-namespace:TMP.WORK.AramisChetchiki.Controls"
     xmlns:local="clr-namespace:TMP.WORK.AramisChetchiki.Controls"
     xmlns:local_extensions="clr-namespace:TMP.WORK.AramisChetchiki.Extensions"
+    xmlns:local_converters="clr-namespace:TMP.WORK.AramisChetchiki.Converters"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:controls_helper="clr-namespace:TMP.UI.Controls.WPF.Helpers;assembly=ui.controls.wpf"
     xmlns:system="clr-namespace:System;assembly=mscorlib"
     Margin="5,0,0,2"
     d:DesignHeight="30"
     d:DesignWidth="100"
     mc:Ignorable="d">
     <local_controls:BaseFilterControl.Resources>
+
+        <local_converters:FieldNameConverter x:Key="FieldNameConverter" />
 
         <converters:BooleanToStringConverter
             x:Key="BooleanToStringConverter"
@@ -28,12 +32,15 @@
                     <ControlTemplate TargetType="{x:Type itemsfilter_view:StringFilterView}">
                         <TextBox
                                 x:Name="PART_Input"
-                                MinWidth="30" Background="Lime"
+                                MinWidth="30"
                                 Margin="1" VerticalContentAlignment="Center"
                                 Padding="0"
+                            Style="{StaticResource SearchTextBox}"
+                                 controls_helper:TextBoxHelper.Watermark="фильтр..."
                                 FontFamily="{TemplateBinding FontFamily}"
                                 FontSize="{TemplateBinding FontSize}"
-                                Text="{Binding ViewModel.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource TemplatedParent}}"
+                                ToolTip="{Binding ViewModel.Mode,RelativeSource={RelativeSource AncestorType={x:Type itemsfilter_view:StringFilterView}}, Converter={StaticResource EnumDescriptionConverter}}"
+                                Text="{Binding ViewModel.Value, Mode=TwoWay, Delay=300, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType={x:Type itemsfilter_view:StringFilterView}}}"
                                 TextWrapping="NoWrap" >
                             <TextBox.ContextMenu>
                                 <ContextMenu x:Name="PART_FilterType">
@@ -60,9 +67,9 @@
         Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"
         BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}"
         BorderThickness="1"
-        Header="{Binding Path=FilterPropertyName, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local_controls:StringFilter}}, Converter={StaticResource UnderLineTextToSpaceConverter}}">
+        Header="{Binding Path=FilterPropertyName, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local_controls:BaseFilterControl}}, Converter={StaticResource FieldNameConverter}}">
         <itemsfilter_view:StringFilterView x:Name="filterView"
             itemsfilter:FilterListExtensions.IsActive="True"
-            ViewModel="{Binding Path=Filter, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local_controls:StringFilter}}}" />
+            ViewModel="{Binding Path=Filter, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local_controls:BaseFilterControl}}}" />
     </HeaderedContentControl>
 </local_controls:BaseFilterControl>

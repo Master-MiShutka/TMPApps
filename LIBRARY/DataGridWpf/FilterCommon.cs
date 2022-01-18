@@ -201,7 +201,7 @@ namespace DataGridWpf
             try
             {
                 var uncheckPrevious = this.FieldName == lastFilter;
-                var type = typeof(DateTime);
+                var type = dates.FirstOrDefault().GetType() == typeof(DateTime) ? typeof(DateTime) : (dates.FirstOrDefault().GetType() == typeof(DateOnly) ? typeof(DateOnly) : throw new InvalidCastException());
 
                 this.Tree = new List<FilterItem>
                 {
@@ -216,15 +216,23 @@ namespace DataGridWpf
                     return this.Tree;
                 }
 
+                // build FilterItem
+                FilterItem buildFilterItem()
+                {
+
+                }
+
+
                 // iterate over all items that are not null
                 // INFO:
                 // SetState : does not raise OnDateStatusChanged event
                 // IsChecked    : raise OnDateStatusChanged event
                 // (see the FilterItem class for more informations)
                 var dateTimes = dates.ToList();
-
+                
                 foreach (var y in from date in dateTimes.Where(d => d != null)
-                        .Select(d => (DateTime)d).OrderBy(o => o.Year)
+                        .Select(d => (DateTime)d)
+                        .OrderBy(o => o.Year)
                                   group date by date.Year into year
                                   select new FilterItem(this)
                                   {

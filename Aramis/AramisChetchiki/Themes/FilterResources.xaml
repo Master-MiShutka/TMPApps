@@ -19,9 +19,9 @@
                                 BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}"
                                 BorderThickness="1"
                                 CornerRadius="5">
-                        <TextBlock x:Name="txt"
-                                Margin="5,2"
-                                Text="{TemplateBinding Content}" />
+                        <TextBlock x:Name="txt" MaxWidth="100"
+                                Margin="5,2" TextAlignment="Center" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis"
+                                Text="{TemplateBinding Content}" ToolTip="{TemplateBinding Content}" />
                     </Border>
                     <DataTemplate.Triggers>
                         <DataTrigger Binding="{Binding Path=IsFilterActive, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:BaseFilterControl}}}" Value="True">

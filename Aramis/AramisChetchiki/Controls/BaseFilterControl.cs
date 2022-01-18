@@ -6,13 +6,15 @@
 
     public class BaseFilterControl : UserControl, System.ComponentModel.INotifyPropertyChanged
     {
+        private bool isFilterActive;
+
         public BaseFilterControl()
         {
         }
 
         #region Properties
 
-        public bool IsFilterActive { get; private set; }
+        public bool IsFilterActive { get => this.isFilterActive; private set => this.SetProperty(ref this.isFilterActive, value); }
 
         #endregion
 
@@ -20,16 +22,16 @@
 
         #region Filter
 
-        public ItemsFilter.Model.IMultiValueFilter Filter
+        public ItemsFilter.Model.IFilter Filter
         {
-            get => (ItemsFilter.Model.IMultiValueFilter)this.GetValue(FilterProperty);
+            get => (ItemsFilter.Model.IFilter)this.GetValue(FilterProperty);
             set => this.SetValue(FilterProperty, value);
         }
 
         public static readonly DependencyProperty FilterProperty =
             DependencyProperty.Register(
                 nameof(Filter),
-                typeof(ItemsFilter.Model.IMultiValueFilter),
+                typeof(ItemsFilter.Model.IFilter),
                 typeof(BaseFilterControl),
                 new FrameworkPropertyMetadata(null, new PropertyChangedCallback(OnFilterChanged)));
 
@@ -40,12 +42,17 @@
             if (target.Filter != null)
                 target.Filter.PropertyChanged -= target.Filter_PropertyChanged;
 
-            ItemsFilter.Model.IMultiValueFilter filter = (ItemsFilter.Model.IMultiValueFilter)e.NewValue;
+            ItemsFilter.Model.IFilter filter = (ItemsFilter.Model.IFilter)e.NewValue;
 
             if (filter is ItemsFilter.Model.IPropertyFilter ipf)
             {
                 var p = ipf.PropertyInfo;
                 target.FilterPropertyName = ipf.PropertyInfo.Name;
+            }
+
+            if (filter is ItemsFilter.Model.IStringFilter sf)
+            {
+                target.FilterPropertyName = sf.PropertyInfo.Name;
             }
 
             if (target.Filter != null)
@@ -85,9 +92,11 @@
             BaseFilterControl target = (BaseFilterControl)d;
             ItemsFilter.FilterPresenter filterPresenter = (ItemsFilter.FilterPresenter)e.NewValue;
 
-            target.SetCurrentValue(FilterProperty, (ItemsFilter.Model.IMultiValueFilter)filterPresenter.TryGetFilter(
-                target.FilterPropertyName,
-                new ItemsFilter.Initializer.EqualFilterInitializer()));
+            target.SetCurrentValue(
+                FilterProperty,
+                (ItemsFilter.Model.IMultiValueFilter)filterPresenter.TryGetFilter(
+                    target.FilterPropertyName,
+                    new ItemsFilter.Initializer.EqualFilterInitializer()));
         }
 
         #endregion
@@ -106,7 +115,6 @@
                 typeof(string),
                 typeof(BaseFilterControl),
                 new FrameworkPropertyMetadata("<?>", new PropertyChangedCallback(OnFilterPropertyNameChanged)));
-        private bool isFilterActive;
 
         private static void OnFilterPropertyNameChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {

@@ -1001,7 +1001,7 @@ namespace DataGridWpf
                 if (this.search)
                 {
                     // in search, at least one article must be checked
-                    e.CanExecute = this.CurrentFilter?.FieldType == typeof(DateTime)
+                    e.CanExecute = this.CurrentFilter?.FieldType == typeof(DateTime) || this.CurrentFilter?.FieldType == typeof(DateOnly)
                     ? this.CurrentFilter.AnyDateIsChecked()
                     : this.PopupViewItems.Any(f => f?.IsChecked == true);
                 }
@@ -1009,7 +1009,7 @@ namespace DataGridWpf
                 {
                     // on change state, at least one item must be checked
                     // and another must have changed status
-                    e.CanExecute = this.CurrentFilter?.FieldType == typeof(DateTime)
+                    e.CanExecute = this.CurrentFilter?.FieldType == typeof(DateTime) || this.CurrentFilter?.FieldType == typeof(DateOnly)
                         ? this.CurrentFilter.AnyDateChanged()
                         : this.PopupViewItems.Any(f => f.Changed) && this.PopupViewItems.Any(f => f?.IsChecked == true);
                 }
@@ -1270,7 +1270,7 @@ namespace DataGridWpf
             // apply filter
             this.ItemCollectionView.Refresh();
 
-            if (this.CurrentFilter.FieldType != typeof(DateTime) || this.treeview == null)
+            if ((this.CurrentFilter.FieldType != typeof(DateTime) || this.CurrentFilter.FieldType != typeof(DateOnly)) || this.treeview == null)
             {
                 return;
             }
@@ -1376,6 +1376,14 @@ namespace DataGridWpf
                 if (columnType == typeof(WpfDataGridTemplateColumn))
                 {
                     var column = (WpfDataGridTemplateColumn)header.Column;
+                    this.fieldName = column.FieldName;
+                    column.CanUserSort = false;
+                    this.currentColumn = column;
+                }
+
+                if (columnType == typeof(WpfDataGridCheckBoxColumn))
+                {
+                    var column = (WpfDataGridCheckBoxColumn)header.Column;
                     this.fieldName = column.FieldName;
                     column.CanUserSort = false;
                     this.currentColumn = column;
@@ -1495,7 +1503,7 @@ namespace DataGridWpf
                 }); // and task
 
                 // the current listbox or treeview
-                if (fieldType == typeof(DateTime))
+                if (fieldType == typeof(DateTime) || fieldType == typeof(DateOnly))
                 {
                     this.treeview = VisualTreeHelpers.FindChild<TreeView>(this.popup.Child, "PopupTreeview");
 
@@ -1620,7 +1628,7 @@ namespace DataGridWpf
                     }
                     else
                     {
-                        var viewItems = this.CurrentFilter.FieldType == typeof(DateTime)
+                        var viewItems = this.CurrentFilter.FieldType == typeof(DateTime) || this.CurrentFilter.FieldType == typeof(DateOnly)
                             ? this.CurrentFilter.GetAllItemsTree().ToList()
                             : popupItems.Where(v => v.Changed).ToList();
 
