@@ -195,9 +195,6 @@
 
         public void Save()
         {
-            var dialog = (App.Current as TMPApplication.TMPApp).MainWindowWithDialogs.DialogWaitingScreen("сохранение настроек ...", indeterminate: true);
-            dialog.Show();
-
             this.Settings.FontSize = this.FontSize;
 
             this.Settings.AramisDBPath = this.AramisDBPath;
@@ -224,8 +221,6 @@
             this.Settings.NumberOfApartmentsInAnApartmentBuilding = this.NumberOfApartmentsInAnApartmentBuilding;
 
             this.Settings.Save();
-
-            dialog.Close();
         }
 
         public static IEnumerable<PlusPropertyDescriptor> GetElectricitySupplyPropertyDescriptors()

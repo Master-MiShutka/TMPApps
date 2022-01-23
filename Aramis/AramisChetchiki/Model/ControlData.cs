@@ -5,6 +5,7 @@
     using System.ComponentModel;
 
     [MessagePack.MessagePackObject]
+    [System.Diagnostics.DebuggerDisplay("ID={Лицевой}")]
     public class ControlData : IModelWithPersonalId
     {
         [DisplayName("Лицевой счёт абонента")]
@@ -18,7 +19,7 @@
 
         [DisplayName("Данные")]
         [MessagePack.Key(1)]
-        public IEnumerable<KeyValuePair<DateOnly, int>> Data
+        public IEnumerable<MeterControlData> Data
         {
             get;
             set;
@@ -31,5 +32,41 @@
             get;
             set;
         }
+    }
+
+    [MessagePack.MessagePackObject]
+    [System.Diagnostics.DebuggerDisplay("Date={Date}, Value={Value}, Operator={Operator}")]
+    public class MeterControlData : IModelWithMeterLastReading
+    {
+        public MeterControlData(DateOnly date, int value, string @operator)
+        {
+            this.Date = date;
+            this.Value = value;
+            this.Operator = @operator;
+        }
+
+        [MessagePack.Key(0)]
+        public DateOnly Date
+        {
+            get;
+            set;
+        }
+
+        [MessagePack.Key(1)]
+        public int Value
+        {
+            get;
+            set;
+        }
+
+        [MessagePack.Key(2)]
+        public string Operator
+        {
+            get;
+            set;
+        }
+
+        [MessagePack.IgnoreMember]
+        public int LastReading => this.Value;
     }
 }

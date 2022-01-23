@@ -14,7 +14,14 @@
 
             this.IsIndeterminate = isIndeterminate;
 
-            this.InitializeComponent();
+            try
+            {
+                this.InitializeComponent();
+            }
+            catch (System.InvalidOperationException e)
+            {
+                return;
+            }
         }
 
         private Visibility animationVisibility;

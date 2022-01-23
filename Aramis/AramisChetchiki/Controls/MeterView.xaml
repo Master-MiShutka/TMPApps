@@ -60,7 +60,7 @@
             </Grid.RowDefinitions>
             <!--  0  -->
             <HeaderedContentControl Header="ФИО и основная информация об абоненте" Grid.Row="0" DataContext="{Binding Meter}">
-                <StackPanel Orientation="Horizontal" TextBlock.FontSize="18" >
+                <StackPanel Orientation="Horizontal" TextBlock.FontSize="{DynamicResource HeaderFontSize}" >
                     <TextBox Text="{Binding Path=Фамилия, Mode=OneWay}" />
                     <TextBox Text="{Binding Path=Имя, Mode=OneWay}" />
                     <TextBox Text="{Binding Path=Отчество, Mode=OneWay}" />
@@ -232,7 +232,7 @@
                         <HeaderedContentControl HorizontalAlignment="Stretch" Header="Коментарий">
                             <TextBox
                                         AcceptsReturn="True"
-                                        AcceptsTab="True"
+                                        AcceptsTab="True" MaxWidth="300"
                                         IsReadOnly="True"
                                         Text="{Binding Path=Коментарий, Mode=OneWay}"
                                         TextWrapping="Wrap" />
@@ -295,14 +295,14 @@
                             <StackPanel Orientation="Horizontal">
                                 <controls:LabelledTextBox Label="Тарифов" Text="{Binding Path=Тарифов, Mode=OneWay}" />
                                 <controls:LabelledTextBox Label="Тип" Text="{Binding Path=ТипСчетчика, Mode=OneWay}" />
-                                <controls:LabelledTextBox Label="#" Text="{Binding Path=НомерСчетчика, Mode=OneWay}" />
                             </StackPanel>
+                            <controls:LabelledTextBox Label="#" Text="{Binding Path=НомерСчетчика, Mode=OneWay}" />
                             <Separator />
                             <StackPanel Orientation="Horizontal">
                                 <controls:LabelledTextBox Label="Ампераж" Text="{Binding Path=Ампераж, Mode=OneWay}" />
                                 <controls:LabelledTextBox Label="Фаз" Text="{Binding Path=Фаз, Mode=OneWay}" />
-                                <controls:LabelledTextBox Label="Год выпуска" Text="{Binding Path=ГодВыпуска, Mode=OneWay}" />
                             </StackPanel>
+                            <controls:LabelledTextBox Label="Год выпуска" Text="{Binding Path=ГодВыпуска, Mode=OneWay}" />
                             <Separator />
                             <StackPanel Orientation="Horizontal">
                                 <controls:LabelledTextBox Label="Установка" Text="{Binding Path=ДатаУстановки, Mode=OneWay, StringFormat=dd.MM.yy}" />
@@ -338,13 +338,15 @@
                                 </ContentControl>
                             </StackPanel>
                             <Separator />
-                            <controls:LabelledTextBox Label="Принцип" Text="{Binding Path=Принцип, Mode=OneWay}" />
+                            <StackPanel Orientation="Horizontal">
+                                <controls:LabelledTextBox Label="Принцип" Text="{Binding Path=Принцип, Mode=OneWay}" />
+                                <controls:LabelledTextBox Label="Мощность" Text="{Binding Path=Мощность, Mode=OneWay}" />
+                            </StackPanel>
                             <Separator />
                             <controls:LabelledTextBox Label="Пломбы" Text="{Binding Path=НомераПломб, Mode=OneWay}" />
                             <Separator />
-                            <controls:LabelledTextBox Label="Мощность" Text="{Binding Path=Мощность, Mode=OneWay}" />
-                            <Separator />
-                            <controls:LabelledTextBox Label="Среднемес. расход" Text="{Binding Path=СреднеМесячныйРасход, Mode=OneWay}" />
+                            <controls:LabelledTextBox Label="Ср.мес. расход по оплате" Text="{Binding Path=СреднеМесячныйРасходПоОплате, Mode=OneWay}" />
+                            <controls:LabelledTextBox Label="Ср.мес. расход по контр. показ." Text="{Binding Path=СреднеМесячныйРасходПоКонтрольнымПоказаниям, Mode=OneWay}" />
                         </StackPanel>
                     </HeaderedContentControl>
                 </StackPanel>
@@ -354,8 +356,9 @@
                     <ListView ItemsSource="{Binding Path=MeterControlData}" >
                         <ListView.View>
                             <GridView TextBlock.TextAlignment="Center" TextBlock.LineStackingStrategy="BlockLineHeight" TextBlock.LineHeight="15">
-                                <GridViewColumn Width="68" HeaderTemplate="{StaticResource GridViewColumnHeaderTemplate}" Header="Дата" DisplayMemberBinding="{Binding Key, StringFormat={}{0:dd.MM.yy}}" />
+                                <GridViewColumn Width="68" HeaderTemplate="{StaticResource GridViewColumnHeaderTemplate}" Header="Дата" DisplayMemberBinding="{Binding Date, StringFormat={}{0:dd.MM.yy}}" />
                                 <GridViewColumn Width="85" HeaderTemplate="{StaticResource GridViewColumnHeaderTemplate}" Header="Показания" DisplayMemberBinding="{Binding Value}"/>
+                                <GridViewColumn Width="85" HeaderTemplate="{StaticResource GridViewColumnHeaderTemplate}" Header="Причина" DisplayMemberBinding="{Binding Operator}"/>
                             </GridView>
                         </ListView.View>
                     </ListView>
@@ -399,13 +402,13 @@
                     <ListView  ItemsSource="{Binding Path=Payments}" ScrollViewer.CanContentScroll="True" ScrollViewer.VerticalScrollBarVisibility="Visible">
                         <ListView.View>
                             <GridView TextBlock.TextAlignment="Center">
-                                <GridViewColumn Width="65" HeaderTemplate="{StaticResource GridViewColumnHeaderTemplate}" Header="Дата" DisplayMemberBinding="{Binding ДатаОплаты, StringFormat={}{0:dd.MM.yy}}"/>
+                                <GridViewColumn Width="68" HeaderTemplate="{StaticResource GridViewColumnHeaderTemplate}" Header="Дата" DisplayMemberBinding="{Binding ДатаОплаты, StringFormat={}{0:dd.MM.yy}}"/>
                                 <GridViewColumn Width="65" HeaderTemplate="{StaticResource GridViewColumnHeaderTemplate}" Header="Период" DisplayMemberBinding="{Binding ПериодОплаты, StringFormat={}{0:MM.yy}}"/>
                                 <GridViewColumn Width="93" HeaderTemplate="{StaticResource GridViewColumnHeaderTemplate}" Header="Предыдущее показание" DisplayMemberBinding="{Binding ПредыдущееПоказание}"/>
                                 <GridViewColumn Width="90" HeaderTemplate="{StaticResource GridViewColumnHeaderTemplate}" Header="Последнее показание" DisplayMemberBinding="{Binding ПоследнееПоказание}"/>
-                                <GridViewColumn Width="61" HeaderTemplate="{StaticResource GridViewColumnHeaderTemplate}" Header="Разность" DisplayMemberBinding="{Binding РазностьПоказанийПоКвитанции}"/>
-                                <GridViewColumn Width="73" HeaderTemplate="{StaticResource GridViewColumnHeaderTemplate}" Header="Разность расчётная" DisplayMemberBinding="{Binding РазностьПоказанийРасчётная}"/>
-                                <GridViewColumn Width="53" HeaderTemplate="{StaticResource GridViewColumnHeaderTemplate}" Header="Тариф" DisplayMemberBinding="{Binding ВеличинаТарифа}"/>
+                                <GridViewColumn Width="65" HeaderTemplate="{StaticResource GridViewColumnHeaderTemplate}" Header="Разность" DisplayMemberBinding="{Binding РазностьПоказанийПоКвитанции}"/>
+                                <GridViewColumn Width="75" HeaderTemplate="{StaticResource GridViewColumnHeaderTemplate}" Header="Разность расчётная" DisplayMemberBinding="{Binding РазностьПоказанийРасчётная}"/>
+                                <GridViewColumn Width="63" HeaderTemplate="{StaticResource GridViewColumnHeaderTemplate}" Header="Тариф" DisplayMemberBinding="{Binding ВеличинаТарифа}"/>
                                 <GridViewColumn Width="62" HeaderTemplate="{StaticResource GridViewColumnHeaderTemplate}" Header="Сумма оплаты" DisplayMemberBinding="{Binding СуммаОплаты}"/>
                                 <GridViewColumn Width="62" HeaderTemplate="{StaticResource GridViewColumnHeaderTemplate}" Header="Пеня выст." DisplayMemberBinding="{Binding ПеняВыставленая}"/>
                                 <GridViewColumn Width="62" HeaderTemplate="{StaticResource GridViewColumnHeaderTemplate}" Header="Пеня опл." DisplayMemberBinding="{Binding ПеняОплаченная}"/>
@@ -431,7 +434,7 @@
 
             </StackPanel>
             <!--  4  -->
-            <local_controls:MeterСonsumptionViewer MeterEvents="{Binding Path=Meter.Events}" />
+            <local_controls:MeterСonsumptionViewer Grid.Row="4" MeterEvents="{Binding Path=Meter.Events}" />
         </Grid>
     </Border>
 </UserControl>

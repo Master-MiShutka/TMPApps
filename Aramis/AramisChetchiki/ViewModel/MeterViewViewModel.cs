@@ -15,20 +15,20 @@ public class MeterViewViewModel : BaseDataViewModel<Meter>
             ? MainViewModel.Data.ChangesOfMeters[meter.Лицевой]
             : new List<ChangeOfMeter>();
 
-        this.Payments = MainViewModel.Data.PaymentDataInfo.ContainsKey(meter.Лицевой)
-            ? MainViewModel.Data.PaymentDataInfo[meter.Лицевой]
-            : new List<PaymentData>();
+        this.Payments = MainViewModel.Data.Payments.ContainsKey(meter.Лицевой)
+            ? MainViewModel.Data.Payments[meter.Лицевой]
+            : new List<Payment>();
 
         this.MeterControlData = MainViewModel.Data.MetersControlData.ContainsKey(meter.Лицевой)
             ? MainViewModel.Data.MetersControlData[meter.Лицевой].FirstOrDefault().Data
-            : new List<KeyValuePair<DateOnly, int>>();
+            : new List<MeterControlData>();
     }
 
     public Meter Meter { get; init; }
 
     public IEnumerable<ChangeOfMeter> MeterChanges { get; init; }
 
-    public IEnumerable<PaymentData> Payments { get; init; }
+    public IEnumerable<Payment> Payments { get; init; }
 
-    public IEnumerable<KeyValuePair<DateOnly, int>> MeterControlData { get; init; }
+    public IEnumerable<MeterControlData> MeterControlData { get; init; }
 }

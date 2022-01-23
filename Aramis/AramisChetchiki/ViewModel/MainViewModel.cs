@@ -68,6 +68,19 @@
                 this.ChangeMode(Mode.Home);
             });
 
+            this.CommandShowErrors = new DelegateCommand(() =>
+            {
+                System.Windows.Controls.ScrollViewer scrollViewer = new System.Windows.Controls.ScrollViewer();
+                System.Windows.Controls.TextBox textBox = new System.Windows.Controls.TextBox();
+                textBox.HorizontalAlignment = HorizontalAlignment.Stretch;
+                textBox.VerticalAlignment = VerticalAlignment.Stretch;
+                textBox.IsReadOnlyCaretVisible = true;
+                textBox.Text = System.IO.File.ReadAllText(AramisDBParser.ErrorsFileName, System.Text.Encoding.UTF8);
+                scrollViewer.Content = textBox;
+
+                this.ShowCustomDialog(scrollViewer, "-= Выявленные ошибки в БД Арамис =-", TMPApplication.WpfDialogs.DialogMode.Ok);
+            }, (o) => System.IO.File.Exists(AramisDBParser.ErrorsFileName));
+
             this.IsInitialized = false;
             this.Status = "запуск программы";
             this.DetailedStatus = "поиск файлов с данными ...";
@@ -311,6 +324,8 @@
         /// Команда возврата к начальному экрану
         /// </summary>
         public ICommand CommandGoHome { get; }
+
+        public ICommand CommandShowErrors { get; }
 
         /// <summary>
         /// Заголовок окна

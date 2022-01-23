@@ -40,6 +40,11 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Update="AramisDBParser.*.cs">
+      <DependentUpon>AramisDBParser.cs</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
     <None Update="nlog.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

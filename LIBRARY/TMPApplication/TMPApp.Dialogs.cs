@@ -131,7 +131,7 @@
                 }
             };
 
-            if (Application.Current.Dispatcher.CheckAccess() == false)
+            if (Application.Current != null && Application.Current.Dispatcher.CheckAccess() == false)
             {
                 return (MessageBoxResult)DispatcherExtensions.InUi(func);
             }

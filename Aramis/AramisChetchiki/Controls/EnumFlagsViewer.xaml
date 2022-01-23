@@ -14,6 +14,7 @@
 
     <ItemsControl.Resources>
         <local_converters:EnumFlagToBoolConverter x:Key="EnumFlagToBoolConverter" />
+        <local_converters:FieldNameConverter x:Key="FieldNameConverter" />
     </ItemsControl.Resources>
     <ItemsControl.ItemTemplate>
         <DataTemplate>
@@ -22,7 +23,7 @@
                 Padding="2"
                 BorderBrush="SteelBlue"
                 BorderThickness="0,0,0,1">
-                <TextBlock Background="Transparent" Text="{Binding}" />
+                <TextBlock Background="Transparent" Text="{Binding Converter={StaticResource FieldNameConverter}}" />
             </Border>
         </DataTemplate>
     </ItemsControl.ItemTemplate>

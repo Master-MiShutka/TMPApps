@@ -3,7 +3,7 @@
     using System;
 
     [MessagePack.MessagePackObject]
-    public class TransformerSubstation : IComparable<TransformerSubstation>, IEquatable<TransformerSubstation>
+    public class TransformerSubstation : IComparable<TransformerSubstation>, IEquatable<TransformerSubstation>, IComparable
     {
         [MessagePack.IgnoreMember]
         private StringComparison stringComparison = StringComparison.Ordinal;
@@ -80,6 +80,18 @@
             else
             {
                 throw new ArgumentException("Object is not a TransformerSubstation");
+            }
+        }
+
+        public int CompareTo(object obj)
+        {
+            if (obj is TransformerSubstation transformerSubstation2)
+            {
+                return this.CompareTo(transformerSubstation2);
+            }
+            else
+            {
+                return 1;
             }
         }
     }

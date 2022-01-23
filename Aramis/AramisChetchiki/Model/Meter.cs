@@ -530,11 +530,11 @@
             }
         }
 
-        [DisplayName("Среднемесячный расход, кВт∙ч")]
+        [DisplayName("Среднемесячный расход по оплате, кВт∙ч")]
         [Display(GroupName = "Оплата")]
         [SummaryInfo]
         [MessagePack.Key(44)]
-        public int? СреднеМесячныйРасход { get; set; }
+        public int? СреднеМесячныйРасходПоОплате { get; set; }
 
         #endregion
 
@@ -894,6 +894,12 @@
         [MessagePack.Key(63)]
         [IgnoreDataMember]
         public IEnumerable<MeterEvent> Events { get; set; }
+
+        [DisplayName("Среднемесячный расход по контрольным показаниям, кВт∙ч")]
+        [Display(GroupName = "Оплата")]
+        [SummaryInfo]
+        [MessagePack.Key(64)]
+        public int? СреднеМесячныйРасходПоКонтрольнымПоказаниям { get; set; }
 
         #region Наборы полей для отображения в таблицах
 

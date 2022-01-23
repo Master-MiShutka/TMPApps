@@ -216,23 +216,15 @@ namespace DataGridWpf
                     return this.Tree;
                 }
 
-                // build FilterItem
-                FilterItem buildFilterItem()
+                IEnumerable<FilterItem> filterItems = null;
+
+                // DateTime
+                if (type == typeof(DateTime))
                 {
-
-                }
-
-
-                // iterate over all items that are not null
-                // INFO:
-                // SetState : does not raise OnDateStatusChanged event
-                // IsChecked    : raise OnDateStatusChanged event
-                // (see the FilterItem class for more informations)
-                var dateTimes = dates.ToList();
-                
-                foreach (var y in from date in dateTimes.Where(d => d != null)
-                        .Select(d => (DateTime)d)
-                        .OrderBy(o => o.Year)
+                    filterItems = from date in dates
+                                    .Where(d => d != null)
+                                    .Cast<DateTime>()
+                                    .OrderBy(o => o.Year)
                                   group date by date.Year into year
                                   select new FilterItem(this)
                                   {
@@ -266,39 +258,102 @@ namespace DataGridWpf
                                                                       Label = day.ToString("dd", this.Translate.Culture),
                                                                       SetState = true, // default state
                                                                       FieldType = type,
-                                                                      Children = new List<FilterItem>()
+                                                                      Children = new List<FilterItem>(),
                                                                   }).ToList(),
                                                   }).ToList(),
-                                  })
+                                  };
+                }
+
+                // DateOnly
+                else if (type == typeof(DateOnly))
                 {
-                    // set parent and IsChecked property if uncheckPrevious items
-                    y.Children.ForEach(m =>
+                    filterItems = from date in dates
+                                    .Where(d => d != null)
+                                    .Cast<DateOnly>()
+                                    .OrderBy(o => o.Year)
+                                  group date by date.Year into year
+                                  select new FilterItem(this)
+                                  {
+                                      // YEAR
+                                      Level = 1,
+                                      CurrentFilter = this,
+                                      Content = year.Key,
+                                      Label = year.First().ToString("yyyy", this.Translate.Culture),
+                                      SetState = true, // default state
+                                      FieldType = type,
+
+                                      Children = (from date in year
+                                                  group date by date.Month into month
+                                                  select new FilterItem(this)
+                                                  {
+                                                      // MOUNTH
+                                                      Level = 2,
+                                                      CurrentFilter = this,
+                                                      Content = month.Key,
+                                                      Label = month.First().ToString("MMMM", this.Translate.Culture),
+                                                      SetState = true, // default state
+                                                      FieldType = type,
+
+                                                      Children = (from day in month
+                                                                  select new FilterItem(this)
+                                                                  {
+                                                                      // DAY
+                                                                      Level = 3,
+                                                                      CurrentFilter = this,
+                                                                      Content = day.Day,
+                                                                      Label = day.ToString("dd", this.Translate.Culture),
+                                                                      SetState = true, // default state
+                                                                      FieldType = type,
+                                                                      Children = new List<FilterItem>(),
+                                                                  }).ToList(),
+                                                  }).ToList(),
+                                  };
+                }
+                else
+                {
+                    throw new InvalidCastException(type.FullName);
+                }
+
+                // iterate over all items that are not null
+                // INFO:
+                // SetState : does not raise OnDateStatusChanged event
+                // IsChecked    : raise OnDateStatusChanged event
+                // (see the FilterItem class for more informations)
+                var dateTimes = dates.ToList();
+
+                if (filterItems != null)
+                {
+                    foreach (var y in filterItems)
                     {
-                        m.Parent = y;
-
-                        m.Children.ForEach(d =>
+                        // set parent and IsChecked property if uncheckPrevious items
+                        y.Children.ForEach(m =>
                         {
-                            d.Parent = m;
+                            m.Parent = y;
 
-                            // set the state of the ischecked property based on the items already filtered (unchecked)
-                            if (this.PreviouslyFilteredItems != null && uncheckPrevious)
+                            m.Children.ForEach(d =>
                             {
-                                d.IsChecked = this.PreviouslyFilteredItems
-                                    .Any(u => u != null && u.Equals(new DateTime((int)y.Content, (int)m.Content, (int)d.Content))) == false;
-                            }
+                                d.Parent = m;
+
+                                // set the state of the ischecked property based on the items already filtered (unchecked)
+                                if (this.PreviouslyFilteredItems != null && uncheckPrevious)
+                                {
+                                    d.IsChecked = this.PreviouslyFilteredItems
+                                        .Any(u => u != null && u.Equals(this.GetFilterItemValue(y, m, d))) == false;
+                                }
+
+                                // reset initialization with new state
+                                d.InitialState = d.IsChecked;
+                            });
 
                             // reset initialization with new state
-                            d.InitialState = d.IsChecked;
+                            m.InitialState = m.IsChecked;
                         });
 
                         // reset initialization with new state
-                        m.InitialState = m.IsChecked;
-                    });
+                        y.InitialState = y.IsChecked;
 
-                    // reset initialization with new state
-                    y.InitialState = y.IsChecked;
-
-                    this.Tree.Add(y);
+                        this.Tree.Add(y);
+                    }
                 }
 
                 // last empty item if exist in collection
@@ -370,5 +425,21 @@ namespace DataGridWpf
         }
 
         #endregion Public Methods
+
+        private object GetFilterItemValue(FilterItem y, FilterItem m, FilterItem d)
+        {
+            if (y.GetType() == typeof(DateTime))
+            {
+                return new DateTime((int)y.Content, (int)m.Content, (int)d.Content);
+            }
+            if (y.GetType() == typeof(DateOnly))
+            {
+                return new DateOnly((int)y.Content, (int)m.Content, (int)d.Content);
+            }
+            else
+            {
+                throw new InvalidCastException(y.GetType().FullName);
+            }
+        }
     }
 }

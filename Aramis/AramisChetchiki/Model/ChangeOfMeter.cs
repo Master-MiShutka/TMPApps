@@ -6,7 +6,8 @@
     using TMP.Shared;
 
     [MessagePack.MessagePackObject]
-    public class ChangeOfMeter : IModelWithPersonalId
+    [System.Diagnostics.DebuggerDisplay("ID={Лицевой} :: Date={ДатаЗамены} :: Prev={ПоказаниеСнятого} :: Next={ПоказаниеУстановленного}")]
+    public class ChangeOfMeter : IModelWithPersonalId, IModelWithMeterLastReading
     {
         [Display(Order = 0, GroupName = "Операция")]
         [DisplayName("Дата замены")]
@@ -213,5 +214,18 @@
         [Display(Order = 25, GroupName = "Привязка")]
         [MessagePack.Key(25)]
         public string Опора { get; set; }
+
+        [DisplayName("Разрядность снятого счётчика")]
+        [Display(Order = 26, GroupName = "Снятый счётчик")]
+        [MessagePack.Key(26)]
+        public byte РазрядностьСнятого { get; set; }
+
+        [DisplayName("Разрядность установленного счётчика")]
+        [Display(Order = 27, GroupName = "Установленный счётчик")]
+        [MessagePack.Key(27)]
+        public byte РазрядностьУстановленного { get; set; }
+
+        [MessagePack.IgnoreMember]
+        public int LastReading => this.ПоказаниеУстановленного;
     }
 }

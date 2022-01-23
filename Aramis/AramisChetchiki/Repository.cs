@@ -166,10 +166,10 @@
             }
 
             this.UpdateUI("загрузка данных об произведенных оплатах");
-            var pd = this.LoadDictionaryFromPackageAsync<ulong, PaymentData>(package, PART_PAYMENTS).Result;
+            var pd = this.LoadDictionaryFromPackageAsync<ulong, Payment>(package, PART_PAYMENTS).Result;
             if (pd != null)
             {
-                aramisData.PaymentDataInfo = pd;
+                aramisData.Payments = pd;
             }
 
             this.UpdateUI("загрузка контрольных показаний по лицевому счету");
@@ -197,7 +197,7 @@
                 bytes = JsonSerializer.JsonSerializeToBytesAsync(this.Data.ElectricitySupplyInfo).Result;
                 this.SaveJsonDataToPart(bytes, package, PART_ELECTRICITY_SUPPLYS);
                 this.UpdateUI("сохранение данных об произведенных оплатах");
-                bytes = JsonSerializer.JsonSerializeToBytesAsync(this.Data.PaymentDataInfo).Result;
+                bytes = JsonSerializer.JsonSerializeToBytesAsync(this.Data.Payments).Result;
                 this.SaveJsonDataToPart(bytes, package, PART_PAYMENTS);
                 this.UpdateUI("сохранение контрольных показаний по лицевому счету");
                 bytes = JsonSerializer.JsonSerializeToBytesAsync(this.Data.MetersControlData).Result;

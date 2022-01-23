@@ -337,9 +337,10 @@
                 matrix.Builded += this.Matrix_Builded;
             }
 
-            int metersCount = MainViewModel.Meters.Count();
+            int metersCount = MainViewModel.Meters.Where(i => i.Удалён == false).Count();
 
             IEnumerable<Meter> metersNotSplit = MainViewModel.Meters
+                .Where(i => i.Удалён == false)
                 .Where(i => i.МестоУстановки != "СПЛИТ");
 
             // населенные пункты по убыванию кол-ва счетчиков (первые 10)
@@ -508,12 +509,23 @@
 
             #region Свод по н.п., преобладающим типам счетчиков и кол-ву фаз счетчика
 
+            // fix
+            foreach (var meter in metersNotSplit)
+            {
+                if (meter.ТипСчетчика == null)
+                {
+                    meter.ТипСчетчика = string.Empty;
+                }
+            }
+
             // населенные пункты по убыванию кол-ва счетчиков (первые countOfLocalities)
-            var meterTypePerLocality = SummaryInfoHelper.BuildFirst10LargeGroups(
+            var gr = SummaryInfoHelper.BuildFirst10LargeGroups(
                 metersNotSplit,
                 nameof(Meter.НаселённыйПункт),
                 i => i.Аскуэ == false,
-                countOfLocalities)
+                countOfLocalities);
+
+            var meterTypePerLocality = gr
                 .Select(sigi => new
                 {
                     Key = sigi.Key,

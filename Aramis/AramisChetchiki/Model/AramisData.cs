@@ -1,5 +1,6 @@
 ﻿namespace TMP.WORK.AramisChetchiki.Model
 {
+    using System;
     using System.Collections.Generic;
     using System.Runtime.Serialization;
     using TMP.Common.RepositoryCommon;
@@ -45,7 +46,7 @@
         /// Информация об произведенных оплатах по лицевому счету
         /// </summary>
         [MessagePack.Key(5)]
-        public Dictionary<ulong, IList<PaymentData>> PaymentDataInfo { get; set; }
+        public Dictionary<ulong, IList<Payment>> Payments { get; set; }
 
         /// <summary>
         /// Контрольные показания по лицевому счету
