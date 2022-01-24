@@ -367,7 +367,7 @@
             <!--  3  -->
             <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center">
                 <HeaderedContentControl HorizontalAlignment="Stretch" Header="Замены счётчиков у абонента">
-                    <ListView ItemsSource="{Binding Path=MeterChanges}" >
+                    <ListView ItemsSource="{Binding Path=MeterChanges}" MaxHeight="200" VirtualizingPanel.IsVirtualizing="True">
                         <ListView.View>
                             <GridView TextBlock.TextAlignment="Center" TextBlock.LineStackingStrategy="BlockLineHeight" TextBlock.LineHeight="15">
                                 <GridViewColumn Width="68" HeaderTemplate="{StaticResource GridViewColumnHeaderTemplate}" Header="Дата замены" DisplayMemberBinding="{Binding ДатаЗамены, StringFormat={}{0:dd.MM.yy}}" />
@@ -392,6 +392,15 @@
                                             </Setter.Value>
                                         </Setter>
                                     </DataTrigger>
+                                    <DataTrigger Binding="{Binding View}" Value="{x:Null}">
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate>
+                                                    <uicontrols:NoData Message="Нет замен" />
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </DataTrigger>
                                 </Style.Triggers>
                             </Style>
                         </ListView.Style>
@@ -399,7 +408,7 @@
                 </HeaderedContentControl>
 
                 <HeaderedContentControl HorizontalAlignment="Stretch" Header="Произведенные оплаты за электроэнергию">
-                    <ListView  ItemsSource="{Binding Path=Payments}" ScrollViewer.CanContentScroll="True" ScrollViewer.VerticalScrollBarVisibility="Visible">
+                    <ListView  ItemsSource="{Binding Path=Payments}" MaxHeight="200" VirtualizingPanel.IsVirtualizing="True" ScrollViewer.CanContentScroll="True" ScrollViewer.VerticalScrollBarVisibility="Visible">
                         <ListView.View>
                             <GridView TextBlock.TextAlignment="Center">
                                 <GridViewColumn Width="68" HeaderTemplate="{StaticResource GridViewColumnHeaderTemplate}" Header="Дата" DisplayMemberBinding="{Binding ДатаОплаты, StringFormat={}{0:dd.MM.yy}}"/>
@@ -410,6 +419,7 @@
                                 <GridViewColumn Width="75" HeaderTemplate="{StaticResource GridViewColumnHeaderTemplate}" Header="Разность расчётная" DisplayMemberBinding="{Binding РазностьПоказанийРасчётная}"/>
                                 <GridViewColumn Width="63" HeaderTemplate="{StaticResource GridViewColumnHeaderTemplate}" Header="Тариф" DisplayMemberBinding="{Binding ВеличинаТарифа}"/>
                                 <GridViewColumn Width="62" HeaderTemplate="{StaticResource GridViewColumnHeaderTemplate}" Header="Сумма оплаты" DisplayMemberBinding="{Binding СуммаОплаты}"/>
+                                <GridViewColumn Width="62" HeaderTemplate="{StaticResource GridViewColumnHeaderTemplate}" Header="Сумма оплаты расч." DisplayMemberBinding="{Binding СуммаОплатыРасчётная}"/>
                                 <GridViewColumn Width="62" HeaderTemplate="{StaticResource GridViewColumnHeaderTemplate}" Header="Пеня выст." DisplayMemberBinding="{Binding ПеняВыставленая}"/>
                                 <GridViewColumn Width="62" HeaderTemplate="{StaticResource GridViewColumnHeaderTemplate}" Header="Пеня опл." DisplayMemberBinding="{Binding ПеняОплаченная}"/>
                             </GridView>
@@ -434,7 +444,7 @@
 
             </StackPanel>
             <!--  4  -->
-            <local_controls:MeterСonsumptionViewer Grid.Row="4" MeterEvents="{Binding Path=Meter.Events}" />
+            <local_controls:MeterСonsumptionViewer Grid.Row="4" DataContext="{Binding Meter}" MeterEvents="{Binding Path=Events}" />
         </Grid>
     </Border>
 </UserControl>

@@ -5,6 +5,7 @@
     using System.Collections.Generic;
     using System.Data;
     using System.Linq;
+    using System.Threading.Tasks;
     using TMP.WORK.AramisChetchiki.Model;
     using TMPApplication;
 
@@ -31,14 +32,14 @@
 
             try
             {
-                //Parallel.ForEach(c, meter =>
-                foreach (var meter in aramisData.Meters)
+                Parallel.ForEach(aramisData.Meters, meter =>
+                //foreach (var meter in aramisData.Meters)
                 {
                     workTask.UpdateUI(++processedRows, totalRows, stepNameString: "лицевой счет");
 
                     if (meter.Лицевой == 0 || meter.Удалён)
                     {
-                        continue;
+                        return;
                     }
 
                     // контрольные показания
@@ -91,17 +92,18 @@
                     // сортировка по дате - по убыванию
                     list.Sort(comparison);
 
-                    if (list.Count == 0)
-                        continue;
+                    if (list.Count != 0)
+                    {
 
-                    // построение списка событий
-                    meter.Events = this.BuildMeterEvents(list);
+                        // построение списка событий
+                        meter.Events = this.BuildMeterEvents(list);
 
-                    // расчёт среднемесячного потребления за последний год
-                    meter.СреднеМесячныйРасходПоОплате = this.CalcAverageConsumptionByPayments(ref list);
-                    meter.СреднеМесячныйРасходПоКонтрольнымПоказаниям = this.CalcAverageConsumptionByControlReadings(ref list);
-                }
-                //});
+                        // расчёт среднемесячного потребления за последний год
+                        meter.СреднеМесячныйРасходПоОплате = this.CalcAverageConsumptionByPayments(list);
+                        meter.СреднеМесячныйРасходПоКонтрольнымПоказаниям = this.CalcAverageConsumptionByControlReadings(list);
+                    }
+                //}
+                });
             }
             catch (Exception ex)
             {
@@ -224,7 +226,7 @@
             return meterEvents;
         }
 
-        private int CalcAverageConsumptionByPayments(ref List<Tuple<DateOnly, MeterEventType, object>> list)
+        private int CalcAverageConsumptionByPayments(List<Tuple<DateOnly, MeterEventType, object>> list)
         {
             // конечная дата
             DateOnly endDate = list[0].Item1;
@@ -309,7 +311,7 @@
             return this.CalculateMonthAverageConsumption(startDate, endDate, summ);
         }
 
-        private int CalcAverageConsumptionByControlReadings(ref List<Tuple<DateOnly, MeterEventType, object>> list)
+        private int CalcAverageConsumptionByControlReadings(List<Tuple<DateOnly, MeterEventType, object>> list)
         {
             // конечная дата
             DateOnly endDate = list[0].Item1;

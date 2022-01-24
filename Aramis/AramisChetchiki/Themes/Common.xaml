@@ -24,6 +24,7 @@
 
     <FontFamily x:Key="DefaultFont">Segoe UI, Lucida Sans Unicode, Verdana</FontFamily>
     <FontFamily x:Key="HeaderFont">Arial Black</FontFamily>
+    <System:Double x:Key="ContentFontSize">12</System:Double>
     <System:Double x:Key="NormalFontSize">14</System:Double>
     <System:Double x:Key="HeaderFontSize">16</System:Double>
     <System:Double x:Key="BigFontSize">18</System:Double>

@@ -892,7 +892,6 @@
         #endregion
 
         [MessagePack.Key(63)]
-        [IgnoreDataMember]
         public IEnumerable<MeterEvent> Events { get; set; }
 
         [DisplayName("Среднемесячный расход по контрольным показаниям, кВт∙ч")]

@@ -16,8 +16,8 @@ public class MeterViewViewModel : BaseDataViewModel<Meter>
             : new List<ChangeOfMeter>();
 
         this.Payments = MainViewModel.Data.Payments.ContainsKey(meter.Лицевой)
-            ? MainViewModel.Data.Payments[meter.Лицевой]
-            : new List<Payment>();
+            ? MainViewModel.Data.Payments[meter.Лицевой].SelectMany(p => p.Payments)
+            : new List<PaymentData>();
 
         this.MeterControlData = MainViewModel.Data.MetersControlData.ContainsKey(meter.Лицевой)
             ? MainViewModel.Data.MetersControlData[meter.Лицевой].FirstOrDefault().Data
@@ -28,7 +28,7 @@ public class MeterViewViewModel : BaseDataViewModel<Meter>
 
     public IEnumerable<ChangeOfMeter> MeterChanges { get; init; }
 
-    public IEnumerable<Payment> Payments { get; init; }
+    public IEnumerable<PaymentData> Payments { get; init; }
 
     public IEnumerable<MeterControlData> MeterControlData { get; init; }
 }
