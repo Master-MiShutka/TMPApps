@@ -137,7 +137,7 @@
                 <Border Margin="2" CornerRadius="5" Background="Crimson" BorderBrush="WhiteSmoke" BorderThickness="2" Padding="10,5" Visibility="{Binding Удалён, Converter={StaticResource BooleanToVisibilityConverter}}">
                     <TextBlock TextWrapping="Wrap" FontWeight="ExtraBold" Foreground="White" FontSize="{DynamicResource HeaderFontSize}">
                                 <Run Text="Абонент удален из базы данных "/>
-                                <Run Text="{Binding ДатаУдаления, FallbackValue=00.00.0000, StringFormat={}{0:dd.MM.yyy}!}"/>
+                                <Run Text="{Binding ДатаУдаления, Mode=OneWay, FallbackValue=00.00.0000, StringFormat={}{0:dd.MM.yyy}!}"/>
                     </TextBlock>
                 </Border>
                 <Border Margin="2" CornerRadius="5" Background="Crimson" BorderBrush="WhiteSmoke" BorderThickness="2" Padding="10,5" Visibility="{Binding Отключён, Converter={StaticResource BooleanToVisibilityConverter}}">
@@ -417,7 +417,7 @@
                                 <GridViewColumn Width="90" HeaderTemplate="{StaticResource GridViewColumnHeaderTemplate}" Header="Последнее показание" DisplayMemberBinding="{Binding ПоследнееПоказание}"/>
                                 <GridViewColumn Width="65" HeaderTemplate="{StaticResource GridViewColumnHeaderTemplate}" Header="Разность" DisplayMemberBinding="{Binding РазностьПоказанийПоКвитанции}"/>
                                 <GridViewColumn Width="75" HeaderTemplate="{StaticResource GridViewColumnHeaderTemplate}" Header="Разность расчётная" DisplayMemberBinding="{Binding РазностьПоказанийРасчётная}"/>
-                                <GridViewColumn Width="63" HeaderTemplate="{StaticResource GridViewColumnHeaderTemplate}" Header="Тариф" DisplayMemberBinding="{Binding ВеличинаТарифа}"/>
+                                <GridViewColumn Width="80" HeaderTemplate="{StaticResource GridViewColumnHeaderTemplate}" Header="Тариф" DisplayMemberBinding="{Binding ВеличинаТарифа}"/>
                                 <GridViewColumn Width="62" HeaderTemplate="{StaticResource GridViewColumnHeaderTemplate}" Header="Сумма оплаты" DisplayMemberBinding="{Binding СуммаОплаты}"/>
                                 <GridViewColumn Width="62" HeaderTemplate="{StaticResource GridViewColumnHeaderTemplate}" Header="Сумма оплаты расч." DisplayMemberBinding="{Binding СуммаОплатыРасчётная}"/>
                                 <GridViewColumn Width="62" HeaderTemplate="{StaticResource GridViewColumnHeaderTemplate}" Header="Пеня выст." DisplayMemberBinding="{Binding ПеняВыставленая}"/>

@@ -98,7 +98,8 @@
                                         <Run Text="?" x:Name="runПоверка" />
                                     </TextBlock>
                                     <Separator/>
-                                    <TextBlock Text="{Binding Path=СреднеМесячныйРасход, StringFormat={}Среднемесячный расход: {0} кВт∙ч}"/>
+                                    <TextBlock Text="{Binding Path=СреднеМесячныйРасходПоОплате, StringFormat={}Среднемесячный расход по оплате: {0} кВт∙ч}"/>
+                                    <TextBlock Text="{Binding Path=СреднеМесячныйРасходПоКонтрольнымПоказаниям, StringFormat={}Среднемесячный расход по контр. показаниям: {0} кВт∙ч}"/>
                                 </StackPanel>
                                 <DataTemplate.Triggers>
                                     <DataTrigger Binding="{Binding Path=PlacementTarget.DataContext.Поверен, RelativeSource={RelativeSource AncestorType=ToolTip}}" Value="False">

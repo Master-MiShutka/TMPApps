@@ -121,17 +121,23 @@
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
-            <Style.Triggers>
-                <DataTrigger Binding="{Binding EventType}" Value="{x:Static model:MeterEventType.Payment}">
-                    <Setter Property="ItemTemplate" Value="{StaticResource PaymentItemDataTemplate}"/>
-                </DataTrigger>
-                <DataTrigger Binding="{Binding EventType}" Value="{x:Static model:MeterEventType.Change}">
-                    <Setter Property="ItemTemplate" Value="{StaticResource ChangeItemDataTemplate}"/>
-                </DataTrigger>
-                <DataTrigger Binding="{Binding EventType}" Value="{x:Static model:MeterEventType.Control}">
-                    <Setter Property="ItemTemplate" Value="{StaticResource ControlItemDataTemplate}"/>
-                </DataTrigger>
-            </Style.Triggers>
+            <Setter Property="ItemContainerStyle">
+                <Setter.Value>
+                    <Style>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding EventType}" Value="{x:Static model:MeterEventType.Payment}">
+                                <Setter Property="Control.Template" Value="{StaticResource PaymentItemDataTemplate}"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding EventType}" Value="{x:Static model:MeterEventType.Change}">
+                                <Setter Property="Control.Template" Value="{StaticResource ChangeItemDataTemplate}"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding EventType}" Value="{x:Static model:MeterEventType.Control}">
+                                <Setter Property="Control.Template" Value="{StaticResource ControlItemDataTemplate}"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Setter.Value>
+            </Setter>
         </Style>
         
         <Style x:Key="periodItems" TargetType="{x:Type ItemsControl}">
