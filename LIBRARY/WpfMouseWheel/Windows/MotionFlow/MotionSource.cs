@@ -122,7 +122,10 @@
             // for information on timestamp seee http://msdn.microsoft.com/en-us/library/ms644939(VS.85).aspx
 
             if (timeStamp < 0)
+            {
+                return;
                 throw new ArgumentOutOfRangeException("timeStamp");
+            }
 
             if (this._timeStamp >= 0)
             {

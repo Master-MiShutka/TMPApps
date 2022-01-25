@@ -43,14 +43,14 @@
                 .Distinct()
                 .SelectMany(i => i.Meters);
 
-            this.DiffTariff2MetersCount = diffTariff2Meters.Count();
+            this.DiffTariff2MetersCount = diffTariff2Meters.Count() / 2;
 
             var diffTariff3Meters = diffTariffMeters
                 .Where(i => i.MetersCount == 3)
                 .Distinct()
                 .SelectMany(i => i.Meters);
 
-            this.DiffTariff3MetersCount = diffTariff3Meters.Count();
+            this.DiffTariff3MetersCount = diffTariff3Meters.Count() / 3;
 
             this.PersonalAccountsCount = metersList.Select(d => d.БазовыйЛицевой).Distinct().Count();
 

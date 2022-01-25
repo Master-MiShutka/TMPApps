@@ -149,18 +149,18 @@
                 rowIndex = 1;
                 foreach (T item in collection)
                 {
-                    data[rowIndex, 0].NumberFormat = "0";
+                    data[rowIndex, 0 + 1].NumberFormat = "0";
                     ind = 1; // т.к. первый столбец номер по порядку
                     foreach (string field in fieldsAndFormats.Keys)
                     {
                         object value = string.Empty;
                         if (string.IsNullOrWhiteSpace(fieldsAndFormats[field].ExcelFormat) == false)
                         {
-                            data[rowIndex, 0].NumberFormat = fieldsAndFormats[field].ExcelFormat;
+                            data[rowIndex, 0 + 1 + ind].NumberFormat = fieldsAndFormats[field].ExcelFormat;
                         }
                         else if (string.IsNullOrWhiteSpace(fieldsAndFormats[field].ContentDisplayFormat) == false)
                         {
-                            data[rowIndex, 0].NumberFormat = "General";
+                            data[rowIndex, 0 + 1 + ind].NumberFormat = "General";
                         }
 
                         ind++;
