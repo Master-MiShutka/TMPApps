@@ -38,9 +38,10 @@
             // byte[] bytes = Utf8Json.JsonSerializer.Serialize(model);
             using MemoryStream stream = new MemoryStream();
 
-            var optinos = MessagePack.MessagePackSerializer.DefaultOptions.WithCompression(MessagePack.MessagePackCompression.Lz4BlockArray);
+            var options = MessagePack.MessagePackSerializer.DefaultOptions
+                .WithCompression(MessagePack.MessagePackCompression.Lz4BlockArray);
 
-            await MessagePack.MessagePackSerializer.SerializeAsync<T>(stream, model, optinos);
+            await MessagePack.MessagePackSerializer.SerializeAsync<T>(stream, model, options);
 
             // await JsonSerializeObjectAsync(model, stream);
             using StreamReader reader = new StreamReader(stream);

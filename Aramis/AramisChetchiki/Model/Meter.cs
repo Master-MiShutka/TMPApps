@@ -11,7 +11,7 @@
 
     [KnownType(typeof(Address))]
     [KnownType(typeof(TransformerSubstation))]
-    [MessagePack.MessagePackObject]
+    [MessagePack.MessagePackObject(keyAsPropertyName: true)]
     public class Meter : IModelWithPersonalId
     {
         private const string UNKNOWN_STR = "#Н/Д";
@@ -20,17 +20,14 @@
 
         [DisplayName("Фамилия")]
         [Display(GroupName = "Контактные данные")]
-        [MessagePack.Key(0)]
         public string Фамилия { get; set; }
 
         [DisplayName("Имя")]
         [Display(GroupName = "Контактные данные")]
-        [MessagePack.Key(1)]
         public string Имя { get; set; }
 
         [DisplayName("Отчество")]
         [Display(GroupName = "Контактные данные")]
-        [MessagePack.Key(2)]
         public string Отчество { get; set; }
 
         [MessagePack.IgnoreMember]
@@ -54,12 +51,10 @@
 
         [DisplayName("SMS")]
         [Display(GroupName = "Контактные данные")]
-        [MessagePack.Key(3)]
         public string SMS { get; set; }
 
         [DisplayName("Телефоны")]
         [Display(GroupName = "Контактные данные")]
-        [MessagePack.Key(4)]
         public string Телефоны { get; set; }
 
         [MessagePack.IgnoreMember]
@@ -74,7 +69,6 @@
 
         [DisplayName("Адрес")]
         [Display(GroupName = "Адрес")]
-        [MessagePack.Key(5)]
         public Address Адрес { get; set; }
 
         [MessagePack.IgnoreMember]
@@ -146,24 +140,22 @@
         [DisplayName("Категория")]
         [SummaryInfo]
         [Display(GroupName = "Абонент")]
-        [MessagePack.Key(6)]
         public string Категория { get; set; }
 
         [DisplayName("Коментарий")]
         [Display(GroupName = "Абонент")]
-        [MessagePack.Key(7)]
         public string Коментарий { get; set; }
 
         [DisplayName("Дата уведомления")]
         [Display(GroupName = "Абонент")]
         [DateTimeDataFormat]
-        [MessagePack.Key(8)]
+        [MessagePack.MessagePackFormatter(typeof(DateOnlyFormatter))]
         public DateOnly? ДатаУведомления { get; set; }
 
         [DisplayName("Дата отключения")]
         [Display(GroupName = "Абонент")]
         [DateTimeDataFormat]
-        [MessagePack.Key(9)]
+        [MessagePack.MessagePackFormatter(typeof(DateOnlyFormatter))]
         public DateOnly? ДатаОтключения { get; set; }
 
         [MessagePack.IgnoreMember]
@@ -181,18 +173,16 @@
         [DisplayName("Удалён из базы")]
         [Display(GroupName = "Абонент")]
         [SummaryInfo]
-        [MessagePack.Key(10)]
         public bool Удалён { get; set; } = false;
 
         [DisplayName("Дата удаления из базы")]
         [Display(GroupName = "Абонент")]
-        [MessagePack.Key(11)]
+        [MessagePack.MessagePackFormatter(typeof(DateOnlyFormatter))]
         public DateOnly ДатаУдаления { get; set; }
 
         [DisplayName("Прописано человек")]
         [Display(GroupName = "Абонент")]
         [SummaryInfo]
-        [MessagePack.Key(12)]
         public int? КолвоЧеловек { get; set; }
 
         #endregion
@@ -202,55 +192,46 @@
         [DisplayName("Шифр тарифа")]
         [SummaryInfo]
         [Display(GroupName = "Счётчик")]
-        [MessagePack.Key(13)]
         public string ШифрТарифа { get; set; }
 
         [DisplayName("Тип счётчика")]
         [Display(GroupName = "Счётчик")]
         [SummaryInfo]
-        [MessagePack.Key(14)]
         public string ТипСчетчика { get; set; }
 
         [DisplayName("Ампераж счётчика")]
         [Display(GroupName = "Счётчик")]
         [TextDataFormat]
-        [MessagePack.Key(15)]
         public string Ампераж { get; set; }
 
         [DisplayName("Принцип действия счётчика")]
         [SummaryInfo]
         [Display(GroupName = "Счётчик")]
-        [MessagePack.Key(16)]
         public string Принцип { get; set; }
 
         [DisplayName("Количество фаз счётчика")]
         [SummaryInfo]
         [Display(GroupName = "Счётчик")]
-        [MessagePack.Key(17)]
         public byte Фаз { get; set; }
 
         [DisplayName("Номер счётчика")]
         [Display(GroupName = "Счётчик")]
         [TextDataFormat]
-        [MessagePack.Key(18)]
         public string НомерСчетчика { get; set; }
 
         [DisplayName("Номера пломб")]
         [Display(GroupName = "Счётчик")]
         [TextDataFormat]
-        [MessagePack.Key(19)]
         public string НомераПломб { get; set; }
 
         [DisplayName("Мощность электроустановки, кВт")]
         [Display(GroupName = "Счётчик")]
         [SummaryInfo]
-        [MessagePack.Key(20)]
         public decimal? Мощность { get; set; }
 
         [DisplayName("Год выпуска счётчика")]
         [SummaryInfo]
         [Display(GroupName = "Счётчик")]
-        [MessagePack.Key(21)]
         public int ГодВыпуска { get; set; }
 
         [MessagePack.IgnoreMember]
@@ -259,7 +240,7 @@
         [DisplayName("Дата установки учёта")]
         [Display(GroupName = "Счётчик")]
         [DateTimeDataFormat]
-        [MessagePack.Key(22)]
+        [MessagePack.MessagePackFormatter(typeof(DateOnlyFormatter))]
         public DateOnly ДатаУстановки
         {
             get => this.датаУстановки == null || this.датаУстановки == default ? default : this.датаУстановки.Value;
@@ -274,17 +255,14 @@
 
         [DisplayName("Показание при установке")]
         [Display(GroupName = "Счётчик")]
-        [MessagePack.Key(23)]
         public int ПоказаниеПриУстановке { get; set; }
 
         [DisplayName("Расчётное показание")]
         [Display(GroupName = "Счётчик")]
-        [MessagePack.Key(24)]
         public int? РасчПоказание { get; set; }
 
         [DisplayName("Последнее показание при обходе")]
         [Display(GroupName = "Счётчик")]
-        [MessagePack.Key(25)]
         public int? ПослПоказаниеОбхода { get; set; }
 
         [MessagePack.IgnoreMember]
@@ -318,12 +296,10 @@
 
         [DisplayName("Количество используемых тарифов")]
         [Display(GroupName = "Счётчик")]
-        [MessagePack.Key(26)]
         public byte Тарифов { get; set; }
 
         [DisplayName("Количество используемых знаков")]
         [Display(GroupName = "Счётчик")]
-        [MessagePack.Key(27)]
         public decimal Разрядность { get; set; }
 
         #endregion
@@ -333,25 +309,21 @@
         [DisplayName("Расположение")]
         [SummaryInfo]
         [Display(GroupName = "Счётчик-признаки")]
-        [MessagePack.Key(28)]
         public string Расположение { get; set; }
 
         [DisplayName("Место установки учёта")]
         [SummaryInfo]
         [Display(GroupName = "Счётчик-признаки")]
-        [MessagePack.Key(29)]
         public string МестоУстановки { get; set; }
 
         [DisplayName("Использование")]
         [SummaryInfo]
         [Display(GroupName = "Счётчик-признаки")]
-        [MessagePack.Key(30)]
         public string Использование { get; set; }
 
         [DisplayName("Наличие АСКУЭ")]
         [SummaryInfo]
         [Display(GroupName = "Счётчик-признаки")]
-        [MessagePack.Key(31)]
         public bool Аскуэ { get; set; }
 
         #endregion
@@ -360,19 +332,16 @@
 
         [DisplayName("Показание при отключении")]
         [Display(GroupName = "Счётчик")]
-        [MessagePack.Key(32)]
         public int? ПоказаниеПриОтключении { get; set; }
 
         [DisplayName("Последнее оплаченное показание")]
         [Display(GroupName = "Оплата")]
         [NumericDataFormat]
-        [MessagePack.Key(33)]
         public int? ПоследнееОплаченноеПоказание { get; set; }
 
         [DisplayName("Предыдуще оплаченное показание")]
         [Display(GroupName = "Оплата")]
         [NumericDataFormat]
-        [MessagePack.Key(34)]
         public int? ПредыдущеОплаченноеПоказание { get; set; }
 
         #endregion
@@ -393,41 +362,35 @@
 
         [DisplayName("Долг, руб")]
         [Display(GroupName = "Оплата")]
-        [MessagePack.Key(35)]
         public decimal? ДолгРуб { get; set; }
 
         [DisplayName("ErrSumN")]
         [Display(GroupName = "Оплата")]
-        [MessagePack.Key(36)]
         public decimal? ErrSumN { get; set; }
 
         [DisplayName("ErrSumV")]
         [Display(GroupName = "Оплата")]
-        [MessagePack.Key(37)]
         public decimal? ErrSumV { get; set; }
 
         [DisplayName("Сумма оплаты")]
         [Display(GroupName = "Оплата")]
         [NumericDataFormat]
-        [MessagePack.Key(38)]
         public decimal? СуммаОплаты { get; set; }
 
         [DisplayName("Период последней оплаты")]
         [Display(GroupName = "Оплата")]
         [DateTimeDataFormat]
-        [MessagePack.Key(39)]
+        [MessagePack.MessagePackFormatter(typeof(DateOnlyFormatter))]
         public DateOnly? ПериодПослОплаты { get; set; }
 
         [DisplayName("Среднее")]
         [Display(GroupName = "Оплата")]
         [NumericDataFormat]
-        [MessagePack.Key(40)]
         public int? Среднее { get; set; }
 
         [DisplayName("Месяц")]
         [Display(GroupName = "Оплата")]
         [NumericDataFormat]
-        [MessagePack.Key(41)]
         public int? Месяц { get; set; }
 
         [MessagePack.IgnoreMember]
@@ -461,7 +424,7 @@
         [DisplayName("Дата оплаты")]
         [Display(GroupName = "Оплата")]
         [DateTimeDataFormat]
-        [MessagePack.Key(42)]
+        [MessagePack.MessagePackFormatter(typeof(DateOnlyFormatter))]
         public DateOnly ДатаОплаты
         {
             get => this.датаОплаты == null || this.датаОплаты == default ? default : this.датаОплаты.Value;
@@ -477,7 +440,6 @@
         [DisplayName("Задолженник")]
         [Display(GroupName = "Оплата")]
         [SummaryInfo]
-        [MessagePack.Key(43)]
         public bool Задолженник { get; set; }
 
         [DisplayName("Задолженность, кВт∙ч")]
@@ -533,7 +495,6 @@
         [DisplayName("Среднемесячный расход по оплате, кВт∙ч")]
         [Display(GroupName = "Оплата")]
         [SummaryInfo]
-        [MessagePack.Key(44)]
         public int? СреднеМесячныйРасходПоОплате { get; set; }
 
         #endregion
@@ -546,7 +507,7 @@
         [DisplayName("Дата обхода")]
         [Display(GroupName = "Обход")]
         [DateTimeDataFormat]
-        [MessagePack.Key(45)]
+        [MessagePack.MessagePackFormatter(typeof(DateOnlyFormatter))]
         public DateOnly ДатаОбхода
         {
             get => this.датаОбхода == null || this.датаОбхода == default ? DateOnly.FromDateTime(new DateTime(1900, 1, 1)) : this.датаОбхода.Value;
@@ -598,7 +559,6 @@
         [SummaryInfo]
         [Display(GroupName = "Обход")]
         [DisplayFormat(DataFormatString = "{0}")]
-        [MessagePack.Key(46)]
         public string Контролёр { get; set; }
 
         #endregion
@@ -635,7 +595,6 @@
 
         [DisplayName("Квартал поверки счётчика")]
         [Display(GroupName = "Поверка")]
-        [MessagePack.Key(47)]
         public byte КварталПоверки { get; set; }
 
         [MessagePack.IgnoreMember]
@@ -644,7 +603,6 @@
         [DisplayName("Год поверки счётчика")]
         [SummaryInfo]
         [Display(GroupName = "Поверка")]
-        [MessagePack.Key(48)]
         public uint ГодПоверки
         {
             get => this.годПоверки;
@@ -663,7 +621,6 @@
 
         [DisplayName("Период поверки")]
         [Display(GroupName = "Поверка")]
-        [MessagePack.Key(49)]
         public byte ПериодПоверки { get; set; }
 
         [MessagePack.IgnoreMember]
@@ -708,19 +665,16 @@
         [DisplayName("Подстанция")]
         [SummaryInfo]
         [Display(GroupName = "Привязка")]
-        [MessagePack.Key(50)]
         public string Подстанция { get; set; }
 
         [DisplayName("Фидер 10 кВ")]
         [SummaryInfo]
         [Display(GroupName = "Привязка")]
-        [MessagePack.Key(51)]
         public string Фидер10 { get; set; }
 
         [DisplayName("ТП")]
         [SummaryInfo]
         [Display(GroupName = "Привязка")]
-        [MessagePack.Key(52)]
         public TransformerSubstation ТП { get; set; }
 
         [MessagePack.IgnoreMember]
@@ -746,13 +700,11 @@
         [DisplayName("Фидер 0,4 кВ")]
         [Display(GroupName = "Привязка")]
         [TextDataFormat]
-        [MessagePack.Key(53)]
         public int? Фидер04 { get; set; }
 
         [DisplayName("№ опоры")]
         [Display(GroupName = "Привязка")]
         [TextDataFormat]
-        [MessagePack.Key(54)]
         public string Опора { get; set; }
 
         [MessagePack.IgnoreMember]
@@ -770,7 +722,6 @@
 
         [DisplayName("Признаки")]
         [Display(GroupName = "Признаки")]
-        [MessagePack.Key(55)]
         public MeterSigns Signs { get; set; }
 
         [MessagePack.IgnoreMember]
@@ -843,29 +794,25 @@
         [SummaryInfo]
         [DisplayName("Заключен ли договор")]
         [Display(GroupName = "Признаки")]
-        [MessagePack.Key(56)]
         public bool Договор { get; set; }
 
         [DisplayName("Дата договора")]
         [Display(GroupName = "Признаки")]
-        [MessagePack.Key(57)]
+        [MessagePack.MessagePackFormatter(typeof(DateOnlyFormatter))]
         public DateOnly? ДатаДоговора { get; set; }
 
         [SummaryInfo]
         [DisplayName("Льгота")]
         [Display(GroupName = "Признаки")]
-        [MessagePack.Key(58)]
         public int? Льгота { get; set; }
 
         [DisplayName("Принадлежит РУП 'ГродноЭнерго'")]
         [Display(GroupName = "Признаки")]
-        [MessagePack.Key(59)]
         public bool ПринадлежностьРуп { get; set; }
 
         [DisplayName("Работник ГПО БелЭнерго")]
         [Display(GroupName = "Признаки")]
         [SummaryInfo]
-        [MessagePack.Key(60)]
         public bool РаботникБелЭнерго { get; set; } = false;
 
         #endregion
@@ -875,7 +822,6 @@
         [DisplayName("Лицевой счёт абонента")]
         [Display(GroupName = "Счёт")]
         [PersonalAccountDataFormat]
-        [MessagePack.Key(61)]
         public ulong Лицевой { get; set; }
 
         [MessagePack.IgnoreMember]
@@ -886,18 +832,15 @@
 
         [DisplayName("Лицевой счёт в ЖКХ")]
         [Display(GroupName = "Счёт")]
-        [MessagePack.Key(62)]
         public ulong ЛицевойЖКХ { get; set; }
 
         #endregion
 
-        [MessagePack.Key(63)]
         public IEnumerable<MeterEvent> Events { get; set; }
 
         [DisplayName("Среднемесячный расход по контрольным показаниям, кВт∙ч")]
         [Display(GroupName = "Оплата")]
         [SummaryInfo]
-        [MessagePack.Key(64)]
         public int? СреднеМесячныйРасходПоКонтрольнымПоказаниям { get; set; }
 
         #region Наборы полей для отображения в таблицах
