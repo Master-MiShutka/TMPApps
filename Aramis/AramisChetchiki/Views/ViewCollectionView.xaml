@@ -26,8 +26,11 @@
     <view:BaseView HeaderPanelVisible="True">
         <view:BaseView.HeaderPanel>
             <StackPanel Margin="2" Orientation="Horizontal">
-                <controls:DropDownButton Content="{Binding SelectedViewKind, Converter={converters:EnumBindingConverter}}" ItemsSource="{Binding Source={StaticResource TableViewKindSelectMenu}}"
-                                         MenuStyle="{StaticResource baseContextMenuStyle}" StayMenuOpen="True">
+                <controls:DropDownButton
+                    Content="{Binding SelectedViewKind, Converter={converters:EnumBindingConverter}}"
+                    ItemsSource="{Binding Source={StaticResource TableViewKindSelectMenu}}"
+                    MenuStyle="{StaticResource baseContextMenuStyle}"
+                    StayMenuOpen="True">
                     <controls:DropDownButton.Icon>
                         <controls:Icons Height="16" Kind="ListSelect" />
                     </controls:DropDownButton.Icon>
@@ -50,16 +53,20 @@
                     Text="{Binding GroupingFields, Mode=OneWay, StringFormat=Сгруппировано по: {0}}"
                     Visibility="{Binding GroupingFields, Mode=OneWay, Converter={StaticResource NullOrEmptyToVisibilityConverter}}" />
                 <Separator Style="{StaticResource dotedSeparator}" />
-                <Button
-                    HorizontalAlignment="Right"
-                    Command="{Binding CommandShowFilters}">
+                <Button HorizontalAlignment="Right" Command="{Binding CommandShowFilters}">
                     <StackPanel Orientation="Horizontal">
-                        <controls:Icons  Kind="FilterAlphabetical" Width="16    " />
-                        <TextBlock Margin="5,0,0,0" Text="{Binding CommandShowFilters.Header}" />
+                        <controls:Icons Width="16" Kind="FilterAlphabetical" />
+                        <TextBlock Margin="5,0,0,0" Text="Фильтр" />
                     </StackPanel>
                 </Button>
-                <Separator Grid.Column="3" Margin="5,0" Style="{StaticResource dotedSeparator}"/>
-                <ToggleButton IsChecked="True" Content="Скрывать удалённые" Command="{Binding CommandNotShowDeleted}"/>
+                <Separator
+                    Grid.Column="3"
+                    Margin="5,0"
+                    Style="{StaticResource dotedSeparator}" />
+                <ToggleButton
+                    Command="{Binding CommandNotShowDeleted}"
+                    Content="Скрывать удалённые"
+                    IsChecked="True" />
                 <Separator Style="{StaticResource dotedSeparator}" />
                 <local_controls:ShowFilters DockPanel.Dock="Right" />
 
@@ -79,17 +86,18 @@
                     ItemsSource="{Binding Filters}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
-                            <controls:StackPanel 
-                                IsItemsHost="True" 
+                            <controls:StackPanel
+                                IsItemsHost="True"
                                 MarginBetweenChildren="5"
                                 Orientation="Horizontal" />
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <HeaderedContentControl Header="{Binding Path=PropertyInfo.Name}"  Style="{StaticResource FilterHeaderedContentControlStyle}">
+                            <HeaderedContentControl Header="{Binding Path=PropertyInfo.Name}" Style="{StaticResource FilterHeaderedContentControlStyle}">
                                 <itemsfilter_view:StringFilterView
-                                    MinWidth="115" itemsfilter:FilterListExtensions.IsActive="True"
+                                    MinWidth="115"
+                                    itemsfilter:FilterListExtensions.IsActive="True"
                                     Style="{StaticResource CompactSearchPanel}"
                                     ViewModel="{Binding}" />
                             </HeaderedContentControl>
@@ -103,7 +111,7 @@
                     DataRowStyle="{StaticResource MeterRowStyle}"
                     NoItemsMessage="{Binding DataGridMessage}" />
                 <!--    -->
-                <local_controls:TableDetailsView Grid.Row="2"/>
+                <local_controls:TableDetailsView Grid.Row="2" />
             </Grid>
         </view:BaseView.Content>
     </view:BaseView>

@@ -29,18 +29,17 @@
 
         // ObjectProperty dependency property
         public static readonly DependencyProperty ObjectPropertyProperty =
-                       DependencyProperty.Register("ObjectProperty", typeof(string), typeof(PieChart),
-                           new FrameworkPropertyMetadata(default(string), ObjectPropertyChanged));
+                       DependencyProperty.Register(nameof(ObjectProperty), typeof(string), typeof(PieChart),
+                           new FrameworkPropertyMetadata(default(string), OnObjectPropertyChanged));
 
         /// <summary>
         /// Handles changes to the PlottedProperty property.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private static void ObjectPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private static void OnObjectPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            PieChart chart = d as PieChart;
-            if (chart == null)
+            if (d is not PieChart chart)
             {
                 return;
             }
@@ -58,7 +57,7 @@
         }
 
         public static readonly DependencyProperty ColorSelectorProperty =
-               DependencyProperty.Register("ColorSelector", typeof(IColorSelector), typeof(PieChart), new FrameworkPropertyMetadata(null));
+               DependencyProperty.Register(nameof(ColorSelector), typeof(IColorSelector), typeof(PieChart), new FrameworkPropertyMetadata(null));
 
         /// <summary>
         /// The size of the hole in the centre of circle (as a percentage)
@@ -74,7 +73,7 @@
         }
 
         public static readonly DependencyProperty HoleSizeProperty =
-                       DependencyProperty.Register("HoleSize", typeof(double), typeof(PieChart), new UIPropertyMetadata(0.0));
+                       DependencyProperty.Register(nameof(HoleSize), typeof(double), typeof(PieChart), new UIPropertyMetadata(0.0));
 
         #endregion
 
@@ -83,7 +82,7 @@
         /// is the same as the index of the item within the collection view which
         /// it represents.
         /// </summary>
-        private List<PiePiece> piePieces = new ();
+        private List<PiePiece> piePieces = new();
 
         public PieChart()
         {
@@ -148,8 +147,7 @@
                 return;
             }
 
-            PiePiece piece = sender as PiePiece;
-            if (piece == null)
+            if (sender is not PiePiece piece)
             {
                 return;
             }
@@ -172,7 +170,7 @@
             {
                 PiePiece piece = this.piePieces[collectionView.CurrentPosition];
 
-                DoubleAnimation a = new ();
+                DoubleAnimation a = new();
                 a.To = 0;
                 a.Duration = new Duration(TimeSpan.FromMilliseconds(200));
 
@@ -193,7 +191,7 @@
             {
                 PiePiece piece = this.piePieces[collectionView.CurrentPosition];
 
-                DoubleAnimation a = new ();
+                DoubleAnimation a = new();
                 a.To = 10;
                 a.Duration = new Duration(TimeSpan.FromMilliseconds(200));
 
@@ -254,7 +252,7 @@
             }
 
             PropertyDescriptorCollection filterPropDesc = TypeDescriptor.GetProperties(item);
-            var prop = filterPropDesc[this.ObjectProperty];
+            PropertyDescriptor prop = filterPropDesc[this.ObjectProperty];
             if (prop != null)
             {
                 object value = prop.GetValue(item);
@@ -305,7 +303,7 @@
 
                 double wedgeAngle = this.GetPropertyValue(item) * 360 / total;
 
-                PiePiece piece = new ()
+                PiePiece piece = new()
                 {
                     Radius = halfWidth,
                     InnerRadius = innerRadius,

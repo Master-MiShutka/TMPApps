@@ -109,7 +109,10 @@
                         <GroupStyle>
                             <GroupStyle.HeaderTemplate>
                                 <DataTemplate>
-                                    <TextBlock Text="{Binding Name}" FontWeight="Black" HorizontalAlignment="Center" />
+                                    <TextBlock
+                                        HorizontalAlignment="Center"
+                                        FontWeight="Black"
+                                        Text="{Binding Name}" />
                                 </DataTemplate>
                             </GroupStyle.HeaderTemplate>
                         </GroupStyle>
@@ -123,7 +126,7 @@
                     Margin="10,1"
                     Padding="10,0"
                     Command="{Binding CommandResetFilters}"
-                    Content="{Binding CommandResetFilters.Header}" />
+                    Content="Очистить фильтры" />
                 <Button
                     Margin="10,1"
                     Padding="10,0"

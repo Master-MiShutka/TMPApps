@@ -23,17 +23,16 @@
                 return new DataTemplate { VisualTree = factory };
             }
 
-            FrameworkElement element = container as FrameworkElement;
-            if (element != null && item != null)
+            if (container is FrameworkElement element && item != null)
             {
                 IViewModel viewModel = item as IViewModel;
 
                 Mode currentMode = ModelHelper.ViewModelToModeDictionary[viewModel.GetType()];
 
-                var tupple = ModelHelper.ModesViewModelTypes[currentMode];
+                (System.Type view, System.Type vm) tupple = ModelHelper.ModesViewModelTypes[currentMode];
 
-                DataTemplate dataTemplate = new (tupple.view);
-                FrameworkElementFactory factory = new (tupple.view);
+                DataTemplate dataTemplate = new(tupple.view);
+                FrameworkElementFactory factory = new(tupple.view);
                 dataTemplate.VisualTree = factory;
                 dataTemplate.Seal();
 

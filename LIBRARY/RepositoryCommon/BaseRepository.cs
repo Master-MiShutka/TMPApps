@@ -6,7 +6,6 @@
     using System.IO.Packaging;
     using System.Linq;
     using System.Threading.Tasks;
-    using MessagePack;
 
     public class RepositoryEventArgs : EventArgs
     {
@@ -136,8 +135,6 @@
             this.callBackAction = (e) => logger?.Error(e);
 
             Task.Run(async () => await this.InitializationAsync());
-
-            MessagePackSerializer.DefaultOptions = MessagePackSerializer.DefaultOptions.WithCompression(MessagePack.MessagePackCompression.Lz4BlockArray);
         }
 
         #region IDisposable implementation
@@ -797,7 +794,7 @@
             T data = new T();
             try
             {
-                T obj = await BaseDeserializer<T>.GzJsonDeserializeAsync(fileName);
+                T obj = await JsonDeserializer.FromGzFileAsync<T>(fileName);
                 if (obj != null)
                 {
                     var fi = new FileInfo(fileName);
@@ -914,7 +911,7 @@
         {
             try
             {
-                dynamic obj = (dynamic)BaseDeserializer<object>.GzJsonDeserializeAsync(fileName);
+                dynamic obj = (dynamic)JsonDeserializer.FromGzFileAsync<object>(fileName);
                 return obj != null ? (Version)obj.Version : null;
             }
             catch
@@ -988,7 +985,7 @@
         {
             try
             {
-                TDataFileInfo result = await BaseDeserializer<TDataFileInfo>.JsonDeserializeFromStreamAsync(packagePart.GetStream());
+                TDataFileInfo result = await MessagePackDeserializer.FromStreamAsync<TDataFileInfo>(packagePart.GetStream());
                 return result;
             }
             catch (IOException ioe)
@@ -1014,8 +1011,7 @@
 
                 Stream stream = this.GetPackagePartFromPartName(package, partName).GetStream();
 
-                // string json = await BaseDeserializer<object>.ReadJsonFromStreamAsync(stream, _callBackAction);
-                IEnumerable<TIModel> result = await BaseDeserializer<List<TIModel>>.JsonDeserializeFromStreamAsync(stream);
+                IEnumerable<TIModel> result = await MessagePackDeserializer.FromStreamAsync<List<TIModel>>(stream);
 
                 return result?.ToArray();
             }
@@ -1042,8 +1038,7 @@
 
                 Stream stream = this.GetPackagePartFromPartName(package, partName).GetStream();
 
-                // string json = await BaseDeserializer<object>.ReadJsonFromStreamAsync(stream, _callBackAction);
-                Dictionary<TKey, IList<TIModel>> result = await BaseDeserializer<Dictionary<TKey, IList<TIModel>>>.JsonDeserializeFromStreamAsync(stream);
+                Dictionary<TKey, IList<TIModel>> result = await MessagePackDeserializer.FromStreamAsync<Dictionary<TKey, IList<TIModel>>>(stream);
 
                 return result;
             }
@@ -1196,7 +1191,7 @@
                     package.PackageProperties.Version = this.Data.Info.Version.ToString();
 
                     // Общая информация
-                    byte[] bytes = await JsonSerializer.JsonSerializeToBytesAsync(this.Data.Info);
+                    byte[] bytes = await MessagePackSerializer.ToBytesAsync(this.Data.Info);
 
                     this.SaveJsonDataToPart(bytes, package, PART_Info);
 

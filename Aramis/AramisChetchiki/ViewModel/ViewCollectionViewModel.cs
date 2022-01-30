@@ -2,15 +2,9 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel;
     using System.Linq;
-    using System.Text;
     using System.Windows;
-    using System.Windows.Data;
-    using System.Windows.Input;
     using ItemsFilter;
-    using TMP.Extensions;
-    using TMP.Shared.Commands;
     using TMP.WORK.AramisChetchiki.Model;
 
     /// <summary>
@@ -63,7 +57,7 @@
                     if (string.IsNullOrWhiteSpace(this.fieldValue) && string.IsNullOrWhiteSpace(this.fieldDisplayName))
                     {
                         int total = 0;
-                        foreach (var item in this.View.SourceCollection)
+                        foreach (object item in this.View.SourceCollection)
                         {
                             total++;
                         }
@@ -134,6 +128,12 @@
 
             this.DataGridMessage = DEFAULT_DATA_GRID_MESSAGE;
             this.IsBusy = false;
+        }
+
+        public override int GetHashCode()
+        {
+            System.Guid guid = new System.Guid("1A555AD8-D371-4E35-9852-0967B8EC0463");
+            return guid.GetHashCode();
         }
     }
 }

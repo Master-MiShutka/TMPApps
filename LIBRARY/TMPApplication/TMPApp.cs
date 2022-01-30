@@ -937,6 +937,8 @@ namespace TMPApplication
 
         public void LoadVisualTheme(VisualTheme theme)
         {
+            if (theme == null)
+                return;
             this.LoadVisualTheme(theme.FullName);
         }
 
@@ -1022,13 +1024,12 @@ namespace TMPApplication
         #endregion Themes support
     }
 
-    [DataContract]
+    [System.Xml.Serialization.XmlRoot("UITheme")]
+    [Serializable]
     public class VisualTheme
     {
-        [DataMember]
         public string ShortName { get; set; }
 
-        [DataMember]
         public string FullName { get; set; }
     }
 

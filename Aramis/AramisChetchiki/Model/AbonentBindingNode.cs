@@ -1,6 +1,5 @@
 ﻿namespace TMP.WORK.AramisChetchiki.Model
 {
-    using System;
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.Windows;
@@ -122,7 +121,7 @@
                 return;
             }
 
-            foreach (var child in children)
+            foreach (AbonentBindingNode child in children)
             {
                 this.Children.Add(child);
                 child.Parent = this;
@@ -136,7 +135,7 @@
                 throw new System.InvalidOperationException();
             }
 
-            foreach (var meter in meters)
+            foreach (Meter meter in meters)
             {
                 this.Meters.Add(meter);
             }
@@ -179,7 +178,7 @@
                 this.isExpanded = value;
                 if (this.isExpanded)
                 {
-                    foreach (var child in this.Children)
+                    foreach (AbonentBindingNode child in this.Children)
                     {
                         child.IsMatch = true;
                     }
@@ -219,7 +218,7 @@
             if (this.IsCriteriaMatched(criteria))
             {
                 this.IsMatch = true;
-                foreach (var ancestor in ancestors)
+                foreach (AbonentBindingNode ancestor in ancestors)
                 {
                     ancestor.IsMatch = true;
                     ancestor.IsExpanded = !string.IsNullOrEmpty(criteria);
@@ -231,7 +230,7 @@
             }
 
             ancestors.Push(this);
-            foreach (var child in this.Children)
+            foreach (AbonentBindingNode child in this.Children)
             {
                 child.ApplyCriteria(criteria, ancestors);
             }

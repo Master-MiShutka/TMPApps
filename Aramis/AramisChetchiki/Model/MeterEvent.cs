@@ -1,17 +1,19 @@
 ﻿namespace TMP.WORK.AramisChetchiki.Model
 {
     using System;
+    using System.Runtime.InteropServices;
 
-    public enum MeterEventType
+    public enum MeterEventType : sbyte
     {
-        None,
-        Control,
-        Change,
-        Payment,
+        None = 0,
+        Control = 1,
+        Change = 2,
+        Payment = 3,
     }
 
     [MessagePack.MessagePackObject]
-    public class MeterEvent : IComparable, IComparable<MeterEvent>
+    [StructLayout(LayoutKind.Sequential, Pack = 2)]
+    public struct MeterEvent : IComparable, IComparable<MeterEvent>
     {
         [MessagePack.Key(0)]
         public DateOnly Date { get; set; }
@@ -20,12 +22,12 @@
         public MeterEventType EventType { get; set; }
 
         [MessagePack.Key(2)]
-        public int Сonsumption { get; set; }
+        public uint Сonsumption { get; set; }
 
         [MessagePack.Key(3)]
-        public int LastElectricityReadings { get; set; }
+        public uint LastElectricityReadings { get; set; }
 
-        public MeterEvent(DateOnly date, MeterEventType meterEventType, int consumption, int lastElectricityReadings)
+        public MeterEvent(DateOnly date, MeterEventType meterEventType, uint consumption, uint lastElectricityReadings)
         {
             this.Date = date;
             this.EventType = meterEventType;
@@ -35,17 +37,12 @@
 
         public int CompareTo(object obj)
         {
-            return this.CompareTo(obj as MeterEvent);
+            return this.CompareTo((MeterEvent)obj);
         }
 
         public int CompareTo(MeterEvent other)
         {
-            if (other == null)
-            {
-                return 1;
-            }
-
-            return this.Date.CompareTo(other.Date);
+            return this.Date.CompareTo(other.Date) ^ this.EventType.CompareTo(other.EventType);
         }
     }
 }

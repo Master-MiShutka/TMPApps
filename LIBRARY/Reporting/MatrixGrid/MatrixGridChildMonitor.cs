@@ -19,7 +19,7 @@
 
         public static readonly DependencyProperty GridRowProperty =
             DependencyProperty.Register(
-            "GridRow",
+            nameof(GridRow),
             typeof(int),
             typeof(MatrixGridChildMonitor),
             new UIPropertyMetadata(0));
@@ -36,7 +36,7 @@
 
         public static readonly DependencyProperty GridColumnProperty =
             DependencyProperty.Register(
-            "GridColumn",
+            nameof(GridColumn),
             typeof(int),
             typeof(MatrixGridChildMonitor),
             new UIPropertyMetadata(0));
@@ -53,7 +53,7 @@
 
         public static readonly DependencyProperty GridRowSpanProperty =
             DependencyProperty.Register(
-            "GridRowSpan",
+            nameof(GridRowSpan),
             typeof(int),
             typeof(MatrixGridChildMonitor),
             new UIPropertyMetadata(1));
@@ -70,7 +70,7 @@
 
         public static readonly DependencyProperty GridColumnSpanProperty =
             DependencyProperty.Register(
-            "GridColumnSpan",
+            nameof(GridColumnSpan),
             typeof(int),
             typeof(MatrixGridChildMonitor),
             new UIPropertyMetadata(1));

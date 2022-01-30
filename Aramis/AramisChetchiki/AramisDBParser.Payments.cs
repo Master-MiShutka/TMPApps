@@ -3,16 +3,10 @@
     using System;
     using System.Collections;
     using System.Collections.Generic;
-    using System.Collections.ObjectModel;
-    using System.Data;
     using System.IO;
-    using System.Linq;
-    using System.Text;
     using System.Threading.Tasks;
-    using System.Windows;
     using DBF;
     using TMP.WORK.AramisChetchiki.Model;
-    using TMP.WORK.AramisChetchiki.Properties;
     using TMPApplication;
 
     internal partial class AramisDBParser
@@ -28,16 +22,19 @@
 
             WorkTask workTask = new("чтение таблиц с данными по оплате")
             {
-                Status = "подготовка ..."
+                Status = "подготовка ...",
             };
             this.workTasksProgressViewModel.WorkTasks.Add(workTask);
 
-            void _(string msg) => workTask.UpdateUI(processedFiles, filesCount, ++processedRecords, totalRecords, message: "таблица " + msg + $"\nзапись {processedRecords:N0} из {totalRecords:N0}", stepNameString: "обработка файла");
+            void _(string msg)
+            {
+                workTask.UpdateUI(processedFiles, filesCount, ++processedRecords, totalRecords, message: "таблица " + msg + $"\nзапись {processedRecords:N0} из {totalRecords:N0}", stepNameString: "обработка файла");
+            }
 
             System.Collections.Concurrent.ConcurrentBag<RawPaymentData> list = new();
             try
             {
-                var files = System.IO.Directory.GetFiles(this.pathDBF, "KARTKV*.DBF");
+                string[] files = System.IO.Directory.GetFiles(this.pathDBF, "KARTKV*.DBF");
                 filesCount = files.Length;
 
                 string tableFileName = string.Empty;
@@ -52,9 +49,9 @@
                     }
                 }
 
-                foreach (var file in files)
+                foreach (string file in files)
                 {
-                    var result = this.CheckAndLoadFromCache<RawPaymentData>(file, ref workTask);
+                    IList<RawPaymentData> result = this.CheckAndLoadFromCache<RawPaymentData>(file, ref workTask);
                     if (result != null)
                     {
                         workTask.IsIndeterminate = false;

@@ -40,13 +40,15 @@
             BaseFilterControl target = (BaseFilterControl)d;
 
             if (target.Filter != null)
+            {
                 target.Filter.PropertyChanged -= target.Filter_PropertyChanged;
+            }
 
             ItemsFilter.Model.IFilter filter = (ItemsFilter.Model.IFilter)e.NewValue;
 
             if (filter is ItemsFilter.Model.IPropertyFilter ipf)
             {
-                var p = ipf.PropertyInfo;
+                System.ComponentModel.ItemPropertyInfo p = ipf.PropertyInfo;
                 target.FilterPropertyName = ipf.PropertyInfo.Name;
             }
 
@@ -56,7 +58,9 @@
             }
 
             if (target.Filter != null)
+            {
                 target.Filter.PropertyChanged += target.Filter_PropertyChanged;
+            }
         }
 
         private void Filter_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -169,35 +173,12 @@
         [System.Diagnostics.DebuggerStepThrough]
         protected void VerifyPropertyName(string propertyName)
         {
-            var myType = this.GetType();
-
-#if NETFX_CORE
-            if (!string.IsNullOrEmpty(propertyName)
-                && myType.GetTypeInfo().GetDeclaredProperty(propertyName) == null)
-            {
-                throw new ArgumentException("Property not found", propertyName);
-            }
-#else
+            System.Type myType = this.GetType();
             if (!string.IsNullOrEmpty(propertyName)
                 && myType.GetProperty(propertyName) == null)
             {
-#if !SILVERLIGHT
-                var descriptor = this as System.ComponentModel.ICustomTypeDescriptor;
-
-                if (descriptor != null)
-                {
-                    if (descriptor.GetProperties()
-                        .Cast<System.ComponentModel.PropertyDescriptor>()
-                        .Any(property => property.Name == propertyName))
-                    {
-                        return;
-                    }
-                }
-#endif
-
                 throw new System.ArgumentException("Property not found", propertyName);
             }
-#endif
         }
 
         #endregion Члены INotifyPropertyChanged

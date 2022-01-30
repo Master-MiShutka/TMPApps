@@ -39,14 +39,14 @@
             this.IsBusy = true;
             this.Status = "Подоговка данных ...";
 
-            var task = System.Threading.Tasks.Task.Run(() =>
+            System.Threading.Tasks.Task task = System.Threading.Tasks.Task.Run(() =>
             {
                 const string empty = "(пусто)";
 
                 IList<AbonentBindingNode> groupMetersByProperty(IEnumerable<Meter> metersList, string propName, AbonentBindingNode.NodeType nodeType)
                 {
                     // группируем список по значению свойства
-                    var groups = metersList
+                    List<IGrouping<object, Meter>> groups = metersList
                         .GroupBy(i => ModelHelper.MeterGetPropertyValue(i, propName))
                         .ToList();
                     if (groups.Count >= 1)
@@ -72,24 +72,24 @@
                 }
 
                 ICollection<Meter> list = null;
-                var substationsNodes = groupMetersByProperty(this.Data, "Подстанция", AbonentBindingNode.NodeType.Substation);
+                IList<AbonentBindingNode> substationsNodes = groupMetersByProperty(this.Data, "Подстанция", AbonentBindingNode.NodeType.Substation);
                 if (substationsNodes != null)
                 {
                     foreach (AbonentBindingNode substation in substationsNodes)
                     {
-                        var fiders = groupMetersByProperty(substation.Meters, "Фидер10", AbonentBindingNode.NodeType.Fider10);
+                        IList<AbonentBindingNode> fiders = groupMetersByProperty(substation.Meters, "Фидер10", AbonentBindingNode.NodeType.Fider10);
                         if (fiders != null)
                         {
                             substation.AddChildren(fiders);
                             foreach (AbonentBindingNode fider in substation.Children)
                             {
-                                var tps = groupMetersByProperty(fider.Meters, "ТП", AbonentBindingNode.NodeType.TP);
+                                IList<AbonentBindingNode> tps = groupMetersByProperty(fider.Meters, "ТП", AbonentBindingNode.NodeType.TP);
                                 if (tps != null)
                                 {
                                     fider.AddChildren(tps);
                                     foreach (AbonentBindingNode tp in fider.Children)
                                     {
-                                        var fiders04 = groupMetersByProperty(tp.Meters, "Фидер04", AbonentBindingNode.NodeType.Fider04);
+                                        IList<AbonentBindingNode> fiders04 = groupMetersByProperty(tp.Meters, "Фидер04", AbonentBindingNode.NodeType.Fider04);
                                         if (fiders04 != null)
                                         {
                                             tp.AddChildren(fiders04);
@@ -105,7 +105,7 @@
 
                                     if (list.Count > 0)
                                     {
-                                        var emptyNodes = fider.Children.Cast<AbonentBindingNode>().Where(i => string.Equals(i.Header, empty, AppSettings.StringComparisonMethod));
+                                        IEnumerable<AbonentBindingNode> emptyNodes = fider.Children.Cast<AbonentBindingNode>().Where(i => string.Equals(i.Header, empty, AppSettings.StringComparisonMethod));
                                         if (!emptyNodes.Any())
                                         {
                                             fider.Children.Insert(0, item: new AbonentBindingNode(
@@ -127,7 +127,7 @@
 
                             if (list.Count > 0)
                             {
-                                var emptyNodes = substation.Children.Cast<AbonentBindingNode>().Where(i => string.Equals(i.Header, empty, AppSettings.StringComparisonMethod));
+                                IEnumerable<AbonentBindingNode> emptyNodes = substation.Children.Cast<AbonentBindingNode>().Where(i => string.Equals(i.Header, empty, AppSettings.StringComparisonMethod));
                                 if (!emptyNodes.Any())
                                 {
                                     substation.Children.Insert(0, new AbonentBindingNode(substation,
@@ -271,9 +271,9 @@
         private void ApplyFilter()
         {
             this.IsBusy = true;
-            var task = System.Threading.Tasks.Task.Run(() =>
+            System.Threading.Tasks.Task task = System.Threading.Tasks.Task.Run(() =>
             {
-                foreach (var child in this.AbonentBindingNodes)
+                foreach (AbonentBindingNode child in this.AbonentBindingNodes)
                 {
                     child.ApplyCriteria(this.AbonentBondingFilter, new Stack<AbonentBindingNode>());
                 }
@@ -290,7 +290,7 @@
             if (this.selectedAbonentBindingNode != null)
             {
                 this.IsBusy = true;
-                var view = new ListCollectionView(this.selectedAbonentBindingNode.Meters.ToList());
+                ListCollectionView view = new ListCollectionView(this.selectedAbonentBindingNode.Meters.ToList());
                 using (view.DeferRefresh())
                 {
                     view.SortDescriptions.Add(new SortDescription(nameof(Meter.Подстанция), ListSortDirection.Ascending));
@@ -327,7 +327,7 @@
                 ICollection<TreeMapItem> result = new List<TreeMapItem>();
                 foreach (AbonentBindingNode node in nodes)
                 {
-                    TreeMapItem item = new (node.Header, node.MetersCount);
+                    TreeMapItem item = new(node.Header, node.MetersCount);
                     item.AddChildren(recursiveBuild(node.Children));
                     result.Add(item);
                 }
@@ -341,6 +341,12 @@
         public override string ReportTitle => $"Сведения о привяке абонентов по '{this.SelectedAbonentBindingNode?.Header}";
 
         #endregion
+
+        public override int GetHashCode()
+        {
+            System.Guid guid = new System.Guid("1A555AD8-D371-4E35-9852-0967B8EC0452");
+            return guid.GetHashCode();
+        }
 
         public class TreeMapItem : INotifyPropertyChanged
         {

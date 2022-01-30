@@ -20,8 +20,6 @@
                                      IsDesignTimeCreatable=True}"
     Background="Transparent"
     Focusable="False"
-    FontSize="{local_extensions:SettingBinding Path=FontSize,
-                                               FallbackValue=13.0}"
     TextOptions.TextFormattingMode="Ideal"
     mc:Ignorable="d">
     <Border
@@ -209,10 +207,11 @@
                 HorizontalAlignment="Center"
                 Orientation="Horizontal">
                 <Button
-                    Margin="5,0" TextBlock.TextAlignment="Center"
+                    Margin="5,0"
                     Padding="10,2"
                     Command="{Binding Path=CommandSelectAndLoad}"
-                    Content="{Binding Path=CommandSelectAndLoad.Header}" />
+                    Content="Выбрать и загрузить"
+                    TextBlock.TextAlignment="Center" />
             </StackPanel>
         </StackPanel>
     </Border>

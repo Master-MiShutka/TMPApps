@@ -139,9 +139,9 @@
         {
             get
             {
-                GeometryGroup group = new ();
+                GeometryGroup group = new();
 
-                StreamGeometry geometry = new ();
+                StreamGeometry geometry = new();
                 geometry.FillRule = FillRule.EvenOdd;
 
                 using (StreamGeometryContext context = geometry.Open())
@@ -184,7 +184,7 @@
         private void DrawGeometry(StreamGeometryContext context)
         {
             double angle = this.WedgeAngle == 360 ? 359.9 : this.WedgeAngle;
-            Point startPoint = new (this.CentreX, this.CentreY);
+            Point startPoint = new(this.CentreX, this.CentreY);
 
             Point innerArcStartPoint = ComputeCartesianCoordinate(this.RotationAngle, this.InnerRadius);
             innerArcStartPoint.Offset(this.CentreX, this.CentreY);
@@ -209,8 +209,8 @@
                 outerArcEndPoint.Offset(offset.X, offset.Y);
             }
 
-            Size outerArcSize = new (this.Radius, this.Radius);
-            Size innerArcSize = new (this.InnerRadius, this.InnerRadius);
+            Size outerArcSize = new(this.Radius, this.Radius);
+            Size innerArcSize = new(this.InnerRadius, this.InnerRadius);
 
             context.BeginFigure(innerArcStartPoint, true, true);
             context.LineTo(outerArcStartPoint, true, true);

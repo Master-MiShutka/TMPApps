@@ -15,6 +15,7 @@
     <ProjectReference Include="..\..\LIBRARY\Extensions\TMP.Extensions.csproj" />
     <ProjectReference Include="..\..\LIBRARY\Interactivity\Interactivity.csproj" />
     <ProjectReference Include="..\..\LIBRARY\ItemsFilter\ItemsFilter.csproj" />
+    <ProjectReference Include="..\..\LIBRARY\PortableSettings\PortableSettings.csproj" />
     <ProjectReference Include="..\..\LIBRARY\Reporting\Reporting.csproj" />
     <ProjectReference Include="..\..\LIBRARY\RepositoryCommon\RepositoryCommon.csproj" />
     <ProjectReference Include="..\..\LIBRARY\Shared\Shared.csproj" />
@@ -33,13 +34,6 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Update="Properties\Settings.Designer.cs">
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Settings.settings</DependentUpon>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Update="AramisDBParser.*.cs">
       <DependentUpon>AramisDBParser.cs</DependentUpon>
     </Compile>
@@ -47,10 +41,6 @@
   <ItemGroup>
     <None Update="nlog.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Properties\Settings.settings">
-      <Generator>PublicSettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
   </ItemGroup>
   <ItemGroup>

@@ -16,14 +16,14 @@
             }
             else
             {
-                StackPanel result = new () { Orientation = Orientation.Horizontal };
-                var obj = node;
+                StackPanel result = new() { Orientation = Orientation.Horizontal };
+                Model.AbonentBindingNode obj = node;
                 while (obj != null)
                 {
                     result.Children.Insert(0, new TextBlock() { Text = "\\", Margin = new Thickness(2, 0, 2, 0) });
                     result.Children.Insert(0, new TextBlock() { Text = obj.Header, Margin = new Thickness(2, 0, 2, 0) });
                     result.Children.Insert(0, new Image() { Source = obj.Icon as System.Windows.Media.ImageSource, Height = (obj.Icon as System.Windows.Media.ImageSource).Height });
-                    obj = obj.Parent as Model.AbonentBindingNode;
+                    obj = obj.Parent;
                 }
 
                 return result;

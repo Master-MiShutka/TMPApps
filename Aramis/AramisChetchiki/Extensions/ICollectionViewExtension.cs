@@ -80,10 +80,10 @@
             string fileName = System.IO.Path.GetTempFileName();
             fileName = System.IO.Path.ChangeExtension(fileName, "xlsx");
 
-            var defaultCulture = System.Threading.Thread.CurrentThread.CurrentCulture;
+            System.Globalization.CultureInfo defaultCulture = System.Threading.Thread.CurrentThread.CurrentCulture;
 
             // HACK: Workaround for Excel bug on machines which are set up in the English language, but not an English region.
-            var enusCultureInfo = System.Globalization.CultureInfo.GetCultureInfo("en-US");
+            System.Globalization.CultureInfo enusCultureInfo = System.Globalization.CultureInfo.GetCultureInfo("en-US");
             System.Threading.Thread.CurrentThread.CurrentCulture = enusCultureInfo;
 
             Excel.Application excelApplication = null;
@@ -96,9 +96,11 @@
             {
                 callBack?.Invoke("создание книги MS Excel");
 
-                excelApplication = new Excel.Application();
-                excelApplication.DisplayAlerts = false;
-                excelApplication.ScreenUpdating = false;
+                excelApplication = new Excel.Application
+                {
+                    DisplayAlerts = false,
+                    ScreenUpdating = false
+                };
 
                 xlWorkbook = excelApplication.Workbooks.Add();
                 xlWorksheet = (Excel.Worksheet)xlWorkbook.Sheets[1];
@@ -175,7 +177,7 @@
                     Type.Missing, XlYesNoGuess.xlYes, Type.Missing).Name = "DataTable";
                 xlWorksheet.ListObjects["DataTable"].TableStyle = "TableStyleMedium6";
 
-                var ps = xlWorksheet.PageSetup;
+                Excel.PageSetup ps = xlWorksheet.PageSetup;
                 ps.PaperSize = XlPaperSize.xlPaperA4;
                 ps.Orientation = XlPageOrientation.xlLandscape;
                 ps.Zoom = false;
@@ -197,7 +199,7 @@
                 ps.CenterFooter = "Страница &P / &N";
                 ps.PrintArea = header.Resize(numberOfRows + 3, numberOfColumns).Address;
 
-                foreach (var i in Enumerable.Range(1, numberOfColumns))
+                foreach (int i in Enumerable.Range(1, numberOfColumns))
                 {
                     xlWorksheet.Columns[i].AutoFit();
                 }
@@ -231,7 +233,7 @@
                 {
                     if (excelApplication.Workbooks.Any())
                     {
-                        foreach (var workbook in excelApplication.Workbooks.Where(x => !x.IsDisposed))
+                        foreach (Excel.Workbook workbook in excelApplication.Workbooks.Where(x => !x.IsDisposed))
                         {
                             workbook.Close(false, System.Reflection.Missing.Value, Missing.Value);
                             workbook.Dispose();
@@ -250,7 +252,7 @@
             {
                 callBack?.Invoke("открытие созданной книги MS Excel");
 
-                using var p = new System.Diagnostics.Process
+                using System.Diagnostics.Process p = new System.Diagnostics.Process
                 {
                     StartInfo = new System.Diagnostics.ProcessStartInfo(fileName)
                     {
@@ -280,9 +282,9 @@
                 return null;
             }
 
-            DataTable table = new ();
+            DataTable table = new();
 
-            foreach (var column in fieldsAndFormats)
+            foreach (KeyValuePair<string, Model.DataCellFormats> column in fieldsAndFormats)
             {
                 table.Columns.Add(column.Key);
             }

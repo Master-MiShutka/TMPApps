@@ -128,4 +128,4 @@
             return string.Format("MatrixHeaderCell - {0} - {1}, childs: {2}, R[{3}], C[{4}], RS[{5}, CS[{6}]", this.Header, this.CellType, this.ChildrenCount, this.GridRow, this.GridColumn, this.GridRowSpan, this.GridColumnSpan);
         }
     }
-}
+}

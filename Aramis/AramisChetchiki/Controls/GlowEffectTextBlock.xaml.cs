@@ -25,7 +25,10 @@
                 typeof(GlowEffectTextBlock),
                 new FrameworkPropertyMetadata(Colors.WhiteSmoke, FrameworkPropertyMetadataOptions.AffectsRender));
 
-        public GlowEffectTextBlock() => this.InitializeComponent();
+        public GlowEffectTextBlock()
+        {
+            this.InitializeComponent();
+        }
 
         public string Text
         {

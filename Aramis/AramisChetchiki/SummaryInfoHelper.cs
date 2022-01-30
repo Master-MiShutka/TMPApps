@@ -15,7 +15,7 @@
 
         public static IEnumerable<SummaryInfoGroupItem> BuildGroups(IEnumerable<Meter> meters, string field)
         {
-            var values = meters
+            IEnumerable<IGrouping<object, Meter>> values = meters
 
                 // группируем список по значению текущего свойства
                 .GroupBy(i => ModelHelper.MeterGetPropertyValue(i, field));
@@ -43,7 +43,7 @@
 
         public static IEnumerable<SummaryInfoGroupItem> BuildFirst10LargeGroups(IEnumerable<Meter> meters, string field, Func<Meter, bool> filterFunc, int defaultGroupsCount = 10)
         {
-            var values = meters
+            IEnumerable<IGrouping<object, Meter>> values = meters
                 // применяем фильтр
                 .Where(meter => filterFunc(meter))
                 // группируем список по значению текущего свойства
@@ -72,22 +72,22 @@
 
             if (groupsCount > defaultGroupsCount)
             {
-                var first = data.Take(defaultGroupsCount - 1);
-                foreach (var item in first)
+                IEnumerable<SummaryInfoGroupItem> first = data.Take(defaultGroupsCount - 1);
+                foreach (SummaryInfoGroupItem item in first)
                 {
                     item.Percent = 100 * item.Count / totalCount;
                 }
 
-                var last = data.Skip(defaultGroupsCount - 1);
-                List<Meter> otherMeters = new ();
-                foreach (var item in last)
+                IEnumerable<SummaryInfoGroupItem> last = data.Skip(defaultGroupsCount - 1);
+                List<Meter> otherMeters = new();
+                foreach (SummaryInfoGroupItem item in last)
                 {
                     otherMeters.AddRange(item.Value);
                 }
 
-                List<SummaryInfoGroupItem> list = new ();
+                List<SummaryInfoGroupItem> list = new();
                 list.AddRange(first);
-                var other = new SummaryInfoGroupItem()
+                SummaryInfoGroupItem other = new SummaryInfoGroupItem()
                 {
                     Key = ANOTHERSTRING,
                     HasEmptyValue = false,
@@ -113,10 +113,10 @@
 
             string fieldDisplayName = ModelHelper.MeterPropertyDisplayNames[field];
 
-            SummaryInfoItem si = new (fieldDisplayName);
+            SummaryInfoItem si = new(fieldDisplayName);
             si.FieldName = field;
 
-            var data = BuildGroups(meters, field);
+            IEnumerable<SummaryInfoGroupItem> data = BuildGroups(meters, field);
 
             // количество уникальных значений свойства
             int groupsCount = data.Count();
@@ -203,7 +203,7 @@
             }
 
             // создание списка с не пустыми значениями
-            var dataWhereHasValues = data.Where(g => g.HasEmptyValue == false);
+            IEnumerable<SummaryInfoGroupItem> dataWhereHasValues = data.Where(g => g.HasEmptyValue == false);
             IEnumerable<SummaryInfoChildItem> first;
             int lastCount = 0;
 
@@ -220,7 +220,7 @@
                 lastCount = dataWhereHasValues.Skip(10).Sum(g => g.Value.Count);
             }
 
-            foreach (var item in first)
+            foreach (SummaryInfoChildItem item in first)
             {
                 si.OnlyFirst10Items.Add(item);
             }
@@ -248,15 +248,15 @@
 
         public static IEnumerable<IMatrix> GetEnergyPowerSuppyPivots(AramisData aramisData, DateOnly period)
         {
-            if (aramisData == null)
+            if (aramisData == null || aramisData.ElectricitySupplyInfo == null)
             {
-                return null;
+                return new List<IMatrix>();
             }
 
-            List<IMatrix> pivots = new ();
+            List<IMatrix> pivots = new();
 
-            var data = aramisData.ElectricitySupplyInfo.Where(i => i.Период == period).ToList();
-            var total = data.Sum(i => i.Полезный_отпуск);
+            List<ElectricitySupply> data = aramisData.ElectricitySupplyInfo.Where(i => i.Период == period).ToList();
+            int total = data.Sum(i => i.Полезный_отпуск);
 
             IEnumerable<IMatrixHeader> headerCells2 = new IMatrixHeader[]
             {
@@ -266,13 +266,13 @@
 
             string notDefinedString = "(не указана)";
 
-            var substationsPowerSuppy = data
+            List<KeyValuePair<string, int>> substationsPowerSuppy = data
                 .GroupBy(i => i.Подстанция)
                 .Select(i => new KeyValuePair<string, int>(string.IsNullOrWhiteSpace(i.Key) ? notDefinedString : i.Key, i.Sum(o => o.Полезный_отпуск)))
                 .OrderByDescending(i => i.Value)
                 .ToList();
 
-            var substationsNames = substationsPowerSuppy
+            List<string> substationsNames = substationsPowerSuppy
                 .Select(i => i.Key)
                 .ToList();
 
@@ -285,7 +285,7 @@
                 GetColumnHeaderValuesFunc = () => headerCells2,
                 GetDataCellFunc = (row, column) =>
                 {
-                    var value = substationsPowerSuppy
+                    int value = substationsPowerSuppy
                         .Where(i => i.Key == row.Header)
                         .Select(i => i.Value)
                         .FirstOrDefault();
@@ -302,13 +302,13 @@
 
             string otherString = "(остальное)";
 
-            var data1 = data
+            List<KeyValuePair<string, int>> data1 = data
                 .GroupBy(i => i.Населённый_пункт)
                 .Select(i => new KeyValuePair<string, int>(i.Key, i.Sum(o => o.Полезный_отпуск)))
                 .OrderByDescending(i => i.Value)
                 .ToList();
-            List<KeyValuePair<string, int>> energyPowerSupplyByStateList = new ();
-            List<string> stateNames = new ();
+            List<KeyValuePair<string, int>> energyPowerSupplyByStateList = new();
+            List<string> stateNames = new();
             if (data1.Count > 15)
             {
                 int lastCount = data1
@@ -316,18 +316,18 @@
                     .Count();
                 otherString += $" {lastCount} шт.";
 
-                var summOfLast = data1
+                int summOfLast = data1
                     .Skip(15)
                     .Sum(o => o.Value);
 
-                var first = data1
+                List<KeyValuePair<string, int>> first = data1
                     .Take(15)
                     .ToList();
 
                 energyPowerSupplyByStateList.AddRange(first);
                 energyPowerSupplyByStateList.Add(new KeyValuePair<string, int>(otherString, summOfLast));
 
-                var firstStateNames = data1
+                List<string> firstStateNames = data1
                     .Take(15)
                     .Select(i => i.Key)
                     .ToList();
@@ -352,7 +352,7 @@
                 GetColumnHeaderValuesFunc = () => headerCells2,
                 GetDataCellFunc = (row, column) =>
                 {
-                    var value = energyPowerSupplyByStateList
+                    int value = energyPowerSupplyByStateList
                         .Where(i => i.Key == row.Header)
                         .Select(i => i.Value)
                         .FirstOrDefault();
@@ -367,18 +367,18 @@
                 },
             });
 
-            var data2 = data
+            List<ElectricitySupply> data2 = data
                 .Where(i => i.Полезный_отпуск > 0)
                 .ToList();
 
-            var data3 = data2
+            List<IGrouping<string, ElectricitySupply>> data3 = data2
                 .GroupBy(i => i.Тип_населённого_пункта)
                 .ToList();
 
-            var data4 = data3
+            Dictionary<string, int> data4 = data3
                 .ToDictionary(i => i.Key, k => k.Count());
 
-            Dictionary<string, Dictionary<string, int>> keyValuePairs = new ()
+            Dictionary<string, Dictionary<string, int>> keyValuePairs = new()
             {
                 { "до 50 кВт∙ч", data3.ToDictionary(i => i.Key, k => k.Count(l => l.Полезный_отпуск < 50)) },
                 { "от 50 до 100 кВт∙ч", data3.ToDictionary(i => i.Key, k => k.Count(l => l.Полезный_отпуск is >= 50 and < 100)) },
@@ -412,7 +412,7 @@
                 GetColumnHeaderValuesFunc = () => headerCells4.Select(i => MatrixHeaderCell.CreateColumnHeader(i, children: headerCells3.Select(k => MatrixHeaderCell.CreateColumnHeader(k)).ToList())).ToList(),
                 GetDataCellFunc = (row, column) =>
                 {
-                    var value = keyValuePairs[row.Header][column.Parent.Header];
+                    int value = keyValuePairs[row.Header][column.Parent.Header];
                     if (column.Header == "Доля, %")
                     {
                         return new MatrixDataCell(100d * value / data4[column.Parent.Header], "N1");

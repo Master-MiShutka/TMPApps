@@ -18,7 +18,7 @@
 
             options.Security.DepthStep(ref reader);
 
-            Version version = new (1, 1);
+            Version version = new(1, 1);
             DatePeriod period = null;
             string departamentName = null;
             string aramisDbPath = null;
@@ -64,8 +64,7 @@
                 return;
             }
 
-            AramisDataInfo aramisDataInfo = value as AramisDataInfo;
-            if (aramisDataInfo == null)
+            if (value is not AramisDataInfo aramisDataInfo)
             {
                 writer.WriteNil();
                 return;
@@ -86,8 +85,8 @@
                 }
             }
 
-            getBytesAndWrite(ref writer, aramisDataInfo.Version == null ? new Version(1, 1) : aramisDataInfo.Version);
-            getBytesAndWrite(ref writer, aramisDataInfo.Period == null ? new DatePeriod() : aramisDataInfo.Period);
+            getBytesAndWrite(ref writer, aramisDataInfo.Version ?? new Version(1, 1));
+            getBytesAndWrite(ref writer, aramisDataInfo.Period ?? new DatePeriod());
             getBytesAndWrite(ref writer, aramisDataInfo.DepartamentName);
             getBytesAndWrite(ref writer, aramisDataInfo.AramisDbPath);
         }
@@ -104,7 +103,7 @@
 
             options.Security.DepthStep(ref reader);
 
-            Version version = new (1, 1);
+            Version version = new(1, 1);
             DatePeriod period = null;
             string departamentName = null;
             string aramisDbPath = null;
@@ -188,7 +187,7 @@
     internal static class AramisDataInfoResolverGetFormatterHelper
     {
         // If type is concrete type, use type-formatter map
-        private static readonly Dictionary<Type, object> formatterMap = new ()
+        private static readonly Dictionary<Type, object> formatterMap = new()
         {
             { typeof(AramisDataInfo), new AramisDataInfoFormatter() },
             { typeof(IDataFileInfo), new IDataFileInfoFormatter() },

@@ -23,8 +23,6 @@
     d:DesignWidth="800"
     Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"
     Focusable="False"
-    FontSize="{local_extensions:SettingBinding Path=FontSize,
-                                               FallbackValue=14.0}"
     TextOptions.TextFormattingMode="Ideal"
     mc:Ignorable="d">
     <Grid>

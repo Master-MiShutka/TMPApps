@@ -1,7 +1,7 @@
-﻿using System.Windows.Controls;
-
-namespace TMP.WORK.AramisChetchiki.Controls
+﻿namespace TMP.WORK.AramisChetchiki.Controls
 {
+    using System.Windows.Controls;
+
     /// <summary>
     /// Interaction logic for TableDetailsView.xaml
     /// </summary>
@@ -9,7 +9,7 @@ namespace TMP.WORK.AramisChetchiki.Controls
     {
         public TableDetailsView()
         {
-            InitializeComponent();
+            this.InitializeComponent();
         }
     }
 }

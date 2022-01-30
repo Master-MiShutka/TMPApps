@@ -1,496 +1,202 @@
 ﻿namespace TMP.Shared.Commands
 {
     using System;
-    using System.ComponentModel;
-    using System.Runtime.CompilerServices;
-    using System.Windows.Input;
+    using System.Reflection;
+    using System.Threading.Tasks;
 
-    public class DelegateCommand : ICommand, INotifyPropertyChanged
+    /// <summary>
+    /// An <see cref="T:System.Windows.Input.ICommand"/> whose delegates do not take any parameters for <see cref="M:Microsoft.Practices.Prism.Commands.DelegateCommand.Execute"/> and <see cref="M:Microsoft.Practices.Prism.Commands.DelegateCommand.CanExecute"/>.
+    /// </summary>
+    /// <see cref="T:Microsoft.Practices.Prism.Commands.DelegateCommandBase"/><see cref="T:Microsoft.Practices.Prism.Commands.DelegateCommand`1"/>
+    public class DelegateCommand : DelegateCommandBase
     {
         /// <summary>
-        /// Действие(или параметризованное действие) которое вызывается при активации команды.
+        /// Creates a new instance of <see cref="T:Microsoft.Practices.Prism.Commands.DelegateCommand"/> with the <see cref="T:System.Action"/> to invoke on execution.
         /// </summary>
-        protected Action action = null;
-        protected Action<object> parameterizedAction = null;
+        /// <param name="executeMethod">The <see cref="T:System.Action"/> to invoke when <see cref="M:System.Windows.Input.ICommand.Execute(System.Object)"/> is called.</param>
+        public DelegateCommand(Action executeMethod)
+            : this(executeMethod, () => true)
+        {
+        }
 
         /// <summary>
-        /// Предикат, определяющий возможность выполнения команды.
+        /// Creates a new instance of <see cref="T:Microsoft.Practices.Prism.Commands.DelegateCommand"/> with the <see cref="T:System.Action"/> to invoke on execution
+        ///             and a <see langword="Func"/> to query for determining if the command can execute.
         /// </summary>
-        protected readonly Predicate<object> canExecute;
-
-        protected Func<string> getHeaderFunc = null;
-        protected string header;
-        protected string toolTip;
-        private object tag;
-
-        public string Header
+        /// <param name="executeMethod">The <see cref="T:System.Action"/> to invoke when <see cref="M:System.Windows.Input.ICommand.Execute(System.Object)"/> is called.</param><param name="canExecuteMethod">The <see cref="T:System.Func`1"/> to invoke when <see cref="M:System.Windows.Input.ICommand.CanExecute(System.Object)"/> is called</param>
+        public DelegateCommand(Action executeMethod, Func<bool> canExecuteMethod)
+            : base(o => executeMethod(), o => canExecuteMethod())
         {
-            get => (this.getHeaderFunc == null) ? (this.header ?? "<без названия>") : this.getHeaderFunc();
-
-            set
-            {
-                if (this.getHeaderFunc == null)
-                {
-                    this.SetProperty(ref this.header, value, nameof(this.Header));
-                }
-            }
+            if (executeMethod == null || canExecuteMethod == null)
+                throw new ArgumentNullException(nameof(executeMethod), "DelegateCommand Delegates CannotBeNull");
         }
 
-        public string ToolTip
+        private DelegateCommand(Func<Task> executeMethod)
+            : this(executeMethod, () => true)
         {
-            get => this.toolTip;
-            set => this.SetProperty(ref this.toolTip, value, nameof(this.ToolTip));
         }
 
-        public object Tag
+        private DelegateCommand(Func<Task> executeMethod, Func<bool> canExecuteMethod)
+            : base(o => executeMethod(), o => canExecuteMethod())
         {
-            get => this.tag;
-            set => this.SetProperty(ref this.tag, value, nameof(this.Tag));
+            if (executeMethod == null || canExecuteMethod == null)
+                throw new ArgumentNullException(nameof(executeMethod), "DelegateCommand Delegates CannotBeNull");
         }
-
-        public DelegateCommand(Action action)
-        {
-            this.action = action;
-        }
-
-        public DelegateCommand(Action action, string header, object tag = null) : this(action)
-        {
-            this.header = header;
-            this.tag = tag;
-        }
-
-        public DelegateCommand(Action action, string header, string tooltip, object tag = null) : this(action, header, tag)
-        {
-            this.toolTip = tooltip;
-        }
-
-        public DelegateCommand(Action<object> parameterizedAction)
-        {
-            this.parameterizedAction = parameterizedAction;
-        }
-
-        public DelegateCommand(Action<object> action, string header, object tag = null) : this(action)
-        {
-            this.header = header;
-            this.tag = tag;
-        }
-
-        public DelegateCommand(Action<object> action, string header, string tooltip, object tag = null) : this(action, header, tag)
-        {
-            this.toolTip = tooltip;
-        }
-
-        public DelegateCommand(Action action, Predicate<object> canExecute) : this(action)
-        {
-            this.canExecute = canExecute;
-        }
-
-        public DelegateCommand(Action<object> action, Predicate<object> canExecute) : this(action)
-        {
-            this.canExecute = canExecute;
-        }
-
-        public DelegateCommand(Action action, Predicate<object> canExecute, string header) : this(action, canExecute)
-        {
-            this.header = header;
-        }
-
-        public DelegateCommand(Action<object> action, Predicate<object> canExecute, string header) : this(action, canExecute)
-        {
-            this.header = header;
-        }
-
-        public DelegateCommand(Action action, Predicate<object> canExecute, Func<string> getHeader) : this(action, canExecute)
-        {
-            this.getHeaderFunc = getHeader;
-        }
-
-        public DelegateCommand(Action<object> action, Predicate<object> canExecute, Func<string> getHeader) : this(action, canExecute)
-        {
-            this.getHeaderFunc = getHeader;
-        }
-        #region Выполнение
 
         /// <summary>
-        /// Выполнение команды
+        /// Factory method to create a new instance of <see cref="T:Microsoft.Practices.Prism.Commands.DelegateCommand"/> from an awaitable handler method.
         /// </summary>
-        /// <param name="param">Параметр</param>
-        public virtual void DoExecute(object param)
-        {
-            // Вызов выполнения команды с возможностью отмены
-            CancelCommandEventArgs args =
-               new CancelCommandEventArgs() { Parameter = param, Cancel = false };
-            this.InvokeExecuting(args);
-
-            // Если событие было отменено - остановка
-            if (args.Cancel)
-            {
-                return;
-            }
-
-            // Вызов действия
-            this.InvokeAction(param);
-
-            // Сообщение о выполнении команды
-            this.InvokeExecuted(new CommandEventArgs() { Parameter = param });
-        }
-        #endregion
-
-        #region ICommand implementation
-
-        /// <summary>
-        /// Определяем метод, определющий, что выполнение команды допускается в текущем состоянии
-        /// </summary>
-        /// <param name="parameter">Этот параметр используется командой.
-        ///  Если команда вызывается без использования параметра,
-        ///  то этот объект может быть установлен в  null.</param>
+        /// <param name="executeMethod">Delegate to execute when Execute is called on the command.</param>
         /// <returns>
-        /// если выполнение команды разрешено - true, если запрещено - false.
+        /// Constructed instance of <see cref="T:Microsoft.Practices.Prism.Commands.DelegateCommand"/>
         /// </returns>
-        bool ICommand.CanExecute(object parameter)
+        public static DelegateCommand FromAsyncHandler(Func<Task> executeMethod)
         {
-            return this.canExecute == null ? true : this.canExecute(parameter);
+            return new DelegateCommand(executeMethod);
         }
 
         /// <summary>
-        /// Выполнение команды
+        /// Factory method to create a new instance of <see cref="T:Microsoft.Practices.Prism.Commands.DelegateCommand"/> from an awaitable handler method.
         /// </summary>
-        /// <param name="param">Параметр</param>
-        void ICommand.Execute(object parameter)
-        {
-            this.DoExecute(parameter);
-        }
-
-        /// <summary>
-        /// Вызывается, когда меняется возможность выполнения команды
-        /// </summary>
-        public event EventHandler CanExecuteChanged
-        {
-            add { System.Windows.Input.CommandManager.RequerySuggested += value; }
-            remove { System.Windows.Input.CommandManager.RequerySuggested -= value; }
-        }
-
-        /// <summary>
-        /// Raises the <see cref="CanExecuteChanged" /> event.
-        /// </summary>
-        public void OnCanExecuteChanged()
-        {
-            System.Windows.Input.CommandManager.InvalidateRequerySuggested();
-        }
-        #endregion
-
-        #region События
-
-        /// <summary>
-        /// Вызывается во время выполнения команды
-        /// </summary>
-        public event CancelCommandEventHandler Executing;
-
-        /// <summary>
-        /// Вызывается, когда команда выполнена
-        /// </summary>
-        public event CommandEventHandler Executed;
-
-        #endregion
-
-        #region Invokes
-        protected void InvokeAction(object param)
-        {
-            Action theAction = this.action;
-            Action<object> theParameterizedAction = this.parameterizedAction;
-            if (theAction != null)
-            {
-                theAction();
-            }
-            else
-            {
-                theParameterizedAction?.Invoke(param);
-            }
-        }
-
-        protected void InvokeExecuted(CommandEventArgs args)
-        {
-            this.Executed?.Invoke(this, args);
-        }
-
-        protected void InvokeExecuting(CancelCommandEventArgs args)
-        {
-            this.Executing?.Invoke(this, args);
-        }
-
-        #endregion
-
-        #region INotifyPropertyChanged implementation
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected bool SetProperty<T>(ref T storage, T value, string propertyName)
-        {
-            if (Equals(storage, value))
-            {
-                return false;
-            }
-
-            storage = value;
-            this.OnPropertyChanged(propertyName);
-            return true;
-        }
-
-        protected void OnPropertyChanged(string propertyName)
-        {
-            PropertyChangedEventHandler eventHandler = this.PropertyChanged;
-            if (eventHandler != null)
-            {
-                eventHandler(this, new PropertyChangedEventArgs(propertyName));
-            }
-        }
-
-        #endregion
-    }
-
-    /// <summary>
-    /// The CommandEventHandler delegate.
-    /// </summary>
-    public delegate void CommandEventHandler(object sender, CommandEventArgs args);
-
-    /// <summary>
-    /// The CancelCommandEvent delegate.
-    /// </summary>
-    public delegate void CancelCommandEventHandler(object sender, CancelCommandEventArgs args);
-
-    /// <summary>
-    /// CommandEventArgs - simply holds the command parameter.
-    /// </summary>
-    public class CommandEventArgs : EventArgs
-    {
-        /// <summary>
-        /// Gets or sets the parameter.
-        /// </summary>
-        /// <value>The parameter.</value>
-        public object Parameter { get; set; }
-    }
-
-    /// <summary>
-    /// CancelCommandEventArgs - just like above but allows the event to
-    /// be cancelled.
-    /// </summary>
-    public class CancelCommandEventArgs : CommandEventArgs
-    {
-        /// <summary>
-        /// Gets or sets a value indicating whether this <see cref="CancelCommandEventArgs"/> command should be cancelled.
-        /// </summary>
-        /// <value><c>true</c> if cancel; otherwise, <c>false</c>.</value>
-        public bool Cancel { get; set; }
-    }
-
-    public class DelegateCommand<T> : ICommand, INotifyPropertyChanged
-    {
-        private readonly Action<T> action;
-        private readonly Predicate<object> canExecute;
-
-        protected Func<string> _getHeaderFunc = null;
-        protected string _header;
-        protected string _toolTip;
-        private object _tag;
-
-        public string Header
-        {
-            get => (this._getHeaderFunc == null) ? (this._header ?? "<без названия>") : this._getHeaderFunc();
-
-            set
-            {
-                if (this._getHeaderFunc == null)
-                {
-                    this.SetProperty(ref this._header, value, nameof(this.Header));
-                }
-            }
-        }
-
-        public string ToolTip
-        {
-            get => this._toolTip;
-            set => this.SetProperty(ref this._toolTip, value, nameof(this.ToolTip));
-        }
-
-        public object Tag
-        {
-            get => this._tag;
-            set => this.SetProperty(ref this._tag, value, nameof(this.Tag));
-        }
-
-        public DelegateCommand(Action<T> action)
-        {
-            this.action = action;
-            this.Header = "<без названия>";
-        }
-
-        public DelegateCommand(Action<T> action, string header) : this(action)
-        {
-            this.Header = header;
-        }
-
-        public DelegateCommand(Action<T> action, string header, object tag = null) : this(action, header)
-        {
-            this._tag = tag;
-        }
-
-        public DelegateCommand(Action<T> action, string header, string tooltip, object tag = null) : this(action, header, tag)
-        {
-            this._toolTip = tooltip;
-        }
-
-        public DelegateCommand(Action<T> action, Predicate<object> canExecute) : this(action)
-        {
-            this.canExecute = canExecute;
-        }
-
-        public DelegateCommand(Action<T> action, Predicate<object> canExecute, string header) : this(action, canExecute)
-        {
-            this._header = header;
-        }
-
-        public DelegateCommand(Action<T> action, Predicate<object> canExecute, string header, string tooltip) : this(action, canExecute, header)
-        {
-            this._toolTip = tooltip;
-        }
-
-        public DelegateCommand(Action<T> action, Predicate<object> canExecute, string header, string tooltip, object tag = null) : this(action, canExecute, header, tooltip)
-        {
-            this._tag = tag;
-        }
-
-        public DelegateCommand(Action<T> action, Predicate<object> canExecute, Func<string> getHeader) : this(action, canExecute)
-        {
-            this._getHeaderFunc = getHeader;
-        }
-
-        #region Выполнение
-
-        /// <summary>
-        /// Выполнение команды
-        /// </summary>
-        /// <param name="param">Параметр</param>
-        public virtual void DoExecute(T param)
-        {
-            // Вызов выполнения команды с возможностью отмены
-            CancelCommandEventArgs args =
-               new CancelCommandEventArgs() { Parameter = param, Cancel = false };
-            this.InvokeExecuting(args);
-
-            // Если событие было отменено - остановка
-            if (args.Cancel)
-            {
-                return;
-            }
-
-            // Вызов действия
-            this.InvokeAction(param);
-
-            // Сообщение о выполнении команды
-            this.InvokeExecuted(new CommandEventArgs() { Parameter = param });
-        }
-        #endregion
-
-        #region ICommand implementation
-
-        /// <summary>
-        /// Определяем метод, определющий, что выполнение команды допускается в текущем состоянии
-        /// </summary>
-        /// <param name="parameter">Этот параметр используется командой.
-        ///  Если команда вызывается без использования параметра,
-        ///  то этот объект может быть установлен в  null.</param>
+        /// <param name="executeMethod">Delegate to execute when Execute is called on the command. This can be null to just hook up a CanExecute delegate.</param><param name="canExecuteMethod">Delegate to execute when CanExecute is called on the command. This can be null.</param>
         /// <returns>
-        /// если выполнение команды разрешено - true, если запрещено - false.
+        /// Constructed instance of <see cref="T:Microsoft.Practices.Prism.Commands.DelegateCommand"/>
         /// </returns>
-        bool ICommand.CanExecute(object parameter)
+        public static DelegateCommand FromAsyncHandler(Func<Task> executeMethod, Func<bool> canExecuteMethod)
         {
-            return this.canExecute == null ? true : this.canExecute(parameter);
+            return new DelegateCommand(executeMethod, canExecuteMethod);
         }
 
         /// <summary>
-        /// Выполнение команды
+        /// Executes the command.
         /// </summary>
-        /// <param name="param">Параметр</param>
-        void ICommand.Execute(object parameter)
+        public virtual async Task Execute()
         {
-            this.DoExecute((T)parameter);
+            await Execute(null);
         }
 
         /// <summary>
-        /// Вызывается, когда меняется возможность выполнения команды
+        /// Determines if the command can be executed.
         /// </summary>
-        public event EventHandler CanExecuteChanged
+        /// <returns>
+        /// Returns <see langword="true"/> if the command can execute, otherwise returns <see langword="false"/>.
+        /// </returns>
+        public virtual bool CanExecute()
         {
-            add { System.Windows.Input.CommandManager.RequerySuggested += value; }
-            remove { System.Windows.Input.CommandManager.RequerySuggested -= value; }
+            return CanExecute(null);
+        }
+    }
+
+    /// <summary>
+    /// An <see cref="T:System.Windows.Input.ICommand"/> whose delegates can be attached for <see cref="M:Microsoft.Practices.Prism.Commands.DelegateCommand`1.Execute(`0)"/> and <see cref="M:Microsoft.Practices.Prism.Commands.DelegateCommand`1.CanExecute(`0)"/>.
+    /// </summary>
+    /// <typeparam name="T">Parameter type.</typeparam>
+    /// <remarks>
+    /// The constructor deliberately prevents the use of value types.
+    ///             Because ICommand takes an object, having a value type for T would cause unexpected behavior when CanExecute(null) is called during XAML initialization for command bindings.
+    ///             Using default(T) was considered and rejected as a solution because the implementor would not be able to distinguish between a valid and defaulted values.
+    /// <para/>
+    ///             Instead, callers should support a value type by using a nullable value type and checking the HasValue property before using the Value property.
+    /// <example>
+    /// <code>
+    /// public MyClass()
+    ///             {
+    ///                 this.submitCommand = new DelegateCommand&lt;int?&gt;(this.Submit, this.CanSubmit);
+    ///             }
+    /// 
+    ///             private bool CanSubmit(int? customerId)
+    ///             {
+    ///                 return (customerId.HasValue &amp;&amp; customers.Contains(customerId.Value));
+    ///             }
+    /// </code>
+    /// </example>
+    /// </remarks>
+    public class DelegateCommand<T> : DelegateCommandBase
+    {
+        /// <summary>
+        /// Initializes a new instance of <see cref="T:Microsoft.Practices.Prism.Commands.DelegateCommand`1"/>.
+        /// </summary>
+        /// <param name="executeMethod">Delegate to execute when Execute is called on the command. This can be null to just hook up a CanExecute delegate.</param>
+        /// <remarks>
+        /// <see cref="M:Microsoft.Practices.Prism.Commands.DelegateCommand`1.CanExecute(`0)"/> will always return true.
+        /// </remarks>
+        public DelegateCommand(Action<T> executeMethod)
+            : this(executeMethod, o => true)
+        {
         }
 
         /// <summary>
-        /// Raises the <see cref="CanExecuteChanged" /> event.
+        /// Initializes a new instance of <see cref="T:Microsoft.Practices.Prism.Commands.DelegateCommand`1"/>.
         /// </summary>
-        public void OnCanExecuteChanged()
+        /// <param name="executeMethod">Delegate to execute when Execute is called on the command. This can be null to just hook up a CanExecute delegate.</param><param name="canExecuteMethod">Delegate to execute when CanExecute is called on the command. This can be null.</param><exception cref="T:System.ArgumentNullException">When both <paramref name="executeMethod"/> and <paramref name="canExecuteMethod"/> ar <see langword="null"/>.</exception>
+        public DelegateCommand(Action<T> executeMethod, Func<T, bool> canExecuteMethod)
+            : base(o => executeMethod((T)o), o => canExecuteMethod((T)o))
         {
-            System.Windows.Input.CommandManager.InvalidateRequerySuggested();
-        }
-        #endregion
-
-        #region События
-
-        /// <summary>
-        /// Вызывается во время выполнения команды
-        /// </summary>
-        public event CancelCommandEventHandler Executing;
-
-        /// <summary>
-        /// Вызывается, когда команда выполнена
-        /// </summary>
-        public event CommandEventHandler Executed;
-
-        #endregion
-
-        #region Invokes
-        protected void InvokeAction(T param)
-        {
-            this.action?.Invoke(param);
-        }
-
-        protected void InvokeExecuted(CommandEventArgs args)
-        {
-            this.Executed?.Invoke(this, args);
-        }
-
-        protected void InvokeExecuting(CancelCommandEventArgs args)
-        {
-            this.Executing?.Invoke(this, args);
-        }
-
-        #endregion
-
-        #region INotifyPropertyChanged implementation
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected bool SetProperty<P>(ref P storage, P value, string propertyName)
-        {
-            if (Equals(storage, value))
+            if (executeMethod == null || canExecuteMethod == null)
+                throw new ArgumentNullException(nameof(executeMethod), "DelegateCommand Delegates CannotBeNull");
+            TypeInfo typeInfo = typeof(T).GetTypeInfo();
+            if (typeInfo.IsValueType && (!typeInfo.IsGenericType || !typeof(Nullable<>).GetTypeInfo().IsAssignableFrom(typeInfo.GetGenericTypeDefinition().GetTypeInfo())))
             {
-                return false;
-            }
-
-            storage = value;
-            this.OnPropertyChanged(propertyName);
-            return true;
-        }
-
-        protected void OnPropertyChanged(string propertyName)
-        {
-            PropertyChangedEventHandler eventHandler = this.PropertyChanged;
-            if (eventHandler != null)
-            {
-                eventHandler(this, new PropertyChangedEventArgs(propertyName));
+                //throw new InvalidCastException("DelegateCommand Invalid Generic Payload Type");
             }
         }
 
-        #endregion
+        private DelegateCommand(Func<T, Task> executeMethod)
+            : this(executeMethod, o => true)
+        {
+        }
+
+        private DelegateCommand(Func<T, Task> executeMethod, Func<T, bool> canExecuteMethod)
+            : base(o => executeMethod((T)o), o => canExecuteMethod((T)o))
+        {
+            if (executeMethod == null || canExecuteMethod == null)
+                throw new ArgumentNullException(nameof(executeMethod), "DelegateCommand Delegates CannotBeNull");
+        }
+
+        /// <summary>
+        /// Factory method to create a new instance of <see cref="T:Microsoft.Practices.Prism.Commands.DelegateCommand`1"/> from an awaitable handler method.
+        /// </summary>
+        /// <param name="executeMethod">Delegate to execute when Execute is called on the command.</param>
+        /// <returns>
+        /// Constructed instance of <see cref="T:Microsoft.Practices.Prism.Commands.DelegateCommand`1"/>
+        /// </returns>
+        public static DelegateCommand<T> FromAsyncHandler(Func<T, Task> executeMethod)
+        {
+            return new DelegateCommand<T>(executeMethod);
+        }
+
+        /// <summary>
+        /// Factory method to create a new instance of <see cref="T:Microsoft.Practices.Prism.Commands.DelegateCommand`1"/> from an awaitable handler method.
+        /// </summary>
+        /// <param name="executeMethod">Delegate to execute when Execute is called on the command. This can be null to just hook up a CanExecute delegate.</param><param name="canExecuteMethod">Delegate to execute when CanExecute is called on the command. This can be null.</param>
+        /// <returns>
+        /// Constructed instance of <see cref="T:Microsoft.Practices.Prism.Commands.DelegateCommand`1"/>
+        /// </returns>
+        public static DelegateCommand<T> FromAsyncHandler(Func<T, Task> executeMethod, Func<T, bool> canExecuteMethod)
+        {
+            return new DelegateCommand<T>(executeMethod, canExecuteMethod);
+        }
+
+        /// <summary>
+        /// Determines if the command can execute by invoked the <see cref="T:System.Func`2"/> provided during construction.
+        /// </summary>
+        /// <param name="parameter">Data used by the command to determine if it can execute.</param>
+        /// <returns>
+        /// <see langword="true"/> if this command can be executed; otherwise, <see langword="false"/>.
+        /// 
+        /// </returns>
+        public virtual bool CanExecute(T parameter)
+        {
+            return CanExecute((object)parameter);
+        }
+
+        /// <summary>
+        /// Executes the command and invokes the <see cref="T:System.Action`1"/> provided during construction.
+        /// </summary>
+        /// <param name="parameter">Data used by the command.</param>
+        public virtual async Task Execute(T parameter)
+        {
+            await Execute((object)parameter);
+        }
     }
 }

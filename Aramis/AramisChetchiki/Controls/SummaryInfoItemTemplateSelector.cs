@@ -14,17 +14,20 @@
         public override DataTemplate SelectTemplate(object item, DependencyObject container)
         {
             if (item == null)
+            {
                 return null;
+            }
 
-            var frameworkElement = container as FrameworkElement;
-            if (frameworkElement == null)
+            if (container is not FrameworkElement frameworkElement)
+            {
                 return null;
+            }
 
             return this.ViewAsDiagramTemplate;
 
-            var type = item.GetType();
+            System.Type type = item.GetType();
 
-            var key = new DataTemplateKey(type);
+            DataTemplateKey key = new DataTemplateKey(type);
             return frameworkElement.FindResource(key) as DataTemplate;
         }
     }

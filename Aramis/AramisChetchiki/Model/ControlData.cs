@@ -9,7 +9,7 @@
     public class ControlData : IModelWithPersonalId
     {
         [DisplayName("Лицевой счёт абонента")]
-        [PersonalAccountDataFormat]
+        [PersonalAccountDataFormatAttribute]
         [MessagePack.Key(0)]
         public ulong Лицевой
         {
@@ -38,7 +38,7 @@
     [System.Diagnostics.DebuggerDisplay("Date={Date}, Value={Value}, Operator={Operator}")]
     public class MeterControlData : IModelWithMeterLastReading
     {
-        public MeterControlData(DateOnly date, int value, string @operator)
+        public MeterControlData(DateOnly date, uint value, string @operator)
         {
             this.Date = date;
             this.Value = value;
@@ -53,7 +53,7 @@
         }
 
         [MessagePack.Key(1)]
-        public int Value
+        public uint Value
         {
             get;
             set;
@@ -67,6 +67,6 @@
         }
 
         [MessagePack.IgnoreMember]
-        public int LastReading => this.Value;
+        public uint LastReading => this.Value;
     }
 }

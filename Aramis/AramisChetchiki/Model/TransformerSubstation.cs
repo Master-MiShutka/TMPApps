@@ -45,8 +45,7 @@
                 return false;
             }
 
-            TransformerSubstation other = obj as TransformerSubstation;
-            if (other != null)
+            if (obj is TransformerSubstation other)
             {
                 return this.Number == other.Number && string.Equals(this.Type, other.Type, this.stringComparison);
             }

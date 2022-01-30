@@ -12,7 +12,7 @@
     {
         private IList<T> CheckAndLoadFromCache<T>(string fileName, ref Model.WorkTask workTask)
         {
-            var fileInfo = new System.IO.FileInfo(fileName);
+            FileInfo fileInfo = new System.IO.FileInfo(fileName);
             List<T> data = null;
 
             if (this.dataFilesInfo.ContainsKey(fileName))
@@ -20,14 +20,16 @@
                 workTask.UpdateStatus($"загрузка данных из кэша ...");
                 workTask.IsIndeterminate = true;
 
-                var info = this.dataFilesInfo[fileName];
+                DataFileRecord info = this.dataFilesInfo[fileName];
 
                 if (info.LastModified == fileInfo.LastWriteTime)
                 {
                     T[] result = this.DeserializeData<T>(fileName);
 
                     if (result != null)
+                    {
                         data = new List<T>(result);
+                    }
                 }
                 else
                 {
@@ -36,9 +38,11 @@
 
                     if (string.Equals(info.Hash, hashAsString))
                     {
-                        var result = this.DeserializeData<T>(fileName);
+                        T[] result = this.DeserializeData<T>(fileName);
                         if (result != null)
+                        {
                             data = new List<T>(result);
+                        }
                     }
                 }
             }
@@ -72,12 +76,16 @@
                 numberOfRetries++;
             } while (isOk == false);
 
-            var fileInfo = new System.IO.FileInfo(fileName);
+            FileInfo fileInfo = new System.IO.FileInfo(fileName);
             DataFileRecord dataFileRecord = new DataFileRecord() { FileName = fileName, Hash = hashAsString, LastModified = fileInfo.LastWriteTime };
             if (this.dataFilesInfo.ContainsKey(fileName))
+            {
                 this.dataFilesInfo[fileName] = dataFileRecord;
+            }
             else
+            {
                 this.dataFilesInfo.Add(fileName, dataFileRecord);
+            }
 
             this.SerializeData<T>(data, fileName);
         }
@@ -137,7 +145,7 @@
             string hashAsString = string.Empty;
 
             // Not sure if BufferedStream should be wrapped in using block
-            using (var stream = new BufferedStream(File.Open(fileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite), bufferedStreamBufferSize))
+            using (BufferedStream stream = new BufferedStream(File.Open(fileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite), bufferedStreamBufferSize))
             {
                 using (System.Security.Cryptography.SHA256 mySHA256 = System.Security.Cryptography.SHA256.Create())
                 {
@@ -167,7 +175,7 @@
             workTask.Status = "Сортировка данных";
             workTask.IsIndeterminate = true;
 
-            var result = source.OrderBy(i => i.Лицевой).ToList();
+            List<T> result = source.OrderBy(i => i.Лицевой).ToList();
 
             workTask.IsCompleted = true;
 

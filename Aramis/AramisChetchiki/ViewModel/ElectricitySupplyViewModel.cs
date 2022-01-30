@@ -15,7 +15,7 @@
     {
         #region Fields
 
-        private MTObservableCollection<IMatrix> pivotCollection = new ();
+        private MTObservableCollection<IMatrix> pivotCollection = new();
 
         private int collectionViewItemsCount;
         private DateOnly? selectedPeriod;
@@ -49,7 +49,6 @@
         #endregion
 
         #region Properties
-
 
         public int ElectricitySupplySumm
         {
@@ -141,7 +140,12 @@
 
         private void MakePeriods()
         {
-            var datePeriods = new List<KeyValuePair<string, DateOnly>>();
+            List<KeyValuePair<string, DateOnly>> datePeriods = new List<KeyValuePair<string, DateOnly>>();
+            this.DatePeriods = datePeriods;
+            this.SelectedPeriod = this.DatePeriods.LastOrDefault().Value;
+
+            if (this.Data == null)
+                return;
 
             var years = this.Data
                 .Where(i => i.Период.HasValue)
@@ -161,16 +165,13 @@
                         new DateOnly(year.Key, month.Key, 1).AddDays(-1).AddMonths(1)));
                 }
             }
-
-            this.DatePeriods = datePeriods;
-            this.SelectedPeriod = this.DatePeriods.LastOrDefault().Value;
         }
 
         private void CreatePivots()
         {
             this.PivotCollection.Clear();
 
-            foreach (var pivot in SummaryInfoHelper.GetEnergyPowerSuppyPivots(MainViewModel.Data, this.SelectedPeriod.Value))
+            foreach (IMatrix pivot in SummaryInfoHelper.GetEnergyPowerSuppyPivots(MainViewModel.Data, this.SelectedPeriod.Value))
             {
                 this.PivotCollection.Add(pivot);
             }
@@ -236,5 +237,11 @@
             this.SelectedPeriod.Value.AddDays(1).AddMonths(-1).ToShortDateString(), this.SelectedPeriod.Value.ToShortDateString());
 
         #endregion
+
+        public override int GetHashCode()
+        {
+            System.Guid guid = new System.Guid("1A555AD8-D371-4E35-9852-0967B8EC0454");
+            return guid.GetHashCode();
+        }
     }
 }

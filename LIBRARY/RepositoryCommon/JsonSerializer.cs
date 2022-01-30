@@ -19,65 +19,59 @@
 
         public static long CompressedDataSize { get; private set; }
 
-        public static async Task<(long, long)> GzJsonSerializeAsync(object model, string fileName)
+        public static async Task<(long, long)> GzJsonToFileAsync(object model, string fileName)
         {
             using System.IO.FileStream fs = new System.IO.FileStream(fileName, System.IO.FileMode.Create, System.IO.FileAccess.Write);
             using System.IO.Compression.GZipStream gz = new System.IO.Compression.GZipStream(fs, System.IO.Compression.CompressionMode.Compress);
             using MemoryStream memoryStream = new MemoryStream();
-            await JsonSerializeObjectAsync(model, memoryStream);
-            await JsonSerializeObjectAsync(model, gz);
+            await ObjectToStreamAsync(model, memoryStream);
+            await ObjectToStreamAsync(model, gz);
             await gz.FlushAsync();
             dataSize = memoryStream.Length;
             compressedDataSize = gz.Length;
             return (dataSize, compressedDataSize);
         }
 
-        public static async Task<byte[]> JsonSerializeToBytesAsync<T>(T model)
+        public static async Task<byte[]> JsonToBytesAsync<T>(T model)
         {
-            // byte[] bytes = MessagePack.MessagePackSerializer.Serialize(model, lz4Options);
-            // byte[] bytes = Utf8Json.JsonSerializer.Serialize(model);
+            byte[] bytes = Utf8Json.JsonSerializer.Serialize(model);
             using MemoryStream stream = new MemoryStream();
 
-            var options = MessagePack.MessagePackSerializer.DefaultOptions
-                .WithCompression(MessagePack.MessagePackCompression.Lz4BlockArray);
-
-            await MessagePack.MessagePackSerializer.SerializeAsync<T>(stream, model, options);
-
-            // await JsonSerializeObjectAsync(model, stream);
+            await ObjectToStreamAsync(model, stream);
             using StreamReader reader = new StreamReader(stream);
             byte[] result = stream.ToArray();
             return result;
         }
 
-        public static async Task<string> JsonSerializeToStringAsync(object model)
+        public static async Task<string> JsonToStringAsync(object model)
         {
             using MemoryStream stream = new MemoryStream();
-            await JsonSerializeObjectAsync(model, stream);
+            await ObjectToStreamAsync(model, stream);
             using StreamReader reader = new StreamReader(stream);
             string result = await reader.ReadToEndAsync();
             return result;
         }
 
-        public static async Task<bool> JsonSerializeToStreamAsync(object model, Stream stream)
+        public static async Task<bool> JsonToStreamAsync(object model, Stream stream)
         {
             stream = new MemoryStream();
-            await JsonSerializeObjectAsync(model, stream);
+            await ObjectToStreamAsync(model, stream);
             dataSize = stream.Position;
             return true;
         }
 
-        public static async Task<bool> JsonSerializeAsync(object model, string fileName)
+        public static async Task<bool> JsonToFileAsync(object model, string fileName)
         {
             using System.IO.FileStream fs = new System.IO.FileStream(fileName, System.IO.FileMode.Create, System.IO.FileAccess.Write);
             {
-                await JsonSerializeObjectAsync(model, fs);
+                await ObjectToStreamAsync(model, fs);
                 dataSize = fs.Position;
             }
 
             return true;
         }
 
-        private static async Task JsonSerializeObjectAsync(object model, Stream utf8Stream)
+        private static async Task ObjectToStreamAsync(object model, Stream utf8Stream)
         {
             await System.Text.Json.JsonSerializer.SerializeAsync(utf8Stream, model);
         }

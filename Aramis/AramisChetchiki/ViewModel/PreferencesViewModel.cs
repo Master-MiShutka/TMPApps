@@ -1,11 +1,11 @@
 ﻿namespace TMP.WORK.AramisChetchiki.ViewModel
 {
+    using GongSolutions.Wpf.DragDrop;
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
     using System.Windows.Input;
-    using GongSolutions.Wpf.DragDrop;
     using TMP.Shared.Commands;
 
     public class PreferencesViewModel : BaseViewModel, IDropTarget
@@ -33,9 +33,9 @@
                 Repository.Instance.AddNewAramisDbPath(this.DBPath);
 
                 // теперь если список файлов был пуст, нужно выбрать добавленный
-                var selected = Repository.Instance.AvailableDataFiles.Where(file => file.IsSelected == true).ToList();
+                List<Common.RepositoryCommon.IDataFileInfo> selected = Repository.Instance.AvailableDataFiles.Where(file => file.IsSelected == true).ToList();
                 this.SelectedDataFileInfo = selected.FirstOrDefault() as Model.AramisDataInfo;
-            }, (o) => string.IsNullOrWhiteSpace(this.DBPath) == false && System.IO.Directory.Exists(this.DBPath) && string.IsNullOrEmpty(this.isDBPathValidMessage));
+            }, () => string.IsNullOrWhiteSpace(this.DBPath) == false && System.IO.Directory.Exists(this.DBPath) && string.IsNullOrEmpty(this.isDBPathValidMessage));
 
             this.CommandRemoveAramisDbPath = new DelegateCommand(
                 () =>
@@ -57,7 +57,7 @@
                         this.SelectedDataFileInfo.IsSelected = true;
                     }
                 }
-            }, (o) => this.SelectedDataFileInfo != null);
+            }, () => this.SelectedDataFileInfo != null);
 
             this.CommandClearAramisDbPathList = new DelegateCommand(
                 () =>
@@ -74,7 +74,7 @@
                 }
 
                 Repository.Instance.AvailableDataFiles.Clear();
-            }, (o) => Repository.Instance.AvailableDataFiles.Count > 0);
+            }, () => Repository.Instance.AvailableDataFiles.Count > 0);
 
             this.CommandSaveAndClose = new DelegateCommand(() =>
             {
@@ -84,7 +84,7 @@
 
                 if (string.Equals(this.oldPath, AppSettings.Default.DataFilesStorePath, AppSettings.StringComparisonMethod) == false && MainViewModel.Data != null)
                 {
-                    var result = Repository.Instance.SaveAsync();
+                    Task<Common.RepositoryCommon.SaveStatus> result = Repository.Instance.SaveAsync();
 
                     this.logger?.Info(result);
                 }
@@ -105,17 +105,7 @@
                 MainViewModel.GoBack();
             });
 
-            this.CommandAddProperty = new DelegateCommand(
-                (param) =>
-            {
-            },
-                o => this.SelectedSourceProperty != null);
-
-            this.CommandRemoveProperty = new DelegateCommand((param) =>
-            {
-            });
-
-            this.CommandRemoveField = new DelegateCommand((param) =>
+            this.CommandRemoveField = new DelegateCommand<object>((param) =>
             {
                 if (param != null && param is System.Collections.IEnumerable list)
                 {
@@ -177,24 +167,20 @@
 
         public ICommand CommandSaveAndClose { get; }
 
-        public ICommand CommandRemoveProperty { get; }
-
-        public ICommand CommandAddProperty { get; }
-
         public ICommand CommandRemoveField { get; }
 
         public Shared.PlusPropertyDescriptor SelectedSourceProperty { get; set; }
 
-        public static List<TMPApplication.VisualTheme> VisualThemesList
+        public List<TMPApplication.VisualTheme> VisualThemesList
         {
             get => App.Instance.VisualThemesList;
             set => App.Instance.VisualThemesList = value;
         }
 
-        public static TMPApplication.VisualTheme SelectedVisualTheme
+        public TMPApplication.VisualTheme SelectedVisualTheme
         {
             get => App.Instance.SelectedVisualTheme;
-            set => TMPApplication.TMPApp.Instance.SelectedVisualTheme = value;
+            set => App.Instance.SelectedVisualTheme = value;
         }
 
         #endregion

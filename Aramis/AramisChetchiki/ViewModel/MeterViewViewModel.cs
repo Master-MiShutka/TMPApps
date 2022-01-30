@@ -1,6 +1,4 @@
 ﻿namespace TMP.WORK.AramisChetchiki.ViewModel;
-
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using TMP.WORK.AramisChetchiki.Model;
@@ -22,6 +20,10 @@ public class MeterViewViewModel : BaseDataViewModel<Meter>
         this.MeterControlData = MainViewModel.Data.MetersControlData.ContainsKey(meter.Лицевой)
             ? MainViewModel.Data.MetersControlData[meter.Лицевой].FirstOrDefault().Data
             : new List<MeterControlData>();
+
+        this.Events = MainViewModel.Data.Events.ContainsKey(meter.Лицевой)
+            ? MainViewModel.Data.Events[meter.Лицевой]
+            : new List<MeterEvent>();
     }
 
     public Meter Meter { get; init; }
@@ -31,4 +33,12 @@ public class MeterViewViewModel : BaseDataViewModel<Meter>
     public IEnumerable<PaymentData> Payments { get; init; }
 
     public IEnumerable<MeterControlData> MeterControlData { get; init; }
+
+    public IEnumerable<MeterEvent> Events { get; init; }
+
+    public override int GetHashCode()
+    {
+        System.Guid guid = new System.Guid("1A555AD8-D371-4E35-9852-0967B8EC0458");
+        return guid.GetHashCode();
+    }
 }

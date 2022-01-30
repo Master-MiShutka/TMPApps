@@ -44,7 +44,7 @@
         {
             if (string.IsNullOrWhiteSpace(city) == false)
             {
-                var parts = city.Split('.');
+                string[] parts = city.Split('.');
 
                 if (parts.Length == 2)
                 {
@@ -53,8 +53,8 @@
                 }
                 else if (parts.Length == 1)
                 {
-                    this.ТипНаселённогоПункта = parts[0].StartsWith("Дач") 
-                        ? "дачи" 
+                    this.ТипНаселённогоПункта = parts[0].StartsWith("Дач")
+                        ? "дачи"
                         : "?";
                     this.НаселённыйПункт = parts[0];
                 }
@@ -145,17 +145,17 @@
 
             int compareStrOrInt(string value1, string value2)
             {
-                var regex = new Regex("^(\\d+)");
+                Regex regex = new Regex("^(\\d+)");
 
                 // run the regex on both strings
-                var xRegexResult = regex.Match(value1);
-                var yRegexResult = regex.Match(value2);
+                Match xRegexResult = regex.Match(value1);
+                Match yRegexResult = regex.Match(value2);
 
                 // check if they are both numbers
                 if (xRegexResult.Success && yRegexResult.Success)
                 {
-                    var xx = int.Parse(xRegexResult.Groups[1].Value, AppSettings.CurrentCulture.NumberFormat);
-                    var yy = int.Parse(yRegexResult.Groups[1].Value, AppSettings.CurrentCulture.NumberFormat);
+                    int xx = int.Parse(xRegexResult.Groups[1].Value, AppSettings.CurrentCulture.NumberFormat);
+                    int yy = int.Parse(yRegexResult.Groups[1].Value, AppSettings.CurrentCulture.NumberFormat);
                     return xx.CompareTo(yy);
                 }
 
@@ -165,7 +165,7 @@
 
             int compareHouses(string house1, string house2, string kv1, string kv2)
             {
-                var result = compareStrOrInt(house1, house2);
+                int result = compareStrOrInt(house1, house2);
                 return result == 0 ? compareStrOrInt(kv1, kv2) : result;
             }
 
@@ -370,17 +370,17 @@
     {
         public int Compare(string x, string y)
         {
-            var regex = new Regex("^(d+)");
+            Regex regex = new Regex("^(d+)");
 
             // run the regex on both strings
-            var xRegexResult = regex.Match(x);
-            var yRegexResult = regex.Match(y);
+            Match xRegexResult = regex.Match(x);
+            Match yRegexResult = regex.Match(y);
 
             // check if they are both numbers
             if (xRegexResult.Success && yRegexResult.Success)
             {
-                var xx = int.Parse(xRegexResult.Groups[1].Value, AppSettings.CurrentCulture.NumberFormat);
-                var yy = int.Parse(yRegexResult.Groups[1].Value, AppSettings.CurrentCulture.NumberFormat);
+                int xx = int.Parse(xRegexResult.Groups[1].Value, AppSettings.CurrentCulture.NumberFormat);
+                int yy = int.Parse(yRegexResult.Groups[1].Value, AppSettings.CurrentCulture.NumberFormat);
                 return xx.CompareTo(yy);
             }
 

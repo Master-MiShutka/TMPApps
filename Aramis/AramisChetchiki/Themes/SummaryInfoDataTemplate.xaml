@@ -188,7 +188,7 @@
                                             <Binding Path="Value" RelativeSource="{RelativeSource Mode=Self}" />
                                         </MultiBinding>
                                     </Hyperlink.CommandParameter>
-                                    <TextBlock Text="{Binding Header}" />
+                                    <TextBlock Text="Список" />
                                 </Hyperlink>
                             </TextBlock>
                         </Border>
@@ -293,8 +293,8 @@
                             Command="{Binding DataContext.CommandShowMeters, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type views:SummaryInfoView}}}"
                             CommandParameter="{Binding FieldName}"
                             TextDecorations="{x:Null}"
-                            ToolTip="{Binding DataContext.CommandShowMeters.ToolTip, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type views:SummaryInfoView}}}">
-                            <Run Text="{Binding Header}" />
+                            ToolTip="Показать все счётчики, сгруппированные по этому полю">
+                            <Run Text="Список" />
                         </Hyperlink>
                     </TextBlock>
                 </DockPanel>

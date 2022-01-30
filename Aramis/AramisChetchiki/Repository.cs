@@ -26,13 +26,14 @@
         private const string PART_ELECTRICITY_SUPPLYS = "ElectricitySupplys";
         private const string PART_PAYMENTS = "PaymentDataInfos";
         private const string PART_CONTROLDATA = "MetersControlData";
+        private const string PART_EVENTS = "Events";
 
         #endregion
 
         #region Fields
 
         // Helper for Thread Safety
-        private static readonly object @lock = new ();
+        private static readonly object @lock = new();
 
         private TMPApplication.WpfDialogs.Contracts.IWindowWithDialogs mainWindow = TMPApp.Instance.MainWindowWithDialogs;
 
@@ -101,14 +102,6 @@
 
         #endregion
 
-        #region Properties
-
-        #endregion
-
-        #region Private properties
-
-        #endregion
-
         #region Private methods
 
         private void SetWindowTaskbarItemProgressState(TMPApplication.WpfDialogs.Contracts.TaskbarItemProgressState taskbarItemProgressState, double value = -1)
@@ -142,41 +135,49 @@
         private void LoadRestDataInfo(System.IO.Packaging.Package package, AramisData aramisData)
         {
             this.UpdateUI("загрузка счётчиков");
-            var meters = this.LoadDataListFromPackageAsync<Meter>(package, PART_METERS).Result;
+            Meter[] meters = this.LoadDataListFromPackageAsync<Meter>(package, PART_METERS).Result;
             aramisData.Meters = meters != null ? new ObservableCollection<Meter>(meters) : throw new NoNullAllowedException();
+
             this.UpdateUI("загрузка замен счётчиков");
-            var chom = this.LoadDictionaryFromPackageAsync<ulong, ChangeOfMeter>(package, PART_CHANGES_OF_METERS).Result;
+            System.Collections.Generic.Dictionary<ulong, System.Collections.Generic.IList<ChangeOfMeter>> chom = this.LoadDictionaryFromPackageAsync<ulong, ChangeOfMeter>(package, PART_CHANGES_OF_METERS).Result;
             if (chom != null)
             {
                 aramisData.ChangesOfMeters = chom;
             }
 
             this.UpdateUI("загрузка сводной информации");
-            var si = this.LoadDataListFromPackageAsync<SummaryInfoItem>(package, PART_SUMMARY_INFOS).Result;
+            SummaryInfoItem[] si = this.LoadDataListFromPackageAsync<SummaryInfoItem>(package, PART_SUMMARY_INFOS).Result;
             if (si != null)
             {
                 aramisData.SummaryInfos = new ObservableCollection<SummaryInfoItem>(si);
             }
 
             this.UpdateUI("загрузка данных о полезном отпуске");
-            var es = this.LoadDataListFromPackageAsync<ElectricitySupply>(package, PART_ELECTRICITY_SUPPLYS).Result;
+            ElectricitySupply[] es = this.LoadDataListFromPackageAsync<ElectricitySupply>(package, PART_ELECTRICITY_SUPPLYS).Result;
             if (es != null)
             {
                 aramisData.ElectricitySupplyInfo = new ObservableCollection<ElectricitySupply>(es);
             }
 
             this.UpdateUI("загрузка данных об произведенных оплатах");
-            var pd = this.LoadDictionaryFromPackageAsync<ulong, Payment>(package, PART_PAYMENTS).Result;
+            System.Collections.Generic.Dictionary<ulong, System.Collections.Generic.IList<Payment>> pd = this.LoadDictionaryFromPackageAsync<ulong, Payment>(package, PART_PAYMENTS).Result;
             if (pd != null)
             {
                 aramisData.Payments = pd;
             }
 
             this.UpdateUI("загрузка контрольных показаний по лицевому счету");
-            var cd = this.LoadDictionaryFromPackageAsync<ulong, ControlData>(package, PART_CONTROLDATA).Result;
+            System.Collections.Generic.Dictionary<ulong, System.Collections.Generic.IList<ControlData>> cd = this.LoadDictionaryFromPackageAsync<ulong, ControlData>(package, PART_CONTROLDATA).Result;
             if (cd != null)
             {
                 aramisData.MetersControlData = cd;
+            }
+
+            this.UpdateUI("загрузка событий по лицевому счету");
+            System.Collections.Generic.Dictionary<ulong, System.Collections.Generic.IList<MeterEvent>> events = this.LoadDictionaryFromPackageAsync<ulong, MeterEvent>(package, PART_EVENTS).Result;
+            if (events != null)
+            {
+                aramisData.Events = events;
             }
         }
 
@@ -185,23 +186,32 @@
             try
             {
                 this.UpdateUI("сохранение счётчиков");
-                byte[] bytes = JsonSerializer.JsonSerializeToBytesAsync(this.Data.Meters).Result;
+                byte[] bytes = JsonSerializer.JsonToBytesAsync(this.Data.Meters).Result;
                 this.SaveJsonDataToPart(bytes, package, PART_METERS);
+
                 this.UpdateUI("сохранение замен счётчиков");
-                bytes = JsonSerializer.JsonSerializeToBytesAsync(this.Data.ChangesOfMeters).Result;
+                bytes = JsonSerializer.JsonToBytesAsync(this.Data.ChangesOfMeters).Result;
                 this.SaveJsonDataToPart(bytes, package, PART_CHANGES_OF_METERS);
+
                 this.UpdateUI("сохранение сводной информации");
-                bytes = JsonSerializer.JsonSerializeToBytesAsync(this.Data.SummaryInfos).Result;
+                bytes = JsonSerializer.JsonToBytesAsync(this.Data.SummaryInfos).Result;
                 this.SaveJsonDataToPart(bytes, package, PART_SUMMARY_INFOS);
+
                 this.UpdateUI("сохранение данных о полезном отпуске");
-                bytes = JsonSerializer.JsonSerializeToBytesAsync(this.Data.ElectricitySupplyInfo).Result;
+                bytes = JsonSerializer.JsonToBytesAsync(this.Data.ElectricitySupplyInfo).Result;
                 this.SaveJsonDataToPart(bytes, package, PART_ELECTRICITY_SUPPLYS);
+
                 this.UpdateUI("сохранение данных об произведенных оплатах");
-                bytes = JsonSerializer.JsonSerializeToBytesAsync(this.Data.Payments).Result;
+                bytes = JsonSerializer.JsonToBytesAsync(this.Data.Payments).Result;
                 this.SaveJsonDataToPart(bytes, package, PART_PAYMENTS);
+
                 this.UpdateUI("сохранение контрольных показаний по лицевому счету");
-                bytes = JsonSerializer.JsonSerializeToBytesAsync(this.Data.MetersControlData).Result;
+                bytes = JsonSerializer.JsonToBytesAsync(this.Data.MetersControlData).Result;
                 this.SaveJsonDataToPart(bytes, package, PART_CONTROLDATA);
+
+                this.UpdateUI("сохранение событий по лицевому счету");
+                bytes = JsonSerializer.JsonToBytesAsync(this.Data.Events).Result;
+                this.SaveJsonDataToPart(bytes, package, PART_EVENTS);
             }
             catch (Exception e)
             {
@@ -225,7 +235,7 @@
             }
 
             string departamentName = GetDepartamentName(aramisDbPath);
-            AramisDataInfo newAramisDataInfo = new ()
+            AramisDataInfo newAramisDataInfo = new()
             {
                 AramisDbPath = aramisDbPath,
                 FileName = "Data-" + departamentName + Instance.DATA_FILENAME_EXTENSION,
@@ -240,7 +250,7 @@
         {
             if (this.AvailableDataFiles != null && this.AvailableDataFiles.Count > 0)
             {
-                var dataFiles = this.AvailableDataFiles
+                System.Collections.Generic.List<AramisDataInfo> dataFiles = this.AvailableDataFiles
                     .Cast<AramisDataInfo>()
                     .Where(f => f.FileName == aramisDataInfo.FileName && f.DepartamentName == aramisDataInfo.DepartamentName)
                     .ToList();
@@ -256,7 +266,7 @@
         {
             if (this.AvailableDataFiles != null && this.AvailableDataFiles.Count > 0)
             {
-                var dataFiles = this.AvailableDataFiles
+                System.Collections.Generic.List<AramisDataInfo> dataFiles = this.AvailableDataFiles
                     .Cast<AramisDataInfo>()
                     .Where(f => f.AramisDbPath == aramisDbPath)
                     .ToList();
@@ -284,7 +294,7 @@
                     return null;
                 }
 
-                using DBF.DbfTable dbfTable = new (Path.Combine(pathDBFC, "KartPd.DBF"), System.Text.Encoding.GetEncoding("cp866"), false);
+                using DBF.DbfTable dbfTable = new(Path.Combine(pathDBFC, "KartPd.DBF"), System.Text.Encoding.GetEncoding("cp866"), false);
                 string value = dbfTable.ReadRecord().GetValue<string>("PNPD");
                 string name = value.Trim();
                 return name;
@@ -348,19 +358,20 @@
                 return false;
             }
 
+            this.Data?.Clear();
             AramisData data = null;
             this.SetWindowTaskbarItemProgressState(TMPApplication.WpfDialogs.Contracts.TaskbarItemProgressState.Normal, 0d);
 
             try
             {
-                AramisDBParser aramisDBParser = new (aramisDataInfo, workTasksProgressViewModel);
+                AramisDBParser aramisDBParser = new(aramisDataInfo, workTasksProgressViewModel);
                 data = await aramisDBParser.GetDataAsync().ConfigureAwait(false);
                 (data.Info as AramisDataInfo).AramisDbPath = aramisDataInfo.AramisDbPath;
                 (data.Info as AramisDataInfo).LastModifiedDate = DateTime.Now;
                 data.Info.Period = new Common.RepositoryCommon.DatePeriod();
                 this.Data = data;
 
-                Model.WorkTask workTask = new ("сохранение данных")
+                Model.WorkTask workTask = new("сохранение данных")
                 {
                     Status = "сохранение информации в файл",
                     IsIndeterminate = true,
@@ -406,7 +417,7 @@
             try
             {
                 // загрузка
-                var status = await this.LoadAsync(aramisDataInfo.FileName).ConfigureAwait(false);
+                LoadStatus status = await this.LoadAsync(aramisDataInfo.FileName).ConfigureAwait(false);
                 logger?.Info(status);
 
                 this.SetWindowTaskbarItemProgressState(TMPApplication.WpfDialogs.Contracts.TaskbarItemProgressState.None);

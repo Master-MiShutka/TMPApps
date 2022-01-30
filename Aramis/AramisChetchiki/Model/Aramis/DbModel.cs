@@ -2,6 +2,8 @@
 {
     using System;
 
+#pragma warning disable SA1313 // Parameter names should begin with lower-case letter
+
     /// <summary>
     /// справочник установленных счётчиков
     /// </summary>
@@ -90,68 +92,127 @@
     public class KARTAB
     {
         public bool IsDeleted { get; set; }
+
         public string LIC_SCH { get; set; }
+
         public string FAM { get; set; }
+
         public string NAME { get; set; }
+
         public string OTCH { get; set; }
+
         public string SMS { get; set; }
 
         public bool RABOT { get; set; }
 
         public string COD_TN { get; set; }
+
         public string COD_ST { get; set; }
+
         public string HOME { get; set; }
+
         public string KV { get; set; }
+
         public int? ЧЛЕНОВ { get; set; }
+
         public string TELEF { get; set; }
+
         public string COD_KAT { get; set; }
+
         public string COD_TPR { get; set; }
+
         public string ШИФР { get; set; }
+
         public string COD_PD { get; set; }
+
         public decimal? DKONT { get; set; }
+
         public string KOMENT { get; set; }
+
         public bool PLIT { get; set; }
+
         public DateTime? YEARMON { get; set; }
+
         public decimal? ERRSUM { get; set; }
+
         public decimal? ERRSUMN { get; set; }
+
         public decimal? SUMMA_KN { get; set; }
+
         public decimal? SUMMA_KC { get; set; }
+
         public string КОД_КОН { get; set; }
+
         public int? СРЕДНЕЕ { get; set; }
+
         public int? МЕСЯЦ { get; set; }
+
         public DateTime? ДАТА_ОТКПЛ { get; set; }
+
         public DateTime? ДАТА_ОТКФК { get; set; }
+
         public string НОМЕР_ТП { get; set; }
+
         public int? ФИДЕР { get; set; }
+
         public string НОМЕР_ОПОР { get; set; }
+
         public string СМЕНА { get; set; }
+
         public int? DATA_KON { get; set; }
+
         public DateTime? DATE_KON { get; set; }
+
         public string ФАМИЛИЯ { get; set; }
+
         public string PR_OPL { get; set; }
+
         public string COD_PRED { get; set; }
+
         public DateTime? DATE_ZAP { get; set; }
+
         public string COD_VID { get; set; }
+
         public int? ПОКАЗАНИЯ { get; set; }
+
         public DateTime? DATE_LGT { get; set; }
+
         public int? ЛЬГОТА { get; set; }
+
         public int? ПРОЦЕНТ { get; set; }
+
         public bool PR_VN { get; set; }
+
         public bool PR_VO { get; set; }
+
         public bool PR_MO { get; set; }
+
         public bool PR_ZD { get; set; }
+
         public DateTime? DATE_R { get; set; }
+
         public int? RACHPOK { get; set; }
+
         public decimal? PENYA_T { get; set; }
+
         public string COD_ISP { get; set; }
+
         public string DOG { get; set; }
+
         public DateTime? DATE_DOG { get; set; }
+
         public string FIDER10 { get; set; }
+
         public bool ASKUE { get; set; }
+
         public decimal? ERRSUMV { get; set; }
+
         public int? KVT_LGT { get; set; }
+
         public string PRIZNAK { get; set; }
+
         public string GKH_L { get; set; }
+
         public string GKH_L1 { get; set; }
     }
 
@@ -174,4 +235,6 @@
     /// Удаленные абоненты
     /// </summary>
     public record RemovAb(ulong LIC_SCH, string FAM, string NAME, string OTCH, DateOnly DATE_ZAP);
+
+#pragma warning restore SA1313 // Parameter names should begin with lower-case letter
 }

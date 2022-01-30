@@ -1,10 +1,5 @@
 ﻿namespace TMP.UI.Controls.WPF.Reporting.MatrixGrid
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-
     /// <summary>
     /// Представляет ячейку с данными матрицы
     /// </summary>

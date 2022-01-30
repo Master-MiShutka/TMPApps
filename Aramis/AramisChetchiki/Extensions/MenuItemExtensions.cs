@@ -1,13 +1,12 @@
 ﻿namespace TMP.WORK.AramisChetchiki.Extensions
 {
-    using System;
     using System.Collections.Generic;
     using System.Windows;
     using System.Windows.Controls;
 
     public class MenuItemExtensions : DependencyObject
     {
-        public static Dictionary<MenuItem, string> ElementToGroupNames = new ();
+        public static Dictionary<MenuItem, string> ElementToGroupNames = new();
 
         public static readonly DependencyProperty GroupNameProperty =
             DependencyProperty.RegisterAttached(
@@ -29,9 +28,8 @@
         private static void OnGroupNameChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             // Add an entry to the group name collection
-            var menuItem = d as MenuItem;
 
-            if (menuItem != null)
+            if (d is MenuItem menuItem)
             {
                 string newGroupName = e.NewValue.ToString();
                 string oldGroupName = e.OldValue.ToString();
@@ -66,8 +64,8 @@
 
         private static void MenuItemChecked(object sender, RoutedEventArgs e)
         {
-            var menuItem = e.OriginalSource as MenuItem;
-            foreach (var item in ElementToGroupNames)
+            MenuItem menuItem = e.OriginalSource as MenuItem;
+            foreach (KeyValuePair<MenuItem, string> item in ElementToGroupNames)
             {
                 if (item.Key != menuItem && item.Value == GetGroupName(menuItem))
                 {

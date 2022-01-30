@@ -22,7 +22,7 @@
         [Display(Order = 1, GroupName = "Операция")]
         [DisplayName("Номер акта")]
         [MessagePack.Key(1)]
-        public int? НомерАкта
+        public uint? НомерАкта
         {
             get;
             set;
@@ -39,7 +39,7 @@
 
         [Display(Order = 3, GroupName = "Абонент")]
         [DisplayName("Лицевой счёт абонента")]
-        [PersonalAccountDataFormat]
+        [PersonalAccountDataFormatAttribute]
         [MessagePack.Key(3)]
         public ulong Лицевой
         {
@@ -91,7 +91,7 @@
         [Display(Order = 9, GroupName = "Снятый счётчик")]
         [DisplayName("Показание снятого")]
         [MessagePack.Key(9)]
-        public int ПоказаниеСнятого
+        public uint ПоказаниеСнятого
         {
             get;
             set;
@@ -127,7 +127,7 @@
         [Display(Order = 13, GroupName = "Снятый счётчик")]
         [DisplayName("Год выпуска снятого")]
         [MessagePack.Key(13)]
-        public int? ГодВыпускаСнятого
+        public ushort? ГодВыпускаСнятого
         {
             get;
             set;
@@ -154,7 +154,7 @@
         [Display(Order = 16, GroupName = "Установленный счётчик")]
         [DisplayName("Показание установленного")]
         [MessagePack.Key(16)]
-        public int ПоказаниеУстановленного
+        public uint ПоказаниеУстановленного
         {
             get;
             set;
@@ -163,7 +163,7 @@
         [Display(Order = 17, GroupName = "Установленный счётчик")]
         [DisplayName("Год выпуска установленного")]
         [MessagePack.Key(17)]
-        public int? ГодВыпускаУстановленного
+        public ushort? ГодВыпускаУстановленного
         {
             get;
             set;
@@ -208,7 +208,7 @@
         [DisplayName("Фидер 0,4 кВ")]
         [Display(Order = 24, GroupName = "Привязка")]
         [MessagePack.Key(24)]
-        public int? Фидер04 { get; set; }
+        public byte? Фидер04 { get; set; }
 
         [DisplayName("№ опоры")]
         [Display(Order = 25, GroupName = "Привязка")]
@@ -226,6 +226,6 @@
         public byte РазрядностьУстановленного { get; set; }
 
         [MessagePack.IgnoreMember]
-        public int LastReading => this.ПоказаниеУстановленного;
+        public uint LastReading => this.ПоказаниеУстановленного;
     }
 }

@@ -1,106 +1,24 @@
-﻿<UserControl x:Class="TMP.WORK.AramisChetchiki.Controls.MeterСonsumptionViewer"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:model="clr-namespace:TMP.WORK.AramisChetchiki.Model"
-             xmlns:local_controls="clr-namespace:TMP.WORK.AramisChetchiki.Controls"
-             xmlns:System="clr-namespace:System;assembly=mscorlib"
-             BorderThickness="1"
-             BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}"
-             mc:Ignorable="d" 
-             x:Name="root"
-             d:DesignHeight="150" d:DesignWidth="800">
+﻿<UserControl
+    x:Class="TMP.WORK.AramisChetchiki.Controls.MeterСonsumptionViewer"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:System="clr-namespace:System;assembly=mscorlib"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local_controls="clr-namespace:TMP.WORK.AramisChetchiki.Controls"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:model="clr-namespace:TMP.WORK.AramisChetchiki.Model"
+    xmlns:uicontrols="clr-namespace:TMP.UI.Controls.WPF;assembly=ui.controls.wpf"
+    x:Name="root"
+    d:DesignHeight="150"
+    d:DesignWidth="800"
+    BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}"
+    BorderThickness="1"
+    mc:Ignorable="d">
     <UserControl.Resources>
 
-        <local_controls:ItemHeightValueConverter x:Key="ItemHeightValueConverter"/>
+        <local_controls:ItemHeightValueConverter x:Key="ItemHeightValueConverter" />
 
-        <System:Double x:Key="minValueWidth">20</System:Double>
-
-        <DataTemplate x:Key="ChangeItemDataTemplate" DataType="{x:Type model:MeterEvent}">
-            <Grid MinWidth="{StaticResource minValueWidth}" Margin="1,2,1,0">
-                <Border x:Name="border"
-                        Margin="5,0,5,1"
-                        VerticalAlignment="Bottom"
-                        Background="Green"
-                        BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}"
-                        BorderThickness="1"
-                        Effect="{StaticResource dropShadowAccent}">
-                    <Border.Height>
-                        <MultiBinding Converter="{StaticResource ItemHeightValueConverter}">
-                            <Binding Path="Сonsumption" />
-                            <Binding Path="ActualHeight" RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type ItemsControl}}" />
-                        </MultiBinding>
-                    </Border.Height>
-                </Border>
-                <TextBlock
-                    x:Name="text"
-                    FontSize="{DynamicResource ContentFontSize}">
-                    <Run Text="{Binding Сonsumption, StringFormat=N2}"/>
-                    <LineBreak/>
-                    <Run Text="⛖" FontSize="{DynamicResource HeaderFontSize}"/>
-                </TextBlock>
-                <Grid.ToolTip>
-                    <TextBlock>
-                        <Run Text="{Binding LastElectricityReadings}"/>
-                    </TextBlock>
-                </Grid.ToolTip>
-            </Grid>
-        </DataTemplate>
-
-        <DataTemplate x:Key="PaymentItemDataTemplate" DataType="{x:Type model:MeterEvent}">
-            <Grid MinWidth="{StaticResource minValueWidth}" Margin="1,2,1,0">
-                <Border x:Name="border"
-                        Margin="5,0,5,1"
-                        VerticalAlignment="Bottom"
-                        Background="Skyblue"
-                        BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}"
-                        BorderThickness="1"
-                        Effect="{StaticResource dropShadowAccent}">
-                    <Border.Height>
-                        <MultiBinding Converter="{StaticResource ItemHeightValueConverter}">
-                            <Binding Path="Сonsumption" />
-                            <Binding Path="ActualHeight" RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type ItemsControl}}" />
-                        </MultiBinding>
-                    </Border.Height>
-                </Border>
-                <TextBlock
-                    x:Name="text"
-                    FontSize="{DynamicResource ContentFontSize}">
-                    <Run Text="{Binding Сonsumption, StringFormat=N2}"/>
-                    <LineBreak/>
-                    <Run Text="💰" FontSize="{DynamicResource HeaderFontSize}"/>
-                </TextBlock>
-                <Grid.ToolTip>
-                    <TextBlock>
-                        <Run Text="{Binding LastElectricityReadings}"/>
-                    </TextBlock>
-                </Grid.ToolTip>
-            </Grid>
-        </DataTemplate>
-
-        <DataTemplate x:Key="ControlItemDataTemplate" DataType="{x:Type model:MeterEvent}">
-            <Grid MinWidth="{StaticResource minValueWidth}" Margin="1,2,1,0">
-                <Border x:Name="border"
-                        Margin="2,1,2,1"
-                        VerticalAlignment="Bottom"
-                        Background="Skyblue"
-                        BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}"
-                        BorderThickness="1"
-                        Effect="{StaticResource dropShadowAccent}">
-                </Border>
-                <TextBlock
-                    x:Name="text"
-                    FontSize="{DynamicResource ContentFontSize}">
-                    <Run Text="🕗" FontSize="{DynamicResource HeaderFontSize}"/>
-                </TextBlock>
-                <Grid.ToolTip>
-                    <TextBlock>
-                        <Run Text="{Binding LastElectricityReadings}"/>
-                    </TextBlock>
-                </Grid.ToolTip>
-            </Grid>
-        </DataTemplate>
+        <System:Double x:Key="minValueWidth">15</System:Double>
 
         <Style x:Key="valuesItems" TargetType="{x:Type ItemsControl}">
             <Setter Property="Margin" Value="0" />
@@ -121,25 +39,76 @@
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
-            <Setter Property="ItemContainerStyle">
+            <Setter Property="ItemTemplate">
                 <Setter.Value>
-                    <Style>
-                        <Style.Triggers>
+                    <DataTemplate DataType="{x:Type model:MeterEvent}">
+                        <Grid MinWidth="{StaticResource minValueWidth}" Margin="1,2,1,0">
+                            <Border
+                                x:Name="border"
+                                Margin="2,1,2,1"
+                                VerticalAlignment="Bottom"
+                                Background="Skyblue"
+                                BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}"
+                                BorderThickness="1"
+                                Effect="{StaticResource dropShadowAccent}" />
+                            <TextBlock
+                                x:Name="text"
+                                FontSize="{DynamicResource ContentFontSize}"
+                                TextAlignment="Center">
+                                <Run x:Name="txtBar1" FontSize="{DynamicResource HeaderFontSize}" />
+                                <LineBreak />
+                                <Run x:Name="txtBar2" FontSize="{DynamicResource HeaderFontSize}" />
+                            </TextBlock>
+                            <Grid.ToolTip>
+                                <TextBlock>
+                                    <Run x:Name="txtToolTip" />
+                                </TextBlock>
+                            </Grid.ToolTip>
+                        </Grid>
+                        <DataTemplate.Triggers>
                             <DataTrigger Binding="{Binding EventType}" Value="{x:Static model:MeterEventType.Payment}">
-                                <Setter Property="Control.Template" Value="{StaticResource PaymentItemDataTemplate}"/>
+                                <Setter TargetName="border" Property="Background" Value="Skyblue" />
+                                <Setter TargetName="border" Property="Margin" Value="5,0,5,1" />
+                                <Setter TargetName="border" Property="Height">
+                                    <Setter.Value>
+                                        <MultiBinding Converter="{StaticResource ItemHeightValueConverter}">
+                                            <Binding Path="Сonsumption" />
+                                            <Binding Path="ActualHeight" RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type ItemsControl}}" />
+                                        </MultiBinding>
+                                    </Setter.Value>
+                                </Setter>
+                                <Setter TargetName="txtBar1" Property="Text" Value="{Binding Сonsumption, StringFormat=N2}" />
+                                <Setter TargetName="txtBar2" Property="Text" Value="💰" />
+                                <Setter TargetName="txtToolTip" Property="Text" Value="{Binding LastElectricityReadings, Mode=OneWay}" />
                             </DataTrigger>
                             <DataTrigger Binding="{Binding EventType}" Value="{x:Static model:MeterEventType.Change}">
-                                <Setter Property="Control.Template" Value="{StaticResource ChangeItemDataTemplate}"/>
+                                <Setter TargetName="border" Property="Background" Value="Green" />
+                                <Setter TargetName="border" Property="Margin" Value="5,0,5,1" />
+                                <Setter TargetName="border" Property="Height">
+                                    <Setter.Value>
+                                        <MultiBinding Converter="{StaticResource ItemHeightValueConverter}">
+                                            <Binding Path="Сonsumption" />
+                                            <Binding Path="ActualHeight" RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type ItemsControl}}" />
+                                        </MultiBinding>
+                                    </Setter.Value>
+                                </Setter>
+                                <Setter TargetName="txtBar1" Property="Text" Value="{Binding Сonsumption, StringFormat=N2}" />
+                                <Setter TargetName="txtBar2" Property="Text" Value="⛖" />
+                                <Setter TargetName="txtToolTip" Property="Text" Value="{Binding LastElectricityReadings, Mode=OneWay}" />
                             </DataTrigger>
                             <DataTrigger Binding="{Binding EventType}" Value="{x:Static model:MeterEventType.Control}">
-                                <Setter Property="Control.Template" Value="{StaticResource ControlItemDataTemplate}"/>
+                                <Setter TargetName="border" Property="Background" Value="Skyblue" />
+                                <Setter TargetName="border" Property="Margin" Value="2,1,2,1" />
+                                <Setter TargetName="txtBar1" Property="Text" Value="🕗" />
+                                <Setter TargetName="txtBar2" Property="Text" Value="" />
+                                <Setter TargetName="txtToolTip" Property="Text" Value="{Binding LastElectricityReadings, Mode=OneWay}" />
                             </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
+                        </DataTemplate.Triggers>
+                    </DataTemplate>
                 </Setter.Value>
             </Setter>
         </Style>
-        
+
         <Style x:Key="periodItems" TargetType="{x:Type ItemsControl}">
             <Setter Property="Margin" Value="0" />
             <Setter Property="Padding" Value="0" />
@@ -160,15 +129,13 @@
                                 VerticalAlignment="Top"
                                 BorderBrush="{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}"
                                 BorderThickness="1,0" />
-                            <TextBlock
-                                Margin="0,4,0,0"
-                                Text="{Binding}" />
+                            <TextBlock Margin="0,4,0,0" Text="{Binding Mode=OneWay}" />
                         </Grid>
                     </DataTemplate>
                 </Setter.Value>
             </Setter>
-        </Style>        
-        
+        </Style>
+
         <Style TargetType="{x:Type ScrollViewer}">
             <Setter Property="OverridesDefaultStyle" Value="True" />
             <Setter Property="HorizontalScrollBarVisibility" Value="Visible" />
@@ -196,8 +163,9 @@
                                 Grid.Column="1" />
 
                             <TextBlock
-                                Grid.Row="0" TextAlignment="Center"
-                                Text="Потребление,&#x0a;кВт∙ч" />
+                                Grid.Row="0"
+                                Text="Потребление,&#x0a;кВт∙ч"
+                                TextAlignment="Center" />
                             <TextBlock
                                 Grid.Row="1"
                                 FontSize="{DynamicResource ContentFontSize}"
@@ -215,6 +183,17 @@
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Dates.Count, RelativeSource={RelativeSource AncestorType={x:Type local_controls:MeterСonsumptionViewer}}}" Value="0">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate>
+                                <uicontrols:NoData Message="Нет событий по лицевому счёту" />
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </DataTrigger>
+            </Style.Triggers>
         </Style>
 
 
@@ -233,7 +212,7 @@
                 Grid.Row="0"
                 Grid.Column="1"
                 ItemsSource="{Binding MeterEvents, ElementName=root}"
-                Style="{StaticResource valuesItems}"/>
+                Style="{StaticResource valuesItems}" />
             <ItemsControl
                 Grid.Row="1"
                 ItemsSource="{Binding Dates, ElementName=root}"

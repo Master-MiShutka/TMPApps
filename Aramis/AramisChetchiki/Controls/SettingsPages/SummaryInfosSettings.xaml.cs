@@ -1,7 +1,7 @@
-﻿using System.Collections;
-
-namespace TMP.WORK.AramisChetchiki.Controls.SettingsPages
+﻿namespace TMP.WORK.AramisChetchiki.Controls.SettingsPages
 {
+    using System.Collections;
+
     /// <summary>
     /// Interaction logic for SummaryInfosSettings.xaml
     /// </summary>
@@ -27,7 +27,7 @@ namespace TMP.WORK.AramisChetchiki.Controls.SettingsPages
             if (this.lstBox.SelectedIndex > 0)
             {
                 int index = this.lstBox.SelectedIndex;
-                var collection = this.lstBox.ItemsSource as IList;
+                IList collection = this.lstBox.ItemsSource as IList;
                 collection.RemoveAt(index);
             }
         }

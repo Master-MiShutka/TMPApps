@@ -1,4 +1,4 @@
-﻿namespace TMP.Shared.Serialization
+﻿namespace TMP.Common.RepositoryCommon
 {
     using System.IO;
     using System.IO.Compression;
@@ -7,6 +7,8 @@
 
     public class CustomSerializer
     {
+        public static string Key { get; set; } = "ABCDEFGH";
+
         private static T DecryptAndDeserialize<T>(string fileName, SymmetricAlgorithm key)
         {
             T obj;
@@ -22,10 +24,10 @@
 
         public static T LoadFromFile<T>(string fileName)
         {
-            using (DESCryptoServiceProvider key = new DESCryptoServiceProvider())
+            using (DES key = DES.Create())
             {
-                key.Key = Encoding.ASCII.GetBytes("ABCDEFGH");
-                key.IV = Encoding.ASCII.GetBytes("ABCDEFGH");
+                key.Key = Encoding.ASCII.GetBytes(Key);
+                key.IV = Encoding.ASCII.GetBytes(Key);
 
                 return DecryptAndDeserialize<T>(fileName, key);
             }
@@ -43,9 +45,9 @@
 
         public static void SaveToFile<T>(T obj, string fileName)
         {
-            DESCryptoServiceProvider key = new DESCryptoServiceProvider();
-            key.Key = Encoding.ASCII.GetBytes("ABCDEFGH");
-            key.IV = Encoding.ASCII.GetBytes("ABCDEFGH");
+            DES key = DES.Create();
+            key.Key = Encoding.ASCII.GetBytes(Key);
+            key.IV = Encoding.ASCII.GetBytes(Key);
 
             string tempFileName = Path.GetTempFileName();
             try

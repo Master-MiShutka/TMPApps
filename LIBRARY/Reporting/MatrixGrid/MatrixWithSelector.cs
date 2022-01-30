@@ -1,13 +1,8 @@
 ﻿namespace TMP.UI.Controls.WPF.Reporting.MatrixGrid
 {
-    using System;
     using System.Collections;
     using System.Collections.Generic;
-    using System.Collections.Immutable;
-    using System.Collections.ObjectModel;
-    using System.Collections.Specialized;
     using System.Linq;
-    using System.Text;
 
     public class MatrixWithSelector : Matrix
     {

@@ -80,7 +80,7 @@
             {
                 // добавление фильтров
                 string[] filterFields = { nameof(Meter.Лицевой), nameof(Meter.НаселённыйПунктИУлицаСНомеромДома), nameof(Meter.ФиоСокращ), nameof(Meter.НомерСчетчика), nameof(Meter.ТП) };
-                foreach (var filterField in filterFields)
+                foreach (string filterField in filterFields)
                 {
                     this.Filters.Add((ItemsFilter.Model.IStringFilter)this.FilterPresenter.TryGetFilter(filterField, new ItemsFilter.Initializer.StringFilterInitializer()));
                 }
@@ -94,10 +94,20 @@
         public override Predicate<Meter> DataFilter => (meter) =>
         {
             if (meter != null & this.notShowDeleted && meter.Удалён == true)
+            {
                 return false;
+            }
             else
+            {
                 return true;
+            }
         };
+
+        public override int GetHashCode()
+        {
+            System.Guid guid = new System.Guid("3E70130E-CE09-40CC-88ED-AF06915976C8");
+            return guid.GetHashCode();
+        }
 
         #endregion
 
@@ -121,7 +131,7 @@
 
                 this.IsBusy = false;
             },
-            (o) => this.Data != null);
+            () => this.Data != null);
         }
 
         private void View_PropertyChanged(object sender, PropertyChangedEventArgs e)

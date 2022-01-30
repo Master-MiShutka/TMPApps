@@ -44,11 +44,11 @@
         private ObservableCollection<ItemsFilter.Model.IFilter> filters = new ObservableCollection<ItemsFilter.Model.IFilter>();
         protected const string none = "(нет)";
 
-        private readonly Dictionary<string, Dictionary<ItemsFilter.Model.IFilter, string>> selectedFilters = new ();
+        private readonly Dictionary<string, Dictionary<ItemsFilter.Model.IFilter, string>> selectedFilters = new();
         private readonly string ACTIVEFILTERLISTSEPARATOR = "; ";
 
         private FiltersWindow fw;
-        private readonly FilterViewModel filterViewModel = new ();
+        private readonly FilterViewModel filterViewModel = new();
 
         private string activeFiltersList;
 
@@ -59,206 +59,36 @@
                 return;
             }
 
-            this.CommandExport = new DelegateCommand(
-                () =>
-                {
-                    this.IsBusy = true;
+            this.IsBusy = true;
+            this.Status = "загрузка ...";
 
-                    this.Status = "Экспорт данных";
-                    this.DetailedStatus = "подготовка ...";
+            // fix
+            var v = this.View;
 
-                    var task = System.Threading.Tasks.Task.Run(() =>
-                    {
-                        this.view?.Export(
-                            this.GetFieldsAndFormats(),
-                            this.ReportTitle,
-                            this.ReportDescription,
-                            this.GetValueDelegate,
-                            (msg) => this.DetailedStatus = msg);
-                    });
-                    task.ContinueWith(
-                        t =>
-                        {
-                            this.ShowDialogError($"Произошла ошибка при формировании отчёта.\nОписание: {App.GetExceptionDetails(t.Exception)}");
-                        }, this.IsBusyCancellationTokenSource.Token, System.Threading.Tasks.TaskContinuationOptions.OnlyOnFaulted, System.Threading.Tasks.TaskScheduler.FromCurrentSynchronizationContext());
-
-                    task.ContinueWith(
-                        t =>
-                        {
-                            this.IsBusy = false;
-                            this.Status = null;
-                            this.DetailedStatus = null;
-                        }, System.Threading.Tasks.TaskScheduler.FromCurrentSynchronizationContext());
-                }, (o) => this.view != null, "Экспорт");
-
-            this.CommandPrint = new DelegateCommand(
-                () =>
-                {
-                    this.IsBusy = true;
-                    App.DoEvents();
-
-                    this.Status = "Печать данных";
-                    this.DetailedStatus = "подготовка ...";
-                    App.DoEvents();
-                    try
-                    {
-                        FlowDocument doc = this.GenerateFlowDocumentFromPrint();
-                        if (doc == null)
-                        {
-                            return;
-                        }
-
-                        var window = new PrintPreviewWindow(doc)
-                        {
-                            Owner = App.Current.MainWindow,
-                        };
-                        window.ShowDialog();
-                    }
-                    catch (Exception e)
-                    {
-                        this.ShowDialogError($"Произошла ошибка при формировании отчёта.\nОписание: {App.GetExceptionDetails(e)}");
-                    }
-                    finally
-                    {
-                        this.IsAnalizingData = false;
-                        this.IsBusy = false;
-                        this.Status = null;
-                        this.DetailedStatus = null;
-                    }
-                }, (o) => this.view != null, "Печать");
-
-            this.CommandViewDetailsBySelectedItem = new DelegateCommand<object>((selectedItem) =>
-            {
-                Meter meter = selectedItem as Meter;
-                if (meter == null)
-                {
-                    return;
-                }
-
-                var control = new Controls.MeterView
-                {
-                    DataContext = new ViewModel.MeterViewViewModel(meter),
-                };
-                var dialogCloseAction = this.ShowCustomDialog(control, "-= Подробная информация =-");
-                control.CloseAction = dialogCloseAction;
-            });
-
-            this.CommandChangeViewKind = new DelegateCommand<TableViewKinds>(
-                (kind) =>
-                {
-                    // SelectedViewKind = (TableViewKinds)Enum.Parse(typeof(TableViewKinds), kind);
-                    this.SelectedViewKind = kind;
-                },
-                (o) => this.Data != null);
-
-            this.CommandDoSort = new DelegateCommand<HierarchicalItem>(
-                (field) =>
-                {
-                    if (field == null)
-                    {
-                        return;
-                    }
-
-                    if (this.view == null)
-                    {
-                        return;
-                    }
-
-                    if (this.view.CanSort == false)
-                    {
-                        return;
-                    }
-
-                    using (this.view.DeferRefresh())
-                    {
-                        this.SortingFields = string.Empty;
-                        this.view.SortDescriptions.Clear();
-                        if (field.Name == none)
-                        {
-                            return;
-                        }
-
-                        Stack<string> stack = new ();
-                        var item = field;
-                        while (item != null)
-                        {
-                            stack.Push(item.Name);
-                            item = item.Parent;
-                        }
-
-                        string[] values = stack.ToArray();
-                        this.SortingFields = string.Join(" > ", values.Select(s => s.Replace("_", " ", AppSettings.StringComparisonMethod))).ToString();
-                        foreach (string value in values)
-                        {
-                            this.view.SortDescriptions.Add(new SortDescription(value, ListSortDirection.Ascending));
-                        }
-                    }
-                }, "Сортировка");
-
-            this.CommandDoGroup = new DelegateCommand<HierarchicalItem>(
-                (field) =>
-                {
-                    if (field == null)
-                    {
-                        return;
-                    }
-
-                    if (this.view == null)
-                    {
-                        return;
-                    }
-
-                    if (this.view.CanGroup == false)
-                    {
-                        return;
-                    }
-
-                    using (this.view.DeferRefresh())
-                    {
-                        this.GroupingFields = string.Empty;
-                        this.view.GroupDescriptions.Clear();
-                        if (field.Name == none)
-                        {
-                            return;
-                        }
-
-                        Stack<string> stack = new ();
-                        var item = field;
-                        while (item != null)
-                        {
-                            stack.Push(item.Name);
-                            item = item.Parent;
-                        }
-
-                        string[] values = stack.ToArray();
-                        this.GroupingFields = string.Join(" > ", values.Select(s => s.Replace("_", " ", AppSettings.StringComparisonMethod)));
-                        foreach (string value in values)
-                        {
-                            this.view.GroupDescriptions.Add(new PropertyGroupDescription(value));
-                        }
-                    }
-                }, "Группировка");
-
-            this.CommandSetSorting = new DelegateCommand(
-                () =>
-                {
-                    var control = new Controls.SelectorFieldsAndSortCollectionView(this.TableColumns, this.view);
-                    var dialogCloseAction = this.ShowCustomDialog(control, "-= Выбор полей, их порядок и сортировка =-", TMPApplication.WpfDialogs.DialogMode.None);
-                    control.CloseAction = dialogCloseAction;
-                }, (o) => this.Data != null, "Сортировка");
+            this.CommandExport = new DelegateCommand(this.DoExport, this.CanExecuteCheckView);
+            this.CommandPrint = new DelegateCommand(this.DoPrint, this.CanExecuteCheckView);
+            this.CommandViewDetailsBySelectedItem = new DelegateCommand<object>(this.DoViewDetailsBySelectedItem);
+            this.CommandChangeViewKind = new DelegateCommand<TableViewKinds>(this.DoChangeViewKind, this.CanExecuteCheckData);
+            this.CommandDoSort = new DelegateCommand<HierarchicalItem>(this.DoSort);
+            this.CommandDoGroup = new DelegateCommand<HierarchicalItem>(this.DoGroup);
+            this.CommandSetSorting = new DelegateCommand(this.DoSetSorting, this.CanExecuteCheckData);
+            this.SetupTableViewKinds = new DelegateCommand<object>(this.DoSetupTableViewKinds, this.CanExecuteCheckData);
+            this.SaveCurrentTableViewKindAsNew = new DelegateCommand(this.DoSaveCurrentTableViewKindAsNew, this.CanExecuteCheckData);
+            this.CommandShowFilters = new DelegateCommand(this.DoShowFilters, this.CanExecuteCheckView);
 
             this.SortFields = new List<HierarchicalItem>
             {
                 new HierarchicalItem() { Name = none, Command = this.CommandDoSort },
             };
-            var l1 = ModelHelper.MeterPropertiesNames?.Select(g => new HierarchicalItem
+            IEnumerable<HierarchicalItem> l1 = ModelHelper.MeterPropertiesNames.Select(a => new HierarchicalItem
             {
-                Name = g,
+                Name = a,
                 Command = this.CommandDoSort,
-                Items = g == none ? null : ModelHelper.MeterPropertiesNames
-                    .Where(i => i != none && i != g).Select(c => new HierarchicalItem(c, this.CommandDoSort, true)),
+                Items = a == none ? null : ModelHelper.MeterPropertiesNames
+                    .Where(b => b != none && b != a)
+                    .Select(c => new HierarchicalItem(c, this.CommandDoSort, true)),
             });
-            foreach (var item in l1)
+            foreach (HierarchicalItem item in l1)
             {
                 this.SortFields.Add(item);
             }
@@ -267,53 +97,28 @@
             {
                 new HierarchicalItem() { Name = none, Command = this.CommandDoGroup },
             };
-            var l2 = ModelHelper.MeterPropertiesNames?.Select(a => new HierarchicalItem
+            IEnumerable<HierarchicalItem> l2 = ModelHelper.MeterPropertiesNames.Select(a => new HierarchicalItem
             {
                 Name = a,
                 Command = this.CommandDoGroup,
-                Items = a == none ? null : ModelHelper.MeterPropertiesNames.Where(b => b != none && b != a)
+                Items = a == none ? null : ModelHelper.MeterPropertiesNames
+                    .Where(b => b != none && b != a)
                     .Select(c => new HierarchicalItem(c, this.CommandDoGroup, true)
                     {
-                        Items = c == none ? null : ModelHelper.MeterPropertiesNames.Where(e => e != none && e != c)
-                            .Select(d => new HierarchicalItem(d, this.CommandDoGroup, true)),
+                        Items = c == none ? null : ModelHelper.MeterPropertiesNames
+                            .Where(d => d != none && d != c)
+                            .Select(e => new HierarchicalItem(e, this.CommandDoGroup, true)),
                     }),
             });
-            foreach (var item in l2)
+            foreach (HierarchicalItem item in l2)
             {
                 this.GroupFields.Add(item);
             }
 
-            /*var columns = Utils.BuildColumns(this.PropertyDescriptors);
-            if (columns != null)
-            {
-                this.TableColumns = new ObservableCollection<DataGridWpfColumnViewModel>(columns);
-            }*/
+            // загрузка сохраненных колонок таблицы
+            this.TryLoadTableColumnsFromSettings();
 
-            this.SetupTableViewKinds = new DelegateCommand<object>(
-                (o) =>
-                {
-                    var control = new Controls.SettingsPages.TablesSettings();
-                    var dialogCloseAction = this.ShowCustomDialog(control, "-= Настройка полей таблиц =-");
-                    control.CloseAction = dialogCloseAction;
-                }, (o) => this.Data != null);
-
-            this.SaveCurrentTableViewKindAsNew = new DelegateCommand(
-                () =>
-                {
-                    this.ShowDialogInfo("Ещё не реализовано.");
-                }, (o) => this.Data != null);
-
-            this.CommandShowFilters = new DelegateCommand(
-                () =>
-                {
-                    if (this.fw.IsVisible == false)
-                    {
-                        this.fw.Show();
-                    }
-                },
-                (o) => this.View != null,
-                "Фильтр");
-
+            // окно фильтров
             this.fw = new FiltersWindow() { Owner = App.Current.MainWindow, DataContext = this.filterViewModel };
 
             ItemsFilter.FilterListExtensions.FiltersChanged += this.FilterListExtensions_FiltersChanged;
@@ -328,21 +133,28 @@
             this.data = typeof(T) == typeof(Meter) && data == null ? MainViewModel.Data?.Meters?.Cast<T>().ToList() : data;
             this.RaisePropertyChanged(nameof(this.View));
             this.RaisePropertyChanged(nameof(this.Data));
-
-            if (AppSettings.Default.ViewModelsTableColumns.ContainsKey(this))
-            {
-                try
-                {
-                    this.tableColumns = new ObservableCollection<DataGridWpfColumnViewModel>(AppSettings.Default.ViewModelsTableColumns[this]);
-                }
-                catch (Exception e)
-                {
-                }
-            }
         }
 
         protected override void OnDispose()
         {
+            if (this.GroupFields != null)
+            {
+                for (int index = 0; index < this.GroupFields.Count; index++)
+                {
+                    HierarchicalItem item = this.GroupFields[index];
+                    item.Dispose();
+                }
+            }
+
+            if (this.SortFields != null)
+            {
+                for (int index = 0; index < this.SortFields.Count; index++)
+                {
+                    HierarchicalItem item = this.SortFields[index];
+                    item.Dispose();
+                }
+            }
+
             ItemsFilter.FilterListExtensions.FiltersChanged -= this.FilterListExtensions_FiltersChanged;
 
             ItemsFilter.FiltersManager.RemoveCollectionView(this.view);
@@ -357,8 +169,6 @@
                 {
                     disposable.Dispose();
                 }
-
-                this.Data = null;
             }
 
             if (this.fw != null && this.fw.IsVisible)
@@ -373,15 +183,19 @@
 
             this.view = null;
 
-            if (AppSettings.Default.ViewModelsTableColumns.ContainsKey(this))
+            byte[] bytes = Common.RepositoryCommon.MessagePackSerializer.ToBytes<ObservableCollection<DataGridWpfColumnViewModel>>(this.TableColumns);
+            string rawdata = Convert.ToBase64String(bytes);
+            string thisHashCode = this.GetHashCode().ToString();
+
+            if (AppSettings.Default.ViewModelsTableColumns.ContainsKey(thisHashCode))
             {
-                AppSettings.Default.ViewModelsTableColumns[this] = this.TableColumns.ToList();
+                AppSettings.Default.ViewModelsTableColumns[thisHashCode] = rawdata;
             }
             else
             {
-                if (this.TableColumns != null)
+                if (this.TableColumns != null && this.TableColumns.Count > 0)
                 {
-                    AppSettings.Default.ViewModelsTableColumns.Add(this, this.TableColumns.ToList());
+                    AppSettings.Default.ViewModelsTableColumns.Add(thisHashCode, rawdata);
                 }
             }
             AppSettings.Default.Save();
@@ -399,9 +213,9 @@
 
         public void SortAndGroupByField(string fieldName)
         {
-            var fieldDisplayNames = from prop in this.PropertyDescriptors
-                                    where prop.Name == fieldName
-                                    select prop.DisplayName;
+            IEnumerable<string> fieldDisplayNames = from prop in this.PropertyDescriptors
+                                                    where prop.Name == fieldName
+                                                    select prop.DisplayName;
 
             if (fieldDisplayNames.Any())
             {
@@ -414,23 +228,29 @@
             }
         }
 
+        public override int GetHashCode()
+        {
+            System.Guid guid = new System.Guid("C78578C1-C425-44EF-9EA6-5F93CE44F999");
+            return guid.GetHashCode();
+        }
+
         #region Propperties
 
         /// <summary>
         /// Команда настройки вариантов отображения
         /// </summary>
-        public ICommand SetupTableViewKinds { get; }
+        public ICommand SetupTableViewKinds { get; private set; }
 
         /// <summary>
         /// Команда сохранения текущего вида
         /// </summary>
-        public ICommand SaveCurrentTableViewKindAsNew { get; }
+        public ICommand SaveCurrentTableViewKindAsNew { get; private set; }
 
-        public ICommand CommandDoSort { get; }
+        public ICommand CommandDoSort { get; private set; }
 
-        public ICommand CommandDoGroup { get; }
+        public ICommand CommandDoGroup { get; private set; }
 
-        public ICommand CommandViewDetailsBySelectedItem { get; }
+        public ICommand CommandViewDetailsBySelectedItem { get; private set; }
 
         /// <summary>
         /// Команда выбора вида отображения данных
@@ -440,11 +260,11 @@
         /// <summary>
         /// Команда отображения списка фильтров
         /// </summary>
-        public ICommand CommandShowFilters { get; }
+        public ICommand CommandShowFilters { get; private set; }
 
-        public ICollection<HierarchicalItem> GroupFields { get; private set; }
+        public IList<HierarchicalItem> GroupFields { get; private set; }
 
-        public ICollection<HierarchicalItem> SortFields { get; private set; }
+        public IList<HierarchicalItem> SortFields { get; private set; }
 
         /// <summary>
         /// Перечень полей для сортировки
@@ -504,6 +324,8 @@
             }
         }
 
+        public bool IsDataNullOrEmpty => this.Data == null ? false : this.Data.Any();
+
         /// <summary>
         /// Представление коллекции
         /// </summary>
@@ -513,7 +335,7 @@
             {
                 if (this.Data == null)
                 {
-                    return this.view = null;
+                    this.view = null;
                 }
                 else
                 {
@@ -540,8 +362,6 @@
 
                             this.view.Refresh();
 
-                            this.OnViewBuilded();
-
                             this.view.Filter = this.Filter;
                         }
 
@@ -549,6 +369,8 @@
                         this.isViewBuilding = false;
                     }
                 }
+
+                this.OnViewBuilded();
 
                 return this.view;
             }
@@ -575,9 +397,13 @@
                     this.RaisePropertyChanged(nameof(this.IsFilteredItems));
 
                     if (this.collectionViewItemsCount == 0)
+                    {
                         this.NoItemsMessage = "нет данных\nизмените условия фильтров";
+                    }
                     else
+                    {
                         this.NoItemsMessage = NOITEMSSTRING;
+                    }
                 }
             }
         }
@@ -628,8 +454,8 @@
             {
                 if (this.tableColumns == null)
                 {
-                    var propertyDescriptors = ModelHelper.GetPropertyDescriptors(typeof(T));
-                    var values = Utils.GenerateColumns(propertyDescriptors);
+                    IEnumerable<PlusPropertyDescriptor> propertyDescriptors = ModelHelper.GetPropertyDescriptors(typeof(T));
+                    Tuple<IEnumerable<DataGridWpfColumnViewModel>, List<string>> values = Utils.GenerateColumns(propertyDescriptors);
 
                     if (values.Item1 == null)
                     {
@@ -687,9 +513,9 @@
             {
                 if (this.activeFiltersList == null)
                 {
-                    Dictionary<string, string> filtersDictonary = new ();
+                    Dictionary<string, string> filtersDictonary = new();
 
-                    foreach (var filter in this.filters)
+                    foreach (IFilter filter in this.filters)
                     {
                         if (filter.IsActive)
                         {
@@ -716,10 +542,10 @@
                         }
                     }
 
-                    System.Text.StringBuilder stringBuilder = new (1_000);
+                    System.Text.StringBuilder stringBuilder = new(1_000);
                     int count = filtersDictonary.Count;
                     int index = 0;
-                    foreach (var item in filtersDictonary)
+                    foreach (KeyValuePair<string, string> item in filtersDictonary)
                     {
                         if (index != count - 1)
                         {
@@ -738,13 +564,13 @@
                         count = this.selectedFilters.Count;
                         index = 0;
 
-                        foreach (var item in this.selectedFilters)
+                        foreach (KeyValuePair<string, Dictionary<IFilter, string>> item in this.selectedFilters)
                         {
                             string propertyName = item.Key;
                             int childCount = item.Value.Count;
                             int childIndex = 0;
 
-                            foreach (var child in item.Value)
+                            foreach (KeyValuePair<IFilter, string> child in item.Value)
                             {
                                 if (childIndex != childCount - 1)
                                 {
@@ -778,19 +604,262 @@
 
         #region Methods
 
+        #region CommandActions
+
+        private void DoExport()
+        {
+            this.IsBusy = true;
+
+            this.Status = "Экспорт данных";
+            this.DetailedStatus = "подготовка ...";
+
+            System.Threading.Tasks.Task task = System.Threading.Tasks.Task.Run(() =>
+            {
+                this.view?.Export(
+                    this.GetFieldsAndFormats(),
+                    this.ReportTitle,
+                    this.ReportDescription,
+                    this.GetValueDelegate,
+                    (msg) => this.DetailedStatus = msg);
+            });
+            task.ContinueWith(
+                t =>
+                {
+                    this.ShowDialogError($"Произошла ошибка при формировании отчёта.\nОписание: {App.GetExceptionDetails(t.Exception)}");
+                }, this.IsBusyCancellationTokenSource.Token, System.Threading.Tasks.TaskContinuationOptions.OnlyOnFaulted, System.Threading.Tasks.TaskScheduler.FromCurrentSynchronizationContext());
+
+            task.ContinueWith(
+                t =>
+                {
+                    this.IsBusy = false;
+                    this.Status = null;
+                    this.DetailedStatus = null;
+                }, System.Threading.Tasks.TaskScheduler.FromCurrentSynchronizationContext());
+        }
+
+        private void DoPrint()
+        {
+            this.IsBusy = true;
+            App.DoEvents();
+
+            this.Status = "Печать данных";
+            this.DetailedStatus = "подготовка ...";
+            App.DoEvents();
+            try
+            {
+                FlowDocument doc = this.GenerateFlowDocumentFromPrint();
+                if (doc == null)
+                {
+                    return;
+                }
+
+                PrintPreviewWindow window = new PrintPreviewWindow(doc)
+                {
+                    Owner = App.Current.MainWindow,
+                };
+                window.ShowDialog();
+            }
+            catch (Exception e)
+            {
+                this.ShowDialogError($"Произошла ошибка при формировании отчёта.\nОписание: {App.GetExceptionDetails(e)}");
+            }
+            finally
+            {
+                this.IsAnalizingData = false;
+                this.IsBusy = false;
+                this.Status = null;
+                this.DetailedStatus = null;
+            }
+        }
+
+        private void DoViewDetailsBySelectedItem(object selectedItem)
+        {
+            if (selectedItem is not Meter meter)
+            {
+                return;
+            }
+
+            Controls.MeterView control = new Controls.MeterView
+            {
+                DataContext = new ViewModel.MeterViewViewModel(meter),
+            };
+            Action dialogCloseAction = this.ShowCustomDialog(control, "-= Подробная информация =-");
+            control.CloseAction = dialogCloseAction;
+        }
+
+        private void DoChangeViewKind(TableViewKinds kind)
+        {
+            // SelectedViewKind = (TableViewKinds)Enum.Parse(typeof(TableViewKinds), kind);
+            this.SelectedViewKind = kind;
+        }
+
+        private void DoSort(HierarchicalItem field)
+        {
+            if (field == null)
+            {
+                return;
+            }
+
+            if (this.view == null)
+            {
+                return;
+            }
+
+            if (this.view.CanSort == false)
+            {
+                return;
+            }
+
+            using (this.view.DeferRefresh())
+            {
+                this.SortingFields = string.Empty;
+                this.view.SortDescriptions.Clear();
+                if (field.Name == none)
+                {
+                    return;
+                }
+
+                Stack<string> stack = new();
+                HierarchicalItem item = field;
+                while (item != null)
+                {
+                    stack.Push(item.Name);
+                    item = item.Parent;
+                }
+
+                string[] values = stack.ToArray();
+                this.SortingFields = string.Join(" > ", values.Select(s => s.Replace("_", " ", AppSettings.StringComparisonMethod))).ToString();
+                foreach (string value in values)
+                {
+                    this.view.SortDescriptions.Add(new SortDescription(value, ListSortDirection.Ascending));
+                }
+            }
+        }
+
+        private void DoGroup(HierarchicalItem field)
+        {
+            if (field == null)
+            {
+                return;
+            }
+
+            if (this.view == null)
+            {
+                return;
+            }
+
+            if (this.view.CanGroup == false)
+            {
+                return;
+            }
+
+            using (this.view.DeferRefresh())
+            {
+                this.GroupingFields = string.Empty;
+                this.view.GroupDescriptions.Clear();
+                if (field.Name == none)
+                {
+                    return;
+                }
+
+                Stack<string> stack = new();
+                HierarchicalItem item = field;
+                while (item != null)
+                {
+                    stack.Push(item.Name);
+                    item = item.Parent;
+                }
+
+                string[] values = stack.ToArray();
+                this.GroupingFields = string.Join(" > ", values.Select(s => s.Replace("_", " ", AppSettings.StringComparisonMethod)));
+                foreach (string value in values)
+                {
+                    this.view.GroupDescriptions.Add(new PropertyGroupDescription(value));
+                }
+            }
+        }
+
+        private void DoSetSorting()
+        {
+            Controls.SelectorFieldsAndSortCollectionView control = new Controls.SelectorFieldsAndSortCollectionView(this.TableColumns, this.view);
+            Action dialogCloseAction = this.ShowCustomDialog(control, "-= Выбор полей, их порядок и сортировка =-", TMPApplication.WpfDialogs.DialogMode.None);
+            control.CloseAction = dialogCloseAction;
+        }
+
+        private void DoSetupTableViewKinds(object o)
+        {
+            Controls.SettingsPages.TablesSettings control = new Controls.SettingsPages.TablesSettings();
+            Action dialogCloseAction = this.ShowCustomDialog(control, "-= Настройка полей таблиц =-");
+            control.CloseAction = dialogCloseAction;
+        }
+
+        private void DoSaveCurrentTableViewKindAsNew()
+        {
+            this.ShowDialogInfo("Ещё не реализовано.");
+        }
+
+        private void DoShowFilters()
+        {
+            if (this.fw.IsVisible == false)
+            {
+                this.fw.Show();
+            }
+        }
+
+        protected bool CanExecuteCheckView()
+        {
+            return this.view != null;
+        }
+
+        protected bool CanExecuteCheckData()
+        {
+            return this.IsDataNullOrEmpty;
+        }
+        protected bool CanExecuteCheckData(object o)
+        {
+            return this.IsDataNullOrEmpty;
+        }
+
+        protected bool CanExecuteCheckData(TableViewKinds o)
+        {
+            return this.IsDataNullOrEmpty;
+        }
+
+        #endregion
+
+        private void TryLoadTableColumnsFromSettings()
+        {
+            string thisHashCode = this.GetHashCode().ToString();
+            if (AppSettings.Default.ViewModelsTableColumns.ContainsKey(thisHashCode))
+            {
+                try
+                {
+                    string rawdata = AppSettings.Default.ViewModelsTableColumns[thisHashCode];
+                    byte[] bytes = Convert.FromBase64String(rawdata);
+                    var columns = Common.RepositoryCommon.MessagePackDeserializer.FromBytes<ObservableCollection<DataGridWpfColumnViewModel>>(bytes);
+
+                    if (columns != null)
+                        this.TableColumns = columns;
+                }
+                catch (Exception e)
+                {
+                }
+            }
+        }
+
         private void SetTableColumnsVisibility(TableViewKinds selectedViewKind, bool isVisible)
         {
-            var propDescriptors = ModelHelper.GetPropertyDescriptors(typeof(T), selectedViewKind);
+            IEnumerable<PlusPropertyDescriptor> propDescriptors = ModelHelper.GetPropertyDescriptors(typeof(T), selectedViewKind);
             if (propDescriptors == null)
             {
                 return;
             }
 
             IEnumerable<string> newFieldNames = propDescriptors.Select(ppd => ppd.Name).ToList();
-            var items = this.TableColumns
+            List<DataGridWpfColumnViewModel> items = this.TableColumns
                 .Where(cvm => newFieldNames.Contains(cvm.FieldName))
                 .ToList();
-            foreach (var item in items)
+            foreach (DataGridWpfColumnViewModel item in items)
             {
                 item.IsVisible = isVisible;
                 this.RaisePropertyChanged(nameof(this.TableColumns));
@@ -828,10 +897,10 @@
         /// <returns></returns>
         protected Dictionary<string, DataCellFormats> GetFieldsAndFormats()
         {
-            var fieldsAndFormats = new Dictionary<string, DataCellFormats>();
-            Application.Current.Dispatcher.Invoke((Action)(() =>
+            Dictionary<string, DataCellFormats> fieldsAndFormats = new Dictionary<string, DataCellFormats>();
+            Application.Current.Dispatcher.Invoke(() =>
             {
-                var columns = this.TableColumns
+                IOrderedEnumerable<DataGridWpfColumnViewModel> columns = this.TableColumns
                     .Where(c => c.IsVisible)
                     .OrderBy(c => c.DisplayIndex);
                 var columnsFields = columns.Select(c => new
@@ -844,7 +913,7 @@
                 {
                     fieldsAndFormats.Add(item.Key, new DataCellFormats() { ContentDisplayFormat = item.ContentFormat, ExcelFormat = item.ExportFormat, ClipboardFormat = item.ExportFormat });
                 }
-            }));
+            });
             return fieldsAndFormats;
         }
 
@@ -856,11 +925,11 @@
         {
             using DataTable dataTable = this.view.ToDataTable(this.GetFieldsAndFormats(), this.GetValueDelegate);
 
-            System.Windows.Controls.PrintDialog printDialog = new ();
+            System.Windows.Controls.PrintDialog printDialog = new();
             printDialog.PrintTicket.PageMediaSize = new System.Printing.PageMediaSize(System.Printing.PageMediaSizeName.ISOA4);
             printDialog.PrintTicket.PageOrientation = System.Printing.PageOrientation.Landscape;
 
-            FlowDocument doc = new ()
+            FlowDocument doc = new()
             {
                 PageHeight = printDialog.PrintableAreaHeight,
                 PageWidth = printDialog.PrintableAreaWidth,
@@ -870,18 +939,18 @@
                 ColumnWidth = double.PositiveInfinity,
             };
 
-            Paragraph p = new (new Run(this.ReportTitle))
+            Paragraph p = new(new Run(this.ReportTitle))
             { FontSize = 16, FontWeight = FontWeights.Bold, TextAlignment = TextAlignment.Center };
             doc.Blocks.Add(p);
 
-            Table table = new ()
+            Table table = new()
             {
                 CellSpacing = 0,
                 BorderBrush = new SolidColorBrush(Colors.Black),
                 BorderThickness = new Thickness(1),
             };
 
-            foreach (var _ in dataTable.Columns)
+            foreach (object _ in dataTable.Columns)
             {
                 table.Columns.Add(new TableColumn());
             }
@@ -890,13 +959,13 @@
             foreach (DataRow dataRow in dataTable.Rows)
             {
                 App.DoEvents();
-                TableRowGroup rg = new ();
-                TableRow row = new ();
+                TableRowGroup rg = new();
+                TableRow row = new();
 
                 foreach (DataColumn column in dataTable.Columns)
                 {
                     App.DoEvents();
-                    TableCell cell = new (new Paragraph(new Run(dataRow[column].ToString())))
+                    TableCell cell = new(new Paragraph(new Run(dataRow[column].ToString())))
                     { BorderBrush = new SolidColorBrush(Colors.Gray), BorderThickness = new Thickness(0.5) };
                     row.Cells.Add(cell);
                 }
@@ -904,7 +973,7 @@
                 rg.Rows.Add(row);
 
                 row = new TableRow();
-                TableCell line = new () { Padding = new Thickness(0), BorderBrush = new SolidColorBrush(Colors.Black), BorderThickness = new Thickness(0, 0, 0, 1), ColumnSpan = columnsCount };
+                TableCell line = new() { Padding = new Thickness(0), BorderBrush = new SolidColorBrush(Colors.Black), BorderThickness = new Thickness(0, 0, 0, 1), ColumnSpan = columnsCount };
                 row.Cells.Add(line);
                 rg.Rows.Add(row);
 
@@ -924,8 +993,8 @@
 
         protected virtual void OnViewBuilded()
         {
+            this.IsBusy = false;
         }
-
 
         #region Filters
 
@@ -998,7 +1067,7 @@
             {
                 if (this.selectedFilters.ContainsKey(propertyName))
                 {
-                    var dictionary = this.selectedFilters[propertyName];
+                    Dictionary<IFilter, string> dictionary = this.selectedFilters[propertyName];
                     if (dictionary.ContainsKey(filter))
                     {
                         dictionary.Remove(filter);

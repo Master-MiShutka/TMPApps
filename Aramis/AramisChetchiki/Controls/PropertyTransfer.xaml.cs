@@ -39,31 +39,37 @@
         public PropertyTransfer()
         {
             this.CommandMoveUp = new DelegateCommand(
-                (param) =>
+                () =>
                 {
-                    var index = this.TargetCollection.IndexOf(this.TargetSelectedItem);
+                    int index = this.TargetCollection.IndexOf(this.TargetSelectedItem);
                     int newIndex = index - 1;
                     if (newIndex < 0)
+                    {
                         return;
+                    }
+
                     this.TargetCollection.Move(index, newIndex);
                     this.TargetSelectedItem = this.TargetCollection[newIndex];
                 },
-                o => this.TargetSelectedItem != null);
+                () => this.TargetSelectedItem != null);
 
             this.CommandMoveDown = new DelegateCommand(
-                (param) =>
+                () =>
                 {
-                    var index = this.TargetCollection.IndexOf(this.TargetSelectedItem);
+                    int index = this.TargetCollection.IndexOf(this.TargetSelectedItem);
                     int newIndex = index + 1;
                     if (newIndex >= this.TargetCollection.Count)
+                    {
                         return;
+                    }
+
                     this.TargetCollection.Move(index, newIndex);
                     this.TargetSelectedItem = this.TargetCollection[newIndex];
                 },
-                o => this.TargetSelectedItem != null);
+                () => this.TargetSelectedItem != null);
 
             this.CommandClear = new DelegateCommand(
-                (param) =>
+                () =>
                 {
                     TMPApplication.TMPApp.ShowQuestion("Очистить список используемых полей?",
                         onYes: () =>
@@ -73,15 +79,15 @@
                             this.RaisePropertyChanged(nameof(this.AllSourceCollectionItemsUsed));
                             this.RaisePropertyChanged(nameof(this.HasTargetItems));
 
-                            var binding = this.GetBindingExpression(PropertyTransfer.TargetCollectionProperty);
+                            System.Windows.Data.BindingExpression binding = this.GetBindingExpression(PropertyTransfer.TargetCollectionProperty);
                             binding.UpdateSource();
                         },
                         onNo: () => { });
                 },
-                o => this.TargetCollection != null && this.TargetCollection.Count > 0);
+                () => this.TargetCollection != null && this.TargetCollection.Count > 0);
 
             this.CommandRemoveFromTarget = new DelegateCommand(
-                (param) =>
+                () =>
                 {
                     this.TargetCollection.Remove(this.TargetSelectedItem);
 
@@ -90,13 +96,13 @@
                     this.RaisePropertyChanged(nameof(this.HasTargetItems));
                     this.RaisePropertyChanged(nameof(this.HasSourceItems));
 
-                    var binding = this.GetBindingExpression(PropertyTransfer.TargetCollectionProperty);
+                    System.Windows.Data.BindingExpression binding = this.GetBindingExpression(PropertyTransfer.TargetCollectionProperty);
                     binding.UpdateSource();
                 },
-                o => this.TargetSelectedItem != null);
+                () => this.TargetSelectedItem != null);
 
             this.CommandAddToTarget = new DelegateCommand(
-                (param) =>
+                () =>
                 {
                     this.TargetCollection.Add(this.SourceSelectedItem);
                     this.SourceCollection?.Refresh();
@@ -104,7 +110,7 @@
                     this.RaisePropertyChanged(nameof(this.HasTargetItems));
                     this.RaisePropertyChanged(nameof(this.HasSourceItems));
                 },
-                o => this.SourceSelectedItem != null && this.TargetCollection != null && this.TargetCollection.Contains(this.SourceSelectedItem) == false);
+                () => this.SourceSelectedItem != null && this.TargetCollection != null && this.TargetCollection.Contains(this.SourceSelectedItem) == false);
 
             this.InitializeComponent();
         }
@@ -168,7 +174,7 @@
         {
             PropertyTransfer propertyTransfer = (PropertyTransfer)d;
 
-            (propertyTransfer.SourceCollection as ICollectionView)?.Refresh();
+            propertyTransfer.SourceCollection?.Refresh();
 
             propertyTransfer.RaisePropertyChanged(nameof(HasTargetItems));
             propertyTransfer.RaisePropertyChanged(nameof(propertyTransfer.AllSourceCollectionItemsUsed));

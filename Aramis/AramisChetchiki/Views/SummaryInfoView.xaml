@@ -14,8 +14,6 @@
     xmlns:vm="clr-namespace:TMP.WORK.AramisChetchiki.ViewModel"
     xmlns:System="clr-namespace:System;assembly=mscorlib"
     x:Name="root"
-    d:DataContext="{d:DesignInstance {x:Type vm:SummaryInfoViewViewModel},
-    IsDesignTimeCreatable=True}"
     SnapsToDevicePixels="True"
     TextOptions.TextFormattingMode="Ideal"
     UseLayoutRounding="True"

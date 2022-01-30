@@ -22,15 +22,15 @@
             source.ColumnWidth = double.PositiveInfinity;
 
             // Create a package for the XPS document
-            MemoryStream packageStream = new ();
+            MemoryStream packageStream = new();
             Package package = Package.Open(packageStream, FileMode.Create, FileAccess.ReadWrite);
 
             // Create a XPS document with the path "pack://temp.xps"
             PackageStore.AddPackage(new Uri(this.packagePath), package);
-            XpsDocument xpsDocument = new (package, CompressionOption.SuperFast, this.packagePath);
+            XpsDocument xpsDocument = new(package, CompressionOption.SuperFast, this.packagePath);
 
             // Serialize the XPS document
-            XpsSerializationManager serializer = new (new XpsPackagingPolicy(xpsDocument), false);
+            XpsSerializationManager serializer = new(new XpsPackagingPolicy(xpsDocument), false);
             DocumentPaginator paginator = ((IDocumentPaginatorSource)source).DocumentPaginator;
             serializer.SaveAsXaml(paginator);
 

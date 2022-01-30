@@ -24,14 +24,14 @@
         /// <summary>
         /// Команда экспорта данных
         /// </summary>
-        public virtual ICommand CommandExport { get; init; }
+        public virtual ICommand CommandExport { get; protected set; }
 
         /// <summary>
         /// Команда печати данных
         /// </summary>
-        public virtual ICommand CommandPrint { get; init; }
+        public virtual ICommand CommandPrint { get; protected set; }
 
-        public ICommand CommandSetSorting { get; init; }
+        public ICommand CommandSetSorting { get; protected set; }
 
         internal void SubscribeMainViewModel()
         {
@@ -82,6 +82,12 @@
         /// </summary>
         protected virtual void OnInitialized()
         {
+        }
+
+        public override int GetHashCode()
+        {
+            System.Guid guid = new System.Guid("1A555AD8-D371-4E35-9852-0967B8EC0450");
+            return guid.GetHashCode();
         }
     }
 }

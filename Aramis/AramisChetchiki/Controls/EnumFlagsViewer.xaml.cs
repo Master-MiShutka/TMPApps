@@ -15,12 +15,12 @@
 
         public object Value
         {
-            get => (object)this.GetValue(ValueProperty);
+            get => this.GetValue(ValueProperty);
             set => this.SetValue(ValueProperty, value);
         }
 
         // Using a DependencyProperty as the backing store for Value.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty ValueProperty =
-            DependencyProperty.Register("Value", typeof(object), typeof(EnumFlagsViewer), new PropertyMetadata(default));
+            DependencyProperty.Register(nameof(Value), typeof(object), typeof(EnumFlagsViewer), new PropertyMetadata(default));
     }
 }

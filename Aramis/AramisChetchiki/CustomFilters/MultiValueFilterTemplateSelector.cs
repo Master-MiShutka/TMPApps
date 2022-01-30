@@ -3,7 +3,6 @@
     using System.Linq;
     using System.Windows;
     using System.Windows.Controls;
-    using TMP.WORK.AramisChetchiki.Model;
 
     public class MultiValueFilterTemplateSelector : DataTemplateSelector
     {
@@ -15,16 +14,19 @@
 
         public override DataTemplate SelectTemplate(object item, DependencyObject container)
         {
-            FrameworkElement element = container as FrameworkElement;
-            if (element != null && item != null)
+            if (container is FrameworkElement element && item != null)
             {
                 switch (item)
                 {
                     case ItemsFilter.Model.IMultiValueFilter multiValueFilter:
                         if (multiValueFilter.AvailableValues.Cast<object>().Count() <= 4)
+                        {
                             return this.LittleAvailableValuesTemplate;
+                        }
                         else
+                        {
                             return this.ManyAvailableValuesTemplate;
+                        }
 
                     case ItemsFilter.Model.IStringFilter stringFilter:
                         return this.StringFilterTemplate;

@@ -29,7 +29,9 @@
         public BaseFieldsCollection(IEnumerable<string> collection) : base()
         {
             if (collection == null)
+            {
                 throw new ArgumentNullException("collection");
+            }
 
             this.CopyFrom(collection);
         }
@@ -39,7 +41,7 @@
             IList<string> items = this.Items;
             if (plusPropertyDescriptors != null && items != null)
             {
-                foreach (var item in plusPropertyDescriptors)
+                foreach (Shared.PlusPropertyDescriptor item in plusPropertyDescriptors)
                 {
                     items.Add(item.Name);
                 }
@@ -83,7 +85,7 @@
             };
 
             IList<string> items = this.Items;
-            foreach (var item in items)
+            foreach (string item in items)
             {
                 if (dictionary.ContainsKey(item))
                 {
@@ -248,7 +250,9 @@
                 // invalid for later listeners.  This keeps existing code working
                 // (e.g. Selector.SelectedItems).
                 if ((this.CollectionChanged != null) && (this.CollectionChanged.GetInvocationList().Length > 1))
+                {
                     throw new InvalidOperationException("ObservableCollectionReentrancyNotAllowed");
+                }
             }
         }
 
@@ -312,7 +316,7 @@
                 --this.busyCount;
             }
 
-            public bool Busy { get { return this.busyCount > 0; } }
+            public bool Busy => this.busyCount > 0;
 
             private int busyCount;
         }
@@ -342,7 +346,7 @@
 
         public MeterFieldsCollection(IEnumerable<string> enumerable)
         {
-            foreach (var item in enumerable)
+            foreach (string item in enumerable)
             {
                 this.Add(item);
             }
@@ -363,7 +367,7 @@
 
         public ChangesOfMetersFieldsCollection(IEnumerable<string> enumerable)
         {
-            foreach (var item in enumerable)
+            foreach (string item in enumerable)
             {
                 this.Add(item);
             }
@@ -384,7 +388,7 @@
 
         public SummaryInfoFieldsCollection(IEnumerable<string> enumerable)
         {
-            foreach (var item in enumerable)
+            foreach (string item in enumerable)
             {
                 this.Add(item);
             }

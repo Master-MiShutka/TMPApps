@@ -291,7 +291,8 @@ namespace DataGridWpf
 
             if (dataGrid.Columns.Count == 0)
             {
-                foreach (var column in columns)
+                var orderedColumns = columns.OrderBy(i => i.DisplayIndex).ToArray();
+                foreach (var column in orderedColumns)
                 {
                     SysDataGridColumn newColumn = Factory.ToDataGridWpfColumn(column) as SysDataGridColumn;
                     dataGrid.Columns.Add(newColumn);

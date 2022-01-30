@@ -52,9 +52,9 @@
                     mi1.Header = "Показать гистограмму";
                     mi1.IsCheckable = true;
                     mi1.IsChecked = col.ShowHistogramm;
-                    mi1.Command = new Shared.Commands.DelegateCommand(c =>
+                    mi1.Command = new Shared.Commands.DelegateCommand<TableViewColumn>(c =>
                     {
-                        TableViewColumn tableViewColumn = c as TableViewColumn;
+                        TableViewColumn tableViewColumn = c;
                         tableViewColumn.ShowHistogramm = !tableViewColumn.ShowHistogramm;
                     });
                     mi1.CommandParameter = col;
@@ -97,4 +97,4 @@
             base.OnMouseRightButtonDown(e);
         }
     }
-}
+}

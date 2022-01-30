@@ -20,15 +20,18 @@
     xmlns:uicontrols_behaviours="clr-namespace:TMP.UI.Controls.WPF.Behaviours;assembly=ui.controls.wpf"
     xmlns:uicontrols_helper="clr-namespace:TMP.UI.Controls.WPF.Helpers;assembly=ui.controls.wpf"
     xmlns:view="clr-namespace:TMP.WORK.AramisChetchiki.Views"
-    xmlns:vm="clr-namespace:TMP.WORK.AramisChetchiki.ViewModel"    
+    xmlns:vm="clr-namespace:TMP.WORK.AramisChetchiki.ViewModel"
     x:Name="root">
     <UserControl.Resources>
 
-        <local_converters:BoolToStrConverter x:Key="BoolToStrConverter"/>
+        <local_converters:BoolToStrConverter x:Key="BoolToStrConverter" />
 
         <SolidColorBrush x:Key="rowAlternatingBackgroundBrush" Color="Gray" />
 
-        <Style x:Key="HierarchicalMenu" BasedOn="{StaticResource baseMenuItemStyle}" TargetType="{x:Type MenuItem}">
+        <Style
+            x:Key="HierarchicalMenu"
+            BasedOn="{StaticResource baseMenuItemStyle}"
+            TargetType="{x:Type MenuItem}">
             <Setter Property="Command" Value="{Binding Command}" />
             <Setter Property="CommandParameter" Value="{Binding CommandParameter}" />
             <Setter Property="IsCheckable" Value="{Binding IsCheckable}" />
@@ -40,13 +43,13 @@
 
         <ContextMenu x:Key="dataGridContextMenuKey" Style="{StaticResource baseContextMenuStyle}">
             <MenuItem
-                Style="{StaticResource HierarchicalMenu}"
                 Header="Сортировка"
-                ItemsSource="{Binding SortFields}" />
+                ItemsSource="{Binding SortFields}"
+                Style="{StaticResource HierarchicalMenu}" />
             <MenuItem
-                Style="{StaticResource HierarchicalMenu}"
-                Header="Группировка" 
-                ItemsSource="{Binding GroupFields}" />
+                Header="Группировка"
+                ItemsSource="{Binding GroupFields}"
+                Style="{StaticResource HierarchicalMenu}" />
             <Separator />
             <MenuItem Command="ApplicationCommands.Copy" Header="Копировать" />
             <Separator />
@@ -62,58 +65,61 @@
                 </MenuItem.ItemContainerStyle>
             </MenuItem>
         </ContextMenu>
-        
-        <Style x:Key="MeterRowStyle" BasedOn="{StaticResource {x:Type DataGridRow}}" TargetType="{x:Type DataGridRow}">
+
+        <Style
+            x:Key="MeterRowStyle"
+            BasedOn="{StaticResource {x:Type DataGridRow}}"
+            TargetType="{x:Type DataGridRow}">
             <Setter Property="MaxHeight" Value="100" />
 
             <Setter Property="ToolTip">
                 <Setter.Value>
-                    <ToolTip >
+                    <ToolTip>
                         <ToolTip.ContentTemplate>
-                            <DataTemplate >
-                                <StackPanel MinWidth="100" DataContext="{Binding Path=PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType=ToolTip}}">
+                            <DataTemplate>
+                                <StackPanel MinWidth="100" DataContext="{Binding Path=PlacementTarget.DataContext, IsAsync=True, RelativeSource={RelativeSource AncestorType=ToolTip}}">
                                     <StackPanel x:Name="txtRemoved">
                                         <TextBlock>
-                                            <Run Text="Удалён:"/>
-                                            <Decorator Width="4"/>
-                                            <Run Text="{Binding Path=ДатаУдаления, StringFormat={}{0:dd.MM.yyy} г.}" />
+                                            <Run Text="Удалён:" />
+                                            <Decorator Width="4" />
+                                            <Run Text="{Binding Path=ДатаУдаления, StringFormat={}{0:dd.MM.yyy} г., Mode=OneWay}" />
                                         </TextBlock>
-                                        <Separator/>
+                                        <Separator />
                                     </StackPanel>
                                     <StackPanel x:Name="txtDisconnected">
                                         <TextBlock>
-                                            <Run Text="Отключён:"/>
-                                            <Decorator Width="4"/>
-                                            <Run Text="{Binding Path=ДатаОтключения, StringFormat={}{0:dd.MM.yyy} г.}" />
+                                            <Run Text="Отключён:" />
+                                            <Decorator Width="4" />
+                                            <Run Text="{Binding Path=ДатаОтключения, StringFormat={}{0:dd.MM.yyy} г., Mode=OneWay}" />
                                         </TextBlock>
-                                        <Separator/>
+                                        <Separator />
                                     </StackPanel>
-                                    <TextBlock Text="{Binding Path=Задолженность, StringFormat={}Задолженность {0} руб.}" />
-                                    <TextBlock Text="{Binding Path=ДолгРуб, StringFormat={}Долг {0} руб.}" />
-                                    <TextBlock Text="{Binding Path=Долг, StringFormat={}Долг {0} кВт∙ч}" />
-                                    <TextBlock Text="{Binding Path=ДатаОплаты, StringFormat={}ДатаОплаты {0:dd.MM.yyy} г.}" />
-                                    <Separator/>
+                                    <TextBlock Text="{Binding Path=Задолженность, StringFormat={}Задолженность {0} руб., Mode=OneWay}" />
+                                    <TextBlock Text="{Binding Path=ДолгРуб, StringFormat={}Долг {0} руб., Mode=OneWay}" />
+                                    <TextBlock Text="{Binding Path=Долг, StringFormat={}Долг {0} кВт∙ч, Mode=OneWay}" />
+                                    <TextBlock Text="{Binding Path=ДатаОплаты, StringFormat={}ДатаОплаты {0:dd.MM.yyy} г., Mode=OneWay}" />
+                                    <Separator />
                                     <TextBlock x:Name="txtПоверка">
-                                        <Run Text="Поверка: "/>
-                                        <Run Text="?" x:Name="runПоверка" />
+                                        <Run Text="Поверка: " />
+                                        <Run x:Name="runПоверка" Text="?" />
                                     </TextBlock>
-                                    <Separator/>
-                                    <TextBlock Text="{Binding Path=СреднеМесячныйРасходПоОплате, StringFormat={}Среднемесячный расход по оплате: {0} кВт∙ч}"/>
-                                    <TextBlock Text="{Binding Path=СреднеМесячныйРасходПоКонтрольнымПоказаниям, StringFormat={}Среднемесячный расход по контр. показаниям: {0} кВт∙ч}"/>
+                                    <Separator />
+                                    <TextBlock Text="{Binding Path=СреднеМесячныйРасходПоОплате, StringFormat={}Среднемесячный расход по оплате: {0} кВт∙ч, Mode=OneWay}" />
+                                    <TextBlock Text="{Binding Path=СреднеМесячныйРасходПоКонтрольнымПоказаниям, StringFormat={}Среднемесячный расход по контр. показаниям: {0} кВт∙ч, Mode=OneWay}" />
                                 </StackPanel>
                                 <DataTemplate.Triggers>
                                     <DataTrigger Binding="{Binding Path=PlacementTarget.DataContext.Поверен, RelativeSource={RelativeSource AncestorType=ToolTip}}" Value="False">
-                                        <Setter TargetName="runПоверка" Property="Text" Value="не поверен"/>
-                                        <Setter TargetName="txtПоверка" Property="Foreground" Value="Red"/>
+                                        <Setter TargetName="runПоверка" Property="Text" Value="не поверен" />
+                                        <Setter TargetName="txtПоверка" Property="Foreground" Value="Red" />
                                     </DataTrigger>
                                     <DataTrigger Binding="{Binding Path=PlacementTarget.DataContext.Поверен, RelativeSource={RelativeSource AncestorType=ToolTip}}" Value="True">
-                                        <Setter TargetName="runПоверка" Property="Text" Value="да"/>
+                                        <Setter TargetName="runПоверка" Property="Text" Value="да" />
                                     </DataTrigger>
                                     <DataTrigger Binding="{Binding Path=PlacementTarget.DataContext.Удалён, RelativeSource={RelativeSource AncestorType=ToolTip}}" Value="False">
-                                        <Setter TargetName="txtRemoved" Property="Visibility" Value="Collapsed"/>
+                                        <Setter TargetName="txtRemoved" Property="Visibility" Value="Collapsed" />
                                     </DataTrigger>
                                     <DataTrigger Binding="{Binding Path=PlacementTarget.DataContext.Отключён, RelativeSource={RelativeSource AncestorType=ToolTip}}" Value="False">
-                                        <Setter TargetName="txtDisconnected" Property="Visibility" Value="Collapsed"/>
+                                        <Setter TargetName="txtDisconnected" Property="Visibility" Value="Collapsed" />
                                     </DataTrigger>
                                 </DataTemplate.Triggers>
                             </DataTemplate>
@@ -138,17 +144,17 @@
                 </Trigger>
 
                 <DataTrigger Binding="{Binding Удалён, FallbackValue=False}" Value="True">
-                    <Setter Property="Background" Value="Crimson"/>
+                    <Setter Property="Background" Value="Crimson" />
                 </DataTrigger>
 
                 <DataTrigger Binding="{Binding Отключён, FallbackValue=False}" Value="True">
-                    <Setter Property="Background" Value="DarkGray"/>
-                    <Setter Property="Foreground" Value="Gray"/>
+                    <Setter Property="Background" Value="DarkGray" />
+                    <Setter Property="Foreground" Value="Gray" />
                 </DataTrigger>
 
                 <!-- DataTrigger Binding="{Binding Поверен, FallbackValue=True}" Value="False">
                     <Setter Property="Background" Value="MistyRose" />
-                </DataTrigger -->
+                </DataTrigger-->
 
                 <DataTrigger Binding="{Binding ЕстьДолг}" Value="True">
                     <Setter Property="Background" Value="Turquoise" />
@@ -184,26 +190,28 @@
     </UserControl.Style>
 
     <filterdatagrid:FilterDataGrid
-        x:Name="filterDataGrid"
         xmlns:mouseWheel="clr-namespace:WpfMouseWheel.Windows.Input;assembly=WpfMouseWheelLib"
-        mouseWheel:MouseWheel.Enhanced="False"
+        x:Name="filterDataGrid"
         Grid.Row="1"
+        mouseWheel:MouseWheel.Enhanced="False"
         uicontrols_behaviours:MouseDoubleClick.Command="{Binding Path=CommandViewDetailsBySelectedItem}"
         uicontrols_behaviours:MouseDoubleClick.CommandParameter="{Binding Path=SelectedItem, RelativeSource={RelativeSource Mode=Self}}"
         AutoGenerateColumns="False"
         ColumnsViewModels="{Binding TableColumns, IsAsync=True, FallbackValue={x:Null}}"
         DisplayRowNumber="True"
-        IsReadOnly="True" 
-        RowStyle="{Binding DataRowStyle, RelativeSource={RelativeSource AncestorType={x:Type local_controls:DataGridControl}}}"
+        IsReadOnly="True"
         ItemsSource="{Binding View, IsAsync=True, FallbackValue={x:Null}}"
+        RowStyle="{Binding DataRowStyle, RelativeSource={RelativeSource AncestorType={x:Type local_controls:DataGridControl}}}"
         VirtualizingPanel.IsVirtualizing="True">
         <Interactions:Interaction.Behaviors>
             <uicontrols_behaviours:ZoomFontSizeOnMouseWheelBehavior />
         </Interactions:Interaction.Behaviors>
         <filterdatagrid:FilterDataGrid.ItemsPanel>
             <ItemsPanelTemplate>
-                <DataGridRowsPresenter x:Name="PART_RowsPresenter" ContextMenu="{StaticResource dataGridContextMenuKey}" ContextMenuOpening="ItemsPresenterContextMenuOpening">
-                </DataGridRowsPresenter>
+                <DataGridRowsPresenter
+                    x:Name="PART_RowsPresenter"
+                    ContextMenu="{StaticResource dataGridContextMenuKey}"
+                    ContextMenuOpening="ItemsPresenterContextMenuOpening" />
             </ItemsPanelTemplate>
         </filterdatagrid:FilterDataGrid.ItemsPanel>
     </filterdatagrid:FilterDataGrid>

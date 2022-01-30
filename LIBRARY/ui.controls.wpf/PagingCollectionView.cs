@@ -44,20 +44,20 @@ namespace TMP.UI.Controls.WPF
                     this.ItemsPerPage = this.InternalCount;
                 }
             },
-            (o) => this.InternalList != null && this.itemsPerPage < this.InternalCount);
+            () => this.InternalList != null && this.itemsPerPage < this.InternalCount);
 
             this._moveFirstCommand = new DelegateCommand(() =>
             {
                 this.MoveCurrentToFirst();
                 this.NotifyToUpdateProperties();
             },
-            (o) => this.InternalList != null && this.UICurrentItemPositionOnPage > 1);
+            () => this.InternalList != null && this.UICurrentItemPositionOnPage > 1);
             this._moveToPreviousCommand = new DelegateCommand(() =>
             {
                 this.MoveCurrentToPrevious();
                 this.NotifyToUpdateProperties();
             },
-            (o) => this.InternalList != null && this.UICurrentItemPositionOnPage > 1);
+            () => this.InternalList != null && this.UICurrentItemPositionOnPage > 1);
             this._moveToNextCommand = new DelegateCommand(() =>
             {
                 this.MoveCurrentToNext();
@@ -66,38 +66,38 @@ namespace TMP.UI.Controls.WPF
                 {
                     this.MoveCurrentToLast();
                 }
-            }, (o) => this.InternalList != null && !this.IsCurrentAfterLast && this.UICurrentItemPositionOnPage < this.Count);
+            }, () => this.InternalList != null && !this.IsCurrentAfterLast && this.UICurrentItemPositionOnPage < this.Count);
             this._moveToLastCommand = new DelegateCommand(() =>
             {
                 this.MoveCurrentToLast();
                 this.NotifyToUpdateProperties();
             },
-            (o) => this.InternalList != null && !this.IsCurrentAfterLast && this.UICurrentItemPositionOnPage < this.Count);
+            () => this.InternalList != null && !this.IsCurrentAfterLast && this.UICurrentItemPositionOnPage < this.Count);
 
             this._moveFirstPageCommand = new DelegateCommand(() =>
             {
                 this.MoveToFirstPage();
                 this.NotifyToUpdateProperties();
             },
-            (o) => this.CurrentPage > 1);
+            () => this.CurrentPage > 1);
             this._moveToPreviousPageCommand = new DelegateCommand(() =>
             {
                 this.MoveToPreviousPage();
                 this.NotifyToUpdateProperties();
             },
-            (o) => this.CurrentPage > 1);
+            () => this.CurrentPage > 1);
             this._moveToNextPageCommand = new DelegateCommand(() =>
             {
                 this.MoveToNextPage();
                 this.NotifyToUpdateProperties();
             },
-            (o) => this.CurrentPage < this.PageCount);
+            () => this.CurrentPage < this.PageCount);
             this._moveToLastPageCommand = new DelegateCommand(() =>
             {
                 this.MoveToLastPage();
                 this.NotifyToUpdateProperties();
             },
-            (o) => this.CurrentPage < this.PageCount);
+            () => this.CurrentPage < this.PageCount);
 
             this.PropertyChanged += this.CollectionView_PropertyChanged;
         }

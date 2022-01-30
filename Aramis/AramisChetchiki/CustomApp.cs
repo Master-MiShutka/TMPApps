@@ -18,7 +18,7 @@
 
             Window window = new Window() { Title = "Test" };
 
-            DataGridWpf.FilterDataGrid grid = new ();
+            DataGridWpf.FilterDataGrid grid = new();
             grid.AutoGenerateColumns = true;
 
             grid.ItemsSource = new object[]
@@ -47,11 +47,11 @@
             grid.HorizontalAlignment = System.Windows.HorizontalAlignment.Stretch;
             grid.VerticalAlignment = System.Windows.VerticalAlignment.Stretch;
 
-            Button btn = new () { Content = "Show message" };
+            Button btn = new() { Content = "Show message" };
             btn.SetValue(DockPanel.DockProperty, Dock.Bottom);
             btn.Click += (o, e) => { MessageBox.Show(window, DateTime.Now.ToLongDateString()); };
 
-            DockPanel dockPanel = new ();
+            DockPanel dockPanel = new();
             dockPanel.LastChildFill = true;
             dockPanel.HorizontalAlignment = HorizontalAlignment.Stretch;
             dockPanel.VerticalAlignment = VerticalAlignment.Stretch;
@@ -70,7 +70,7 @@
         [System.Diagnostics.DebuggerNonUserCodeAttribute()]
         public static void Main()
         {
-            CustomApp app = new ();
+            CustomApp app = new();
 
             // MessageBox.Show(app.MainWindow, "Reaady", "IOIK");
             app.Run(app.MainWindow);

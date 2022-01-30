@@ -1,18 +1,15 @@
 ﻿namespace TMP.WORK.AramisChetchiki
 {
     using System;
-    using System.Collections;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.Data;
     using System.IO;
     using System.Linq;
-    using System.Text;
     using System.Threading.Tasks;
     using System.Windows;
     using DBF;
     using TMP.WORK.AramisChetchiki.Model;
-    using TMP.WORK.AramisChetchiki.Properties;
     using TMPApplication;
 
     internal partial class AramisDBParser
@@ -37,7 +34,7 @@
         private readonly string pathDBF;
         private readonly string pathDBFC;
 
-        private readonly List<string> errors = new ();
+        private readonly List<string> errors = new();
         private readonly ViewModel.LoadingDataViewModel workTasksProgressViewModel;
 
         private Dictionary<string, ICollection<KARTSCH>> dictionaryKARTSCH;
@@ -61,7 +58,7 @@
 
         // private Dictionary<string, ICollection<KartKvGd>> dictionaryKartKvGd;
 
-        private MeterComparerByPersonalID meterComparerByPersonalID = new ();
+        private MeterComparerByPersonalID meterComparerByPersonalID = new();
 
         private const int bufferedStreamBufferSize = 1_200_000;
 
@@ -108,7 +105,7 @@
                 {
                     string jsonString = File.ReadAllText(Path.Combine(this.dataFilesPath, DATA_FILE_NAME_HASHES));
 
-                    var d = System.Text.Json.JsonSerializer.Deserialize<DataFileRecord[]>(jsonString);
+                    DataFileRecord[] d = System.Text.Json.JsonSerializer.Deserialize<DataFileRecord[]>(jsonString);
                     this.dataFilesInfo = d.ToDictionary(i => i.FileName, i => i);
                 }
                 catch (Exception ex)
@@ -141,46 +138,54 @@
                     }, taskScheduler); */
 
                 // чтение оплат за электроэнергию
-                var taskPayments = Task.Run<IList<RawPaymentData>>(this.GetPaymentDatas)
+                Task taskPayments = Task.Run<IList<RawPaymentData>>(this.GetPaymentDatas)
                     .ContinueWith(
                         t =>
                         {
-                            WorkTask workTask = new ("группировка произведенных оплат абонентом")
+                            WorkTask workTask = new("группировка произведенных оплат абонентом")
                             {
-                                Progress = 0d,
+                                Progress = 0d, ChildProgress = 0d,
                             };
                             this.workTasksProgressViewModel.WorkTasks.Add(workTask);
                             int processedRecords = 0;
 
                             // группировка оплат по лицевому счету, затем по периоду оплаты (в одном периоде может быть несколько оплат)
                             IList<RawPaymentData> list = t.Result;
-                            var result = list
+                            Dictionary<ulong, Dictionary<DateOnly, List<RawPaymentData>>> result = list
                                 .GroupBy(i => i.Лицевой)
                                 .ToDictionary(i => i.Key, e => e.GroupBy(element => element.ПериодОплаты).ToDictionary(i => i.Key, j => j.ToList()));
 
-                            data.Payments = new ();
+                            data.Payments = new();
 
                             int totalRecords = result.Count;
+                            int childProcessed = 0, childCount = 0;
+                            SortedList<DateOnly, Payment> sortedList = new SortedList<DateOnly, Payment>(this.dateOnlyComparerByAscending);
+
                             // по всем лицевым счетам
                             foreach (KeyValuePair<ulong, Dictionary<DateOnly, List<RawPaymentData>>> item in result)
                             {
-                                var sortedList = new SortedList<DateOnly, Payment>(this.dateOnlyComparerByAscending);
+                                sortedList.Clear();
+
+                                childProcessed = 0;
+                                childCount = item.Value.Count;
 
                                 // по всем временным периодам
-                                foreach (var p in item.Value)
+                                foreach (KeyValuePair<DateOnly, List<RawPaymentData>> p in item.Value)
                                 {
-                                    Payment payment = new Payment();
-                                    payment.Лицевой = item.Key;
-                                    payment.ПериодОплаты = p.Key;
+                                    Payment payment = new Payment
+                                    {
+                                        Лицевой = item.Key,
+                                        ПериодОплаты = p.Key,
 
-                                    // массив оплат в этом периоде
-                                    payment.Payments = new PaymentData[p.Value.Count];
+                                        // массив оплат в этом периоде
+                                        Payments = new PaymentData[p.Value.Count],
+                                    };
 
                                     int index = 0;
 
                                     // по всем оплатам за этот период
-                                    var pp = p.Value.OrderBy(i => i.ПредыдущееПоказание);
-                                    foreach (var rawPayment in pp)
+                                    IOrderedEnumerable<RawPaymentData> pp = p.Value.OrderBy(i => i.ПредыдущееПоказание);
+                                    foreach (RawPaymentData rawPayment in pp)
                                     {
                                         payment.Payments[index++] = PaymentData.FromRawData(rawPayment);
                                     }
@@ -190,12 +195,17 @@
                                     payment.СуммаОплаты = payment.Payments.Sum(i => i.СуммаОплатыРасчётная);
 
                                     sortedList.Add(payment.ПериодОплаты, payment);
+
+                                    childProcessed++;
+                                    workTask.UpdateUI(++processedRecords, totalRecords, ++childProcessed, childCount);
                                 }
 
                                 if (data.Payments.ContainsKey(item.Key))
                                 {
-                                    foreach (var element in sortedList)
+                                    foreach (KeyValuePair<DateOnly, Payment> element in sortedList)
+                                    {
                                         data.Payments[item.Key].Add(element.Value);
+                                    }
                                 }
                                 else
                                 {
@@ -210,15 +220,15 @@
                         }, taskScheduler);
 
                 // чтение контрольных показаний по лицевому счету
-                var taskControlData = Task.Run<IReadOnlyCollection<ControlData>>(() => this.ParseAramisDbTable<ControlData>("просмотр контрольных показаний", Path.Combine(this.pathDBF, "KARTKP.DBF"), this.ParseControlData))
+                Task taskControlData = Task.Run<IReadOnlyCollection<ControlData>>(() => this.ParseAramisDbTable<ControlData>("просмотр контрольных показаний", Path.Combine(this.pathDBF, "KARTKP.DBF"), this.ParseControlData))
                     .ContinueWith(
                         t =>
                         {
-                            var result = this.SortData(t.Result);
+                            IList<ControlData> result = this.SortData(t.Result);
 
                             data.MetersControlData = new();
 
-                            foreach (var item in result)
+                            foreach (ControlData item in result)
                             {
                                 if (data.MetersControlData.ContainsKey(item.Лицевой))
                                 {
@@ -232,17 +242,17 @@
                         }, taskScheduler);
 
                 // чтение таблиц
-                var taskMain = Task.Run(this.ReadTables);
+                Task taskMain = Task.Run(this.ReadTables);
 
                 // получение названия РЭС
-                var taskPrepareTables = taskMain.ContinueWith(
+                Task taskPrepareTables = taskMain.ContinueWith(
                     t =>
                     {
                         (data.Info as AramisDataInfo).DepartamentName = this.dictionaryKartPd.Values.First().PNPD;
                     }, taskScheduler);
 
                 IList<Meter> notDeletedMeters = null;
-                var taskGetAbonentsAndMeter = taskPrepareTables.ContinueWith(
+                Task taskGetAbonentsAndMeter = taskPrepareTables.ContinueWith(
                     t =>
                     {
                         // проход по всем абонентам
@@ -251,14 +261,14 @@
                     }, taskScheduler);
 
                 // удаленные абоненты
-                var taskRemovedAbonents = taskGetAbonentsAndMeter.ContinueWith(
+                Task taskRemovedAbonents = taskGetAbonentsAndMeter.ContinueWith(
                     t =>
                     {
-                        var deletedMeters = data.Meters.Where(i => i.Удалён == true).ToList();
+                        List<Meter> deletedMeters = data.Meters.Where(i => i.Удалён == true).ToList();
                         int totalRecords = deletedMeters.Count;
                         int processedRecords = 0;
 
-                        WorkTask workTask = new ("обработка удаленных абонентов")
+                        WorkTask workTask = new("обработка удаленных абонентов")
                         {
                             Progress = 0d,
                         };
@@ -281,7 +291,7 @@
 
                     }, taskScheduler);
 
-                var taskMakeSummaryInfos = taskGetAbonentsAndMeter.ContinueWith(
+                Task taskMakeSummaryInfos = taskGetAbonentsAndMeter.ContinueWith(
                     t =>
                     {
                         // создание сводной информации
@@ -298,14 +308,14 @@
                     }, taskScheduler); */
 
                 // просмотр замен счётчиков
-                var taskGetChangesOfMeters = taskPrepareTables.ContinueWith(
+                Task taskGetChangesOfMeters = taskPrepareTables.ContinueWith(
                     t =>
                     {
-                        var result = this.GetChangesOfMeters();
+                        IList<ChangeOfMeter> result = this.GetChangesOfMeters();
 
-                        data.ChangesOfMeters = new ();
+                        data.ChangesOfMeters = new();
 
-                        WorkTask workTask = new ("обработка замен счётчиков")
+                        WorkTask workTask = new("обработка замен счётчиков")
                         {
                             Progress = 0d,
                         };
@@ -313,7 +323,7 @@
                         int totalRecords = result.Count;
                         int processedRecords = 0;
 
-                        foreach (var item in result)
+                        foreach (ChangeOfMeter item in result)
                         {
                             if (data.ChangesOfMeters.ContainsKey(item.Лицевой))
                             {
@@ -333,7 +343,7 @@
                     }, taskScheduler);
 
                 // расчет среднемесячного потребления
-                var taskCalcAverageConsumptionByAbonents = taskGetAbonentsAndMeter.ContinueWith(
+                Task taskCalcAverageConsumptionByAbonents = taskGetAbonentsAndMeter.ContinueWith(
                     t =>
                     {
                         WorkTask workTask = new("расчет среднемесячного потребления: ожидание готовности")
@@ -356,7 +366,7 @@
                     .ConfigureAwait(false);
 
                 // сохранение хэшей в файл
-                var options = new System.Text.Json.JsonSerializerOptions { WriteIndented = true };
+                System.Text.Json.JsonSerializerOptions options = new System.Text.Json.JsonSerializerOptions { WriteIndented = true };
                 string jsonString = System.Text.Json.JsonSerializer.Serialize(this.dataFilesInfo.Select(i => i.Value).ToArray(), options);
                 File.WriteAllText(Path.Combine(this.dataFilesPath, DATA_FILE_NAME_HASHES), jsonString);
             }
@@ -392,7 +402,7 @@
 
             string taskName = "чтение таблиц базы данных";
 
-            WorkTask workTask = new ("чтение справочников")
+            WorkTask workTask = new("чтение справочников")
             {
                 Status = taskName,
                 IsIndeterminate = true,
@@ -402,7 +412,10 @@
             int totalTables = 18;
             int processedTables = 1;
 
-            void _(string msg) => workTask.UpdateUI(processedTables, totalTables, ++processedRecords, totalRecords, message: taskName + ": " + msg, stepNameString: "обработка таблицы");
+            void _(string msg)
+            {
+                workTask.UpdateUI(processedTables, totalTables, ++processedRecords, totalRecords, message: taskName + ": " + msg, stepNameString: "обработка таблицы");
+            }
 
             void init(string msg)
             {
@@ -417,13 +430,16 @@
                 _(msg);
             }
 
-            void setChildProgress(int childValue, int childTotal) => workTask.SetChildProgress(childTotal, childValue);
+            void setChildProgress(int childValue, int childTotal)
+            {
+                workTask.SetChildProgress(childTotal, childValue);
+            }
 
             string tableName = "справочник установленных счётчиков";
             init(tableName);
-            this.dictionaryKARTSCH = new ();
+            this.dictionaryKARTSCH = new();
             IReadOnlyCollection<KARTSCH> tableKARTSCH = this.ParseAramisDbTable<KARTSCH>(tableName, Path.Combine(this.pathDBF, "KARTSCH.DBF"), this.ParseKARTSCHRecord, removeTaskAfterCompleted: true, progressCallback: setChildProgress);
-            foreach (var item in tableKARTSCH)
+            foreach (KARTSCH item in tableKARTSCH)
             {
                 if (this.dictionaryKARTSCH.ContainsKey(item.LIC_SCH))
                 {
@@ -439,9 +455,9 @@
 
             tableName = "справочник снятых счётчиков";
             init(tableName);
-            this.dictionaryKARTSCHRemoved = new ();
+            this.dictionaryKARTSCHRemoved = new();
             IReadOnlyCollection<KARTSCH> tableKARTTSCHRemoved = this.ParseAramisDbTable<KARTSCH>(tableName, Path.Combine(this.pathDBFC, "KARTSCH.DBF"), this.ParseKARTSCHRecord, removeTaskAfterCompleted: true, progressCallback: setChildProgress);
-            foreach (var item in tableKARTTSCHRemoved)
+            foreach (KARTSCH item in tableKARTTSCHRemoved)
             {
                 if (this.dictionaryKARTSCHRemoved.ContainsKey(item.LIC_SCH))
                 {
@@ -457,9 +473,9 @@
 
             tableName = "справочник типов счетчиков";
             init(tableName);
-            this.dictionaryKARTTSCH = new ();
+            this.dictionaryKARTTSCH = new();
             IReadOnlyCollection<KARTTSCH> tableKARTTSCH = this.ParseAramisDbTable<KARTTSCH>(tableName, Path.Combine(this.pathDBFC, "KARTTSCH.DBF"), this.ParseKARTTSCHRecord, removeTaskAfterCompleted: true, progressCallback: setChildProgress);
-            foreach (var item in tableKARTTSCH)
+            foreach (KARTTSCH item in tableKARTTSCH)
             {
                 if (this.dictionaryKARTTSCH.ContainsKey(item.COD_TSCH))
                 {
@@ -474,9 +490,9 @@
 
             tableName = "справочник мест установки";
             init(tableName);
-            this.dictionaryASVIDYST = new ();
+            this.dictionaryASVIDYST = new();
             IReadOnlyCollection<ASVIDYST> tableASVIDYST = this.ParseAramisDbTable<ASVIDYST>(tableName, Path.Combine(this.pathDBFC, "ASVIDYST.DBF"), this.ParseASVIDYSTRecord, removeTaskAfterCompleted: true, progressCallback: setChildProgress);
-            foreach (var item in tableASVIDYST)
+            foreach (ASVIDYST item in tableASVIDYST)
             {
                 if (this.dictionaryASVIDYST.ContainsKey(item.COD_SS))
                 {
@@ -491,9 +507,9 @@
 
             tableName = "справочник населенных пунктов";
             init(tableName);
-            this.dictionaryKartTn = new ();
+            this.dictionaryKartTn = new();
             IReadOnlyCollection<KartTn> tableKartTn = this.ParseAramisDbTable<KartTn>(tableName, Path.Combine(this.pathDBFC, "KartTn.DBF"), this.ParseKartTnRecord, removeTaskAfterCompleted: true, progressCallback: setChildProgress);
-            foreach (var item in tableKartTn)
+            foreach (KartTn item in tableKartTn)
             {
                 if (this.dictionaryKartTn.ContainsKey(item.COD_TN))
                 {
@@ -508,9 +524,9 @@
 
             tableName = "справочник сельских советов";
             init(tableName);
-            this.dictionaryKartSs = new ();
+            this.dictionaryKartSs = new();
             IReadOnlyCollection<KartSs> tableKartSs = this.ParseAramisDbTable<KartSs>(tableName, Path.Combine(this.pathDBFC, "KartSs.DBF"), this.ParseKartSsRecord, removeTaskAfterCompleted: true, progressCallback: setChildProgress);
-            foreach (var item in tableKartSs)
+            foreach (KartSs item in tableKartSs)
             {
                 if (this.dictionaryKartSs.ContainsKey(item.COD_SS))
                 {
@@ -525,9 +541,9 @@
 
             tableName = "справочник улиц";
             init(tableName);
-            this.dictionaryKartSt = new ();
+            this.dictionaryKartSt = new();
             IReadOnlyCollection<KartSt> tableKartSt = this.ParseAramisDbTable<KartSt>(tableName, Path.Combine(this.pathDBFC, "KartSt.DBF"), this.ParseKartStRecord, removeTaskAfterCompleted: true, progressCallback: setChildProgress);
-            foreach (var item in tableKartSt)
+            foreach (KartSt item in tableKartSt)
             {
                 if (this.dictionaryKartSt.ContainsKey(item.COD_ST))
                 {
@@ -535,16 +551,16 @@
                     continue;
                 }
 
-                this.dictionaryKartSt.Add(item.COD_ST, item);   
+                this.dictionaryKartSt.Add(item.COD_ST, item);
             }
 
             finish(tableName);
 
             tableName = "справочник токоприемников";
             init(tableName);
-            this.dictionaryKartTpr = new ();
+            this.dictionaryKartTpr = new();
             IReadOnlyCollection<KartTpr> tableKartTpr = this.ParseAramisDbTable<KartTpr>(tableName, Path.Combine(this.pathDBFC, "KartTpr.DBF"), this.ParseKartTprRecord, removeTaskAfterCompleted: true, progressCallback: setChildProgress);
-            foreach (var item in tableKartTpr)
+            foreach (KartTpr item in tableKartTpr)
             {
                 if (this.dictionaryKartTpr.ContainsKey(item.COD_TPR))
                 {
@@ -559,9 +575,9 @@
 
             tableName = "справочник использования";
             init(tableName);
-            this.dictionaryKartIsp = new ();
+            this.dictionaryKartIsp = new();
             IReadOnlyCollection<KartIsp> tableKartIsp = this.ParseAramisDbTable<KartIsp>(tableName, Path.Combine(this.pathDBFC, "KartIsp.DBF"), this.ParseKartIspRecord, removeTaskAfterCompleted: true, progressCallback: setChildProgress);
-            foreach (var item in tableKartIsp)
+            foreach (KartIsp item in tableKartIsp)
             {
                 if (this.dictionaryKartIsp.ContainsKey(item.COD_ISP))
                 {
@@ -576,9 +592,9 @@
 
             tableName = "справочник категорий";
             init(tableName);
-            this.dictionaryKartKat = new ();
+            this.dictionaryKartKat = new();
             IReadOnlyCollection<KartKat> tableKartKat = this.ParseAramisDbTable<KartKat>(tableName, Path.Combine(this.pathDBFC, "KartKat.DBF"), this.ParseKartKatRecord, removeTaskAfterCompleted: true, progressCallback: setChildProgress);
-            foreach (var item in tableKartKat)
+            foreach (KartKat item in tableKartKat)
             {
                 if (this.dictionaryKartKat.ContainsKey(item.COD_KAT))
                 {
@@ -593,9 +609,9 @@
 
             tableName = "подстанции";
             init(tableName);
-            this.dictionaryKartps = new ();
+            this.dictionaryKartps = new();
             IReadOnlyCollection<Kartps> tableKartps = this.ParseAramisDbTable<Kartps>(tableName, Path.Combine(this.pathDBFC, "Kartps.DBF"), this.ParseKartpsRecord, removeTaskAfterCompleted: true, progressCallback: setChildProgress);
-            foreach (var item in tableKartps)
+            foreach (Kartps item in tableKartps)
             {
                 if (this.dictionaryKartps.ContainsKey(item.ПОДСТАНЦИЯ))
                 {
@@ -610,9 +626,9 @@
 
             tableName = "фидера 10 кВ";
             init(tableName);
-            this.dictionaryKartfid = new ();
+            this.dictionaryKartfid = new();
             IReadOnlyCollection<Kartfid> tableKartfid = this.ParseAramisDbTable<Kartfid>(tableName, Path.Combine(this.pathDBFC, "Kartfid.DBF"), this.ParseKartfidRecord, removeTaskAfterCompleted: true, progressCallback: setChildProgress);
-            foreach (var item in tableKartfid)
+            foreach (Kartfid item in tableKartfid)
             {
                 if (this.dictionaryKartfid.ContainsKey(item.ФИДЕР))
                 {
@@ -627,9 +643,9 @@
 
             tableName = "пс 10 кВ";
             init(tableName);
-            this.dictionaryKartktp = new ();
+            this.dictionaryKartktp = new();
             IReadOnlyCollection<Kartktp> tableKartktp = this.ParseAramisDbTable<Kartktp>(tableName, Path.Combine(this.pathDBFC, "Kartktp.DBF"), this.ParseKartktpRecord, removeTaskAfterCompleted: true, progressCallback: setChildProgress);
-            foreach (var item in tableKartktp)
+            foreach (Kartktp item in tableKartktp)
             {
                 if (this.dictionaryKartktp.ContainsKey(item.КОД_ТП))
                 {
@@ -644,9 +660,9 @@
 
             tableName = "контролёры";
             init(tableName);
-            this.dictionaryASKONTR = new ();
+            this.dictionaryASKONTR = new();
             IReadOnlyCollection<ASKONTR> tableASKONTR = this.ParseAramisDbTable<ASKONTR>(tableName, Path.Combine(this.pathDBFC, "ASKONTR.DBF"), this.ParseASKONTRRecord, removeTaskAfterCompleted: true, progressCallback: setChildProgress);
-            foreach (var item in tableASKONTR)
+            foreach (ASKONTR item in tableASKONTR)
             {
                 if (this.dictionaryASKONTR.ContainsKey(item.КОД_КОН))
                 {
@@ -661,28 +677,27 @@
 
             tableName = "справочник абонентов";
             init(tableName);
-            collectionKARTAB = this.ParseAramisDbTable<KARTAB>(tableName, Path.Combine(this.pathDBF, "KARTAB.DBF"), this.ParseKARTABRecord,
+            this.collectionKARTAB = this.ParseAramisDbTable<KARTAB>(tableName, Path.Combine(this.pathDBF, "KARTAB.DBF"), this.ParseKARTABRecord,
                 skipDeletedRecords: false,
                 removeTaskAfterCompleted: true, progressCallback: setChildProgress);
             finish(tableName);
 
             tableName = "наименование РЭС";
             init(tableName);
-            this.dictionaryKartPd = new ();
+            this.dictionaryKartPd = new();
             IReadOnlyCollection<KartPd> tableKartPd = this.ParseAramisDbTable<KartPd>(tableName, Path.Combine(this.pathDBFC, "KartPd.DBF"), this.ParseKartPdRecord, removeTaskAfterCompleted: true, progressCallback: setChildProgress);
-            foreach (var item in tableKartPd)
+            foreach (KartPd item in tableKartPd)
             {
                 this.dictionaryKartPd.Add(item.COD_PD, item);
             }
 
             finish(tableName);
 
-
             tableName = "перечень удаленных абонентов";
             init(tableName);
-            this.dictionaryRemovAb = new ();
+            this.dictionaryRemovAb = new();
             IReadOnlyCollection<RemovAb> tableRemovAb = this.ParseAramisDbTable<RemovAb>(tableName, Path.Combine(this.pathDBF, "RemovAb.DBF"), this.ParseRemovAbRecord, removeTaskAfterCompleted: true, progressCallback: setChildProgress);
-            foreach (var item in tableRemovAb)
+            foreach (RemovAb item in tableRemovAb)
             {
                 // сохранение самой новой записи
                 if (this.dictionaryRemovAb.ContainsKey(item.LIC_SCH))
@@ -724,9 +739,11 @@
 
             try
             {
-                var result = this.CheckAndLoadFromCache<T>(tableFileName, ref workTask);
+                IList<T> result = this.CheckAndLoadFromCache<T>(tableFileName, ref workTask);
                 if (result != null)
+                {
                     data = new System.Collections.Concurrent.ConcurrentBag<T>(result);
+                }
 
                 if (data == null)
                 {
@@ -786,7 +803,10 @@
                 if (Application.Current != null && !Application.Current.Dispatcher.CheckAccess())
                 {
                     System.Windows.Window mainWindow = null;
-                    void action() => mainWindow = TMPApp.Instance.MainWindow;
+                    void action()
+                    {
+                        mainWindow = TMPApp.Instance.MainWindow;
+                    }
 
                     Application.Current.Dispatcher.Invoke(action, System.Windows.Threading.DispatcherPriority.Background);
                     return mainWindow;

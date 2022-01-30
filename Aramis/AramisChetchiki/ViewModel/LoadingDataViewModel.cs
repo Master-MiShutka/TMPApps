@@ -10,7 +10,7 @@
     public class LoadingDataViewModel : BaseViewModel
     {
         private readonly NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
-        private MTObservableCollection<WorkTask> workTasks = new ();
+        private MTObservableCollection<WorkTask> workTasks = new();
 
         /// <summary>
         /// Список выполняемых задач
@@ -42,11 +42,11 @@
                         new WorkTask("Задача №4") { Status = "Status 4", IsCompleted = true },
                 };
 
-                var t1 = new WorkTask("Задача №2") { Status = "Status 2", Progress = 25 };
+                WorkTask t1 = new WorkTask("Задача №2") { Status = "Status 2", Progress = 25 };
                 t1.SetChildProgress(100, 33);
                 this.workTasks.Insert(1, t1);
 
-                var t2 = new WorkTask("Задача №5") { Status = "Status 5", Progress = 12 };
+                WorkTask t2 = new WorkTask("Задача №5") { Status = "Status 5", Progress = 12 };
                 t2.SetChildProgress(100, 3);
                 this.workTasks.Insert(2, t2);
 
@@ -123,6 +123,12 @@
             {
                 return false;
             }
+        }
+
+        public override int GetHashCode()
+        {
+            System.Guid guid = new System.Guid("1A555AD8-D371-4E35-9852-0967B8EC0456");
+            return guid.GetHashCode();
         }
     }
 }

@@ -1,12 +1,7 @@
 ﻿namespace TMP.WORK.AramisChetchiki.ViewModel
 {
     using System;
-    using System.Collections.Generic;
-    using System.ComponentModel;
-    using System.Linq;
-    using System.Text;
     using System.Windows;
-    using System.Windows.Data;
     using TMP.Extensions;
     using TMP.WORK.AramisChetchiki.Model;
 
@@ -28,9 +23,6 @@
             }
 
             this.CommandPrint = null;
-
-            this.IsBusy = true;
-            this.Status = "загрузка ...";
         }
 
         #endregion
@@ -66,9 +58,12 @@
         protected override void OnViewBuilded()
         {
             if (this.FilterPresenter == null)
+            {
+                this.IsBusy = false;
                 return;
+            }
 
-            var filters = new[] {
+            string[] filters = new[] {
                 nameof(Meter.СельскийСовет),
                 nameof(Meter.НаселённыйПункт),
                 nameof(Meter.ТипНаселённойМестности),
@@ -82,7 +77,7 @@
             // добавление фильтров
             TMPApplication.DispatcherExtensions.InUi(() =>
             {
-                foreach (var filter in filters)
+                foreach (string filter in filters)
                 {
                     this.Filters.Add((ItemsFilter.Model.IMultiValueFilter)this.FilterPresenter.TryGetFilter(filter, new ItemsFilter.Initializer.EqualFilterInitializer()));
                 }
@@ -95,7 +90,12 @@
 
         #region Private Methods
 
-
         #endregion
+
+        public override int GetHashCode()
+        {
+            System.Guid guid = new System.Guid("1A555AD8-D371-4E35-9852-0967B8EC0459");
+            return guid.GetHashCode();
+        }
     }
 }

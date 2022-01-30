@@ -14,20 +14,14 @@
     xmlns:view="clr-namespace:TMP.WORK.AramisChetchiki.Views"
     xmlns:vm="clr-namespace:TMP.WORK.AramisChetchiki.ViewModel"
     x:Name="root"
-    d:DataContext="{d:DesignInstance {x:Type vm:ChangesOfMetersViewModel},
-                                     IsDesignTimeCreatable=True}"
     d:DesignHeight="250"
     d:DesignWidth="1000"
-    FontSize="{local_extensions:SettingBinding Path=FontSize,
-                                               FallbackValue=13.0}"
     TextOptions.TextFormattingMode="Ideal"
     mc:Ignorable="d">
     <UserControl.Resources />
     <view:BaseView>
         <view:BaseView.HeaderPanel>
-            <StackPanel
-                Margin="2"
-                Orientation="Horizontal">
+            <StackPanel Margin="2" Orientation="Horizontal">
                 <Label VerticalAlignment="Center" Content="с " />
                 <DatePicker
                     VerticalAlignment="Center"
@@ -47,7 +41,7 @@
                     Command="{Binding CommandSetSorting}">
                     <StackPanel Orientation="Horizontal">
                         <controls:Icons Kind="Sort" />
-                        <TextBlock Margin="5,0,0,0" Text="{Binding CommandSetSorting.Header}" />
+                        <TextBlock Margin="5,0,0,0" Text="Сортировка" />
                     </StackPanel>
                 </Button>
                 <StackPanel.ContextMenu>
@@ -85,10 +79,7 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-            <StackPanel
-                Background="{extensions:ValueFromStyle StyleKey={x:Type ToolBar},
-                                                       Property=Control.Background}"
-                Orientation="Horizontal">
+            <StackPanel Background="{extensions:ValueFromStyle StyleKey={x:Type ToolBar}, Property=Control.Background}" Orientation="Horizontal">
                 <StackPanel.Resources>
                     <Style TargetType="TextBox">
                         <Setter Property="MinWidth" Value="95" />

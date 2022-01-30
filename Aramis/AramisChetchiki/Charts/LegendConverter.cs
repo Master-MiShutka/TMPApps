@@ -22,7 +22,7 @@
             object item = label.Tag;
 
             // поиск контейнера объекта
-            DependencyObject container = (DependencyObject)TMPApplication.Helpers.BaseWPFHelpers.FindElementOfTypeUp((Visual)value, typeof(ListBoxItem));
+            DependencyObject container = TMPApplication.Helpers.BaseWPFHelpers.FindElementOfTypeUp((Visual)value, typeof(ListBoxItem));
 
             ItemsControl owner = ItemsControl.ItemsControlFromItemContainer(container);
 

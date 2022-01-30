@@ -10,22 +10,13 @@
 
     public static class Hash
     {
-        public static string GetHash<T>(this object instance)
-            where T : HashAlgorithm, new()
+        public static string GetHash(this object instance, string hashName)
         {
-            T cryptoServiceProvider = new T();
+            HashAlgorithm cryptoServiceProvider = HashAlgorithm.Create(hashName);
             return ComputeHash(instance, cryptoServiceProvider);
         }
 
-        public static string GetKeyedHash<T>(this object instance, byte[] key)
-            where T : KeyedHashAlgorithm, new()
-        {
-            T cryptoServiceProvider = new T { Key = key };
-            return ComputeHash(instance, cryptoServiceProvider);
-        }
-
-        private static string ComputeHash<T>(object instance, T cryptoServiceProvider)
-            where T : HashAlgorithm, new()
+        private static string ComputeHash(object instance, HashAlgorithm cryptoServiceProvider)
         {
             DataContractSerializer serializer = new DataContractSerializer(instance.GetType());
             using (MemoryStream memoryStream = new MemoryStream())
@@ -38,12 +29,16 @@
 
         public static string GetMD5Hash(this object instance)
         {
-            return instance.GetHash<MD5CryptoServiceProvider>();
+            MD5 md5 = (MD5)HashAlgorithm.Create("MD5");
+
+            return ComputeHash(instance, md5);
         }
 
         public static string GetSHA1Hash(this object instance)
         {
-            return instance.GetHash<SHA1CryptoServiceProvider>();
+            SHA1 sha1 = (SHA1)HashAlgorithm.Create("SHA1");
+
+            return ComputeHash(instance, sha1);
         }
     }
 }

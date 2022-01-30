@@ -1,22 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-
-namespace TMP.WORK.AramisChetchiki.Controls
+﻿namespace TMP.WORK.AramisChetchiki.Controls
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Collections.Specialized;
+    using System.Linq;
+    using System.Windows;
+    using System.Windows.Controls;
+    using System.Windows.Data;
+
     /// <summary>
     /// Interaction logic for MeterСonsumptionViewer.xaml
     /// </summary>
@@ -24,13 +15,13 @@ namespace TMP.WORK.AramisChetchiki.Controls
     {
         public MeterСonsumptionViewer()
         {
-            InitializeComponent();
+            this.InitializeComponent();
         }
 
         public IEnumerable<Model.MeterEvent> MeterEvents
         {
-            get { return (IEnumerable<Model.MeterEvent>)GetValue(MeterEventsProperty); }
-            set { SetValue(MeterEventsProperty, value); }
+            get => (IEnumerable<Model.MeterEvent>)this.GetValue(MeterEventsProperty);
+            set => this.SetValue(MeterEventsProperty, value);
         }
 
         public static readonly DependencyProperty MeterEventsProperty =
@@ -42,17 +33,24 @@ namespace TMP.WORK.AramisChetchiki.Controls
 
             IEnumerable<Model.MeterEvent> meterEvents = (IEnumerable<Model.MeterEvent>)e.NewValue;
 
-            int max = meterEvents.Max(i => i.Сonsumption);
+            viewer.Dates = new StringCollection();
+
+            if (meterEvents == null || meterEvents.Any() == false)
+            {
+                return;
+            }
+
+            uint max = meterEvents.Max(i => i.Сonsumption);
             ItemHeightValueConverter.MaxValue = max;
 
             viewer.Dates = new StringCollection();
-            viewer.Dates.AddRange(meterEvents.Select(i => i.Date.ToString("mm-yyyy")).ToArray());
+            viewer.Dates.AddRange(meterEvents.Select(i => i.Date.ToString("MM-yyyy")).ToArray());
         }
 
         public StringCollection Dates
         {
-            get { return (StringCollection)GetValue(DatesProperty); }
-            set { SetValue(DatesProperty, value); }
+            get => (StringCollection)this.GetValue(DatesProperty);
+            set => this.SetValue(DatesProperty, value);
         }
 
         public static readonly DependencyProperty DatesProperty =
@@ -61,15 +59,29 @@ namespace TMP.WORK.AramisChetchiki.Controls
 
     public class ItemHeightValueConverter : IMultiValueConverter
     {
-        public static int MaxValue { get; internal set; }
+        public static uint MaxValue { get; internal set; }
 
         public object Convert(object[] values, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            var d = new Nullable<double>((double)values[0]);
-            double value = ((d != null && Double.IsNaN(d.Value) == false) ? d.Value : 0.0);
-            double parentHeight = (values[1] != DependencyProperty.UnsetValue ? (double)values[1] : 0.0);
+            if (values != null && values.Length == 2)
+            {
+                double value = values[0] == null ? 0.0 : System.Convert.ToDouble(values[0]);
+                double parentHeight = (values[1] == null || values[1] == DependencyProperty.UnsetValue) ? 0.0 : System.Convert.ToDouble(values[1]);
 
-            return (value / MaxValue == 0 ? 1 : MaxValue) * (parentHeight - 7);
+                double result = (value / (MaxValue == 0 ? 1 : MaxValue)) * (parentHeight - 7);
+
+                if (result < 0)
+                {
+                    System.Diagnostics.Debugger.Break();
+                    return 0d;
+                }
+
+                return result;
+            }
+            else
+            {
+                return DependencyProperty.UnsetValue;
+            }
         }
 
         public object[] ConvertBack(object value, Type[] targetTypes, object parameter, System.Globalization.CultureInfo culture)

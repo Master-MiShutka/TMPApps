@@ -24,7 +24,7 @@
                     Repository.Instance.AddNewAramisDbPath(this.AramisDbPath);
 
                     // теперь если список файлов был пуст, нужно выбрать добавленный
-                    var selected = Repository.Instance.AvailableDataFiles.Where(file => file.IsSelected == true).ToList();
+                    List<Common.RepositoryCommon.IDataFileInfo> selected = Repository.Instance.AvailableDataFiles.Where(file => file.IsSelected == true).ToList();
 
                     if (selected.Any() == false)
                     {
@@ -50,12 +50,9 @@
                 // итак подразделение выбрано - загрузка данных
                 MainViewModel.SelectedDataFileInfo = this.SelectedDataInfo;
             },
-                (o) => this.SelectedDataInfo != null || (this.AramisDbSelected && string.IsNullOrEmpty(this.AramisDbPath) == false),
-                "Выбрать\nи загрузить");
+                (o) => this.SelectedDataInfo != null || (this.AramisDbSelected && string.IsNullOrEmpty(this.AramisDbPath) == false));
 
-            this.CommandGoToSettings = new DelegateCommand(
-                () => MainViewModel.ChangeMode(Mode.Preferences),
-                "Перейти к параметрам\nи указать путь к базе данных");
+            this.CommandGoToSettings = new DelegateCommand(() => MainViewModel.ChangeMode(Mode.Preferences));
 
             this.CommandDeleteDataFile = new DelegateCommand<TMP.Common.RepositoryCommon.IDataFileInfo>(
                 (dataFileInfo) =>
@@ -115,6 +112,12 @@
         {
             get => this.aramisDbSelected;
             set => this.SetProperty(ref this.aramisDbSelected, value);
+        }
+
+        public override int GetHashCode()
+        {
+            System.Guid guid = new System.Guid("1A555AD8-D371-4E35-9852-0967B8EC0460");
+            return guid.GetHashCode();
         }
     }
 }

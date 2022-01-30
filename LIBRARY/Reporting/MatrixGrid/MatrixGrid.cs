@@ -44,11 +44,11 @@
 
         internal void InspectRowIndex(int index)
         {
-            DispatcherOperation o = base.Dispatcher.BeginInvoke(new Action(delegate
+            DispatcherOperation o = this.Dispatcher.BeginInvoke(new Action(delegate
                 {
-                    while (base.RowDefinitions.Count - 1 < index)
+                    while (this.RowDefinitions.Count - 1 < index)
                     {
-                        base.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(1, GridUnitType.Auto) });
+                        this.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(1, GridUnitType.Auto) });
                     }
                 }));
             var s = o.Status;
@@ -56,11 +56,11 @@
 
         internal void InspectColumnIndex(int index)
         {
-            DispatcherOperation o = base.Dispatcher.BeginInvoke(new Action(delegate
+            DispatcherOperation o = this.Dispatcher.BeginInvoke(new Action(delegate
                  {
-                     while (base.ColumnDefinitions.Count - 1 < index)
+                     while (this.ColumnDefinitions.Count - 1 < index)
                      {
-                         base.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Auto) });
+                         this.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Auto) });
                      }
                  }));
             var s = o.Status;

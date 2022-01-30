@@ -55,10 +55,9 @@
         {
             if (e.NewValue != null)
             {
-                if (this.DataContext is INotifyCollectionChanged)
+                if (this.DataContext is INotifyCollectionChanged changed)
                 {
-                    INotifyCollectionChanged observable = (INotifyCollectionChanged)this.DataContext;
-                    observable.CollectionChanged += new NotifyCollectionChangedEventHandler(this.BoundCollectionChanged);
+                    changed.CollectionChanged += new NotifyCollectionChangedEventHandler(this.BoundCollectionChanged);
                 }
 
                 this.ObserveBoundCollectionChanges();

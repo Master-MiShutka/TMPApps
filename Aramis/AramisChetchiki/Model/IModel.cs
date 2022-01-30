@@ -11,6 +11,6 @@
 
     public interface IModelWithMeterLastReading : IModel
     {
-        int LastReading { get; }
+        uint LastReading { get; }
     }
 }

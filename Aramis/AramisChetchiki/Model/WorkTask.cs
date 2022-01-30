@@ -242,7 +242,7 @@
             }
             else
             {
-                this.callingDispatcher.BeginInvoke((Action)this.UpdateUIAction, DispatcherPriority.Input);
+                this.callingDispatcher.BeginInvoke(this.UpdateUIAction, DispatcherPriority.Input);
             }
         }
     }

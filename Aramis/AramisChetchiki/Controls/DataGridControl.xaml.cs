@@ -56,8 +56,8 @@
 
         public Style DataRowStyle
         {
-            get { return (Style)GetValue(DataRowStyleProperty); }
-            set { SetValue(DataRowStyleProperty, value); }
+            get => (Style)this.GetValue(DataRowStyleProperty);
+            set => this.SetValue(DataRowStyleProperty, value);
         }
 
         public static readonly DependencyProperty DataRowStyleProperty =
@@ -95,10 +95,10 @@
 
             if (this.rowsItemsPresenter != null)
             {
-                System.Collections.Generic.List<Control> menuItems = new ();
+                System.Collections.Generic.List<Control> menuItems = new();
                 this.GenerateRowsContextMenu(ref menuItems);
                 menuItems.Add(new Separator());
-                var selectColumnsMenuItem = new MenuItem()
+                MenuItem selectColumnsMenuItem = new MenuItem()
                 {
                     Header = "Отображаемые столбцы таблицы",
                     Tag = "selectColumnsMenuItem",
@@ -109,11 +109,11 @@
                 selectColumnsMenuItem.Loaded += this.SelectColumnsMenuItem_Loaded;
                 menuItems.Add(selectColumnsMenuItem);
 
-                System.Windows.Data.CompositeCollection cc = new ();
+                System.Windows.Data.CompositeCollection cc = new();
 
                 if (this.rowsItemsPresenter.ContextMenu != null)
                 {
-                    System.Windows.Data.CollectionContainer c = new ();
+                    System.Windows.Data.CollectionContainer c = new();
                     c.SetCurrentValue(System.Windows.Data.CollectionContainer.CollectionProperty, this.rowsItemsPresenter.ContextMenu.Items);
                     cc.Add(c);
                 }
@@ -124,12 +124,12 @@
 
                 if (contextMenu != null)
                 {
-                    System.Windows.Data.CollectionContainer c = new ();
+                    System.Windows.Data.CollectionContainer c = new();
                     c.SetCurrentValue(System.Windows.Data.CollectionContainer.CollectionProperty, contextMenu.Items);
                     cc.Add(c);
                 }
 
-                System.Windows.Data.CollectionContainer newCollection = new ();
+                System.Windows.Data.CollectionContainer newCollection = new();
                 menuItems.Add(new Separator());
                 newCollection.SetCurrentValue(System.Windows.Data.CollectionContainer.CollectionProperty, menuItems);
                 cc.Add(newCollection);
@@ -151,7 +151,7 @@
             }
 
             MenuItem menuItem = null;
-            foreach (var item in contextMenu.Items)
+            foreach (object item in contextMenu.Items)
             {
                 if (item is MenuItem menu && menu.Tag != null && Equals(menu.Tag, "selectColumnsMenuItem"))
                 {
@@ -168,7 +168,7 @@
             menuItem.Items.Clear();
             if (this.filterDataGrid.ColumnsVisibilitySelectMenuItemList != null)
             {
-                foreach (var item in this.filterDataGrid.ColumnsVisibilitySelectMenuItemList)
+                foreach (MenuItem item in this.filterDataGrid.ColumnsVisibilitySelectMenuItemList)
                 {
                     menuItem.Items.Add(item);
                 }
@@ -177,20 +177,20 @@
 
         private void GenerateRowsContextMenu(ref System.Collections.Generic.List<Control> menuItems)
         {
-            MenuItem menuItem1 = new ()
+            MenuItem menuItem1 = new()
             {
                 Header = "Режим копирования: включать заголовки столбцов",
                 IsCheckable = true,
                 IsChecked = true,
             };
             menuItem1.Click += this.GridCopyModeClick;
-            MenuItem menuItem2 = new ()
+            MenuItem menuItem2 = new()
             {
                 Header = "Режим выделения",
             };
-            MenuItem menuItem3 = new () { Header = "Строка" };
+            MenuItem menuItem3 = new() { Header = "Строка" };
             menuItem3.Click += this.GridSelectModeRowClick;
-            MenuItem menuItem4 = new () { Header = "Ячейка" };
+            MenuItem menuItem4 = new() { Header = "Ячейка" };
             menuItem4.Click += this.GridSelectModeCellClick;
             menuItem2.Items.Add(menuItem3);
             menuItem2.Items.Add(menuItem4);

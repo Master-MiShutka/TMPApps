@@ -1,22 +1,27 @@
-﻿<local:BaseFilterControl x:Class="TMP.WORK.AramisChetchiki.Controls.ComboBoxFilter"
-                         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-                         xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-                         xmlns:local="clr-namespace:TMP.WORK.AramisChetchiki.Controls"
-                         xmlns:controls="clr-namespace:TMP.UI.Controls.WPF;assembly=ui.controls.wpf"
-                         xmlns:converters="clr-namespace:TMP.UI.Controls.WPF.Converters;assembly=ui.controls.wpf"
-                         xmlns:itemsfilter="clr-namespace:ItemsFilter;assembly=ItemsFilter"
-                         xmlns:itemsfilter_view="clr-namespace:ItemsFilter.View;assembly=ItemsFilter"
-                         xmlns:system="clr-namespace:System;assembly=mscorlib"
-                         mc:Ignorable="d" >
+﻿<local:BaseFilterControl
+    x:Class="TMP.WORK.AramisChetchiki.Controls.ComboBoxFilter"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="clr-namespace:TMP.UI.Controls.WPF;assembly=ui.controls.wpf"
+    xmlns:converters="clr-namespace:TMP.UI.Controls.WPF.Converters;assembly=ui.controls.wpf"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:itemsfilter="clr-namespace:ItemsFilter;assembly=ItemsFilter"
+    xmlns:itemsfilter_view="clr-namespace:ItemsFilter.View;assembly=ItemsFilter"
+    xmlns:local="clr-namespace:TMP.WORK.AramisChetchiki.Controls"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:system="clr-namespace:System;assembly=mscorlib"
+    mc:Ignorable="d">
     <local:BaseFilterControl.Resources>
 
         <Style TargetType="{x:Type itemsfilter_view:MultiValueFilterView}">
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type itemsfilter_view:MultiValueFilterView}">
-                        <controls:MultiSelectCombobox x:Name="PART_Items" ItemSeparator=";" ItemsSource="{Binding ViewModel.AvailableValues, RelativeSource={RelativeSource TemplatedParent}}" HorizontalAlignment="Stretch" />
+                        <controls:MultiSelectCombobox
+                            x:Name="PART_Items"
+                            HorizontalAlignment="Stretch"
+                            ItemSeparator=";"
+                            ItemsSource="{Binding ViewModel.AvailableValues, IsAsync=True, RelativeSource={RelativeSource TemplatedParent}}" />
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
@@ -24,14 +29,12 @@
 
     </local:BaseFilterControl.Resources>
     <HeaderedContentControl
-        Style="{StaticResource FilterHeaderedContentControlStyle}"
         x:Name="root"
         Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"
         BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}"
         BorderThickness="1"
-        Header="{Binding Path=FilterPropertyName, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:ComboBoxFilter}}, Converter={StaticResource UnderLineTextToSpaceConverter}}">
-        <itemsfilter_view:MultiValueFilterView 
-            itemsfilter:FilterListExtensions.IsActive="True"
-            ViewModel="{Binding Path=Filter, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:ComboBoxFilter}}}" />
+        Header="{Binding Path=FilterPropertyName, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:ComboBoxFilter}}, Converter={StaticResource UnderLineTextToSpaceConverter}}"
+        Style="{StaticResource FilterHeaderedContentControlStyle}">
+        <itemsfilter_view:MultiValueFilterView itemsfilter:FilterListExtensions.IsActive="True" ViewModel="{Binding Path=Filter, IsAsync=True, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:ComboBoxFilter}}}" />
     </HeaderedContentControl>
 </local:BaseFilterControl>

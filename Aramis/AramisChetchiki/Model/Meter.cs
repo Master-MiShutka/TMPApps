@@ -1,7 +1,6 @@
 ﻿namespace TMP.WORK.AramisChetchiki.Model
 {
     using System;
-    using System.Collections.Generic;
     using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
     using System.Linq;
@@ -149,20 +148,18 @@
         [DisplayName("Дата уведомления")]
         [Display(GroupName = "Абонент")]
         [DateTimeDataFormat]
-        [MessagePack.MessagePackFormatter(typeof(DateOnlyFormatter))]
         public DateOnly? ДатаУведомления { get; set; }
 
         [DisplayName("Дата отключения")]
         [Display(GroupName = "Абонент")]
         [DateTimeDataFormat]
-        [MessagePack.MessagePackFormatter(typeof(DateOnlyFormatter))]
         public DateOnly? ДатаОтключения { get; set; }
 
         [MessagePack.IgnoreMember]
         [DisplayName("Год отключения")]
         [Display(GroupName = "Абонент")]
         [SummaryInfo]
-        public int? ГодОтключения => this.Отключён ? this.ДатаОтключения.Value.Year : null;
+        public ushort? ГодОтключения => this.Отключён ? (ushort)this.ДатаОтключения.Value.Year : null;
 
         [MessagePack.IgnoreMember]
         [Display(GroupName = "Абонент")]
@@ -177,13 +174,13 @@
 
         [DisplayName("Дата удаления из базы")]
         [Display(GroupName = "Абонент")]
-        [MessagePack.MessagePackFormatter(typeof(DateOnlyFormatter))]
+
         public DateOnly ДатаУдаления { get; set; }
 
         [DisplayName("Прописано человек")]
         [Display(GroupName = "Абонент")]
         [SummaryInfo]
-        public int? КолвоЧеловек { get; set; }
+        public byte? КолвоЧеловек { get; set; }
 
         #endregion
 
@@ -227,12 +224,12 @@
         [DisplayName("Мощность электроустановки, кВт")]
         [Display(GroupName = "Счётчик")]
         [SummaryInfo]
-        public decimal? Мощность { get; set; }
+        public float? Мощность { get; set; }
 
         [DisplayName("Год выпуска счётчика")]
         [SummaryInfo]
         [Display(GroupName = "Счётчик")]
-        public int ГодВыпуска { get; set; }
+        public ushort ГодВыпуска { get; set; }
 
         [MessagePack.IgnoreMember]
         private DateOnly? датаУстановки;
@@ -240,7 +237,7 @@
         [DisplayName("Дата установки учёта")]
         [Display(GroupName = "Счётчик")]
         [DateTimeDataFormat]
-        [MessagePack.MessagePackFormatter(typeof(DateOnlyFormatter))]
+
         public DateOnly ДатаУстановки
         {
             get => this.датаУстановки == null || this.датаУстановки == default ? default : this.датаУстановки.Value;
@@ -251,11 +248,11 @@
         [DisplayName("Год установки учёта")]
         [SummaryInfo]
         [Display(GroupName = "Счётчик")]
-        public int ГодУстановки => this.ДатаУстановки.Year;
+        public ushort ГодУстановки => (ushort)this.ДатаУстановки.Year;
 
         [DisplayName("Показание при установке")]
         [Display(GroupName = "Счётчик")]
-        public int ПоказаниеПриУстановке { get; set; }
+        public uint? ПоказаниеПриУстановке { get; set; }
 
         [DisplayName("Расчётное показание")]
         [Display(GroupName = "Счётчик")]
@@ -263,7 +260,7 @@
 
         [DisplayName("Последнее показание при обходе")]
         [Display(GroupName = "Счётчик")]
-        public int? ПослПоказаниеОбхода { get; set; }
+        public uint? ПослПоказаниеОбхода { get; set; }
 
         [MessagePack.IgnoreMember]
         [Display(GroupName = "Счётчик")]
@@ -278,6 +275,7 @@
                     : this.Фаз == 3
                         ? this.Принцип == "индукционный" ? "3ф инд." : this.Принцип == "электронный" ? "3ф эл." : "3ф неизв."
                         : "неверное кол-во фаз";
+
                 return result;
             }
         }
@@ -300,7 +298,7 @@
 
         [DisplayName("Количество используемых знаков")]
         [Display(GroupName = "Счётчик")]
-        public decimal Разрядность { get; set; }
+        public byte Разрядность { get; set; }
 
         #endregion
 
@@ -332,17 +330,17 @@
 
         [DisplayName("Показание при отключении")]
         [Display(GroupName = "Счётчик")]
-        public int? ПоказаниеПриОтключении { get; set; }
+        public uint? ПоказаниеПриОтключении { get; set; }
 
         [DisplayName("Последнее оплаченное показание")]
         [Display(GroupName = "Оплата")]
         [NumericDataFormat]
-        public int? ПоследнееОплаченноеПоказание { get; set; }
+        public uint? ПоследнееОплаченноеПоказание { get; set; }
 
         [DisplayName("Предыдуще оплаченное показание")]
         [Display(GroupName = "Оплата")]
         [NumericDataFormat]
-        public int? ПредыдущеОплаченноеПоказание { get; set; }
+        public uint? ПредыдущеОплаченноеПоказание { get; set; }
 
         #endregion
 
@@ -362,31 +360,31 @@
 
         [DisplayName("Долг, руб")]
         [Display(GroupName = "Оплата")]
-        public decimal? ДолгРуб { get; set; }
+        public float? ДолгРуб { get; set; }
 
         [DisplayName("ErrSumN")]
         [Display(GroupName = "Оплата")]
-        public decimal? ErrSumN { get; set; }
+        public float? ErrSumN { get; set; }
 
         [DisplayName("ErrSumV")]
         [Display(GroupName = "Оплата")]
-        public decimal? ErrSumV { get; set; }
+        public float? ErrSumV { get; set; }
 
         [DisplayName("Сумма оплаты")]
         [Display(GroupName = "Оплата")]
         [NumericDataFormat]
-        public decimal? СуммаОплаты { get; set; }
+        public float? СуммаОплаты { get; set; }
 
         [DisplayName("Период последней оплаты")]
         [Display(GroupName = "Оплата")]
         [DateTimeDataFormat]
-        [MessagePack.MessagePackFormatter(typeof(DateOnlyFormatter))]
+
         public DateOnly? ПериодПослОплаты { get; set; }
 
         [DisplayName("Среднее")]
         [Display(GroupName = "Оплата")]
         [NumericDataFormat]
-        public int? Среднее { get; set; }
+        public float? Среднее { get; set; }
 
         [DisplayName("Месяц")]
         [Display(GroupName = "Оплата")]
@@ -396,7 +394,7 @@
         [MessagePack.IgnoreMember]
         [DisplayName("Долг")]
         [Display(GroupName = "Оплата")]
-        public uint? Долг
+        public double? Долг
         {
             get
             {
@@ -411,10 +409,10 @@
 
                 int months = now.Year > year ? 12 - month + now.Month + ((now.Year - year - 1) * 12) : now.Month - month;
 
-                int среднее = this.Среднее.Value;
+                float среднее = this.Среднее.Value;
                 int месяц = this.Месяц.Value;
 
-                return (uint)Math.Round(1d * среднее / месяц * (months - 1), 0);
+                return Math.Round(1d * среднее / месяц * (months - 1), 2);
             }
         }
 
@@ -424,7 +422,6 @@
         [DisplayName("Дата оплаты")]
         [Display(GroupName = "Оплата")]
         [DateTimeDataFormat]
-        [MessagePack.MessagePackFormatter(typeof(DateOnlyFormatter))]
         public DateOnly ДатаОплаты
         {
             get => this.датаОплаты == null || this.датаОплаты == default ? default : this.датаОплаты.Value;
@@ -435,7 +432,7 @@
         [DisplayName("Год оплаты")]
         [SummaryInfo]
         [Display(GroupName = "Оплата")]
-        public int ГодОплаты => this.ДатаОплаты.Year;
+        public ushort ГодОплаты => (ushort)this.ДатаОплаты.Year;
 
         [DisplayName("Задолженник")]
         [Display(GroupName = "Оплата")]
@@ -445,7 +442,7 @@
         [DisplayName("Задолженность, кВт∙ч")]
         [Display(GroupName = "Оплата")]
         [MessagePack.IgnoreMember]
-        public decimal Задолженность
+        public uint Задолженность
         {
             get
             {
@@ -456,12 +453,12 @@
 
                 if (this.ДатаОбхода > this.ДатаОплаты)
                 {
-                    int value = (this.ПослПоказаниеОбхода.HasValue ? this.ПослПоказаниеОбхода.Value : 0) - (this.ПоследнееОплаченноеПоказание.HasValue ? this.ПоследнееОплаченноеПоказание.Value : 0);
-                    return value > 0 ? value : 0;
+                    long value = (this.ПослПоказаниеОбхода ?? 0) - (this.ПоследнееОплаченноеПоказание ?? 0);
+                    return value > 0 ? (uint)value : 0;
                 }
                 else
                 {
-                    int value = (this.ПослПоказаниеОбхода.HasValue ? this.ПослПоказаниеОбхода.Value : 0) - (this.ПоследнееОплаченноеПоказание.HasValue ? this.ПоследнееОплаченноеПоказание.Value : 0);
+                    long value = (this.ПослПоказаниеОбхода ?? 0) - (this.ПоследнееОплаченноеПоказание ?? 0);
                     if (value > 0)
                     {
                         ;
@@ -481,21 +478,32 @@
             get
             {
                 if (this.ДатаОплаты == default)
+                {
                     return true;
+                }
 
-                var paymentDate = this.ДатаОплаты.ToDateTime(TimeOnly.MinValue);
+                DateTime paymentDate = this.ДатаОплаты.ToDateTime(TimeOnly.MinValue);
 
                 if ((DateTime.Now - paymentDate).Days >= 62)
+                {
                     return true;
+                }
                 else
+                {
                     return false;
+                }
             }
         }
 
         [DisplayName("Среднемесячный расход по оплате, кВт∙ч")]
         [Display(GroupName = "Оплата")]
         [SummaryInfo]
-        public int? СреднеМесячныйРасходПоОплате { get; set; }
+        public uint? СреднеМесячныйРасходПоОплате { get; set; }
+
+        [DisplayName("Среднемесячный расход по контрольным показаниям, кВт∙ч")]
+        [Display(GroupName = "Оплата")]
+        [SummaryInfo]
+        public uint? СреднеМесячныйРасходПоКонтрольнымПоказаниям { get; set; }
 
         #endregion
 
@@ -507,7 +515,7 @@
         [DisplayName("Дата обхода")]
         [Display(GroupName = "Обход")]
         [DateTimeDataFormat]
-        [MessagePack.MessagePackFormatter(typeof(DateOnlyFormatter))]
+
         public DateOnly ДатаОбхода
         {
             get => this.датаОбхода == null || this.датаОбхода == default ? DateOnly.FromDateTime(new DateTime(1900, 1, 1)) : this.датаОбхода.Value;
@@ -518,18 +526,18 @@
         [DisplayName("Год обхода")]
         [SummaryInfo]
         [Display(GroupName = "Обход")]
-        public int ГодОбхода => this.ДатаОбхода.Year;
+        public ushort ГодОбхода => (ushort)this.датаОбхода?.Year;
 
         [MessagePack.IgnoreMember]
         [DisplayName("Обхода не было Х месяцев")]
         [Display(GroupName = "Обход")]
-        public int ОбходаНеБылоМесяцев
+        public ushort ОбходаНеБылоМесяцев
         {
             get
             {
                 DateOnly now = DateOnly.FromDateTime(DateTime.Now);
-                DateOnly обход = this.ДатаОбхода;
-                return ((now.Year - обход.Year) * 12) + now.Month - обход.Month;
+                DateOnly обход = this.датаОбхода ?? default;
+                return (ushort)(((now.Year - обход.Year) * 12) + now.Month - обход.Month);
             }
         }
 
@@ -537,23 +545,16 @@
         [DisplayName("Обхода не было")]
         [SummaryInfo]
         [Display(GroupName = "Обход")]
-        public string ОбходаНеБыло
+        public string ОбходаНеБыло => this.ОбходаНеБылоМесяцев switch
         {
-            get
-            {
-                return this.ОбходаНеБылоМесяцев switch
-                {
-                    0 => "был в этом месяце",
-                    > 0 and <= 3 => "был недавно",
-                    > 3 and <= 6 => "более 3 месяцев",
-                    > 6 and <= 12 => "более полугода",
-                    > 12 and <= 36 => "более 1 года",
-                    > 36 and < 60 => "более 3 лет",
-                    >= 60 => "очень давно",
-                    _ => throw new NotImplementedException()
-                };
-            }
-        }
+            0 => "был в этом месяце",
+            > 0 and <= 3 => "был недавно",
+            > 3 and <= 6 => "более 3 месяцев",
+            > 6 and <= 12 => "более полугода",
+            > 12 and <= 36 => "более 1 года",
+            > 36 and < 60 => "более 3 лет",
+            >= 60 => "очень давно",
+        };
 
         [DisplayName("Контролёр")]
         [SummaryInfo]
@@ -573,7 +574,7 @@
         {
             get
             {
-                uint year = this.ГодПоверки + this.ПериодПоверки;
+                int year = this.ГодПоверки + this.ПериодПоверки;
                 DateOnly now = ДатаСравненияПоверки;
 
                 if (year < now.Year)
@@ -598,20 +599,20 @@
         public byte КварталПоверки { get; set; }
 
         [MessagePack.IgnoreMember]
-        private uint годПоверки;
+        private ushort годПоверки;
 
         [DisplayName("Год поверки счётчика")]
         [SummaryInfo]
         [Display(GroupName = "Поверка")]
-        public uint ГодПоверки
+        public ushort ГодПоверки
         {
             get => this.годПоверки;
             set => this.годПоверки = FixYear(value);
         }
 
-        private static uint FixYear(uint value)
+        private static ushort FixYear(ushort value)
         {
-            return value < 100 ? value > 50 ? 1900 + value : 2000 + value : value;
+            return (ushort)(value < 100 ? value > 50 ? 1900 + value : 2000 + value : value);
         }
 
         [MessagePack.IgnoreMember]
@@ -685,7 +686,7 @@
         [MessagePack.IgnoreMember]
         [DisplayName("Номер ТП")]
         [Display(GroupName = "Привязка")]
-        public int? ТПNumber => this.ТП?.Number < 0 ? null : this.ТП?.Number;
+        public ushort? ТПNumber => (this.ТП != null && this.ТП.IsEmpty) ? null : (ushort)this.ТП?.Number;
 
         [MessagePack.IgnoreMember]
         [DisplayName("Название ТП")]
@@ -700,7 +701,7 @@
         [DisplayName("Фидер 0,4 кВ")]
         [Display(GroupName = "Привязка")]
         [TextDataFormat]
-        public int? Фидер04 { get; set; }
+        public byte? Фидер04 { get; set; }
 
         [DisplayName("№ опоры")]
         [Display(GroupName = "Привязка")]
@@ -798,13 +799,13 @@
 
         [DisplayName("Дата договора")]
         [Display(GroupName = "Признаки")]
-        [MessagePack.MessagePackFormatter(typeof(DateOnlyFormatter))]
+
         public DateOnly? ДатаДоговора { get; set; }
 
         [SummaryInfo]
         [DisplayName("Льгота")]
         [Display(GroupName = "Признаки")]
-        public int? Льгота { get; set; }
+        public ushort? Льгота { get; set; }
 
         [DisplayName("Принадлежит РУП 'ГродноЭнерго'")]
         [Display(GroupName = "Признаки")]
@@ -836,18 +837,11 @@
 
         #endregion
 
-        public IEnumerable<MeterEvent> Events { get; set; }
-
-        [DisplayName("Среднемесячный расход по контрольным показаниям, кВт∙ч")]
-        [Display(GroupName = "Оплата")]
-        [SummaryInfo]
-        public int? СреднеМесячныйРасходПоКонтрольнымПоказаниям { get; set; }
-
         #region Наборы полей для отображения в таблицах
 
         public static MeterFieldsCollection GetSetOfColumns(string viewName)
         {
-            var list = viewName switch
+            string[] list = viewName switch
             {
                 "BaseView" => new string[] { nameof(Лицевой), nameof(ФиоСокращ), nameof(Адрес), nameof(ТипСчетчика), nameof(НомерСчетчика), nameof(Поверка), nameof(Поверен), nameof(ТП), nameof(Коментарий) },
                 "DetailedView" => new string[]

@@ -15,36 +15,36 @@
 
         public static void Init()
         {
-            var task = System.Threading.Tasks.Task.Run(() =>
+            System.Threading.Tasks.Task task = System.Threading.Tasks.Task.Run(() =>
             {
                 InitMode();
 
-                var list1 = MeterPropertiesNames;
-                var list2 = MeterPropertiesCollection;
-                var list3 = MeterProperties;
-                var list4 = MeterPropertyDisplayNames;
-                var list5 = MeterSummaryInfoProperties;
-                var list6 = MeterSummaryInfoPropertiesCollection;
+                IList<string> list1 = MeterPropertiesNames;
+                IDictionary<string, PlusPropertyDescriptor> list2 = MeterPropertiesCollection;
+                Dictionary<string, PropertyInfo> list3 = MeterProperties;
+                Dictionary<string, string> list4 = MeterPropertyDisplayNames;
+                IList<string> list5 = MeterSummaryInfoProperties;
+                IDictionary<string, PlusPropertyDescriptor> list6 = MeterSummaryInfoPropertiesCollection;
 
-                var list7 = ChangesOfMeterPropertiesNames;
-                var list8 = ChangesOfMetersPropertiesCollection;
-                var list9 = ChangesOfMetersProperties;
+                IEnumerable<string> list7 = ChangesOfMeterPropertiesNames;
+                IDictionary<string, PlusPropertyDescriptor> list8 = ChangesOfMetersPropertiesCollection;
+                Dictionary<string, PropertyInfo> list9 = ChangesOfMetersProperties;
 
-                var list10 = ElectricitySupplyPropertiesNames;
-                var list11 = ElectricitySupplyPropertiesCollection;
-                var list12 = ElectricitySupplyProperties;
+                IEnumerable<string> list10 = ElectricitySupplyPropertiesNames;
+                IDictionary<string, PlusPropertyDescriptor> list11 = ElectricitySupplyPropertiesCollection;
+                Dictionary<string, PropertyInfo> list12 = ElectricitySupplyProperties;
 
-                var list13 = SummaryInfoItemPropertiesNames;
-                var list14 = SummaryInfoItemPropertiesCollection;
-                var list15 = SummaryInfoItemProperties;
+                IEnumerable<string> list13 = SummaryInfoItemPropertiesNames;
+                IDictionary<string, PlusPropertyDescriptor> list14 = SummaryInfoItemPropertiesCollection;
+                Dictionary<string, PropertyInfo> list15 = SummaryInfoItemProperties;
             });
         }
 
         #region | Mode |
 
-        public readonly static IDictionary<Model.Mode, string> ModesDescription = new Dictionary<Model.Mode, string>();
-        public readonly static IDictionary<Model.Mode, (Type view, Type vm)> ModesViewModelTypes = new Dictionary<Model.Mode, (Type view, Type vm)>();
-        public readonly static IDictionary<Type, Model.Mode> ViewModelToModeDictionary = new Dictionary<Type, Model.Mode>();
+        public static readonly IDictionary<Model.Mode, string> ModesDescription = new Dictionary<Model.Mode, string>();
+        public static readonly IDictionary<Model.Mode, (Type view, Type vm)> ModesViewModelTypes = new Dictionary<Model.Mode, (Type view, Type vm)>();
+        public static readonly IDictionary<Type, Model.Mode> ViewModelToModeDictionary = new Dictionary<Type, Model.Mode>();
 
         private static void InitMode()
         {
@@ -55,7 +55,7 @@
             foreach (Model.Mode mode in Enum.GetValues(typeof(Model.Mode)))
             {
                 System.Reflection.FieldInfo info = mode.GetType().GetField(mode.ToString());
-                var valueDescription = (System.ComponentModel.DescriptionAttribute[])info.GetCustomAttributes(typeof(System.ComponentModel.DescriptionAttribute), false);
+                DescriptionAttribute[] valueDescription = (System.ComponentModel.DescriptionAttribute[])info.GetCustomAttributes(typeof(System.ComponentModel.DescriptionAttribute), false);
 
                 Type viewType = null, viewModelType = null;
 
@@ -162,11 +162,11 @@
                 if (meterPropertiesCollection == null)
                 {
                     meterPropertiesCollection = new Dictionary<string, PlusPropertyDescriptor>();
-                    var collection = TypeDescriptor.GetProperties(MeterType);
+                    PropertyDescriptorCollection collection = TypeDescriptor.GetProperties(MeterType);
 
                     // var sortedCollection = new SortedSet<PlusPropertyDescriptor>(new PropertyDescriptorComparer());
 
-                    var list = new List<PlusPropertyDescriptor>();
+                    List<PlusPropertyDescriptor> list = new List<PlusPropertyDescriptor>();
 
                     foreach (PropertyDescriptor pd in collection)
                     {
@@ -273,7 +273,7 @@
                         }
                     }
 
-                    var sortedCollection = new SortedSet<PlusPropertyDescriptor>(plusPropsCollection, new PropertyDescriptorComparer());
+                    SortedSet<PlusPropertyDescriptor> sortedCollection = new SortedSet<PlusPropertyDescriptor>(plusPropsCollection, new PropertyDescriptorComparer());
 
                     foreach (PlusPropertyDescriptor ppd in sortedCollection)
                     {
@@ -313,7 +313,7 @@
 
         #region | ChangesOfMeters |
 
-        private static readonly object Lock = new ();
+        private static readonly object Lock = new();
 
         public static Type ChangesOfMeterType => typeof(Model.ChangeOfMeter);
 
@@ -356,8 +356,8 @@
                 {
                     lock (Lock)
                     {
-                        Dictionary<string, PlusPropertyDescriptor> result = new ();
-                        var collection = TypeDescriptor.GetProperties(ChangesOfMeterType);
+                        Dictionary<string, PlusPropertyDescriptor> result = new();
+                        PropertyDescriptorCollection collection = TypeDescriptor.GetProperties(ChangesOfMeterType);
 
                         System.Diagnostics.Debug.Assert(collection.Count > 0, "TypeDescriptor.GetProperties(ChangesOfMeterType).Count <= 0");
 
@@ -375,7 +375,7 @@
                             }
                         }
 
-                        var sortedCollection = new SortedSet<PlusPropertyDescriptor>(plusPropsCollection, new PropertyDescriptorComparer());
+                        SortedSet<PlusPropertyDescriptor> sortedCollection = new SortedSet<PlusPropertyDescriptor>(plusPropsCollection, new PropertyDescriptorComparer());
 
                         foreach (PlusPropertyDescriptor ppd in sortedCollection)
                         {
@@ -450,8 +450,8 @@
                 {
                     lock (Lock)
                     {
-                        Dictionary<string, PlusPropertyDescriptor> result = new ();
-                        var collection = TypeDescriptor.GetProperties(ElectricitySupplyType);
+                        Dictionary<string, PlusPropertyDescriptor> result = new();
+                        PropertyDescriptorCollection collection = TypeDescriptor.GetProperties(ElectricitySupplyType);
 
                         System.Diagnostics.Debug.Assert(collection.Count > 0, "TypeDescriptor.GetProperties(ElectricitySupplyType).Count <= 0");
 
@@ -469,7 +469,7 @@
                             }
                         }
 
-                        var sortedCollection = new SortedSet<PlusPropertyDescriptor>(plusPropsCollection, new PropertyDescriptorComparer());
+                        SortedSet<PlusPropertyDescriptor> sortedCollection = new SortedSet<PlusPropertyDescriptor>(plusPropsCollection, new PropertyDescriptorComparer());
 
                         foreach (PlusPropertyDescriptor ppd in sortedCollection)
                         {
@@ -505,7 +505,7 @@
 
         #region | SummaryInfoItem |
 
-        private static readonly object Lock4 = new ();
+        private static readonly object Lock4 = new();
 
         public static Type SummaryInfoItemType => typeof(Model.SummaryInfoItem);
 
@@ -548,8 +548,8 @@
                 {
                     lock (Lock4)
                     {
-                        Dictionary<string, PlusPropertyDescriptor> result = new ();
-                        var collection = TypeDescriptor.GetProperties(SummaryInfoItemType);
+                        Dictionary<string, PlusPropertyDescriptor> result = new();
+                        PropertyDescriptorCollection collection = TypeDescriptor.GetProperties(SummaryInfoItemType);
 
                         System.Diagnostics.Debug.Assert(collection.Count > 0, "TypeDescriptor.GetProperties(SummaryInfoItemType).Count <= 0");
 
@@ -567,7 +567,7 @@
                             }
                         }
 
-                        var sortedCollection = new SortedSet<PlusPropertyDescriptor>(plusPropsCollection, new PropertyDescriptorComparer());
+                        SortedSet<PlusPropertyDescriptor> sortedCollection = new SortedSet<PlusPropertyDescriptor>(plusPropsCollection, new PropertyDescriptorComparer());
 
                         foreach (PlusPropertyDescriptor ppd in sortedCollection)
                         {
@@ -675,8 +675,8 @@
                 return null;
             }
 
-            List<PlusPropertyDescriptor> result = new ();
-            foreach (var item in propertyNames)
+            List<PlusPropertyDescriptor> result = new();
+            foreach (object item in propertyNames)
             {
                 if (item is Shared.PlusPropertyDescriptor descriptor)
                 {
@@ -703,7 +703,9 @@
             object value = pi.GetValue(obj, null);
 
             if (value == null)
+            {
                 return string.Empty;
+            }
 
             return pi.PropertyType switch
             {

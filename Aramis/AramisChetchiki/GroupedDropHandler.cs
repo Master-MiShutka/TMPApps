@@ -25,8 +25,8 @@
             GongSolutions.Wpf.DragDrop.DragDrop.DefaultDropHandler.Drop(dropInfo);
 
             // Now extract the dragged group items and set the new group (target)
-            var data = DefaultDropHandler.ExtractData(dropInfo.Data).OfType<PlusPropertyDescriptor>().ToList();
-            foreach (var groupedItem in data)
+            System.Collections.Generic.List<PlusPropertyDescriptor> data = DefaultDropHandler.ExtractData(dropInfo.Data).OfType<PlusPropertyDescriptor>().ToList();
+            foreach (PlusPropertyDescriptor groupedItem in data)
             {
                 // groupedItem.GroupName = dropInfo.TargetGroup.Name.ToString();
             }

@@ -1,31 +1,33 @@
-﻿<UserControl x:Class="TMP.WORK.AramisChetchiki.Controls.TableDetailsView"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:TMP.WORK.AramisChetchiki.Controls"
-             xmlns:extensions="clr-namespace:TMP.Extensions;assembly=TMP.Extensions"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+﻿<UserControl
+    x:Class="TMP.WORK.AramisChetchiki.Controls.TableDetailsView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:extensions="clr-namespace:TMP.Extensions;assembly=TMP.Extensions"
+    xmlns:local="clr-namespace:TMP.WORK.AramisChetchiki.Controls"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    mc:Ignorable="d">
     <Border Background="{extensions:ValueFromStyle StyleKey={x:Type ToolBar}, Property=Control.Background}">
         <WrapPanel
-            Margin="2,2"                        
+            Margin="2,2"
             Orientation="Horizontal"
             TextBlock.FontWeight="Bold">
             <TextBlock Text="Всего: " />
-            <TextBlock Text="{Binding Path=ItemsCount, FallbackValue=0, StringFormat={} элементов: {0:N0};}" />
-            <TextBlock Text="{Binding Path=AccountsCount, FallbackValue=0, StringFormat={} л/с: {0:N0};}" />
-            <TextBlock Text="{Binding Path=MetersCount, FallbackValue=0, StringFormat={} счётчиков: {0:N0};}" />
-            <TextBlock Text="{Binding Path=AbonentsCount, FallbackValue=0, StringFormat={} абонентов: {0:N0};}" />
-            <StackPanel Orientation="Horizontal" Visibility="{Binding ActiveFiltersList, Converter={StaticResource NullOrEmptyToVisibilityConverter}}">
+            <TextBlock Text="{Binding Path=ItemsCount, IsAsync=True, FallbackValue=0, StringFormat={} элементов: {0:N0};}" />
+            <TextBlock Text="{Binding Path=AccountsCount, IsAsync=True, FallbackValue=0, StringFormat={} л/с: {0:N0};}" />
+            <TextBlock Text="{Binding Path=MetersCount, IsAsync=True, FallbackValue=0, StringFormat={} счётчиков: {0:N0};}" />
+            <TextBlock Text="{Binding Path=AbonentsCount, IsAsync=True, FallbackValue=0, StringFormat={} абонентов: {0:N0};}" />
+            <StackPanel Orientation="Horizontal" Visibility="{Binding ActiveFiltersList, IsAsync=True, Converter={StaticResource NullOrEmptyToVisibilityConverter}}">
                 <Separator Margin="5,0" Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
-                <TextBlock Text="{Binding Path=CollectionViewItemsCount, FallbackValue=0, StringFormat=Найдено счётчиков: {0:N0}}" />
+                <TextBlock Text="{Binding Path=CollectionViewItemsCount, IsAsync=True, FallbackValue=0, StringFormat=Найдено счётчиков: {0:N0}}" />
                 <Separator Margin="5,0" Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
-                <TextBlock Text="{Binding Path=PercentOfTotal, StringFormat=или {0:N1}% от общего количества}" />
+                <TextBlock Text="{Binding Path=PercentOfTotal, IsAsync=True, StringFormat=или {0:N1}% от общего количества}" />
             </StackPanel>
-            <StackPanel Orientation="Horizontal" Visibility="{Binding ActiveFiltersList, Converter={StaticResource NullOrEmptyToVisibilityConverter}}">
+            <StackPanel Orientation="Horizontal" Visibility="{Binding ActiveFiltersList, IsAsync=True, Converter={StaticResource NullOrEmptyToVisibilityConverter}}">
                 <Separator Margin="5,0" Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
-                <TextBlock Text="{Binding Path=ActiveFiltersList, StringFormat=Активный(е) фильтр(ы): {0}}" TextTrimming="CharacterEllipsis" />
+                <TextBlock Text="{Binding Path=ActiveFiltersList, IsAsync=True, StringFormat=Активный(е) фильтр(ы): {0}}" TextTrimming="CharacterEllipsis" />
             </StackPanel>
         </WrapPanel>
     </Border>

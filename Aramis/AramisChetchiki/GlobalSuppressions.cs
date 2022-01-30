@@ -51,3 +51,10 @@ using System.Diagnostics.CodeAnalysis;
     Justification = "ToDo",
     Scope = "namespaceanddescendants",
     Target = "TMP.WORK.AramisChetchiki")]
+
+[assembly: SuppressMessage(
+    "StyleCop.CSharp.SpacingRules",
+    "SA1000:Keywords should be spaced correctly",
+    Justification = "ToDo",
+    Scope = "namespaceanddescendants",
+    Target = "TMP.WORK.AramisChetchiki")]

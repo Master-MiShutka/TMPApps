@@ -3,16 +3,12 @@
     using System;
     using System.Collections;
     using System.Collections.Generic;
-    using System.Collections.ObjectModel;
     using System.Data;
     using System.IO;
     using System.Linq;
-    using System.Text;
     using System.Threading.Tasks;
-    using System.Windows;
     using DBF;
     using TMP.WORK.AramisChetchiki.Model;
-    using TMP.WORK.AramisChetchiki.Properties;
     using TMPApplication;
 
     internal partial class AramisDBParser
@@ -97,8 +93,8 @@
 
                 if (this.dictionaryKartTn.ContainsKey(abonent.COD_TN))
                 {
-                    var town = this.dictionaryKartTn[abonent.COD_TN];
-                    var townName = town.TOWN;
+                    KartTn town = this.dictionaryKartTn[abonent.COD_TN];
+                    string townName = town.TOWN;
                     string province = NOTFOUNDED;
                     if (this.dictionaryKartSs.ContainsKey(town.COD_SS))
                     {
@@ -117,7 +113,7 @@
                         }
                     }
 
-                    var street = this.GetDictionaryValue(this.dictionaryKartSt, abonent.COD_ST);
+                    KartSt street = this.GetDictionaryValue(this.dictionaryKartSt, abonent.COD_ST);
 
                     Address address = new(
                         townName,
@@ -129,7 +125,7 @@
                 }
                 else
                 {
-                    var code = abonent.COD_TN;
+                    string code = abonent.COD_TN;
                     this.errors.Add($"Не найден населенный пункт с кодом {code}");
                 }
 
@@ -141,14 +137,14 @@
 
                 meter.Коментарий = abonent.KOMENT;
 
-                meter.ДатаУведомления = GetDateOnly(abonent.ДАТА_ОТКПЛ);
+                meter.ДатаУведомления = ConvertToDateOnly(abonent.ДАТА_ОТКПЛ);
 
-                meter.ДатаОтключения = GetDateOnly(abonent.ДАТА_ОТКФК);
-                meter.ПоказаниеПриОтключении = abonent.ПОКАЗАНИЯ;
+                meter.ДатаОтключения = ConvertToDateOnly(abonent.ДАТА_ОТКФК);
+                meter.ПоказаниеПриОтключении = ConvertToUInt(abonent.ПОКАЗАНИЯ);
 
                 meter.Задолженник = abonent.PR_ZD;
 
-                meter.КолвоЧеловек = abonent.ЧЛЕНОВ;
+                meter.КолвоЧеловек = ConvertToByte(abonent.ЧЛЕНОВ);
 
                 #endregion
 
@@ -159,19 +155,19 @@
 
                 #region Оплата
 
-                meter.ПериодПослОплаты = GetDateOnly(abonent.YEARMON);
+                meter.ПериодПослОплаты = ConvertToDateOnly(abonent.YEARMON);
                 meter.Среднее = abonent.СРЕДНЕЕ;
                 meter.Месяц = abonent.МЕСЯЦ;
 
-                meter.ДатаОплаты = GetDateOnly(abonent.DATE_R);
-                meter.СуммаОплаты = abonent.SUMMA_KN + abonent.SUMMA_KC;
+                meter.ДатаОплаты = ConvertToDateOnly(abonent.DATE_R);
+                meter.СуммаОплаты = ConvertToFloat(abonent.SUMMA_KN + abonent.SUMMA_KC);
 
-                meter.ДолгРуб = abonent.ERRSUM;
+                meter.ДолгРуб = ConvertToFloat(abonent.ERRSUM);
 
-                meter.ErrSumN = abonent.ERRSUMN;
-                meter.ErrSumV = abonent.ERRSUMV;
+                meter.ErrSumN = ConvertToFloat(abonent.ERRSUMN);
+                meter.ErrSumV = ConvertToFloat(abonent.ERRSUMV);
 
-                meter.ДатаОбхода = GetDateOnly(abonent.DATE_KON);
+                meter.ДатаОбхода = ConvertToDateOnly(abonent.DATE_KON);
 
                 #endregion
 
@@ -186,7 +182,7 @@
 
                 if (this.dictionaryKartfid.ContainsKey(abonent.FIDER10))
                 {
-                    var fider10 = this.dictionaryKartfid[abonent.FIDER10];
+                    Kartfid fider10 = this.dictionaryKartfid[abonent.FIDER10];
                     string s = fider10.ФИДЕР;
                     meter.Фидер10 = string.IsNullOrWhiteSpace(s) ? string.Empty : fider10.НАИМЕНОВ + "-" + s;
                     meter.Подстанция = this.GetDictionaryValue(this.dictionaryKartps, fider10.ПОДСТАНЦИЯ)?.НАИМЕНОВ;
@@ -196,21 +192,20 @@
                     this.errors.Add($"Не найдена информация по фидеру 10 кВ: л/с {meter.Лицевой}, код фидера {abonent.FIDER10}");
                 }
 
-                int n = 0;
-                if (int.TryParse(abonent.НОМЕР_ТП, out n) == false)
+                if (int.TryParse(abonent.НОМЕР_ТП, out int n) == false)
                 {
                     this.errors.Add($"Ошибка в номере ТП (поле НОМЕР_ТП) '{abonent.НОМЕР_ТП}' (Лицевой счет абонента={abonent.LIC_SCH})");
                 }
 
                 if (this.dictionaryKartktp.ContainsKey(n))
                 {
-                    var nameTp = this.GetDictionaryValue(this.dictionaryKartktp, n)?.НАИМ_ТП;
+                    string nameTp = this.GetDictionaryValue(this.dictionaryKartktp, n)?.НАИМ_ТП;
                     int? numberTp = this.GetDictionaryValue(this.dictionaryKartktp, n)?.НОМЕР_ТП;
-                    var ss = this.GetDictionaryValue(this.dictionaryKartktp, n)?.PR_GS;
+                    string ss = this.GetDictionaryValue(this.dictionaryKartktp, n)?.PR_GS;
                     meter.ТП = new TransformerSubstation(nameTp, numberTp.GetValueOrDefault(), ss);
                 }
 
-                meter.Фидер04 = abonent.ФИДЕР;
+                meter.Фидер04 = ConvertToByte(abonent.ФИДЕР);
                 meter.Опора = abonent.НОМЕР_ОПОР;
 
                 #endregion
@@ -223,7 +218,7 @@
                     System.Diagnostics.Debugger.Break();
                 }
 
-                var bitArray = new BitArray(15);
+                BitArray bitArray = new BitArray(15);
                 for (byte index = 0; index < priznak.Length; index++)
                 {
                     char bit = priznak[index];
@@ -235,10 +230,10 @@
                 }
 
                 meter.Договор = string.IsNullOrWhiteSpace(abonent.DOG) == false && (abonent.DOG == "1" || abonent.DOG == "д");
-                meter.ДатаДоговора = abonent.DATE_DOG.HasValue ? GetDateOnly(abonent.DATE_DOG) : null;
+                meter.ДатаДоговора = abonent.DATE_DOG.HasValue ? ConvertToDateOnly(abonent.DATE_DOG) : null;
 
                 meter.ПринадлежностьРуп = abonent.PR_MO;
-                meter.Льгота = abonent.ЛЬГОТА;
+                meter.Льгота = (ushort)abonent.ЛЬГОТА;
 
                 meter.РаботникБелЭнерго = abonent.RABOT;
 
@@ -253,32 +248,32 @@
 
                 if (meterData != null)
                 {
-                    var meterInfo = this.GetDictionaryValue(this.dictionaryKARTTSCH, meterData.COD_TSCH);
+                    KARTTSCH meterInfo = this.GetDictionaryValue(this.dictionaryKARTTSCH, meterData.COD_TSCH);
                     if (meterInfo != null)
                     {
                         meter.ТипСчетчика = meterInfo.NAME;
                         meter.Ампераж = meterInfo.TOK;
-                        meter.ПериодПоверки = GetByte(meterInfo.PERIOD, 0, 1, 0);
+                        meter.ПериодПоверки = ConvertToByte(meterInfo.PERIOD, 0, 1, 0);
                         meter.Фаз = (byte)meterInfo.ФАЗ;
                         meter.Принцип = meterInfo.TIP == "И" ? "индукционный" : (meterInfo.TIP == "Э" ? "электронный" : "неизвестный");
-                        meter.Разрядность = meterInfo.ЗНАК;
+                        meter.Разрядность = ConvertToByte(meterInfo.ЗНАК);
                     }
 
-                    meter.ПоследнееОплаченноеПоказание = meterData.DATA_NEW;
-                    meter.ПредыдущеОплаченноеПоказание = meterData.DATA_OLD;
+                    meter.ПоследнееОплаченноеПоказание = ConvertToUInt(meterData.DATA_NEW);
+                    meter.ПредыдущеОплаченноеПоказание = ConvertToUInt(meterData.DATA_OLD);
 
                     meter.РасчПоказание = abonent.RACHPOK;
-                    meter.ПослПоказаниеОбхода = abonent.DATA_KON;
+                    meter.ПослПоказаниеОбхода = ConvertToUInt(abonent.DATA_KON);
 
                     meter.НомерСчетчика = meterData.N_SCH;
                     string god = meterData.GODVYPUSKA.ToString();
-                    meter.ГодВыпуска = Convert.ToInt32(string.IsNullOrWhiteSpace(god) ? "0" : god, AppSettings.CurrentCulture);
+                    meter.ГодВыпуска = ConvertToUShort(god);
 
-                    meter.ДатаУстановки = GetDateOnly(meterData.DUSTAN);
-                    meter.ПоказаниеПриУстановке = meterData.PUSTAN ?? 0;
+                    meter.ДатаУстановки = ConvertToDateOnly(meterData.DUSTAN);
+                    meter.ПоказаниеПриУстановке = ConvertToUInt(meterData.PUSTAN);
 
                     meter.НомераПломб = meterData.N_PLOMB + "; " + meterData.PLOMB_GS;
-                    meter.Мощность = meterData.POWERS;
+                    meter.Мощность = ConvertToFloat(meterData.POWERS);
 
                     #region Счётчик-признаки
 
@@ -289,8 +284,8 @@
 
                     #region Поверка
 
-                    meter.КварталПоверки = GetByte(meterData.G_PROV, 0, 1, 1);
-                    meter.ГодПоверки = GetByte(meterData.G_PROV, 2, 2, 0);
+                    meter.КварталПоверки = ConvertToByte(meterData.G_PROV, 0, 1, 1);
+                    meter.ГодПоверки = ConvertToByte(meterData.G_PROV, 2, 2, 0);
 
                     #endregion
                 }
@@ -299,7 +294,7 @@
                     meter.ТипСчетчика = UNKNOWN_STR;
                     meter.Ампераж = UNKNOWN_STR;
                     meter.ПериодПоверки = 0;
-                    meter.Фаз = 0;
+                    meter.Фаз = 1;
                     meter.Принцип = UNKNOWN_STR;
                     meter.НомерСчетчика = UNKNOWN_STR;
                     meter.МестоУстановки = UNKNOWN_STR;
@@ -372,7 +367,7 @@
                 }
 
                 workTask.UpdateStatus("анализ полученных данных...");
-                foreach (var item in tableAssmena)
+                foreach (Assmena item in tableAssmena)
                 {
                     if (this.dictionaryAssmena.ContainsKey(item.ЛИЦ_СЧЕТ))
                     {
@@ -439,7 +434,7 @@
                 ICollection<KARTSCH> meterInfos = this.dictionaryKARTSCH[assmena.ЛИЦ_СЧЕТ];
 
                 KARTAB abonent = new KARTAB();
-                var list = this.collectionKARTAB.Where(i => i.LIC_SCH == assmena.ЛИЦ_СЧЕТ && i.IsDeleted == false);
+                IEnumerable<KARTAB> list = this.collectionKARTAB.Where(i => i.LIC_SCH == assmena.ЛИЦ_СЧЕТ && i.IsDeleted == false);
                 if (list.Any())
                 {
                     if (list.Count() > 1)
@@ -461,7 +456,7 @@
                 if (meterInfos != null && meterInfos.Count != 0)
                 {
                     KARTSCH meterInfo1 = meterInfos.First();
-                    change.ГодВыпускаУстановленного = meterInfo1.GODVYPUSKA;
+                    change.ГодВыпускаУстановленного = ConvertToUShort(meterInfo1.GODVYPUSKA);
 
                     KARTTSCH meterInfos1 = this.GetDictionaryValue(this.dictionaryKARTTSCH, meterInfo1.COD_TSCH);
                     if (meterInfos1 != null)
@@ -478,13 +473,15 @@
                     KARTSCH meterInfo3 = old_meter.First();
                     KARTTSCH meterInfos3 = this.GetDictionaryValue(this.dictionaryKARTTSCH, meterInfo3.COD_TSCH);
 
-                    change.КварталПоверкиСнятого = GetByte(meterInfo3.G_PROV, 0, 1, 1);
-                    change.ГодПоверкиСнятого = GetByte(meterInfo3.G_PROV, 2, 2, 0);
-                    change.ГодВыпускаСнятого = meterInfo3.GODVYPUSKA;
-                    change.ДатаУстановкиСнятого = GetDateOnly(meterInfo3.DATE_UST);
+                    change.КварталПоверкиСнятого = ConvertToByte(meterInfo3.G_PROV, 0, 1, 1);
+                    change.ГодПоверкиСнятого = ConvertToByte(meterInfo3.G_PROV, 2, 2, 0);
+                    change.ГодВыпускаСнятого = ConvertToUShort(meterInfo3.GODVYPUSKA);
+                    change.ДатаУстановкиСнятого = ConvertToDateOnly(meterInfo3.DATE_UST);
 
                     if (meterInfos3 != null)
+                    {
                         change.РазрядностьСнятого = (byte)meterInfos3.ЗНАК;
+                    }
                 }
 
                 change.Адрес = new BaseAddress(
@@ -500,14 +497,13 @@
 
                 if (this.dictionaryKartfid.ContainsKey(abonent.FIDER10))
                 {
-                    var fider10 = this.dictionaryKartfid[abonent.FIDER10];
+                    Kartfid fider10 = this.dictionaryKartfid[abonent.FIDER10];
                     string s = fider10.ФИДЕР;
                     change.Фидер10 = string.IsNullOrWhiteSpace(s) ? string.Empty : fider10.НАИМЕНОВ + "-" + s;
                     change.Подстанция = this.GetDictionaryValue(this.dictionaryKartps, fider10.ПОДСТАНЦИЯ)?.НАИМЕНОВ;
                 }
 
-                int n = 0;
-                if (int.TryParse(abonent.НОМЕР_ТП, out n) == false)
+                if (int.TryParse(abonent.НОМЕР_ТП, out int n) == false)
                 {
                     this.errors.Add($"Ошибка в номере ТП (поле НОМЕР_ТП) '{abonent.НОМЕР_ТП}' (Лицевой счет абонента={abonent.LIC_SCH})");
                 }
@@ -518,24 +514,24 @@
                 }
                 else
                 {
-                    var typeTp = this.dictionaryKartktp[n].НАИМ_ТП;
-                    var nameTp = this.dictionaryKartktp[n].PR_GS;
+                    string typeTp = this.dictionaryKartktp[n].НАИМ_ТП;
+                    string nameTp = this.dictionaryKartktp[n].PR_GS;
                     int? numberTp = this.dictionaryKartktp[n].НОМЕР_ТП;
                     change.НомерТП = numberTp.GetValueOrDefault().ToString();
                     change.НаименованиеТП = typeTp + " " + nameTp;
                 }
 
-                change.Фидер04 = abonent.ФИДЕР;
+                change.Фидер04 = ConvertToByte(abonent.ФИДЕР);
                 change.Опора = abonent.НОМЕР_ОПОР;
 
                 change.Лицевой = ConvertToULong(assmena.ЛИЦ_СЧЕТ);
                 change.НомерСнятогоСчетчика = assmena.НОМЕР_СНЯТ;
-                change.ПоказаниеСнятого = assmena.ПОКАЗ_СНЯТ;
+                change.ПоказаниеСнятого = ConvertToUInt(assmena.ПОКАЗ_СНЯТ);
 
                 change.НомерУстановленногоСчетчика = assmena.НОМЕР_УСТ;
-                change.ПоказаниеУстановленного = assmena.ПОКАЗ_УСТ;
-                change.ДатаЗамены = GetDateOnly(assmena.ДАТА_ЗАМЕН);
-                change.НомерАкта = assmena.НОМЕР_АКТА;
+                change.ПоказаниеУстановленного = ConvertToUInt(assmena.ПОКАЗ_УСТ);
+                change.ДатаЗамены = ConvertToDateOnly(assmena.ДАТА_ЗАМЕН);
+                change.НомерАкта = ConvertToUInt(assmena.НОМЕР_АКТА);
                 change.Фамилия = assmena.ФАМИЛИЯ;
                 change.Причина = assmena.ПРИЧИНА;
             }
@@ -557,12 +553,12 @@
             if (record != null)
             {
                 int currYear = DateTime.Now.Year;
-                DateOnly period = GetDateOnly(record.GetValue<DateTime>("DATE_N"));
+                DateOnly period = ConvertToDateOnly(record.GetValue<DateTime>("DATE_N"));
                 if (period.Year == currYear || period.Year == currYear - 1)
                 {
                     try
                     {
-                        electricitySupply.ДатаОплаты = GetDateOnly(record.GetValue<DateTime>("DATE_OPL"));
+                        electricitySupply.ДатаОплаты = ConvertToDateOnly(record.GetValue<DateTime>("DATE_OPL"));
                         electricitySupply.ОплаченныеПоказания = record.GetValue<int>("DATA_OPL");
 
                         electricitySupply.Период = period.AddMonths(-1); // оплата на месяц позже
@@ -624,8 +620,8 @@
                 try
                 {
                     payment.Лицевой = ConvertToULong(record.GetString("LIC_SCH"));
-                    payment.ДатаОплаты = GetDateOnly(record.GetValue<DateTime?>("DATE_R"));
-                    payment.ПериодОплаты = GetDateOnly(record.GetValue<DateTime?>("YEARMON"));
+                    payment.ДатаОплаты = ConvertToDateOnly(record.GetValue<DateTime?>("DATE_R"));
+                    payment.ПериодОплаты = ConvertToDateOnly(record.GetValue<DateTime?>("YEARMON"));
 
                     payment.ПредыдущееПоказание = record.GetValue<int>("DATA_OLD");
                     payment.ПоследнееПоказание = record.GetValue<int>("DATA_NEW");
@@ -667,7 +663,7 @@
                 controlData.Лицевой = ConvertToULong(record.GetString("LIC_SCH"));
                 controlData.Оператор = record.GetString("ОПЕРАТОР");
 
-                var list = new List<MeterControlData>(12);
+                List<MeterControlData> list = new List<MeterControlData>(12);
 
                 try
                 {
@@ -675,12 +671,12 @@
                     int? value;
                     for (int ind = 1; ind <= 12; ind++)
                     {
-                        date = GetDateOnly(record.GetValue<DateTime?>($"DATE_{ind}"));
+                        date = ConvertToDateOnly(record.GetValue<DateTime?>($"DATE_{ind}"));
                         value = record.GetValue<int>($"DATA_{ind}");
 
                         if (date != default && value.HasValue)
                         {
-                            list.Add(new MeterControlData(date, value.Value, string.Empty));
+                            list.Add(new MeterControlData(date, ConvertToUInt(value.Value), string.Empty));
                         }
                     }
 
@@ -703,100 +699,139 @@
         /// </summary>
         /// <param name="record"></param>
         /// <returns></returns>
-        private KARTSCH ParseKARTSCHRecord(DbfRecord record) => new
-                (
-                    record.GetString("LIC_SCH"),
-                    record.GetString("N_SCH"),
-                    record.GetString("COD_TSCH"),
-                    record.GetString("G_PROV"),
-                    GetDate(record.GetValue<DateTime?>("DUSTAN")),
-                    record.GetValue<int?>("DATA_OLD"),
-                    record.GetValue<int?>("DATA_NEW"),
-                    record.GetString("N_PLOMB"),
-                    record.GetValue<int?>("GODVYPUSKA"),
-                    record.GetValue<decimal?>("POWERS"),
-                    record.GetString("COD_SS"),
-                    GetDate(record.GetValue<DateTime?>("DATE_FAZ")),
-                    record.GetString("PLOMB_GS"),
-                    record.GetString("MATER"),
-                    record.GetValue<int?>("PUSTAN"),
-                    record.GetValue<int?>("DATA_UST"),
-                    GetDate(record.GetValue<DateTime?>("DATE_UST")));
+        private KARTSCH ParseKARTSCHRecord(DbfRecord record)
+        {
+            return new
+(
+record.GetString("LIC_SCH"),
+record.GetString("N_SCH"),
+record.GetString("COD_TSCH"),
+record.GetString("G_PROV"),
+ConvertToDateTime(record.GetValue<DateTime?>("DUSTAN")),
+record.GetValue<int?>("DATA_OLD"),
+record.GetValue<int?>("DATA_NEW"),
+record.GetString("N_PLOMB"),
+record.GetValue<int?>("GODVYPUSKA"),
+record.GetValue<decimal?>("POWERS"),
+record.GetString("COD_SS"),
+ConvertToDateTime(record.GetValue<DateTime?>("DATE_FAZ")),
+record.GetString("PLOMB_GS"),
+record.GetString("MATER"),
+record.GetValue<int?>("PUSTAN"),
+record.GetValue<int?>("DATA_UST"),
+ConvertToDateTime(record.GetValue<DateTime?>("DATE_UST")));
+        }
 
-        private Kartfid ParseKartfidRecord(DbfRecord record) => new
-                (
-                    record.GetValue<int>("ПОДСТАНЦИЯ"),
-                    record.GetString("ФИДЕР"),
-                    record.GetString("НАИМЕНОВ"),
-                    record.GetString("НАИМ_ПОД"));
+        private Kartfid ParseKartfidRecord(DbfRecord record)
+        {
+            return new
+(
+record.GetValue<int>("ПОДСТАНЦИЯ"),
+record.GetString("ФИДЕР"),
+record.GetString("НАИМЕНОВ"),
+record.GetString("НАИМ_ПОД"));
+        }
 
-        private ASKONTR ParseASKONTRRecord(DbfRecord record) => new
-                (
-                    record.GetString("КОД_КОН"),
-                    record.GetString("ФАМИЛИЯ"));
+        private ASKONTR ParseASKONTRRecord(DbfRecord record)
+        {
+            return new
+(
+record.GetString("КОД_КОН"),
+record.GetString("ФАМИЛИЯ"));
+        }
 
-        private Kartktp ParseKartktpRecord(DbfRecord record) => new
-               (
-                   record.GetValue<int>("КОД_ТП"),
-                   record.GetString("ФИДЕР"),
-                   record.GetValue<int?>("НОМЕР_ТП"),
-                   record.GetString("НАИМ_ТП"),
-                   record.GetValue<int?>("ПОДСТАНЦИЯ"),
-                   record.GetValue<int?>("РЭС"),
-                   record.GetString("НАИМЕНОВ"),
-                   record.GetString("PR_GS"));
+        private Kartktp ParseKartktpRecord(DbfRecord record)
+        {
+            return new
+(
+record.GetValue<int>("КОД_ТП"),
+record.GetString("ФИДЕР"),
+record.GetValue<int?>("НОМЕР_ТП"),
+record.GetString("НАИМ_ТП"),
+record.GetValue<int?>("ПОДСТАНЦИЯ"),
+record.GetValue<int?>("РЭС"),
+record.GetString("НАИМЕНОВ"),
+record.GetString("PR_GS"));
+        }
 
-        private Kartps ParseKartpsRecord(DbfRecord record) => new
-               (
-                   record.GetValue<int>("ПОДСТАНЦИЯ"),
-                   record.GetValue<int?>("РЭС"),
-                   record.GetString("НАИМЕНОВ"));
+        private Kartps ParseKartpsRecord(DbfRecord record)
+        {
+            return new
+(
+record.GetValue<int>("ПОДСТАНЦИЯ"),
+record.GetValue<int?>("РЭС"),
+record.GetString("НАИМЕНОВ"));
+        }
 
-        private KartKat ParseKartKatRecord(DbfRecord record) => new
-               (
-                   record.GetString("COD_KAT"),
-                   record.GetString("KATEGAB"));
+        private KartKat ParseKartKatRecord(DbfRecord record)
+        {
+            return new
+(
+record.GetString("COD_KAT"),
+record.GetString("KATEGAB"));
+        }
 
-        private KartIsp ParseKartIspRecord(DbfRecord record) => new
-                (
-                    record.GetString("COD_ISP"),
-                    record.GetString("ISPIEM"));
+        private KartIsp ParseKartIspRecord(DbfRecord record)
+        {
+            return new
+(
+record.GetString("COD_ISP"),
+record.GetString("ISPIEM"));
+        }
 
-        private KartTpr ParseKartTprRecord(DbfRecord record) => new
-                (
-                    record.GetString("COD_TPR"),
-                    record.GetString("TPRIEM"));
+        private KartTpr ParseKartTprRecord(DbfRecord record)
+        {
+            return new
+(
+record.GetString("COD_TPR"),
+record.GetString("TPRIEM"));
+        }
 
-        private KartSt ParseKartStRecord(DbfRecord record) => new
-                (
-                    record.GetString("COD_ST"),
-                    record.GetString("STREET"));
+        private KartSt ParseKartStRecord(DbfRecord record)
+        {
+            return new
+(
+record.GetString("COD_ST"),
+record.GetString("STREET"));
+        }
 
-        private KartSs ParseKartSsRecord(DbfRecord record) => new
-                (
-                    record.GetString("COD_SS"),
-                    record.GetString("СЕЛЬСОВЕТ"));
+        private KartSs ParseKartSsRecord(DbfRecord record)
+        {
+            return new
+(
+record.GetString("COD_SS"),
+record.GetString("СЕЛЬСОВЕТ"));
+        }
 
-        private KartTn ParseKartTnRecord(DbfRecord record) => new
-                (
-                    record.GetString("COD_TN"),
-                    record.GetString("TOWN"),
-                    record.GetString("COD_SS"));
+        private KartTn ParseKartTnRecord(DbfRecord record)
+        {
+            return new
+(
+record.GetString("COD_TN"),
+record.GetString("TOWN"),
+record.GetString("COD_SS"));
+        }
 
-        private ASVIDYST ParseASVIDYSTRecord(DbfRecord record) => new
-                (
-                    record.GetString("COD_SS"),
-                    record.GetString("MESTO"));
+        private ASVIDYST ParseASVIDYSTRecord(DbfRecord record)
+        {
+            return new
+(
+record.GetString("COD_SS"),
+record.GetString("MESTO"));
+        }
 
-        private KARTTSCH ParseKARTTSCHRecord(DbfRecord record) => new
-                (
-                    record.GetString("COD_TSCH"),
-                    record.GetString("NAME"),
-                    record.GetString("TOK"),
-                    record.GetString("PERIOD"),
-                    record.GetString("TIP"),
-                    record.GetValue<int>("ФАЗ"),
-                    record.GetValue<decimal>("ЗНАК"));
+        private KARTTSCH ParseKARTTSCHRecord(DbfRecord record)
+        {
+            return new
+(
+record.GetString("COD_TSCH"),
+record.GetString("NAME"),
+record.GetString("TOK"),
+record.GetString("PERIOD"),
+record.GetString("TIP"),
+record.GetValue<int>("ФАЗ"),
+record.GetValue<decimal>("ЗНАК"));
+        }
 
         private KARTAB ParseKARTABRecord(DbfRecord record)
         {
@@ -904,7 +939,7 @@
                     record.GetString("FAM"),
                     record.GetString("NAME"),
                     record.GetString("OTCH"),
-                    GetDateOnly(record.GetValue<DateTime?>("DATE_ZAP"))
+                    ConvertToDateOnly(record.GetValue<DateTime?>("DATE_ZAP"))
                     );
         }
 

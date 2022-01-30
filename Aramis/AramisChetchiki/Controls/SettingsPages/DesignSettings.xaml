@@ -2,8 +2,6 @@
     x:Class="TMP.WORK.AramisChetchiki.Controls.SettingsPages.DesignSettings"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:settings_pages="clr-namespace:TMP.WORK.AramisChetchiki.Controls.SettingsPages"
-
     xmlns:controls="clr-namespace:TMP.UI.Controls.WPF;assembly=ui.controls.wpf"
     xmlns:converters="clr-namespace:TMP.UI.Controls.WPF.Converters;assembly=ui.controls.wpf"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -14,6 +12,7 @@
     xmlns:local_converters="clr-namespace:TMP.WORK.AramisChetchiki.Converters"
     xmlns:local_extensions="clr-namespace:TMP.WORK.AramisChetchiki.Extensions"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:settings_pages="clr-namespace:TMP.WORK.AramisChetchiki.Controls.SettingsPages"
     xmlns:tmpapp="clr-namespace:TMPApplication;assembly=TMPApplication"
     xmlns:xcdg="http://schemas.xceed.com/wpf/xaml/datagrid"
     Header="Оформление"
@@ -33,8 +32,7 @@
                     DisplayMemberPath="ShortName"
                     IsSynchronizedWithCurrentItem="True"
                     ItemsSource="{Binding Path=VisualThemesList}"
-                    SelectedItem="{Binding Path=SelectedVisualTheme, Mode=TwoWay}"
-                    Text="{Binding Path=SelectedVisualTheme.ShortName}" />
+                    SelectedItem="{Binding Path=SelectedVisualTheme, Mode=TwoWay}" />
             </controls:LabelledContent>
             <Separator />
             <DockPanel>

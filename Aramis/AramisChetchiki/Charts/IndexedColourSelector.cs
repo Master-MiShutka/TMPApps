@@ -30,7 +30,7 @@
             {
                 Brush result = System.Windows.Media.Brushes.LightGray;
 
-                Random rnd = new ();
+                Random rnd = new();
 
                 Type brushesType = typeof(Brushes);
 

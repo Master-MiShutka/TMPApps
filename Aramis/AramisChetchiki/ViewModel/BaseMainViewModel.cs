@@ -35,11 +35,7 @@
                 throw new ArgumentNullException("App.Current.MainWindow");
             }
 
-            this.CommandCloseWindow = new DelegateCommand(
-                () =>
-                {
-                    this.window.Close();
-                }, "Закрыть");
+            this.CommandCloseWindow = new DelegateCommand(this.DoCloseWindow);
 
             this.window.Closed += this.MainWindow_Closed;
         }
@@ -91,7 +87,7 @@
                 {
                     this.isBusyCancellationTokenSource = new System.Threading.CancellationTokenSource(TimeSpan.FromSeconds(30));
                     this.RaisePropertyChanged(nameof(this.IsBusyCancellationTokenSource));
-                    var waitTask = System.Threading.Tasks.Task.Run(
+                    System.Threading.Tasks.Task waitTask = System.Threading.Tasks.Task.Run(
                         () =>
                         {
                             System.Threading.Thread.Sleep(100);
@@ -266,6 +262,17 @@
             dialog.Show();
 
             return dialogCloseAction;
+        }
+
+        public override int GetHashCode()
+        {
+            Guid guid = new Guid("1E3F77FC-9833-46F3-AB7E-A991707B1CB9");
+            return guid.GetHashCode();
+        }
+
+        private void DoCloseWindow()
+        {
+            this.window.Close();
         }
     }
 }

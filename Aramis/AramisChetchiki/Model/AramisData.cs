@@ -1,6 +1,5 @@
 ﻿namespace TMP.WORK.AramisChetchiki.Model
 {
-    using System;
     using System.Collections.Generic;
     using System.Runtime.Serialization;
     using TMP.Common.RepositoryCommon;
@@ -54,9 +53,106 @@
         [MessagePack.Key(6)]
         public Dictionary<ulong, IList<ControlData>> MetersControlData { get; set; }
 
+        /// <summary>
+        /// События по каждому лицевому счёту: замена счётчика, оплата, контрольные показания
+        /// </summary>
+        [MessagePack.Key(7)]
+        public Dictionary<ulong, IList<MeterEvent>> Events { get; set; }
+
         public AramisData()
         {
             this.Info = new AramisDataInfo();
+
+            this.Events = new Dictionary<ulong, IList<MeterEvent>>();
+        }
+
+        public void Clear()
+        {
+            this.Info = null;
+
+            if (this.Meters is ICollection<Meter> meters)
+            {
+                if (meters is IReadOnlyCollection<Meter> meters2)
+                {
+                    meters2 = null;
+                }
+                else
+                {
+                    meters.Clear();
+                    meters = null;
+                }
+            }
+            else
+            {
+                this.Meters = null;
+            }
+
+            this.ChangesOfMeters.Clear();
+            this.ChangesOfMeters = null;
+
+            if (this.SummaryInfos is ICollection<SummaryInfoItem> summaryInfos)
+            {
+                if (summaryInfos is IReadOnlyCollection<SummaryInfoItem> summaryInfos2)
+                {
+                    summaryInfos2 = null;
+                }
+                else
+                {
+                    summaryInfos.Clear();
+                    summaryInfos = null;
+                }
+            }
+            else
+            {
+                this.SummaryInfos = null;
+            }
+
+            if (this.ElectricitySupplyInfo is ICollection<ElectricitySupply> electricitySupplis)
+            {
+                if (electricitySupplis is IReadOnlyCollection<ElectricitySupply> electricitySupplis2)
+                {
+                    electricitySupplis2 = null;
+                }
+                else
+                {
+                    electricitySupplis.Clear();
+                    electricitySupplis = null;
+                }
+            }
+            else
+            {
+                this.ElectricitySupplyInfo = null;
+            }
+
+            if (this.Payments != null)
+            {
+                foreach (KeyValuePair<ulong, IList<Payment>> item in this.Payments)
+                {
+                    item.Value?.Clear();
+                }
+                this.Payments.Clear();
+                this.Payments = null;
+            }
+
+            if (this.MetersControlData != null)
+            {
+                foreach (KeyValuePair<ulong, IList<ControlData>> item in this.MetersControlData)
+                {
+                    item.Value?.Clear();
+                }
+                this.MetersControlData.Clear();
+                this.MetersControlData = null;
+            }
+
+            if (this.Events != null)
+            {
+                foreach (KeyValuePair<ulong, IList<MeterEvent>> item in this.Events)
+                {
+                    item.Value?.Clear();
+                }
+                this.Events.Clear();
+                this.Events = null;
+            }
         }
     }
 }

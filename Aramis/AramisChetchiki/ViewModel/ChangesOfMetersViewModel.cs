@@ -42,12 +42,12 @@
                     TMPApplication.WpfDialogs.DialogMode.None);
                 control.CloseAction = () => dialog.Close();
                 dialog.Show();*/
-            }, (o) => this.Data != null, "Сортировка");
+            }, () => this.Data != null);
 
             this.CommandSetPeriod = new DelegateCommand<string>(
                 tag =>
             {
-                var month = new DateTime(today.Year, today.Month, 1);
+                DateTime month = new DateTime(today.Year, today.Month, 1);
                 switch (tag)
                 {
                     case "this week":
@@ -93,6 +93,7 @@
                         this.ToDate = today;
                         break;
                 }
+                this.RaisePropertyChanged(nameof(this.DataFilter));
             }, (o) => this.Data != null);
 
             if (System.ComponentModel.DesignerProperties.GetIsInDesignMode(new DependencyObject()))
@@ -108,7 +109,7 @@
 
                 if (lastDateTime.HasValue)
                 {
-                    var month = new DateTime(lastDateTime.Value.Year, lastDateTime.Value.Month, 1);
+                    DateTime month = new DateTime(lastDateTime.Value.Year, lastDateTime.Value.Month, 1);
                     this.FromDate = month;
                     this.ToDate = lastDateTime.Value.ToDateTime(TimeOnly.MinValue);
                 }
@@ -223,7 +224,7 @@
         {
             if (this.FromDate.HasValue && this.ToDate.HasValue && item.ДатаЗамены != default)
             {
-                var date = item.ДатаЗамены.ToDateTime(TimeOnly.MinValue);
+                DateTime date = item.ДатаЗамены.ToDateTime(TimeOnly.MinValue);
                 return date >= this.FromDate && date <= this.ToDate;
             }
             else
@@ -269,7 +270,7 @@
 
             if (this.FromDate.HasValue && this.ToDate.HasValue && item.ДатаЗамены != default)
             {
-                var date = item.ДатаЗамены.ToDateTime(TimeOnly.MinValue);
+                DateTime date = item.ДатаЗамены.ToDateTime(TimeOnly.MinValue);
                 result = date >= this.FromDate && date <= this.ToDate;
             }
 
@@ -316,5 +317,11 @@
             }
         }
         #endregion
+
+        public override int GetHashCode()
+        {
+            System.Guid guid = new System.Guid("1A555AD8-D371-4E35-9852-0967B8EC0453");
+            return guid.GetHashCode();
+        }
     }
 }

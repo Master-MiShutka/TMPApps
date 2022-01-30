@@ -38,7 +38,7 @@
                 field =>
             {
                 MainViewModel.ShowMetersWithGroupingAtField(field);
-            }, o => MainViewModel != null, HEADERFORWINDOWSHOWMETERS, "Показать все счётчики, сгруппированные по этому полю");
+            }, (o) => MainViewModel != null);
 
             this.CommandToShowList = new DelegateCommand<object>(
                 obj =>
@@ -47,18 +47,18 @@
                 {
                     MainViewModel.ShowMeterFilteredByFieldValue(parameters[0], parameters[1]);
                 }
-            }, o => MainViewModel != null, HEADERFORWINDOWSHOWMETERS, "Показать все счётчики, сгруппированные по этому полю");
+            }, (o) => MainViewModel != null);
 
             this.CommandExport = new DelegateCommand(
                 () =>
             {
                 this.ShowDialogInfo("Ещё не реализовано..");
-            }, o => this.View != null, "Экспорт");
+            }, () => this.View != null);
             this.CommandPrint = new DelegateCommand(
                 () =>
             {
                 this.ShowDialogInfo("Ещё не реализовано.");
-            }, o => this.View != null, "Печать");
+            }, () => this.View != null);
 
             if (System.ComponentModel.DesignerProperties.GetIsInDesignMode(new DependencyObject()))
             {
@@ -120,7 +120,7 @@
             {
                 DateTime start = DateTime.Now;
 
-                var fields = ModelHelper.GetFields(ModelHelper.MeterSummaryInfoPropertiesCollection, AppSettings.Default.SummaryInfoFields);
+                IEnumerable<Shared.PlusPropertyDescriptor> fields = ModelHelper.GetFields(ModelHelper.MeterSummaryInfoPropertiesCollection, AppSettings.Default.SummaryInfoFields);
 
                 if (fields == null)
                 {
@@ -128,7 +128,7 @@
                 }
 
                 IList<SummaryInfoItem> list = new List<SummaryInfoItem>();
-                foreach (var f in fields)
+                foreach (Shared.PlusPropertyDescriptor f in fields)
                 {
                     SummaryInfoItem si = this.Data.FirstOrDefault(i => i?.FieldName == f.Name);
                     if (si != null)
@@ -137,7 +137,7 @@
                     }
                 }
 
-                var view = CollectionViewSource.GetDefaultView(list);
+                ICollectionView view = CollectionViewSource.GetDefaultView(list);
                 view.Filter = this.Filter;
 
                 double ms = (DateTime.Now - start).TotalMilliseconds;
@@ -182,13 +182,13 @@
         /// </summary>
         private void PrintSummaryInfo()
         {
-            FlowDocument doc = new ()
+            FlowDocument doc = new()
             {
                 FontFamily = new FontFamily("Verdana;Tahoma"),
                 ColumnWidth = double.PositiveInfinity,
             };
 
-            Paragraph p = new (new Run(SUMMARYINFOREPORTHEADER)) { FontSize = 16, FontWeight = FontWeights.Bold, TextAlignment = TextAlignment.Center };
+            Paragraph p = new(new Run(SUMMARYINFOREPORTHEADER)) { FontSize = 16, FontWeight = FontWeights.Bold, TextAlignment = TextAlignment.Center };
             doc.Blocks.Add(p);
 
             IEnumerable<Model.SummaryInfoChildItem> childs;
@@ -198,7 +198,7 @@
                 doc.Blocks.Add(new Paragraph(new Run("* показаны только первые 10 групп, по убыванию количества счётчиков")) { FontSize = 12, FontStyle = FontStyles.Italic });
             }
 
-            Table table = new ()
+            Table table = new()
             {
                 CellSpacing = 0,
                 BorderBrush = new SolidColorBrush(Colors.Black),
@@ -212,10 +212,10 @@
             {
                 childs = this.ShowOnly10Groups ? si.OnlyFirst10Items : si.AllItems;
 
-                TableRowGroup rg = new ();
-                TableRow row = new ();
+                TableRowGroup rg = new();
+                TableRow row = new();
 
-                TableCell cellHeader = new (new Paragraph(new Run(si.Header) { FontWeight = FontWeights.Bold }));
+                TableCell cellHeader = new(new Paragraph(new Run(si.Header) { FontWeight = FontWeights.Bold }));
 
                 // TableCell cellInfo = new TableCell(new Paragraph(new Run(si.Info) { FontStyle = FontStyles.Italic }) { TextAlignment = TextAlignment.Right });
                 row.Cells.Add(cellHeader);
@@ -228,7 +228,7 @@
                 int index = 1;
                 foreach (SummaryInfoChildItem item in childs)
                 {
-                    TableCell cell = new (new Paragraph(new Run(item.Header)))
+                    TableCell cell = new(new Paragraph(new Run(item.Header)))
                     { BorderBrush = new SolidColorBrush(Colors.Gray), BorderThickness = new Thickness(0.5) };
                     row.Cells.Add(cell);
 
@@ -247,7 +247,7 @@
                 }
 
                 row = new TableRow();
-                TableCell line = new () { Padding = new Thickness(0), BorderBrush = new SolidColorBrush(Colors.Black), BorderThickness = new Thickness(0, 0, 0, 1), ColumnSpan = 2 };
+                TableCell line = new() { Padding = new Thickness(0), BorderBrush = new SolidColorBrush(Colors.Black), BorderThickness = new Thickness(0, 0, 0, 1), ColumnSpan = 2 };
                 row.Cells.Add(line);
                 rg.Rows.Add(row);
 
@@ -256,7 +256,7 @@
 
             doc.Blocks.Add(table);
 
-            var window = new PrintPreviewWindow(doc)
+            PrintPreviewWindow window = new PrintPreviewWindow(doc)
             {
                 Owner = App.Current.MainWindow,
             };
@@ -285,7 +285,7 @@
                 {
                     DisplayAlerts = false,
                 };
-                using Excel.Tools.Contribution.CommonUtils utils = new (excelApplication);
+                using Excel.Tools.Contribution.CommonUtils utils = new(excelApplication);
 
                 xlWorkbook = excelApplication.Workbooks.Add();
                 xlWorksheet = (Excel.Worksheet)xlWorkbook.Sheets[1];
@@ -387,7 +387,7 @@
                 // data.Borders[XlBordersIndex.xl].LineStyle = XlLineStyle.xlDouble;
 
                 // xlWorksheet.Columns[2].ColumnWidth = 25;
-                var ps = xlWorksheet.PageSetup;
+                Excel.PageSetup ps = xlWorksheet.PageSetup;
                 ps.PaperSize = XlPaperSize.xlPaperA4;
                 ps.Orientation = XlPageOrientation.xlPortrait;
                 ps.Zoom = false;
@@ -431,7 +431,7 @@
 
             try
             {
-                using var p = new System.Diagnostics.Process
+                using System.Diagnostics.Process p = new System.Diagnostics.Process
                 {
                     StartInfo = new System.Diagnostics.ProcessStartInfo(fileName)
                     {
@@ -452,5 +452,11 @@
         }
 
         #endregion
+
+        public override int GetHashCode()
+        {
+            System.Guid guid = new System.Guid("1A555AD8-D371-4E35-9852-0967B8EC0461");
+            return guid.GetHashCode();
+        }
     }
 }

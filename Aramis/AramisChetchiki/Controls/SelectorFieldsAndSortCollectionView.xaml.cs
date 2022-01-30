@@ -90,7 +90,7 @@
                             _columns.Move(column.VisiblePosition, item.DisplayIndex);
                     }
                 }*/
-            }, (o) => this.Fields != null && this.SortingFields != null);
+            }, () => this.Fields != null && this.SortingFields != null);
 
             this.CommandAddField = new DelegateCommand(
                 () =>
@@ -101,13 +101,13 @@
                 }
 
                 this.SortingFields.Add(new Field(this.SelectedField.FieldName));
-            }, (o) => this.Fields != null && this.Fields.Count > 0 && this.SelectedField != null);
+            }, () => this.Fields != null && this.Fields.Count > 0 && this.SelectedField != null);
 
             this.CommandClear = new DelegateCommand(
                 () =>
             {
                 this.SortingFields.Clear();
-            }, (o) => this.SortingFields != null && this.SortingFields.Count > 0);
+            }, () => this.SortingFields != null && this.SortingFields.Count > 0);
 
             this.CommandRemoveField = new DelegateCommand<Field>(
                 (sd) =>

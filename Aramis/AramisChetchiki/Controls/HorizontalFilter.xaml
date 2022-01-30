@@ -6,7 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:itemsfilter="clr-namespace:ItemsFilter;assembly=ItemsFilter"
     xmlns:itemsfilter_view="clr-namespace:ItemsFilter.View;assembly=ItemsFilter"
-    xmlns:local="clr-namespace:TMP.WORK.AramisChetchiki.Controls"    
+    xmlns:local="clr-namespace:TMP.WORK.AramisChetchiki.Controls"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:system="clr-namespace:System;assembly=mscorlib"
     Margin="5,0,0,2"
@@ -29,7 +29,7 @@
                             Background="Transparent"
                             BorderThickness="0"
                             Focusable="False"
-                            ItemsSource="{Binding ViewModel.AvailableValues, RelativeSource={RelativeSource TemplatedParent}}"
+                            ItemsSource="{Binding ViewModel.AvailableValues, IsAsync=True, RelativeSource={RelativeSource TemplatedParent}}"
                             SelectedValuePath="{x:Null}"
                             SelectionMode="Multiple">
                             <ListBox.ItemsPanel>
@@ -94,13 +94,12 @@
 
     </local:BaseFilterControl.Resources>
     <HeaderedContentControl
-        x:Name="root" Style="{StaticResource FilterHeaderedContentControlStyle}"
+        x:Name="root"
         Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"
         BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}"
         BorderThickness="1"
-        Header="{Binding Path=FilterPropertyName, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:HorizontalFilter}}, Converter={StaticResource UnderLineTextToSpaceConverter}}">
-        <itemsfilter_view:MultiValueFilterView 
-            itemsfilter:FilterListExtensions.IsActive="True"
-            ViewModel="{Binding Path=Filter, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:HorizontalFilter}}}" />
+        Header="{Binding Path=FilterPropertyName, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:HorizontalFilter}}, Converter={StaticResource UnderLineTextToSpaceConverter}}"
+        Style="{StaticResource FilterHeaderedContentControlStyle}">
+        <itemsfilter_view:MultiValueFilterView itemsfilter:FilterListExtensions.IsActive="True" ViewModel="{Binding Path=Filter, IsAsync=True, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:HorizontalFilter}}}" />
     </HeaderedContentControl>
 </local:BaseFilterControl>

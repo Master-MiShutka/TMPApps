@@ -2,10 +2,6 @@
 {
     using MessagePack;
     using MessagePack.Resolvers;
-    using System;
-    using System.Collections.Generic;
-    using TMP.Common.RepositoryCommon;
-    using TMP.WORK.AramisChetchiki.Model;
     using TMPApplication;
 
     /// <summary>
@@ -24,7 +20,7 @@
             System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
 
             // Do this once and store it for reuse.
-            var resolver = MessagePack.Resolvers.CompositeResolver.Create(
+            IFormatterResolver resolver = MessagePack.Resolvers.CompositeResolver.Create(
 
                 // resolver custom types first
                 AramisDataInfoResolver.Instance,
@@ -34,7 +30,7 @@
 
                 // finally use standard resolver
                 StandardResolver.Instance);
-            var options = MessagePackSerializerOptions.Standard.WithResolver(resolver);
+            MessagePackSerializerOptions options = MessagePackSerializerOptions.Standard.WithResolver(resolver);
 
             MessagePackSerializer.DefaultOptions = options;
 

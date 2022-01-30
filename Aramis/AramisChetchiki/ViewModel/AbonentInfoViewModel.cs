@@ -4,7 +4,6 @@
     using System.Windows.Input;
     using TMP.Shared.Commands;
     using TMP.WORK.AramisChetchiki.Model;
-    using TMP.WORK.AramisChetchiki.Properties;
 
     public class AbonentInfoViewModel : BaseMeterViewModel
     {
@@ -21,21 +20,21 @@
             {
                 this.View.MoveCurrentToPrevious();
             },
-                (o) => this.View != null);
+                () => this.View != null);
 
             this.NextItem = new DelegateCommand(
                 () =>
             {
                 this.View.MoveCurrentToNext();
             },
-                (o) => this.View != null);
+                () => this.View != null);
 
             this.FindById = new DelegateCommand(
                 () =>
             {
                 // View.MoveCurrentToNext();
             },
-                (o) => this.View != null);
+                () => this.View != null);
 
             this.View?.MoveCurrentToFirst();
         }
@@ -109,5 +108,11 @@
         }
 
         #endregion
+
+        public override int GetHashCode()
+        {
+            System.Guid guid = new System.Guid("1A555AD8-D371-4E35-9852-0967B8EC0451");
+            return guid.GetHashCode();
+        }
     }
 }

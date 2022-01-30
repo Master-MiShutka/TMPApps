@@ -43,7 +43,7 @@
                         Period = new Common.RepositoryCommon.DatePeriod(),
                     },
 
-                    ChangesOfMeters = new (),
+                    ChangesOfMeters = new(),
                     Meters = new List<Meter>(),
                     SummaryInfos = new ObservableCollection<SummaryInfoItem>(),
                 };
@@ -63,7 +63,7 @@
             this.getAppMemoryUsageTimer.Elapsed += this.AppMemoryUsageTimerCallback;
             this.getAppMemoryUsageTimer.Start();
 
-            this.CommandGoHome = new DelegateCommand(action: () =>
+            this.CommandGoHome = new DelegateCommand(() =>
             {
                 this.ChangeMode(Mode.Home);
             });
@@ -71,15 +71,17 @@
             this.CommandShowErrors = new DelegateCommand(() =>
             {
                 System.Windows.Controls.ScrollViewer scrollViewer = new System.Windows.Controls.ScrollViewer();
-                System.Windows.Controls.TextBox textBox = new System.Windows.Controls.TextBox();
-                textBox.HorizontalAlignment = HorizontalAlignment.Stretch;
-                textBox.VerticalAlignment = VerticalAlignment.Stretch;
-                textBox.IsReadOnlyCaretVisible = true;
-                textBox.Text = System.IO.File.ReadAllText(AramisDBParser.ErrorsFileName, System.Text.Encoding.UTF8);
+                System.Windows.Controls.TextBox textBox = new System.Windows.Controls.TextBox
+                {
+                    HorizontalAlignment = HorizontalAlignment.Stretch,
+                    VerticalAlignment = VerticalAlignment.Stretch,
+                    IsReadOnlyCaretVisible = true,
+                    Text = System.IO.File.ReadAllText(AramisDBParser.ErrorsFileName, System.Text.Encoding.UTF8)
+                };
                 scrollViewer.Content = textBox;
 
                 this.ShowCustomDialog(scrollViewer, "-= Выявленные ошибки в БД Арамис =-", TMPApplication.WpfDialogs.DialogMode.Ok);
-            }, (o) => System.IO.File.Exists(AramisDBParser.ErrorsFileName));
+            }, () => System.IO.File.Exists(AramisDBParser.ErrorsFileName));
 
             this.IsInitialized = false;
             this.Status = "запуск программы";
@@ -117,7 +119,7 @@
 
                     if (e.Info != null)
                     {
-                        var fi = Repository.Instance.AvailableDataFiles.Cast<AramisDataInfo>().FirstOrDefault(i => i.FileName == e.Info.FileName);
+                        AramisDataInfo fi = Repository.Instance.AvailableDataFiles.Cast<AramisDataInfo>().FirstOrDefault(i => i.FileName == e.Info.FileName);
                         if (this.IsDataLoaded == false)
                         {
                             this.SelectedDataFileInfo = fi;
@@ -153,6 +155,7 @@
                     this.RaisePropertyChanged(nameof(this.Data));
                     this.RaisePropertyChanged(nameof(this.Meters));
                     this.RaisePropertyChanged(nameof(this.AvailableDataFiles));
+                    this.RaisePropertyChanged(nameof(this.SelectedDataFileInfo));
 
                     //TMP.Common.RepositoryCommon.JsonSerializer.JsonSerializeAsync(this.Data.Meters.Take(10), "meters10.json");
 
@@ -161,6 +164,7 @@
                 case Common.RepositoryCommon.RepositoryAction.Saved:
                     this.SetWindowTaskbarItemProgressState(TMPApplication.WpfDialogs.Contracts.TaskbarItemProgressState.None);
                     this.RaisePropertyChanged(nameof(this.AvailableDataFiles));
+                    this.RaisePropertyChanged(nameof(this.SelectedDataFileInfo));
                     //TMP.Common.RepositoryCommon.JsonSerializer.JsonSerializeAsync(this.Data.Meters, "meters.json");
                     //TMP.Common.RepositoryCommon.JsonSerializer.JsonSerializeAsync(this.Data.Meters.Take(10), "meters10.json");
                     break;
@@ -168,6 +172,7 @@
                     this.RaisePropertyChanged(nameof(this.Data));
                     this.RaisePropertyChanged(nameof(this.Meters));
                     this.RaisePropertyChanged(nameof(this.AvailableDataFiles));
+                    this.RaisePropertyChanged(nameof(this.SelectedDataFileInfo));
                     break;
                 case Common.RepositoryCommon.RepositoryAction.FoundNewFile:
                     break;
@@ -199,7 +204,7 @@
 
             this.SetWindowTaskbarItemProgressState(TMPApplication.WpfDialogs.Contracts.TaskbarItemProgressState.Indeterminate);
 
-            var result = await Repository.Instance.GetDataFromFile(this.SelectedDataFileInfo).ConfigureAwait(false);
+            bool result = await Repository.Instance.GetDataFromFile(this.SelectedDataFileInfo).ConfigureAwait(false);
 
             this.IsInitialized = true;
             this.SetWindowTaskbarItemProgressState(TMPApplication.WpfDialogs.Contracts.TaskbarItemProgressState.None);
@@ -221,7 +226,7 @@
 
         private void DoShowMetersCollection(IEnumerable<Meter> meters, string fieldDisplayName = null, string fieldName = null, string value = null)
         {
-            var vm = new ViewModel.ViewCollectionViewModel(meters, fieldDisplayName, fieldName, value);
+            ViewCollectionViewModel vm = new ViewModel.ViewCollectionViewModel(meters, fieldDisplayName, fieldName, value);
             this.previousMode = this.CurrentMode;
             this.currentMode = Mode.ViewCollection;
             this.currentViewModel = vm;
@@ -343,7 +348,7 @@
                         return result;
                     }
 
-                    var valueDescription = (DescriptionAttribute[])info.GetCustomAttributes(typeof(DescriptionAttribute), false);
+                    DescriptionAttribute[] valueDescription = (DescriptionAttribute[])info.GetCustomAttributes(typeof(DescriptionAttribute), false);
                     if (valueDescription != null && valueDescription.Length == 1)
                     {
                         result += " :: " + valueDescription[0].Description;
@@ -418,22 +423,23 @@
             Exp.Expression innerLambda = Exp.Expression.Equal(left, right);
             Exp.Expression<Func<Meter, bool>> innerFunction = Exp.Expression.Lambda<Func<Meter, bool>>(innerLambda, pe);
 
-            var method = typeof(Enumerable).GetMethods().Where(m => m.Name == "Where" && m.GetParameters().Length == 2).Single().MakeGenericMethod(typeof(Meter));
+            System.Reflection.MethodInfo method = typeof(Enumerable).GetMethods().Where(m => m.Name == "Where" && m.GetParameters().Length == 2).Single().MakeGenericMethod(typeof(Meter));
 
             Exp.MethodCallExpression outerLambda = Exp.Expression.Call(method, Exp.Expression.Constant(this.Meters), innerFunction);
 
             Func<IEnumerable<Meter>> a = (Func<IEnumerable<Meter>>)Exp.Expression.Lambda(outerLambda).Compile();
 
-            var items = a();
+            IEnumerable<Meter> items = a();
 
             this.DoShowMetersCollection(items, ModelHelper.MeterPropertyDisplayNames[fieldName], fieldName, value);
         }
 
         public void ChangeMode(Mode newMode)
         {
-            if (this.CurrentViewModel is not null and IDisposable disposable)
+            if (this.currentViewModel is not null and IDisposable disposable)
             {
                 disposable.Dispose();
+                this.currentViewModel = null;
             }
 
             if (newMode == this.currentMode && this.currentViewModel != null)
@@ -472,5 +478,11 @@
         }
 
         #endregion IMainViewModel implementation
+
+        public override int GetHashCode()
+        {
+            System.Guid guid = new System.Guid("1A555AD8-D371-4E35-9852-0967B8EC0457");
+            return guid.GetHashCode();
+        }
     }
 }

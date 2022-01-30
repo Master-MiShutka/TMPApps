@@ -11,16 +11,16 @@
     {
         public static Tuple<IEnumerable<DataGridWpfColumnViewModel>, List<string>> GenerateColumns(IEnumerable<PlusPropertyDescriptor> fields)
         {
-            var columns = BuildColumns(fields);
+            IEnumerable<DataGridWpfColumnViewModel> columns = BuildColumns(fields);
             return GenerateColumns(columns);
         }
 
         public static Tuple<IEnumerable<DataGridWpfColumnViewModel>, List<string>> GenerateColumns(IEnumerable<DataGridWpfColumnViewModel> columns)
         {
-            List<string> tableColumnsFields = new ();
+            List<string> tableColumnsFields = new();
             if (columns != null)
             {
-                foreach (var column in columns.Cast<DataGridWpfColumnViewModel>())
+                foreach (DataGridWpfColumnViewModel column in columns.Cast<DataGridWpfColumnViewModel>())
                 {
                     tableColumnsFields.Add(column.FieldName);
                 }
@@ -31,10 +31,10 @@
 
         public static Tuple<IEnumerable<DataGridWpfColumnViewModel>, IEnumerable<string>> GenerateMeterColumns(TableViewKinds tableViewKind)
         {
-            var propertyDescriptors = ModelHelper.GetPropertyDescriptors(typeof(Model.Meter), tableViewKind);
-            var collection = BuildColumns(propertyDescriptors);
+            IEnumerable<PlusPropertyDescriptor> propertyDescriptors = ModelHelper.GetPropertyDescriptors(typeof(Model.Meter), tableViewKind);
+            IEnumerable<DataGridWpfColumnViewModel> collection = BuildColumns(propertyDescriptors);
 
-            var fieldNames = propertyDescriptors?.Select(m => m.Name);
+            IEnumerable<string> fieldNames = propertyDescriptors?.Select(m => m.Name);
 
             return new Tuple<IEnumerable<DataGridWpfColumnViewModel>, IEnumerable<string>>(collection, fieldNames);
         }
@@ -43,7 +43,7 @@
         {
             IList<Model.Field> result = new List<Model.Field>();
 
-            foreach (var column in dataGridBoundColumns.Cast<DataGridWpfColumnViewModel>())
+            foreach (DataGridWpfColumnViewModel column in dataGridBoundColumns.Cast<DataGridWpfColumnViewModel>())
             {
                 result.Add(new Field()
                 {
@@ -80,12 +80,12 @@
             }
 
             int index = 0;
-            foreach (var item in fields)
+            foreach (PlusPropertyDescriptor item in fields)
             {
                 item.Order = index++;
             }
 
-            List<DataGridWpfColumnViewModel> result = new ();
+            List<DataGridWpfColumnViewModel> result = new();
             foreach (PlusPropertyDescriptor field in fields)
             {
                 if (field == null)
@@ -100,7 +100,7 @@
                     typecode = Type.GetTypeCode(Nullable.GetUnderlyingType(field.PropertyType));
                 }
 
-                var cvm = new DataGridWpfColumnViewModel()
+                DataGridWpfColumnViewModel cvm = new DataGridWpfColumnViewModel()
                 {
                     FieldName = field.Name,
                     Title = field.DisplayName,

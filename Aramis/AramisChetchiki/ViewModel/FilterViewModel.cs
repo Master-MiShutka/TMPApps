@@ -26,7 +26,7 @@
             if (this.propertiesCollection.CanGroup == true && this.propertiesCollection.GroupDescriptions.Count == 0)
             {
                 PropertyGroupDescription groupDescription
-                    = new ("GroupName");
+                    = new("GroupName");
                 this.propertiesCollection.GroupDescriptions.Add(groupDescription);
             }
 
@@ -92,7 +92,7 @@
                     return;
                 }
 
-                foreach (var f in FilterListExtensions.FilterControls)
+                foreach (FilterControl f in FilterListExtensions.FilterControls)
                 {
                     if (f.ViewModel != null)
                     {
@@ -100,15 +100,14 @@
                         this.RaisePropertyChanged(propertyName: nameof(this.ActiveFiltersList));
                         this.RaisePropertyChanged(propertyName: nameof(this.IsAnyFilterActive));
                         this.RaisePropertyChanged(propertyName: nameof(this.FilterWindowHeader));
-                        foreach (var i in f.ViewModel)
+                        foreach (ItemsFilter.Model.IFilter i in f.ViewModel)
                         {
                             i.IsActive = false;
                         }
                     }
                 }
             },
-                (o) => this.IsAnyFilterActive,
-                "Очистить фильтры");
+                () => this.IsAnyFilterActive);
 
         private void FilterListExtensions_FiltersChanged(object sender, PropertyChangedEventArgs e)
         {

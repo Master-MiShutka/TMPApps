@@ -1,14 +1,14 @@
-﻿using System;
-using System.Globalization;
-using System.Windows;
-using System.Windows.Data;
-
-
-namespace TMP.WORK.AramisChetchiki.Converters
+﻿namespace TMP.WORK.AramisChetchiki.Converters
 {
+    using System;
+    using System.Globalization;
+    using System.Windows;
+    using System.Windows.Data;
+
     public class BoolToStrConverter : IValueConverter
     {
         public string TrueContent { get; set; } = "да";
+
         public string FalseContent { get; set; } = "нет";
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)

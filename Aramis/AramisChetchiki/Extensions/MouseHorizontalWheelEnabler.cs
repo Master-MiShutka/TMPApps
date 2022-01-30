@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
-using System.Windows.Input;
-using System.Windows.Interop;
-
-namespace TMP.WORK.AramisChetchiki.Extensions
+﻿namespace TMP.WORK.AramisChetchiki.Extensions
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Windows;
+    using System.Windows.Controls;
+    using System.Windows.Controls.Primitives;
+    using System.Windows.Input;
+    using System.Windows.Interop;
+
     public static class MouseHorizontalWheelEnabler
     {
         /// <summary>
@@ -41,7 +41,8 @@ namespace TMP.WORK.AramisChetchiki.Extensions
             }
             else
             {
-                window.Loaded += (sender, args) => {
+                window.Loaded += (sender, args) =>
+                {
                     IntPtr handle = new WindowInteropHelper(window).Handle;
                     EnableMouseHorizontalWheelSupport(handle);
                 };
@@ -70,7 +71,8 @@ namespace TMP.WORK.AramisChetchiki.Extensions
             }
 
             // also hook for IsOpened since a new window is created each time
-            popup.Opened += (sender, args) => {
+            popup.Opened += (sender, args) =>
+            {
                 // ReSharper disable once PossibleInvalidOperationException
                 EnableMouseHorizontalWheelSupport(GetObjectParentHandle(popup.Child).Value);
             };
@@ -98,7 +100,8 @@ namespace TMP.WORK.AramisChetchiki.Extensions
             }
 
             // also hook for IsOpened since a new window is created each time
-            contextMenu.Opened += (sender, args) => {
+            contextMenu.Opened += (sender, args) =>
+            {
                 // ReSharper disable once PossibleInvalidOperationException
                 EnableMouseHorizontalWheelSupport(GetObjectParentHandle(contextMenu).Value);
             };
@@ -111,7 +114,7 @@ namespace TMP.WORK.AramisChetchiki.Extensions
                 throw new ArgumentNullException(nameof(depObj));
             }
 
-            var presentationSource = PresentationSource.FromDependencyObject(depObj) as HwndSource;
+            HwndSource presentationSource = PresentationSource.FromDependencyObject(depObj) as HwndSource;
             return presentationSource?.Handle;
         }
 
@@ -234,7 +237,6 @@ namespace TMP.WORK.AramisChetchiki.Extensions
             return DisableMouseHorizontalWheelSupport(handle.Value);
         }
 
-
         /// <summary>
         ///   Enable Horizontal Wheel support for all that control and all controls hosted by the same window/popup/context menu.
         ///   This method does not need to be called if AutoEnableMouseHorizontalWheelSupport is true.
@@ -244,17 +246,17 @@ namespace TMP.WORK.AramisChetchiki.Extensions
         public static void EnableMouseHorizontalWheelSupportForParentOf(UIElement uiElement)
         {
             // try to add it right now
-            if (uiElement is Window)
+            if (uiElement is Window window)
             {
-                EnableMouseHorizontalWheelSupport((Window)uiElement);
+                EnableMouseHorizontalWheelSupport(window);
             }
-            else if (uiElement is Popup)
+            else if (uiElement is Popup popup)
             {
-                EnableMouseHorizontalWheelSupport((Popup)uiElement);
+                EnableMouseHorizontalWheelSupport(popup);
             }
-            else if (uiElement is ContextMenu)
+            else if (uiElement is ContextMenu contextMenu)
             {
-                EnableMouseHorizontalWheelSupport((ContextMenu)uiElement);
+                EnableMouseHorizontalWheelSupport(contextMenu);
             }
             else
             {
@@ -271,8 +273,7 @@ namespace TMP.WORK.AramisChetchiki.Extensions
 
         private static void PresenationSourceChangedHandler(object sender, SourceChangedEventArgs sourceChangedEventArgs)
         {
-            var src = sourceChangedEventArgs.NewSource as HwndSource;
-            if (src != null)
+            if (sourceChangedEventArgs.NewSource is HwndSource src)
             {
                 EnableMouseHorizontalWheelSupport(src.Handle);
             }
@@ -292,18 +293,19 @@ namespace TMP.WORK.AramisChetchiki.Extensions
                 return;
             }
 
-            if (!(element is UIElement))
+            if (element is not UIElement)
             {
                 element = FindAncestor<UIElement>(element as DependencyObject);
             }
+
             if (element == null)
             {
                 return;
             }
 
-            var ev = new MouseHorizontalWheelEventArgs(Mouse.PrimaryDevice, Environment.TickCount, tilt)
+            MouseHorizontalWheelEventArgs ev = new MouseHorizontalWheelEventArgs(Mouse.PrimaryDevice, Environment.TickCount, tilt)
             {
-                RoutedEvent = PreviewMouseHorizontalWheelEvent
+                RoutedEvent = PreviewMouseHorizontalWheelEvent,
                 //Source = handledWindow
             };
 
@@ -328,6 +330,7 @@ namespace TMP.WORK.AramisChetchiki.Extensions
                     HandleMouseHorizontalWheel(wParam);
                     break;
             }
+
             return IntPtr.Zero;
         }
 
@@ -356,8 +359,7 @@ namespace TMP.WORK.AramisChetchiki.Extensions
 
         public static void AddMouseHorizontalWheelHandler(DependencyObject d, RoutedEventHandler handler)
         {
-            var uie = d as UIElement;
-            if (uie != null)
+            if (d is UIElement uie)
             {
                 uie.AddHandler(MouseHorizontalWheelEvent, handler);
 
@@ -370,7 +372,7 @@ namespace TMP.WORK.AramisChetchiki.Extensions
 
         public static void RemoveMouseHorizontalWheelHandler(DependencyObject d, RoutedEventHandler handler)
         {
-            var uie = d as UIElement;
+            UIElement uie = d as UIElement;
             uie?.RemoveHandler(MouseHorizontalWheelEvent, handler);
         }
 
@@ -384,8 +386,7 @@ namespace TMP.WORK.AramisChetchiki.Extensions
 
         public static void AddPreviewMouseHorizontalWheelHandler(DependencyObject d, RoutedEventHandler handler)
         {
-            var uie = d as UIElement;
-            if (uie != null)
+            if (d is UIElement uie)
             {
                 uie.AddHandler(PreviewMouseHorizontalWheelEvent, handler);
 
@@ -398,7 +399,7 @@ namespace TMP.WORK.AramisChetchiki.Extensions
 
         public static void RemovePreviewMouseHorizontalWheelHandler(DependencyObject d, RoutedEventHandler handler)
         {
-            var uie = d as UIElement;
+            UIElement uie = d as UIElement;
             uie?.RemoveHandler(PreviewMouseHorizontalWheelEvent, handler);
         }
 
@@ -407,7 +408,8 @@ namespace TMP.WORK.AramisChetchiki.Extensions
         /// <summary>
         ///   Returns the first ancestor of specified type
         /// </summary>
-        public static T FindAncestor<T>(DependencyObject current) where T : DependencyObject
+        public static T FindAncestor<T>(DependencyObject current)
+            where T : DependencyObject
         {
             current = GetVisualOrLogicalParent(current);
 
@@ -417,6 +419,7 @@ namespace TMP.WORK.AramisChetchiki.Extensions
                 {
                     return (T)current;
                 }
+
                 current = GetVisualOrLogicalParent(current);
             }
 
@@ -429,6 +432,7 @@ namespace TMP.WORK.AramisChetchiki.Extensions
             {
                 return System.Windows.Media.VisualTreeHelper.GetParent(obj);
             }
+
             return LogicalTreeHelper.GetParent(obj);
         }
     }
@@ -440,7 +444,7 @@ namespace TMP.WORK.AramisChetchiki.Extensions
         public MouseHorizontalWheelEventArgs(MouseDevice mouse, int timestamp, int horizontalDelta)
           : base(mouse, timestamp)
         {
-            HorizontalDelta = horizontalDelta;
+            this.HorizontalDelta = horizontalDelta;
         }
     }
 }

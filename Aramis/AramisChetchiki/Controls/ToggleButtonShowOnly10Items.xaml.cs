@@ -21,8 +21,7 @@
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            int count = 0;
-            int.TryParse(value.ToString(), out count);
+            int.TryParse(value.ToString(), out int count);
             return count > 11;
         }
 
