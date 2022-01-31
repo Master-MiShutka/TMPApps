@@ -27,33 +27,33 @@
 
     <!--  MAGNIFIER ICON  -->
     <Geometry x:Key="Magnifier">
-              M9.6 8.5H9L8.7 8.2C9.6 7.4 10 6.2 10 5C10 2.2 7.8 0 5 0S0 2.2 0 5S2.2 10 5 10C6.2 10 7.4 9.6 8.2 8.7L8.5
-              9V9.6L12.3 13.5L13.5 12.3L9.6 8.5ZM5 8.5C3.1 8.5 1.5 6.9 1.5 5S3.1 1.5 5 1.5S8.5 3.1 8.5 5S6.9 8.5 5 8.5Z
+        M9.6 8.5H9L8.7 8.2C9.6 7.4 10 6.2 10 5C10 2.2 7.8 0 5 0S0 2.2 0 5S2.2 10 5 10C6.2 10 7.4 9.6 8.2 8.7L8.5
+        9V9.6L12.3 13.5L13.5 12.3L9.6 8.5ZM5 8.5C3.1 8.5 1.5 6.9 1.5 5S3.1 1.5 5 1.5S8.5 3.1 8.5 5S6.9 8.5 5 8.5Z
     </Geometry>
 
     <!--  DELETE FILTER ICON  -->
     <Geometry x:Key="FilterDelete">
-              M11.1 11.4L8.5 8.9L9.8 7.6L12.3 10.1L14.8 7.6L16.1 8.9L13.6 11.4L16.1 13.9L14.8 15.2L12.3 12.6L9.8 15.2L8.5 13.9ZM0 0H13L13 2L8 6V14L5 11V6L0 2Z
+        M11.1 11.4L8.5 8.9L9.8 7.6L12.3 10.1L14.8 7.6L16.1 8.9L13.6 11.4L16.1 13.9L14.8 15.2L12.3 12.6L9.8 15.2L8.5 13.9ZM0 0H13L13 2L8 6V14L5 11V6L0 2Z
     </Geometry>
 
     <!--  BOX CHECKED ICON  -->
     <Geometry x:Key="FilterChecked">
-              M 125 125 L 0 125 V 0 H 125 Z M 1 124 H 124 V 1 H 1 Z M 20 68 L 29 57 L 56 80 L 98 25 L 110 35 L 59 101 Z
+        M 125 125 L 0 125 V 0 H 125 Z M 1 124 H 124 V 1 H 1 Z M 20 68 L 29 57 L 56 80 L 98 25 L 110 35 L 59 101 Z
     </Geometry>
 
     <!--  GRIPSIZE ICON  -->
     <Geometry x:Key="GripSizeIcon">
-              M0 9L2 9M4 9L6 9M8 9L10 9M1 8L1 10M5 8L5 10M9 8L9 10M4 5L6 5M8 5L10 5M5 4L5 6M9 4L9 6M8 1L10 1M9 0L9 2
+        M0 9L2 9M4 9L6 9M8 9L10 9M1 8L1 10M5 8L5 10M9 8L9 10M4 5L6 5M8 5L10 5M5 4L5 6M9 4L9 6M8 1L10 1M9 0L9 2
     </Geometry>
 
     <!--  FILTER SET ICON  -->
     <Geometry x:Key="FilterSet">
-              M 0 17 H 13 L 7 25 Z M 8 0 H 28 L 28 2 L 20 8 L 20 18 H 16 L 16 8 L 8 2 Z
+        M 0 17 H 13 L 7 25 Z M 8 0 H 28 L 28 2 L 20 8 L 20 18 H 16 L 16 8 L 8 2 Z
     </Geometry>
 
     <!--  FILTER BUTTON ICON  -->
     <Geometry x:Key="Filter">
-              M 7 10 L 12 15 L 17 10 H 7 Z
+        M 7 10 L 12 15 L 17 10 H 7 Z
     </Geometry>
 
     <!--  PLACEHOLDER SEARCH BOX  -->
@@ -216,9 +216,16 @@
                 </Grid.ColumnDefinitions>
 
                 <!--  RENDER THE HEADER TEXT  -->
-                <TextBlock Grid.Column="0" Text="{Binding}" TextAlignment="Center" TextWrapping="WrapWithOverflow" TextTrimming="CharacterEllipsis" Padding="0" LineHeight="15"/>
+                <TextBlock
+                    Grid.Column="0"
+                    Padding="0"
+                    LineHeight="15"
+                    Text="{Binding}"
+                    TextAlignment="Center"
+                    TextTrimming="CharacterEllipsis"
+                    TextWrapping="WrapWithOverflow" />
 
-                <!--  FILTER BUTTON  -->
+                <!--  FILTER BUTTON  Visibility="{Binding RelativeSource={RelativeSource Mode=Self}, Path=IsEnabled, Converter={StaticResource BooleanToVisibilityConverter}}"  -->
                 <Button
                     Name="filterButton"
                     Grid.Column="1"
@@ -228,11 +235,11 @@
                     BorderBrush="DarkGray"
                     BorderThickness="1"
                     Command="{x:Static control:FilterDataGrid.CommandShowFilter}"
-                    Visibility="{Binding RelativeSource={RelativeSource Mode=Self}, Path=IsEnabled, Converter={StaticResource BooleanToVisibilityConverter}}"
                     Cursor="Hand"
                     Opacity="0.5"
                     SnapsToDevicePixels="True"
-                    UseLayoutRounding="True">
+                    UseLayoutRounding="True"
+                    Visibility="Collapsed">
                     <Button.Style>
                         <Style TargetType="{x:Type Button}">
                             <Setter Property="Template">
@@ -681,14 +688,17 @@
         </Grid>
     </DataTemplate>
 
-    <!--  DATAGRIDCOLUMNHEADER x:Key="DataGridColumnHeaderStyle" -->
+    <!--  DATAGRIDCOLUMNHEADER x:Key="DataGridColumnHeaderStyle"  -->
     <Style BasedOn="{StaticResource {x:Type DataGridColumnHeader}}" TargetType="{x:Type DataGridColumnHeader}">
         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-        <Setter Property="ContentTemplate" Value="{StaticResource DataGridHeaderTemplate}"/>
+        <Setter Property="ContentTemplate" Value="{StaticResource DataGridHeaderTemplate}" />
         <Setter Property="ContextMenu">
             <Setter.Value>
                 <ContextMenu>
-                    <MenuItem Header="Скрыть столбец" Command="{x:Static control:FilterDataGrid.CommandShowHideColumn}" CommandParameter="{Binding PlacementTarget, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ContextMenu}}}"/>
+                    <MenuItem
+                        Command="{x:Static control:FilterDataGrid.CommandShowHideColumn}"
+                        CommandParameter="{Binding PlacementTarget, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ContextMenu}}}"
+                        Header="Скрыть столбец" />
                 </ContextMenu>
             </Setter.Value>
         </Setter>
@@ -734,7 +744,7 @@
                                     Command="{x:Static DataGrid.SelectAllCommand}"
                                     Focusable="false"
                                     Style="{DynamicResource {ComponentResourceKey ResourceId=DataGridSelectAllButtonStyle,
-                                    TypeInTargetAssembly={x:Type DataGrid}}}"
+                                                                                  TypeInTargetAssembly={x:Type DataGrid}}}"
                                     Visibility="{Binding HeadersVisibility, ConverterParameter={x:Static DataGridHeadersVisibility.All}, Converter={x:Static DataGrid.HeadersVisibilityConverter}, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" />
                                 <DataGridColumnHeadersPresenter
                                     x:Name="PART_ColumnHeadersPresenter"
@@ -811,7 +821,7 @@
         <!--  This feature is temporarily disabled because it causes an error  -->
         <Setter Property="CanUserAddRows" Value="False" />
 
-        <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.ControlLightLightBrushKey}}"/>
+        <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.ControlLightLightBrushKey}}" />
 
         <Setter Property="AlternationCount" Value="2" />
         <Setter Property="AlternatingRowBackground" Value="WhiteSmoke" />
@@ -833,7 +843,7 @@
             </Setter.Value>
         </Setter>
 
-        <!-- Setter Property="ColumnHeaderStyle" Value="{StaticResource DataGridColumnHeaderStyle}"/ -->
+        <!--  Setter Property="ColumnHeaderStyle" Value="{StaticResource DataGridColumnHeaderStyle}"/  -->
 
         <Style.Triggers>
             <Trigger Property="ItemsSource" Value="{x:Null}">

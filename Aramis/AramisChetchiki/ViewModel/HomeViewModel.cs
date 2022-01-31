@@ -21,6 +21,8 @@
         private KeyValuePair<int, string> selectedQuarter;
         private int selectedYear;
         private string message = "?";
+        private bool isPivotsBuilding = false;
+        private bool pivotsBuildingCanceled = false;
 
         #endregion Fields
 
@@ -243,11 +245,15 @@
 
         private void Start()
         {
+            if (this.isPivotsBuilding)
+            {
+                this.pivotsBuildingCanceled = true;
+                while (this.isPivotsBuilding)
+                {
+                    System.Threading.Tasks.Task.Delay(100);
+                }
+            }
             this.BuildPivots();
-
-            System.Diagnostics.Debug.WriteLine("***** ");
-            System.Diagnostics.Debug.WriteLine(HierarchicalItem.InstancesCount);
-            System.Diagnostics.Debug.WriteLine("***** ");
         }
 
         /// <summary>
@@ -321,6 +327,8 @@
                 this.IsBusy = false;
             }
         }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1123:Do not place regions within elements", Justification = "<Pending>")]
         private void CreatePivots()
         {
             foreach (IMatrix mtrx in this.PivotCollection)
@@ -330,11 +338,19 @@
 
             this.PivotCollection.Clear();
 
-            void add(IMatrix matrix)
+            bool add(IMatrix matrix)
             {
+                if (pivotsBuildingCanceled)
+                    return false;
+
+                if (matrix == null)
+                    return false;
+
                 this.PivotCollection.Add(matrix);
 
                 matrix.Builded += this.Matrix_Builded;
+
+                return true;
             }
 
             int metersCount = MainViewModel.Meters.Where(i => i.Удалён == false).Count();
@@ -420,7 +436,7 @@
 
             // показывать данные за 8 лет
             const int yearsCount = 8;
-            add(new Matrix()
+            if (add(new Matrix()
             {
                 Header = "Свод по установке или замене счётчиков за последние восемь лет помесячно",
                 Description = "* количество счётчиков",
@@ -443,11 +459,12 @@
                         .ToList();
                     return values == null || values.Count == 0 ? new MatrixDataCell(string.Empty) : new MatrixDataCell(values.Count);
                 },
-            });
+            }) == false)
+                return;
             #endregion
 
             #region Свод по установке или замене на электронный счётчик за последние восемь лет помесячно
-            add(new Matrix()
+            if (add(new Matrix()
             {
                 Header = "Свод по установке или замене на электронный счётчик за последние восемь лет помесячно",
                 Description = "* количество электронных счётчиков",
@@ -478,11 +495,12 @@
                         return new MatrixDataCell(values.Count);
                     }
                 },
-            });
+            }) == false)
+                return;
             #endregion
 
             #region Свод по категории счётчика и типу населённого пункта
-            add(new Matrix()
+            if (add(new Matrix()
             {
                 Header = "Свод по категории счётчика\n и типу населённого пункта",
                 Description = "* количество счётчиков",
@@ -504,7 +522,8 @@
                         return new MatrixDataCell(string.Empty);
                     }
                 },
-            });
+            }) == false)
+                return;
             #endregion
 
             #region Свод по н.п., преобладающим типам счетчиков и кол-ву фаз счетчика
@@ -580,7 +599,8 @@
                     return new MatrixDataCell(string.Empty);
                 }
             };
-            add(matrix);
+            if (add(matrix) == false)
+                return;
 
             #endregion
 
@@ -645,12 +665,13 @@
                     return new MatrixDataCell(string.Empty);
                 }
             };
-            add(matrix2);
+            if (add(matrix2) == false)
+                return;
 
             #endregion
 
             #region Свод по типам счётчиков
-            add(new Matrix()
+            if (add(new Matrix()
             {
                 Header = "Свод по типам счётчиков",
                 Description = "* количество счётчиков",
@@ -669,7 +690,8 @@
                         return new MatrixDataCell(group.Count);
                     }
                 },
-            });
+            }) == false)
+                return;
             #endregion
 
             #region Свод по категории счётчика, состоянию метрологической поверки и типу населённого пункта
@@ -685,7 +707,7 @@
                 MatrixHeaderCell.CreateColumnHeader("не поверен", children: childsHeaderCells5
                 .Select(i => MatrixHeaderCell.CreateColumnHeader(i)).ToList()),
             };
-            add(new Matrix()
+            if (add(new Matrix()
             {
                 Header = "Свод по категории счётчика, состоянию\nметрологической поверки и типу населённого пункта",
                 Description = "* количество счётчиков",
@@ -710,7 +732,8 @@
                         return new MatrixDataCell(string.Empty);
                     }
                 },
-            });
+            }) == false)
+                return;
             #endregion
 
             #region Свод по нас. пункту, количеству МЖД, наличию аскуэ
@@ -731,7 +754,7 @@
                 MatrixHeaderCell.CreateColumnHeader("нет АСКУЭ", tag: false),
             };
 
-            add(new Matrix()
+            if (add(new Matrix()
             {
                 Header = "Свод по нас. пункту, количеству МЖД",
                 Description = "* количество МЖД",
@@ -759,7 +782,8 @@
                         return new MatrixDataCell(string.Empty);
                     }
                 },
-            });
+            }) == false)
+                return;
             #endregion
 
             #region Свод по по н.п., мндукционным типам счетчиков и использованию
@@ -832,7 +856,8 @@
                     return new MatrixDataCell(string.Empty);
                 }
             };
-            add(matrix3);
+            if (add(matrix3) == false)
+                return;
 
             #endregion
 
@@ -848,7 +873,7 @@
                 MatrixHeaderCell.CreateColumnHeader("поверен", children: childsHeaderCells1.Select(i => MatrixHeaderCell.CreateColumnHeader(i)).ToList()),
                 MatrixHeaderCell.CreateColumnHeader("не поверен", children: childsHeaderCells1.Select(i => MatrixHeaderCell.CreateColumnHeader(i)).ToList()),
             };
-            add(new Matrix()
+            if (add(new Matrix()
             {
                 Header = "Свод по категории счётчика и сельсовету",
                 Description = "* количество счётчиков",
@@ -871,11 +896,12 @@
                         return new MatrixDataCell(string.Empty);
                     }
                 },
-            });
+            }) == false)
+                return;
             #endregion
 
             #region Свод по наличию обхода и сельсовету
-            add(new Matrix()
+            if (add(new Matrix()
             {
                 Header = "Свод по наличию обхода и сельсовету",
                 Description = "* количество счётчиков\n* сплит-счётчики не учтены",
@@ -897,7 +923,8 @@
                         return new MatrixDataCell(string.Empty);
                     }
                 },
-            });
+            }) == false)
+                return;
             #endregion
 
             #region Свод по населенному пункту и отсутствию обхода более года
@@ -906,7 +933,7 @@
             const string col2Header = "Кол-во не\nпосещ. > года"; // noVisitMoreThanOneYearPerLocality
             const string col3Header = "Кол-во посещ.\nза год"; // visitInCurrentYearPerLocality
             const string strToolTip = "% от общего количества счётчиков в н.п.";
-            add(new Matrix()
+            if (add(new Matrix()
             {
                 Header = "Свод по населенному пункту и отсутствию обхода более года",
                 Description = "* количество счётчиков\n* сплит-счётчики не учтены",
@@ -932,11 +959,12 @@
                             throw new ArgumentOutOfRangeException("column.Header is unknown");
                     }
                 },
-            });
+            }) == false)
+                return;
             #endregion
 
             #region Свод по типу счётчика и году поверки
-            add(new Matrix()
+            if (add(new Matrix()
             {
                 Header = "Свод по типу счётчика и году поверки",
                 Description = "* количество счётчиков",
@@ -955,11 +983,12 @@
                         return new MatrixDataCell(string.Empty);
                     }
                 },
-            });
+            }) == false)
+                return;
             #endregion
 
             #region Свод по типам электронных счётчиков и году поверки
-            add(new Matrix()
+            if (add(new Matrix()
             {
                 Header = "Свод по типам электронных счётчиков и году поверки",
                 Description = "* количество электронных счётчиков",
@@ -978,11 +1007,12 @@
                         return new MatrixDataCell(string.Empty);
                     }
                 },
-            });
+            }) == false)
+                return;
             #endregion
 
             #region Свод по населенному пункту и количеству просроченных
-            add(new Matrix()
+            if (add(new Matrix()
             {
                 Header = "Свод по населенному пункту и количеству просроченных",
                 Description = "* количество счётчиков",
@@ -1009,11 +1039,12 @@
                         return new MatrixDataCell(count) { ToolTip = $"{100 * count / metersCount:N1}% от общего количества счётчиков" };
                     }
                 },
-            });
+            }) == false)
+                return;
             #endregion
 
             #region Свод по населенному пункту и принципу действия счётчика
-            add(new Matrix()
+            if (add(new Matrix()
             {
                 Header = "Свод по населенному пункту и принципу действия счётчика",
                 Description = "* количество счётчиков",
@@ -1033,11 +1064,12 @@
                         return new MatrixDataCell(string.Empty);
                     }
                 },
-            });
+            }) == false)
+                return;
             #endregion
 
             #region Свод по подстанции и принципу действия
-            add(new Matrix()
+            if (add(new Matrix()
             {
                 Header = "Свод по подстанции и принципу действия",
                 Description = "* количество счётчиков",
@@ -1056,11 +1088,12 @@
                         .ToList();
                     return list == null ? new MatrixDataCell(string.Empty) : new MatrixDataCell(list.Count);
                 },
-            });
+            }) == false)
+                return;
             #endregion
 
             #region Свод по типу счётчика и году будущей поверки
-            add(new Matrix()
+            if (add(new Matrix()
             {
                 Header = "Перспективный план поверки счётчиков",
                 Description = "* количество счётчиков",
@@ -1080,7 +1113,8 @@
                         return new MatrixDataCell(string.Empty);
                     }
                 },
-            });
+            }) == false)
+                return;
             #endregion
 
             if (MainViewModel.Data.ElectricitySupplyInfo != null)

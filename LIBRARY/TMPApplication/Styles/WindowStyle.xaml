@@ -135,10 +135,17 @@
                                                 VerticalAlignment="Center"
                                                 FontFamily="Segoe UI"
                                                 Text="{Binding Path=Title, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}" />
-                                            <TextBlock Grid.Column="1" Margin="5,0" VerticalAlignment="Center" FontFamily="Segoe UI" FontStyle="Italic" FontWeight="Light" TextAlignment="Right"
-                                                       ToolTip="{x:Static local:TMPApp.AssemblyDescription}">
-                                                <Run Text="v:"/>
-                                                <Run Text="{x:Static local:TMPApp.AppVersion}"/>
+                                            <TextBlock
+                                                Grid.Column="1"
+                                                Margin="5,0"
+                                                VerticalAlignment="Center"
+                                                FontFamily="Segoe UI"
+                                                FontStyle="Italic"
+                                                FontWeight="Light"
+                                                TextAlignment="Right"
+                                                ToolTip="{x:Static local:TMPApp.AssemblyDescription}">
+                                                <Run Text="v:" />
+                                                <Run Text="{x:Static local:TMPApp.AppVersion}" />
                                             </TextBlock>
                                             <Button
                                                 x:Name="MinButton"

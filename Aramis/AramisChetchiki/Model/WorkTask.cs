@@ -143,7 +143,7 @@
                 else
                 {
                     TimeSpan timeRemaining = TimeSpan.FromTicks(DateTime.Now.Subtract(this.startProcessing).Ticks * (total - (processed + 1)) / (processed + 1));
-                    if (timeRemaining.Seconds < 5)
+                    if (timeRemaining.Seconds < 5 && this.Progress > 90d)
                     {
                         this.RemainingTime = timeRemaining.Seconds == 0 ? "завершение ..." : "осталось совсем немного";
                     }

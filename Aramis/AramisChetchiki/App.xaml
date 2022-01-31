@@ -9,7 +9,7 @@
             <ResourceDictionary.MergedDictionaries>
 
                 <ResourceDictionary Source="pack://application:,,,/TMPApplication;component/styles/windowstyle.xaml" />
-                
+
                 <ResourceDictionary Source="pack://application:,,,/ui.controls.wpf;component/themes/generic.xaml" />
 
 
@@ -32,7 +32,7 @@
                 <ResourceDictionary Source="/Controls/SettingsPages/SettingsStyles.xaml" />
 
                 <ResourceDictionary Source="/Views/BaseView.xaml" />
-                
+
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

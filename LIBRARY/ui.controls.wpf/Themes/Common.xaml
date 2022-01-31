@@ -140,8 +140,9 @@
                             <ControlTemplate TargetType="{x:Type ListBoxItem}">
                                 <Border
                                     x:Name="Border"
+                                    Padding="5,0"
                                     BorderThickness="1"
-                                    CornerRadius="3" Padding="5,0">
+                                    CornerRadius="3">
                                     <ContentPresenter />
                                 </Border>
                                 <ControlTemplate.Triggers>
@@ -214,8 +215,8 @@
     <Style x:Key="PlusMinusExpander" TargetType="{x:Type Expander}">
         <Setter Property="Margin" Value="0" />
         <Setter Property="Padding" Value="0" />
-        <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}"/>
-        <Setter Property="BorderBrush" Value="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}"/>
+        <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}" />
         <Setter Property="HeaderTemplate">
             <Setter.Value>
                 <DataTemplate>
@@ -237,7 +238,8 @@
                                 x:Name="HeaderSite"
                                 Background="{TemplateBinding Background}"
                                 BorderBrush="{TemplateBinding BorderBrush}"
-                                BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="3,3,0,3"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="3,3,0,3"
                                 DockPanel.Dock="Top">
                                 <DockPanel>
                                     <ToggleButton
@@ -265,11 +267,12 @@
                                 Padding="{TemplateBinding Margin}"
                                 HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                                 VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                BorderBrush="{TemplateBinding BorderBrush}"
                                 Background="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
                                 BorderThickness="1,0,1,1"
+                                CornerRadius="3,0,3,3"
                                 DockPanel.Dock="Bottom"
-                                Focusable="false" CornerRadius="3,0,3,3"
+                                Focusable="false"
                                 Opacity="0"
                                 Visibility="Collapsed">
                                 <ContentPresenter

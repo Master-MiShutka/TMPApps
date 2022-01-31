@@ -55,7 +55,7 @@
 
                     if (meter.Лицевой == 0 || meter.Удалён)
                     {
-                        return;
+                        continue;// return;
                     }
 
                     // контрольные показания

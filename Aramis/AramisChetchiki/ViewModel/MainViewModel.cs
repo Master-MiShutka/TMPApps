@@ -252,7 +252,7 @@
         /// <summary>
         /// Признак, указывающий, что данные загружены
         /// </summary>
-        public bool IsDataLoaded => this.Data != null;
+        public bool IsDataLoaded => this.Data != null && this.CurrentMode != Mode.LoadingData;
 
         /// <summary>
         /// Флаг, указывающий завершена ли инициализация
@@ -452,6 +452,7 @@
             this.currentMode = newMode;
             this.currentViewModel = ModelHelper.ModeFactory(newMode);
 
+            this.RaisePropertyChanged(propertyName: nameof(this.IsDataLoaded));
             this.RaisePropertyChanged(propertyName: nameof(this.CurrentMode));
             this.RaisePropertyChanged(propertyName: nameof(this.CurrentViewModel));
             this.RaisePropertyChanged(propertyName: nameof(this.WindowTitle));

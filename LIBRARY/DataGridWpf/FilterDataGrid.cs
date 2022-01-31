@@ -1049,7 +1049,7 @@ namespace DataGridWpf
         /// <param name="e"></param>
         private void CanShowFilter(object sender, CanExecuteRoutedEventArgs e)
         {
-            e.CanExecute = this.collectionType != null && this.CollectionViewSource?.CanFilter == true && !this.pending;// && (!this.popup?.IsOpen ?? true);
+            e.CanExecute = this.collectionType != null && this.CollectionViewSource?.CanFilter == true && !this.pending; // && (!this.popup?.IsOpen ?? true);
         }
 
         /// <summary>

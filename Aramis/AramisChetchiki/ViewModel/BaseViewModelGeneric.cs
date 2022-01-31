@@ -61,6 +61,8 @@
                     this.OnInitialized();
                     break;
                 case "IsDataLoaded":
+                    this.RaisePropertyChanged(nameof(this.IsDataLoaded));
+                    break;
                 case "Data":
                     this.RaisePropertyChanged(nameof(this.IsDataLoaded));
                     this.OnDataLoaded();

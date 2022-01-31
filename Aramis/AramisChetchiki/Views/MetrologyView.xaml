@@ -102,13 +102,11 @@
                         </ItemsControl.Template>
                     </ItemsControl>
                 </Border>
-                <!--
-                    local_controls:DataGridControl
+                <local_controls:DataGridControl
                     Grid.Row="1"
                     DataRowStyle="{StaticResource MeterRowStyle}"
-                    NoItemsMessage="{Binding NoItemsMessage}" /
-                -->
-                <!--  local_controls:TableDetailsView Grid.Row="2"/  -->
+                    NoItemsMessage="{Binding NoItemsMessage}" />
+                <local_controls:TableDetailsView Grid.Row="2" />
             </Grid>
         </view:BaseView.Content>
     </view:BaseView>

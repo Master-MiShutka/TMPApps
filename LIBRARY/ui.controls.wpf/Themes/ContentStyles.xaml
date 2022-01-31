@@ -98,7 +98,7 @@
                                         helpers:RelativeFontSize.RelativeFontSize="1.5"
                                         Foreground="{DynamicResource {x:Static SystemColors.ControlDarkDarkBrushKey}}"
                                         Text="🤷‍" />
-                                    <!-- ⚠️-->
+                                    <!--  ⚠️  -->
                                 </Viewbox>
                                 <Label Grid.Row="1" />
                                 <TextBlock

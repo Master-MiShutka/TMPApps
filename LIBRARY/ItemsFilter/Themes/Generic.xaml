@@ -413,8 +413,9 @@
                             <TextBox
                                 x:Name="PART_Input"
                                 MinWidth="30"
-                                Margin="1" VerticalContentAlignment="Center"
+                                Margin="1"
                                 Padding="0"
+                                VerticalContentAlignment="Center"
                                 FontFamily="{TemplateBinding FontFamily}"
                                 FontSize="{TemplateBinding FontSize}"
                                 Text="{Binding ViewModel.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource TemplatedParent}}"

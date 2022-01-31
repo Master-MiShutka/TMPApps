@@ -31,12 +31,12 @@
         <ResourceDictionary Source="/ui.controls.wpf;component/Themes/ButtonGroupStyles.xaml" />
 
         <ResourceDictionary Source="/ui.controls.wpf;component/Themes/MultiSelectCombobox.xaml" />
-        
+
 
     </ResourceDictionary.MergedDictionaries>
 
     <Style BasedOn="{StaticResource {x:Type ContextMenu}}" TargetType="{x:Type ContextMenu}">
-        <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.MenuBrushKey}}"/>
+        <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.MenuBrushKey}}" />
     </Style>
-    
+
 </ResourceDictionary>
