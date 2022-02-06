@@ -20,6 +20,7 @@
                                      IsDesignTimeCreatable=True}"
     Background="Transparent"
     Focusable="False"
+    FontSize="{DynamicResource HeaderFontSize}"
     TextOptions.TextFormattingMode="Ideal"
     mc:Ignorable="d">
     <Border
@@ -36,7 +37,8 @@
             <controls:ContentWithDescription
                 Margin="10"
                 ContentDock="Bottom"
-                Description="Выберите базу данных Арамис">
+                Description="Выберите базу данных Арамис"
+                DescriptionFontSize="{DynamicResource BigFontSize}">
                 <local_controls:AramisDbSelector DbPath="{Binding AramisDbPath, Mode=TwoWay, NotifyOnSourceUpdated=True}" IsOk="{Binding AramisDbSelected, Mode=TwoWay}" />
             </controls:ContentWithDescription>
             <Separator Margin="5" />
@@ -210,6 +212,7 @@
                     Margin="5,0"
                     Padding="10,2"
                     Command="{Binding Path=CommandSelectAndLoad}"
+                    CommandParameter="{Binding Path=SelectedDataInfo}"
                     Content="Выбрать и загрузить"
                     TextBlock.TextAlignment="Center" />
             </StackPanel>

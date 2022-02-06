@@ -123,12 +123,12 @@
 
         protected override string GetDataStorePath()
         {
-            return Settings.Default.DataFilesStorePath;
+            return AppSettings.Default.DataFilesStorePath;
         }
 
         protected override void SetDataStorePath(string value)
         {
-            Settings.Default.DataFilesStorePath = value;
+            AppSettings.Default.DataFilesStorePath = value;
             base.SetDataStorePath(value);
         }
 
@@ -144,12 +144,20 @@
             {
                 aramisData.ChangesOfMeters = chom;
             }
+            else
+            {
+                aramisData.ChangesOfMeters = new ();
+            }
 
             this.UpdateUI("загрузка сводной информации");
             SummaryInfoItem[] si = this.LoadDataListFromPackageAsync<SummaryInfoItem>(package, PART_SUMMARY_INFOS).Result;
             if (si != null)
             {
                 aramisData.SummaryInfos = new ObservableCollection<SummaryInfoItem>(si);
+            }
+            else
+            {
+                aramisData.SummaryInfos = new System.Collections.Generic.List<SummaryInfoItem>();
             }
 
             this.UpdateUI("загрузка данных о полезном отпуске");
@@ -158,12 +166,20 @@
             {
                 aramisData.ElectricitySupplyInfo = new ObservableCollection<ElectricitySupply>(es);
             }
+            else
+            {
+                aramisData.ElectricitySupplyInfo = new System.Collections.Generic.List<ElectricitySupply>();
+            }
 
             this.UpdateUI("загрузка данных об произведенных оплатах");
             System.Collections.Generic.Dictionary<ulong, System.Collections.Generic.IList<Payment>> pd = this.LoadDictionaryFromPackageAsync<ulong, Payment>(package, PART_PAYMENTS).Result;
             if (pd != null)
             {
                 aramisData.Payments = pd;
+            }
+            else
+            {
+                aramisData.Payments = new ();
             }
 
             this.UpdateUI("загрузка контрольных показаний по лицевому счету");
@@ -172,6 +188,10 @@
             {
                 aramisData.MetersControlData = cd;
             }
+            else
+            {
+                aramisData.MetersControlData = new();
+            }
 
             this.UpdateUI("загрузка событий по лицевому счету");
             System.Collections.Generic.Dictionary<ulong, System.Collections.Generic.IList<MeterEvent>> events = this.LoadDictionaryFromPackageAsync<ulong, MeterEvent>(package, PART_EVENTS).Result;
@@ -179,38 +199,42 @@
             {
                 aramisData.Events = events;
             }
+            else
+            {
+                aramisData.Events = new();
+            }
         }
 
-        private void SaveRestDataInfo(System.IO.Packaging.Package package, AramisData aramisData)
+        private async void SaveRestDataInfo(System.IO.Packaging.Package package, AramisData aramisData)
         {
             try
             {
                 this.UpdateUI("сохранение счётчиков");
-                byte[] bytes = JsonSerializer.JsonToBytesAsync(this.Data.Meters).Result;
+                byte[] bytes = await TMP.Common.RepositoryCommon.MessagePackSerializer.ToBytesAsync(this.Data.Meters);
                 this.SaveJsonDataToPart(bytes, package, PART_METERS);
 
                 this.UpdateUI("сохранение замен счётчиков");
-                bytes = JsonSerializer.JsonToBytesAsync(this.Data.ChangesOfMeters).Result;
+                bytes = await TMP.Common.RepositoryCommon.MessagePackSerializer.ToBytesAsync(this.Data.ChangesOfMeters);
                 this.SaveJsonDataToPart(bytes, package, PART_CHANGES_OF_METERS);
 
                 this.UpdateUI("сохранение сводной информации");
-                bytes = JsonSerializer.JsonToBytesAsync(this.Data.SummaryInfos).Result;
+                bytes = await TMP.Common.RepositoryCommon.MessagePackSerializer.ToBytesAsync(this.Data.SummaryInfos);
                 this.SaveJsonDataToPart(bytes, package, PART_SUMMARY_INFOS);
 
                 this.UpdateUI("сохранение данных о полезном отпуске");
-                bytes = JsonSerializer.JsonToBytesAsync(this.Data.ElectricitySupplyInfo).Result;
+                bytes = await TMP.Common.RepositoryCommon.MessagePackSerializer.ToBytesAsync(this.Data.ElectricitySupplyInfo);
                 this.SaveJsonDataToPart(bytes, package, PART_ELECTRICITY_SUPPLYS);
 
                 this.UpdateUI("сохранение данных об произведенных оплатах");
-                bytes = JsonSerializer.JsonToBytesAsync(this.Data.Payments).Result;
+                bytes = await TMP.Common.RepositoryCommon.MessagePackSerializer.ToBytesAsync(this.Data.Payments);
                 this.SaveJsonDataToPart(bytes, package, PART_PAYMENTS);
 
                 this.UpdateUI("сохранение контрольных показаний по лицевому счету");
-                bytes = JsonSerializer.JsonToBytesAsync(this.Data.MetersControlData).Result;
+                bytes = await TMP.Common.RepositoryCommon.MessagePackSerializer.ToBytesAsync(this.Data.MetersControlData);
                 this.SaveJsonDataToPart(bytes, package, PART_CONTROLDATA);
 
                 this.UpdateUI("сохранение событий по лицевому счету");
-                bytes = JsonSerializer.JsonToBytesAsync(this.Data.Events).Result;
+                bytes = await TMP.Common.RepositoryCommon.MessagePackSerializer.ToBytesAsync(this.Data.Events);
                 this.SaveJsonDataToPart(bytes, package, PART_EVENTS);
             }
             catch (Exception e)

@@ -17,6 +17,8 @@
             this.SkipDeletedRecords = skipDeletedRecords;
             this.DbfTable = new DbfTable(pathToDbfFile, encoding, skipDeletedRecords);
             this.DbfRecord = new DbfRecord(this.DbfTable);
+
+            this.DataBaseFileInfo = new System.IO.FileInfo(pathToDbfFile);
         }
 
         public DbfReader(string pathToDbfFile, bool skipDeletedRecords)
@@ -24,6 +26,8 @@
             this.SkipDeletedRecords = skipDeletedRecords;
             this.DbfTable = new DbfTable(pathToDbfFile, Encoding.GetEncoding(866), skipDeletedRecords);
             this.DbfRecord = new DbfRecord(this.DbfTable);
+
+            this.DataBaseFileInfo = new System.IO.FileInfo(pathToDbfFile);
         }
 
         public DbfReader(Stream stream, Encoding encoding, bool skipDeletedRecords)
@@ -60,6 +64,8 @@
         #endregion
 
         #region Public properties
+
+        public FileInfo DataBaseFileInfo { get; init; }
 
         public bool SkipDeletedRecords { get; set; } = true;
 

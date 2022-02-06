@@ -31,10 +31,7 @@
 
         public static byte[] ToBytes<T>(T model)
         {
-            using MemoryStream stream = ToStreamAsync(model).Result;
-            using StreamReader reader = new StreamReader(stream);
-            byte[] result = stream.ToArray();
-            return result;
+            return ToBytesAsync(model).Result;
         }
 
         public static async Task<string> ToStringAsync<T>(T model)

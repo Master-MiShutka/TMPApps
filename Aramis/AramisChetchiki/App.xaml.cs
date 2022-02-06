@@ -2,6 +2,7 @@
 {
     using MessagePack;
     using MessagePack.Resolvers;
+    using System.Threading.Tasks;
     using TMPApplication;
 
     /// <summary>
@@ -34,6 +35,8 @@
 
             MessagePackSerializer.DefaultOptions = options;
 
+            //this.GGG();
+
             ModelHelper.Init();
 
             this.AppSettings = TMP.WORK.AramisChetchiki.Properties.Settings.Default;
@@ -42,6 +45,15 @@
 
             this.MainWindowWithDialogs = new MainWindow();
             this.MainViewModel = new ViewModel.MainViewModel();
+        }
+
+        private async Task GGG()
+        {
+            Model.AramisDataInfo result = await Common.RepositoryCommon.MessagePackDeserializer.FromFileAsync<Model.AramisDataInfo>("Info");
+
+            System.Collections.Generic.Dictionary<ulong, System.Collections.Generic.IList<Model.ChangeOfMeter>> result2 = await Common.RepositoryCommon.MessagePackDeserializer.FromFileAsync<System.Collections.Generic.Dictionary<ulong, System.Collections.Generic.IList<Model.ChangeOfMeter>>>("ChangesOfMeters");
+
+            int c = result2.Count;
         }
     }
 }

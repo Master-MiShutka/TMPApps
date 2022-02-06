@@ -93,7 +93,8 @@
             this.CurrentEncoding = encoding;
             this.SkipDeletedRecords = skipDeletedRecords;
 
-            this.BinaryReader = new BinaryReader(stream, encoding);
+            this.bufferedStream = new BufferedStream(this.fileStream, FILEREADBUFFERSIZE);
+            this.BinaryReader = new BinaryReader(this.bufferedStream, encoding);
 
             this.ReadHeader();
 

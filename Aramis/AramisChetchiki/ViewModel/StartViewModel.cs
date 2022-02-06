@@ -16,56 +16,11 @@
 
         public StartViewModel()
         {
-            this.CommandSelectAndLoad = new DelegateCommand<AramisDataInfo>(
-                (adi) =>
-            {
-                if (this.SelectedDataInfo == null && adi == null)
-                {
-                    Repository.Instance.AddNewAramisDbPath(this.AramisDbPath);
-
-                    // теперь если список файлов был пуст, нужно выбрать добавленный
-                    List<Common.RepositoryCommon.IDataFileInfo> selected = Repository.Instance.AvailableDataFiles.Where(file => file.IsSelected == true).ToList();
-
-                    if (selected.Any() == false)
-                    {
-                        // тогда создаем новый
-                        this.SelectedDataInfo = new AramisDataInfo()
-                        {
-                            DepartamentName = Repository.GetDepartamentName(this.AramisDbPath),
-                            AramisDbPath = this.AramisDbPath,
-                            IsSelected = false,
-                        };
-                    }
-                    else
-                    {
-                        this.SelectedDataInfo = selected.FirstOrDefault() as Model.AramisDataInfo;
-                    }
-                }
-
-                if (this.SelectedDataInfo == null && adi != null)
-                {
-                    this.SelectedDataInfo = adi;
-                }
-
-                // итак подразделение выбрано - загрузка данных
-                MainViewModel.SelectedDataFileInfo = this.SelectedDataInfo;
-            },
-                (o) => this.SelectedDataInfo != null || (this.AramisDbSelected && string.IsNullOrEmpty(this.AramisDbPath) == false));
+            this.CommandSelectAndLoad = new DelegateCommand<AramisDataInfo>(this.DoSelectAndLoad, this.CanSelectAndLoad);
 
             this.CommandGoToSettings = new DelegateCommand(() => MainViewModel.ChangeMode(Mode.Preferences));
 
-            this.CommandDeleteDataFile = new DelegateCommand<TMP.Common.RepositoryCommon.IDataFileInfo>(
-                (dataFileInfo) =>
-            {
-                try
-                {
-                    System.IO.File.Delete(dataFileInfo.FileName);
-                }
-                catch (Exception e)
-                {
-                    App.ShowWarning($"Файл не удалось удалить.\nОписание проблемы:\n{App.GetExceptionDetails(e)}");
-                }
-            }, (o) => o != null);
+            this.CommandDeleteDataFile = new DelegateCommand<TMP.Common.RepositoryCommon.IDataFileInfo>(this.DoDeleteDataFile, (o) => o != null);
 
             if (System.ComponentModel.DesignerProperties.GetIsInDesignMode(new System.Windows.DependencyObject()))
             {
@@ -88,13 +43,20 @@
 
         public bool HasDataFiles => this.DataFileInfos.Count > 0;
 
-        public AramisDataInfo SelectedDataInfo { get => this.selectedDataInfo; set => this.SetProperty(ref this.selectedDataInfo, value); }
+        public AramisDataInfo SelectedDataInfo
+        {
+            get => this.selectedDataInfo;
+            set
+            {
+                this.SetProperty(ref this.selectedDataInfo, value);
+            }
+        }
 
-        public ICommand CommandSelectAndLoad { get; }
+        public DelegateCommand<AramisDataInfo> CommandSelectAndLoad { get; }
 
-        public ICommand CommandGoToSettings { get; }
+        public DelegateCommand CommandGoToSettings { get; }
 
-        public ICommand CommandDeleteDataFile { get; }
+        public DelegateCommand<TMP.Common.RepositoryCommon.IDataFileInfo> CommandDeleteDataFile { get; }
 
         public string AramisDbPath
         {
@@ -105,13 +67,71 @@
                 {
                     this.SelectedDataInfo = null;
                 }
+
+                this.CommandSelectAndLoad.RaiseCanExecuteChanged();
             }
         }
 
         public bool AramisDbSelected
         {
             get => this.aramisDbSelected;
-            set => this.SetProperty(ref this.aramisDbSelected, value);
+            set
+            {
+                this.SetProperty(ref this.aramisDbSelected, value);
+
+                this.CommandSelectAndLoad.RaiseCanExecuteChanged();
+            }
+        }
+
+        private void DoSelectAndLoad(AramisDataInfo adi)
+        {
+            if (this.SelectedDataInfo == null && adi == null)
+            {
+                Repository.Instance.AddNewAramisDbPath(this.AramisDbPath);
+
+                // теперь если список файлов был пуст, нужно выбрать добавленный
+                List<Common.RepositoryCommon.IDataFileInfo> selected = Repository.Instance.AvailableDataFiles.Where(file => file.IsSelected == true).ToList();
+
+                if (selected.Any() == false)
+                {
+                    // тогда создаем новый
+                    this.SelectedDataInfo = new AramisDataInfo()
+                    {
+                        DepartamentName = Repository.GetDepartamentName(this.AramisDbPath),
+                        AramisDbPath = this.AramisDbPath,
+                        IsSelected = false,
+                    };
+                }
+                else
+                {
+                    this.SelectedDataInfo = selected.FirstOrDefault() as Model.AramisDataInfo;
+                }
+            }
+
+            if (this.SelectedDataInfo == null && adi != null)
+            {
+                this.SelectedDataInfo = adi;
+            }
+
+            // итак подразделение выбрано - загрузка данных
+            MainViewModel.SelectedDataFileInfo = this.SelectedDataInfo;
+        }
+
+        private bool CanSelectAndLoad(AramisDataInfo adi)
+        {
+            return (this.AramisDbSelected && string.IsNullOrEmpty(this.AramisDbPath) == false) || this.SelectedDataInfo != null;
+        }
+
+        private void DoDeleteDataFile(TMP.Common.RepositoryCommon.IDataFileInfo dataFileInfo)
+        {
+            try
+            {
+                System.IO.File.Delete(dataFileInfo.FileName);
+            }
+            catch (Exception e)
+            {
+                App.ShowWarning($"Файл не удалось удалить.\nОписание проблемы:\n{App.GetExceptionDetails(e)}");
+            }
         }
 
         public override int GetHashCode()

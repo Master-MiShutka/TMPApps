@@ -15,9 +15,8 @@
         /// чтение оплат за электроэнергию
         /// </summary>
         /// <returns></returns>
-        private IList<RawPaymentData> GetPaymentDatas()
+        private async Task<IList<RawPaymentData>> GetPaymentDatasAsync()
         {
-            int filesCount = 0, processedFiles = 0;
             int totalRecords = 0, processedRecords = 0;
 
             WorkTask workTask = new("чтение таблиц с данными по оплате")
@@ -28,16 +27,16 @@
 
             void _(string msg)
             {
-                workTask.UpdateUI(processedFiles, filesCount, ++processedRecords, totalRecords, message: "таблица " + msg + $"\nзапись {processedRecords:N0} из {totalRecords:N0}", stepNameString: "обработка файла");
+                workTask.UpdateUI(++processedRecords, totalRecords, message: "таблица " + msg + $"\nзапись {processedRecords:N0} из {totalRecords:N0}", stepNameString: "обработка файла");
             }
 
             System.Collections.Concurrent.ConcurrentBag<RawPaymentData> list = new();
             try
             {
-                string[] files = System.IO.Directory.GetFiles(this.pathDBF, "KARTKV*.DBF");
-                filesCount = files.Length;
+                // KARTKVGD - годовая база
+                // KARTKVMN - месячная база
 
-                string tableFileName = string.Empty;
+                string tableFileName = Path.Combine(this.pathDBF, "KARTKVGD.DBF");
 
                 void toParse(DbfRecord record)
                 {
@@ -49,44 +48,32 @@
                     }
                 }
 
-                foreach (string file in files)
+                IList<RawPaymentData> result = await this.CheckAndLoadFromCacheAsync<RawPaymentData>(tableFileName, workTask);
+                if (result != null)
                 {
-                    IList<RawPaymentData> result = this.CheckAndLoadFromCache<RawPaymentData>(file, ref workTask);
-                    if (result != null)
+                    workTask.IsIndeterminate = false;
+                    workTask.ChildProgress = 0;
+                    int total = result.Count;
+                    for (int i = 0; i < total; i++)
                     {
-                        workTask.IsIndeterminate = false;
-                        workTask.ChildProgress = 0;
-                        int total = result.Count;
-                        for (int i = 0; i < total; i++)
-                        {
-                            workTask.ChildProgress = 100d * i / total;
-                            list.Add(result[i]);
-                        }
+                        workTask.ChildProgress = 100d * i / total;
+                        list.Add(result[i]);
                     }
-                    else
+                }
+                else
+                {
+                    _(System.IO.Path.GetFileName(tableFileName));
+
+                    using DBF.DbfReader dbfReader = new DbfReader(tableFileName, System.Text.Encoding.GetEncoding(866), true);
                     {
-                        tableFileName = file;
+                        processedRecords = 0;
+                        totalRecords = dbfReader.DbfTable.Header.NumberOfRecords;
+                        _(System.IO.Path.GetFileName(tableFileName));
 
-                        string digits = tableFileName.Substring(tableFileName.Length - 6, 2);
+                        dbfReader.ParseRecords(toParse);
 
-                        if (/*byte.TryParse(digits, out byte n) ||*/ string.Equals(digits, "GD", StringComparison.OrdinalIgnoreCase) || string.Equals(digits, "MN", StringComparison.OrdinalIgnoreCase) || string.Equals(digits, "VW", StringComparison.OrdinalIgnoreCase))
-                        {
-                            _(System.IO.Path.GetFileName(tableFileName));
-
-                            using DBF.DbfReader dbfReader = new DbfReader(tableFileName, System.Text.Encoding.GetEncoding(866), true);
-                            {
-                                processedRecords = 0;
-                                totalRecords = dbfReader.DbfTable.Header.NumberOfRecords;
-                                _(System.IO.Path.GetFileName(tableFileName));
-
-                                dbfReader.ParseRecords(toParse);
-                            }
-
-                            this.StoreHashAndSaveData(tableFileName, ref workTask, list.ToArray());
-                        }
+                        this.StoreHashAndSaveData(dbfReader.DataBaseFileInfo, workTask, list.ToArray());
                     }
-
-                    processedFiles++;
                 }
             }
             catch (IOException ioex)
@@ -148,8 +135,8 @@
 
                     if (meter != null)
                     {
-                        electricitySupply.Адрес = meter.Адрес?.УлицаСДомомИКв;
-                        electricitySupply.Населённый_пункт = meter.Адрес?.НаселённыйПункт;
+                        electricitySupply.Адрес = meter.Адрес?.StreetWithHouseNumberAndApartment;
+                        electricitySupply.Населённый_пункт = meter.Адрес?.City;
                         electricitySupply.Подстанция = meter.Подстанция;
                         electricitySupply.Фидер10 = meter.Фидер10;
 

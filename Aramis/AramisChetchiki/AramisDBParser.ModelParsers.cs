@@ -314,7 +314,7 @@
         /// получение замен счётчиков
         /// </summary>
         /// <returns></returns>
-        private IList<ChangeOfMeter> GetChangesOfMeters()
+        private async Task<IList<ChangeOfMeter>> GetChangesOfMetersAsync()
         {
             string taskName = "таблица замен счётчиков";
             Model.WorkTask workTask = new(taskName);
@@ -327,7 +327,7 @@
             workTask.IsIndeterminate = true;
 
             ChangeOfMeter[] result;
-            result = this.DeserializeData<ChangeOfMeter>(fileName);
+            result = await this.DeserializeDataAsync<ChangeOfMeter>(fileName);
             if (result != null)
             {
                 List<ChangeOfMeter> data = new(result);
@@ -411,7 +411,7 @@
 
                 workTask.UpdateStatus($"сохранение в кэш...");
                 workTask.IsIndeterminate = true;
-                this.SerializeData<ChangeOfMeter>(changes.ToArray(), fileName);
+                await this.SerializeDataAsync<ChangeOfMeter>(changes.ToArray(), fileName);
 
                 // fix
                 workTask.UpdateUI(totalRows, totalRows);
@@ -484,11 +484,34 @@
                     }
                 }
 
-                change.Адрес = new BaseAddress(
-                        this.dictionaryKartTn[abonent.COD_TN].TOWN,
-                        this.dictionaryKartSt[abonent.COD_ST].STREET,
+                KartTn town = this.dictionaryKartTn[abonent.COD_TN];
+                string townName = town.TOWN;
+                string province = NOTFOUNDED;
+                if (this.dictionaryKartSs.ContainsKey(town.COD_SS))
+                {
+                    province = this.dictionaryKartSs[town.COD_SS].СЕЛЬСОВЕТ;
+
+                    if (string.IsNullOrEmpty(province) && townName != null && townName.StartsWith("г.", AppSettings.StringComparisonMethod))
+                    {
+                        province = "город";
+                    }
+                }
+                else
+                {
+                    if (string.Equals(province, NOTFOUNDED) && townName != null && townName.StartsWith("г.", AppSettings.StringComparisonMethod))
+                    {
+                        province = "город";
+                    }
+                }
+
+                KartSt street = this.GetDictionaryValue(this.dictionaryKartSt, abonent.COD_ST);
+
+                change.Адрес = new Address(
+                        townName,
+                        street?.STREET,
                         abonent.HOME,
-                        abonent.KV);
+                        abonent.KV,
+                        province);
 
                 string name = abonent.NAME;
                 string otch = abonent.OTCH;
@@ -702,135 +725,135 @@
         private KARTSCH ParseKARTSCHRecord(DbfRecord record)
         {
             return new
-(
-record.GetString("LIC_SCH"),
-record.GetString("N_SCH"),
-record.GetString("COD_TSCH"),
-record.GetString("G_PROV"),
-ConvertToDateTime(record.GetValue<DateTime?>("DUSTAN")),
-record.GetValue<int?>("DATA_OLD"),
-record.GetValue<int?>("DATA_NEW"),
-record.GetString("N_PLOMB"),
-record.GetValue<int?>("GODVYPUSKA"),
-record.GetValue<decimal?>("POWERS"),
-record.GetString("COD_SS"),
-ConvertToDateTime(record.GetValue<DateTime?>("DATE_FAZ")),
-record.GetString("PLOMB_GS"),
-record.GetString("MATER"),
-record.GetValue<int?>("PUSTAN"),
-record.GetValue<int?>("DATA_UST"),
-ConvertToDateTime(record.GetValue<DateTime?>("DATE_UST")));
+            (
+            record.GetString("LIC_SCH"),
+            record.GetString("N_SCH"),
+            record.GetString("COD_TSCH"),
+            record.GetString("G_PROV"),
+            ConvertToDateTime(record.GetValue<DateTime?>("DUSTAN")),
+            record.GetValue<int?>("DATA_OLD"),
+            record.GetValue<int?>("DATA_NEW"),
+            record.GetString("N_PLOMB"),
+            record.GetValue<int?>("GODVYPUSKA"),
+            record.GetValue<decimal?>("POWERS"),
+            record.GetString("COD_SS"),
+            ConvertToDateTime(record.GetValue<DateTime?>("DATE_FAZ")),
+            record.GetString("PLOMB_GS"),
+            record.GetString("MATER"),
+            record.GetValue<int?>("PUSTAN"),
+            record.GetValue<int?>("DATA_UST"),
+            ConvertToDateTime(record.GetValue<DateTime?>("DATE_UST")));
         }
 
         private Kartfid ParseKartfidRecord(DbfRecord record)
         {
             return new
-(
-record.GetValue<int>("ПОДСТАНЦИЯ"),
-record.GetString("ФИДЕР"),
-record.GetString("НАИМЕНОВ"),
-record.GetString("НАИМ_ПОД"));
+            (
+            record.GetValue<int>("ПОДСТАНЦИЯ"),
+            record.GetString("ФИДЕР"),
+            record.GetString("НАИМЕНОВ"),
+            record.GetString("НАИМ_ПОД"));
         }
 
         private ASKONTR ParseASKONTRRecord(DbfRecord record)
         {
             return new
-(
-record.GetString("КОД_КОН"),
-record.GetString("ФАМИЛИЯ"));
+            (
+            record.GetString("КОД_КОН"),
+            record.GetString("ФАМИЛИЯ"));
         }
 
         private Kartktp ParseKartktpRecord(DbfRecord record)
         {
             return new
-(
-record.GetValue<int>("КОД_ТП"),
-record.GetString("ФИДЕР"),
-record.GetValue<int?>("НОМЕР_ТП"),
-record.GetString("НАИМ_ТП"),
-record.GetValue<int?>("ПОДСТАНЦИЯ"),
-record.GetValue<int?>("РЭС"),
-record.GetString("НАИМЕНОВ"),
-record.GetString("PR_GS"));
+            (
+            record.GetValue<int>("КОД_ТП"),
+            record.GetString("ФИДЕР"),
+            record.GetValue<int?>("НОМЕР_ТП"),
+            record.GetString("НАИМ_ТП"),
+            record.GetValue<int?>("ПОДСТАНЦИЯ"),
+            record.GetValue<int?>("РЭС"),
+            record.GetString("НАИМЕНОВ"),
+            record.GetString("PR_GS"));
         }
 
         private Kartps ParseKartpsRecord(DbfRecord record)
         {
             return new
-(
-record.GetValue<int>("ПОДСТАНЦИЯ"),
-record.GetValue<int?>("РЭС"),
-record.GetString("НАИМЕНОВ"));
+            (
+            record.GetValue<int>("ПОДСТАНЦИЯ"),
+            record.GetValue<int?>("РЭС"),
+            record.GetString("НАИМЕНОВ"));
         }
 
         private KartKat ParseKartKatRecord(DbfRecord record)
         {
             return new
-(
-record.GetString("COD_KAT"),
-record.GetString("KATEGAB"));
+            (
+            record.GetString("COD_KAT"),
+            record.GetString("KATEGAB"));
         }
 
         private KartIsp ParseKartIspRecord(DbfRecord record)
         {
             return new
-(
-record.GetString("COD_ISP"),
-record.GetString("ISPIEM"));
+            (
+            record.GetString("COD_ISP"),
+            record.GetString("ISPIEM"));
         }
 
         private KartTpr ParseKartTprRecord(DbfRecord record)
         {
             return new
-(
-record.GetString("COD_TPR"),
-record.GetString("TPRIEM"));
+            (
+            record.GetString("COD_TPR"),
+            record.GetString("TPRIEM"));
         }
 
         private KartSt ParseKartStRecord(DbfRecord record)
         {
             return new
-(
-record.GetString("COD_ST"),
-record.GetString("STREET"));
+            (
+            record.GetString("COD_ST"),
+            record.GetString("STREET"));
         }
 
         private KartSs ParseKartSsRecord(DbfRecord record)
         {
             return new
-(
-record.GetString("COD_SS"),
-record.GetString("СЕЛЬСОВЕТ"));
+            (
+            record.GetString("COD_SS"),
+            record.GetString("СЕЛЬСОВЕТ"));
         }
 
         private KartTn ParseKartTnRecord(DbfRecord record)
         {
             return new
-(
-record.GetString("COD_TN"),
-record.GetString("TOWN"),
-record.GetString("COD_SS"));
+            (
+            record.GetString("COD_TN"),
+            record.GetString("TOWN"),
+            record.GetString("COD_SS"));
         }
 
         private ASVIDYST ParseASVIDYSTRecord(DbfRecord record)
         {
             return new
-(
-record.GetString("COD_SS"),
-record.GetString("MESTO"));
+            (
+            record.GetString("COD_SS"),
+            record.GetString("MESTO"));
         }
 
         private KARTTSCH ParseKARTTSCHRecord(DbfRecord record)
         {
             return new
-(
-record.GetString("COD_TSCH"),
-record.GetString("NAME"),
-record.GetString("TOK"),
-record.GetString("PERIOD"),
-record.GetString("TIP"),
-record.GetValue<int>("ФАЗ"),
-record.GetValue<decimal>("ЗНАК"));
+            (
+            record.GetString("COD_TSCH"),
+            record.GetString("NAME"),
+            record.GetString("TOK"),
+            record.GetString("PERIOD"),
+            record.GetString("TIP"),
+            record.GetValue<int>("ФАЗ"),
+            record.GetValue<decimal>("ЗНАК"));
         }
 
         private KARTAB ParseKARTABRecord(DbfRecord record)

@@ -723,13 +723,13 @@
         {
             return version == null
                 ? false
-                : (version.CompareTo(this.LastSupportedVersion) switch
+                : version.CompareTo(this.LastSupportedVersion) switch
                 {
                     0 => true,
                     1 => false,
                     -1 => true,
                     _ => false,
-                });
+                };
         }
 
         public string CheckLastUsedDataFileStoredAndGetFileName()
@@ -1228,7 +1228,7 @@
         {
             PackagePart part = package.CreatePart(
                 PackUriHelper.CreatePartUri(new Uri(partName, UriKind.Relative)),
-                "application/json",
+                "application/messagepack", // "application/json"
                 CompressionOption.SuperFast);
             using Stream outStream = part.GetStream();
             outStream.Write(bytes, 0, bytes.Length);

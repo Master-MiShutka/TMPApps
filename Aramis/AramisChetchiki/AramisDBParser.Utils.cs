@@ -10,12 +10,13 @@
 
     internal partial class AramisDBParser
     {
-        private IList<T> CheckAndLoadFromCache<T>(string fileName, ref Model.WorkTask workTask)
+        private async Task<IList<T>> CheckAndLoadFromCacheAsync<T>(string fileName, Model.WorkTask workTask)
         {
             FileInfo fileInfo = new System.IO.FileInfo(fileName);
             List<T> data = null;
+            string cachedFileName = this.GetDbTableNamePath(fileName);
 
-            if (this.dataFilesInfo.ContainsKey(fileName))
+            if (this.dataFilesInfo.ContainsKey(cachedFileName))
             {
                 workTask.UpdateStatus($"загрузка данных из кэша ...");
                 workTask.IsIndeterminate = true;
@@ -24,7 +25,7 @@
 
                 if (info.LastModified == fileInfo.LastWriteTime)
                 {
-                    T[] result = this.DeserializeData<T>(fileName);
+                    T[] result = await this.DeserializeDataAsync<T>(cachedFileName);
 
                     if (result != null)
                     {
@@ -38,7 +39,7 @@
 
                     if (string.Equals(info.Hash, hashAsString))
                     {
-                        T[] result = this.DeserializeData<T>(fileName);
+                        T[] result = await this.DeserializeDataAsync<T>(cachedFileName);
                         if (result != null)
                         {
                             data = new List<T>(result);
@@ -50,8 +51,10 @@
             return data;
         }
 
-        private void StoreHashAndSaveData<T>(string fileName, ref WorkTask workTask, T[] data)
+        private void StoreHashAndSaveData<T>(FileInfo fileInfo, WorkTask workTask, T[] data)
         {
+            string fileName = fileInfo.FullName;
+
             string msg = "вычисление контрольной-суммы файла ...";
             workTask.UpdateStatus(msg);
             workTask.IsIndeterminate = true;
@@ -76,8 +79,7 @@
                 numberOfRetries++;
             } while (isOk == false);
 
-            FileInfo fileInfo = new System.IO.FileInfo(fileName);
-            DataFileRecord dataFileRecord = new DataFileRecord() { FileName = fileName, Hash = hashAsString, LastModified = fileInfo.LastWriteTime };
+            DataFileRecord dataFileRecord = new DataFileRecord(fileName, hashAsString, fileInfo.LastWriteTime);
             if (this.dataFilesInfo.ContainsKey(fileName))
             {
                 this.dataFilesInfo[fileName] = dataFileRecord;
@@ -87,7 +89,8 @@
                 this.dataFilesInfo.Add(fileName, dataFileRecord);
             }
 
-            this.SerializeData<T>(data, fileName);
+            string cachedFileName = this.GetDbTableNamePath(fileName);
+            _ = this.SerializeDataAsync<T>(data, cachedFileName);
         }
 
         private string GetDbTableNamePath(string fileName)
@@ -97,7 +100,7 @@
             return Path.Combine(this.dataFilesPath, s + DATA_FILE_EXTENSION);
         }
 
-        private void SerializeData<T>(T[] data, string fileName)
+        private async Task SerializeDataAsync<T>(T[] data, string fileName)
         {
             try
             {
@@ -108,8 +111,7 @@
 
                 string fullFileName = this.GetDbTableNamePath(fileName);
 
-                using System.IO.FileStream fs = new System.IO.FileStream(fullFileName, System.IO.FileMode.OpenOrCreate, System.IO.FileAccess.ReadWrite);
-                MessagePack.MessagePackSerializer.Serialize<T[]>(fs, data, MessagePack.MessagePackSerializer.DefaultOptions);
+                _ = await TMP.Common.RepositoryCommon.MessagePackSerializer.ToFileAsync<T[]>(data, fileName);
             }
             catch (Exception ex)
             {
@@ -117,7 +119,7 @@
             }
         }
 
-        private T[] DeserializeData<T>(string fileName)
+        private async Task<T[]> DeserializeDataAsync<T>(string fileName)
         {
             try
             {
@@ -128,8 +130,7 @@
                     return null;
                 }
 
-                using System.IO.FileStream fs = new System.IO.FileStream(fullFileName, System.IO.FileMode.Open, System.IO.FileAccess.Read);
-                T[] result = MessagePack.MessagePackSerializer.Deserialize<T[]>(fs, MessagePack.MessagePackSerializer.DefaultOptions);
+                T[] result = await TMP.Common.RepositoryCommon.MessagePackDeserializer.FromFileAsync<T[]>(fileName);
 
                 return result;
             }

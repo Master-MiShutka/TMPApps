@@ -10,6 +10,7 @@
     xmlns:local_controls="clr-namespace:TMP.WORK.AramisChetchiki.Controls"
     xmlns:local_extensions="clr-namespace:TMP.WORK.AramisChetchiki.Extensions"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:model="clr-namespace:TMP.WORK.AramisChetchiki.Model"
     xmlns:mouseWheel="clr-namespace:WpfMouseWheel.Windows.Input;assembly=WpfMouseWheelLib"
     xmlns:tmp="clr-namespace:TMPApplication;assembly=TMPApplication"
     xmlns:uicontrols="clr-namespace:TMP.UI.Controls.WPF;assembly=ui.controls.wpf"
@@ -94,7 +95,7 @@
                 IsEditable="False"
                 IsEnabled="{Binding Path=IsDataLoaded}"
                 ItemsSource="{Binding Path=AvailableDataFiles}"
-                SelectedValue="{Binding SelectedDataFileInfo, Mode=TwoWay}">
+                SelectedValue="{Binding SelectedDataFileInfo, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}">
                 <ComboBox.Style>
                     <Style BasedOn="{StaticResource {x:Type ComboBox}}" TargetType="{x:Type ComboBox}">
                         <Style.Triggers>
@@ -120,7 +121,7 @@
                     </Style>
                 </ComboBox.Style>
                 <ComboBox.ItemTemplate>
-                    <DataTemplate>
+                    <DataTemplate DataType="{x:Type model:AramisDataInfo}">
                         <Grid IsSharedSizeScope="True">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition x:Name="c1" Width="Auto" />
@@ -138,7 +139,7 @@
                             <TextBlock
                                 Grid.Column="1"
                                 Margin="0,0,10,0"
-                                Text="{Binding Path=FileSize, StringFormat={}Размер данных: {0}, Converter={StaticResource FileSizeToHumanReadableConverter}}" />
+                                Text="{Binding Path=FileSize, UpdateSourceTrigger=PropertyChanged, StringFormat={}Размер данных: {0}, Converter={StaticResource FileSizeToHumanReadableConverter}}" />
                             <TextBlock
                                 Grid.Column="2"
                                 Margin="0,0,10,0"
@@ -158,7 +159,7 @@
                             <TextBlock
                                 Grid.Column="4"
                                 Margin="0,0,5,0"
-                                Text="{Binding Path=LastModifiedDate, StringFormat={}📅: {0:dd.MM.yyyy HH:mm}}" />
+                                Text="{Binding Path=LastModifiedDate, NotifyOnSourceUpdated=True, StringFormat={}📅: {0:dd.MM.yyyy HH:mm}}" />
                         </Grid>
                     </DataTemplate>
                 </ComboBox.ItemTemplate>

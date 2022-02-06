@@ -5,13 +5,13 @@
     using TMP.Common.RepositoryCommon;
 
     [KnownType(typeof(DatePeriod))]
-    [MessagePackObject]
+    [MessagePackObject(keyAsPropertyName: true)]
     [MessagePackFormatter(typeof(AramisDataInfoFormatter))]
     public class AramisDataInfo : TMP.Common.RepositoryCommon.DataFileInfo
     {
-        [IgnoreMember]
+        [MessagePack.IgnoreMember]
         private string departamentName;
-        [IgnoreMember]
+        [MessagePack.IgnoreMember]
         private string aramisDbPath = string.Empty;
 
         public AramisDataInfo()
@@ -28,7 +28,6 @@
         /// <summary>
         /// Название подразделения
         /// </summary>
-        [Key(2)]
         public string DepartamentName
         {
             get => this.departamentName;
@@ -38,7 +37,6 @@
         /// <summary>
         /// Путь к базе данных Арамис, откуда получены данные
         /// </summary>
-        [Key(3)]
         public string AramisDbPath
         {
             get => this.aramisDbPath;
@@ -51,7 +49,7 @@
             }
         }
 
-        [IgnoreMember]
+        [MessagePack.IgnoreMember]
         public override bool IsLocal => string.IsNullOrWhiteSpace(this.aramisDbPath) == false && System.IO.Directory.Exists(this.aramisDbPath);
     }
 }

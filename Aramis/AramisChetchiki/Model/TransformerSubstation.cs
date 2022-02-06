@@ -2,7 +2,7 @@
 {
     using System;
 
-    [MessagePack.MessagePackObject]
+    [MessagePack.MessagePackObject(keyAsPropertyName: true)]
     public class TransformerSubstation : IComparable<TransformerSubstation>, IEquatable<TransformerSubstation>, IComparable
     {
         [MessagePack.IgnoreMember]
@@ -14,17 +14,11 @@
             this.Number = number;
             this.Name = name;
         }
-
-        [MessagePack.Key(0)]
         public string Type { get; set; }
-
-        [MessagePack.Key(1)]
         public int Number { get; set; }
 
-        [MessagePack.Key(2)]
         public string Name { get; set; }
 
-        [MessagePack.Key(3)]
         public bool IsEmpty => string.IsNullOrWhiteSpace(this.Type) & (this.Number == 0 || this.Number == -1);
 
         public override string ToString()

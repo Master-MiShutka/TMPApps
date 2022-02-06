@@ -73,59 +73,59 @@
         [MessagePack.IgnoreMember]
         [DisplayName("Тип населённой местности")]
         [Display(GroupName = "Адрес")]
-        public string ТипНаселённойМестности => string.IsNullOrWhiteSpace(this.Адрес?.ТипНаселённогоПункта)
+        public string ТипНаселённойМестности => string.IsNullOrWhiteSpace(this.Адрес?.CityType)
             ? UNKNOWN_STR
-            : (this.Адрес.ТипНаселённогоПункта.StartsWith("г.", AppSettings.StringComparisonMethod) ? "город" : "село");
+            : (this.Адрес.CityType.StartsWith("г.", AppSettings.StringComparisonMethod) ? "город" : "село");
 
         [MessagePack.IgnoreMember]
         [DisplayName("Тип населённого пункта")]
         [SummaryInfo]
         [Display(GroupName = "Адрес")]
-        public string ТипНаселённогоПункта => this.Адрес?.ТипНаселённогоПункта;
+        public string ТипНаселённогоПункта => this.Адрес?.CityType;
 
         [MessagePack.IgnoreMember]
         [SummaryInfo]
         [DisplayName("Населённый пункт")]
         [Display(GroupName = "Адрес")]
-        public string НаселённыйПункт => this.Адрес?.НаселённыйПункт;
+        public string НаселённыйПункт => this.Адрес?.City;
 
         [MessagePack.IgnoreMember]
         [DisplayName("Улица")]
         [Display(GroupName = "Адрес")]
-        public string Улица => this.Адрес?.Улица;
+        public string Улица => this.Адрес?.Street;
 
         [MessagePack.IgnoreMember]
         [DisplayName("Улица с домом")]
         [Display(GroupName = "Адрес")]
-        public string УлицаСДомом => this.Адрес?.УлицаСДомом;
+        public string УлицаСДомом => this.Адрес?.StreetWithHouseNumber;
 
         [MessagePack.IgnoreMember]
         [DisplayName("Улица с домом и квартирой")]
         [Display(GroupName = "Адрес")]
-        public string УлицаСДомомИКв => this.Адрес?.УлицаСДомомИКв;
+        public string УлицаСДомомИКв => this.Адрес?.StreetWithHouseNumberAndApartment;
 
         [MessagePack.IgnoreMember]
         [DisplayName("Дом")]
         [Display(GroupName = "Адрес")]
         [TextDataFormat]
-        public string Дом => this.Адрес?.Дом;
+        public string Дом => this.Адрес?.HouseNumber;
 
         [MessagePack.IgnoreMember]
         [DisplayName("Квартира")]
         [Display(GroupName = "Адрес")]
         [TextDataFormat]
-        public string Квартира => this.Адрес?.Квартира;
+        public string Квартира => this.Адрес?.Apartment;
 
         [MessagePack.IgnoreMember]
         [SummaryInfo]
         [DisplayName("Сельский совет")]
         [Display(GroupName = "Адрес")]
-        public string СельскийСовет => this.Адрес?.СельскийСовет;
+        public string СельскийСовет => this.Адрес?.Province;
 
         [MessagePack.IgnoreMember]
         [DisplayName("МЖД")]
         [Display(GroupName = "Адрес")]
-        public bool ЭтоМжд => this.Адрес != null ? this.Адрес.ЭтоМжд : false;
+        public bool ЭтоМжд => this.Адрес != null ? this.Адрес.IsApartmentBuilding : false;
 
         [MessagePack.IgnoreMember]
         [DisplayName("Населенный пункт и улица с номером дома")]
@@ -145,15 +145,33 @@
         [Display(GroupName = "Абонент")]
         public string Коментарий { get; set; }
 
+        [MessagePack.IgnoreMember]
+        private DateOnly датаУведомления;
+
         [DisplayName("Дата уведомления")]
         [Display(GroupName = "Абонент")]
         [DateTimeDataFormat]
-        public DateOnly? ДатаУведомления { get; set; }
+        [System.Text.Json.Serialization.JsonConverter(typeof(TMP.Common.RepositoryCommon.DateOnlyConverterNullable))]
+        [MessagePack.MessagePackFormatter(typeof(TMP.Common.RepositoryCommon.DateOnlyFormatterNullable))]
+        public DateOnly? ДатаУведомления
+        {
+            get => this.датаУведомления == default ? null : this.датаУведомления;
+            set => this.датаУведомления = value ?? default;
+        }
+
+        [MessagePack.IgnoreMember]
+        private DateOnly датаОтключения;
 
         [DisplayName("Дата отключения")]
         [Display(GroupName = "Абонент")]
         [DateTimeDataFormat]
-        public DateOnly? ДатаОтключения { get; set; }
+        [System.Text.Json.Serialization.JsonConverter(typeof(TMP.Common.RepositoryCommon.DateOnlyConverterNullable))]
+        [MessagePack.MessagePackFormatter(typeof(TMP.Common.RepositoryCommon.DateOnlyFormatterNullable))]
+        public DateOnly? ДатаОтключения
+        {
+            get => this.датаОтключения == default ? null : this.датаОтключения;
+            set => this.датаОтключения = value ?? default;
+        }
 
         [MessagePack.IgnoreMember]
         [DisplayName("Год отключения")]
@@ -172,10 +190,18 @@
         [SummaryInfo]
         public bool Удалён { get; set; } = false;
 
+        [MessagePack.IgnoreMember]
+        private DateOnly датаУдаления;
+
         [DisplayName("Дата удаления из базы")]
         [Display(GroupName = "Абонент")]
-
-        public DateOnly ДатаУдаления { get; set; }
+        [System.Text.Json.Serialization.JsonConverter(typeof(TMP.Common.RepositoryCommon.DateOnlyConverterNullable))]
+        [MessagePack.MessagePackFormatter(typeof(TMP.Common.RepositoryCommon.DateOnlyFormatterNullable))]
+        public DateOnly? ДатаУдаления
+        {
+            get => this.датаУдаления == default ? null : this.датаУдаления;
+            set => this.датаУдаления = value ?? default;
+        }
 
         [DisplayName("Прописано человек")]
         [Display(GroupName = "Абонент")]
@@ -232,23 +258,24 @@
         public ushort ГодВыпуска { get; set; }
 
         [MessagePack.IgnoreMember]
-        private DateOnly? датаУстановки;
+        private DateOnly датаУстановки;
 
         [DisplayName("Дата установки учёта")]
         [Display(GroupName = "Счётчик")]
         [DateTimeDataFormat]
-
-        public DateOnly ДатаУстановки
+        [System.Text.Json.Serialization.JsonConverter(typeof(TMP.Common.RepositoryCommon.DateOnlyConverterNullable))]
+        [MessagePack.MessagePackFormatter(typeof(TMP.Common.RepositoryCommon.DateOnlyFormatterNullable))]
+        public DateOnly? ДатаУстановки
         {
-            get => this.датаУстановки == null || this.датаУстановки == default ? default : this.датаУстановки.Value;
-            set => this.датаУстановки = value;
+            get => this.датаУстановки == default ? null: this.датаУстановки;
+            set => this.датаУстановки = value ?? default;
         }
 
         [MessagePack.IgnoreMember]
         [DisplayName("Год установки учёта")]
         [SummaryInfo]
         [Display(GroupName = "Счётчик")]
-        public ushort ГодУстановки => (ushort)this.ДатаУстановки.Year;
+        public ushort? ГодУстановки => (ushort?)this.ДатаУстановки?.Year;
 
         [DisplayName("Показание при установке")]
         [Display(GroupName = "Счётчик")]
@@ -375,11 +402,19 @@
         [NumericDataFormat]
         public float? СуммаОплаты { get; set; }
 
+        [MessagePack.IgnoreMember]
+        private DateOnly периодПослОплаты;
+
         [DisplayName("Период последней оплаты")]
         [Display(GroupName = "Оплата")]
         [DateTimeDataFormat]
-
-        public DateOnly? ПериодПослОплаты { get; set; }
+        [System.Text.Json.Serialization.JsonConverter(typeof(TMP.Common.RepositoryCommon.DateOnlyConverterNullable))]
+        [MessagePack.MessagePackFormatter(typeof(TMP.Common.RepositoryCommon.DateOnlyFormatterNullable))]
+        public DateOnly? ПериодПослОплаты
+        {
+            get => this.периодПослОплаты == default ? null : this.периодПослОплаты;
+            set => this.периодПослОплаты = value ?? default;
+        }
 
         [DisplayName("Среднее")]
         [Display(GroupName = "Оплата")]
@@ -417,22 +452,24 @@
         }
 
         [MessagePack.IgnoreMember]
-        private DateOnly? датаОплаты;
+        private DateOnly датаОплаты;
 
         [DisplayName("Дата оплаты")]
         [Display(GroupName = "Оплата")]
         [DateTimeDataFormat]
-        public DateOnly ДатаОплаты
+        [System.Text.Json.Serialization.JsonConverter(typeof(TMP.Common.RepositoryCommon.DateOnlyConverterNullable))]
+        [MessagePack.MessagePackFormatter(typeof(TMP.Common.RepositoryCommon.DateOnlyFormatterNullable))]
+        public DateOnly? ДатаОплаты
         {
-            get => this.датаОплаты == null || this.датаОплаты == default ? default : this.датаОплаты.Value;
-            set => this.датаОплаты = value;
+            get => this.датаОплаты == default ? null : this.датаОплаты;
+            set => this.датаОплаты = value ?? default;
         }
 
         [MessagePack.IgnoreMember]
         [DisplayName("Год оплаты")]
         [SummaryInfo]
         [Display(GroupName = "Оплата")]
-        public ushort ГодОплаты => (ushort)this.ДатаОплаты.Year;
+        public ushort? ГодОплаты => (ushort?)this.ДатаОплаты?.Year;
 
         [DisplayName("Задолженник")]
         [Display(GroupName = "Оплата")]
@@ -482,7 +519,7 @@
                     return true;
                 }
 
-                DateTime paymentDate = this.ДатаОплаты.ToDateTime(TimeOnly.MinValue);
+                DateTime paymentDate = this.датаОплаты.ToDateTime(TimeOnly.MinValue);
 
                 if ((DateTime.Now - paymentDate).Days >= 62)
                 {
@@ -510,23 +547,24 @@
         #region Обход
 
         [MessagePack.IgnoreMember]
-        private DateOnly? датаОбхода;
+        private DateOnly датаОбхода;
 
         [DisplayName("Дата обхода")]
         [Display(GroupName = "Обход")]
         [DateTimeDataFormat]
-
-        public DateOnly ДатаОбхода
+        [System.Text.Json.Serialization.JsonConverter(typeof(TMP.Common.RepositoryCommon.DateOnlyConverterNullable))]
+        [MessagePack.MessagePackFormatter(typeof(TMP.Common.RepositoryCommon.DateOnlyFormatterNullable))]
+        public DateOnly? ДатаОбхода
         {
-            get => this.датаОбхода == null || this.датаОбхода == default ? DateOnly.FromDateTime(new DateTime(1900, 1, 1)) : this.датаОбхода.Value;
-            set => this.датаОбхода = value;
+            get => this.датаОбхода == default ? null : this.датаОбхода;
+            set => this.датаОбхода = value ?? default;
         }
 
         [MessagePack.IgnoreMember]
         [DisplayName("Год обхода")]
         [SummaryInfo]
         [Display(GroupName = "Обход")]
-        public ushort ГодОбхода => (ushort)this.датаОбхода?.Year;
+        public ushort? ГодОбхода => (ushort?)this.ДатаОбхода?.Year;
 
         [MessagePack.IgnoreMember]
         [DisplayName("Обхода не было Х месяцев")]
@@ -536,7 +574,7 @@
             get
             {
                 DateOnly now = DateOnly.FromDateTime(DateTime.Now);
-                DateOnly обход = this.датаОбхода ?? default;
+                DateOnly обход = this.датаОбхода;
                 return (ushort)(((now.Year - обход.Year) * 12) + now.Month - обход.Month);
             }
         }
@@ -686,7 +724,7 @@
         [MessagePack.IgnoreMember]
         [DisplayName("Номер ТП")]
         [Display(GroupName = "Привязка")]
-        public ushort? ТПNumber => (this.ТП != null && this.ТП.IsEmpty) ? null : (ushort)this.ТП?.Number;
+        public ushort? ТПNumber => (ushort?)this.ТП?.Number;
 
         [MessagePack.IgnoreMember]
         [DisplayName("Название ТП")]
@@ -797,10 +835,18 @@
         [Display(GroupName = "Признаки")]
         public bool Договор { get; set; }
 
+        [MessagePack.IgnoreMember]
+        private DateOnly датаДоговора;
+
         [DisplayName("Дата договора")]
         [Display(GroupName = "Признаки")]
-
-        public DateOnly? ДатаДоговора { get; set; }
+        [System.Text.Json.Serialization.JsonConverter(typeof(TMP.Common.RepositoryCommon.DateOnlyConverterNullable))]
+        [MessagePack.MessagePackFormatter(typeof(TMP.Common.RepositoryCommon.DateOnlyFormatterNullable))]
+        public DateOnly? ДатаДоговора
+        {
+            get => this.датаДоговора == default ? null : this.датаДоговора;
+            set => this.датаДоговора = value ?? default;
+        }
 
         [SummaryInfo]
         [DisplayName("Льгота")]

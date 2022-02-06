@@ -701,26 +701,52 @@
                 .Select(i => i)
                 .ToList<string>();
 
-            IEnumerable<IMatrixHeader> headerCells5 = new IMatrixHeader[]
+            var columns5 = childsHeaderCells5.Select(i => MatrixHeaderCell.CreateColumnHeader(i)).ToList();
+
+            IEnumerable<IMatrixHeader> headerCells51 = new IMatrixHeader[]
             {
-                MatrixHeaderCell.CreateColumnHeader("поверен", children: childsHeaderCells5.Select(i => MatrixHeaderCell.CreateColumnHeader(i)).ToList()),
-                MatrixHeaderCell.CreateColumnHeader("не поверен", children: childsHeaderCells5
-                .Select(i => MatrixHeaderCell.CreateColumnHeader(i)).ToList()),
+                MatrixHeaderCell.CreateColumnHeader("Есть АСКУЭ", children: new List<IMatrixHeader>()
+            {
+                MatrixHeaderCell.CreateColumnHeader("поверен", children: columns5),
+                MatrixHeaderCell.CreateColumnHeader("не поверен", children: columns5),
+            }),
+                MatrixHeaderCell.CreateColumnHeader("Нет АСКУЭ", children: new List<IMatrixHeader>()
+            {
+                MatrixHeaderCell.CreateColumnHeader("поверен", children: columns5),
+                MatrixHeaderCell.CreateColumnHeader("не поверен", children: columns5),
+            }),
             };
+
+            var children5 = MainViewModel.Meters
+                    .Select(i => i.ГруппаСчётчикаДляОтчётов)
+                    .Distinct()
+                    .ToList();
+
             if (add(new Matrix()
             {
                 Header = "Свод по категории счётчика, состоянию\nметрологической поверки и типу населённого пункта",
                 Description = "* количество счётчиков",
-                GetRowHeaderValuesFunc = () => MainViewModel.Meters
-                    .Select(i => i.ГруппаСчётчикаДляОтчётов).Distinct().Select(i => MatrixHeaderCell.CreateRowHeader(i)),
+                GetRowHeaderValuesFunc = () => new IMatrixHeader[]
+                {
+                    MatrixHeaderCell.CreateRowHeader("абонента", children: children5.Select(i => MatrixHeaderCell.CreateRowHeader(i)).ToList()),
+                    MatrixHeaderCell.CreateRowHeader("ЭСО", children: children5.Select(i => MatrixHeaderCell.CreateRowHeader(i)).ToList()),
+                },
                 ShowColumnsTotal = true,
-                GetColumnHeaderValuesFunc = () => headerCells5,
+                GetColumnHeaderValuesFunc = () => headerCells51,
                 GetDataCellFunc = (row, column) =>
                 {
+                    string meterGroup = row.Header;
+                    bool meterAbonentBalance = row.Parent.Header == "абонента";
+
+                    bool hasAskue = column.Parent.Parent.Header == "Есть АСКУЭ";
+                    bool isPoveren = column.Parent.Header == "поверен";
+
                     List<Meter> list = MainViewModel.Meters
-                        .Where(i => i.ГруппаСчётчикаДляОтчётов == row.Header)
+                        .Where(i => i.НаБалансеАбонента == meterAbonentBalance)
+                        .Where(i => i.ГруппаСчётчикаДляОтчётов == meterGroup)
+                        .Where(i => i.Аскуэ == hasAskue)
                         .Where(i => i.ТипНаселённойМестности == column.Header)
-                        .Where(i => i.Поверен == (column.Parent?.Header == "поверен"))
+                        .Where(i => i.Поверен == isPoveren)
                         .ToList();
                     if (list != null)
                     {
@@ -763,7 +789,7 @@
                 GetDataCellFunc = (row, column) =>
                 {
                     IEnumerable<Meter> list = MainViewModel.Meters
-                        .Where(i => i.Адрес.НаселённыйПункт == row.Header)
+                        .Where(i => i.Адрес.City == row.Header)
                         .Where(i => i.МестоУстановки == "Лестничная клетка")
                         .Where(i => listOfAnApartmentBuilding.ContainsKey(i.НаселённыйПунктИУлицаСНомеромДома))
                         .Where(i => i.Аскуэ == (bool)column.Tag);

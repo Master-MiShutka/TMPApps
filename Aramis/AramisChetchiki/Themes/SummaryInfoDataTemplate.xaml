@@ -10,7 +10,7 @@
     xmlns:views="clr-namespace:TMP.WORK.AramisChetchiki.Views">
 
     <controls_converters:IsNullOrEmptyConverter x:Key="IsNullOrEmptyConverter" />
-    
+
     <Style x:Key="SummaryInfoItemToolTip" TargetType="{x:Type ToolTip}">
         <Setter Property="UIElement.Opacity" Value=".95" />
         <Setter Property="ToolTipService.InitialShowDelay" Value="100" />
@@ -38,10 +38,13 @@
             </Setter.Value>
         </Setter>
     </Style>
-    
+
     <DataTemplate x:Key="ViewAsListInfoItemTemplate" DataType="{x:Type model:SummaryInfoItem}">
-        <Expander Margin="0,2"
-            Header="{Binding Header}" VerticalContentAlignment="Center" VerticalAlignment="Center"
+        <Expander
+            Margin="0,2"
+            VerticalAlignment="Center"
+            VerticalContentAlignment="Center"
+            Header="{Binding Header}"
             IsExpanded="False"
             Style="{StaticResource PlusMinusExpander}">
             <Expander.HeaderTemplate>
@@ -58,16 +61,17 @@
                     </DockPanel>
                 </DataTemplate>
             </Expander.HeaderTemplate>
-            <Border
-                Name="root" Padding="5">
+            <Border Name="root" Padding="5">
                 <DockPanel LastChildFill="True">
-                    <DockPanel DockPanel.Dock="Top" MaxHeight="50">
-                        <CheckBox 
+                    <DockPanel MaxHeight="50" DockPanel.Dock="Top">
+                        <CheckBox
+                            Content="Экспортируется и выводится на печать"
                             DockPanel.Dock="Left"
-                            IsChecked="{Binding IsChecked}" Content="Экспортируется и выводится на печать"
+                            IsChecked="{Binding IsChecked}"
                             ToolTip="Если отмечено, эта группа&#xA;будет экспортироваться и выводиться на печать" />
                         <TextBlock
-                            Name="showall" MaxHeight="30"
+                            Name="showall"
+                            MaxHeight="30"
                             DockPanel.Dock="Right"
                             Focusable="False"
                             Visibility="Hidden">
@@ -98,13 +102,13 @@
                                     Name="btn"
                                     Margin="2,0"
                                     Padding="2,0"
-                                    Command="{Binding DataContext.CommandToShowList, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type views:SummaryInfoView}}}"
-                                    Content="{Binding Header}"
+                                    Command="{Binding Path=DataContext.CommandToShowList, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type views:SummaryInfoView}}}"
+                                    Content="{Binding Path=Header}"
                                     ToolTip="{Binding Path=Percent, StringFormat=', {0:N1}%'}">
                                     <Button.CommandParameter>
                                         <MultiBinding Converter="{StaticResource ParametersToOneConverter}">
                                             <Binding Path="FieldName" RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType={x:Type model:SummaryInfoItem}}" />
-                                            <Binding Path="Value" RelativeSource="{RelativeSource Mode=Self}" />
+                                            <Binding Path="Value" RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType={x:Type model:SummaryInfoChildItem}}" />
                                         </MultiBinding>
                                     </Button.CommandParameter>
                                 </Button>
@@ -147,7 +151,7 @@
             </DataTrigger>
         </DataTemplate.Triggers>
     </DataTemplate>
-    
+
     <DataTemplate x:Key="ViewAsTableInfoItemTemplate" DataType="{x:Type model:SummaryInfoItem}">
         <DataTemplate.Resources>
             <Style BasedOn="{StaticResource SummaryInfoItemToolTip}" TargetType="{x:Type ToolTip}" />
@@ -185,7 +189,7 @@
                                     <Hyperlink.CommandParameter>
                                         <MultiBinding Converter="{StaticResource ParametersToOneConverter}">
                                             <Binding Path="FieldName" RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType={x:Type model:SummaryInfoItem}}" />
-                                            <Binding Path="Value" RelativeSource="{RelativeSource Mode=Self}" />
+                                            <Binding ElementName="txt" Path="DataContext.Value" />
                                         </MultiBinding>
                                     </Hyperlink.CommandParameter>
                                     <TextBlock Text="Список" />
@@ -209,7 +213,7 @@
             </DataTrigger>
         </DataTemplate.Triggers>
     </DataTemplate>
-    
+
     <DataTemplate x:Key="ViewAsDataTableInfoItemTemplate" DataType="{x:Type model:SummaryInfoItem}">
         <Expander
             Background="{DynamicResource AccentColorBrush4}"
@@ -235,13 +239,13 @@
             <ListView
                 Name="itemsControl"
                 ItemsSource="{Binding OnlyFirst10Items}"
-                VirtualizingPanel.IsVirtualizing="True"
-                ToolTip="{Binding Info}">
+                ToolTip="{Binding Info}"
+                VirtualizingPanel.IsVirtualizing="True">
                 <ListView.View>
                     <GridView>
-                        <GridViewColumn Header="Название" DisplayMemberBinding="{Binding Value}" />
-                        <GridViewColumn Header="Количество" DisplayMemberBinding="{Binding Path=Count, StringFormat={}{0:N0}}"/>
-                        <GridViewColumn Header="%" DisplayMemberBinding="{Binding Path=Percent, StringFormat={}{0:N1}%}" />
+                        <GridViewColumn DisplayMemberBinding="{Binding Value}" Header="Название" />
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=Count, StringFormat={}{0:N0}}" Header="Количество" />
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=Percent, StringFormat={}{0:N1}%}" Header="%" />
                     </GridView>
                 </ListView.View>
             </ListView>
@@ -252,7 +256,7 @@
             </DataTrigger>
         </DataTemplate.Triggers>
     </DataTemplate>
-    
+
     <Style x:Key="{x:Type charts:PiePiece}" TargetType="{x:Type charts:PiePiece}">
         <Setter Property="Shape.Stroke" Value="#FFFFFFFF" />
         <Setter Property="Shape.StrokeThickness" Value="1" />
@@ -266,7 +270,7 @@
             </Setter.Value>
         </Setter>
     </Style>
-    
+
     <DataTemplate x:Key="ViewAsDiagramInfoItemTemplate" DataType="{x:Type model:SummaryInfoItem}">
         <Border
             Name="root"
@@ -357,9 +361,7 @@
 
     <ControlTemplate x:Key="ItemsControlWithDiagrams" TargetType="{x:Type ItemsControl}">
         <Grid>
-            <controls:NoData
-                Name="contentNoData"
-                Visibility="Collapsed" />
+            <controls:NoData Name="contentNoData" Visibility="Collapsed" />
             <ContentControl
                 Name="contentPrepare"
                 Content="{DynamicResource PrepareDataTemplate}"
@@ -374,10 +376,14 @@
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
-                <Border Grid.Column="1" BorderThickness="1" CornerRadius="3"
-                        Background="{extensions:ValueFromStyle StyleKey={x:Type ToolBar},
-                        Property=Control.Background}" Padding="2">
-                    <Grid >
+                <Border
+                    Grid.Column="1"
+                    Padding="2"
+                    Background="{extensions:ValueFromStyle StyleKey={x:Type ToolBar},
+                                                           Property=Control.Background}"
+                    BorderThickness="1"
+                    CornerRadius="3">
+                    <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="*" />
@@ -399,22 +405,24 @@
                             Text="крупнее" />
                     </Grid>
                 </Border>
-                <ScrollViewer Grid.Row="1" xmlns:mouseWheel="clr-namespace:WpfMouseWheel.Windows.Input;assembly=WpfMouseWheelLib"
-                                      mouseWheel:MouseWheel.Enhanced="True"
-                    Grid.ColumnSpan="3">
+                <ScrollViewer
+                    xmlns:mouseWheel="clr-namespace:WpfMouseWheel.Windows.Input;assembly=WpfMouseWheelLib"
+                    Grid.Row="1"
+                    Grid.ColumnSpan="3"
+                    mouseWheel:MouseWheel.Enhanced="True">
                     <WrapPanel
                         x:Name="_wrapPanel"
-                    
-                        IsItemsHost="True" ScrollViewer.VerticalScrollBarVisibility="Visible"
-                        ItemWidth="{Binding Path=Value, ElementName=slider}" />
+                        IsItemsHost="True"
+                        ItemWidth="{Binding Path=Value, ElementName=slider}"
+                        ScrollViewer.VerticalScrollBarVisibility="Visible" />
                 </ScrollViewer>
             </Grid>
         </Grid>
         <ControlTemplate.Triggers>
             <MultiDataTrigger>
                 <MultiDataTrigger.Conditions>
-                    <Condition Binding="{Binding View.IsEmpty}" Value="True"/>
-                    <Condition Binding="{Binding TextToFind, Converter={StaticResource IsNullOrEmptyConverter}}" Value="False"/>
+                    <Condition Binding="{Binding View.IsEmpty}" Value="True" />
+                    <Condition Binding="{Binding TextToFind, Converter={StaticResource IsNullOrEmptyConverter}}" Value="False" />
                 </MultiDataTrigger.Conditions>
                 <MultiDataTrigger.Setters>
                     <Setter TargetName="contentNoData" Property="Message" Value="ничего не нашлось" />
@@ -429,8 +437,11 @@
         <controls:NoData Margin="10" Message="ничего не нашлось" />
     </ControlTemplate>
 
-    <Style x:Key="SummaryInfosItemsControlStyle" BasedOn="{StaticResource {x:Type ItemsControl}}" TargetType="{x:Type ItemsControl}">
-        <Setter Property="Template" Value="{StaticResource ItemsControlBaseTemplate}"/>
+    <Style
+        x:Key="SummaryInfosItemsControlStyle"
+        BasedOn="{StaticResource {x:Type ItemsControl}}"
+        TargetType="{x:Type ItemsControl}">
+        <Setter Property="Template" Value="{StaticResource ItemsControlBaseTemplate}" />
         <Setter Property="ItemsPanel">
             <Setter.Value>
                 <ItemsPanelTemplate>
@@ -441,51 +452,51 @@
         <Style.Triggers>
             <MultiDataTrigger>
                 <MultiDataTrigger.Conditions>
-                    <Condition Binding="{Binding View.IsEmpty}" Value="True"/>
-                    <Condition Binding="{Binding TextToFind, Converter={StaticResource IsNullOrEmptyConverter}}" Value="False"/>
+                    <Condition Binding="{Binding View.IsEmpty}" Value="True" />
+                    <Condition Binding="{Binding TextToFind, Converter={StaticResource IsNullOrEmptyConverter}}" Value="False" />
                 </MultiDataTrigger.Conditions>
                 <MultiDataTrigger.Setters>
-                    <Setter Property="Template" Value="{StaticResource NothingFound}" />                    
-                    <Setter Property="ToolTip" Value="dddddd"/>
+                    <Setter Property="Template" Value="{StaticResource NothingFound}" />
+                    <Setter Property="ToolTip" Value="dddddd" />
                 </MultiDataTrigger.Setters>
             </MultiDataTrigger>
             <DataTrigger Binding="{Binding IsBusy}" Value="True">
-                <Setter Property="Margin" Value="10,5"/>
+                <Setter Property="Margin" Value="10,5" />
                 <Setter Property="Template" Value="{StaticResource PrepareDataControlTemplate}" />
             </DataTrigger>
             <DataTrigger Binding="{Binding IsAnalizingData}" Value="True">
-                <Setter Property="Margin" Value="10,5"/>
+                <Setter Property="Margin" Value="10,5" />
                 <Setter Property="Template" Value="{StaticResource PrepareDataControlTemplate}" />
             </DataTrigger>
             <MultiDataTrigger>
                 <MultiDataTrigger.Conditions>
-                    <Condition Binding="{Binding View.IsEmpty}" Value="True"/>
-                    <Condition Binding="{Binding TextToFind, Converter={StaticResource IsNullOrEmptyConverter}}" Value="True"/>
+                    <Condition Binding="{Binding View.IsEmpty}" Value="True" />
+                    <Condition Binding="{Binding TextToFind, Converter={StaticResource IsNullOrEmptyConverter}}" Value="True" />
                 </MultiDataTrigger.Conditions>
                 <MultiDataTrigger.Setters>
-                    <Setter Property="Margin" Value="10,5"/>
+                    <Setter Property="Margin" Value="10,5" />
                     <Setter Property="Template" Value="{StaticResource NoDataControlTemplate}" />
                 </MultiDataTrigger.Setters>
             </MultiDataTrigger>
             <!-- Trigger Property="ItemsSource" Value="{x:Null}">
                 <Setter Property="Margin" Value="10,5"/>
                 <Setter Property="Template" Value="{StaticResource NoDataControlTemplate}" />
-            </Trigger -->
+            </Trigger-->
             <DataTrigger Binding="{Binding SelectedInfoViewType}" Value="{x:Static model:InfoViewType.ViewAsDiagram}">
-                <Setter Property="Template" Value="{StaticResource ItemsControlWithDiagrams}"/>
-                <Setter Property="ItemTemplate" Value="{StaticResource ViewAsDiagramInfoItemTemplate}"/>
+                <Setter Property="Template" Value="{StaticResource ItemsControlWithDiagrams}" />
+                <Setter Property="ItemTemplate" Value="{StaticResource ViewAsDiagramInfoItemTemplate}" />
             </DataTrigger>
 
             <DataTrigger Binding="{Binding SelectedInfoViewType}" Value="{x:Static model:InfoViewType.ViewAsList}">
-                <Setter Property="ItemTemplate" Value="{StaticResource ViewAsListInfoItemTemplate}"/>
+                <Setter Property="ItemTemplate" Value="{StaticResource ViewAsListInfoItemTemplate}" />
             </DataTrigger>
 
             <DataTrigger Binding="{Binding SelectedInfoViewType}" Value="{x:Static model:InfoViewType.ViewAsTable}">
-                <Setter Property="ItemTemplate" Value="{StaticResource ViewAsDataTableInfoItemTemplate}"/>
+                <Setter Property="ItemTemplate" Value="{StaticResource ViewAsDataTableInfoItemTemplate}" />
             </DataTrigger>
 
             <DataTrigger Binding="{Binding SelectedInfoViewType}" Value="{x:Static model:InfoViewType.ViewAsTable}">
-                <!-- Setter Property="ItemTemplate" Value="{StaticResource ViewAsDataTableInfoItemTemplate}"/ -->
+                <!--  Setter Property="ItemTemplate" Value="{StaticResource ViewAsDataTableInfoItemTemplate}"/  -->
             </DataTrigger>
 
         </Style.Triggers>

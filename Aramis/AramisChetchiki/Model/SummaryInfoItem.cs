@@ -5,7 +5,7 @@
     using System.Runtime.Serialization;
 
     [KnownType(typeof(SummaryInfoChildItem))]
-    [MessagePack.MessagePackObject]
+    [MessagePack.MessagePackObject(keyAsPropertyName: true)]
     public class SummaryInfoItem : IModel, INotifyPropertyChanged
     {
         [MessagePack.IgnoreMember]
@@ -44,42 +44,36 @@
             this.fieldName = fieldName;
         }
 
-        [MessagePack.Key(0)]
         public string FieldName
         {
             get => this.fieldName;
             set => this.SetProperty(ref this.fieldName, value);
         }
 
-        [MessagePack.Key(1)]
         public string Header
         {
             get => this.header;
             set => this.SetProperty(ref this.header, value);
         }
 
-        [MessagePack.Key(2)]
         public string Info
         {
             get => this.info;
             set => this.SetProperty(ref this.info, value);
         }
 
-        [MessagePack.Key(3)]
         public ICollection<SummaryInfoChildItem> OnlyFirst10Items
         {
             get => this.onlyFirst10Items;
             set => this.SetProperty(ref this.onlyFirst10Items, value);
         }
 
-        [MessagePack.Key(4)]
         public ICollection<SummaryInfoChildItem> AllItems
         {
             get => this.allItems;
             set => this.SetProperty(ref this.allItems, value);
         }
 
-        [MessagePack.Key(5)]
         public bool IsChecked
         {
             get => this.isChecked;
@@ -146,7 +140,7 @@
         #endregion // INotifyPropertyChanged Members
     }
 
-    [MessagePack.MessagePackObject]
+    [MessagePack.MessagePackObject(keyAsPropertyName: true)]
     public class SummaryInfoChildItem : IModel, INotifyPropertyChanged
     {
         [MessagePack.IgnoreMember]
@@ -160,35 +154,30 @@
         [MessagePack.IgnoreMember]
         private bool isEmpty;
 
-        [MessagePack.Key(0)]
         public string Header
         {
             get => this.header;
             set => this.SetProperty(ref this.header, value);
         }
 
-        [MessagePack.Key(1)]
         public uint Count
         {
             get => this.count;
             set => this.SetProperty(ref this.count, value);
         }
 
-        [MessagePack.Key(2)]
         public double Percent
         {
             get => this.percent;
             set => this.SetProperty(ref this.percent, value);
         }
 
-        [MessagePack.Key(3)]
         public string Value
         {
             get => this.value;
             set => this.SetProperty(ref this.value, value);
         }
 
-        [MessagePack.Key(4)]
         public bool IsEmpty
         {
             get => this.isEmpty;

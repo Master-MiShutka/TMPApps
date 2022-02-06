@@ -4,126 +4,136 @@
     using System.Collections.Generic;
     using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
-    using System.Runtime.Serialization;
     using System.Text.RegularExpressions;
 
     public interface IAddress : IComparable, IComparable<IAddress>, IEquatable<IAddress>
     {
-        string ТипНаселённогоПункта { get; }
+        string CityType { get; }
 
-        string НаселённыйПункт { get; }
+        string City { get; }
 
-        string Улица { get; }
+        string Street { get; }
 
-        string Дом { get; }
+        string HouseNumber { get; }
 
-        string Квартира { get; }
+        string Apartment { get; }
 
-        string УлицаСДомом { get; }
+        string StreetWithHouseNumber { get; }
 
-        string УлицаСДомомИКв { get; }
+        string StreetWithHouseNumberAndApartment { get; }
     }
 
-    [MessagePack.MessagePackObject]
-    public class BaseAddress : IAddress, IComparable<BaseAddress>, IEquatable<BaseAddress>
+    [MessagePack.MessagePackObject(keyAsPropertyName: true)]
+    public sealed class Address :IAddress, IComparable, IComparable<Address>, IEquatable<Address>
     {
-        public BaseAddress()
-        {
-        }
+        [MessagePack.IgnoreMember]
+        public static System.Collections.Concurrent.ConcurrentDictionary<string, uint> DictionaryStreetWithHouseNumber { get; private set; } = new System.Collections.Concurrent.ConcurrentDictionary<string, uint>();
 
-        public BaseAddress(string cityType, string city, string street, string houseNumber, string apartment)
+        [MessagePack.SerializationConstructor]
+        public Address(string city, string street, string houseNumber, string apartment, string province, string cityType = null)
         {
-            this.ТипНаселённогоПункта = cityType;
-            this.НаселённыйПункт = city;
-            this.Улица = string.IsNullOrWhiteSpace(street) ? string.Empty : street;
-            this.Дом = string.IsNullOrWhiteSpace(houseNumber) ? string.Empty : houseNumber;
-            this.Квартира = string.IsNullOrWhiteSpace(apartment) ? string.Empty : apartment;
-        }
-
-        public BaseAddress(string city, string street, string houseNumber, string apartment)
-        {
-            if (string.IsNullOrWhiteSpace(city) == false)
+            if (string.IsNullOrEmpty(cityType))
             {
-                string[] parts = city.Split('.');
+                if (string.IsNullOrWhiteSpace(city) == false)
+                {
+                    string[] parts = city.Split('.');
 
-                if (parts.Length == 2)
-                {
-                    this.ТипНаселённогоПункта = parts[0] + ".";
-                    this.НаселённыйПункт = parts[1];
-                }
-                else if (parts.Length == 1)
-                {
-                    this.ТипНаселённогоПункта = parts[0].StartsWith("Дач")
-                        ? "дачи"
-                        : "?";
-                    this.НаселённыйПункт = parts[0];
+                    if (parts.Length == 2)
+                    {
+                        this.CityType = parts[0] + ".";
+                        this.City = parts[1];
+                    }
+                    else if (parts.Length == 1)
+                    {
+                        this.CityType = parts[0].StartsWith("Дач")
+                            ? "дачи"
+                            : "?";
+                        this.City = parts[0];
+                    }
+                    else
+                    {
+                        this.CityType = string.Empty;
+                        this.City = city;
+                    }
                 }
                 else
                 {
-                    this.ТипНаселённогоПункта = string.Empty;
-                    this.НаселённыйПункт = city;
+                    this.City = this.CityType = string.Empty;
                 }
             }
             else
             {
-                this.НаселённыйПункт = this.ТипНаселённогоПункта = string.Empty;
+                this.City = city;
+                this.CityType = cityType;
             }
 
-            this.Улица = string.IsNullOrWhiteSpace(street) ? string.Empty : street;
-            this.Дом = string.IsNullOrWhiteSpace(houseNumber) ? string.Empty : houseNumber;
-            this.Квартира = string.IsNullOrWhiteSpace(apartment) ? string.Empty : apartment;
+            this.Street = string.IsNullOrWhiteSpace(street) ? string.Empty : street;
+            this.HouseNumber = string.IsNullOrWhiteSpace(houseNumber) ? string.Empty : houseNumber;
+            this.Apartment = string.IsNullOrWhiteSpace(apartment) ? string.Empty : apartment;
+
+            this.Province = string.IsNullOrWhiteSpace(province) ? string.Empty : province;
+
+            string s = this.CityAndStreetWithHouse;
+            if (DictionaryStreetWithHouseNumber.ContainsKey(s) == false)
+            {
+                DictionaryStreetWithHouseNumber.AddOrUpdate(s, 1u, (string key, uint value) => { return value; });
+            }
+            else
+            {
+                DictionaryStreetWithHouseNumber[s] = DictionaryStreetWithHouseNumber[s] + 1;
+            }
         }
 
-        [SummaryInfo]
-        [DisplayName("Тип населённого пункта")]
-        [Display(GroupName = "Адрес")]
-        [MessagePack.Key(0)]
-        public string ТипНаселённогоПункта { get; }
-
-        [SummaryInfo]
         [DisplayName("Населённый пункт")]
         [Display(GroupName = "Адрес")]
-        [MessagePack.Key(1)]
-        public string НаселённыйПункт { get; }
+        [MessagePack.Key(nameof(City))]
+        public string City { get; }
 
         [DisplayName("Улица")]
         [Display(GroupName = "Адрес")]
-        [MessagePack.Key(2)]
-        public string Улица { get; }
+        [MessagePack.Key(nameof(Street))]
+        public string Street { get; }
 
         [DisplayName("Дом")]
         [Display(GroupName = "Адрес")]
-        [MessagePack.Key(3)]
-        public string Дом { get; }
+        [MessagePack.Key(nameof(HouseNumber))]
+        public string HouseNumber { get; }
 
         [DisplayName("Квартира")]
         [Display(GroupName = "Адрес")]
-        [MessagePack.Key(4)]
-        public string Квартира { get; }
+        [MessagePack.Key(nameof(Apartment))]
+        public string Apartment { get; }
 
-        [IgnoreDataMember]
+        [DisplayName("Сельский совет")]
+        [Display(GroupName = "Адрес")]
+        [MessagePack.Key(nameof(Province))]
+        public string Province { get; }
+
+        [DisplayName("Тип населённого пункта")]
+        [Display(GroupName = "Адрес")]
+        [MessagePack.Key(nameof(CityType))]
+        public string CityType { get; }
+
+        [MessagePack.IgnoreMember]
         [DisplayName("Улица с домом")]
         [Display(GroupName = "Адрес")]
-        public string УлицаСДомом => string.IsNullOrWhiteSpace(this.Улица) ? (string.IsNullOrWhiteSpace(this.Дом) ? string.Empty : this.Дом) : this.Улица + ", " + this.Дом;
+        public string StreetWithHouseNumber => string.IsNullOrWhiteSpace(this.Street) ? (string.IsNullOrWhiteSpace(this.HouseNumber) ? string.Empty : this.HouseNumber) : this.Street + ", " + this.HouseNumber;
 
-        [IgnoreDataMember]
+        [MessagePack.IgnoreMember]
         [DisplayName("Улица с домом и квартирой")]
         [Display(GroupName = "Адрес")]
-        public string УлицаСДомомИКв => (string.IsNullOrWhiteSpace(this.Улица) && string.IsNullOrWhiteSpace(this.Дом))
-            ? (string.IsNullOrEmpty(this.Квартира) ? string.Empty : $", {this.Квартира}")
-            : this.УлицаСДомом + (string.IsNullOrEmpty(this.Квартира) ? string.Empty : $", {this.Квартира}");
+        public string StreetWithHouseNumberAndApartment => (string.IsNullOrWhiteSpace(this.Street) && string.IsNullOrWhiteSpace(this.HouseNumber))
+            ? (string.IsNullOrEmpty(this.Apartment) ? string.Empty : $", {this.Apartment}")
+            : this.StreetWithHouseNumber + (string.IsNullOrEmpty(this.Apartment) ? string.Empty : $", {this.Apartment}");
 
-        public override string ToString()
-        {
-            string kv = string.IsNullOrWhiteSpace(this.Квартира) ? string.Empty : $", {this.Квартира}";
+        [MessagePack.IgnoreMember]
+        [DisplayName("МЖД")]
+        [Display(GroupName = "Адрес")]
+        public bool IsApartmentBuilding => DictionaryStreetWithHouseNumber.ContainsKey(this.CityAndStreetWithHouse)
+            && DictionaryStreetWithHouseNumber[this.CityAndStreetWithHouse] >= AppSettings.Default.NumberOfApartmentsInAnApartmentBuilding;
 
-            return $"{this.ТипНаселённогоПункта}{this.НаселённыйПункт}, {this.УлицаСДомом}{kv}";
-        }
-
-        public override int GetHashCode()
-        {
-            return HashCode.Combine(this.ТипНаселённогоПункта, this.НаселённыйПункт, this.УлицаСДомом, this.Квартира);
-        }
+        [MessagePack.IgnoreMember]
+        public string CityAndStreetWithHouse => this.City + ", " + this.StreetWithHouseNumber;
 
         public override bool Equals(object obj)
         {
@@ -132,10 +142,37 @@
                 return false;
             }
 
-            BaseAddress other = obj as BaseAddress;
+            Address other = obj as Address;
             return this.Equals(other);
         }
 
+        public override string ToString()
+        {
+            string kv = string.IsNullOrWhiteSpace(this.Apartment) ? string.Empty : $", {this.Apartment}";
+
+            return $"{this.CityType}{this.City}, {this.StreetWithHouseNumber}{kv}";
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(this.CityType, this.City, this.StreetWithHouseNumber, this.Apartment, this.Province);
+        }
+
+        public bool Equals(IAddress other)
+        {
+            return other != null
+                && string.Equals(this.CityType, other.CityType, AppSettings.StringComparisonMethod)
+                && string.Equals(this.City, other.City, AppSettings.StringComparisonMethod)
+                && string.Equals(this.StreetWithHouseNumber, other.StreetWithHouseNumber, AppSettings.StringComparisonMethod)
+                && string.Equals(this.Apartment, other.Apartment, AppSettings.StringComparisonMethod);
+        }
+
+        public bool Equals(Address other)
+        {
+            return this.Equals(other as IAddress);
+        }
+
+        #region IComparable implementation
         public int CompareTo(IAddress other)
         {
             if (other == null)
@@ -169,155 +206,28 @@
                 return result == 0 ? compareStrOrInt(kv1, kv2) : result;
             }
 
-            if (string.Equals(this.НаселённыйПункт, other.НаселённыйПункт, AppSettings.StringComparisonMethod))
+            if (string.Equals(this.City, other.City, AppSettings.StringComparisonMethod))
             {
-                if (string.IsNullOrWhiteSpace(this.Улица))
+                if (string.IsNullOrWhiteSpace(this.Street))
                 {
-                    return compareHouses(this.Дом, other.Дом, this.Квартира, other.Квартира);
+                    return compareHouses(this.HouseNumber, other.HouseNumber, this.Apartment, other.Apartment);
                 }
                 else
                 {
-                    if (string.Equals(this.Улица, other.Улица, AppSettings.StringComparisonMethod))
+                    if (string.Equals(this.Street, other.Street, AppSettings.StringComparisonMethod))
                     {
-                        return compareHouses(this.Дом, other.Дом, this.Квартира, other.Квартира);
+                        return compareHouses(this.HouseNumber, other.HouseNumber, this.Apartment, other.Apartment);
                     }
                     else
                     {
-                        return string.Compare(this.Улица, other.Улица, AppSettings.StringComparisonMethod);
+                        return string.Compare(this.Street, other.Street, AppSettings.StringComparisonMethod);
                     }
                 }
             }
             else
             {
-                return string.Compare(this.НаселённыйПункт, other.НаселённыйПункт, AppSettings.StringComparisonMethod);
+                return string.Compare(this.City, other.City, AppSettings.StringComparisonMethod);
             }
-        }
-
-        public bool Equals(IAddress other)
-        {
-            return other != null
-                && string.Equals(this.ТипНаселённогоПункта, other.ТипНаселённогоПункта, AppSettings.StringComparisonMethod)
-                && string.Equals(this.НаселённыйПункт, other.НаселённыйПункт, AppSettings.StringComparisonMethod)
-                && string.Equals(this.УлицаСДомом, other.УлицаСДомом, AppSettings.StringComparisonMethod)
-                && string.Equals(this.Квартира, other.Квартира, AppSettings.StringComparisonMethod);
-        }
-
-        public int CompareTo(BaseAddress other)
-        {
-            return this.CompareTo(other as IAddress);
-        }
-
-        public bool Equals(BaseAddress other)
-        {
-            return this.Equals(other as IAddress);
-        }
-
-        public int CompareTo(object obj)
-        {
-            return this.CompareTo(obj as IAddress);
-        }
-
-        public static bool operator ==(BaseAddress left, BaseAddress right)
-        {
-            return left is null ? right is null : left.Equals(right);
-        }
-
-        public static bool operator !=(BaseAddress left, BaseAddress right)
-        {
-            return !(left == right);
-        }
-
-        public static bool operator <(BaseAddress left, BaseAddress right)
-        {
-            return left is null ? right is not null : left.CompareTo(right) < 0;
-        }
-
-        public static bool operator <=(BaseAddress left, BaseAddress right)
-        {
-            return left is null || left.CompareTo(right) <= 0;
-        }
-
-        public static bool operator >(BaseAddress left, BaseAddress right)
-        {
-            return left is not null && left.CompareTo(right) > 0;
-        }
-
-        public static bool operator >=(BaseAddress left, BaseAddress right)
-        {
-            return left is null ? right is null : left.CompareTo(right) >= 0;
-        }
-    }
-
-    [MessagePack.MessagePackObject]
-    public sealed class Address : BaseAddress, IComparable, IComparable<Address>, IEquatable<Address>
-    {
-        public Address()
-        {
-        }
-
-        public Address(string cityType, string city, string street, string houseNumber, string apartment, string province)
-            : base(cityType, city, street, houseNumber, apartment)
-        {
-            this.СельскийСовет = string.IsNullOrWhiteSpace(province) ? string.Empty : province;
-
-            string s = this.CityAndStreetWithHouse;
-            if (DictionaryStreetWithHouseNumber.ContainsKey(s) == false)
-            {
-                DictionaryStreetWithHouseNumber.AddOrUpdate(s, 1u, (string key, uint value) => { return value; });
-            }
-            else
-            {
-                DictionaryStreetWithHouseNumber[s] = DictionaryStreetWithHouseNumber[s] + 1;
-            }
-        }
-
-        public Address(string city, string street, string houseNumber, string apartment, string province)
-            : base(city, street, houseNumber, apartment)
-        {
-            this.СельскийСовет = string.IsNullOrWhiteSpace(province) ? string.Empty : province;
-
-            string s = this.CityAndStreetWithHouse;
-            if (DictionaryStreetWithHouseNumber.ContainsKey(s) == false)
-            {
-                DictionaryStreetWithHouseNumber.AddOrUpdate(s, 1u, (string key, uint value) => { return value; });
-            }
-            else
-            {
-                DictionaryStreetWithHouseNumber[s] = DictionaryStreetWithHouseNumber[s] + 1;
-            }
-        }
-
-        [SummaryInfo]
-        [DisplayName("Сельский совет")]
-        [Display(GroupName = "Адрес")]
-        [MessagePack.Key(5)]
-        public string СельскийСовет { get; }
-
-        [MessagePack.Key(6)]
-        public static HashSet<string> Cities { get; } = new HashSet<string>();
-
-        [MessagePack.Key(7)]
-        public static System.Collections.Concurrent.ConcurrentDictionary<string, uint> DictionaryStreetWithHouseNumber { get; } = new System.Collections.Concurrent.ConcurrentDictionary<string, uint>();
-
-        [MessagePack.IgnoreMember]
-        [SummaryInfo]
-        [DisplayName("МЖД")]
-        [Display(GroupName = "Адрес")]
-        public bool ЭтоМжд => DictionaryStreetWithHouseNumber.ContainsKey(this.CityAndStreetWithHouse)
-            && DictionaryStreetWithHouseNumber[this.CityAndStreetWithHouse] >= AppSettings.Default.NumberOfApartmentsInAnApartmentBuilding;
-
-        [MessagePack.IgnoreMember]
-        public string CityAndStreetWithHouse => this.НаселённыйПункт + ", " + this.УлицаСДомом;
-
-        public override bool Equals(object obj)
-        {
-            if (obj == null)
-            {
-                return false;
-            }
-
-            Address other = obj as Address;
-            return this.Equals(other);
         }
 
         public int CompareTo(Address other)
@@ -325,10 +235,14 @@
             return this.CompareTo(other as IAddress);
         }
 
-        public bool Equals(Address other)
+        public int CompareTo(object obj)
         {
-            return this.Equals(other as IAddress);
+            return this.CompareTo(obj as IAddress);
         }
+
+        #endregion
+
+        #region Operators
 
         public static bool operator ==(Address left, Address right)
         {
@@ -360,10 +274,7 @@
             return left is null ? right is null : left.CompareTo(right) >= 0;
         }
 
-        public override int GetHashCode()
-        {
-            return HashCode.Combine(this.ТипНаселённогоПункта, this.НаселённыйПункт, this.УлицаСДомом, this.Квартира, this.СельскийСовет);
-        }
+        #endregion
     }
 
     public class StringLikeNumbersComparer : IComparer<string>

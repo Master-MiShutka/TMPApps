@@ -1,10 +1,7 @@
 ﻿namespace TMP.UI.Controls.WPF.Converters
 {
     using System;
-    using System.Collections.Generic;
     using System.Globalization;
-    using System.Linq;
-    using System.Text;
     using System.Windows.Data;
 
     public class ParametersToOneConverter : IMultiValueConverter

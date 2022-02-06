@@ -4,7 +4,7 @@
     using System.Runtime.Serialization;
 
     [KnownType(typeof(DatePeriod))]
-    [MessagePack.MessagePackObject]
+    [MessagePack.MessagePackObject(keyAsPropertyName: true)]
     public class DataFileInfo : Shared.PropertyChangedBase, IDataFileInfo
     {
         [MessagePack.IgnoreMember]
@@ -28,7 +28,6 @@
         /// <summary>
         /// Версия данных
         /// </summary>
-        [MessagePack.Key(0)]
         public Version Version
         {
             get => this.version;
@@ -79,7 +78,6 @@
         /// Временной период хранящихся данных
         /// </summary>
         [DataMember]
-        [MessagePack.Key(1)]
         public DatePeriod Period
         {
             get => this.period;
