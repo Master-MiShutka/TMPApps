@@ -8,6 +8,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:model="clr-namespace:TMP.WORK.AramisChetchiki.Model"
     xmlns:uicontrols="clr-namespace:TMP.UI.Controls.WPF;assembly=ui.controls.wpf"
+    xmlns:uicontrols_helpers="clr-namespace:TMP.UI.Controls.WPF.Helpers;assembly=ui.controls.wpf"
     x:Name="root"
     d:DesignHeight="150"
     d:DesignWidth="800"
@@ -42,7 +43,10 @@
             <Setter Property="ItemTemplate">
                 <Setter.Value>
                     <DataTemplate DataType="{x:Type model:MeterEvent}">
-                        <Grid MinWidth="{StaticResource minValueWidth}" Margin="1,2,1,0">
+                        <Grid
+                            x:Name="grid"
+                            MinWidth="{StaticResource minValueWidth}"
+                            Margin="1,2,1,0">
                             <Border
                                 x:Name="border"
                                 Margin="2,1,2,1"
@@ -66,6 +70,9 @@
                             </Grid.ToolTip>
                         </Grid>
                         <DataTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="grid" Property="Background" Value="{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}" />
+                            </Trigger>
                             <DataTrigger Binding="{Binding EventType}" Value="{x:Static model:MeterEventType.Payment}">
                                 <Setter TargetName="border" Property="Background" Value="Skyblue" />
                                 <Setter TargetName="border" Property="Margin" Value="5,0,5,1" />
@@ -94,6 +101,7 @@
                                 </Setter>
                                 <Setter TargetName="txtBar1" Property="Text" Value="{Binding Сonsumption, StringFormat=N2}" />
                                 <Setter TargetName="txtBar2" Property="Text" Value="⛖" />
+                                <Setter TargetName="txtBar2" Property="uicontrols_helpers:RelativeFontSize.RelativeFontSize" Value="1.5" />
                                 <Setter TargetName="txtToolTip" Property="Text" Value="{Binding LastElectricityReadings, Mode=OneWay}" />
                             </DataTrigger>
                             <DataTrigger Binding="{Binding EventType}" Value="{x:Static model:MeterEventType.Control}">
@@ -184,7 +192,7 @@
                 </Setter.Value>
             </Setter>
             <Style.Triggers>
-                <DataTrigger Binding="{Binding Dates.Count, RelativeSource={RelativeSource AncestorType={x:Type local_controls:MeterСonsumptionViewer}}}" Value="0">
+                <DataTrigger Binding="{Binding Path=Dates.Count, RelativeSource={RelativeSource AncestorType={x:Type local_controls:MeterСonsumptionViewer}}}" Value="0">
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate>

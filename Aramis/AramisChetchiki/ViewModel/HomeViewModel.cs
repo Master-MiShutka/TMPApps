@@ -701,19 +701,17 @@
                 .Select(i => i)
                 .ToList<string>();
 
-            var columns5 = childsHeaderCells5.Select(i => MatrixHeaderCell.CreateColumnHeader(i)).ToList();
-
             IEnumerable<IMatrixHeader> headerCells51 = new IMatrixHeader[]
             {
-                MatrixHeaderCell.CreateColumnHeader("Есть АСКУЭ", children: new List<IMatrixHeader>()
+                MatrixHeaderCell.CreateColumnHeader("Есть АСКУЭ", 0, 0, columnSpan: 4, children: new List<IMatrixHeader>()
             {
-                MatrixHeaderCell.CreateColumnHeader("поверен", children: columns5),
-                MatrixHeaderCell.CreateColumnHeader("не поверен", children: columns5),
+                MatrixHeaderCell.CreateColumnHeader("поверен", 1, 0, columnSpan: 2, children: new List<IMatrixHeader>(childsHeaderCells5.Select(i => MatrixHeaderCell.CreateColumnHeader(i)).ToList())),
+                MatrixHeaderCell.CreateColumnHeader("не поверен", 1, 3, columnSpan: 2, children: new List<IMatrixHeader>(childsHeaderCells5.Select(i => MatrixHeaderCell.CreateColumnHeader(i)).ToList())),
             }),
-                MatrixHeaderCell.CreateColumnHeader("Нет АСКУЭ", children: new List<IMatrixHeader>()
+                MatrixHeaderCell.CreateColumnHeader("Нет АСКУЭ", 0, 5, columnSpan: 4, children: new List<IMatrixHeader>()
             {
-                MatrixHeaderCell.CreateColumnHeader("поверен", children: columns5),
-                MatrixHeaderCell.CreateColumnHeader("не поверен", children: columns5),
+                MatrixHeaderCell.CreateColumnHeader("поверен", 1, 5, columnSpan: 2, children: new List<IMatrixHeader>(childsHeaderCells5.Select(i => MatrixHeaderCell.CreateColumnHeader(i)).ToList())),
+                MatrixHeaderCell.CreateColumnHeader("не поверен", 1, 7, columnSpan: 2, children: new List<IMatrixHeader>(childsHeaderCells5.Select(i => MatrixHeaderCell.CreateColumnHeader(i)).ToList())),
             }),
             };
 
@@ -761,7 +759,7 @@
             }) == false)
                 return;
             #endregion
-
+            
             #region Свод по нас. пункту, количеству МЖД, наличию аскуэ
             Dictionary<string, uint> listOfAnApartmentBuilding = Address.DictionaryStreetWithHouseNumber
                 .Where(i => i.Value >= AppSettings.Default.NumberOfApartmentsInAnApartmentBuilding)
@@ -1142,7 +1140,7 @@
             }) == false)
                 return;
             #endregion
-
+            
             if (MainViewModel.Data.ElectricitySupplyInfo != null)
             {
                 DateOnly? period = MainViewModel.Data.ElectricitySupplyInfo.Max(i => i.Период);

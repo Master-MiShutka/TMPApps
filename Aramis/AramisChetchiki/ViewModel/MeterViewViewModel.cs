@@ -22,7 +22,7 @@ public class MeterViewViewModel : BaseDataViewModel<Meter>
             : new List<MeterControlData>();
 
         this.Events = MainViewModel.Data.Events.ContainsKey(meter.Лицевой)
-            ? MainViewModel.Data.Events[meter.Лицевой]
+            ? MainViewModel.Data.Events[meter.Лицевой].OrderBy(i => i.Date)
             : new List<MeterEvent>();
     }
 

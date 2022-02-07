@@ -437,7 +437,8 @@
                     <ListView
                         MaxHeight="200"
                         ItemsSource="{Binding Path=MeterChanges, IsAsync=True}"
-                        VirtualizingPanel.IsVirtualizing="True">
+                        VirtualizingPanel.ScrollUnit="Item"
+                        VirtualizingPanel.VirtualizationMode="Recycling">
                         <ListView.View>
                             <GridView
                                 TextBlock.LineHeight="15"
@@ -516,9 +517,8 @@
                     <ListView
                         MaxHeight="200"
                         ItemsSource="{Binding Path=Payments, IsAsync=True}"
-                        ScrollViewer.CanContentScroll="True"
-                        ScrollViewer.VerticalScrollBarVisibility="Visible"
-                        VirtualizingPanel.IsVirtualizing="True">
+                        VirtualizingPanel.ScrollUnit="Item"
+                        VirtualizingPanel.VirtualizationMode="Recycling">
                         <ListView.View>
                             <GridView TextBlock.TextAlignment="Center">
                                 <GridViewColumn
@@ -598,7 +598,7 @@
 
             </StackPanel>
             <!--  4  -->
-            <local_controls:MeterСonsumptionViewer Grid.Row="4" MeterEvents="{Binding Path=Events, IsAsync=True}" />
+            <local_controls:MeterСonsumptionViewer Grid.Row="4" MeterEvents="{Binding Path=Events}" />
         </Grid>
     </Border>
 </UserControl>

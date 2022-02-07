@@ -564,8 +564,9 @@
         private IList<IMatrixHeader> BuildFlatHeadersList(IList<IMatrixHeader> headers)
         {
             List<IMatrixHeader> result = new List<IMatrixHeader>();
-            foreach (MatrixHeaderCell header in headers)
+            for (int index = 0; index < headers.Count; index++)
             {
+                IMatrixHeader header = headers[index];
                 if (header.Children == null || header.Children.Count == 0)
                 {
                     result.Add(header);

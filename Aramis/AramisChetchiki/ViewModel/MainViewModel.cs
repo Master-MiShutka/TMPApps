@@ -172,6 +172,7 @@
                     this.RaisePropertyChanged(nameof(this.Data));
                     this.RaisePropertyChanged(nameof(this.Meters));
                     this.RaisePropertyChanged(nameof(this.AvailableDataFiles));
+                    this.selectedDataFileInfo = (AramisDataInfo)Repository.Instance.Data.Info;
                     this.RaisePropertyChanged(nameof(this.SelectedDataFileInfo));
                     break;
                 case Common.RepositoryCommon.RepositoryAction.FoundNewFile:
