@@ -316,10 +316,16 @@
             {
                 if (this.SetProperty(ref this.data, value))
                 {
+                    this.RaisePropertyChanged(nameof(this.IsDataNullOrEmpty));
                     this.RaisePropertyChanged(nameof(this.View));
                     this.RaisePropertyChanged(nameof(this.ItemsCount));
                     this.RaisePropertyChanged(nameof(this.PercentOfTotal));
                     this.RaisePropertyChanged(nameof(this.IsFilteredItems));
+
+                    (this.CommandChangeViewKind as DelegateCommand<TableViewKinds>)?.RaiseCanExecuteChanged();
+                    (this.CommandSetSorting as DelegateCommand)?.RaiseCanExecuteChanged();
+                    (this.SetupTableViewKinds as DelegateCommand)?.RaiseCanExecuteChanged();
+                    (this.SaveCurrentTableViewKindAsNew as DelegateCommand)?.RaiseCanExecuteChanged();
                 }
             }
         }
@@ -342,9 +348,14 @@
                     if (this.view == null && this.isViewBuilding == false)
                     {
                         this.isViewBuilding = true;
+
                         // Mouse.OverrideCursor = Cursors.Wait;
 
                         this.view = this.BuildAndGetView();
+
+                        (this.CommandExport as DelegateCommand)?.RaiseCanExecuteChanged();
+                        (this.CommandPrint as DelegateCommand)?.RaiseCanExecuteChanged();
+                        (this.CommandShowFilters as DelegateCommand)?.RaiseCanExecuteChanged();
 
                         if (this.view != null)
                         {
@@ -535,7 +546,7 @@
                                     break;
                             }
 
-                            if (this.selectedFilters.ContainsKey(name) == false)
+                            if (filtersDictonary.ContainsKey(name) == false)
                             {
                                 filtersDictonary.Add(name, value);
                             }
@@ -815,6 +826,7 @@
         {
             return this.IsDataNullOrEmpty;
         }
+
         protected bool CanExecuteCheckData(object o)
         {
             return this.IsDataNullOrEmpty;
