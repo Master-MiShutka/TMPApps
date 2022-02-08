@@ -16,7 +16,7 @@
             List<T> data = null;
             string cachedFileName = this.GetDbTableNamePath(fileName);
 
-            if (this.dataFilesInfo.ContainsKey(cachedFileName))
+            if (this.dataFilesInfo.ContainsKey(fileName))
             {
                 workTask.UpdateStatus($"загрузка данных из кэша ...");
                 workTask.IsIndeterminate = true;
@@ -45,7 +45,15 @@
                             data = new List<T>(result);
                         }
                     }
+                    else
+                    {
+                        ;
+                    }
                 }
+            }
+            else
+            {
+                ;
             }
 
             return data;
@@ -123,9 +131,7 @@
         {
             try
             {
-                string fullFileName = this.GetDbTableNamePath(fileName);
-
-                if (File.Exists(fullFileName) == false)
+                if (File.Exists(fileName) == false)
                 {
                     return null;
                 }
