@@ -56,11 +56,8 @@
 
             List<Meter> metersNotSplit = metersList
                     .Where(i => i.МестоУстановки != "СПЛИТ")
-#if DEBUG
                     .ToList();
-#else
-;
-#endif
+
             this.VisitedLastYearCount = metersNotSplit.Where(i => i.ОбходаНеБылоМесяцев < 12).Count();
 
             IEnumerable<Meter> notVisitedLastYear = metersNotSplit.Where(i => i.ОбходаНеБылоМесяцев >= 12 && i.ОбходаНеБылоМесяцев < 24);
