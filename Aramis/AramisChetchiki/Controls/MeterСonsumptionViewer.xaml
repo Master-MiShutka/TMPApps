@@ -192,7 +192,7 @@
                 </Setter.Value>
             </Setter>
             <Style.Triggers>
-                <DataTrigger Binding="{Binding Path=HasData, RelativeSource={RelativeSource AncestorType={x:Type local_controls:MeterСonsumptionViewer}}}" Value="False">
+                <DataTrigger Binding="{Binding Path=HasData, Delay=500, RelativeSource={RelativeSource AncestorType={x:Type local_controls:MeterСonsumptionViewer}}}" Value="False">
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate>

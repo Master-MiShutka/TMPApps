@@ -2,9 +2,13 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel;
     using System.Linq;
+    using System.Windows.Data;
+    using System.Windows.Input;
     using DataGridWpf;
     using TMP.Shared;
+    using TMP.Shared.Commands;
     using TMP.WORK.AramisChetchiki.Model;
 
     public static class Utils
@@ -141,6 +145,193 @@
             }
 
             return result;
+        }
+
+        private static string None = "(нет)";
+        private static IList<HierarchicalItem> sortFields = new List<HierarchicalItem>
+            {
+                new HierarchicalItem() { Name = None, Command = CommandDoSort },
+            };
+
+        private static IList<HierarchicalItem> groupFields = new List<HierarchicalItem>
+            {
+                new HierarchicalItem() { Name = None, Command = CommandDoSort },
+            };
+
+
+        public static IList<HierarchicalItem> SortFields
+        {
+            get
+            {
+                if (sortFields.Count == 1)
+                {
+                    IEnumerable<HierarchicalItem> l1 = ModelHelper.MeterPropertiesNames.Select(a => new HierarchicalItem
+                    {
+                        Name = a,
+                        Command = CommandDoSort,
+                        Items = a == None ? null : ModelHelper.MeterPropertiesNames
+                            .Where(b => b != None && b != a)
+                            .Select(c => new HierarchicalItem(c, CommandDoSort, true)),
+                    });
+                    foreach (HierarchicalItem item in l1)
+                    {
+                        sortFields.Add(item);
+                    }
+                }
+
+                return sortFields;
+            }
+        }
+
+        public static IList<HierarchicalItem> GroupFields
+        {
+            get
+            {
+                if (groupFields.Count == 1)
+                {
+                    IEnumerable<HierarchicalItem> l2 = ModelHelper.MeterPropertiesNames.Select(a => new HierarchicalItem
+                    {
+                        Name = a,
+                        Command = CommandDoGroup,
+                        Items = a == None ? null : ModelHelper.MeterPropertiesNames
+                    .Where(b => b != None && b != a)
+                    .Select(c => new HierarchicalItem(c, CommandDoGroup, true)
+                    {
+                        Items = c == None ? null : ModelHelper.MeterPropertiesNames
+                            .Where(d => d != None && d != c)
+                            .Select(e => new HierarchicalItem(e, CommandDoGroup, true)),
+                    }),
+                    });
+                    foreach (HierarchicalItem item in l2)
+                    {
+                        groupFields.Add(item);
+                    }
+                }
+
+                return groupFields;
+            }
+        }
+
+        public static ICommand CommandDoSort => new DelegateCommand<HierarchicalItem>(DoSort);
+
+        public static ICommand CommandDoGroup => new DelegateCommand<HierarchicalItem>(DoGroup);
+
+        /// <summary>
+        /// Перечень полей для сортировки
+        /// </summary>
+        public static string SortingFields { get; internal set; } = string.Empty;
+
+        /// <summary>
+        /// Перечень полей для группировки
+        /// </summary>
+        public static string GroupingFields { get; internal set; } = string.Empty;
+
+        private static void DoSort(HierarchicalItem field)
+        {
+            if (field == null)
+            {
+                return;
+            }
+
+            ViewModel.IMainViewModel mainViewModel = TMPApplication.TMPApp.Instance.MainViewModel as ViewModel.IMainViewModel;
+            if (mainViewModel == null)
+            {
+                return;
+            }
+            ViewModel.IViewModelWithDataView viewModel = mainViewModel.CurrentViewModel as ViewModel.IViewModelWithDataView;
+            if (viewModel == null)
+            {
+                return;
+            }
+
+            if (viewModel.View == null)
+            {
+                return;
+            }
+
+            if (viewModel.View.CanSort == false)
+            {
+                return;
+            }
+
+            using (viewModel.View.DeferRefresh())
+            {
+                SortingFields = string.Empty;
+                viewModel.View.SortDescriptions.Clear();
+                if (field.Name == None)
+                {
+                    return;
+                }
+
+                Stack<string> stack = new();
+                HierarchicalItem item = field;
+                while (item != null)
+                {
+                    stack.Push(item.Name);
+                    item = item.Parent;
+                }
+
+                string[] values = stack.ToArray();
+                SortingFields = string.Join(" > ", values.Select(s => s.Replace("_", " ", AppSettings.StringComparisonMethod))).ToString();
+                foreach (string value in values)
+                {
+                    viewModel.View.SortDescriptions.Add(new SortDescription(value, ListSortDirection.Ascending));
+                }
+            }
+        }
+
+        private static void DoGroup(HierarchicalItem field)
+        {
+            if (field == null)
+            {
+                return;
+            }
+
+            ViewModel.IMainViewModel mainViewModel = TMPApplication.TMPApp.Instance.MainViewModel as ViewModel.IMainViewModel;
+            if (mainViewModel == null)
+            {
+                return;
+            }
+            ViewModel.IViewModelWithDataView viewModel = mainViewModel.CurrentViewModel as ViewModel.IViewModelWithDataView;
+            if (viewModel == null)
+            {
+                return;
+            }
+
+            if (viewModel.View == null)
+            {
+                return;
+            }
+
+            if (viewModel.View.CanSort == false)
+            {
+                return;
+            }
+
+            using (viewModel.View.DeferRefresh())
+            {
+                GroupingFields = string.Empty;
+                viewModel.View.GroupDescriptions.Clear();
+                if (field.Name == None)
+                {
+                    return;
+                }
+
+                Stack<string> stack = new();
+                HierarchicalItem item = field;
+                while (item != null)
+                {
+                    stack.Push(item.Name);
+                    item = item.Parent;
+                }
+
+                string[] values = stack.ToArray();
+                GroupingFields = string.Join(" > ", values.Select(s => s.Replace("_", " ", AppSettings.StringComparisonMethod)));
+                foreach (string value in values)
+                {
+                    viewModel.View.GroupDescriptions.Add(new PropertyGroupDescription(value));
+                }
+            }
         }
     }
 }

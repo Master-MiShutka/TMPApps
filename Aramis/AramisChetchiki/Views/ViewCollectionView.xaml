@@ -45,13 +45,13 @@
                 <Separator Style="{StaticResource dotedSeparator}" />
                 <TextBlock
                     Grid.Row="1"
-                    Text="{Binding SortingFields, Mode=OneWay, StringFormat=Отсортировано по: {0}}"
-                    Visibility="{Binding SortingFields, Mode=OneWay, Converter={StaticResource NullOrEmptyToVisibilityConverter}}" />
+                    Text="{Binding Source={x:Static local:Utils.SortingFields}, Mode=OneWay, StringFormat=Отсортировано по: {0}}"
+                    Visibility="{Binding Source={x:Static local:Utils.SortingFields}, Mode=OneWay, Converter={StaticResource NullOrEmptyToVisibilityConverter}}" />
                 <Separator />
                 <TextBlock
                     Grid.Row="2"
-                    Text="{Binding GroupingFields, Mode=OneWay, StringFormat=Сгруппировано по: {0}}"
-                    Visibility="{Binding GroupingFields, Mode=OneWay, Converter={StaticResource NullOrEmptyToVisibilityConverter}}" />
+                    Text="{Binding Source={x:Static local:Utils.GroupingFields}, Mode=OneWay, StringFormat=Сгруппировано по: {0}}"
+                    Visibility="{Binding Source={x:Static local:Utils.GroupingFields}, Mode=OneWay, Converter={StaticResource NullOrEmptyToVisibilityConverter}}" />
                 <Separator Style="{StaticResource dotedSeparator}" />
                 <Button HorizontalAlignment="Right" Command="{Binding CommandShowFilters}">
                     <StackPanel Orientation="Horizontal">

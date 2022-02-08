@@ -37,8 +37,6 @@
 
         private IEnumerable<PlusPropertyDescriptor> propertyDescriptors;
 
-        private string sortingFields = string.Empty;
-        private string groupingFields = string.Empty;
         protected const string NOITEMSSTRING = "ничего нет";
         private string noItemsMessage = NOITEMSSTRING;
         private ObservableCollection<ItemsFilter.Model.IFilter> filters = new ObservableCollection<ItemsFilter.Model.IFilter>();
@@ -69,51 +67,10 @@
             this.CommandPrint = new DelegateCommand(this.DoPrint, this.CanExecuteCheckView);
             this.CommandViewDetailsBySelectedItem = new DelegateCommand<object>(this.DoViewDetailsBySelectedItem);
             this.CommandChangeViewKind = new DelegateCommand<TableViewKinds>(this.DoChangeViewKind, this.CanExecuteCheckData);
-            this.CommandDoSort = new DelegateCommand<HierarchicalItem>(this.DoSort);
-            this.CommandDoGroup = new DelegateCommand<HierarchicalItem>(this.DoGroup);
             this.CommandSetSorting = new DelegateCommand(this.DoSetSorting, this.CanExecuteCheckData);
             this.SetupTableViewKinds = new DelegateCommand<object>(this.DoSetupTableViewKinds, this.CanExecuteCheckData);
             this.SaveCurrentTableViewKindAsNew = new DelegateCommand(this.DoSaveCurrentTableViewKindAsNew, this.CanExecuteCheckData);
             this.CommandShowFilters = new DelegateCommand(this.DoShowFilters, this.CanExecuteCheckView);
-
-            this.SortFields = new List<HierarchicalItem>
-            {
-                new HierarchicalItem() { Name = none, Command = this.CommandDoSort },
-            };
-            IEnumerable<HierarchicalItem> l1 = ModelHelper.MeterPropertiesNames.Select(a => new HierarchicalItem
-            {
-                Name = a,
-                Command = this.CommandDoSort,
-                Items = a == none ? null : ModelHelper.MeterPropertiesNames
-                    .Where(b => b != none && b != a)
-                    .Select(c => new HierarchicalItem(c, this.CommandDoSort, true)),
-            });
-            foreach (HierarchicalItem item in l1)
-            {
-                this.SortFields.Add(item);
-            }
-
-            this.GroupFields = new List<HierarchicalItem>
-            {
-                new HierarchicalItem() { Name = none, Command = this.CommandDoGroup },
-            };
-            IEnumerable<HierarchicalItem> l2 = ModelHelper.MeterPropertiesNames.Select(a => new HierarchicalItem
-            {
-                Name = a,
-                Command = this.CommandDoGroup,
-                Items = a == none ? null : ModelHelper.MeterPropertiesNames
-                    .Where(b => b != none && b != a)
-                    .Select(c => new HierarchicalItem(c, this.CommandDoGroup, true)
-                    {
-                        Items = c == none ? null : ModelHelper.MeterPropertiesNames
-                            .Where(d => d != none && d != c)
-                            .Select(e => new HierarchicalItem(e, this.CommandDoGroup, true)),
-                    }),
-            });
-            foreach (HierarchicalItem item in l2)
-            {
-                this.GroupFields.Add(item);
-            }
 
             // загрузка сохраненных колонок таблицы
             this.TryLoadTableColumnsFromSettings();
@@ -137,24 +94,6 @@
 
         protected override void OnDispose()
         {
-            if (this.GroupFields != null)
-            {
-                for (int index = 0; index < this.GroupFields.Count; index++)
-                {
-                    HierarchicalItem item = this.GroupFields[index];
-                    item.Dispose();
-                }
-            }
-
-            if (this.SortFields != null)
-            {
-                for (int index = 0; index < this.SortFields.Count; index++)
-                {
-                    HierarchicalItem item = this.SortFields[index];
-                    item.Dispose();
-                }
-            }
-
             ItemsFilter.FilterListExtensions.FiltersChanged -= this.FilterListExtensions_FiltersChanged;
 
             ItemsFilter.FiltersManager.RemoveCollectionView(this.view);
@@ -223,7 +162,7 @@
                 {
                     this.view.GroupDescriptions.Add(new PropertyGroupDescription(fieldName));
                     this.view.SortDescriptions.Add(new SortDescription(fieldName, ListSortDirection.Ascending));
-                    this.GroupingFields = fieldDisplayNames.First();
+                    Utils.GroupingFields = fieldDisplayNames.First();
                 }
             }
         }
@@ -246,10 +185,6 @@
         /// </summary>
         public ICommand SaveCurrentTableViewKindAsNew { get; private set; }
 
-        public ICommand CommandDoSort { get; private set; }
-
-        public ICommand CommandDoGroup { get; private set; }
-
         public ICommand CommandViewDetailsBySelectedItem { get; private set; }
 
         /// <summary>
@@ -261,28 +196,6 @@
         /// Команда отображения списка фильтров
         /// </summary>
         public ICommand CommandShowFilters { get; private set; }
-
-        public IList<HierarchicalItem> GroupFields { get; private set; }
-
-        public IList<HierarchicalItem> SortFields { get; private set; }
-
-        /// <summary>
-        /// Перечень полей для сортировки
-        /// </summary>
-        public string SortingFields
-        {
-            get => this.sortingFields;
-            private set => this.SetProperty(ref this.sortingFields, value);
-        }
-
-        /// <summary>
-        /// Перечень полей для группировки
-        /// </summary>
-        public string GroupingFields
-        {
-            get => this.groupingFields;
-            private set => this.SetProperty(ref this.groupingFields, value);
-        }
 
         /// <summary>
         /// Заголовок отчета
@@ -702,92 +615,6 @@
         {
             // SelectedViewKind = (TableViewKinds)Enum.Parse(typeof(TableViewKinds), kind);
             this.SelectedViewKind = kind;
-        }
-
-        private void DoSort(HierarchicalItem field)
-        {
-            if (field == null)
-            {
-                return;
-            }
-
-            if (this.view == null)
-            {
-                return;
-            }
-
-            if (this.view.CanSort == false)
-            {
-                return;
-            }
-
-            using (this.view.DeferRefresh())
-            {
-                this.SortingFields = string.Empty;
-                this.view.SortDescriptions.Clear();
-                if (field.Name == none)
-                {
-                    return;
-                }
-
-                Stack<string> stack = new();
-                HierarchicalItem item = field;
-                while (item != null)
-                {
-                    stack.Push(item.Name);
-                    item = item.Parent;
-                }
-
-                string[] values = stack.ToArray();
-                this.SortingFields = string.Join(" > ", values.Select(s => s.Replace("_", " ", AppSettings.StringComparisonMethod))).ToString();
-                foreach (string value in values)
-                {
-                    this.view.SortDescriptions.Add(new SortDescription(value, ListSortDirection.Ascending));
-                }
-            }
-        }
-
-        private void DoGroup(HierarchicalItem field)
-        {
-            if (field == null)
-            {
-                return;
-            }
-
-            if (this.view == null)
-            {
-                return;
-            }
-
-            if (this.view.CanGroup == false)
-            {
-                return;
-            }
-
-            using (this.view.DeferRefresh())
-            {
-                this.GroupingFields = string.Empty;
-                this.view.GroupDescriptions.Clear();
-                if (field.Name == none)
-                {
-                    return;
-                }
-
-                Stack<string> stack = new();
-                HierarchicalItem item = field;
-                while (item != null)
-                {
-                    stack.Push(item.Name);
-                    item = item.Parent;
-                }
-
-                string[] values = stack.ToArray();
-                this.GroupingFields = string.Join(" > ", values.Select(s => s.Replace("_", " ", AppSettings.StringComparisonMethod)));
-                foreach (string value in values)
-                {
-                    this.view.GroupDescriptions.Add(new PropertyGroupDescription(value));
-                }
-            }
         }
 
         private void DoSetSorting()

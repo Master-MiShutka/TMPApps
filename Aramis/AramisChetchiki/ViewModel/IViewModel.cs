@@ -20,16 +20,19 @@
         ICommand CommandPrint { get; }
     }
 
-    public interface IDataViewModel<T> : IViewModel
+    public interface IViewModelWithDataView
+    {
+        /// <summary>
+        /// Представление коллекции
+        /// </summary>
+        ICollectionView View { get; }
+    }
+
+    public interface IDataViewModel<T> : IViewModel, IViewModelWithDataView
     {
         /// <summary>
         /// Коллекция
         /// </summary>
         IEnumerable<T> Data { get; }
-
-        /// <summary>
-        /// Представление коллекции
-        /// </summary>
-        ICollectionView View { get; }
     }
 }

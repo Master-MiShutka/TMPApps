@@ -6,11 +6,12 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:dd="urn:gong-wpf-dragdrop"
     xmlns:extensions="clr-namespace:TMP.Extensions;assembly=TMP.Extensions"
-    xmlns:local="clr-namespace:TMP.WORK.AramisChetchiki.Controls"
+    xmlns:local="clr-namespace:TMP.WORK.AramisChetchiki"
+    xmlns:local_controls="clr-namespace:TMP.WORK.AramisChetchiki.Controls"
     xmlns:local_extensions="clr-namespace:TMP.WORK.AramisChetchiki.Extensions"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:model="clr-namespace:TMP.WORK.AramisChetchiki.Model"
-    d:DataContext="{d:DesignInstance {x:Type local:SelectorFieldsAndSortCollectionView},
+    d:DataContext="{d:DesignInstance {x:Type local_controls:SelectorFieldsAndSortCollectionView},
     IsDesignTimeCreatable=True}"
     FontSize="{local_extensions:SettingBinding FontSize,
     13.0}"
@@ -135,7 +136,7 @@
                 </DockPanel>
                 <ListBox
                     IsSynchronizedWithCurrentItem="True"
-                    ItemsSource="{Binding SortingFields}"
+                    ItemsSource="{Binding Source={x:Static local:Utils.SortingFields}}"
                     SelectedValue="{Binding SelectedSortingField}">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
