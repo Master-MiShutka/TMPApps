@@ -100,6 +100,10 @@
             base.OnViewBuilded();
 
             this.View.CurrentChanged += this.View_CurrentChanged;
+
+            (this.PreviousItem as DelegateCommand)?.RaiseCanExecuteChanged();
+            (this.NextItem as DelegateCommand)?.RaiseCanExecuteChanged();
+            (this.FindById as DelegateCommand)?.RaiseCanExecuteChanged();
         }
 
         private void View_CurrentChanged(object sender, EventArgs e)

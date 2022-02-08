@@ -134,7 +134,14 @@
         {
             this.callBackAction = (e) => logger?.Error(e);
 
+            this.availableDataFiles.CollectionChanged += this.AvailableDataFiles_CollectionChanged;
+
             Task.Run(async () => await this.InitializationAsync());
+        }
+
+        private void AvailableDataFiles_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            this.RaisePropertyChanged(nameof(this.AvailableDataFilesCount));
         }
 
         #region IDisposable implementation
@@ -147,6 +154,8 @@
             {
                 if (disposing)
                 {
+                    this.availableDataFiles.CollectionChanged -= this.AvailableDataFiles_CollectionChanged;
+
                     if (this.dataFileStorePathWatcher != null)
                     {
                         this.dataFileStorePathWatcher.Created -= this.OnDataFileStorePathChanged;
@@ -216,6 +225,8 @@
         /// Коллекция доступных файлов с данными
         /// </summary>
         public Shared.AsyncObservableCollection<IDataFileInfo> AvailableDataFiles => this.availableDataFiles;
+
+        public int AvailableDataFilesCount => this.AvailableDataFiles != null ? this.AvailableDataFiles.Count : 0;
 
         public int LocalDataFilesCount => this.AvailableDataFiles != null ? this.AvailableDataFiles.Count(i => i.IsLocal) : 0;
 

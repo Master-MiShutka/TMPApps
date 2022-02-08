@@ -134,6 +134,13 @@
             () => this.Data != null);
         }
 
+        protected override void OnDataLoaded()
+        {
+            base.OnDataLoaded();
+
+            (this.CommandNotShowDeleted as DelegateCommand)?.RaiseCanExecuteChanged();
+        }
+
         private void View_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == "Count" && sender is CollectionView collectionView)

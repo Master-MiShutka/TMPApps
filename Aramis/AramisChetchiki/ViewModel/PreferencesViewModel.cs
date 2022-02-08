@@ -1,11 +1,11 @@
 ﻿namespace TMP.WORK.AramisChetchiki.ViewModel
 {
-    using GongSolutions.Wpf.DragDrop;
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
     using System.Windows.Input;
+    using GongSolutions.Wpf.DragDrop;
     using TMP.Shared.Commands;
 
     public class PreferencesViewModel : BaseViewModel, IDropTarget
@@ -74,7 +74,7 @@
                 }
 
                 Repository.Instance.AvailableDataFiles.Clear();
-            }, () => Repository.Instance.AvailableDataFiles.Count > 0);
+            }, () => Repository.Instance.AvailableDataFilesCount > 0);
 
             this.CommandSaveAndClose = new DelegateCommand(() =>
             {
@@ -111,6 +111,23 @@
                 {
                 }
             });
+
+            Repository.Instance.PropertyChanged += this.Repository_PropertyChanged;
+        }
+
+        private void Repository_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(Repository.AvailableDataFilesCount))
+            {
+                (this.CommandClearAramisDbPathList as DelegateCommand)?.RaiseCanExecuteChanged();
+            }
+        }
+
+        protected override void OnDispose()
+        {
+            base.OnDispose();
+
+            Repository.Instance.PropertyChanged -= this.Repository_PropertyChanged;
         }
 
         #region GongSolutions.Wpf.DragDrop IDropTarget implementation
@@ -147,16 +164,33 @@
                 {
                     this.RaisePropertyChanged(nameof(this.IsDBPathValidMessage));
                     this.CheckDbPath();
+                    (this.CommandAddAramisDbPath as DelegateCommand)?.RaiseCanExecuteChanged();
                 }
             }
         }
 
-        public string IsDBPathValidMessage { get => this.isDBPathValidMessage; private set => this.SetProperty(ref this.isDBPathValidMessage, value); }
+        public string IsDBPathValidMessage
+        {
+            get => this.isDBPathValidMessage;
+            private set
+            {
+                if (this.SetProperty(ref this.isDBPathValidMessage, value))
+                {
+                    (this.CommandAddAramisDbPath as DelegateCommand)?.RaiseCanExecuteChanged();
+                }
+            }
+        }
 
         public Model.AramisDataInfo SelectedDataFileInfo
         {
             get => this.selectedDataFileInfo;
-            set => this.SetProperty(ref this.selectedDataFileInfo, value);
+            set
+            {
+                if (this.SetProperty(ref this.selectedDataFileInfo, value))
+                {
+                    (this.CommandRemoveAramisDbPath as DelegateCommand)?.RaiseCanExecuteChanged();
+                }
+            }
         }
 
         public ICommand CommandAddAramisDbPath { get; }

@@ -219,6 +219,7 @@
                 if (this.SetProperty(ref this.abonentBindingNodes, value))
                 {
                     this.RaisePropertyChanged(nameof(this.TotalMetersCount));
+                    this.RaisePropertyChanged(nameof(this.VisibleAbonentBindingNodesCount));
                     this.BuildTreeMapItems();
                 }
             }

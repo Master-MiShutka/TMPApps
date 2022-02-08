@@ -132,7 +132,7 @@
                 if (this.SetProperty(ref this.fromDate, value))
                 {
                     this.RaisePropertyChanged(nameof(this.ReportTitle));
-                    //this.RaisePropertyChanged(nameof(this.DataFilter));
+                    this.RaisePropertyChanged(nameof(this.DataFilter));
                     this.OnDateChanged();
                 }
             }
@@ -146,7 +146,7 @@
                 if (this.SetProperty(ref this.toDate, value))
                 {
                     this.RaisePropertyChanged(nameof(this.ReportTitle));
-                    //this.RaisePropertyChanged(nameof(this.DataFilter));
+                    this.RaisePropertyChanged(nameof(this.DataFilter));
                     this.OnDateChanged();
                 }
             }
