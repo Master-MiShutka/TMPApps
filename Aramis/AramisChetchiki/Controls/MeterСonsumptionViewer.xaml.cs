@@ -55,6 +55,8 @@
 
         public static readonly DependencyProperty DatesProperty =
             DependencyProperty.Register(nameof(Dates), typeof(StringCollection), typeof(MeterСonsumptionViewer), new PropertyMetadata(null));
+
+        public bool HasData => Dates?.Count > 0;
     }
 
     public class ItemHeightValueConverter : IMultiValueConverter

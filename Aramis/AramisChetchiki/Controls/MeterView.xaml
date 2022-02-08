@@ -55,7 +55,7 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
             <!--  0  -->
@@ -275,13 +275,14 @@
                             </StackPanel>
                         </HeaderedContentControl>
                         <HeaderedContentControl HorizontalAlignment="Stretch" Header="Коментарий">
-                            <TextBox
-                                MaxWidth="300"
-                                AcceptsReturn="True"
-                                AcceptsTab="True"
-                                IsReadOnly="True"
-                                Text="{Binding Path=Коментарий, Mode=OneWay}"
-                                TextWrapping="Wrap" />
+                            <ScrollViewer MaxWidth="300" MaxHeight="200">
+                                <TextBox
+                                    AcceptsReturn="True"
+                                    AcceptsTab="True"
+                                    IsReadOnly="True"
+                                    Text="{Binding Path=Коментарий, Mode=OneWay}"
+                                    TextWrapping="Wrap" />
+                            </ScrollViewer>
                         </HeaderedContentControl>
                     </StackPanel>
                     <Separator Style="{StaticResource dotedSeparator}" />
@@ -402,7 +403,7 @@
                 <Separator Style="{StaticResource dotedSeparator}" />
                 <!--    -->
                 <HeaderedContentControl HorizontalAlignment="Stretch" Header="Контрольные показания">
-                    <ListView ItemsSource="{Binding Path=MeterControlData, IsAsync=True}">
+                    <ListView ItemsSource="{Binding Path=MeterControlData}">
                         <ListView.View>
                             <GridView
                                 TextBlock.LineHeight="15"
@@ -436,7 +437,7 @@
                 <HeaderedContentControl HorizontalAlignment="Stretch" Header="Замены счётчиков у абонента">
                     <ListView
                         MaxHeight="200"
-                        ItemsSource="{Binding Path=MeterChanges, IsAsync=True}"
+                        ItemsSource="{Binding Path=MeterChanges}"
                         VirtualizingPanel.ScrollUnit="Item"
                         VirtualizingPanel.VirtualizationMode="Recycling">
                         <ListView.View>
@@ -516,7 +517,7 @@
                 <HeaderedContentControl HorizontalAlignment="Stretch" Header="Произведенные оплаты за электроэнергию">
                     <ListView
                         MaxHeight="200"
-                        ItemsSource="{Binding Path=Payments, IsAsync=True}"
+                        ItemsSource="{Binding Path=Payments}"
                         VirtualizingPanel.ScrollUnit="Item"
                         VirtualizingPanel.VirtualizationMode="Recycling">
                         <ListView.View>
