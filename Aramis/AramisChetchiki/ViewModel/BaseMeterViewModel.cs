@@ -15,6 +15,7 @@
     public class BaseMeterViewModel : BaseDataViewModel<Meter>
     {
         private bool notShowDeleted = true;
+        private bool notShowDisconnected = true;
 
         public BaseMeterViewModel()
         {
@@ -56,9 +57,14 @@
         #endregion
 
         /// <summary>
-        /// Команда для сокрытия удаленных элементов из коллекции
+        /// Команда для сокрытия удаленных счетчиков
         /// </summary>
         public ICommand CommandNotShowDeleted { get; private set; }
+
+        /// <summary>
+        /// Команда для сокрытия отключенных счетчиков
+        /// </summary>
+        public ICommand CommandNotShowDisconnected { get; private set; }
 
         #endregion
 
@@ -97,6 +103,10 @@
             {
                 return false;
             }
+            else if (meter != null & this.notShowDisconnected && meter.Отключён == true)
+            {
+                return false;
+            }
             else
             {
                 return true;
@@ -126,8 +136,22 @@
                 {
                     this.View.Refresh();
                 }
-                //this.RaisePropertyChanged(nameof(this.Data));
-                //this.RaisePropertyChanged(nameof(this.View));
+
+                this.IsBusy = false;
+            },
+            () => this.Data != null);
+
+            this.CommandNotShowDisconnected = new DelegateCommand(() =>
+            {
+                this.IsBusy = true;
+                this.Status = "обновление ...";
+
+                this.notShowDeleted = !this.notShowDisconnected;
+                this.RaisePropertyChanged(nameof(this.DataFilter));
+                if (this.View != null)
+                {
+                    this.View.Refresh();
+                }
 
                 this.IsBusy = false;
             },
@@ -139,6 +163,7 @@
             base.OnDataLoaded();
 
             (this.CommandNotShowDeleted as DelegateCommand)?.RaiseCanExecuteChanged();
+            (this.CommandNotShowDisconnected as DelegateCommand)?.RaiseCanExecuteChanged();
         }
 
         private void View_PropertyChanged(object sender, PropertyChangedEventArgs e)

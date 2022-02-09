@@ -102,7 +102,14 @@
                     // делегат сравнения по дате
                     Comparison<Tuple<DateOnly, MeterEventType, object>> comparison = (x, y) =>
                     {
-                        return y.Item1.CompareTo(x.Item1);
+                        if (x.Item1 == y.Item1)
+                        {
+                            return (y.Item3 as IModelWithMeterLastReading).LastReading.CompareTo((x.Item3 as IModelWithMeterLastReading).LastReading);
+                        }
+                        else
+                        {
+                            return y.Item1.CompareTo(x.Item1);
+                        }
                     };
 
                     // сортировка по дате - по убыванию
@@ -110,7 +117,7 @@
 
                     if (list.Count != 0)
                     {
-                        List<MeterEvent> meterEvents = this.BuildMeterEvents(list).ToList();
+                        List<MeterEvent> meterEvents = this.BuildMeterEvents(list);
 
                         // построение списка событий
                         // пытаемся добавить, если не удалось, т.е. уже добавлен
@@ -160,7 +167,7 @@
 
         private uint CalculateConsumption(uint meterPreviousReadings, uint meterNextReadings, byte meterDigitsCount, Payment previousPayment)
         {
-            long consumption = meterNextReadings - meterPreviousReadings;
+            long consumption = (long)meterNextReadings - (long)meterPreviousReadings;
 
             if (consumption < 0 && Math.Abs(consumption) > 1 && Math.Abs(consumption) <= 5)
             {
@@ -174,23 +181,38 @@
 
             if (consumption < 0 || consumption >= 50_000)
             {
-                if (previousPayment != null && previousPayment.HasPayments)
+                int digits = meterPreviousReadings.ToString().Length;
+
+                if (digits != meterDigitsCount)
                 {
-                    List<PaymentData> readingsList = previousPayment.Payments.Where(i => i.ПоследнееПоказание == meterNextReadings).ToList();
+                    consumption = (meterNextReadings + (int)Math.Pow(10, digits)) - meterPreviousReadings;
 
-                    if (readingsList.Any() && readingsList.Count == 1)
+                    if (consumption >= 50_000)
                     {
-                        uint reading = readingsList.First().ПредыдущееПоказание;
-                        consumption = meterNextReadings - reading;
+                        System.Diagnostics.Debugger.Break();
+                    }
+                    return (uint)consumption;
+                }
+                else
+                {
+                    if (previousPayment != null && previousPayment.HasPayments)
+                    {
+                        List<PaymentData> readingsList = previousPayment.Payments.Where(i => i.ПоследнееПоказание == meterNextReadings).ToList();
 
-                        if (consumption > 0)
+                        if (readingsList.Any() && readingsList.Count == 1)
                         {
-                            return (uint)consumption;
+                            uint reading = readingsList.First().ПредыдущееПоказание;
+                            consumption = meterNextReadings - reading;
+
+                            if (consumption > 0)
+                            {
+                                return (uint)consumption;
+                            }
                         }
                     }
                 }
 
-                //System.Diagnostics.Debugger.Break();
+                System.Diagnostics.Debugger.Break();
                 return 0;
             }
 
@@ -203,9 +225,9 @@
             return days == 0 ? 0 : 30 * consumption / days;
         }
 
-        private SortedSet<MeterEvent> BuildMeterEvents(List<Tuple<DateOnly, MeterEventType, object>> list)
+        private List<MeterEvent> BuildMeterEvents(List<Tuple<DateOnly, MeterEventType, object>> list)
         {
-            SortedSet<MeterEvent> meterEvents = new SortedSet<MeterEvent>();
+            List<MeterEvent> meterEvents = new List<MeterEvent>();
 
             // показания из первой записи в списке
             uint prevReadings = 0;
@@ -266,7 +288,7 @@
                 previousPayment = payment;
             }
 
-            return meterEvents;
+            return meterEvents.OrderBy(i => i.Date).ToList();
         }
 
         private uint CalcAverageConsumptionByPayments(List<Tuple<DateOnly, MeterEventType, object>> list)

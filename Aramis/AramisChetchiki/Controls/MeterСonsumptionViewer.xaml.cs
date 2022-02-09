@@ -33,8 +33,6 @@
 
             IEnumerable<Model.MeterEvent> meterEvents = (IEnumerable<Model.MeterEvent>)e.NewValue;
 
-            viewer.Dates = new StringCollection();
-
             if (meterEvents == null || meterEvents.Any() == false)
             {
                 return;
@@ -45,6 +43,8 @@
 
             viewer.Dates = new StringCollection();
             viewer.Dates.AddRange(meterEvents.Select(i => i.Date.ToString("MM-yyyy")).ToArray());
+
+            viewer.MeterEvents = meterEvents;
         }
 
         public StringCollection Dates

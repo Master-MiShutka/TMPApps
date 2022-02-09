@@ -141,7 +141,7 @@
         {
             get
             {
-                long consumption = this.ПоследнееПоказание - this.ПредыдущееПоказание;
+                long consumption = (long)this.ПоследнееПоказание - (long)this.ПредыдущееПоказание;
 
                 if (consumption < 0)
                 {
@@ -155,7 +155,6 @@
 
                     return (uint)c;
                 }
-
 
                 return (uint)consumption;
             }

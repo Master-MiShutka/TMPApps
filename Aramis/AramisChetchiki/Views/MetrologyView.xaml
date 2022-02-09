@@ -63,6 +63,10 @@
                     Command="{Binding CommandNotShowDeleted}"
                     Content="Скрывать удалённые"
                     IsChecked="True" />
+                <ToggleButton
+                    Command="{Binding CommandNotShowDisconnected}"
+                    Content="Скрывать отключённые"
+                    IsChecked="True" />
                 <Separator Style="{StaticResource dotedSeparator}" />
                 <local_controls:ShowFilters DockPanel.Dock="Right" />
             </StackPanel>
@@ -79,7 +83,7 @@
                     Padding="5,2"
                     Background="{extensions:ValueFromStyle StyleKey={x:Type ToolBar},
                                                            Property=Control.Background}">
-                    <ItemsControl
+                    <!-- temsControl
                         xmlns:mouseWheel="clr-namespace:WpfMouseWheel.Windows.Input;assembly=WpfMouseWheelLib"
                         mouseWheel:MouseWheel.Enhanced="True"
                         mouseWheel:MouseWheel.HScrollModifiers=""
@@ -100,7 +104,7 @@
                                 </ScrollViewer>
                             </ControlTemplate>
                         </ItemsControl.Template>
-                    </ItemsControl>
+                    </ItemsControl-->
                 </Border>
                 <local_controls:DataGridControl
                     Grid.Row="1"
