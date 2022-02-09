@@ -110,9 +110,11 @@
 
                     if (list.Count != 0)
                     {
+                        List<MeterEvent> meterEvents = this.BuildMeterEvents(list).ToList();
+
                         // построение списка событий
                         // пытаемся добавить, если не удалось, т.е. уже добавлен
-                        if (events.TryAdd(meter.Лицевой, this.BuildMeterEvents(list).ToList()) == false)
+                        if (events.TryAdd(meter.Лицевой, meterEvents) == false)
                         {
                             // если текущий счётчик не удален - удаляем ранее добавленный
                             if (meter.Удалён == false)
@@ -120,7 +122,7 @@
                                 events.Remove(meter.Лицевой, out IList<MeterEvent> removed);
 
                                 // попытка добавить текущий счётчик
-                                if (events.TryAdd(meter.Лицевой, this.BuildMeterEvents(list).ToList()) == false)
+                                if (events.TryAdd(meter.Лицевой, meterEvents) == false)
                                 {
                                     if (System.Diagnostics.Debugger.IsAttached)
                                     {
