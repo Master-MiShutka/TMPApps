@@ -137,7 +137,29 @@
         [Display(GroupName = "Оплата")]
         [DisplayName("Разность показаний")]
         [MessagePack.IgnoreMember]
-        public uint РазностьПоказаний => this.ПоследнееПоказание - this.ПредыдущееПоказание;
+        public uint РазностьПоказаний
+        {
+            get
+            {
+                long consumption = this.ПоследнееПоказание - this.ПредыдущееПоказание;
+
+                if (consumption < 0)
+                {
+                    int meterDigitsCount = this.ПредыдущееПоказание.ToString().Length;
+                    var c = (this.ПоследнееПоказание + (int)Math.Pow(10, meterDigitsCount)) - this.ПредыдущееПоказание;
+
+                    if (c < 0 || c >= 50_000)
+                    {
+                        System.Diagnostics.Debugger.Break();
+                    }
+
+                    return (uint)c;
+                }
+
+
+                return (uint)consumption;
+            }
+        }
 
         [Display(GroupName = "Оплата")]
         [DisplayName("Сумма оплаты")]
