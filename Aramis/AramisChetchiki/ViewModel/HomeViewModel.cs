@@ -353,7 +353,8 @@
                 return true;
             }
 
-            int metersCount = MainViewModel.Meters.Where(i => i.Удалён == false).Count();
+            IEnumerable<Meter> allMeters = MainViewModel.Meters.Where(i => i.Удалён == false);
+            int metersCount = allMeters.Count();
 
             IEnumerable<Meter> metersNotSplit = MainViewModel.Meters
                 .Where(i => i.Удалён == false)
@@ -387,21 +388,21 @@
                 .ToDictionary(i => i.Key, i => i.Count);
 
             // сельсоветы
-            IList<string> provinces = MainViewModel.Meters
+            IList<string> provinces = allMeters
                 .Select(i => i.СельскийСовет)
                 .Distinct()
                 .Select(i => i)
                 .ToList<string>();
 
             // населенные пункты
-            IList<string> localities = MainViewModel.Meters
+            IList<string> localities = allMeters
                 .Select(i => i.НаселённыйПункт)
                 .Distinct()
                 .Select(i => i)
                 .ToList<string>();
 
             // количество счетчиков в населенных пунктах
-            Dictionary<string, int> metersCountPerLocality = MainViewModel.Meters
+            Dictionary<string, int> metersCountPerLocality = allMeters
                 .GroupBy(i => i.НаселённыйПункт)
                 .Select(i => new { Key = i.Key, Count = i.Count() })
                 .OrderByDescending(i => i.Count)
@@ -423,10 +424,10 @@
                 .ToDictionary(i => i.Key, i => i.Count);
 
             // все типы счетчиков
-            IEnumerable<SummaryInfoGroupItem> allMeterTypes = SummaryInfoHelper.BuildFirst10LargeGroups(MainViewModel.Meters, nameof(Meter.ТипСчетчика), SummaryInfoHelper.DefaultMeterFilterFunc);
+            IEnumerable<SummaryInfoGroupItem> allMeterTypes = SummaryInfoHelper.BuildFirst10LargeGroups(allMeters, nameof(Meter.ТипСчетчика), SummaryInfoHelper.DefaultMeterFilterFunc);
 
             // типы электронных счетчиков
-            IEnumerable<SummaryInfoGroupItem> electronicMeterTypes = SummaryInfoHelper.BuildFirst10LargeGroups(MainViewModel.Meters.Where(meter => meter.Принцип == "электронный"), nameof(Meter.ТипСчетчика), SummaryInfoHelper.DefaultMeterFilterFunc);
+            IEnumerable<SummaryInfoGroupItem> electronicMeterTypes = SummaryInfoHelper.BuildFirst10LargeGroups(allMeters.Where(meter => meter.Принцип == "электронный"), nameof(Meter.ТипСчетчика), SummaryInfoHelper.DefaultMeterFilterFunc);
 
             const int countOfMeterTypePerLocality = 15;
             const int countOfLocalities = 50;
@@ -504,11 +505,11 @@
             {
                 Header = "Свод по категории счётчика\n и типу населённого пункта",
                 Description = "* количество счётчиков",
-                GetRowHeaderValuesFunc = () => MainViewModel.Meters.Select(i => i.ГруппаСчётчикаДляОтчётов).Distinct().Select(i => MatrixHeaderCell.CreateRowHeader(i)),
-                GetColumnHeaderValuesFunc = () => MainViewModel.Meters.Select(i => i.ТипНаселённойМестности).Distinct().Select(i => MatrixHeaderCell.CreateColumnHeader(i)),
+                GetRowHeaderValuesFunc = () => allMeters.Select(i => i.ГруппаСчётчикаДляОтчётов).Distinct().Select(i => MatrixHeaderCell.CreateRowHeader(i)),
+                GetColumnHeaderValuesFunc = () => allMeters.Select(i => i.ТипНаселённойМестности).Distinct().Select(i => MatrixHeaderCell.CreateColumnHeader(i)),
                 GetDataCellFunc = (row, column) =>
                 {
-                    List<Meter> list = MainViewModel.Meters
+                    List<Meter> list = allMeters
                         .Where(i => i.ГруппаСчётчикаДляОтчётов == row.Header)
                         .Where(i => i.ТипНаселённойМестности == column.Header)
                         .ToList();
@@ -564,7 +565,7 @@
                 .OrderByDescending(i => i.Count)
                 .ToDictionary(i => i.Key, i => i);
 
-            IEnumerable<IMatrixHeader> headerCells0 = MainViewModel.Meters
+            IEnumerable<IMatrixHeader> headerCells0 = allMeters
                 .Select(i => i.Фаз)
                 .Distinct()
                 .Select(i => MatrixHeaderCell.CreateColumnHeader(i.ToString()))
@@ -630,7 +631,7 @@
                 .OrderByDescending(i => i.Count)
                 .ToDictionary(i => i.Key, i => i);
 
-            IEnumerable<IMatrixHeader> headerCells2 = MainViewModel.Meters
+            IEnumerable<IMatrixHeader> headerCells2 = allMeters
                 .Select(i => i.Фаз)
                 .Distinct()
                 .Select(i => MatrixHeaderCell.CreateColumnHeader(i.ToString()))
@@ -695,7 +696,7 @@
             #endregion
 
             #region Свод по категории счётчика, состоянию метрологической поверки и типу населённого пункта
-            IList<string> childsHeaderCells5 = MainViewModel.Meters
+            IList<string> childsHeaderCells5 = allMeters
                 .Select(i => i.ТипНаселённойМестности)
                 .Distinct()
                 .Select(i => i)
@@ -715,7 +716,7 @@
             }),
             };
 
-            var children5 = MainViewModel.Meters
+            var children5 = allMeters
                     .Select(i => i.ГруппаСчётчикаДляОтчётов)
                     .Distinct()
                     .ToList();
@@ -739,7 +740,7 @@
                     bool hasAskue = column.Parent.Parent.Header == "Есть АСКУЭ";
                     bool isPoveren = column.Parent.Header == "поверен";
 
-                    List<Meter> list = MainViewModel.Meters
+                    List<Meter> list = allMeters
                         .Where(i => i.НаБалансеАбонента == meterAbonentBalance)
                         .Where(i => i.ГруппаСчётчикаДляОтчётов == meterGroup)
                         .Where(i => i.Аскуэ == hasAskue)
@@ -759,18 +760,125 @@
             }) == false)
                 return;
             #endregion
-            
+
+            #region Свод по использованию э/э для целей отопления, типу населённого пункта и наличию АСКУЭ
+
+            var cityTypes = allMeters.Select(i => i.ТипНаселённойМестности).Distinct();
+
+            if (add(new Matrix()
+            {
+                Header = "Свод по использованию э/э для целей отопления,\nтипу населённого пункта и наличию АСКУЭ",
+                Description = "* количество счётчиков",
+                ShowColumnsTotal = true,
+                ShowRowsTotal = true,
+                GetColumnHeaderValuesFunc = () => new IMatrixHeader[]
+                {
+                    MatrixHeaderCell.CreateColumnHeader("Есть АСКУЭ"),
+                    MatrixHeaderCell.CreateColumnHeader("Нет АСКУЭ"),
+                },
+                GetRowHeaderValuesFunc = () => new IMatrixHeader[]
+                {
+                    MatrixHeaderCell.CreateRowHeader("эл.\nотопление", children: cityTypes.Select(i => MatrixHeaderCell.CreateRowHeader(i)).ToList()),
+                    MatrixHeaderCell.CreateRowHeader("ж/д с\nэл.плитой", children: cityTypes.Select(i => MatrixHeaderCell.CreateRowHeader(i)).ToList()),
+                },
+                GetDataCellFunc = (row, column) =>
+                {
+                    bool hasAskue = column.Header == "Есть АСКУЭ";
+                    List<Meter> list = null;
+
+                    switch (row.Parent.Header)
+                    {
+                        case "эл.\nотопление":
+                            list = allMeters
+                                .Where(i => i.Аскуэ == hasAskue)
+                                .Where(i => i.ТипНаселённойМестности == row.Header)
+                                .Where(i => i.Расположение == "Эо и гвс")
+                                .ToList();
+                            break;
+                        case "ж/д с\nэл.плитой":
+                            list = allMeters
+                                .Where(i => i.Аскуэ == hasAskue)
+                                .Where(i => i.ТипНаселённойМестности == row.Header)
+                                .Where(i => i.Расположение == "Ж/д с эп эо и гвс")
+                                .ToList();
+                            break;
+                        default:
+                            break;
+                    }
+
+                    if (list != null)
+                    {
+                        int count = list.Count;
+                        return new MatrixDataCell(count) { ToolTip = $"{100 * count / metersCount:N1}%" };
+                    }
+                    else
+                    {
+                        return new MatrixDataCell(string.Empty);
+                    }
+                },
+            }) == false)
+                return;
+
+            #endregion
+
+            #region Свод по использованию э/э для целей отопления и наличию АСКУЭ
+
+            // населенные пункты по убыванию кол-ва счетчиков (первые countOfLocalities)
+            IEnumerable<SummaryInfoGroupItem> gr1 = SummaryInfoHelper.BuildFirst10LargeGroups(
+                allMeters,
+                nameof(Meter.НаселённыйПункт),
+                i => i.Расположение == "Эо и гвс" || i.Расположение == "Ж/д с эп эо и гвс",
+                12);
+
+            var cityesWhereNagrev = gr1
+                .Select(i => i.Key.ToString())
+                .Distinct();
+
+            if (add(new Matrix()
+            {
+                Header = "Свод по использованию э/э для целей\nотопления и наличию АСКУЭ",
+                Description = "* количество счётчиков",
+                ShowColumnsTotal = true,
+                ShowRowsTotal = true,
+                GetColumnHeaderValuesFunc = () => new IMatrixHeader[]
+                {
+                    MatrixHeaderCell.CreateColumnHeader("Есть АСКУЭ"),
+                    MatrixHeaderCell.CreateColumnHeader("Нет АСКУЭ"),
+                },
+                GetRowHeaderValuesFunc = () => cityesWhereNagrev.Select(i => MatrixHeaderCell.CreateRowHeader(i)),
+                GetDataCellFunc = (row, column) =>
+                {
+                    bool hasAskue = column.Header == "Есть АСКУЭ";
+
+                    List<Meter> list = gr1
+                        .Where(i => i.Key == row.Header)
+                        .Select(i => i.Value)
+                        .First()
+                        .Where(meter => meter.Аскуэ == hasAskue)
+                        .ToList();
+
+                    if (list != null)
+                    {
+                        int count = list.Count;
+                        return new MatrixDataCell(count) { ToolTip = $"{100 * count / metersCount:N1}%" };
+                    }
+                    else
+                    {
+                        return new MatrixDataCell(string.Empty);
+                    }
+                },
+            }) == false)
+                return;
+
+            #endregion
+
             #region Свод по нас. пункту, количеству МЖД, наличию аскуэ
-            Dictionary<string, uint> listOfAnApartmentBuilding = Address.DictionaryStreetWithHouseNumber
-                .Where(i => i.Value >= AppSettings.Default.NumberOfApartmentsInAnApartmentBuilding)
-                .ToDictionary(key => key.Key, e => e.Value);
-            int countOfAnApartmentBuilding = listOfAnApartmentBuilding.Count;
 
-            IEnumerable<string> listOfAnApartmentBuildingCities = listOfAnApartmentBuilding
-                .Select(i => i.Key.Split(", ")[0]);
-
-            IEnumerable<string> citiesWithApartmentBuilding = localities
-                .Where(city => listOfAnApartmentBuildingCities.Contains(city));
+            IEnumerable<string> citiesWithApartmentBuilding = allMeters
+                .Where(i => i.МестоУстановки == "Лестничная клетка")
+                .Where(i => i.ЭтоМжд)
+                .Select(i => i.НаселённыйПункт)
+                .Distinct();
 
             IEnumerable<IMatrixHeader> headersHasAskue = new IMatrixHeader[]
             {
@@ -786,10 +894,10 @@
                 GetColumnHeaderValuesFunc = () => headersHasAskue,
                 GetDataCellFunc = (row, column) =>
                 {
-                    IEnumerable<Meter> list = MainViewModel.Meters
+                    IEnumerable<Meter> list = allMeters
                         .Where(i => i.Адрес.City == row.Header)
                         .Where(i => i.МестоУстановки == "Лестничная клетка")
-                        .Where(i => listOfAnApartmentBuilding.ContainsKey(i.НаселённыйПунктИУлицаСНомеромДома))
+                        .Where(i => i.ЭтоМжд)
                         .Where(i => i.Аскуэ == (bool)column.Tag);
 
                     IEnumerable<string> listBuildings = list
@@ -799,7 +907,7 @@
                     if (listBuildings.Any())
                     {
                         int count = listBuildings.Count();
-                        return new MatrixDataCell(count) { ToolTip = $"{100 * count / countOfAnApartmentBuilding:N1}%" };
+                        return new MatrixDataCell(count);
                     }
                     else
                     {
@@ -813,7 +921,7 @@
             #region Свод по по н.п., мндукционным типам счетчиков и использованию
 
             var meterTypePerLocality3 = SummaryInfoHelper.BuildFirst10LargeGroups(
-                MainViewModel.Meters,
+                allMeters,
                 nameof(Meter.НаселённыйПункт),
                 i => i.Поверен == false && i.Аскуэ == false,
                 countOfLocalities)
@@ -838,7 +946,7 @@
                 .OrderByDescending(i => i.CountOfInd)
                 .ToDictionary(i => i.Key, i => i);
 
-            List<IMatrixHeader> headerCells3 = MainViewModel.Meters
+            List<IMatrixHeader> headerCells3 = allMeters
                 .Select(i => i.Использование)
                 .Distinct()
                 .Select(i => MatrixHeaderCell.CreateColumnHeader(i))
@@ -886,7 +994,7 @@
             #endregion
 
             #region Свод по категории счётчика и сельсовету
-            IList<string> childsHeaderCells1 = MainViewModel.Meters
+            IList<string> childsHeaderCells1 = allMeters
                 .Select(i => i.ГруппаСчётчикаДляОтчётов)
                 .Distinct()
                 .Select(i => i)
@@ -901,11 +1009,11 @@
             {
                 Header = "Свод по категории счётчика и сельсовету",
                 Description = "* количество счётчиков",
-                GetRowHeaderValuesFunc = () => MainViewModel.Meters.Select(i => i.СельскийСовет).Distinct().Select(i => MatrixHeaderCell.CreateColumnHeader(i)),
+                GetRowHeaderValuesFunc = () => allMeters.Select(i => i.СельскийСовет).Distinct().Select(i => MatrixHeaderCell.CreateColumnHeader(i)),
                 GetColumnHeaderValuesFunc = () => headerCells1,
                 GetDataCellFunc = (row, column) =>
                 {
-                    List<Meter> list = MainViewModel.Meters
+                    List<Meter> list = allMeters
                         .Where(i => i.ГруппаСчётчикаДляОтчётов == column.Header)
                         .Where(i => i.СельскийСовет == row.Header)
                         .Where(i => i.Поверен == (column.Parent?.Header == "поверен"))
@@ -993,7 +1101,7 @@
                 Header = "Свод по типу счётчика и году поверки",
                 Description = "* количество счётчиков",
                 GetRowHeaderValuesFunc = () => allMeterTypes.Select(i => MatrixHeaderCell.CreateRowHeader(i.Key.ToString())),
-                GetColumnHeaderValuesFunc = () => MainViewModel.Meters.Select(i => i.ГодПоверкиДляОтчётов).Distinct().OrderBy(i => i).Select(i => MatrixHeaderCell.CreateColumnHeader(i)),
+                GetColumnHeaderValuesFunc = () => allMeters.Select(i => i.ГодПоверкиДляОтчётов).Distinct().OrderBy(i => i).Select(i => MatrixHeaderCell.CreateColumnHeader(i)),
                 GetDataCellFunc = (row, column) =>
                 {
                     SummaryInfoGroupItem group = allMeterTypes.FirstOrDefault(i => i.Key.ToString() == row.Header);
@@ -1017,7 +1125,7 @@
                 Header = "Свод по типам электронных счётчиков и году поверки",
                 Description = "* количество электронных счётчиков",
                 GetRowHeaderValuesFunc = () => electronicMeterTypes.Select(i => MatrixHeaderCell.CreateRowHeader(i.Key.ToString())),
-                GetColumnHeaderValuesFunc = () => MainViewModel.Meters.Select(i => i.ГодПоверкиДляОтчётов).Distinct().OrderBy(i => i).Select(i => MatrixHeaderCell.CreateColumnHeader(i)),
+                GetColumnHeaderValuesFunc = () => allMeters.Select(i => i.ГодПоверкиДляОтчётов).Distinct().OrderBy(i => i).Select(i => MatrixHeaderCell.CreateColumnHeader(i)),
                 GetDataCellFunc = (row, column) =>
                 {
                     SummaryInfoGroupItem group = electronicMeterTypes.FirstOrDefault(i => i.Key.ToString() == row.Header);
@@ -1073,7 +1181,7 @@
                 Header = "Свод по населенному пункту и принципу действия счётчика",
                 Description = "* количество счётчиков",
                 GetRowHeaderValuesFunc = () => meterPerLocality.Select(i => MatrixHeaderCell.CreateRowHeader(i.Key.ToString())),
-                GetColumnHeaderValuesFunc = () => MainViewModel.Meters.Select(i => i.Принцип).Distinct().Select(i => MatrixHeaderCell.CreateColumnHeader(i)),
+                GetColumnHeaderValuesFunc = () => allMeters.Select(i => i.Принцип).Distinct().Select(i => MatrixHeaderCell.CreateColumnHeader(i)),
                 GetDataCellFunc = (row, column) =>
                 {
                     SummaryInfoGroupItem group = meterPerLocality.FirstOrDefault(i => i.Key.ToString() == row.Header);
@@ -1097,15 +1205,15 @@
             {
                 Header = "Свод по подстанции и принципу действия",
                 Description = "* количество счётчиков",
-                GetRowHeaderValuesFunc = () => MainViewModel.Meters.Select(i => i.Подстанция).Distinct().OrderBy(i => i).Select(i => MatrixHeaderCell.CreateRowHeader(i)),
-                GetColumnHeaderValuesFunc = () => MainViewModel.Meters
+                GetRowHeaderValuesFunc = () => allMeters.Select(i => i.Подстанция).Distinct().OrderBy(i => i).Select(i => MatrixHeaderCell.CreateRowHeader(i)),
+                GetColumnHeaderValuesFunc = () => allMeters
                     .Select(i => i.Принцип).Distinct()
-                    .Select(i => MatrixHeaderCell.CreateHeaderCell(i, MainViewModel.Meters.Select(ii => ii.Фаз).Distinct().OrderBy(ii => ii).Select(ii => MatrixHeaderCell.CreateHeaderCell(ii.ToString(AppSettings.CurrentCulture))).ToList<IMatrixHeader>())),
+                    .Select(i => MatrixHeaderCell.CreateHeaderCell(i, allMeters.Select(ii => ii.Фаз).Distinct().OrderBy(ii => ii).Select(ii => MatrixHeaderCell.CreateHeaderCell(ii.ToString(AppSettings.CurrentCulture))).ToList<IMatrixHeader>())),
                 GetDataCellFunc = (row, column) =>
                 {
                     _ = byte.TryParse(column.Header, out byte фаз);
 
-                    List<Meter> list = MainViewModel.Meters
+                    List<Meter> list = allMeters
                         .Where(i => i.Подстанция == row.Header)
                         .Where(i => i.Принцип == column.Parent.Header)
                         .Where(i => i.Фаз == фаз)

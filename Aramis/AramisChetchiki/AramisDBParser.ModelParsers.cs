@@ -32,7 +32,7 @@
             // таблица с абонентами
             totalRows = this.collectionKARTAB.Count;
 
-            List<Meter> metersList = new(this.collectionKARTAB.Count);
+            System.Collections.Concurrent.ConcurrentBag<Meter> metersList = new System.Collections.Concurrent.ConcurrentBag<Meter>();
 
             string s = string.Empty;
 
@@ -40,7 +40,7 @@
             processedRows = 0;
             workTask.StartProcessing();
 
-            foreach (KARTAB abonent in this.collectionKARTAB)
+            Parallel.ForEach(this.collectionKARTAB, (abonent) =>
             {
                 ICollection<KARTSCH> abonentMeters = this.GetDictionaryValue(this.dictionaryKARTSCH, abonent.LIC_SCH);
 
@@ -67,7 +67,7 @@
                 }
 
                 workTask.UpdateUI(++processedRows, totalRows);
-            }
+            });
 
             // fix
             workTask.UpdateUI(totalRows, totalRows);

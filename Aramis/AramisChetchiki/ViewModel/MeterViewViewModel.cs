@@ -22,8 +22,10 @@ public class MeterViewViewModel : BaseDataViewModel<Meter>
             : new List<MeterControlData>();
 
         this.Events = MainViewModel.Data.Events.ContainsKey(meter.Лицевой)
-            ? MainViewModel.Data.Events[meter.Лицевой].OrderBy(i => i.Date)
-            : new List<MeterEvent>();
+            ? new MeterEventsCollection(MainViewModel.Data.Events[meter.Лицевой].OrderBy(i => i.Date))
+            : new MeterEventsCollection();
+
+        this.RaisePropertyChanged(nameof(this.Events));
     }
 
     public Meter Meter { get; init; }
@@ -34,7 +36,7 @@ public class MeterViewViewModel : BaseDataViewModel<Meter>
 
     public IEnumerable<MeterControlData> MeterControlData { get; init; }
 
-    public IEnumerable<MeterEvent> Events { get; init; }
+    public MeterEventsCollection Events { get; init; }
 
     public override int GetHashCode()
     {

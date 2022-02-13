@@ -56,7 +56,7 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
+                <RowDefinition Height="3*" />
             </Grid.RowDefinitions>
             <!--  0  -->
             <HeaderedContentControl
@@ -291,7 +291,7 @@
                             <StackPanel Orientation="Horizontal">
                                 <StackPanel>
                                     <controls:LabelledTextBox Label="Дата оплаты" Text="{Binding Path=ДатаОплаты, Mode=OneWay, StringFormat=dd.MM.yy}" />
-                                    <controls:LabelledTextBox Label="Период последней оплаты" Text="{Binding Path=ПериодПослОплаты, Mode=OneWay, StringFormat=dd.MM.yy}" />
+                                    <controls:LabelledTextBox Label="Период" Text="{Binding Path=ПериодПослОплаты, Mode=OneWay, StringFormat=MMMM.yy}" />
                                     <Separator />
                                     <controls:LabelledTextBox Label="Шифр тарифа" Text="{Binding Path=ШифрТарифа, Mode=OneWay}" />
                                     <controls:LabelledTextBox Label="Сумма оплаты" Text="{Binding Path=СуммаОплаты, Mode=OneWay, StringFormat=N2}" />
@@ -329,6 +329,9 @@
                                     <controls:LabelledTextBox Label="Задолженность" Text="{Binding Path=Задолженность, Mode=OneWay}" />
                                 </StackPanel>
                             </StackPanel>
+                            <Separator />
+                            <controls:LabelledTextBox Label="Ср.мес. расход по оплате" Text="{Binding Path=СреднеМесячныйРасходПоОплате, Mode=OneWay}" />
+                            <controls:LabelledTextBox Label="Ср.мес. расход по контр. показ." Text="{Binding Path=СреднеМесячныйРасходПоКонтрольнымПоказаниям, Mode=OneWay}" />
                         </StackPanel>
                     </HeaderedContentControl>
                     <Separator Style="{StaticResource dotedSeparator}" />
@@ -394,9 +397,6 @@
                             </StackPanel>
                             <Separator />
                             <controls:LabelledTextBox Label="Пломбы" Text="{Binding Path=НомераПломб, Mode=OneWay}" />
-                            <Separator />
-                            <controls:LabelledTextBox Label="Ср.мес. расход по оплате" Text="{Binding Path=СреднеМесячныйРасходПоОплате, Mode=OneWay}" />
-                            <controls:LabelledTextBox Label="Ср.мес. расход по контр. показ." Text="{Binding Path=СреднеМесячныйРасходПоКонтрольнымПоказаниям, Mode=OneWay}" />
                         </StackPanel>
                     </HeaderedContentControl>
                 </StackPanel>
@@ -426,6 +426,21 @@
                                     HeaderTemplate="{StaticResource GridViewColumnHeaderTemplate}" />
                             </GridView>
                         </ListView.View>
+                        <ListView.Style>
+                            <Style TargetType="{x:Type ListView}">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding MeterControlData.Count}" Value="0">
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate>
+                                                    <uicontrols:NoData Message="Список пуст, нет контрольных показаний" />
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ListView.Style>
                     </ListView>
                 </HeaderedContentControl>
             </StackPanel>
@@ -436,7 +451,6 @@
                 Orientation="Horizontal">
                 <HeaderedContentControl HorizontalAlignment="Stretch" Header="Замены счётчиков у абонента">
                     <ListView
-                        MaxHeight="200"
                         ItemsSource="{Binding Path=MeterChanges}"
                         VirtualizingPanel.ScrollUnit="Item"
                         VirtualizingPanel.VirtualizationMode="Recycling">
@@ -490,7 +504,7 @@
                         <ListView.Style>
                             <Style TargetType="{x:Type ListView}">
                                 <Style.Triggers>
-                                    <DataTrigger Binding="{Binding View.Count}" Value="0">
+                                    <DataTrigger Binding="{Binding MeterChanges.Count}" Value="0">
                                         <Setter Property="Template">
                                             <Setter.Value>
                                                 <ControlTemplate>
@@ -516,7 +530,6 @@
 
                 <HeaderedContentControl HorizontalAlignment="Stretch" Header="Произведенные оплаты за электроэнергию">
                     <ListView
-                        MaxHeight="200"
                         ItemsSource="{Binding Path=Payments}"
                         VirtualizingPanel.ScrollUnit="Item"
                         VirtualizingPanel.VirtualizationMode="Recycling">
@@ -582,7 +595,7 @@
                         <ListView.Style>
                             <Style TargetType="{x:Type ListView}">
                                 <Style.Triggers>
-                                    <DataTrigger Binding="{Binding View.Count}" Value="0">
+                                    <DataTrigger Binding="{Binding Payments.Count}" Value="0">
                                         <Setter Property="Template">
                                             <Setter.Value>
                                                 <ControlTemplate>
@@ -600,6 +613,7 @@
             </StackPanel>
             <!--  4  -->
             <local_controls:MeterСonsumptionViewer Grid.Row="4" MeterEvents="{Binding Path=Events}" />
+
         </Grid>
     </Border>
 </UserControl>

@@ -291,10 +291,10 @@
 
                         // Mouse.OverrideCursor = null;
                         this.isViewBuilding = false;
+
+                        this.OnViewBuilded();
                     }
                 }
-
-                this.OnViewBuilded();
 
                 return this.view;
             }
@@ -832,7 +832,8 @@
 
         protected virtual void OnViewBuilded()
         {
-            this.IsBusy = false;
+            if (this.IsBusy)
+                this.IsBusy = false;
         }
 
         #region Filters

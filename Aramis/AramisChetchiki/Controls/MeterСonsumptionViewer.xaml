@@ -4,12 +4,13 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:System="clr-namespace:System;assembly=mscorlib"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:TMP.WORK.AramisChetchiki"
     xmlns:local_controls="clr-namespace:TMP.WORK.AramisChetchiki.Controls"
+    xmlns:local_converters="clr-namespace:TMP.WORK.AramisChetchiki.Converters"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:model="clr-namespace:TMP.WORK.AramisChetchiki.Model"
     xmlns:uicontrols="clr-namespace:TMP.UI.Controls.WPF;assembly=ui.controls.wpf"
     xmlns:uicontrols_helpers="clr-namespace:TMP.UI.Controls.WPF.Helpers;assembly=ui.controls.wpf"
-    x:Name="root"
     d:DesignHeight="150"
     d:DesignWidth="800"
     BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}"
@@ -18,8 +19,10 @@
     <UserControl.Resources>
 
         <local_controls:ItemHeightValueConverter x:Key="ItemHeightValueConverter" />
+        <local_converters:TxtYearVisibilityConverter x:Key="TxtYearVisibilityConverter" />
 
-        <System:Double x:Key="minValueWidth">15</System:Double>
+
+        <System:Double x:Key="minValueWidth">20</System:Double>
 
         <Style x:Key="valuesItems" TargetType="{x:Type ItemsControl}">
             <Setter Property="Margin" Value="0" />
@@ -27,7 +30,7 @@
             <Setter Property="ItemsPanel">
                 <Setter.Value>
                     <ItemsPanelTemplate>
-                        <UniformGrid Rows="1" />
+                        <StackPanel Orientation="Horizontal" />
                     </ItemsPanelTemplate>
                 </Setter.Value>
             </Setter>
@@ -43,34 +46,43 @@
             <Setter Property="ItemTemplate">
                 <Setter.Value>
                     <DataTemplate DataType="{x:Type model:MeterEvent}">
-                        <Grid
-                            x:Name="grid"
-                            MinWidth="{StaticResource minValueWidth}"
-                            Margin="1,2,1,0">
-                            <Border
-                                x:Name="border"
-                                Margin="2,1,2,1"
-                                VerticalAlignment="Bottom"
-                                Background="Skyblue"
-                                BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}"
-                                BorderThickness="1"
-                                Effect="{StaticResource dropShadowAccent}" />
+                        <Grid x:Name="grid" Width="{StaticResource minValueWidth}">
+                            <StackPanel x:Name="panel" VerticalAlignment="Bottom">
+                                <TextBlock
+                                    x:Name="textTop"
+                                    FontSize="{DynamicResource SmallFontSize}"
+                                    TextAlignment="Center"
+                                    Visibility="Collapsed" />
+                                <Border
+                                    x:Name="border"
+                                    Margin="2,1,2,1"
+                                    VerticalAlignment="Bottom"
+                                    Background="Skyblue"
+                                    BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}"
+                                    BorderThickness="1"
+                                    Effect="{StaticResource dropShadowAccent}" />
+                            </StackPanel>
                             <TextBlock
-                                x:Name="text"
-                                FontSize="{DynamicResource ContentFontSize}"
-                                TextAlignment="Center">
-                                <Run x:Name="txtBar1" FontSize="{DynamicResource HeaderFontSize}" />
-                                <LineBreak />
-                                <Run x:Name="txtBar2" FontSize="{DynamicResource HeaderFontSize}" />
-                            </TextBlock>
+                                x:Name="textBottom"
+                                Margin="0,5"
+                                VerticalAlignment="Bottom"
+                                FontSize="{DynamicResource NormalFontSize}"
+                                TextAlignment="Center" />
                             <Grid.ToolTip>
-                                <TextBlock>
-                                    <Run x:Name="txtToolTip" />
+                                <TextBlock x:Name="txtToolTip">
+                                    <Run Text="Период:" />
+                                    <Run Text="{Binding Date, StringFormat=MMMM yyyy, ConverterCulture={x:Static local:AppSettings.CurrentCulture}}" />
+                                    <LineBreak />
+                                    <Run Text="Потребление" />
+                                    <Run Text="{Binding Сonsumption, StringFormat=N0, Mode=OneWay}" />
+                                    <LineBreak />
+                                    <Run Text="Последнее показание: " />
+                                    <Run Text="{Binding LastElectricityReadings, StringFormat=G, Mode=OneWay}" />
                                 </TextBlock>
                             </Grid.ToolTip>
                         </Grid>
                         <DataTemplate.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
+                            <Trigger SourceName="grid" Property="IsMouseOver" Value="True">
                                 <Setter TargetName="grid" Property="Background" Value="{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}" />
                             </Trigger>
                             <DataTrigger Binding="{Binding EventType}" Value="{x:Static model:MeterEventType.Payment}">
@@ -84,32 +96,19 @@
                                         </MultiBinding>
                                     </Setter.Value>
                                 </Setter>
-                                <Setter TargetName="txtBar1" Property="Text" Value="{Binding Сonsumption, StringFormat=N2}" />
-                                <Setter TargetName="txtBar2" Property="Text" Value="💰" />
-                                <Setter TargetName="txtToolTip" Property="Text" Value="{Binding LastElectricityReadings, Mode=OneWay}" />
+                                <Setter TargetName="textTop" Property="Text" Value="{Binding Сonsumption, StringFormat=N0}" />
                             </DataTrigger>
                             <DataTrigger Binding="{Binding EventType}" Value="{x:Static model:MeterEventType.Change}">
                                 <Setter TargetName="border" Property="Background" Value="Green" />
-                                <Setter TargetName="border" Property="Margin" Value="5,0,5,1" />
-                                <Setter TargetName="border" Property="Height">
-                                    <Setter.Value>
-                                        <MultiBinding Converter="{StaticResource ItemHeightValueConverter}">
-                                            <Binding Path="Сonsumption" />
-                                            <Binding Path="ActualHeight" RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type ItemsControl}}" />
-                                        </MultiBinding>
-                                    </Setter.Value>
-                                </Setter>
-                                <Setter TargetName="txtBar1" Property="Text" Value="{Binding Сonsumption, StringFormat=N2}" />
-                                <Setter TargetName="txtBar2" Property="Text" Value="⛖" />
-                                <Setter TargetName="txtBar2" Property="uicontrols_helpers:RelativeFontSize.RelativeFontSize" Value="1.5" />
-                                <Setter TargetName="txtToolTip" Property="Text" Value="{Binding LastElectricityReadings, Mode=OneWay}" />
+                                <Setter TargetName="border" Property="Visibility" Value="Collapsed" />
+                                <Setter TargetName="textBottom" Property="Text" Value="⛖" />
+                                <Setter TargetName="textBottom" Property="ToolTip" Value="замена счётчика" />
                             </DataTrigger>
                             <DataTrigger Binding="{Binding EventType}" Value="{x:Static model:MeterEventType.Control}">
                                 <Setter TargetName="border" Property="Background" Value="Skyblue" />
-                                <Setter TargetName="border" Property="Margin" Value="2,1,2,1" />
-                                <Setter TargetName="txtBar1" Property="Text" Value="🕗" />
-                                <Setter TargetName="txtBar2" Property="Text" Value="" />
-                                <Setter TargetName="txtToolTip" Property="Text" Value="{Binding LastElectricityReadings, Mode=OneWay}" />
+                                <Setter TargetName="border" Property="Visibility" Value="Collapsed" />
+                                <Setter TargetName="textBottom" Property="Text" Value="🕗" />
+                                <Setter TargetName="textBottom" Property="ToolTip" Value="обход" />
                             </DataTrigger>
                         </DataTemplate.Triggers>
                     </DataTemplate>
@@ -123,109 +122,82 @@
             <Setter Property="ItemsPanel">
                 <Setter.Value>
                     <ItemsPanelTemplate>
-                        <UniformGrid Rows="1" />
+                        <StackPanel Orientation="Horizontal" ToolTip="период" />
                     </ItemsPanelTemplate>
                 </Setter.Value>
             </Setter>
             <Setter Property="ItemTemplate">
                 <Setter.Value>
                     <DataTemplate>
-                        <Grid MinWidth="{StaticResource minValueWidth}">
+                        <Grid>
+                            <Rectangle
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Stretch"
+                                Stroke="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}"
+                                StrokeDashArray="1 10"
+                                StrokeDashOffset="5" />
                             <Border
-                                Width="2"
-                                Height="4"
-                                VerticalAlignment="Top"
-                                BorderBrush="{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}"
-                                BorderThickness="1,0" />
-                            <TextBlock Margin="0,4,0,0" Text="{Binding Mode=OneWay}" />
+                                x:Name="border"
+                                ToolTip="{Binding Header}"
+                                UseLayoutRounding="True">
+                                <StackPanel Orientation="Vertical">
+                                    <Decorator ToolTip="{Binding Header}" />
+                                    <TextBlock Text="{Binding Header}" TextAlignment="Center">
+                                        <TextBlock.Visibility>
+                                            <MultiBinding Converter="{StaticResource TxtYearVisibilityConverter}">
+                                                <Binding Source="{StaticResource minValueWidth}" />
+                                                <Binding Path="Width" RelativeSource="{RelativeSource AncestorType=TextBlock}" />
+                                                <Binding Path="ActualWidth" RelativeSource="{RelativeSource AncestorType=Border}" />
+                                            </MultiBinding>
+                                        </TextBlock.Visibility>
+                                    </TextBlock>
+                                    <ItemsControl ItemsSource="{Binding Items}">
+                                        <ItemsControl.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <UniformGrid Rows="1" />
+                                            </ItemsPanelTemplate>
+                                        </ItemsControl.ItemsPanel>
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <Border>
+                                                    <Decorator Width="{StaticResource minValueWidth}" />
+                                                </Border>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </StackPanel>
+                            </Border>
                         </Grid>
+                        <DataTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="{DynamicResource {x:Static SystemColors.ControlLightLightBrushKey}}" />
+                                <Setter TargetName="border" Property="Opacity" Value="0.5" />
+                            </Trigger>
+                        </DataTemplate.Triggers>
                     </DataTemplate>
                 </Setter.Value>
             </Setter>
         </Style>
 
-        <Style TargetType="{x:Type ScrollViewer}">
-            <Setter Property="OverridesDefaultStyle" Value="True" />
-            <Setter Property="HorizontalScrollBarVisibility" Value="Visible" />
-            <Setter Property="VerticalScrollBarVisibility" Value="Hidden" />
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type ScrollViewer}">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="*" />
-                            </Grid.ColumnDefinitions>
-                            <Grid.RowDefinitions>
-                                <RowDefinition SharedSizeGroup="r1" />
-                                <RowDefinition
-                                    Height="Auto"
-                                    MinHeight="25"
-                                    SharedSizeGroup="r2" />
-                                <RowDefinition Height="Auto" />
-                            </Grid.RowDefinitions>
-
-                            <ScrollContentPresenter
-                                Grid.Row="0"
-                                Grid.RowSpan="2"
-                                Grid.Column="1" />
-
-                            <TextBlock
-                                Grid.Row="0"
-                                Text="Потребление,&#x0a;кВт∙ч"
-                                TextAlignment="Center" />
-                            <TextBlock
-                                Grid.Row="1"
-                                FontSize="{DynamicResource ContentFontSize}"
-                                Text="период" />
-                            <ScrollBar
-                                x:Name="PART_HorizontalScrollBar"
-                                Grid.Row="2"
-                                Grid.Column="1"
-                                Maximum="{TemplateBinding ScrollableWidth}"
-                                Orientation="Horizontal"
-                                ViewportSize="{TemplateBinding ViewportWidth}"
-                                Visibility="{TemplateBinding ComputedHorizontalScrollBarVisibility}"
-                                Value="{TemplateBinding HorizontalOffset}" />
-                        </Grid>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-            <Style.Triggers>
-                <DataTrigger Binding="{Binding Path=Dates, Delay=500, RelativeSource={RelativeSource AncestorType={x:Type local_controls:MeterСonsumptionViewer}}}" Value="{x:Null}">
-                    <Setter Property="Template">
-                        <Setter.Value>
-                            <ControlTemplate>
-                                <uicontrols:NoData Message="Нет событий по лицевому счёту" />
-                            </ControlTemplate>
-                        </Setter.Value>
-                    </Setter>
-                </DataTrigger>
-            </Style.Triggers>
-        </Style>
-
-
     </UserControl.Resources>
 
-    <ScrollViewer>
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition SharedSizeGroup="r1" />
-                <RowDefinition
-                    Height="Auto"
-                    MinHeight="25"
-                    SharedSizeGroup="r2" />
-            </Grid.RowDefinitions>
-            <ItemsControl
-                Grid.Row="0"
-                Grid.Column="1"
-                ItemsSource="{Binding MeterEvents, ElementName=root}"
-                Style="{StaticResource valuesItems}" />
-            <ItemsControl
-                Grid.Row="1"
-                ItemsSource="{Binding Dates, ElementName=root}"
-                Style="{StaticResource periodItems}" />
-        </Grid>
-    </ScrollViewer>
+    <HeaderedContentControl Header="Потребление, кВт∙ч">
+        <ScrollViewer
+            CanContentScroll="False"
+            HorizontalScrollBarVisibility="Visible"
+            VerticalScrollBarVisibility="Hidden">
+            <Grid Height="300">
+                <ItemsControl
+                    Margin="0,-20,0,0"
+                    ItemsSource="{Binding Path=Dates, RelativeSource={RelativeSource AncestorType={x:Type local_controls:MeterСonsumptionViewer}}}"
+                    Style="{StaticResource periodItems}" />
+                <ItemsControl
+                    Margin="0,0,0,0"
+                    ItemsSource="{Binding Path=MeterEvents, RelativeSource={RelativeSource AncestorType={x:Type local_controls:MeterСonsumptionViewer}}}"
+                    Style="{StaticResource valuesItems}"
+                    ToolTip="{Binding ActualHeight, RelativeSource={RelativeSource Mode=Self}}" />
+            </Grid>
+        </ScrollViewer>
+    </HeaderedContentControl>
 
 </UserControl>

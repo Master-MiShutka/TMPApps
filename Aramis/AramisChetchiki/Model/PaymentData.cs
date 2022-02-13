@@ -141,22 +141,18 @@
         {
             get
             {
-                long consumption = (long)this.ПоследнееПоказание - (long)this.ПредыдущееПоказание;
-
-                if (consumption < 0)
+                if (this.HasPayments == false)
                 {
-                    int meterDigitsCount = this.ПредыдущееПоказание.ToString().Length;
-                    var c = (this.ПоследнееПоказание + (int)Math.Pow(10, meterDigitsCount)) - this.ПредыдущееПоказание;
-
-                    if (c < 0 || c >= 50_000)
-                    {
-                        System.Diagnostics.Debugger.Break();
-                    }
-
-                    return (uint)c;
+                    return 0;
                 }
 
-                return (uint)consumption;
+                uint temp_summ = 0;
+                foreach (var paymentData in this.Payments)
+                {
+                    temp_summ += paymentData.РазностьПоказанийРасчётная;
+                }
+
+                return temp_summ;
             }
         }
 

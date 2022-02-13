@@ -11,6 +11,11 @@
 
     internal partial class AramisDBParser
     {
+        private static void SwapItems(int firstIndex, int secondIndex, List<Tuple<DateOnly, MeterEventType, object>> list)
+        {
+            (list[secondIndex], list[firstIndex]) = (list[firstIndex], list[secondIndex]);
+        }
+
         /// <summary>
         /// расчет среднемесячного потребления
         /// </summary>
@@ -80,44 +85,12 @@
                         changes = aramisData.ChangesOfMeters[meter.Лицевой].OrderByDescending(i => i.ДатаЗамены).ToList();
                     }
 
-                    // общий список для значений
-                    list.Clear();
-
-                    // собираем список
-                    foreach (Payment item in payments)
-                    {
-                        list.Add(new Tuple<DateOnly, MeterEventType, object>(item.ПериодОплаты, MeterEventType.Payment, item));
-                    }
-
-                    foreach (ChangeOfMeter item in changes)
-                    {
-                        list.Add(new Tuple<DateOnly, MeterEventType, object>(item.ДатаЗамены, MeterEventType.Change, item));
-                    }
-
-                    foreach (MeterControlData item in controlDatas)
-                    {
-                        list.Add(new Tuple<DateOnly, MeterEventType, object>(item.Date, MeterEventType.Control, item));
-                    }
-
-                    // делегат сравнения по дате
-                    Comparison<Tuple<DateOnly, MeterEventType, object>> comparison = (x, y) =>
-                    {
-                        if (x.Item1 == y.Item1)
-                        {
-                            return (y.Item3 as IModelWithMeterLastReading).LastReading.CompareTo((x.Item3 as IModelWithMeterLastReading).LastReading);
-                        }
-                        else
-                        {
-                            return y.Item1.CompareTo(x.Item1);
-                        }
-                    };
-
-                    // сортировка по дате - по убыванию
-                    list.Sort(comparison);
+                    // построение списка и сортировка
+                    this.BuildTemporaryListOfEvents(ref list, controlDatas, payments, changes);
 
                     if (list.Count != 0)
                     {
-                        List<MeterEvent> meterEvents = this.BuildMeterEvents(list);
+                        List<MeterEvent> meterEvents = this.BuildMeterEvents(ref list);
 
                         // построение списка событий
                         // пытаемся добавить, если не удалось, т.е. уже добавлен
@@ -165,71 +138,104 @@
             workTask.IsCompleted = true;
         }
 
-        private uint CalculateConsumption(uint meterPreviousReadings, uint meterNextReadings, byte meterDigitsCount, Payment previousPayment)
+        private void BuildTemporaryListOfEvents(ref List<Tuple<DateOnly, MeterEventType, object>> list, List<MeterControlData> controlDatas, List<Payment> payments, List<ChangeOfMeter> changes)
         {
-            long consumption = (long)meterNextReadings - (long)meterPreviousReadings;
+            // общий список для значений
+            list.Clear();
 
-            if (consumption < 0 && Math.Abs(consumption) > 1 && Math.Abs(consumption) <= 5)
+            // собираем список
+            foreach (Payment item in payments)
             {
-                return 0;
+                list.Add(new Tuple<DateOnly, MeterEventType, object>(item.ПериодОплаты, MeterEventType.Payment, item));
             }
 
-            if (consumption < 0 && Math.Abs(consumption) > 1)
+            foreach (ChangeOfMeter item in changes)
             {
-                consumption = (meterNextReadings + (int)Math.Pow(10, meterDigitsCount)) - meterPreviousReadings;
+                list.Add(new Tuple<DateOnly, MeterEventType, object>(item.ДатаЗамены, MeterEventType.Change, item));
             }
 
-            if (consumption < 0 || consumption >= 50_000)
+            foreach (MeterControlData item in controlDatas)
             {
-                int digits = meterPreviousReadings.ToString().Length;
+                list.Add(new Tuple<DateOnly, MeterEventType, object>(item.Date, MeterEventType.Control, item));
+            }
 
-                if (digits != meterDigitsCount)
+            // делегат сравнения по дате
+            Comparison<Tuple<DateOnly, MeterEventType, object>> comparison = (x, y) =>
+            {
+                return y.Item1.CompareTo(x.Item1);
+            };
+
+            // сортировка по дате - по убыванию
+            list.Sort(comparison);
+
+            // дополнительная сортировка - корректировка
+            // проход по списку - от старым к новым
+            for (int index = list.Count - 1; index > 0; index--)
+            {
+                Tuple<DateOnly, MeterEventType, object> current = list[index];
+                Tuple<DateOnly, MeterEventType, object> next = list[index - 1];
+
+                if (current.Item2 == MeterEventType.Payment && next.Item2 == MeterEventType.Change)
                 {
-                    consumption = (meterNextReadings + (int)Math.Pow(10, digits)) - meterPreviousReadings;
+                    ChangeOfMeter changeOfMeter = (ChangeOfMeter)next.Item3;
+                    Payment payment = (Payment)current.Item3;
 
-                    if (consumption >= 50_000)
-                    {
-                        System.Diagnostics.Debugger.Break();
-                    }
-                    return (uint)consumption;
+                    if (payment.Payments[0].ДатаОплаты > changeOfMeter.ДатаЗамены)
+                        SwapItems(index, index - 1, list);
                 }
                 else
+                if (current.Item1 == next.Item1)
                 {
-                    if (previousPayment != null && previousPayment.HasPayments)
+                    if (current.Item2 == MeterEventType.Control && next.Item2 == MeterEventType.Change)
                     {
-                        List<PaymentData> readingsList = previousPayment.Payments.Where(i => i.ПоследнееПоказание == meterNextReadings).ToList();
+                        ChangeOfMeter changeOfMeter = (ChangeOfMeter)next.Item3;
+                        MeterControlData controlData = (MeterControlData)current.Item3;
 
-                        if (readingsList.Any() && readingsList.Count == 1)
+                        int controlDigits = controlData.Value.ToString().Length;
+                        int changePrevDigits = changeOfMeter.ПоказаниеСнятого.ToString().Length;
+                        int changeNextDigits = changeOfMeter.ПоказаниеУстановленного.ToString().Length;
+
+                        bool changed = false;
+
+                        if (controlData.Value == changeOfMeter.ПоказаниеУстановленного)
                         {
-                            uint reading = readingsList.First().ПредыдущееПоказание;
-                            consumption = meterNextReadings - reading;
-
-                            if (consumption > 0)
+                            SwapItems(index, index - 1, list);
+                            changed = true;
+                        }
+                        else
+                        {
+                            if (controlDigits == changeNextDigits && controlData.Value > changeOfMeter.ПоказаниеУстановленного)
                             {
-                                return (uint)consumption;
+                                SwapItems(index, index - 1, list);
+                                changed = true;
                             }
+
+                            if (controlDigits == changePrevDigits && changeOfMeter.ПоказаниеСнятого > controlData.Value)
+                            {
+                                SwapItems(index, index - 1, list);
+                                changed = true;
+                            }
+                        }
+
+                        if (changed && index <= list.Count - 4)
+                            index += 3;
+                    }
+                    else
+                    {
+                        if ((current.Item3 as IModelWithMeterLastReading).LastReading > (next.Item3 as IModelWithMeterLastReading).LastReading)
+                        {
+                            SwapItems(index, index - 1, list);
                         }
                     }
                 }
-
-                System.Diagnostics.Debugger.Break();
-                return 0;
             }
-
-            return (uint)consumption;
         }
 
-        private uint CalculateMonthAverageConsumption(DateOnly startDate, DateOnly endDate, uint consumption)
-        {
-            ushort days = (ushort)(endDate.ToDateTime(TimeOnly.MinValue) - startDate.ToDateTime(TimeOnly.MinValue)).Days;
-            return days == 0 ? 0 : 30 * consumption / days;
-        }
-
-        private List<MeterEvent> BuildMeterEvents(List<Tuple<DateOnly, MeterEventType, object>> list)
+        private List<MeterEvent> BuildMeterEvents(ref List<Tuple<DateOnly, MeterEventType, object>> list)
         {
             List<MeterEvent> meterEvents = new List<MeterEvent>();
 
-            // показания из первой записи в списке
+            // показания из первой из конца записи в списке
             uint prevReadings = 0;
             switch (list[^1].Item2)
             {
@@ -264,22 +270,100 @@
                 Payment payment = item.Item3 as Payment;
                 MeterControlData control = item.Item3 as MeterControlData;
 
+                if (payment != null && prevReadings != payment.ПредыдущееПоказание)
+                {
+                    if (index - 1 > 0 && list[index - 1].Item3 is Payment payment1 && prevReadings == payment1.ПредыдущееПоказание)
+                    {
+                        SwapItems(index, index - 1, list);
+                        item = list[index];
+                        payment = item.Item3 as Payment;
+                    }
+
+                    if (index - 2 > 0 && list[index - 2].Item3 is Payment payment2 && prevReadings == payment2.ПредыдущееПоказание)
+                    {
+                        SwapItems(index, index - 2, list);
+                        item = list[index];
+                        payment = item.Item3 as Payment;
+                    }
+
+                    if (index - 3 > 0 && list[index - 3].Item3 is Payment payment3 && prevReadings == payment3.ПредыдущееПоказание)
+                    {
+                        SwapItems(index, index - 3, list);
+                        item = list[index];
+                        payment = item.Item3 as Payment;
+                    }
+
+
+                    if (index - 1 > 0 && list[index - 1].Item3 is ChangeOfMeter change1 && Math.Abs((long)change1.ПоказаниеСнятого - (long)prevReadings) <= 5_000)
+                    {
+                        SwapItems(index, index - 1, list);
+                        item = list[index];
+                        payment = item.Item3 as Payment;
+                        change = item.Item3 as ChangeOfMeter;
+                    }
+
+                    if (index - 2 > 0 && list[index - 2].Item3 is ChangeOfMeter change2 && Math.Abs((long)change2.ПоказаниеСнятого - (long)prevReadings) <= 5_000)
+                    {
+                        SwapItems(index, index - 2, list);
+                        item = list[index];
+                        payment = item.Item3 as Payment;
+                        change = item.Item3 as ChangeOfMeter;
+                    }
+
+                    if (index - 3 > 0 && list[index - 3].Item3 is ChangeOfMeter change3 && Math.Abs((long)change3.ПоказаниеСнятого - (long)prevReadings) <= 5_000)
+                    {
+                        SwapItems(index, index - 3, list);
+                        item = list[index];
+                        payment = item.Item3 as Payment;
+                        change = item.Item3 as ChangeOfMeter;
+                    }
+                }
+
                 switch (item.Item2)
                 {
                     case MeterEventType.Change:
-                        uint consumption = this.CalculateConsumption(prevReadings, change.ПоказаниеСнятого, change.РазрядностьСнятого, previousPayment);
+                        // если перенос недооплаченной энергии на показания установленного счетчика
+                        if (prevReadings != change.ПоказаниеСнятого)
+                        {
+                            long diff = (long)change.ПоказаниеСнятого - (long)prevReadings;
+                            int digits = change.РазрядностьУстановленного;
 
-                        meterEvents.Add(new MeterEvent(item.Item1, MeterEventType.Change, consumption, change.ПоказаниеУстановленного));
-                        prevReadings = change.ПоказаниеУстановленного;
+                            if (diff == 0)
+                            {
+                                prevReadings = change.ПоказаниеУстановленного;
+                            }
+
+                            // если недоплата
+                            if (diff > 0)
+                            {
+                                // учет перехода через ноль
+                                if ((long)change.ПоказаниеУстановленного - (long)diff < 0)
+                                    prevReadings = (uint)(change.ПоказаниеУстановленного + (int)Math.Pow(10, digits)) - (uint)diff;
+                                else
+                                    prevReadings = change.ПоказаниеУстановленного - (uint)diff;
+                            }
+                            else
+                            // если переплата
+                            if (diff < 0)
+                            {
+                                prevReadings = change.ПоказаниеУстановленного + (uint)(-1 * diff);
+                            }
+                        }
+                        else
+                        {
+                            prevReadings = change.ПоказаниеУстановленного;
+                        }
+
+                        meterEvents.Add(new MeterEvent(item.Item1, MeterEventType.Change, 0, change.ПоказаниеУстановленного));
                         meterDigitsCount = change.РазрядностьУстановленного;
                         break;
                     case MeterEventType.Payment:
+                        //
                         meterEvents.Add(new MeterEvent(item.Item1, MeterEventType.Payment, payment.РазностьПоказаний, payment.ПоследнееПоказание));
                         prevReadings = payment.ПоследнееПоказание;
                         break;
                     case MeterEventType.Control:
                         meterEvents.Add(new MeterEvent(item.Item1, MeterEventType.Control, 0, control.Value));
-                        prevReadings = control.Value;
                         break;
                     default:
                         break;
@@ -289,6 +373,92 @@
             }
 
             return meterEvents.OrderBy(i => i.Date).ToList();
+        }
+
+        private uint CalculateConsumption(uint meterPreviousReadings, uint meterNextReadings, byte meterDigitsCount, Payment previousPayment)
+        {
+            long consumption = (long)meterNextReadings - (long)meterPreviousReadings;
+
+            if (consumption < 0 && Math.Abs(consumption) >= 1 && Math.Abs(consumption) <= 5)
+            {
+                return 0;
+            }
+
+            string strPrev = meterPreviousReadings.ToString();
+            int digitsPrev = strPrev.Length;
+            string strNext = meterNextReadings.ToString();
+            int digitsNext = strNext.Length;
+
+            if (strPrev.StartsWith("999"))
+            {
+                consumption = (meterNextReadings + (int)Math.Pow(10, digitsPrev)) - meterPreviousReadings;
+            }
+
+            if (strNext.StartsWith("999"))
+            {
+                consumption = (meterPreviousReadings + (int)Math.Pow(10, digitsNext)) - meterNextReadings;
+            }
+
+            if (consumption < 0 && Math.Abs(consumption) > 1)
+            {
+                consumption = (meterNextReadings + (int)Math.Pow(10, meterDigitsCount)) - meterPreviousReadings;
+            }
+
+            if (consumption < 0 || consumption >= 50_000)
+            {
+                if (digitsPrev != meterDigitsCount)
+                {
+                    consumption = (meterNextReadings + (int)Math.Pow(10, digitsPrev)) - meterPreviousReadings;
+
+                    if (consumption >= 50_000)
+                    {
+                        consumption = this.CalculateConsumption(meterNextReadings, meterPreviousReadings, meterDigitsCount, previousPayment);
+
+                        if (consumption >= 50_000)
+                        {
+                            System.Diagnostics.Debugger.Break();
+                        }
+                    }
+
+                    return (uint)consumption;
+                }
+                else
+                {
+                    if (previousPayment != null && previousPayment.HasPayments)
+                    {
+                        List<PaymentData> readingsList = previousPayment.Payments.Where(i => i.ПоследнееПоказание == meterNextReadings).ToList();
+
+                        if (readingsList.Any() && readingsList.Count == 1)
+                        {
+                            uint reading = readingsList.First().ПредыдущееПоказание;
+                            consumption = meterNextReadings - reading;
+
+                            if (consumption > 0)
+                            {
+                                return (uint)consumption;
+                            }
+                        }
+                    }
+                }
+
+                consumption = Math.Abs((long)meterNextReadings - (long)meterPreviousReadings);
+
+                if (consumption >= 5_000)
+                {
+                    System.Diagnostics.Debugger.Break();
+                    return 0;
+                }
+
+                return (uint)consumption;
+            }
+
+            return (uint)consumption;
+        }
+
+        private uint CalculateMonthAverageConsumption(DateOnly startDate, DateOnly endDate, uint consumption)
+        {
+            uint days = (uint)(endDate.ToDateTime(TimeOnly.MinValue) - startDate.ToDateTime(TimeOnly.MinValue)).Days;
+            return days == 0 ? 0 : 30 * consumption / days;
         }
 
         private uint CalcAverageConsumptionByPayments(List<Tuple<DateOnly, MeterEventType, object>> list)
@@ -306,71 +476,32 @@
                 return 0;
             }
 
-            uint endValue = payments[0].LastReading;
-
             // сумма расходов за период
             uint summ = 0;
 
             DateOnly findDate = endDate.AddYears(-1);
-
-            bool found = false;
 
             IEnumerable<ChangeOfMeter> changes = list.Where(i => i.Item2 == MeterEventType.Change).Select(i => i.Item3).Cast<ChangeOfMeter>();
             byte meterDigitsCount = changes.Any() ? changes.First().РазрядностьУстановленного : (byte)0;
 
             List<Tuple<DateOnly, MeterEventType, object>> paymentsAndChanges = list.Where(i => i.Item2 == MeterEventType.Payment || i.Item2 == MeterEventType.Change).ToList();
 
-            int paymentIndex = 0;
-            Payment previousPayment = null;
-
             // перебор всех оплат, ищем ближайшую дату оплаты, чтобы период был не меньше года
             for (int index = 0; index < paymentsAndChanges.Count; index++)
             {
                 Tuple<DateOnly, MeterEventType, object> item = paymentsAndChanges[index];
-                ChangeOfMeter change = item.Item3 as ChangeOfMeter;
-                Payment payment = item.Item3 as Payment;
-                MeterControlData control = item.Item3 as MeterControlData;
 
-                previousPayment = (paymentIndex >= payments.Count) ? null : payments[paymentIndex];
-
-                if (item.Item1 > findDate && found == false)
+                if (item.Item1 < findDate)
                 {
-                    // проверяем была ли замена счетчика
-                    if (item.Item2 == MeterEventType.Change)
-                    {
-                        summ += this.CalculateConsumption(change.ПоказаниеУстановленного, endValue, meterDigitsCount, previousPayment);
-                        meterDigitsCount = change.РазрядностьСнятого;
-                        endValue = change.ПоказаниеСнятого;
-                    }
-                    else
-                    {
-                        if (item.Item2 == MeterEventType.Payment)
-                        {
-                            summ += this.CalculateConsumption(payment.ПоследнееПоказание, endValue, meterDigitsCount, previousPayment);
-                            endValue = payment.ПредыдущееПоказание;
-                            paymentIndex++;
-                        }
-                    }
-                }
-                else
-                {
-                    if (item.Item2 == MeterEventType.Change)
-                    {
-                        summ += this.CalculateConsumption(change.ПоказаниеУстановленного, endValue, meterDigitsCount, previousPayment);
-                        meterDigitsCount = change.РазрядностьСнятого;
-                        startDate = change.ДатаЗамены;
-                    }
-                    else
-                    {
-                        if (item.Item2 == MeterEventType.Payment)
-                        {
-                            summ += this.CalculateConsumption(payment.ПоследнееПоказание, endValue, meterDigitsCount, previousPayment);
-                            startDate = payment.ПериодОплаты;
-                        }
-                    }
-
-                    found = true;
                     break;
+                }
+
+                Payment payment = item.Item3 as Payment;
+
+                if (item.Item2 == MeterEventType.Payment)
+                {
+                    summ += payment.РазностьПоказаний;
+                    startDate = new DateOnly(payment.ПериодОплаты.Year, payment.ПериодОплаты.Month, 1);
                 }
             }
 
@@ -411,7 +542,6 @@
             {
                 Tuple<DateOnly, MeterEventType, object> item = controlReadingsAndChanges[index];
                 ChangeOfMeter change = item.Item3 as ChangeOfMeter;
-                Payment payment = item.Item3 as Payment;
                 MeterControlData control = item.Item3 as MeterControlData;
 
                 if (item.Item1 > findDate && found == false)
@@ -437,23 +567,15 @@
                     if (item.Item2 == MeterEventType.Change)
                     {
                         summ += this.CalculateConsumption(change.ПоказаниеУстановленного, endValue, meterDigitsCount, nullPayment);
-                        meterDigitsCount = change.РазрядностьСнятого;
-                        endValue = change.ПоказаниеСнятого;
-                        startDate = item.Item1;
-                        found = true;
-                        break;
                     }
-                    else
+                    else if (item.Item2 == MeterEventType.Control)
                     {
-                        if (item.Item2 == MeterEventType.Control)
-                        {
-                            summ += this.CalculateConsumption(control.Value, endValue, meterDigitsCount, nullPayment);
-                            startDate = item.Item1;
-                            endValue = control.Value;
-                            found = true;
-                            break;
-                        }
+                        summ += this.CalculateConsumption(control.Value, endValue, meterDigitsCount, nullPayment);
                     }
+
+                    startDate = item.Item1;
+                    found = true;
+                    break;
                 }
             }
 

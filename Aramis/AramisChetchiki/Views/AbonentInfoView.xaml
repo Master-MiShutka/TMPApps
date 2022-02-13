@@ -4,9 +4,9 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:common="clr-namespace:TMP.Shared;assembly=Shared"
     xmlns:controls="clr-namespace:TMP.UI.Controls.WPF;assembly=ui.controls.wpf"
-    xmlns:helpers="clr-namespace:TMP.UI.Controls.WPF.Helpers;assembly=ui.controls.wpf"
     xmlns:converters="clr-namespace:TMP.UI.Controls.WPF.Converters;assembly=ui.controls.wpf"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"    
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:helpers="clr-namespace:TMP.UI.Controls.WPF.Helpers;assembly=ui.controls.wpf"
     xmlns:interactivity="clr-namespace:Interactivity;assembly=Interactivity"
     xmlns:local="clr-namespace:TMP.WORK.AramisChetchiki.Views"
     xmlns:local_controls="clr-namespace:TMP.WORK.AramisChetchiki.Controls"
@@ -19,12 +19,12 @@
     xmlns:vm="clr-namespace:TMP.WORK.AramisChetchiki.ViewModel"
     x:Name="root"
     d:DataContext="{d:DesignInstance Type=vm:AbonentInfoViewModel,
-    IsDesignTimeCreatable=True}"
+                                     IsDesignTimeCreatable=True}"
     d:DesignHeight="800"
     d:DesignWidth="1364"
     Background="White"
     FontSize="{local_extensions:SettingBinding Path=FontSize,
-    FallbackValue=13.0}"
+                                               FallbackValue=13.0}"
     TextOptions.TextFormattingMode="Ideal"
     mc:Ignorable="d">
     <UserControl.Resources>
@@ -43,13 +43,30 @@
     <view:BaseView>
         <view:BaseView.HeaderPanel>
             <StackPanel Orientation="Horizontal">
-                <HeaderedContentControl Header="Навигация">
-                    <local_controls:HorizontalListBox
-                        ItemsSource="{Binding Source={common:EnumBindingSource {x:Type model:NavigationMode}}}"
-                        SelectedIndex="0"
-                        SelectedItem="{Binding SelectedNavigationMode}" />
-                </HeaderedContentControl>
-                <Separator />
+                <Button
+                    MinWidth="40"
+                    Command="{Binding PreviousItem}"
+                    Content="&lt;-" />
+                <Button
+                    MinWidth="40"
+                    Command="{Binding NextItem}"
+                    Content="-&gt;" />
+                <Separator Style="{StaticResource dotedSeparator}" />
+                <local_controls:HorizontalListBox
+                    ItemsSource="{Binding Source={common:EnumBindingSource {x:Type model:NavigationMode}}}"
+                    SelectedIndex="0"
+                    SelectedItem="{Binding SelectedNavigationMode}"
+                    ToolTip="Навигация">
+                    <local_controls:HorizontalListBox.ItemTemplate>
+                        <DataTemplate>
+                            <ToggleButton
+                                Padding="10,5"
+                                Content="{Binding Converter={StaticResource EnumDescriptionConverter}}"
+                                IsChecked="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListBoxItem}}, Path=IsSelected}" />
+                        </DataTemplate>
+                    </local_controls:HorizontalListBox.ItemTemplate>
+                </local_controls:HorizontalListBox>
+                <Separator Style="{StaticResource dotedSeparator}" />
                 <TextBlock
                     FontSize="{DynamicResource HeaderFontSize}"
                     FontWeight="SemiBold"
@@ -60,7 +77,7 @@
                     FontWeight="SemiBold"
                     Text="{Binding Path=View.Count, FallbackValue=???}" />
 
-                <Separator />
+                <Separator Style="{StaticResource dotedSeparator}" />
                 <Button
                     MinWidth="40"
                     Command="{Binding PreviousItem}"
@@ -69,18 +86,13 @@
                     MinWidth="40"
                     Command="{Binding NextItem}"
                     Content="-&gt;" />
-                <Separator />
-                <TextBox helpers:TextBoxHelper.Watermark="Лицевой счёт для поиска"
-                         VerticalContentAlignment="Center"
-                         Text="{Binding Path=PersonalAccountFilter, UpdateSourceTrigger=PropertyChanged}"
-                         />
-                <Separator />
-                <TextBlock
-                    MinWidth="50"
-                    Foreground="Red"
-                    Text="{Binding View}" />
-                <TextBlock Foreground="Blue" Text="{Binding View.CurrentItem}" />
-                <TextBlock Foreground="Green" Text="{Binding View.CurrentItem.Фамилия}" />
+                <Separator Style="{StaticResource dotedSeparator}" />
+                <TextBox
+                    MinWidth="100"
+                    VerticalAlignment="Center"
+                    helpers:TextBoxHelper.Watermark="Лицевой счёт для поиска"
+                    Text="{Binding Path=PersonalAccountFilter, UpdateSourceTrigger=PropertyChanged}" />
+                <Separator Style="{StaticResource dotedSeparator}" />
             </StackPanel>
         </view:BaseView.HeaderPanel>
         <Grid MinHeight="200" Margin="2">

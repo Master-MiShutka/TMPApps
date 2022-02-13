@@ -63,7 +63,7 @@
                 return;
             }
 
-            string[] filters = new[] {
+            /*string[] filters = new[] {
                 nameof(Meter.СельскийСовет),
                 nameof(Meter.НаселённыйПункт),
                 nameof(Meter.ТипНаселённойМестности),
@@ -83,7 +83,7 @@
                 }
 
                 this.IsBusy = false;
-            });
+            });*/
         }
 
         #endregion

@@ -18,20 +18,23 @@
             this.InitializeComponent();
         }
 
-        public IEnumerable<Model.MeterEvent> MeterEvents
+        public MeterEventsCollection MeterEvents
         {
-            get => (IEnumerable<Model.MeterEvent>)this.GetValue(MeterEventsProperty);
+            get => (MeterEventsCollection)this.GetValue(MeterEventsProperty);
             set => this.SetValue(MeterEventsProperty, value);
         }
 
         public static readonly DependencyProperty MeterEventsProperty =
-            DependencyProperty.Register(nameof(MeterEvents), typeof(IEnumerable<Model.MeterEvent>), typeof(MeterСonsumptionViewer), new PropertyMetadata(null, OnMeterEventsPropertyChanged));
+            DependencyProperty.Register(nameof(MeterEvents), typeof(MeterEventsCollection), typeof(MeterСonsumptionViewer), new PropertyMetadata(null, OnMeterEventsChanged));
 
-        private static void OnMeterEventsPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private static void OnMeterEventsChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
+            if (e.NewValue == null)
+                return;
+
             MeterСonsumptionViewer viewer = (MeterСonsumptionViewer)d;
 
-            IEnumerable<Model.MeterEvent> meterEvents = (IEnumerable<Model.MeterEvent>)e.NewValue;
+            MeterEventsCollection meterEvents = new MeterEventsCollection((IEnumerable<MeterEvent>)e.NewValue);
 
             if (meterEvents == null || meterEvents.Any() == false)
             {
@@ -41,20 +44,20 @@
             uint max = meterEvents.Max(i => i.Сonsumption);
             ItemHeightValueConverter.MaxValue = max;
 
-            viewer.Dates = new StringCollection();
-            viewer.Dates.AddRange(meterEvents.Select(i => i.Date.ToString("MM-yyyy")).ToArray());
-
-            viewer.MeterEvents = meterEvents;
+            var r = meterEvents
+                .Select(i => i.Date)
+                .GroupBy(i => i.Year, element => element.Month, (key, result) => new { Header = key, Items = result });
+            viewer.Dates = r.ToList();
         }
 
-        public StringCollection Dates
+        public System.Collections.IList Dates
         {
-            get => (StringCollection)this.GetValue(DatesProperty);
+            get => (System.Collections.IList)this.GetValue(DatesProperty);
             set => this.SetValue(DatesProperty, value);
         }
 
         public static readonly DependencyProperty DatesProperty =
-            DependencyProperty.Register(nameof(Dates), typeof(StringCollection), typeof(MeterСonsumptionViewer), new PropertyMetadata(null));
+            DependencyProperty.Register(nameof(Dates), typeof(System.Collections.IList), typeof(MeterСonsumptionViewer), new PropertyMetadata(null));
 
         public bool HasData => Dates?.Count > 0;
     }
@@ -69,6 +72,9 @@
             {
                 double value = values[0] == null ? 0.0 : System.Convert.ToDouble(values[0]);
                 double parentHeight = (values[1] == null || values[1] == DependencyProperty.UnsetValue) ? 0.0 : System.Convert.ToDouble(values[1]);
+
+                if (parentHeight > SystemParameters.PrimaryScreenHeight)
+                    return 0d;
 
                 double result = (value / (MaxValue == 0 ? 1 : MaxValue)) * (parentHeight - 7);
 

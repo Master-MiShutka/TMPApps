@@ -1,8 +1,10 @@
-﻿namespace TMP.WORK.AramisChetchiki
+﻿global using TMP.WORK.AramisChetchiki.Model;
+
+namespace TMP.WORK.AramisChetchiki
 {
+    using System.Threading.Tasks;
     using MessagePack;
     using MessagePack.Resolvers;
-    using System.Threading.Tasks;
     using TMPApplication;
 
     /// <summary>
