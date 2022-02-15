@@ -92,7 +92,7 @@
                 ParseException(exp);
             }
 
-            message += "\n" + exp.StackTrace;
+            message += "\n" + BuildStackTrace(exp);
 
             void ParseException(Exception e)
             {
@@ -121,6 +121,26 @@
             }
 
             return message;
+        }
+
+        public static string BuildStackTrace(Exception e)
+        {
+            var st = new StackTrace(e, true);
+            var frames = st.GetFrames();
+            var traceString = new StringBuilder();
+
+            foreach (var frame in frames)
+            {
+                if (frame.GetFileLineNumber() < 1)
+                    continue;
+
+                traceString.Append("File: " + frame.GetFileName());
+                traceString.Append(", Method:" + frame.GetMethod().Name);
+                traceString.Append(", LineNumber: " + frame.GetFileLineNumber());
+                traceString.Append("  -->  ");
+            }
+
+            return traceString.ToString();
         }
     }
 }

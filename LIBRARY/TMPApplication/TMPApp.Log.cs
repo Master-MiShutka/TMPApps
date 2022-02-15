@@ -1,7 +1,7 @@
 ﻿namespace TMPApplication
 {
-    using System;
     using NLog;
+    using System;
 
     partial class TMPApp
     {
@@ -9,15 +9,7 @@
 
         public static void ToDebug(Exception e)
         {
-            int identLevel = System.Diagnostics.Debug.IndentLevel;
-            do
-            {
-                System.Diagnostics.Debug.WriteLine(e.Message);
-                e = e.InnerException;
-                System.Diagnostics.Debug.Indent();
-            }
-            while (e != null);
-            System.Diagnostics.Debug.IndentLevel = identLevel;
+            System.Diagnostics.Debug.WriteLine(GetExceptionDetails(e));
         }
     }
 }

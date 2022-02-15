@@ -69,6 +69,11 @@
                         value = getValueDelegate(item, fieldsAndFormats[field].ContentDisplayFormat, field);
                     }
 
+                    if (value is DateOnly dateOnlyValue)
+                    {
+                        value = dateOnlyValue.ToDateTime(TimeOnly.MinValue);
+                    }
+
                     output[rowIndex, ind++] = value;
                 }
 
@@ -155,17 +160,29 @@
                     ind = 1; // т.к. первый столбец номер по порядку
                     foreach (string field in fieldsAndFormats.Keys)
                     {
-                        object value = string.Empty;
-                        if (string.IsNullOrWhiteSpace(fieldsAndFormats[field].ExcelFormat) == false)
+                        try
                         {
-                            data[rowIndex, 0 + 1 + ind].NumberFormat = fieldsAndFormats[field].ExcelFormat;
+                            object value = string.Empty;
+                            if (string.IsNullOrWhiteSpace(fieldsAndFormats[field].ExcelFormat) == false)
+                            {
+                                string format = string.IsNullOrWhiteSpace(fieldsAndFormats[field].ExcelFormat) ? "General" : fieldsAndFormats[field].ExcelFormat;
+                                data[rowIndex, 0 + 1 + ind].NumberFormat = format;
+                            }
+                            else if (string.IsNullOrWhiteSpace(fieldsAndFormats[field].ContentDisplayFormat) == false)
+                            {
+                                data[rowIndex, 0 + 1 + ind].NumberFormat = "General";
+                            }
                         }
-                        else if (string.IsNullOrWhiteSpace(fieldsAndFormats[field].ContentDisplayFormat) == false)
+                        catch(Exception e)
                         {
-                            data[rowIndex, 0 + 1 + ind].NumberFormat = "General";
+#if DEBUG
+                            App.ToDebug(e);
+#endif
                         }
-
-                        ind++;
+                        finally
+                        {
+                            ind++;
+                        }
                     }
 
                     rowIndex++;

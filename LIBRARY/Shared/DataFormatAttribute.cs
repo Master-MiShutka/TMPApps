@@ -26,14 +26,14 @@
 
     public class NumericDataFormatAttribute : DataFormatAttribute
     {
-        public override string ExportFormatString => @"0;[Синий]-0;;[Красный]@";
+        public override string ExportFormatString => @"0;[Blue]-0;;[Red]@";
 
         public override string DataFormatString => "{0:N0}";
     }
 
     public class NumericWithSeparatorDataFormatAttribute : DataFormatAttribute
     {
-        public override string ExportFormatString => @"# ##0_ ;[Красный]-# ##0\ ;;[Красный]@";
+        public override string ExportFormatString => @"# ##0_ ;[Red]-# ##0\ ;;[Red]@";
 
         public override string DataFormatString => "{0:N0}";
     }
