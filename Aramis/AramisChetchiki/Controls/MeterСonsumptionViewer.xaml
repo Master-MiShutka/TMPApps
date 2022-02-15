@@ -19,7 +19,7 @@
     <UserControl.Resources>
 
         <local_controls:ItemHeightValueConverter x:Key="ItemHeightValueConverter" />
-        <local_converters:TxtYearVisibilityConverter x:Key="TxtYearVisibilityConverter" />
+        <local_converters:TxtYearVisibilityConverter x:Key="TxtYearVisibilityConverter" FontSize="14" />
 
 
         <System:Double x:Key="minValueWidth">20</System:Double>
@@ -55,7 +55,7 @@
                                     Visibility="Collapsed" />
                                 <Border
                                     x:Name="border"
-                                    Margin="2,1,2,1"
+                                    Margin="1,1,1,1"
                                     VerticalAlignment="Bottom"
                                     Background="Skyblue"
                                     BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}"
@@ -87,7 +87,6 @@
                             </Trigger>
                             <DataTrigger Binding="{Binding EventType}" Value="{x:Static model:MeterEventType.Payment}">
                                 <Setter TargetName="border" Property="Background" Value="Skyblue" />
-                                <Setter TargetName="border" Property="Margin" Value="5,0,5,1" />
                                 <Setter TargetName="border" Property="Height">
                                     <Setter.Value>
                                         <MultiBinding Converter="{StaticResource ItemHeightValueConverter}">
@@ -141,12 +140,14 @@
                                 ToolTip="{Binding Header}"
                                 UseLayoutRounding="True">
                                 <StackPanel Orientation="Vertical">
-                                    <Decorator ToolTip="{Binding Header}" />
-                                    <TextBlock Text="{Binding Header}" TextAlignment="Center">
+                                    <TextBlock
+                                        Panel.ZIndex="10"
+                                        FontSize="{DynamicResource NormalFontSize}"
+                                        Text="{Binding Header}"
+                                        TextAlignment="Center">
                                         <TextBlock.Visibility>
                                             <MultiBinding Converter="{StaticResource TxtYearVisibilityConverter}">
                                                 <Binding Source="{StaticResource minValueWidth}" />
-                                                <Binding Path="Width" RelativeSource="{RelativeSource AncestorType=TextBlock}" />
                                                 <Binding Path="ActualWidth" RelativeSource="{RelativeSource AncestorType=Border}" />
                                             </MultiBinding>
                                         </TextBlock.Visibility>
@@ -183,16 +184,20 @@
 
     <HeaderedContentControl Header="Потребление, кВт∙ч">
         <ScrollViewer
+            Height="280"
+            Padding="0"
             CanContentScroll="False"
             HorizontalScrollBarVisibility="Visible"
             VerticalScrollBarVisibility="Hidden">
-            <Grid Height="300">
+            <Grid>
                 <ItemsControl
-                    Margin="0,-20,0,0"
+                    Margin="0,0,0,0"
+                    VerticalAlignment="Stretch"
                     ItemsSource="{Binding Path=Dates, RelativeSource={RelativeSource AncestorType={x:Type local_controls:MeterСonsumptionViewer}}}"
                     Style="{StaticResource periodItems}" />
                 <ItemsControl
-                    Margin="0,0,0,0"
+                    Margin="0,20,0,0"
+                    VerticalAlignment="Stretch"
                     ItemsSource="{Binding Path=MeterEvents, RelativeSource={RelativeSource AncestorType={x:Type local_controls:MeterСonsumptionViewer}}}"
                     Style="{StaticResource valuesItems}"
                     ToolTip="{Binding ActualHeight, RelativeSource={RelativeSource Mode=Self}}" />
