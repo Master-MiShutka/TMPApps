@@ -20,7 +20,7 @@
         private bool isBusy;
 
         private TMPApplication.WpfDialogs.Contracts.IDialog busyDialog;
-        private System.Threading.CancellationTokenSource isBusyCancellationTokenSource;
+        private System.Threading.CancellationTokenSource isBusyCancellationTokenSource = new System.Threading.CancellationTokenSource();
 
         protected BaseMainViewModel()
         {

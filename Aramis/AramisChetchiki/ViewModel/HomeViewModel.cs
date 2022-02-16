@@ -299,7 +299,7 @@
                 t =>
             {
                 this.BuildPivots();
-            }, this.IsBusyCancellationTokenSource.Token, System.Threading.Tasks.TaskContinuationOptions.OnlyOnRanToCompletion, TaskScheduler.FromCurrentSynchronizationContext());
+            });
         }
 
         private void BuildPivots()

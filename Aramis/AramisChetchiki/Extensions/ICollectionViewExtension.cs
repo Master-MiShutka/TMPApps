@@ -63,6 +63,8 @@
             Excel.Worksheet xlWorksheet = null;
             Excel.Worksheet xlWorksheet2 = null;
 
+            NetOffice.OfficeApi.Tools.Contribution.CommonUtils utils = null;
+
             Exception exception = null;
 
             Process(output, outputWithTwoRowPerRecord);
@@ -155,9 +157,10 @@
                 callBack?.Invoke("заполнение таблицы");
 
                 int rowIndex = 1;
+                int recordIndex = 1;
                 foreach (T item in collection)
                 {
-                    output[rowIndex, 0] = rowIndex;
+                    output[rowIndex, 0] = recordIndex;
                     ind = 1; // т.к. первый столбец номер по порядку
                     foreach (string field in fieldsAndFormats.Keys)
                     {
@@ -165,18 +168,19 @@
                             continue;
 
                         output[rowIndex, ind++] = GetValueOfField(item, field);
-
-                        string commentValue = GetValueOfField(item, commentFieldName).ToString().Trim().Replace('\n', '\t');
-                        output[rowIndex + 1, 1] = commentValue;
                     }
 
+                    string commentValue = GetValueOfField(item, commentFieldName).ToString().Trim().Replace('\n', '\t');
+                    output[rowIndex + 1, 1] = commentValue;
+
                     rowIndex += 2;
+                    recordIndex++;
                 }
 
                 return output;
             }
 
-            void ApplyDataFormatForSheet(Excel.Worksheet xlWorksheet, Excel.Range rangeToSetData)
+            void ApplyDataFormatForSheet(Excel.Worksheet xlWorksheet, Excel.Range rangeToSetData, bool thisWorkSheetIsForPrint)
             {
                 // -1 т.к. исключен столбец Комментарий
                 // +1 т.к. первый столбец номер по порядку
@@ -184,15 +188,16 @@
 
                 callBack?.Invoke("установка формата данных");
 
-                int rowIndex = 1;
+                int rowIndex = 2; // 1 - шапка таблицы
                 int ind = 1;
+                int recordIndex = 1;
                 foreach (T item in collection)
                 {
                     rangeToSetData[rowIndex, 0 + 1].NumberFormat = "0";
                     ind = 1; // т.к. первый столбец номер по порядку
                     foreach (string field in fieldsAndFormats.Keys)
                     {
-                        if (field == commentFieldName)
+                        if (thisWorkSheetIsForPrint && field == commentFieldName)
                             continue;
 
                         try
@@ -220,12 +225,37 @@
                         }
                     }
 
-                    if (hasCommentColumn)
+                    if (thisWorkSheetIsForPrint && hasCommentColumn)
                     {
-                        Excel.Range rng = rangeToSetData[rowIndex + 1, 1].Resize(1, countOfColumns);
+                        // ячейка с номером по порядку
+                        Excel.Range rng = rangeToSetData[rowIndex, 1];
+                        rng = rng.Resize(2, 1);
+                        rng.Merge();
+                        rng.HorizontalAlignment = XlHAlign.xlHAlignLeft;
+                        rng.VerticalAlignment = XlVAlign.xlVAlignCenter;
+
+                        // ячейка с комментарием
+                        rng = rangeToSetData[rowIndex + 1, 2].Resize(1, countOfColumns - 1);
                         rng.Merge();
                         rng.WrapText = true;
                         rng.NumberFormat = "@";
+
+                        rng = rangeToSetData[rowIndex, 1].Resize(2, countOfColumns);
+                        rng.BorderAround(XlLineStyle.xlContinuous, XlBorderWeight.xlThin, XlColorIndex.xlColorIndexAutomatic);
+
+                        rng.Borders[XlBordersIndex.xlInsideHorizontal].LineStyle = XlLineStyle.xlDot;
+                        rng.Borders[XlBordersIndex.xlInsideHorizontal].Weight = XlBorderWeight.xlThin;
+                        rng.Borders[XlBordersIndex.xlInsideHorizontal].Color = utils.Color.ToDouble(System.Drawing.Color.Gray);
+
+                        rng.Borders[XlBordersIndex.xlInsideVertical].LineStyle = XlLineStyle.xlDot;
+                        rng.Borders[XlBordersIndex.xlInsideVertical].Weight = XlBorderWeight.xlThin;
+                        rng.Borders[XlBordersIndex.xlInsideVertical].Color = utils.Color.ToDouble(System.Drawing.Color.Gray);
+
+                        if (recordIndex % 2 == 0)
+                        {
+                            rng = rangeToSetData[rowIndex, 1].Resize(2, countOfColumns);
+                            rng.Interior.Color = utils.Color.ToDouble(System.Drawing.Color.WhiteSmoke);
+                        }
 
                         rowIndex += 2;
                     }
@@ -233,6 +263,8 @@
                     {
                         rowIndex++;
                     }
+
+                    recordIndex++;
                 }
             }
 
@@ -248,9 +280,12 @@
                         ScreenUpdating = false,
                     };
 
+                    utils = new NetOffice.OfficeApi.Tools.Contribution.CommonUtils(excelApplication);
+
                     xlWorkbook = excelApplication.Workbooks.Add();
                     xlWorksheet = (Excel.Worksheet)xlWorkbook.Sheets[1];
-                    xlWorksheet.Name = "Данные";
+
+                    Excel.Range all = xlWorksheet.Range("A1");
 
                     Excel.Range header = xlWorksheet.Range("A1");
                     header.WrapText = true;
@@ -288,22 +323,49 @@
 
                     description.Value2 = reportDescription;
 
-                    Excel.Range data = xlWorksheet.Range("A3").Resize(numberOfRows + 1, numberOfColumns);
-                    data.NumberFormat = "@";
-
-                    data.Value = outputData1;
-
-                    ApplyDataFormatForSheet(xlWorksheet, data);
-
                     callBack?.Invoke("настройка книги MS Excel");
 
                     if (hasCommentColumn)
                     {
                         // создание копии листа
                         xlWorksheet.Copy(xlWorksheet);
+                        xlWorksheet = (Excel.Worksheet)xlWorkbook.Sheets[1];
                         xlWorksheet2 = (Excel.Worksheet)xlWorkbook.Sheets[2];
+                        xlWorksheet.Name = "Данные";
                         xlWorksheet2.Name = "Для печати";
+
+                        Excel.Range data2 = xlWorksheet2.Range("A3").Resize((2 * numberOfRows) + 1, numberOfColumns - 1);
+                        data2.VerticalAlignment = VerticalAlignment.Center;
+                        data2.NumberFormat = "@";
+
+                        data2.Value = outputData2;
+
+                        ApplyDataFormatForSheet(xlWorksheet2, data2, true);
+
+                        Excel.Range tableHeader = xlWorksheet2.Range("A3").Resize(1, numberOfColumns - 1);
+                        tableHeader.WrapText = true;
+                        using (Excel.Font font = tableHeader.Font)
+                        {
+                            font.Size = 12;
+                            font.Bold = true;
+                        }
+
+                        header.HorizontalAlignment = XlHAlign.xlHAlignCenter;
+                        header.VerticalAlignment = XlVAlign.xlVAlignCenter;
+
+                        tableHeader.Interior.Color = utils.Color.ToDouble(System.Drawing.Color.LightGray);
+                        tableHeader.BorderAround(XlLineStyle.xlContinuous, XlBorderWeight.xlMedium, XlColorIndex.xlColorIndexAutomatic);
+
+                        tableHeader.Borders[XlBordersIndex.xlInsideHorizontal].LineStyle = XlLineStyle.xlDot;
+                        tableHeader.Borders[XlBordersIndex.xlInsideHorizontal].Weight = XlBorderWeight.xlThin;
+                        tableHeader.Borders[XlBordersIndex.xlInsideHorizontal].Color = utils.Color.ToDouble(System.Drawing.Color.Black);
                     }
+
+                    Excel.Range data = xlWorksheet.Range("A3").Resize(numberOfRows + 1, numberOfColumns);
+                    data.NumberFormat = "@";
+                    data.Value = outputData1;
+
+                    ApplyDataFormatForSheet(xlWorksheet, data, false);
 
                     xlWorksheet.ListObjects.Add(XlListObjectSourceType.xlSrcRange, data,
                         Type.Missing, XlYesNoGuess.xlYes, Type.Missing).Name = "DataTable";
