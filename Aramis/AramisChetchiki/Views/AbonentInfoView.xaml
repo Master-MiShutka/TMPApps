@@ -91,7 +91,7 @@
                     MinWidth="100"
                     VerticalAlignment="Center"
                     helpers:TextBoxHelper.Watermark="Лицевой счёт для поиска"
-                    Text="{Binding Path=PersonalAccountFilter, UpdateSourceTrigger=PropertyChanged}" />
+                    Text="{Binding Path=SelectedAbonentId, UpdateSourceTrigger=PropertyChanged}" />
                 <Separator Style="{StaticResource dotedSeparator}" />
             </StackPanel>
         </view:BaseView.HeaderPanel>
@@ -104,11 +104,33 @@
             <ListBox
                 IsSynchronizedWithCurrentItem="True"
                 ItemsSource="{Binding Path=View}"
-                VirtualizingPanel.IsVirtualizing="True"
-                VirtualizingPanel.IsVirtualizingWhenGrouping="True">
+                SelectedValue="{Binding SelectedAbonentId}"
+                SelectedValuePath="Лицевой">
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <VirtualizingStackPanel />
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
                 <ListBox.ItemTemplate>
                     <DataTemplate DataType="{x:Type model:Meter}">
-                        <TextBlock Margin="2,5" Text="{Binding Path=Лицевой, Converter={StaticResource NumberFormatConverter}, ConverterParameter='## #### #### #', FallbackValue=-?-, Mode=OneWay}" />
+                        <TextBlock
+                            x:Name="txt"
+                            Margin="2,5"
+                            Text="{Binding Path=Лицевой, Converter={StaticResource NumberFormatConverter}, ConverterParameter='## #### #### #', FallbackValue=-?-, Mode=OneWay}" />
+                        <DataTemplate.Triggers>
+                            <DataTrigger Binding="{Binding Path=Поверен}" Value="False">
+                                <Setter TargetName="txt" Property="FontStyle" Value="Italic" />
+                                <Setter TargetName="txt" Property="ToolTip" Value="Не поверен" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding Path=Удалён}" Value="True">
+                                <Setter TargetName="txt" Property="Foreground" Value="Red" />
+                                <Setter TargetName="txt" Property="ToolTip" Value="Удалён" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding Path=Отключён}" Value="False">
+                                <Setter TargetName="txt" Property="Foreground" Value="LightGray" />
+                                <Setter TargetName="txt" Property="ToolTip" Value="Отключён" />
+                            </DataTrigger>
+                        </DataTemplate.Triggers>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>

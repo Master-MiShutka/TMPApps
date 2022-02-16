@@ -229,7 +229,7 @@
         {
             ViewCollectionViewModel vm = new ViewModel.ViewCollectionViewModel(meters, fieldDisplayName, fieldName, value);
             this.previousMode = this.CurrentMode;
-            this.currentMode = Mode.ViewCollection;
+            this.currentMode = Mode.ViewMeters;
             this.currentViewModel = vm;
 
             this.RaisePropertyChanged(propertyName: nameof(this.CurrentMode));

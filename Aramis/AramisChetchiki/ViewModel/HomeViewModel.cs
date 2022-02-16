@@ -80,7 +80,7 @@
             this.CommandShowAll = new DelegateCommand(
                 () =>
                 {
-                    MainViewModel.ChangeMode(Mode.ViewCollection);
+                    MainViewModel.ChangeMode(Mode.ViewMeters);
                 },
                 () => this.IsDataLoaded);
 

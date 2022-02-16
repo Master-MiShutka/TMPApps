@@ -9,6 +9,7 @@
     {
         private ulong personalAccountFilter;
         private int selectedIndex;
+        private ulong selectedAbonentId;
         private NavigationMode selectedNavigationMode;
 
         private MeterViewViewModel meterViewViewModel;
@@ -71,6 +72,18 @@
                 if (this.SetProperty(ref this.selectedIndex, value))
                 {
                     this.View?.MoveCurrentToPosition(this.selectedIndex);
+                }
+            }
+        }
+
+        public ulong SelectedAbonentId
+        {
+            get => this.selectedAbonentId;
+            set
+            {
+                if (this.SetProperty(ref this.selectedAbonentId, value))
+                {
+                    //this.View?.MoveCurrentToPosition(this.selectedIndex);
                 }
             }
         }

@@ -552,7 +552,7 @@
                 change.ПоказаниеСнятого = ConvertToUInt(assmena.ПОКАЗ_СНЯТ);
 
                 change.НомерУстановленногоСчетчика = assmena.НОМЕР_УСТ;
-                change.ПоказаниеУстановленного = ConvertToUInt(assmena.ПОКАЗ_УСТ);
+                change.LastReading = ConvertToUInt(assmena.ПОКАЗ_УСТ);
                 change.ДатаЗамены = ConvertToDateOnly(assmena.ДАТА_ЗАМЕН);
                 change.НомерАкта = ConvertToUInt(assmena.НОМЕР_АКТА);
                 change.Фамилия = assmena.ФАМИЛИЯ;

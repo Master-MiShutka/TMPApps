@@ -184,7 +184,7 @@
 
     <HeaderedContentControl Header="Потребление, кВт∙ч">
         <ScrollViewer
-            Height="280"
+            Height="250"
             Padding="0"
             CanContentScroll="False"
             HorizontalScrollBarVisibility="Visible"

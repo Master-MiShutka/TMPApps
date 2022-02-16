@@ -6,6 +6,7 @@
     xmlns:controls="clr-namespace:TMP.UI.Controls.WPF;assembly=ui.controls.wpf"
     xmlns:controls_helper="clr-namespace:TMP.UI.Controls.WPF.Helpers;assembly=ui.controls.wpf"
     xmlns:converters="clr-namespace:TMP.UI.Controls.WPF.Converters;assembly=ui.controls.wpf"
+    xmlns:custom_filters="clr-namespace:TMP.WORK.AramisChetchiki.CustomFilters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:extensions="clr-namespace:TMP.Extensions;assembly=TMP.Extensions"
     xmlns:itemsfilter="clr-namespace:ItemsFilter;assembly=ItemsFilter"
@@ -17,12 +18,33 @@
     xmlns:model="clr-namespace:TMP.WORK.AramisChetchiki.Model"
     xmlns:view="clr-namespace:TMP.WORK.AramisChetchiki.Views"
     xmlns:vm="clr-namespace:TMP.WORK.AramisChetchiki.ViewModel"
+    x:Name="root"
     d:DesignHeight="450"
-    d:DesignWidth="800"
-    FontSize="{local_extensions:SettingBinding Path=FontSize,
-                                               FallbackValue=13.0}"
+    d:DesignWidth="1200"
+    Background="WhiteSmoke"
     TextOptions.TextFormattingMode="Ideal"
     mc:Ignorable="d">
+
+    <UserControl.Resources>
+        <custom_filters:MultiValueFilterTemplateSelector x:Key="MultiValueFilterTemplateSelector">
+            <custom_filters:MultiValueFilterTemplateSelector.LittleAvailableValuesTemplate>
+                <DataTemplate>
+                    <local_controls:HorizontalFilter Filter="{Binding}" />
+                </DataTemplate>
+            </custom_filters:MultiValueFilterTemplateSelector.LittleAvailableValuesTemplate>
+            <custom_filters:MultiValueFilterTemplateSelector.ManyAvailableValuesTemplate>
+                <DataTemplate>
+                    <local_controls:ComboBoxFilter Filter="{Binding}" />
+                </DataTemplate>
+            </custom_filters:MultiValueFilterTemplateSelector.ManyAvailableValuesTemplate>
+            <custom_filters:MultiValueFilterTemplateSelector.StringFilterTemplate>
+                <DataTemplate>
+                    <local_controls:StringFilter Filter="{Binding}" />
+                </DataTemplate>
+            </custom_filters:MultiValueFilterTemplateSelector.StringFilterTemplate>
+        </custom_filters:MultiValueFilterTemplateSelector>
+    </UserControl.Resources>
+
     <view:BaseView HeaderPanelVisible="True">
         <view:BaseView.HeaderPanel>
             <StackPanel Margin="2" Orientation="Horizontal">
@@ -65,11 +87,24 @@
                     Style="{StaticResource dotedSeparator}" />
                 <ToggleButton
                     Command="{Binding CommandNotShowDeleted}"
-                    Content="Скрывать удалённые"
-                    IsChecked="True" />
+                    Content="Скрывать&#x0A;удалённые"
+                    IsChecked="True"
+                    TextBlock.TextAlignment="Center" />
+                <ToggleButton
+                    Command="{Binding CommandNotShowDisconnected}"
+                    Content="Скрывать&#x0A;отключённые"
+                    IsChecked="True"
+                    TextBlock.TextAlignment="Center" />
                 <Separator Style="{StaticResource dotedSeparator}" />
                 <local_controls:ShowFilters DockPanel.Dock="Right" />
-
+                <Separator Style="{StaticResource dotedSeparator}" />
+                <controls:ButtonWithIconKind
+                    Padding="10,0"
+                    Command="{Binding CommandCleanFilters}"
+                    Content="Очистить&#x0A;фильтры"
+                    ImageKind="Clean"
+                    TextBlock.TextAlignment="Center"
+                    Visibility="{Binding CommandCleanFilters, Converter={StaticResource NullOrEmptyToVisibilityConverter}}" />
             </StackPanel>
         </view:BaseView.HeaderPanel>
         <view:BaseView.Content>
@@ -79,31 +114,38 @@
                     <RowDefinition Height="*" />
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
-                <ItemsControl
-                    Margin="0"
+                <!--    -->
+                <Border
+                    Grid.Row="0"
+                    Padding="5,2"
                     Background="{extensions:ValueFromStyle StyleKey={x:Type ToolBar},
-                                                           Property=Control.Background}"
-                    ItemsSource="{Binding Filters}">
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <controls:StackPanel
-                                IsItemsHost="True"
-                                MarginBetweenChildren="5"
-                                Orientation="Horizontal" />
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <HeaderedContentControl Header="{Binding Path=PropertyInfo.Name}" Style="{StaticResource FilterHeaderedContentControlStyle}">
-                                <itemsfilter_view:StringFilterView
-                                    MinWidth="115"
-                                    itemsfilter:FilterListExtensions.IsActive="True"
-                                    Style="{StaticResource CompactSearchPanel}"
-                                    ViewModel="{Binding}" />
-                            </HeaderedContentControl>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
+                                                           Property=Control.Background}">
+                    <ItemsControl
+                        xmlns:mouseWheel="clr-namespace:WpfMouseWheel.Windows.Input;assembly=WpfMouseWheelLib"
+                        mouseWheel:MouseWheel.Enhanced="True"
+                        mouseWheel:MouseWheel.HScrollModifiers=""
+                        mouseWheel:MouseWheel.ScrollMode="Physical"
+                        mouseWheel:MouseWheel.ScrollSmoothing="Smooth"
+                        mouseWheel:MouseWheel.VScrollModifiers="Shift"
+                        ItemTemplateSelector="{StaticResource MultiValueFilterTemplateSelector}"
+                        ItemsSource="{Binding Filters, IsAsync=True}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <controls:StackPanel
+                                    IsItemsHost="True"
+                                    MarginBetweenChildren="5"
+                                    Orientation="Horizontal" />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.Template>
+                            <ControlTemplate>
+                                <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Hidden">
+                                    <ItemsPresenter />
+                                </ScrollViewer>
+                            </ControlTemplate>
+                        </ItemsControl.Template>
+                    </ItemsControl>
+                </Border>
                 <!--    -->
                 <local_controls:DataGridControl
                     x:Name="table"

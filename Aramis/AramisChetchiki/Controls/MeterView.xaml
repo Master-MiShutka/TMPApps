@@ -452,8 +452,8 @@
                 <HeaderedContentControl HorizontalAlignment="Stretch" Header="Замены счётчиков у абонента">
                     <ListView
                         ItemsSource="{Binding Path=MeterChanges}"
-                        VirtualizingPanel.ScrollUnit="Item"
-                        VirtualizingPanel.VirtualizationMode="Recycling">
+                        VirtualizingStackPanel.IsVirtualizing="True"
+                        VirtualizingStackPanel.VirtualizationMode="Recycling">
                         <ListView.View>
                             <GridView
                                 TextBlock.LineHeight="15"
@@ -531,8 +531,8 @@
                 <HeaderedContentControl HorizontalAlignment="Stretch" Header="Произведенные оплаты за электроэнергию">
                     <ListView
                         ItemsSource="{Binding Path=Payments}"
-                        VirtualizingPanel.ScrollUnit="Item"
-                        VirtualizingPanel.VirtualizationMode="Recycling">
+                        VirtualizingStackPanel.IsVirtualizing="True"
+                        VirtualizingStackPanel.VirtualizationMode="Recycling">
                         <ListView.View>
                             <GridView TextBlock.TextAlignment="Center">
                                 <GridViewColumn

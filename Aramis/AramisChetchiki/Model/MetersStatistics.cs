@@ -83,7 +83,7 @@
 
             int n = metersList.Select(d => d.НомерСчетчика).Distinct().Count();
 
-            this.CommandShowAll = new DelegateCommand(() => MainViewModel.ChangeMode(Mode.ViewCollection));
+            this.CommandShowAll = new DelegateCommand(() => MainViewModel.ChangeMode(Mode.ViewMeters));
 
             this.CommandShowDiffTariff2Meters = new DelegateCommand(() => MainViewModel.ShowMetersCollection(diffTariff2Meters));
 
