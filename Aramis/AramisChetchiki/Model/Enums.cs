@@ -72,10 +72,10 @@
         /// Сведения по счётчикам
         /// </summary>
         [Description("Сведения по счётчикам")]
-        [View(typeof(Views.MetrologyView))]
-        [ViewModel(typeof(ViewModel.MetrologyViewViewModel))]
+        [View(typeof(Views.ViewCollectionView))]
+        [ViewModel(typeof(ViewModel.ViewCollectionViewModel))]
         [Browsable(true)]
-        Metrology,
+        ViewMeters,
 
         /// <summary>
         /// Полезный отпуск
@@ -85,12 +85,6 @@
         [ViewModel(typeof(ViewModel.ElectricitySupplyViewModel))]
         [Browsable(true)]
         ElectricitySupply,
-
-        [Description("Просмотр перечня")]
-        [View(typeof(Views.ViewCollectionView))]
-        [ViewModel(typeof(ViewModel.ViewCollectionViewModel))]
-        [Browsable(false)]
-        ViewCollection,
 
         [Description("Просмотр информации по абоненту")]
         [View(typeof(Views.AbonentInfoView))]

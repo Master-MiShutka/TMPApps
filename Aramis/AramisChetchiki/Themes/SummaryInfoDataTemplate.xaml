@@ -298,7 +298,7 @@
                             CommandParameter="{Binding FieldName}"
                             TextDecorations="{x:Null}"
                             ToolTip="Показать все счётчики, сгруппированные по этому полю">
-                            <Run Text="Список" />
+                            <Run Text="{Binding Header}" />
                         </Hyperlink>
                     </TextBlock>
                 </DockPanel>

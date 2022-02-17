@@ -193,18 +193,18 @@
 
                         int controlDigits = controlData.Value.ToString().Length;
                         int changePrevDigits = changeOfMeter.ПоказаниеСнятого.ToString().Length;
-                        int changeNextDigits = changeOfMeter.ПоказаниеУстановленного.ToString().Length;
+                        int changeNextDigits = changeOfMeter.LastReading.ToString().Length;
 
                         bool changed = false;
 
-                        if (controlData.Value == changeOfMeter.ПоказаниеУстановленного)
+                        if (controlData.Value == changeOfMeter.LastReading)
                         {
                             SwapItems(index, index - 1, list);
                             changed = true;
                         }
                         else
                         {
-                            if (controlDigits == changeNextDigits && controlData.Value > changeOfMeter.ПоказаниеУстановленного)
+                            if (controlDigits == changeNextDigits && controlData.Value > changeOfMeter.LastReading)
                             {
                                 SwapItems(index, index - 1, list);
                                 changed = true;
@@ -330,31 +330,31 @@
 
                             if (diff == 0)
                             {
-                                prevReadings = change.ПоказаниеУстановленного;
+                                prevReadings = change.LastReading;
                             }
 
                             // если недоплата
                             if (diff > 0)
                             {
                                 // учет перехода через ноль
-                                if ((long)change.ПоказаниеУстановленного - (long)diff < 0)
-                                    prevReadings = (uint)(change.ПоказаниеУстановленного + (int)Math.Pow(10, digits)) - (uint)diff;
+                                if ((long)change.LastReading - (long)diff < 0)
+                                    prevReadings = (uint)(change.LastReading + (int)Math.Pow(10, digits)) - (uint)diff;
                                 else
-                                    prevReadings = change.ПоказаниеУстановленного - (uint)diff;
+                                    prevReadings = change.LastReading - (uint)diff;
                             }
                             else
                             // если переплата
                             if (diff < 0)
                             {
-                                prevReadings = change.ПоказаниеУстановленного + (uint)(-1 * diff);
+                                prevReadings = change.LastReading + (uint)(-1 * diff);
                             }
                         }
                         else
                         {
-                            prevReadings = change.ПоказаниеУстановленного;
+                            prevReadings = change.LastReading;
                         }
 
-                        meterEvents.Add(new MeterEvent(item.Item1, MeterEventType.Change, 0, change.ПоказаниеУстановленного));
+                        meterEvents.Add(new MeterEvent(item.Item1, MeterEventType.Change, 0, change.LastReading));
                         meterDigitsCount = change.РазрядностьУстановленного;
                         break;
                     case MeterEventType.Payment:
@@ -549,7 +549,7 @@
                     // проверяем была ли замена счетчика
                     if (item.Item2 == MeterEventType.Change)
                     {
-                        summ += this.CalculateConsumption(change.ПоказаниеУстановленного, endValue, meterDigitsCount, nullPayment);
+                        summ += this.CalculateConsumption(change.LastReading, endValue, meterDigitsCount, nullPayment);
                         meterDigitsCount = change.РазрядностьСнятого;
                         endValue = change.ПоказаниеСнятого;
                     }
@@ -566,7 +566,7 @@
                 {
                     if (item.Item2 == MeterEventType.Change)
                     {
-                        summ += this.CalculateConsumption(change.ПоказаниеУстановленного, endValue, meterDigitsCount, nullPayment);
+                        summ += this.CalculateConsumption(change.LastReading, endValue, meterDigitsCount, nullPayment);
                     }
                     else if (item.Item2 == MeterEventType.Control)
                     {

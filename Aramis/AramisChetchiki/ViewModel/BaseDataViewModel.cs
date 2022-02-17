@@ -72,6 +72,8 @@
             this.SaveCurrentTableViewKindAsNew = new DelegateCommand(this.DoSaveCurrentTableViewKindAsNew, this.CanExecuteCheckData);
             this.CommandShowFilters = new DelegateCommand(this.DoShowFilters, this.CanExecuteCheckView);
 
+            this.CommandCleanFilters = new DelegateCommand(this.DoCleanFilters, this.CanExecuteCleanFilters);
+
             // загрузка сохраненных колонок таблицы
             this.TryLoadTableColumnsFromSettings();
 
@@ -196,6 +198,11 @@
         /// Команда отображения списка фильтров
         /// </summary>
         public ICommand CommandShowFilters { get; private set; }
+
+        /// <summary>
+        /// Команда удаления примененных фильтров
+        /// </summary>
+        public ICommand CommandCleanFilters { get; private set; }
 
         /// <summary>
         /// Заголовок отчета
@@ -644,6 +651,19 @@
             }
         }
 
+        private void DoCleanFilters()
+        {
+            foreach (IFilter filter in this.filters)
+            {
+                if (filter.IsActive)
+                {
+                    filter.IsActive = false;
+                }
+            }
+
+            this.RaisePropertyChanged(nameof(this.ActiveFiltersList));
+        }
+
         protected bool CanExecuteCheckView()
         {
             return this.view != null;
@@ -662,6 +682,11 @@
         protected bool CanExecuteCheckData(TableViewKinds o)
         {
             return this.IsDataNullOrEmpty;
+        }
+
+        protected bool CanExecuteCleanFilters()
+        {
+            return string.IsNullOrEmpty(this.ActiveFiltersList) == false;
         }
 
         #endregion

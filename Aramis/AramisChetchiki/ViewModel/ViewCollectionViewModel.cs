@@ -5,6 +5,7 @@
     using System.Linq;
     using System.Windows;
     using ItemsFilter;
+    using TMP.Extensions;
     using TMP.WORK.AramisChetchiki.Model;
 
     /// <summary>
@@ -12,6 +13,8 @@
     /// </summary>
     public class ViewCollectionViewModel : BaseMeterViewModel
     {
+        #region Fields
+
         private readonly NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
 
         private string fieldDisplayName;
@@ -20,6 +23,21 @@
 
         private const string DEFAULT_DATA_GRID_MESSAGE = "Пусто";
         private string dataGridMessage = DEFAULT_DATA_GRID_MESSAGE;
+
+        #endregion
+
+        #region Constructors
+
+        public ViewCollectionViewModel()
+        {
+            if (System.ComponentModel.DesignerProperties.GetIsInDesignMode(new DependencyObject()))
+            {
+                this.RaisePropertyChanged(nameof(this.View));
+                return;
+            }
+
+            this.DataGridMessage = this.Status = "Подоговка данных ...";
+        }
 
         /// <summary>
         /// Конструктор
@@ -43,6 +61,8 @@
             this.fieldName = fieldName;
             this.fieldValue = fieldValue;
         }
+
+        #endregion
 
         #region Properties
 
@@ -88,6 +108,10 @@
             }
         }
 
+        public string DataGridMessage { get => this.dataGridMessage; private set => this.SetProperty(ref this.dataGridMessage, value); }
+
+        #region Override Properties
+
         /// <summary>
         /// Заголовок отчета
         /// </summary>
@@ -100,14 +124,19 @@
         {
             get
             {
-                string result = $"условия отбора:{Environment.NewLine}{this.ActiveFiltersList},{Environment.NewLine}";
+                string result = $"параметры: с {Meter.ДатаСравненияПоверки.GetQuarter()} кв {Meter.ДатаСравненияПоверки.Year} г счётчик считается не поверенным,{Environment.NewLine}";
+                if (string.IsNullOrWhiteSpace(this.ActiveFiltersList) == false)
+                {
+                    result += $"условия отбора:{Environment.NewLine}{this.ActiveFiltersList},{Environment.NewLine}";
+                }
+
                 result += $"дата формирования отчёта: {DateTime.Now:dd MMMM yyyy} г.";
 
                 return result;
             }
         }
 
-        public string DataGridMessage { get => this.dataGridMessage; private set => this.SetProperty(ref this.dataGridMessage, value); }
+        #endregion
 
         #endregion Properties
 
@@ -120,6 +149,34 @@
         protected override void OnViewBuilded()
         {
             base.OnViewBuilded();
+
+            if (this.FilterPresenter == null)
+            {
+                this.IsBusy = false;
+                return;
+            }
+
+            string[] filters = new[] {
+                nameof(Meter.СельскийСовет),
+                nameof(Meter.НаселённыйПункт),
+                nameof(Meter.ТипНаселённойМестности),
+                nameof(Meter.Фаз),
+                nameof(Meter.Принцип),
+                nameof(Meter.Аскуэ),
+                nameof(Meter.НаБалансеАбонента),
+                nameof(Meter.Поверен),
+            };
+
+            // добавление фильтров
+            TMPApplication.DispatcherExtensions.InUi(() =>
+            {
+                foreach (string filter in filters)
+                {
+                    this.Filters.Add((ItemsFilter.Model.IMultiValueFilter)this.FilterPresenter.TryGetFilter(filter, new ItemsFilter.Initializer.EqualFilterInitializer()));
+                }
+
+                this.IsBusy = false;
+            });
 
             if (string.IsNullOrWhiteSpace(this.fieldValue) == true && string.IsNullOrWhiteSpace(this.fieldName) == false)
             {

@@ -7,25 +7,29 @@ public class MeterViewViewModel : BaseDataViewModel<Meter>
 {
     public MeterViewViewModel(Meter meter)
     {
-        this.Meter = meter;
+        if (meter != null)
+        {
 
-        this.MeterChanges = MainViewModel.Data.ChangesOfMeters.ContainsKey(meter.Лицевой)
-            ? MainViewModel.Data.ChangesOfMeters[meter.Лицевой]
-            : new List<ChangeOfMeter>();
+            this.Meter = meter;
 
-        this.Payments = MainViewModel.Data.Payments.ContainsKey(meter.Лицевой)
-            ? MainViewModel.Data.Payments[meter.Лицевой].SelectMany(p => p.Payments)
-            : new List<PaymentData>();
+            this.MeterChanges = MainViewModel.Data.ChangesOfMeters.ContainsKey(meter.Лицевой)
+                ? MainViewModel.Data.ChangesOfMeters[meter.Лицевой]
+                : new List<ChangeOfMeter>();
 
-        this.MeterControlData = MainViewModel.Data.MetersControlData.ContainsKey(meter.Лицевой)
-            ? MainViewModel.Data.MetersControlData[meter.Лицевой].FirstOrDefault().Data
-            : new List<MeterControlData>();
+            this.Payments = MainViewModel.Data.Payments.ContainsKey(meter.Лицевой)
+                ? MainViewModel.Data.Payments[meter.Лицевой].SelectMany(p => p.Payments)
+                : new List<PaymentData>();
 
-        this.Events = MainViewModel.Data.Events.ContainsKey(meter.Лицевой)
-            ? new MeterEventsCollection(MainViewModel.Data.Events[meter.Лицевой].OrderBy(i => i.Date))
-            : new MeterEventsCollection();
+            this.MeterControlData = MainViewModel.Data.MetersControlData.ContainsKey(meter.Лицевой)
+                ? MainViewModel.Data.MetersControlData[meter.Лицевой].FirstOrDefault().Data
+                : new List<MeterControlData>();
 
-        this.RaisePropertyChanged(nameof(this.Events));
+            this.Events = MainViewModel.Data.Events.ContainsKey(meter.Лицевой)
+                ? new MeterEventsCollection(MainViewModel.Data.Events[meter.Лицевой].OrderBy(i => i.Date))
+                : new MeterEventsCollection();
+
+            this.RaisePropertyChanged(nameof(this.Events));
+        }
     }
 
     public Meter Meter { get; init; }

@@ -142,7 +142,7 @@
 
         [Display(Order = 16, GroupName = "Установленный счётчик")]
         [DisplayName("Показание установленного")]
-        public uint ПоказаниеУстановленного
+        public uint LastReading
         {
             get;
             set;
@@ -201,8 +201,5 @@
         [DisplayName("Разрядность установленного счётчика")]
         [Display(Order = 27, GroupName = "Установленный счётчик")]
         public byte РазрядностьУстановленного { get; set; }
-
-        [MessagePack.IgnoreMember]
-        public uint LastReading => this.ПоказаниеУстановленного;
     }
 }
