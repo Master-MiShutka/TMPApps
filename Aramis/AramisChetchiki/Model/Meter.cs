@@ -612,6 +612,14 @@
         {
             get
             {
+                if (this.Принцип != null && this.Принцип.StartsWith("и"))
+                {
+                    if (AppSettings.Default.InductiveMeterIsDefaultUnTrusted)
+                    {
+                        return false;
+                    }
+                }
+
                 int year = this.ГодПоверки + this.ПериодПоверки;
                 DateOnly now = ДатаСравненияПоверки;
 
