@@ -221,33 +221,6 @@
             this.Settings.Save();
         }
 
-        public static IEnumerable<PlusPropertyDescriptor> GetElectricitySupplyPropertyDescriptors()
-        {
-            ObservableCollection<string> electricitySupplyFields = new ObservableCollection<string>(
-                ModelHelper.ElectricitySupplyPropertiesCollection.Values.Select(i => i.Name).ToList());
-
-            IEnumerable<PlusPropertyDescriptor> fields = ModelHelper.GetFields(ModelHelper.ElectricitySupplyPropertiesCollection, electricitySupplyFields);
-            int index = 0;
-            foreach (PlusPropertyDescriptor item in fields)
-            {
-                item.Order = index++;
-            }
-
-            return fields.OrderBy(i => i.Order);
-        }
-
-        public IEnumerable<PlusPropertyDescriptor> GetChangesOfMetersPropertyDescriptors()
-        {
-            IEnumerable<PlusPropertyDescriptor> fields = ModelHelper.GetFields(ModelHelper.ChangesOfMetersPropertiesCollection, this.Settings.ChangesOfMetersFields);
-            int index = 0;
-            foreach (PlusPropertyDescriptor item in fields)
-            {
-                item.Order = index++;
-            }
-
-            return fields.OrderBy(i => i.Order);
-        }
-
         public MeterFieldsCollection GetMeterFieldsCollectionByTableViewKind(TableViewKinds tableViewKind)
         {
             return tableViewKind switch

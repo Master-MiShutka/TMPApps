@@ -36,7 +36,7 @@
         }
 
         public static readonly DependencyProperty ModelProperty = DependencyProperty.Register(
-            "Model", typeof(ITreeModel), typeof(TreeListView));
+            nameof(Model), typeof(ITreeModel), typeof(TreeListView));
 
         private TreeNode root;
 
