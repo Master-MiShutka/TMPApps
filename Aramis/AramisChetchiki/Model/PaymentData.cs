@@ -21,15 +21,15 @@
 
         public int РазностьПоказанийРасчётная { get; set; }
 
-        public decimal ВеличинаТарифа { get; set; }
+        public float ВеличинаТарифа { get; set; }
 
-        public decimal СуммаОплаты { get; set; }
+        public float СуммаОплаты { get; set; }
 
-        public decimal СуммаОплатыРасчётная { get; set; }
+        public float СуммаОплатыРасчётная { get; set; }
 
-        public decimal? ПеняОплаченная { get; set; }
+        public float? ПеняОплаченная { get; set; }
 
-        public decimal? ПеняВыставленая { get; set; }
+        public float? ПеняВыставленая { get; set; }
     }
 
     [MessagePack.MessagePackObject(keyAsPropertyName: true)]
@@ -101,11 +101,11 @@
                 ПоследнееПоказание = (uint)rawPaymentData.ПоследнееПоказание,
                 РазностьПоказанийПоКвитанции = (uint)rawPaymentData.РазностьПоказанийПоКвитанции,
                 РазностьПоказанийРасчётная = (uint)rawPaymentData.РазностьПоказанийРасчётная,
-                ВеличинаТарифа = (float)rawPaymentData.ВеличинаТарифа,
-                СуммаОплаты = (float)rawPaymentData.СуммаОплаты,
-                СуммаОплатыРасчётная = (float?)rawPaymentData.СуммаОплатыРасчётная,
-                ПеняОплаченная = (float?)rawPaymentData.ПеняОплаченная,
-                ПеняВыставленая = (float?)rawPaymentData.ПеняВыставленая,
+                ВеличинаТарифа = rawPaymentData.ВеличинаТарифа,
+                СуммаОплаты = rawPaymentData.СуммаОплаты,
+                СуммаОплатыРасчётная = rawPaymentData.СуммаОплатыРасчётная,
+                ПеняОплаченная = rawPaymentData.ПеняОплаченная,
+                ПеняВыставленая = rawPaymentData.ПеняВыставленая,
             };
         }
     }

@@ -17,7 +17,6 @@
 
         private MTObservableCollection<IMatrix> pivotCollection = new();
 
-        private int collectionViewItemsCount;
         private DateOnly? selectedPeriod;
         private ICollection<KeyValuePair<string, DateOnly>> datePeriods;
         private string description = string.Empty;
@@ -49,6 +48,10 @@
         #endregion
 
         #region Properties
+
+        public FiderAnalizTreeModel ModelTree { get; init; }
+
+        public FiderAnalizTreeItem SelectedItemNode { get; set; }
 
         public int ElectricitySupplySumm
         {
@@ -132,13 +135,14 @@
             this.IsBusy = true;
             Task.Run(() =>
             {
-                this.MakePeriods();
+                this.BuildPeriods();
                 this.CreatePivots();
+                this.BuildTreeModel();
             })
             .ContinueWith(t => this.IsBusy = false, TaskScheduler.FromCurrentSynchronizationContext());
         }
 
-        private void MakePeriods()
+        private void BuildPeriods()
         {
             List<KeyValuePair<string, DateOnly>> datePeriods = new List<KeyValuePair<string, DateOnly>>();
             this.DatePeriods = datePeriods;
