@@ -5,7 +5,6 @@
 
     public class FiderAnalizTreeItem : Shared.PropertyChangedBase
     {
-        private FiderAnalizTreeItem parent;
         private FiderAnalizTreeItemType @type;
         private string header;
         private uint? consumption;
@@ -13,39 +12,9 @@
         private float? medianConsumption;
         private uint? notBindingAbonentsCount;
         private uint? notBindingAbonentsConsumption;
-        private IList<FiderAnalizTreeItem> children = new ObservableCollection<FiderAnalizTreeItem>();
+        private ICollection<FiderAnalizTreeItem> children = new ObservableCollection<FiderAnalizTreeItem>();
         private bool isExpanded;
         private bool isMatch = true;
-
-        public FiderAnalizTreeItem() { }
-
-        public FiderAnalizTreeItem(FiderAnalizTreeItem parent, string header, IList<Meter> meters, FiderAnalizTreeItemType type)
-        {
-            this.parent = parent;
-            this.header = header;
-            this.ChildMeters = meters;
-            this.type = type;
-        }
-
-        public void AddChildren(IEnumerable<FiderAnalizTreeItem> children)
-        {
-            if (children == null)
-            {
-                return;
-            }
-
-            foreach (FiderAnalizTreeItem child in children)
-            {
-                this.Children.Add(child);
-                child.Parent = this;
-            }
-        }
-
-        internal IList<Meter> ChildMeters { get; set; }
-
-        internal uint ChildMetersCount { get; set; }
-
-        public FiderAnalizTreeItem Parent { get => this.parent; set => this.SetProperty(ref this.parent, value); }
 
         public FiderAnalizTreeItemType Type { get => this.type; set => this.SetProperty(ref this.type, value); }
 
@@ -61,7 +30,7 @@
 
         public uint? NotBindingAbonentsConsumption { get => this.notBindingAbonentsConsumption; set => this.SetProperty(ref this.notBindingAbonentsConsumption, value); }
 
-        public IList<FiderAnalizTreeItem> Children
+        public ICollection<FiderAnalizTreeItem> Children
         {
             get => this.children; set
             {
