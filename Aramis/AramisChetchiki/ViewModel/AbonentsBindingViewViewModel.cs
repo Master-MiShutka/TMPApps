@@ -51,7 +51,7 @@
                         .ToList();
                     if (groups.Count >= 1)
                     {
-                        List<AbonentBindingNode> abonentBindingNodes = new();
+                        List<AbonentBindingNode> abonentBindingNodes = new(groups.Count);
                         foreach (IGrouping<object, Meter> group in groups)
                         {
                             AbonentBindingNode abn = new();

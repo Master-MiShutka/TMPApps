@@ -80,9 +80,9 @@
         /// <summary>
         /// Полезный отпуск
         /// </summary>
-        [Description("Полезный отпуск электроэнергии")]
-        [View(typeof(Views.ElectricitySupplyView))]
-        [ViewModel(typeof(ViewModel.ElectricitySupplyViewModel))]
+        [Description("Оплата электроэнергии и пофидерный анализ")]
+        [View(typeof(Views.PaymentsAndPofiderAnalizView))]
+        [ViewModel(typeof(ViewModel.PaymentsAndPofiderAnalizViewModel))]
         [Browsable(true)]
         ElectricitySupply,
 

@@ -3,11 +3,11 @@
     using System.Windows.Controls;
 
     /// <summary>
-    /// Interaction logic for ElectricitySupplyView.xaml
+    /// Interaction logic for PaymentsAndPofiderAnalizView.xaml
     /// </summary>
-    public partial class ElectricitySupplyView : UserControl
+    public partial class PaymentsAndPofiderAnalizView : UserControl
     {
-        public ElectricitySupplyView()
+        public PaymentsAndPofiderAnalizView()
         {
             this.InitializeComponent();
         }

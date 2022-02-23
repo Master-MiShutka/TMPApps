@@ -34,9 +34,13 @@
                 IDictionary<string, PlusPropertyDescriptor> list11 = ElectricitySupplyPropertiesCollection;
                 Dictionary<string, PropertyInfo> list12 = ElectricitySupplyProperties;
 
-                IEnumerable<string> list13 = SummaryInfoItemPropertiesNames;
-                IDictionary<string, PlusPropertyDescriptor> list14 = SummaryInfoItemPropertiesCollection;
-                Dictionary<string, PropertyInfo> list15 = SummaryInfoItemProperties;
+                IEnumerable<string> list13 = PaymentPropertiesNames;
+                IDictionary<string, PlusPropertyDescriptor> list14 = PaymentPropertiesCollection;
+                Dictionary<string, PropertyInfo> list15 = PaymentProperties;
+
+                IEnumerable<string> list16 = SummaryInfoItemPropertiesNames;
+                IDictionary<string, PlusPropertyDescriptor> list17 = SummaryInfoItemPropertiesCollection;
+                Dictionary<string, PropertyInfo> list18 = SummaryInfoItemProperties;
             });
         }
 
@@ -407,6 +411,18 @@
             }
         }
 
+        public static IEnumerable<PlusPropertyDescriptor> GetChangesOfMetersPropertyDescriptors()
+        {
+            IEnumerable<PlusPropertyDescriptor> fields = ModelHelper.GetFields(ModelHelper.ChangesOfMetersPropertiesCollection, AppSettings.Default.ChangesOfMetersFields);
+            int index = 0;
+            foreach (PlusPropertyDescriptor item in fields)
+            {
+                item.Order = index++;
+            }
+
+            return fields.OrderBy(i => i.Order);
+        }
+
         #endregion
 
         #region | ElectricitySupply |
@@ -499,6 +515,130 @@
 
                 return electricitySupplyProperties;
             }
+        }
+
+        public static IEnumerable<PlusPropertyDescriptor> GetElectricitySupplyPropertyDescriptors()
+        {
+            System.Collections.ObjectModel.ObservableCollection<string> electricitySupplyFields = new System.Collections.ObjectModel.ObservableCollection<string>(
+                ModelHelper.ElectricitySupplyPropertiesCollection.Values.Select(i => i.Name).ToList());
+
+            IEnumerable<PlusPropertyDescriptor> fields = ModelHelper.GetFields(ModelHelper.ElectricitySupplyPropertiesCollection, electricitySupplyFields);
+            int index = 0;
+            foreach (PlusPropertyDescriptor item in fields)
+            {
+                item.Order = index++;
+            }
+
+            return fields.OrderBy(i => i.Order);
+        }
+
+        #endregion
+
+        #region | Payment |
+
+        public static Type PaymentType => typeof(Model.Payment);
+
+        private static IEnumerable<string> paymentPropertiesNames;
+        private static IDictionary<string, PlusPropertyDescriptor> paymentPropertiesCollection;
+        private static Dictionary<string, PropertyInfo> paymentProperties;
+
+        /// <summary>
+        /// Словарь имен свойств типа <see cref="Model.ElectricitySupply"/>
+        /// </summary>
+        public static IEnumerable<string> PaymentPropertiesNames
+        {
+            get
+            {
+                if (paymentPropertiesNames == null)
+                {
+                    paymentPropertiesNames = new List<string>();
+                    foreach (PlusPropertyDescriptor prop in PaymentPropertiesCollection.Values)
+                    {
+                        ((IList)paymentPropertiesNames).Add(prop.Name);
+                    }
+
+                    (paymentPropertiesNames as List<string>).Sort();
+                }
+
+                return paymentPropertiesNames;
+            }
+        }
+
+        /// <summary>
+        /// Список свойств типа <see cref="Model.Payment"/>
+        /// </summary>
+        public static IDictionary<string, PlusPropertyDescriptor> PaymentPropertiesCollection
+        {
+            get
+            {
+                if (paymentPropertiesCollection == null)
+                {
+                    lock (Lock)
+                    {
+                        Dictionary<string, PlusPropertyDescriptor> result = new();
+                        PropertyDescriptorCollection collection = TypeDescriptor.GetProperties(PaymentType);
+
+                        System.Diagnostics.Debug.Assert(collection.Count > 0, "TypeDescriptor.GetProperties(PaymentType).Count <= 0");
+
+                        IList<PlusPropertyDescriptor> plusPropsCollection = new List<PlusPropertyDescriptor>();
+                        foreach (PropertyDescriptor pd in collection)
+                        {
+                            plusPropsCollection.Add(new PlusPropertyDescriptor(pd));
+                        }
+
+                        if (plusPropsCollection.All(i => i.Order == 0))
+                        {
+                            for (int ind = 0; ind < plusPropsCollection.Count; ind++)
+                            {
+                                plusPropsCollection[ind].Order = ind + 1;
+                            }
+                        }
+
+                        SortedSet<PlusPropertyDescriptor> sortedCollection = new SortedSet<PlusPropertyDescriptor>(plusPropsCollection, new PropertyDescriptorComparer());
+
+                        foreach (PlusPropertyDescriptor ppd in sortedCollection)
+                        {
+                            result.Add(ppd.Name, ppd);
+                        }
+
+                        paymentPropertiesCollection = result;
+                    }
+                }
+
+                return paymentPropertiesCollection;
+            }
+        }
+
+        public static Dictionary<string, PropertyInfo> PaymentProperties
+        {
+            get
+            {
+                if (paymentProperties == null)
+                {
+                    paymentProperties = new Dictionary<string, PropertyInfo>();
+                    foreach (string prop in PaymentPropertiesNames)
+                    {
+                        paymentProperties.Add(prop, PaymentType.GetProperty(prop));
+                    }
+                }
+
+                return paymentProperties;
+            }
+        }
+
+        public static IEnumerable<PlusPropertyDescriptor> GetPaymentPropertyDescriptors()
+        {
+            System.Collections.ObjectModel.ObservableCollection<string> paymentFields = new System.Collections.ObjectModel.ObservableCollection<string>(
+                ModelHelper.PaymentPropertiesCollection.Values.Select(i => i.Name).ToList());
+
+            IEnumerable<PlusPropertyDescriptor> fields = ModelHelper.GetFields(ModelHelper.PaymentPropertiesCollection, paymentFields);
+            int index = 0;
+            foreach (PlusPropertyDescriptor item in fields)
+            {
+                item.Order = index++;
+            }
+
+            return fields.OrderBy(i => i.Order);
         }
 
         #endregion

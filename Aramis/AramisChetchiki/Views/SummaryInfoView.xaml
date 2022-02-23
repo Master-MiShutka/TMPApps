@@ -66,7 +66,7 @@
                 <WrapPanel Orientation="Horizontal" >
                     <ToggleButton
                         Margin="2"
-                        Padding="0"
+                        Padding="5,2"
                         IsChecked="{Binding ShowOnly10Groups, Mode=TwoWay}"
                         ToolTip="Отображать только первые 10 групп&#x0a;в порядке убывания количества элементов">
                         <Grid>
@@ -87,7 +87,7 @@
                     </ToggleButton>
                     <Separator Margin="5,0" />
                     <TextBlock Text="Вид" Margin="5,0"/>
-                    <ComboBox ItemsSource="{Binding SelectedInfoViewType, Converter={converters:EnumBindingConverter}}" 
+                    <ComboBox VerticalContentAlignment="Center" ItemsSource="{Binding SelectedInfoViewType, Converter={converters:EnumBindingConverter}}" 
                               SelectedItem="{Binding SelectedInfoViewType, Converter={converters:EnumBindingConverter}, UpdateSourceTrigger=PropertyChanged}" />
                     <Separator Margin="5,0" />
                     <StackPanel Margin="5,4" Orientation="Horizontal">
