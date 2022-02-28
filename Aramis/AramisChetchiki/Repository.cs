@@ -32,6 +32,8 @@
 
         #region Fields
 
+        private static Repository instance;
+
         // Helper for Thread Safety
         private static readonly object @lock = new();
 
@@ -41,14 +43,13 @@
 
         #region Singleton
 
-        private static Repository instance;
-
         // Explicit static constructor to tell C# compiler not to mark type as beforefieldinit
         static Repository()
         {
         }
 
         private Repository()
+            : base(AppSettings.Default.DataFilesStorePath)
         {
             logger?.Info(">>> TMP.WORK.AramisChetchiki.Repository -> Constructor");
 
@@ -63,16 +64,6 @@
             this.OnSaving = this.SaveRestDataInfo;
 
             this.OnLoadingFromPackage = this.LoadRestDataInfo;
-
-            if (string.IsNullOrWhiteSpace(Settings.Default.DataFilesStorePath) == false)
-            {
-                this.DataStorePath = Settings.Default.DataFilesStorePath;
-            }
-
-            if (string.IsNullOrWhiteSpace(this.DataStorePath))
-            {
-                this.DataStorePath = Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
-            }
         }
 
         public static Repository Instance
@@ -88,15 +79,6 @@
                 }
 
                 return instance;
-            }
-        }
-
-        ~Repository()
-        {
-            if (this.dataFileStorePathWatcher != null)
-            {
-                this.dataFileStorePathWatcher.EnableRaisingEvents = false;
-                this.dataFileStorePathWatcher.Dispose();
             }
         }
 
@@ -128,8 +110,11 @@
 
         protected override void SetDataStorePath(string value)
         {
-            AppSettings.Default.DataFilesStorePath = value;
-            base.SetDataStorePath(value);
+            var appPath = TMPApp.ExecutionPath;
+            var relativePath = System.IO.Path.GetRelativePath(appPath, value);
+
+            AppSettings.Default.DataFilesStorePath = relativePath;
+            base.SetDataStorePath(relativePath);
         }
 
         private void LoadRestDataInfo(System.IO.Packaging.Package package, AramisData aramisData)

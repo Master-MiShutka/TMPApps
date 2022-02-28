@@ -62,22 +62,19 @@
             </StackPanel>
             <DataTemplate.Triggers>
                 <DataTrigger Binding="{Binding Type}" Value="Substation">
-                    <Setter TargetName="img" Property="Source" Value="{StaticResource SubstationIcon}" />
+                    <Setter TargetName="img" Property="Source" Value="{StaticResource IconSubstation}" />
                 </DataTrigger>
                 <DataTrigger Binding="{Binding Type}" Value="Fider10">
-                    <Setter TargetName="img" Property="Source" Value="{StaticResource Fider10Icon}" />
+                    <Setter TargetName="img" Property="Source" Value="{StaticResource IconFider10}" />
                 </DataTrigger>
                 <DataTrigger Binding="{Binding Type}" Value="TP">
-                    <Setter TargetName="img" Property="Source" Value="{StaticResource TPIcon}" />
-                </DataTrigger>
-                <DataTrigger Binding="{Binding Type}" Value="Fider10">
-                    <Setter TargetName="img" Property="Source" Value="{StaticResource Fider10Icon}" />
+                    <Setter TargetName="img" Property="Source" Value="{StaticResource IconTp}" />
                 </DataTrigger>
                 <DataTrigger Binding="{Binding Type}" Value="Fider04">
-                    <Setter TargetName="img" Property="Source" Value="{StaticResource Fider04Icon}" />
+                    <Setter TargetName="img" Property="Source" Value="{StaticResource IconFider04}" />
                 </DataTrigger>
                 <DataTrigger Binding="{Binding Type}" Value="Group">
-                    <Setter TargetName="img" Property="Source" Value="{StaticResource GroupIcon}" />
+                    <Setter TargetName="img" Property="Source" Value="{StaticResource IconGroup}" />
                 </DataTrigger>
             </DataTemplate.Triggers>
         </DataTemplate>
@@ -147,86 +144,75 @@
                 Orientation="Horizontal" />
             <TabControl Grid.Row="1">
                 <TabItem Header="Данные">
-                    <DockPanel>
-                        <StackPanel
-                            Margin="0,2,0,0"
-                            DockPanel.Dock="Bottom"
-                            Orientation="Horizontal"
-                            TextBlock.FontWeight="Bold" />
-
-                        <ui_treelistview:TreeListView
-                            x:Name="tree"
-                            AlternationCount="2"
-                            IsSynchronizedWithCurrentItem="True"
-                            Model="{Binding ModelTree}"
-                            SelectedItem="{Binding SelectedItemNode}"
-                            VirtualizingStackPanel.IsVirtualizing="True">
-                            <ui_treelistview:TreeListView.View>
-                                <GridView>
-                                    <GridViewColumn Width="300" Header="Наименование" />
-                                    <GridViewColumn Header="Потребление, кВт∙ч">
-                                        <GridViewColumn.CellTemplate>
-                                            <DataTemplate>
-                                                <TextBlock Text="{Binding Consumption, StringFormat={StaticResource NumberStringFormat}, ConverterCulture=ru-RU}" />
-                                            </DataTemplate>
-                                        </GridViewColumn.CellTemplate>
-                                    </GridViewColumn>
-                                    <GridViewColumn Header="Среднее потребление, кВт∙ч">
-                                        <GridViewColumn.CellTemplate>
-                                            <DataTemplate>
-                                                <TextBlock Text="{Binding AverageConsumption, StringFormat={StaticResource NumberStringFormat}, ConverterCulture=ru-RU}" />
-                                            </DataTemplate>
-                                        </GridViewColumn.CellTemplate>
-                                    </GridViewColumn>
-                                    <GridViewColumn Header="Медианное потребление, кВт∙ч">
-                                        <GridViewColumn.CellTemplate>
-                                            <DataTemplate>
-                                                <TextBlock Text="{Binding MedianConsumption, StringFormat={StaticResource NumberStringFormat}, ConverterCulture=ru-RU}" />
-                                            </DataTemplate>
-                                        </GridViewColumn.CellTemplate>
-                                    </GridViewColumn>
-                                    <GridViewColumn Header="Количество 'непривязанных' абонентов">
-                                        <GridViewColumn.CellTemplate>
-                                            <DataTemplate>
-                                                <TextBlock Text="{Binding NotBindingAbonentsCount, StringFormat={StaticResource NumberStringFormat}, ConverterCulture=ru-RU}" />
-                                            </DataTemplate>
-                                        </GridViewColumn.CellTemplate>
-                                    </GridViewColumn>
-                                    <GridViewColumn Header="Утерянный ПО, кВт∙ч">
-                                        <GridViewColumn.CellTemplate>
-                                            <DataTemplate>
-                                                <TextBlock Text="{Binding NotBindingAbonentsConsumption, StringFormat={StaticResource NumberStringFormat}, ConverterCulture=ru-RU}" />
-                                            </DataTemplate>
-                                        </GridViewColumn.CellTemplate>
-                                    </GridViewColumn>
-                                </GridView>
-                            </ui_treelistview:TreeListView.View>
-                            <ui_treelistview:TreeListView.Style>
-                                <Style TargetType="{x:Type ui_treelistview:TreeListView}">
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding Items}" Value="{x:Null}">
-                                            <Setter Property="Template">
-                                                <Setter.Value>
-                                                    <ControlTemplate>
-                                                        <Border
-                                                            Background="{TemplateBinding Background}"
-                                                            BorderBrush="{TemplateBinding BorderBrush}"
-                                                            BorderThickness="{TemplateBinding BorderThickness}"
-                                                            SnapsToDevicePixels="true">
-                                                            <ui_controls:NoData />
-                                                        </Border>
-                                                    </ControlTemplate>
-                                                </Setter.Value>
-                                            </Setter>
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </ui_treelistview:TreeListView.Style>
-                        </ui_treelistview:TreeListView>
-
-
-                        <local_controls:DataGridControl x:Name="table" Margin="2" />
-                    </DockPanel>
+                    <ui_treelistview:TreeListView
+                        x:Name="tree"
+                        AlternationCount="2"
+                        IsSynchronizedWithCurrentItem="True"
+                        Model="{Binding ModelTree}"
+                        SelectedValue="{Binding SelectedItemNode}"
+                        VirtualizingStackPanel.IsVirtualizing="True">
+                        <ui_treelistview:TreeListView.View>
+                            <GridView>
+                                <GridViewColumn Width="300" Header="Наименование" />
+                                <GridViewColumn Header="Потребление, кВт∙ч">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Consumption, StringFormat={StaticResource NumberStringFormat}, ConverterCulture=ru-RU}" />
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Header="Среднее потребление, кВт∙ч">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding AverageConsumption, StringFormat={StaticResource NumberStringFormat}, ConverterCulture=ru-RU}" />
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Header="Медианное потребление, кВт∙ч">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding MedianConsumption, StringFormat={StaticResource NumberStringFormat}, ConverterCulture=ru-RU}" />
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Header="Количество 'непривязанных' абонентов">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding NotBindingAbonentsCount, StringFormat={StaticResource NumberStringFormat}, ConverterCulture=ru-RU}" />
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Header="Утерянный ПО, кВт∙ч">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding NotBindingAbonentsConsumption, StringFormat={StaticResource NumberStringFormat}, ConverterCulture=ru-RU}" />
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                            </GridView>
+                        </ui_treelistview:TreeListView.View>
+                        <ui_treelistview:TreeListView.Style>
+                            <Style TargetType="{x:Type ui_treelistview:TreeListView}">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding ModelTree}" Value="{x:Null}">
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate>
+                                                    <Border
+                                                        Background="{TemplateBinding Background}"
+                                                        BorderBrush="{TemplateBinding BorderBrush}"
+                                                        BorderThickness="{TemplateBinding BorderThickness}"
+                                                        SnapsToDevicePixels="true">
+                                                        <ui_controls:NoData />
+                                                    </Border>
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ui_treelistview:TreeListView.Style>
+                    </ui_treelistview:TreeListView>
                 </TabItem>
                 <TabItem Header="Свод">
                     <ScrollViewer VerticalScrollBarVisibility="Auto">

@@ -159,8 +159,8 @@
                         </Trigger>
                         <Trigger Property="IsSelected" Value="true">
                             <Setter TargetName="Bd" Property="BorderBrush" Value="{DynamicResource AccentColorBrush}" />
-                            <Setter TargetName="Bd" Property="Background" Value="{DynamicResource HighlightBrush}" />
-                            <Setter Property="Foreground" Value="{DynamicResource AccentSelectedColorBrush}" />
+                            <Setter TargetName="Bd" Property="Background" Value="{DynamicResource AccentColorBrush2}" />
+                            <Setter Property="Foreground" Value="{DynamicResource WhiteColorBrush}" />
                         </Trigger>
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter TargetName="Bd" Property="Background" Value="{DynamicResource AccentColorBrush3}" />
@@ -170,9 +170,9 @@
                                 <Condition Property="IsSelected" Value="true" />
                                 <Condition Property="Selector.IsSelectionActive" Value="True" />
                             </MultiTrigger.Conditions>
-                            <Setter TargetName="Bd" Property="Background" Value="{DynamicResource HighlightBrush}" />
+                            <Setter TargetName="Bd" Property="Background" Value="{DynamicResource AccentBaseColorBrush}" />
                             <Setter TargetName="Bd" Property="BorderBrush" Value="{DynamicResource AccentColorBrush}" />
-                            <Setter Property="Foreground" Value="{DynamicResource AccentSelectedColorBrush}" />
+                            <Setter Property="Foreground" Value="{DynamicResource WhiteColorBrush}" />
                         </MultiTrigger>
                         <MultiTrigger>
                             <MultiTrigger.Conditions>

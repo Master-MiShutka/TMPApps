@@ -121,7 +121,7 @@
         protected Action<Exception> callBackAction;
         private string dataStorePath;
         private T data;
-        private readonly Shared.AsyncObservableCollection<IDataFileInfo> availableDataFiles = new Shared.AsyncObservableCollection<IDataFileInfo>();
+        private readonly Shared.AsyncObservableCollection<IDataFileInfo> availableDataFiles = new();
         protected FileSystemWatcher dataFileStorePathWatcher;
 
         private object @lock = new object();
@@ -130,11 +130,16 @@
 
         #endregion
 
-        public BaseRepository()
+        public BaseRepository(string dataStorePath = default)
         {
             this.callBackAction = (e) => logger?.Error(e);
 
             this.availableDataFiles.CollectionChanged += this.AvailableDataFiles_CollectionChanged;
+
+            if (string.IsNullOrEmpty(dataStorePath) == false)
+                this.dataStorePath = dataStorePath;
+            else
+                this.dataStorePath = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
 
             Task.Run(async () => await this.InitializationAsync());
         }
@@ -158,6 +163,7 @@
 
                     if (this.dataFileStorePathWatcher != null)
                     {
+                        this.dataFileStorePathWatcher.EnableRaisingEvents = false;
                         this.dataFileStorePathWatcher.Created -= this.OnDataFileStorePathChanged;
                         this.dataFileStorePathWatcher.Deleted -= this.OnDataFileStoreFileDeleted;
                         this.dataFileStorePathWatcher.Renamed -= this.OnDataFileStoreFileRenamed;
@@ -195,7 +201,13 @@
         /// </summary>
         public string DataStorePath
         {
-            get => this.GetDataStorePath();
+            get
+            {
+                this.dataStorePath = this.GetDataStorePath();
+                if (string.IsNullOrEmpty(this.dataStorePath))
+                    this.dataStorePath = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
+                return this.dataStorePath;
+            }
             set => this.SetDataStorePath(value);
         }
 
@@ -292,20 +304,20 @@
             this.Handler?.Invoke(this, RepositoryEventArgs.UICallback(message));
         }
 
-        private bool InitDataStore()
+        /// <summary>
+        /// настройка слежения за файлами
+        /// </summary>
+        /// <returns></returns>
+        protected bool InitDataStore()
         {
-            if (string.IsNullOrWhiteSpace(this.DataStorePath))
-            {
-                this.DataStorePath = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
-            }
-
             try
             {
-                if (string.IsNullOrWhiteSpace(this.DataStorePath) == false && Directory.Exists(this.DataStorePath))
+                string path = this.DataStorePath;
+                if (string.IsNullOrWhiteSpace(path) == false && Directory.Exists(path))
                 {
                     if (this.dataFileStorePathWatcher == null)
                     {
-                        this.dataFileStorePathWatcher = new FileSystemWatcher(this.DataStorePath)
+                        this.dataFileStorePathWatcher = new FileSystemWatcher(path)
                         {
                             NotifyFilter = NotifyFilters.LastWrite
                                 | NotifyFilters.FileName,
@@ -315,7 +327,7 @@
                     }
                     else
                     {
-                        this.dataFileStorePathWatcher.Path = this.DataStorePath;
+                        this.dataFileStorePathWatcher.Path = path;
                     }
 
                     this.dataFileStorePathWatcher.Created += this.OnDataFileStorePathChanged;

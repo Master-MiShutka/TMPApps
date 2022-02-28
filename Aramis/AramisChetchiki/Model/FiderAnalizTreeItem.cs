@@ -204,7 +204,7 @@
         {
             this.consumption = (uint)values.Sum(i => i ?? 0);
             this.averageConsumption = (uint)values.Average(i => i ?? 0);
-            this.medianConsumption = (uint)values.Median();
+            this.medianConsumption = values.Any(i => i != null) ? (uint)values.Median() : 0;
 
             this.RaisePropertyChanged(nameof(this.Consumption));
             this.RaisePropertyChanged(nameof(this.AverageConsumption));
