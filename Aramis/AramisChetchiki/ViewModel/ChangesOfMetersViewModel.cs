@@ -122,7 +122,7 @@
 
         public string DataGridMessage { get => this.dataGridMessage; private set => this.SetProperty(ref this.dataGridMessage, value); }
 
-        public override IEnumerable<Shared.PlusPropertyDescriptor> PropertyDescriptors => AppSettings.Default.GetChangesOfMetersPropertyDescriptors();
+        public override IEnumerable<Shared.PlusPropertyDescriptor> PropertyDescriptors => ModelHelper.GetChangesOfMetersPropertyDescriptors();
 
         public DateTime? FromDate
         {

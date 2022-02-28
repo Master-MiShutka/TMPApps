@@ -41,6 +41,10 @@
                 IEnumerable<string> list16 = SummaryInfoItemPropertiesNames;
                 IDictionary<string, PlusPropertyDescriptor> list17 = SummaryInfoItemPropertiesCollection;
                 Dictionary<string, PropertyInfo> list18 = SummaryInfoItemProperties;
+
+                IEnumerable<string> list19 = FiderAnalizMeterPropertiesNames;
+                IDictionary<string, PlusPropertyDescriptor> list20 = FiderAnalizMeterPropertiesCollection;
+                Dictionary<string, PropertyInfo> list21 = FiderAnalizMeterProperties;
             });
         }
 
@@ -311,6 +315,101 @@
         public static ItemPropertyInfo GetMeterPropertyInfo(string propertyName)
         {
             return new ItemPropertyInfo(propertyName, MeterType, MeterPropertiesCollection[propertyName]);
+        }
+
+        #endregion
+
+        #region | FiderAnalizMeter |
+
+        private static Dictionary<string, PropertyInfo> fiderAnalizMeterProperties;
+        private static IDictionary<string, PlusPropertyDescriptor> fiderAnalizMeterPropertiesCollection;
+        private static IList<string> fiderAnalizMeterPropertiesNames;
+
+        public static Type FiderAnalizMeterType => typeof(Model.FiderAnalizMeter);
+
+        /// <summary>
+        /// Список имен свойств типа <see cref="Model.FiderAnalizMeter"/>
+        /// </summary>
+        public static IList<string> FiderAnalizMeterPropertiesNames
+        {
+            get
+            {
+                if (fiderAnalizMeterPropertiesNames == null)
+                {
+                    fiderAnalizMeterPropertiesNames = new List<string>();
+                    foreach (PlusPropertyDescriptor prop in FiderAnalizMeterPropertiesCollection.Values)
+                    {
+                        fiderAnalizMeterPropertiesNames.Add(prop.Name);
+                    }
+
+                    (fiderAnalizMeterPropertiesNames as List<string>).Sort();
+                }
+
+                return fiderAnalizMeterPropertiesNames;
+            }
+        }
+
+        /// <summary>
+        /// Словарь свойств типа <see cref="Model.FiderAnalizMeter"/>
+        /// </summary>
+        public static IDictionary<string, PlusPropertyDescriptor> FiderAnalizMeterPropertiesCollection
+        {
+            get
+            {
+                if (fiderAnalizMeterPropertiesCollection == null)
+                {
+                    fiderAnalizMeterPropertiesCollection = new Dictionary<string, PlusPropertyDescriptor>();
+                    PropertyDescriptorCollection collection = TypeDescriptor.GetProperties(FiderAnalizMeterType);
+
+                    List<PlusPropertyDescriptor> list = new List<PlusPropertyDescriptor>();
+
+                    foreach (PropertyDescriptor pd in collection)
+                    {
+                        list.Add(new PlusPropertyDescriptor(pd));
+                    }
+
+                    foreach (PlusPropertyDescriptor ppd in list)
+                    {
+                        fiderAnalizMeterPropertiesCollection.Add(ppd.Name, ppd);
+                    }
+                }
+
+                return fiderAnalizMeterPropertiesCollection;
+            }
+        }
+
+        public static Dictionary<string, PropertyInfo> FiderAnalizMeterProperties
+        {
+            get
+            {
+                if (fiderAnalizMeterProperties == null)
+                {
+                    fiderAnalizMeterProperties = new Dictionary<string, PropertyInfo>();
+                    foreach (string prop in FiderAnalizMeterPropertiesNames)
+                    {
+                        fiderAnalizMeterProperties.Add(prop, FiderAnalizMeterType.GetProperty(prop));
+                    }
+                }
+
+                return fiderAnalizMeterProperties;
+            }
+        }
+
+        public static object FiderAnalizMeterGetPropertyValue(Model.FiderAnalizMeter meter, string property)
+        {
+            PropertyInfo pi = FiderAnalizMeterProperties[property];
+            object value = pi.GetValue(meter, null);
+            if (pi.PropertyType == typeof(bool))
+            {
+                return (bool)value ? "да" : "нет";
+            }
+
+            if (pi.PropertyType == typeof(Model.Address))
+            {
+                return value.ToString();
+            }
+
+            return value;
         }
 
         #endregion

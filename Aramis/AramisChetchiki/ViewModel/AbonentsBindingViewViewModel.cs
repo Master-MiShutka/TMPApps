@@ -43,7 +43,7 @@
             {
                 const string empty = "(пусто)";
 
-                IList<AbonentBindingNode> groupMetersByProperty(IEnumerable<Meter> metersList, string propName, AbonentBindingNode.NodeType nodeType)
+                IList<AbonentBindingNode> GroupMetersByProperty(IEnumerable<Meter> metersList, string propName, AbonentBindingNode.NodeType nodeType)
                 {
                     // группируем список по значению свойства
                     List<IGrouping<object, Meter>> groups = metersList
@@ -71,28 +71,35 @@
                     }
                 }
 
+                int notBindingItemsCount = 0;
                 ICollection<Meter> list = null;
-                IList<AbonentBindingNode> substationsNodes = groupMetersByProperty(this.Data, "Подстанция", AbonentBindingNode.NodeType.Substation);
+                IList<AbonentBindingNode> substationsNodes = GroupMetersByProperty(this.Data, nameof(Meter.Подстанция), AbonentBindingNode.NodeType.Substation);
                 if (substationsNodes != null)
                 {
                     foreach (AbonentBindingNode substation in substationsNodes)
                     {
-                        IList<AbonentBindingNode> fiders = groupMetersByProperty(substation.Meters, "Фидер10", AbonentBindingNode.NodeType.Fider10);
+                        IList<AbonentBindingNode> fiders = GroupMetersByProperty(substation.Meters, nameof(Meter.Фидер10), AbonentBindingNode.NodeType.Fider10);
                         if (fiders != null)
                         {
                             substation.AddChildren(fiders);
                             foreach (AbonentBindingNode fider in substation.Children)
                             {
-                                IList<AbonentBindingNode> tps = groupMetersByProperty(fider.Meters, "ТП", AbonentBindingNode.NodeType.TP);
+                                IList<AbonentBindingNode> tps = GroupMetersByProperty(fider.Meters, nameof(Meter.ТП), AbonentBindingNode.NodeType.TP);
                                 if (tps != null)
                                 {
                                     fider.AddChildren(tps);
                                     foreach (AbonentBindingNode tp in fider.Children)
                                     {
-                                        IList<AbonentBindingNode> fiders04 = groupMetersByProperty(tp.Meters, "Фидер04", AbonentBindingNode.NodeType.Fider04);
+                                        IList<AbonentBindingNode> fiders04 = GroupMetersByProperty(tp.Meters, nameof(Meter.Фидер04), AbonentBindingNode.NodeType.Fider04);
                                         if (fiders04 != null)
                                         {
                                             tp.AddChildren(fiders04);
+
+                                            notBindingItemsCount = fiders04.Count(i => i.Header == empty);
+                                            if (notBindingItemsCount > 0)
+                                            {
+                                                tp.NotBindingMetersCount = notBindingItemsCount;
+                                            }
                                         }
                                         else
                                         {
@@ -151,7 +158,7 @@
                     .Where(i =>
                         string.IsNullOrWhiteSpace(i.Подстанция) |
                         string.IsNullOrWhiteSpace(i.Фидер10) |
-                        (i.ТП == null || (i.ТП != null && i.ТП.IsEmpty)) |
+                        i.ТПIsEmpty |
                         i.Фидер04.HasValue == false)
                     .ToList();
 

@@ -6,7 +6,7 @@
 
     public class FiderAnalizTreeItem : Shared.PropertyChangedBase
     {
-        private IList<Meter> childMeters;
+        private IList<FiderAnalizMeter> childMeters;
         private FiderAnalizTreeItem parent;
         private FiderAnalizTreeItemType @type;
         private string header;
@@ -21,12 +21,12 @@
 
         public FiderAnalizTreeItem() { }
 
-        public FiderAnalizTreeItem(FiderAnalizTreeItem parent, string header, IList<Meter> meters, FiderAnalizTreeItemType type)
+        public FiderAnalizTreeItem(FiderAnalizTreeItem parent, string header, FiderAnalizTreeItemType type, IList<FiderAnalizMeter> meters)
         {
             this.parent = parent;
             this.header = header;
-            this.ChildMeters = meters;
             this.type = type;
+            this.childMeters = meters;
         }
 
         public void AddChildren(IEnumerable<FiderAnalizTreeItem> children)
@@ -41,9 +41,13 @@
                 this.Children.Add(child);
                 child.Parent = this;
             }
+
+            this.CalculateConsumption();
         }
 
-        internal IList<Meter> ChildMeters
+        public static string EmptyHeader => "(пусто)";
+
+        internal IList<FiderAnalizMeter> ChildMeters
         {
             get => this.childMeters;
             set
@@ -56,7 +60,7 @@
             }
         }
 
-        internal uint? ChildMetersCount => (uint?)this.ChildMeters?.Count;
+        internal uint ChildMetersCount => this.ChildMeters != null ? (uint)this.ChildMeters.Count : 0;
 
         public FiderAnalizTreeItem Parent { get => this.parent; set => this.SetProperty(ref this.parent, value); }
 
@@ -64,23 +68,29 @@
 
         public string Header { get => this.header; set => this.SetProperty(ref this.header, value); }
 
-        public uint? Consumption { get => this.consumption; set => this.SetProperty(ref this.consumption, value); }
+        public uint? Consumption => this.consumption;
 
-        public float? AverageConsumption { get => this.averageConsumption; set => this.SetProperty(ref this.averageConsumption, value); }
+        public float? AverageConsumption => this.averageConsumption;
 
-        public float? MedianConsumption { get => this.medianConsumption; set => this.SetProperty(ref this.medianConsumption, value); }
+        public float? MedianConsumption => this.medianConsumption;
 
         public uint? NotBindingAbonentsCount { get => this.notBindingAbonentsCount; set => this.SetProperty(ref this.notBindingAbonentsCount, value); }
 
-        public uint? NotBindingAbonentsConsumption { get => this.notBindingAbonentsConsumption; set => this.SetProperty(ref this.notBindingAbonentsConsumption, value); }
+        public uint? NotBindingAbonentsConsumption
+        {
+            get => this.notBindingAbonentsConsumption;
+            set => this.SetProperty(ref this.notBindingAbonentsConsumption, value);
+        }
 
         public IList<FiderAnalizTreeItem> Children
         {
-            get => this.children; set
+            get => this.children;
+            set
             {
                 if (this.SetProperty(ref this.children, value))
                 {
                     this.RaisePropertyChanged(nameof(this.HasChildren));
+                    this.CalculateConsumption();
                 }
             }
         }
@@ -159,6 +169,47 @@
 
             ancestors.Pop();
         }
+
+        private void CalculateConsumption()
+        {
+            if (this.HasChildren)
+            {
+                IList<uint?> values = this.children.Select(child => child.Consumption).ToList();
+                this.CalculateConsumption(values);
+
+                var emptyChildren = this.children.Where(i => i.Header == EmptyHeader).ToList();
+                int? emptyItemsCount = emptyChildren.Count == 0 ? null : emptyChildren.Count;
+                this.notBindingAbonentsConsumption = (uint)emptyChildren.Sum(i => i.Consumption);
+
+                this.RaisePropertyChanged(nameof(this.NotBindingAbonentsCount));
+                this.RaisePropertyChanged(nameof(this.NotBindingAbonentsConsumption));
+            }
+            else
+            {
+                if (this.ChildMetersCount > 0)
+                {
+                    IList<uint?> values = this.ChildMeters.Select(child => child.Consumption).ToList();
+                    this.CalculateConsumption(values);
+                }
+                else
+                {
+                    ;
+                }
+            }
+
+            this.RaisePropertyChanged(nameof(this.HasChildren));
+        }
+
+        internal void CalculateConsumption(IList<uint?> values)
+        {
+            this.consumption = (uint)values.Sum(i => i ?? 0);
+            this.averageConsumption = (uint)values.Average(i => i ?? 0);
+            this.medianConsumption = (uint)values.Median();
+
+            this.RaisePropertyChanged(nameof(this.Consumption));
+            this.RaisePropertyChanged(nameof(this.AverageConsumption));
+            this.RaisePropertyChanged(nameof(this.MedianConsumption));
+        }
     }
 
     public enum FiderAnalizTreeItemType
@@ -168,5 +219,43 @@
         TP,
         Fider04,
         Group,
+    }
+
+    public struct FiderAnalizMeter
+    {
+        public ulong Id { get; set; }
+
+        public string Header { get; set; }
+
+        public string Address { get; set; }
+
+        public bool IsDisconnected { get; set; }
+
+        public bool HasAskue { get; set; }
+
+        public uint? Consumption { get; set; }
+
+        public string Substation { get; set; }
+
+        public string Fider10 { get; set; }
+
+        public string Tp { get; set; }
+
+        public string Fider04 { get; set; }
+
+        public FiderAnalizMeter(Meter meter, uint? consumption)
+        {
+            this.Id = meter.Лицевой;
+            this.Header = meter.ФиоСокращ;
+            this.Address = meter.НаселённыйПунктИУлицаСНомеромДома;
+            this.IsDisconnected = meter.Отключён;
+            this.HasAskue = meter.Аскуэ;
+            this.Consumption = consumption;
+
+            this.Substation = meter.Подстанция;
+            this.Fider10 = meter.Фидер10;
+            this.Tp = meter.ТП?.ToString();
+            this.Fider04 = meter.Фидер04?.ToString();
+        }
     }
 }
