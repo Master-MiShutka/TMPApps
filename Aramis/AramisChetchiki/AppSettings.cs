@@ -19,6 +19,7 @@
         private readonly PlusPropertyDescriptorsCollection defaultОплатаViewColumns;
         private readonly PlusPropertyDescriptorsCollection defaultПривязкаViewColumns;
 
+        private bool inductiveMeterIsDefaultUnTrusted = true;
         private double fontSize = 14.0;
         private string aramisDBPath = "d:\\aramis\\Disks\\OSHM\\aramis";
         private string dataFilesStorePath = string.Empty;
@@ -115,6 +116,8 @@
 
         public static readonly StringComparison StringComparisonMethod = StringComparison.Ordinal;
 
+        public bool InductiveMeterIsDefaultUnTrusted { get => this.inductiveMeterIsDefaultUnTrusted; set => this.SetProperty(ref this.inductiveMeterIsDefaultUnTrusted, value); }
+
         public double FontSize { get => this.fontSize; set => this.SetProperty(ref this.fontSize, value); }
 
         public string AramisDBPath { get => this.aramisDBPath; set => this.SetProperty(ref this.aramisDBPath, value); }
@@ -157,6 +160,7 @@
 
         public void Load()
         {
+            this.InductiveMeterIsDefaultUnTrusted = this.Settings.InductiveMeterIsDefaultUnTrusted;
             this.FontSize = this.Settings.FontSize;
 
             this.AramisDBPath = this.Settings.AramisDBPath;
@@ -194,6 +198,7 @@
 
         public void Save()
         {
+            this.Settings.InductiveMeterIsDefaultUnTrusted = this.InductiveMeterIsDefaultUnTrusted;
             this.Settings.FontSize = this.FontSize;
 
             this.Settings.AramisDBPath = this.AramisDBPath;

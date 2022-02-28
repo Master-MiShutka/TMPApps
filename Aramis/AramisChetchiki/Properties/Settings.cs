@@ -10,6 +10,15 @@ namespace TMP.WORK.AramisChetchiki.Properties
 
         [System.Configuration.UserScopedSettingAttribute()]
         [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool InductiveMeterIsDefaultUnTrusted
+        {
+            get => ((bool)(this["InductiveMeterIsDefaultUnTrusted"]));
+            set => this["InductiveMeterIsDefaultUnTrusted"] = value;
+        }
+
+        [System.Configuration.UserScopedSettingAttribute()]
+        [System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [System.Configuration.DefaultSettingValueAttribute("14")]
         public double FontSize
         {
