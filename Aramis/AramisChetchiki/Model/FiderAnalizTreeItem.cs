@@ -27,6 +27,8 @@
             this.header = header;
             this.type = type;
             this.childMeters = meters;
+
+            this.CalculateConsumption();
         }
 
         public void AddChildren(IEnumerable<FiderAnalizTreeItem> children)
@@ -38,9 +40,11 @@
 
             foreach (FiderAnalizTreeItem child in children)
             {
-                this.Children.Add(child);
+                this.children.Add(child);
                 child.Parent = this;
             }
+
+            this.RaisePropertyChanged(nameof(this.HasChildren));
 
             this.CalculateConsumption();
         }
@@ -50,12 +54,11 @@
         internal IList<FiderAnalizMeter> ChildMeters
         {
             get => this.childMeters;
-            set
+            private set
             {
                 if (this.SetProperty(ref this.childMeters, value))
                 {
                     this.RaisePropertyChanged(nameof(this.ChildMetersCount));
-                    this.RaisePropertyChanged(nameof(this.Consumption));
                 }
             }
         }
@@ -95,7 +98,7 @@
             }
         }
 
-        public bool HasChildren => this.Children != null && this.Children.Count > 0;
+        public bool HasChildren => this.children != null && this.children.Count > 0;
 
         public bool IsExpanded
         {
@@ -196,6 +199,8 @@
                     ;
                 }
             }
+
+            var t = this.ChildMeters.OrderByDescending(i => i.Consumption).Take(20).ToList();
 
             this.RaisePropertyChanged(nameof(this.HasChildren));
         }

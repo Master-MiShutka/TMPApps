@@ -98,7 +98,6 @@
                 <ui_controls:DropDownButton
                     VerticalAlignment="Center"
                     Content="Фильтры"
-                    FontSize="{Binding FontSize, ElementName=root}"
                     ItemsSource="{x:Static local:ModelHelper.ElectricitySupplyPropertiesNames}">
                     <ui_controls:DropDownButton.Icon>
                         <ui_controls:Icons Height="18" Kind="Filter" />
@@ -128,7 +127,7 @@
                 <Separator Margin="5,0" Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
                 <TextBlock
                     VerticalAlignment="Center"
-                    Text="Информация по полезному отпуску э/э используется из формы FORMAB71."
+                    Text="Информация по полезному отпуску э/э используется из оплаты абонентами э/э за указанный период."
                     TextWrapping="Wrap" />
             </StackPanel>
         </view:BaseView.HeaderPanel>
@@ -151,38 +150,49 @@
                         Model="{Binding ModelTree}"
                         SelectedValue="{Binding SelectedItemNode}"
                         VirtualizingStackPanel.IsVirtualizing="True">
+                        <ui_treelistview:TreeListView.Resources>
+                            <Style x:Key="HeaderStyle" TargetType="GridViewColumnHeader">
+                                <Setter Property="HorizontalContentAlignment" Value="Center" />
+                                <Setter Property="TextBlock.TextAlignment" Value="Center" />
+                                <Setter Property="TextBlock.TextTrimming" Value="CharacterEllipsis" />
+                                <Setter Property="TextBlock.TextWrapping" Value="WrapWithOverflow" />
+                            </Style>
+                        </ui_treelistview:TreeListView.Resources>
                         <ui_treelistview:TreeListView.View>
                             <GridView>
-                                <GridViewColumn Width="300" Header="Наименование" />
-                                <GridViewColumn Header="Потребление, кВт∙ч">
+                                <GridViewColumn
+                                    Width="300"
+                                    Header="Наименование"
+                                    HeaderContainerStyle="{StaticResource HeaderStyle}" />
+                                <GridViewColumn Header="Потребление, кВт∙ч" HeaderContainerStyle="{StaticResource HeaderStyle}">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
                                             <TextBlock Text="{Binding Consumption, StringFormat={StaticResource NumberStringFormat}, ConverterCulture=ru-RU}" />
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
-                                <GridViewColumn Header="Среднее потребление, кВт∙ч">
+                                <GridViewColumn Header="Среднее потребление, кВт∙ч" HeaderContainerStyle="{StaticResource HeaderStyle}">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
                                             <TextBlock Text="{Binding AverageConsumption, StringFormat={StaticResource NumberStringFormat}, ConverterCulture=ru-RU}" />
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
-                                <GridViewColumn Header="Медианное потребление, кВт∙ч">
+                                <GridViewColumn Header="Медианное потребление, кВт∙ч" HeaderContainerStyle="{StaticResource HeaderStyle}">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
                                             <TextBlock Text="{Binding MedianConsumption, StringFormat={StaticResource NumberStringFormat}, ConverterCulture=ru-RU}" />
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
-                                <GridViewColumn Header="Количество 'непривязанных' абонентов">
+                                <GridViewColumn Header="Количество 'непривязанных' абонентов" HeaderContainerStyle="{StaticResource HeaderStyle}">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
                                             <TextBlock Text="{Binding NotBindingAbonentsCount, StringFormat={StaticResource NumberStringFormat}, ConverterCulture=ru-RU}" />
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
-                                <GridViewColumn Header="Утерянный ПО, кВт∙ч">
+                                <GridViewColumn Header="Утерянный ПО, кВт∙ч" HeaderContainerStyle="{StaticResource HeaderStyle}">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
                                             <TextBlock Text="{Binding NotBindingAbonentsConsumption, StringFormat={StaticResource NumberStringFormat}, ConverterCulture=ru-RU}" />

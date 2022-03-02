@@ -58,8 +58,13 @@
             {
                 if (this.SetProperty(ref this.selectedPeriod, value))
                 {
-                    /* this.RaisePropertyChanged(nameof(this.ReportTitle));
-                    this.OnDateChanged(); */
+                    this.IsBusy = true;
+                    Task.Run(() =>
+                    {
+                        this.CreatePivots();
+                        this.BuildTreeModel();
+                    })
+                    .ContinueWith(t => this.IsBusy = false);
                 }
             }
         }
@@ -105,8 +110,6 @@
         private void BuildPeriods()
         {
             List<KeyValuePair<string, DateOnly>> datePeriods = new List<KeyValuePair<string, DateOnly>>();
-            this.DatePeriods = datePeriods;
-            this.SelectedPeriod = this.DatePeriods.LastOrDefault().Value;
 
             var data = MainViewModel?.Data?.Payments.SelectMany(i => i.Value);
 
@@ -131,6 +134,9 @@
                         new DateOnly(year.Year, month.Month, 1).AddDays(-1).AddMonths(1)));
                 }
             }
+
+            this.DatePeriods = datePeriods;
+            this.SelectedPeriod = this.DatePeriods.LastOrDefault().Value;
         }
 
         private void CreatePivots()
@@ -145,6 +151,11 @@
 
         private void BuildTreeModel()
         {
+            if (this.selectedPeriod.HasValue == false || this.selectedPeriod.Value == DateOnly.MinValue)
+            {
+                return;
+            }
+
             this.Status = "построение модели";
 
             var allMeters = MainViewModel?.Data?.Meters.Where(i => i.Удалён == false);
@@ -156,6 +167,8 @@
             this.DetailedStatus = "группировка оплат";
             var allPayments = MainViewModel?.Data?.Payments
                 .SelectMany(i => i.Value)
+                .Where(i => i.ПериодОплаты.Year == this.selectedPeriod.Value.Year)
+                .Where(i => i.ПериодОплаты.Month == this.selectedPeriod.Value.Month)
                 .GroupBy(i => i.Лицевой, p => p)
                 .ToDictionary(i => i.Key, p => p.ToList());
             if (allPayments == null)
