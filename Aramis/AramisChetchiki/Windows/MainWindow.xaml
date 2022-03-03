@@ -28,12 +28,12 @@
     FontSize="{local_extensions:SettingBinding Path=FontSize,
                                                FallbackValue=13.0}"
     Icon="{StaticResource MainIcon}"
+    Loaded="WindowWithDialogs_Loaded"
     SnapsToDevicePixels="True"
     Style="{StaticResource WindowStyle}"
     TextOptions.TextFormattingMode="Ideal"
     UseLayoutRounding="True"
     WindowStartupLocation="CenterOwner"
-    WindowState="Maximized"
     mc:Ignorable="d">
     <Window.InputBindings>
         <!--  KeyBinding Key="Esc" Command="{Binding CommandGoHome}" /  -->

@@ -175,32 +175,25 @@
 
         private void CalculateConsumption()
         {
-            if (this.HasChildren)
+            if (this.ChildMetersCount > 0)
             {
-                IList<uint?> values = this.children.Select(child => child.Consumption).ToList();
+                IList<uint?> values = this.ChildMeters.Select(child => child.Consumption).ToList();
                 this.CalculateConsumption(values);
+            }
 
-                var emptyChildren = this.children.Where(i => i.Header == EmptyHeader).ToList();
-                int? emptyItemsCount = emptyChildren.Count == 0 ? null : emptyChildren.Count;
-                this.notBindingAbonentsConsumption = (uint)emptyChildren.Sum(i => i.Consumption);
+            var emptyChildren = this.children.Where(i => i.Header == EmptyHeader).ToList();
+            if (emptyChildren.Any())
+            {
+                IList<FiderAnalizMeter> meters = emptyChildren.SelectMany(i => i.ChildMeters).ToList();
+
+                IList<uint?> values = meters.Select(meter => meter.Consumption).ToList();
+
+                this.notBindingAbonentsConsumption = (uint)values.Sum(i => i ?? 0);
+                this.notBindingAbonentsCount = (uint)values.Count;
 
                 this.RaisePropertyChanged(nameof(this.NotBindingAbonentsCount));
                 this.RaisePropertyChanged(nameof(this.NotBindingAbonentsConsumption));
             }
-            else
-            {
-                if (this.ChildMetersCount > 0)
-                {
-                    IList<uint?> values = this.ChildMeters.Select(child => child.Consumption).ToList();
-                    this.CalculateConsumption(values);
-                }
-                else
-                {
-                    ;
-                }
-            }
-
-            var t = this.ChildMeters.OrderByDescending(i => i.Consumption).Take(20).ToList();
 
             this.RaisePropertyChanged(nameof(this.HasChildren));
         }
