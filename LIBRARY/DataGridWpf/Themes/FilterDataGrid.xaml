@@ -7,11 +7,19 @@
     xmlns:dgx="urn:tom-englert.de/DataGridExtensions"
     xmlns:sys="clr-namespace:System;assembly=mscorlib"
     xmlns:uicontrols="clr-namespace:TMP.UI.Controls.WPF;assembly=ui.controls.wpf"
-    xmlns:uicontrols_behaviours="clr-namespace:TMP.UI.Controls.WPF.Behaviours;assembly=ui.controls.wpf">
+    xmlns:uicontrols_behaviours="clr-namespace:TMP.UI.Controls.WPF.Behaviours;assembly=ui.controls.wpf"
+    xmlns:uicontrols_converters="clr-namespace:TMP.UI.Controls.WPF.Converters;assembly=ui.controls.wpf">
+
+    <uicontrols_converters:BoolToStrConverter
+        x:Key="BoolToStrConverter"
+        FalseContent="нет"
+        TrueContent="да" />
 
     <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
 
     <dgx:RegexContentFilterFactory x:Key="RegexContentFilterFactory" />
+
+    <SolidColorBrush x:Key="rowAlternatingBackgroundBrush" Color="Gray" />
 
     <SolidColorBrush x:Key="HighlightBrush" Color="{x:Static SystemColors.HighlightTextColor}" />
 
@@ -110,7 +118,6 @@
             </Setter.Value>
         </Setter>
     </Style>
-
 
     <!--  SELECT COLUMNS BUTTON  -->
     <Style
@@ -719,6 +726,20 @@
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
 
+                <!--  Overlay  -->
+                <uicontrols:NoData
+                    x:Name="overlay"
+                    Grid.RowSpan="2"
+                    Margin="5"
+                    Visibility="Collapsed">
+                    <uicontrols:NoData.Message>
+                        <PriorityBinding>
+                            <Binding Path="NoItemsMessage" RelativeSource="{RelativeSource AncestorType={x:Type control:FilterDataGrid}}" />
+                            <Binding Source="{StaticResource StringNoData}" />
+                        </PriorityBinding>
+                    </uicontrols:NoData.Message>
+                </uicontrols:NoData>
+
                 <!--  CONTENT DATAGRID  -->
                 <ScrollViewer
                     x:Name="DG_ScrollViewer"
@@ -812,6 +833,13 @@
                 </Border>
             </Grid>
         </Border>
+
+        <ControlTemplate.Triggers>
+            <Trigger Property="HasItems" Value="False">
+                <Setter TargetName="overlay" Property="Visibility" Value="Visible" />
+            </Trigger>
+        </ControlTemplate.Triggers>
+
     </ControlTemplate>
 
     <!--  FILTERDATAGRID STYLE BASED ON DATAGRID  -->
@@ -843,13 +871,15 @@
             </Setter.Value>
         </Setter>
 
-        <!--  Setter Property="ColumnHeaderStyle" Value="{StaticResource DataGridColumnHeaderStyle}"/  -->
+        <Setter Property="ItemsPanel">
+            <Setter.Value>
+                <ItemsPanelTemplate>
+                    <DataGridRowsPresenter x:Name="PART_RowsPresenter" />
+                </ItemsPanelTemplate>
+            </Setter.Value>
+        </Setter>
 
-        <Style.Triggers>
-            <Trigger Property="ItemsSource" Value="{x:Null}">
-                <Setter Property="Template" Value="{DynamicResource NoDataControlTemplate}" />
-            </Trigger>
-        </Style.Triggers>
+        <!--  Setter Property="ColumnHeaderStyle" Value="{StaticResource DataGridColumnHeaderStyle}"/  -->
 
     </Style>
 

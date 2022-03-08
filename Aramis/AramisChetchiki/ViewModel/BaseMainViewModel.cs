@@ -85,7 +85,7 @@
                 this.SetProperty(ref this.isBusy, value);
                 if (this.isBusy)
                 {
-                    this.isBusyCancellationTokenSource = new System.Threading.CancellationTokenSource(TimeSpan.FromSeconds(30));
+                    System.Threading.CancellationTokenSource cts = this.isBusyCancellationTokenSource = new System.Threading.CancellationTokenSource(TimeSpan.FromSeconds(30));
                     this.RaisePropertyChanged(nameof(this.IsBusyCancellationTokenSource));
                     System.Threading.Tasks.Task waitTask = System.Threading.Tasks.Task.Run(
                         () =>
@@ -114,7 +114,7 @@
 
                             this.isBusyCancellationTokenSource = null;
                             this.RaisePropertyChanged(nameof(this.IsBusyCancellationTokenSource));
-                        }, this.isBusyCancellationTokenSource.Token);
+                        }, cts.Token);
                 }
                 else
                 {

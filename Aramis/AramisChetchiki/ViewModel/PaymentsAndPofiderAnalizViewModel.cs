@@ -8,8 +8,10 @@
     using System.Threading.Tasks;
     using System.Windows;
     using System.Windows.Data;
+    using System.Windows.Input;
     using TMP.Extensions;
     using TMP.Shared;
+    using TMP.Shared.Commands;
     using TMP.UI.Controls.WPF.Reporting.MatrixGrid;
     using TMP.WORK.AramisChetchiki.Model;
 
@@ -17,12 +19,21 @@
     {
         #region Fields
 
-        private MTObservableCollection<IMatrix> pivotCollection = new();
+        private ObservableCollections.ObservableList<IMatrix> pivotCollection = new();
+        private string tpNameFilter;
         private FiderAnalizTreeModel modelTree;
-        private FiderAnalizTreeItem selectedItemNode;
+        private UI.Controls.WPF.TreeListView.TreeNode selectedItemNode;
         private DateOnly? selectedPeriod;
         private ICollection<KeyValuePair<string, DateOnly>> datePeriods;
         private string description = string.Empty;
+        private FiderAnalizTreeItem selectedItem;
+
+        private AbonentsBindingTreeMode abonentsBindingTreeMode = AbonentsBindingTreeMode.Full;
+
+        private List<FiderAnalizTreeItem> nodesList;
+
+        private IEnumerable<Meter> allMeters;
+        private IList<FiderAnalizMeter> allFiderAnalizMeters;
 
         #endregion Fields
 
@@ -37,6 +48,9 @@
 
             // this.Data = MainViewModel?.Data?.Payments.SelectMany(i => i.Value);
 
+            this.CommandViewDetailsBySelectedItem = new DelegateCommand<object>(this.DoViewDetailsBySelectedItem);
+            this.CommandChangeViewKind = new DelegateCommand<AbonentsBindingTreeMode>(this.DoChangeViewKind);
+
             this.CommandPrint = null;
 
             this.IsBusy = true;
@@ -47,9 +61,55 @@
 
         #region Properties
 
+        public string TpNameFilter
+        {
+            get => this.tpNameFilter;
+
+            set
+            {
+                if (this.SetProperty(ref this.tpNameFilter, value))
+                {
+                    this.ApplyFilter();
+                    this.RaisePropertyChanged(nameof(this.VisibleNodesCount));
+                }
+            }
+        }
+
         public FiderAnalizTreeModel ModelTree { get => this.modelTree; private set => this.SetProperty(ref this.modelTree, value); }
 
-        public FiderAnalizTreeItem SelectedItemNode { get => this.selectedItemNode; set => this.SetProperty(ref this.selectedItemNode, value); }
+        /// <summary>
+        /// Выбранный в дереве узел
+        /// </summary>
+        public UI.Controls.WPF.TreeListView.TreeNode SelectedItemNode
+        {
+            get
+            {
+                return this.selectedItemNode;
+            }
+
+            set
+            {
+                if (this.SetProperty(ref this.selectedItemNode, value) && value != null)
+                {
+                    this.SelectedItem = value.Model as FiderAnalizTreeItem;
+                    this.RaisePropertyChanged(nameof(this.ChildMeters));
+                }
+            }
+        }
+
+        public FiderAnalizTreeItem SelectedItem
+        {
+            get => this.selectedItem;
+            set
+            {
+                if (this.SetProperty(ref this.selectedItem, value))
+                {
+                    this.RaisePropertyChanged(nameof(this.ChildMeters));
+                }
+            }
+        }
+
+        public IList<FiderAnalizMeter> ChildMeters => this.SelectedItem?.ChildMeters;
 
         public DateOnly? SelectedPeriod
         {
@@ -58,13 +118,7 @@
             {
                 if (this.SetProperty(ref this.selectedPeriod, value))
                 {
-                    this.IsBusy = true;
-                    Task.Run(() =>
-                    {
-                        this.CreatePivots();
-                        this.BuildTreeModel();
-                    })
-                    .ContinueWith(t => this.IsBusy = false);
+                    this.RebuildTree();
                 }
             }
         }
@@ -75,7 +129,7 @@
             private set => this.SetProperty(ref this.datePeriods, value);
         }
 
-        public MTObservableCollection<IMatrix> PivotCollection
+        public ObservableCollections.ObservableList<IMatrix> PivotCollection
         {
             get => this.pivotCollection;
             private set => this.SetProperty(ref this.pivotCollection, value);
@@ -87,13 +141,63 @@
             private set => this.SetProperty(ref this.description, value);
         }
 
+        public int VisibleNodesCount => (this.nodesList == null) ? 0 : this.nodesList.Count(n => n.IsMatch);
+
         #region Commands
+
+        public ICommand CommandViewDetailsBySelectedItem { get; }
+
+        public ICommand CommandChangeViewKind { get; }
 
         #endregion
 
         #endregion
 
         #region Private methods
+
+        private void ApplyFilter()
+        {
+            this.IsBusy = true;
+            System.Threading.Tasks.Task task = System.Threading.Tasks.Task.Run(() =>
+            {
+                foreach (FiderAnalizTreeItem child in this.nodesList)
+                {
+                    child.ApplyCriteria(this.tpNameFilter, new Stack<FiderAnalizTreeItem>());
+                }
+            });
+            task.ContinueWith(t =>
+            {
+                this.IsBusy = false;
+            });
+        }
+
+        private void DoViewDetailsBySelectedItem(object selectedItem)
+        {
+            if (selectedItem == null || selectedItem is FiderAnalizMeter fiderAnalizMeter == false)
+            {
+                return;
+            }
+
+            var meter = MainViewModel?.Data?.Meters.Where(i => i.Удалён == false && i.Лицевой == fiderAnalizMeter.Id).FirstOrDefault();
+
+            if (meter == null)
+            {
+                return;
+            }
+
+            Controls.MeterView control = new Controls.MeterView
+            {
+                DataContext = new ViewModel.MeterViewViewModel(meter),
+            };
+            Action dialogCloseAction = this.ShowCustomDialog(control, "-= Подробная информация =-");
+            control.CloseAction = dialogCloseAction;
+        }
+
+        private void DoChangeViewKind(AbonentsBindingTreeMode kind)
+        {
+            this.abonentsBindingTreeMode = kind;
+            this.RebuildTree();
+        }
 
         private void Init()
         {
@@ -105,6 +209,17 @@
                 this.BuildTreeModel();
             })
             .ContinueWith(t => this.IsBusy = false, TaskScheduler.FromCurrentSynchronizationContext());
+        }
+
+        private void RebuildTree()
+        {
+            this.IsBusy = true;
+            Task.Run(() =>
+            {
+                this.CreatePivots();
+                this.BuildTreeModel();
+            })
+            .ContinueWith(t => this.IsBusy = false);
         }
 
         private void BuildPeriods()
@@ -135,15 +250,17 @@
                 }
             }
 
-            this.DatePeriods = datePeriods;
-            this.SelectedPeriod = this.DatePeriods.LastOrDefault().Value;
+            this.datePeriods = datePeriods;
+            this.selectedPeriod = this.DatePeriods.LastOrDefault().Value;
+            this.RaisePropertyChanged(nameof(this.SelectedPeriod));
+            this.RaisePropertyChanged(nameof(this.DatePeriods));
         }
 
         private void CreatePivots()
         {
             this.PivotCollection.Clear();
 
-            foreach (IMatrix pivot in SummaryInfoHelper.GetEnergyPowerSuppyPivots(MainViewModel.Data, this.SelectedPeriod.Value))
+            foreach (IMatrix pivot in SummaryInfoHelper.GetPaymentsAndPofiderAnalizPivots(this.SelectedPeriod.Value, this.allFiderAnalizMeters))
             {
                 this.PivotCollection.Add(pivot);
             }
@@ -158,8 +275,8 @@
 
             this.Status = "построение модели";
 
-            var allMeters = MainViewModel?.Data?.Meters.Where(i => i.Удалён == false);
-            if (allMeters == null)
+            this.allMeters = MainViewModel?.Data?.Meters.Where(i => i.Удалён == false);
+            if (this.allMeters == null)
             {
                 return;
             }
@@ -199,7 +316,7 @@
                     foreach (IGrouping<object, FiderAnalizMeter> group in groups)
                     {
                         string header = group.Key == null || string.IsNullOrWhiteSpace(group.Key.ToString()) ? FiderAnalizTreeItem.EmptyHeader : group.Key.ToTrimmedString();
-                        FiderAnalizTreeItem item = new(null, header, itemType, group.ToList());
+                        FiderAnalizTreeItem item = new(null, header, itemType, group.OrderByDescending(m => m.Consumption).ToList());
                         items.Add(item);
                     }
 
@@ -212,42 +329,75 @@
             }
 
             this.DetailedStatus = "вычисление потребление э/э счётчиками";
-            IList<FiderAnalizMeter> allFiderAnalizMeters = allMeters.Select(i => new FiderAnalizMeter(i, GetMeterConsumption(i))).ToList();
+            this.allFiderAnalizMeters = this.allMeters.Select(i => new FiderAnalizMeter(i, GetMeterConsumption(i))).ToList();
 
-            IList<FiderAnalizTreeItem> substationsNodes = GroupMetersByProperty(allFiderAnalizMeters, nameof(FiderAnalizMeter.Substation), FiderAnalizTreeItemType.Substation);
-            if (substationsNodes != null)
+            this.DetailedStatus = "построение структуры ...";
+            IList<FiderAnalizTreeItem> nodes = null;
+
+            void BuildTree(FiderAnalizTreeItem item, FiderAnalizTreeItemType itemType)
             {
-                foreach (FiderAnalizTreeItem substation in substationsNodes)
-                {
-                    this.DetailedStatus = $"ПС '{substation.Header}'";
+                IList<FiderAnalizMeter> meters = item == null ? this.allFiderAnalizMeters : item.ChildMeters;
+                IList<FiderAnalizTreeItem> childs = null;
+                FiderAnalizTreeItemType childType = FiderAnalizTreeItemType.None;
+                string fieldName = nameof(FiderAnalizMeter.Substation);
 
-                    IList<FiderAnalizTreeItem> fiders10 = GroupMetersByProperty(substation.ChildMeters, nameof(FiderAnalizMeter.Fider10), FiderAnalizTreeItemType.Fider10);
-                    if (fiders10 != null)
+                switch (itemType)
+                {
+                    case FiderAnalizTreeItemType.None:
+                        childType = FiderAnalizTreeItemType.Substation;
+                        fieldName = nameof(FiderAnalizMeter.Substation);
+                        break;
+                    case FiderAnalizTreeItemType.Substation:
+                        childType = FiderAnalizTreeItemType.Fider10;
+                        fieldName = nameof(FiderAnalizMeter.Fider10);
+                        break;
+                    case FiderAnalizTreeItemType.Fider10:
+                        childType = FiderAnalizTreeItemType.TP;
+                        fieldName = nameof(FiderAnalizMeter.Tp);
+                        break;
+                    case FiderAnalizTreeItemType.TP:
+                        childType = FiderAnalizTreeItemType.Fider04;
+                        fieldName = nameof(FiderAnalizMeter.Fider04);
+                        break;
+                    case FiderAnalizTreeItemType.Fider04:
+                        childType = FiderAnalizTreeItemType.None;
+                        break;
+                }
+
+                childs = GroupMetersByProperty(meters, fieldName, childType);
+                if (item == null)
+                {
+                    nodes = childs;
+                }
+
+                if (childs != null && childType != FiderAnalizTreeItemType.None)
+                {
+                    item?.AddChildren(childs);
+                    foreach (FiderAnalizTreeItem child in childs)
                     {
-                        substation.AddChildren(fiders10);
-                        foreach (FiderAnalizTreeItem fider10 in substation.Children)
-                        {
-                            IList<FiderAnalizTreeItem> tps = GroupMetersByProperty(fider10.ChildMeters, nameof(FiderAnalizMeter.Tp), FiderAnalizTreeItemType.TP);
-                            if (tps != null)
-                            {
-                                fider10.AddChildren(tps);
-                                foreach (FiderAnalizTreeItem tp in fider10.Children)
-                                {
-                                    IList<FiderAnalizTreeItem> fiders04 = GroupMetersByProperty(tp.ChildMeters, nameof(FiderAnalizMeter.Fider04), FiderAnalizTreeItemType.Fider04);
-                                    if (fiders04 != null)
-                                    {
-                                        tp.AddChildren(fiders04);
-                                    }
-                                }
-                            }
-                        }
+                        BuildTree(child, childType);
                     }
                 }
             }
 
+            switch (this.abonentsBindingTreeMode)
+            {
+                case AbonentsBindingTreeMode.Full:
+                    BuildTree(null, FiderAnalizTreeItemType.None);
+                    break;
+                case AbonentsBindingTreeMode.WithoutSubstation:
+                    BuildTree(null, FiderAnalizTreeItemType.Fider10);
+                    break;
+                case AbonentsBindingTreeMode.WithoutFider10:
+                    BuildTree(null, FiderAnalizTreeItemType.TP);
+                    break;
+                default:
+                    throw new NotImplementedException(nameof(this.abonentsBindingTreeMode));
+            }
+
             this.DetailedStatus = "завершение ...";
 
-            IList<FiderAnalizMeter> list = allFiderAnalizMeters
+            IList<FiderAnalizMeter> list = this.allFiderAnalizMeters
                 .Where(i =>
                     string.IsNullOrWhiteSpace(i.Substation) |
                     string.IsNullOrWhiteSpace(i.Fider10) |
@@ -255,7 +405,7 @@
                     string.IsNullOrWhiteSpace(i.Fider04))
                 .ToList();
 
-            FiderAnalizTreeItem root = new(null, "РЭС", FiderAnalizTreeItemType.Group, allFiderAnalizMeters)
+            FiderAnalizTreeItem root = new(null, "РЭС", FiderAnalizTreeItemType.Group, this.allFiderAnalizMeters)
             {
                 IsExpanded = true,
                 NotBindingAbonentsCount = (uint)list.Count,
@@ -270,9 +420,9 @@
                     list));
             }
 
-            if (!substationsNodes.Cast<FiderAnalizTreeItem>().Any(i => string.Equals(i.Header, FiderAnalizTreeItem.EmptyHeader, AppSettings.StringComparisonMethod)))
+            if (!nodes.Cast<FiderAnalizTreeItem>().Any(i => string.Equals(i.Header, FiderAnalizTreeItem.EmptyHeader, AppSettings.StringComparisonMethod)))
             {
-                list = allFiderAnalizMeters.Where(i => string.IsNullOrWhiteSpace(i.Substation)).ToList();
+                list = this.allFiderAnalizMeters.Where(i => string.IsNullOrWhiteSpace(i.Substation)).ToList();
                 if (list.Count > 0)
                 {
                     root.Children.Add(new FiderAnalizTreeItem(
@@ -283,12 +433,14 @@
                 }
             }
 
-            root.AddChildren(substationsNodes);
+            root.AddChildren(nodes);
 
-            this.ModelTree = new FiderAnalizTreeModel(new ObservableCollection<FiderAnalizTreeItem>(root.Children));
+            this.nodesList = new List<FiderAnalizTreeItem>(root.Children.Cast<FiderAnalizTreeItem>());
+            this.ModelTree = new FiderAnalizTreeModel(this.nodesList);
 
             this.Status = null;
             this.DetailedStatus = null;
+            this.RaisePropertyChanged(nameof(this.VisibleNodesCount));
         }
 
         /* protected override ICollectionView BuildAndGetView()

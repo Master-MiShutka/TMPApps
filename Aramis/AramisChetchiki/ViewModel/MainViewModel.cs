@@ -267,7 +267,7 @@
         /// <summary>
         /// Коллекция доступных файлов с данными
         /// </summary>
-        public System.Collections.ObjectModel.ObservableCollection<Common.RepositoryCommon.IDataFileInfo> AvailableDataFiles => Repository.Instance.AvailableDataFiles;
+        public ObservableCollections.ObservableList<Common.RepositoryCommon.IDataFileInfo> AvailableDataFiles => Repository.Instance.AvailableDataFiles;
 
         /// <summary>
         /// Выбранный файл данных

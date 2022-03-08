@@ -24,13 +24,13 @@
 
         #endregion
 
-        public TreeListViewItem()
-        {
-        }
-
         static TreeListViewItem()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(TreeListViewItem), new FrameworkPropertyMetadata(typeof(TreeListViewItem)));
+        }
+
+        public TreeListViewItem()
+        {
         }
 
         protected override void OnKeyDown(KeyEventArgs e)

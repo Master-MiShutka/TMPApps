@@ -246,17 +246,16 @@
             return si;
         }
 
-        public static IEnumerable<IMatrix> GetEnergyPowerSuppyPivots(AramisData aramisData, DateOnly period)
+        public static IEnumerable<IMatrix> GetPaymentsAndPofiderAnalizPivots(DateOnly period, IList<FiderAnalizMeter> fiderAnalizMeters = null)
         {
-            if (aramisData == null || aramisData.ElectricitySupplyInfo == null)
+            if (fiderAnalizMeters == null)
             {
                 return new List<IMatrix>();
             }
 
             List<IMatrix> pivots = new();
 
-            List<ElectricitySupply> data = aramisData.ElectricitySupplyInfo.Where(i => i.Период == period).ToList();
-            int total = data.Sum(i => i.Полезный_отпуск);
+            long total = fiderAnalizMeters.Select(meter => meter.Consumption).Sum(i => i ?? 0);
 
             IEnumerable<IMatrixHeader> headerCells2 = new IMatrixHeader[]
             {
@@ -266,9 +265,9 @@
 
             string notDefinedString = "(не указана)";
 
-            List<KeyValuePair<string, int>> substationsPowerSuppy = data
-                .GroupBy(i => i.Подстанция)
-                .Select(i => new KeyValuePair<string, int>(string.IsNullOrWhiteSpace(i.Key) ? notDefinedString : i.Key, i.Sum(o => o.Полезный_отпуск)))
+            List<KeyValuePair<string, int>> substationsPowerSuppy = fiderAnalizMeters
+                .GroupBy(i => i.Substation)
+                .Select(i => new KeyValuePair<string, int>(string.IsNullOrWhiteSpace(i.Key) ? notDefinedString : i.Key, (int)i.Select(meter => meter.Consumption).Sum(i => i ?? 0)))
                 .OrderByDescending(i => i.Value)
                 .ToList();
 
@@ -302,9 +301,9 @@
 
             string otherString = "(остальное)";
 
-            List<KeyValuePair<string, int>> data1 = data
-                .GroupBy(i => i.Населённый_пункт)
-                .Select(i => new KeyValuePair<string, int>(i.Key, i.Sum(o => o.Полезный_отпуск)))
+            List<KeyValuePair<string, int>> data1 = fiderAnalizMeters
+                .GroupBy(i => i.Town)
+                .Select(i => new KeyValuePair<string, int>(i.Key, (int)i.Select(meter => meter.Consumption).Sum(i => i ?? 0)))
                 .OrderByDescending(i => i.Value)
                 .ToList();
             List<KeyValuePair<string, int>> energyPowerSupplyByStateList = new();
@@ -367,12 +366,12 @@
                 },
             });
 
-            List<ElectricitySupply> data2 = data
-                .Where(i => i.Полезный_отпуск > 0)
+            List<FiderAnalizMeter> data2 = fiderAnalizMeters
+                .Where(i => i.Consumption.HasValue && i.Consumption > 0)
                 .ToList();
 
-            List<IGrouping<string, ElectricitySupply>> data3 = data2
-                .GroupBy(i => i.Тип_населённого_пункта)
+            List<IGrouping<string, FiderAnalizMeter>> data3 = data2
+                .GroupBy(i => i.TownType)
                 .ToList();
 
             Dictionary<string, int> data4 = data3
@@ -380,17 +379,21 @@
 
             Dictionary<string, Dictionary<string, int>> keyValuePairs = new()
             {
-                { "до 50 кВт∙ч", data3.ToDictionary(i => i.Key, k => k.Count(l => l.Полезный_отпуск < 50)) },
-                { "от 50 до 100 кВт∙ч", data3.ToDictionary(i => i.Key, k => k.Count(l => l.Полезный_отпуск is >= 50 and < 100)) },
-                { "от 100 до 150 кВт∙ч", data3.ToDictionary(i => i.Key, k => k.Count(l => l.Полезный_отпуск is >= 100 and < 150)) },
-                { "ровно 150 кВт∙ч", data3.ToDictionary(i => i.Key, k => k.Count(l => l.Полезный_отпуск == 150)) },
-                { "от 150 до 170 кВт∙ч", data3.ToDictionary(i => i.Key, k => k.Count(l => l.Полезный_отпуск is > 150 and < 170)) },
-                { "от 170 до 200 кВт∙ч", data3.ToDictionary(i => i.Key, k => k.Count(l => l.Полезный_отпуск is >= 170 and < 200)) },
-                { "от 200 до 300 кВт∙ч", data3.ToDictionary(i => i.Key, k => k.Count(l => l.Полезный_отпуск is >= 200 and < 300)) },
-                { "от 300 до 500 кВт∙ч", data3.ToDictionary(i => i.Key, k => k.Count(l => l.Полезный_отпуск is >= 300 and < 500)) },
-                { "от 500 до 1000 кВт∙ч", data3.ToDictionary(i => i.Key, k => k.Count(l => l.Полезный_отпуск is >= 500 and < 1000)) },
-                { "от 1000 до 3000 кВт∙ч", data3.ToDictionary(i => i.Key, k => k.Count(l => l.Полезный_отпуск is >= 1000 and < 3000)) },
-                { "более 3000 кВт∙ч", data3.ToDictionary(i => i.Key, k => k.Count(l => l.Полезный_отпуск >= 3000)) },
+                { "до 5 кВт∙ч", data3.ToDictionary(i => i.Key, k => k.Count(l => l.Consumption < 5)) },
+                { "от 5 до 50 кВт∙ч", data3.ToDictionary(i => i.Key, k => k.Count(l => l.Consumption is >= 5 and < 50)) },
+                { "ровно 50 кВт∙ч", data3.ToDictionary(i => i.Key, k => k.Count(l => l.Consumption == 50)) },
+                { "от 50 до 100 кВт∙ч", data3.ToDictionary(i => i.Key, k => k.Count(l => l.Consumption is > 50 and < 100)) },
+                { "ровно 100 кВт∙ч", data3.ToDictionary(i => i.Key, k => k.Count(l => l.Consumption == 100)) },
+                { "от 100 до 150 кВт∙ч", data3.ToDictionary(i => i.Key, k => k.Count(l => l.Consumption is > 100 and < 150)) },
+                { "ровно 150 кВт∙ч", data3.ToDictionary(i => i.Key, k => k.Count(l => l.Consumption == 150)) },
+                { "от 150 до 170 кВт∙ч", data3.ToDictionary(i => i.Key, k => k.Count(l => l.Consumption is > 150 and < 170)) },
+                { "от 170 до 200 кВт∙ч", data3.ToDictionary(i => i.Key, k => k.Count(l => l.Consumption is >= 170 and < 200)) },
+                { "ровно 200 кВт∙ч", data3.ToDictionary(i => i.Key, k => k.Count(l => l.Consumption == 200)) },
+                { "от 200 до 300 кВт∙ч", data3.ToDictionary(i => i.Key, k => k.Count(l => l.Consumption is > 200 and < 300)) },
+                { "от 300 до 500 кВт∙ч", data3.ToDictionary(i => i.Key, k => k.Count(l => l.Consumption is >= 300 and < 500)) },
+                { "от 500 до 1000 кВт∙ч", data3.ToDictionary(i => i.Key, k => k.Count(l => l.Consumption is >= 500 and < 1000)) },
+                { "от 1000 до 3000 кВт∙ч", data3.ToDictionary(i => i.Key, k => k.Count(l => l.Consumption is >= 1000 and < 3000)) },
+                { "более 3000 кВт∙ч", data3.ToDictionary(i => i.Key, k => k.Count(l => l.Consumption >= 3000)) },
             };
 
             IList<string> headerCells3 = new List<string>()
@@ -399,7 +402,7 @@
             };
 
             IList<string> headerCells4 = data2
-                .Select(i => i.Тип_населённого_пункта)
+                .Select(i => i.TownType)
                 .Distinct()
                 .ToList();
 

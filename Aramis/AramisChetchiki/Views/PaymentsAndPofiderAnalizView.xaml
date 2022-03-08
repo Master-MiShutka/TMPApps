@@ -15,19 +15,23 @@
     xmlns:matrix="clr-namespace:TMP.UI.Controls.WPF.Reporting.MatrixGrid;assembly=ui.controls.wpf.reporting"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:model="clr-namespace:TMP.WORK.AramisChetchiki.Model"
+    xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
     xmlns:system="clr-namespace:System;assembly=mscorlib"
     xmlns:ui_controls="clr-namespace:TMP.UI.Controls.WPF;assembly=ui.controls.wpf"
     xmlns:ui_controls_behaviours="clr-namespace:TMP.UI.Controls.WPF.Behaviours;assembly=ui.controls.wpf"
+    xmlns:ui_controls_converters="clr-namespace:TMP.UI.Controls.WPF.Converters;assembly=ui.controls.wpf"
     xmlns:ui_controls_helper="clr-namespace:TMP.UI.Controls.WPF.Helpers;assembly=ui.controls.wpf"
     xmlns:ui_treelistview="clr-namespace:TMP.UI.Controls.WPF.TreeListView;assembly=ui.controls.wpf"
     xmlns:view="clr-namespace:TMP.WORK.AramisChetchiki.Views"
     xmlns:vm="clr-namespace:TMP.WORK.AramisChetchiki.ViewModel"
     x:Name="root"
-    d:DesignHeight="250"
-    d:DesignWidth="800"
+    d:DesignHeight="850"
+    d:DesignWidth="1200"
     TextOptions.TextFormattingMode="Ideal"
     mc:Ignorable="d">
     <UserControl.Resources>
+
+        <ui_controls_converters:BoolOrObjectToGridRowHeightConverter x:Key="BoolOrObjectToGridRowHeightConverter" />
 
         <Style x:Key="BaseCellStyle" TargetType="{x:Type TextBlock}">
             <Setter Property="TextAlignment" Value="Center" />
@@ -82,6 +86,7 @@
                 </DataTrigger>
             </DataTemplate.Triggers>
         </DataTemplate>
+
     </UserControl.Resources>
     <view:BaseView>
         <view:BaseView.HeaderPanel>
@@ -93,41 +98,23 @@
                 <ui_controls:LabelledContent Margin="2" Label="Период: ">
                     <ComboBox
                         MinWidth="100"
+                        VerticalContentAlignment="Center"
                         DisplayMemberPath="Key"
                         ItemsSource="{Binding DatePeriods}"
                         SelectedValue="{Binding SelectedPeriod, Mode=TwoWay}"
                         SelectedValuePath="Value" />
                 </ui_controls:LabelledContent>
                 <Separator Margin="5,0" Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
-                <ui_controls:DropDownButton
-                    VerticalAlignment="Center"
-                    Content="Фильтры"
-                    ItemsSource="{x:Static local:ModelHelper.ElectricitySupplyPropertiesNames}">
-                    <ui_controls:DropDownButton.Icon>
-                        <ui_controls:Icons Height="18" Kind="Filter" />
-                    </ui_controls:DropDownButton.Icon>
-                    <ui_controls:DropDownButton.ItemTemplate>
-                        <DataTemplate>
-                            <Expander
-                                Header="{Binding Converter={StaticResource TextSpaceConverter}}"
-                                IsExpanded="False"
-                                Style="{StaticResource PlusMinusExpander}">
-                                <Expander.Content>
-                                    <itemsfilter:FilterControl
-                                        Key="{Binding}"
-                                        itemsfilter:FilterListExtensions.IsActive="True"
-                                        ParentCollection="{Binding DataContext.View, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}">
-                                        <itemsfilter:FilterControl.ItemsPanel>
-                                            <ItemsPanelTemplate>
-                                                <WrapPanel Orientation="Horizontal" />
-                                            </ItemsPanelTemplate>
-                                        </itemsfilter:FilterControl.ItemsPanel>
-                                    </itemsfilter:FilterControl>
-                                </Expander.Content>
-                            </Expander>
-                        </DataTemplate>
-                    </ui_controls:DropDownButton.ItemTemplate>
-                </ui_controls:DropDownButton>
+                <TextBlock
+                    HorizontalAlignment="Center"
+                    Text="Фильтр&#x0A;по ТП"
+                    TextAlignment="Center" />
+                <TextBox
+                    Margin="2,0,0,0"
+                    controls_helper:TextBoxHelper.Watermark="введите текст для поиска ..."
+                    FontSize="{local_extensions:SettingBinding Path=FontSize}"
+                    Style="{StaticResource SearchTextBox}"
+                    Text="{Binding TpNameFilter, UpdateSourceTrigger=PropertyChanged}" />
                 <Separator Margin="5,0" Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
                 <TextBlock
                     VerticalAlignment="Center"
@@ -151,12 +138,16 @@
                         <Grid.RowDefinitions>
                             <RowDefinition Height="3*" />
                             <RowDefinition Height="Auto" />
-                            <RowDefinition Height="*" />
+                            <RowDefinition Height="{Binding Path=SelectedItem, Converter={StaticResource BoolOrObjectToGridRowHeightConverter}, ConverterParameter=1}" />
                         </Grid.RowDefinitions>
                         <!--  0  -->
                         <ui_treelistview:TreeListView
+                            xmlns:mouseWheel="clr-namespace:WpfMouseWheel.Windows.Input;assembly=WpfMouseWheelLib"
                             x:Name="tree"
                             Grid.Row="0"
+                            mouseWheel:MouseWheel.Enhanced="True"
+                            mouseWheel:MouseWheel.ScrollMode="Auto"
+                            mouseWheel:MouseWheel.ScrollSmoothing="Smooth"
                             AlternationCount="2"
                             IsSynchronizedWithCurrentItem="True"
                             Model="{Binding ModelTree}"
@@ -168,6 +159,7 @@
                                     <Setter Property="TextBlock.TextAlignment" Value="Center" />
                                     <Setter Property="TextBlock.TextTrimming" Value="CharacterEllipsis" />
                                     <Setter Property="TextBlock.TextWrapping" Value="WrapWithOverflow" />
+                                    <Setter Property="TextBlock.Padding" Value="0,0" />
                                 </Style>
                             </ui_treelistview:TreeListView.Resources>
                             <ui_treelistview:TreeListView.View>
@@ -176,46 +168,81 @@
                                         Width="300"
                                         Header="Наименование"
                                         HeaderContainerStyle="{StaticResource HeaderStyle}" />
-                                    <GridViewColumn Header="Потребление, кВт∙ч" HeaderContainerStyle="{StaticResource HeaderStyle}">
-                                        <GridViewColumn.CellTemplate>
-                                            <DataTemplate>
-                                                <TextBlock Text="{Binding Consumption, StringFormat={StaticResource NumberStringFormat}, ConverterCulture=ru-RU}" />
-                                            </DataTemplate>
-                                        </GridViewColumn.CellTemplate>
-                                    </GridViewColumn>
-                                    <GridViewColumn Header="Среднее потребление, кВт∙ч" HeaderContainerStyle="{StaticResource HeaderStyle}">
-                                        <GridViewColumn.CellTemplate>
-                                            <DataTemplate>
-                                                <TextBlock Text="{Binding AverageConsumption, StringFormat={StaticResource NumberStringFormat}, ConverterCulture=ru-RU}" />
-                                            </DataTemplate>
-                                        </GridViewColumn.CellTemplate>
-                                    </GridViewColumn>
-                                    <GridViewColumn Header="Медианное потребление, кВт∙ч" HeaderContainerStyle="{StaticResource HeaderStyle}">
-                                        <GridViewColumn.CellTemplate>
-                                            <DataTemplate>
-                                                <TextBlock Text="{Binding MedianConsumption, StringFormat={StaticResource NumberStringFormat}, ConverterCulture=ru-RU}" />
-                                            </DataTemplate>
-                                        </GridViewColumn.CellTemplate>
-                                    </GridViewColumn>
-                                    <GridViewColumn Header="Количество 'непривязанных' абонентов" HeaderContainerStyle="{StaticResource HeaderStyle}">
-                                        <GridViewColumn.CellTemplate>
-                                            <DataTemplate>
-                                                <TextBlock Text="{Binding NotBindingAbonentsCount, StringFormat={StaticResource NumberStringFormat}, ConverterCulture=ru-RU}" />
-                                            </DataTemplate>
-                                        </GridViewColumn.CellTemplate>
-                                    </GridViewColumn>
-                                    <GridViewColumn Header="Утерянный ПО, кВт∙ч" HeaderContainerStyle="{StaticResource HeaderStyle}">
-                                        <GridViewColumn.CellTemplate>
-                                            <DataTemplate>
-                                                <TextBlock Text="{Binding NotBindingAbonentsConsumption, StringFormat={StaticResource NumberStringFormat}, ConverterCulture=ru-RU}" />
-                                            </DataTemplate>
-                                        </GridViewColumn.CellTemplate>
-                                    </GridViewColumn>
+                                    <GridViewColumn
+                                        DisplayMemberBinding="{Binding Consumption, StringFormat={StaticResource NumberStringFormat}, ConverterCulture=ru-RU}"
+                                        Header="Потребление, кВт∙ч"
+                                        HeaderContainerStyle="{StaticResource HeaderStyle}" />
+                                    <GridViewColumn
+                                        DisplayMemberBinding="{Binding ChildMetersCount, StringFormat={StaticResource NumberStringFormat}, ConverterCulture=ru-RU}"
+                                        Header="Количество счётчиков"
+                                        HeaderContainerStyle="{StaticResource HeaderStyle}" />
+                                    <GridViewColumn
+                                        DisplayMemberBinding="{Binding AverageConsumption, StringFormat={StaticResource NumberStringFormat}, ConverterCulture=ru-RU}"
+                                        Header="Среднее потребление, кВт∙ч"
+                                        HeaderContainerStyle="{StaticResource HeaderStyle}" />
+                                    <GridViewColumn
+                                        DisplayMemberBinding="{Binding MedianConsumption, StringFormat={StaticResource NumberStringFormat}, ConverterCulture=ru-RU}"
+                                        Header="Медианное потребление, кВт∙ч"
+                                        HeaderContainerStyle="{StaticResource HeaderStyle}" />
+                                    <GridViewColumn
+                                        DisplayMemberBinding="{Binding NotBindingAbonentsCount, StringFormat={StaticResource NumberStringFormat}, ConverterCulture=ru-RU}"
+                                        Header="Количество 'непривязанных' абонентов"
+                                        HeaderContainerStyle="{StaticResource HeaderStyle}" />
+                                    <GridViewColumn
+                                        DisplayMemberBinding="{Binding NotBindingAbonentsConsumption, StringFormat={StaticResource NumberStringFormat}, ConverterCulture=ru-RU}"
+                                        Header="Утерянный ПО, кВт∙ч"
+                                        HeaderContainerStyle="{StaticResource HeaderStyle}" />
+                                    <GridViewColumn
+                                        DisplayMemberBinding="{Binding PercentOfPermanentResidence, StringFormat={StaticResource NumberStringFormat}, ConverterCulture=ru-RU}"
+                                        Header="Доля постоянных, %"
+                                        HeaderContainerStyle="{StaticResource HeaderStyle}" />
+                                    <GridViewColumn
+                                        DisplayMemberBinding="{Binding PercentOfSeasonalResidence, StringFormat={StaticResource NumberStringFormat}, ConverterCulture=ru-RU}"
+                                        Header="Доля сезонных, %"
+                                        HeaderContainerStyle="{StaticResource HeaderStyle}" />
+                                    <GridViewColumn
+                                        DisplayMemberBinding="{Binding PercentOfPermanentResidenceWhichHasPayment, StringFormat={StaticResource NumberStringFormat}, ConverterCulture=ru-RU}"
+                                        Header="Доля постоянных с оплатой, %"
+                                        HeaderContainerStyle="{StaticResource HeaderStyle}" />
                                 </GridView>
                             </ui_treelistview:TreeListView.View>
+                            <ui_treelistview:TreeListView.ContextMenu>
+                                <ContextMenu ItemsSource="{local_extensions:EnumToItemsSource {x:Type model:AbonentsBindingTreeMode}}">
+                                    <ContextMenu.ItemContainerStyle>
+                                        <Style BasedOn="{StaticResource baseMenuItemStyle}" TargetType="{x:Type MenuItem}">
+                                            <Setter Property="Header" Value="{Binding Description}" />
+                                            <Setter Property="Command" Value="{Binding Path=DataContext.CommandChangeViewKind, RelativeSource={RelativeSource AncestorType={x:Type filterdatagrid:FilterDataGrid}}}" />
+                                            <Setter Property="CommandParameter" Value="{Binding Value}" />
+                                            <Setter Property="IsCheckable" Value="True" />
+                                            <Setter Property="local_extensions:MenuItemExtensions.GroupName" Value="ViewKind" />
+                                        </Style>
+                                    </ContextMenu.ItemContainerStyle>
+                                </ContextMenu>
+                            </ui_treelistview:TreeListView.ContextMenu>
                             <ui_treelistview:TreeListView.Style>
                                 <Style TargetType="{x:Type ui_treelistview:TreeListView}">
                                     <Style.Triggers>
+                                        <MultiDataTrigger>
+                                            <MultiDataTrigger.Conditions>
+                                                <Condition Binding="{Binding VisibleNodesCount}" Value="0" />
+                                                <Condition Binding="{Binding TpNameFilter, Converter={StaticResource IsNullOrEmptyConverter}}" Value="False" />
+                                            </MultiDataTrigger.Conditions>
+                                            <MultiDataTrigger.Setters>
+                                                <Setter Property="Template">
+                                                    <Setter.Value>
+                                                        <ControlTemplate>
+                                                            <Border
+                                                                ui_controls_helper:RelativeFontSize.RelativeFontSize="2.0"
+                                                                BorderBrush="{TemplateBinding BorderBrush}"
+                                                                BorderThickness="{TemplateBinding BorderThickness}"
+                                                                SnapsToDevicePixels="true">
+                                                                <ui_controls:NoData Margin="10" Message="ничего не нашлось" />
+                                                            </Border>
+                                                        </ControlTemplate>
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </MultiDataTrigger.Setters>
+                                        </MultiDataTrigger>
                                         <DataTrigger Binding="{Binding ModelTree}" Value="{x:Null}">
                                             <Setter Property="Template">
                                                 <Setter.Value>
@@ -225,7 +252,7 @@
                                                             BorderBrush="{TemplateBinding BorderBrush}"
                                                             BorderThickness="{TemplateBinding BorderThickness}"
                                                             SnapsToDevicePixels="true">
-                                                            <ui_controls:NoData />
+                                                            <ui_controls:NoData Margin="5" />
                                                         </Border>
                                                     </ControlTemplate>
                                                 </Setter.Value>
@@ -236,28 +263,22 @@
                             </ui_treelistview:TreeListView.Style>
                         </ui_treelistview:TreeListView>
                         <!--  1  -->
+                        <GridSplitter
+                            Grid.Row="1"
+                            Height="8"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Center"
+                            ResizeBehavior="PreviousAndNext"
+                            ResizeDirection="Rows"
+                            Style="{StaticResource GridSplitterStyle1}" />
                         <!--  2  -->
-                        <filterdatagrid:FilterDataGrid
-                            x:Name="filterDataGrid"
-                            Grid.Row="2"
-                            ui_controls_behaviours:MouseDoubleClick.Command="{Binding Path=CommandViewDetailsBySelectedItem}"
-                            ui_controls_behaviours:MouseDoubleClick.CommandParameter="{Binding Path=SelectedItem, RelativeSource={RelativeSource Mode=Self}}"
-                            AutoGenerateColumns="True"
-                            DisplayRowNumber="True"
-                            IsReadOnly="True"
-                            ItemsSource="{Binding Path=SelectedItemNode.ChildMeters, IsAsync=True, FallbackValue={x:Null}}"
-                            RowStyle="{Binding DataRowStyle, RelativeSource={RelativeSource AncestorType={x:Type local_controls:DataGridControl}}}"
-                            VirtualizingPanel.IsVirtualizing="True"
-                            Visibility="{Binding SelectedItemNode, Converter={StaticResource NullOrEmptyToVisibilityConverter}}">
-                            <Interactions:Interaction.Behaviors>
-                                <ui_controls_behaviours:ZoomFontSizeOnMouseWheelBehavior />
-                            </Interactions:Interaction.Behaviors>
-                            <filterdatagrid:FilterDataGrid.ItemsPanel>
-                                <ItemsPanelTemplate>
-                                    <DataGridRowsPresenter x:Name="PART_RowsPresenter" />
-                                </ItemsPanelTemplate>
-                            </filterdatagrid:FilterDataGrid.ItemsPanel>
-                        </filterdatagrid:FilterDataGrid>
+                        <StackPanel Grid.Row="2" Orientation="Horizontal">
+                            <local_controls:DataGridControl
+                                Grid.Row="2"
+                                AutoGenerateColumns="True"
+                                ItemsSource="{Binding Path=ChildMeters, IsAsync=True}"
+                                Visibility="{Binding SelectedItem, Converter={StaticResource NullOrEmptyToVisibilityConverter}}" />
+                        </StackPanel>
                     </Grid>
                 </TabItem>
                 <TabItem Header="Свод">

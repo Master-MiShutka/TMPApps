@@ -1,8 +1,6 @@
 ﻿namespace TMP.Shared
 {
     using System.Collections.Generic;
-    using System.Collections.ObjectModel;
-    using System.Runtime.Serialization;
 
     /// <summary>
     /// Defines the contract for an object that has a object
@@ -19,17 +17,19 @@
     /// Parent property of the child items when they are added or removed
     /// </summary>
     /// <typeparam name="T">Type of the object</typeparam>
-    public class ChildItemCollection<T> : ObservableCollection<T>
+    public class ChildItemCollection<T> : System.Collections.ObjectModel.ObservableCollection<T>
         where T : class, IChildItem<T>
     {
-        private T parent;
+        private readonly T parent;
 
-        public ChildItemCollection(T parent) : base()
+        public ChildItemCollection(T parent)
+            : base()
         {
             this.parent = parent;
         }
 
-        public ChildItemCollection(T parent, IEnumerable<T> collection) : base(collection)
+        public ChildItemCollection(T parent, IEnumerable<T> collection)
+            : base(collection)
         {
             this.parent = parent;
         }
@@ -46,21 +46,21 @@
 
         protected override void RemoveItem(int index)
         {
-            T oldItem = base[index];
+            T oldItem = this[index];
             base.RemoveItem(index);
             if (oldItem != null)
             {
-                oldItem.Parent = default(T);
+                oldItem.Parent = default;
             }
         }
 
         protected override void SetItem(int index, T item)
         {
-            T oldItem = base[index];
+            T oldItem = this[index];
 
             if (oldItem != null)
             {
-                oldItem.Parent = default(T);
+                oldItem.Parent = default;
             }
 
             if (item != null)
@@ -73,11 +73,11 @@
 
         protected override void ClearItems()
         {
-            foreach (T item in base.Items)
+            foreach (T item in this.Items)
             {
                 if (item != null)
                 {
-                    item.Parent = default(T);
+                    item.Parent = default;
                 }
             }
 

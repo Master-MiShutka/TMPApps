@@ -14,7 +14,7 @@
     d:DesignHeight="150"
     d:DesignWidth="800"
     BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}"
-    BorderThickness="1"
+    BorderThickness="0"
     mc:Ignorable="d">
     <UserControl.Resources>
 
@@ -107,7 +107,17 @@
                                 <Setter TargetName="border" Property="Background" Value="Skyblue" />
                                 <Setter TargetName="border" Property="Visibility" Value="Collapsed" />
                                 <Setter TargetName="textBottom" Property="Text" Value="🕗" />
-                                <Setter TargetName="textBottom" Property="ToolTip" Value="обход" />
+                                <Setter TargetName="textBottom" Property="ToolTip">
+                                    <Setter.Value>
+                                        <TextBlock>
+                                            <Run Text="Обход, дата:" />
+                                            <Run Text="{Binding Date, StringFormat=dd.MM.yyyy, ConverterCulture={x:Static local:AppSettings.CurrentCulture}}" />
+                                            <LineBreak />
+                                            <Run Text="Последнее показание: " />
+                                            <Run Text="{Binding LastElectricityReadings, StringFormat=G, Mode=OneWay}" />
+                                        </TextBlock>
+                                    </Setter.Value>
+                                </Setter>
                             </DataTrigger>
                         </DataTemplate.Triggers>
                     </DataTemplate>
@@ -184,7 +194,7 @@
 
     <HeaderedContentControl Header="Потребление, кВт∙ч">
         <ScrollViewer
-            Height="250"
+            Height="220"
             Padding="0"
             CanContentScroll="False"
             HorizontalScrollBarVisibility="Visible"

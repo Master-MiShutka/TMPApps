@@ -51,27 +51,20 @@
                                 </Hyperlink>
                             </TextBlock>
                             <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
-                                <uicontrols:ContentWithDescription
-                                    Margin="5,0"
-                                    ContentDock="Right"
-                                    Description="Квартал и год до которого включительно у счётчика&#x0A; не истёк срок метрологической поверки"
-                                    DescriptionFontFamily="{DynamicResource DefaultFont}"
-                                    DescriptionFontSize="{DynamicResource NormalFontSize}"
-                                    DescriptionForeground="{DynamicResource TextBrush}">
-                                    <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
-                                        <ComboBox
-                                            MinWidth="50"
-                                            DisplayMemberPath="Value"
-                                            IsEditable="False"
-                                            ItemsSource="{Binding Quarters}"
-                                            SelectedItem="{Binding SelectedQuarter, Mode=TwoWay}" />
-                                        <ComboBox
-                                            MinWidth="50"
-                                            IsEditable="False"
-                                            ItemsSource="{Binding Years}"
-                                            SelectedItem="{Binding SelectedYear, Mode=TwoWay}" />
-                                    </StackPanel>
-                                </uicontrols:ContentWithDescription>
+                                <TextBlock Margin="5,0" Text="Квартал и год до которого включительно у счётчика&#x0A; не истёк срок метрологической поверки" />
+                                <ComboBox
+                                    MinWidth="50"
+                                    VerticalContentAlignment="Center"
+                                    DisplayMemberPath="Value"
+                                    IsEditable="False"
+                                    ItemsSource="{Binding Quarters}"
+                                    SelectedItem="{Binding SelectedQuarter, Mode=TwoWay}" />
+                                <ComboBox
+                                    MinWidth="50"
+                                    VerticalContentAlignment="Center"
+                                    IsEditable="False"
+                                    ItemsSource="{Binding Years}"
+                                    SelectedItem="{Binding SelectedYear, Mode=TwoWay}" />
                                 <Separator Margin="15,0" Style="{StaticResource dotedSeparator}" />
                                 <ItemsControl HorizontalAlignment="Center">
                                     <ItemsControl.ItemsPanel>
@@ -138,7 +131,6 @@
                                         Margin="5,0"
                                         Background="Transparent"
                                         BorderThickness="0"
-                                        FontSize="{DynamicResource HeaderFontSize}"
                                         IsReadOnly="True"
                                         IsReadOnlyCaretVisible="False"
                                         Text="{Binding Path=Message, Mode=OneWay}"

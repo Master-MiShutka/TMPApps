@@ -12,7 +12,7 @@
             <local:Background />
         </ContentControl>
         <Border
-            Margin="20,40,20,10"
+            Margin="10,30,10,10"
             HorizontalAlignment="{Binding HorizontalDialogAlignment, ElementName=root}"
             VerticalAlignment="{Binding VerticalDialogAlignment, ElementName=root}"
             Background="{x:Static SystemColors.WindowBrush}"
@@ -86,8 +86,8 @@
                             </Image.Style>
                         </Image>
                     </Border>
-                    <Grid Margin="10,10" >
-                        <ContentControl x:Name="CustomContent"   />
+                    <Grid>
+                        <ContentControl x:Name="CustomContent" />
                         <ScrollViewer x:Name="ScrollContent">
                             <ContentControl x:Name="StringContent" />
                         </ScrollViewer>

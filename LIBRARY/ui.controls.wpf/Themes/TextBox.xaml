@@ -339,7 +339,7 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type TextBox}">
                     <ControlTemplate.Resources>
-                        <!-- Storyboard x:Key="enterGotFocus">
+                        <Storyboard x:Key="enterGotFocus">
                             <DoubleAnimation
                                 Storyboard.TargetName="PART_Message"
                                 Storyboard.TargetProperty="Opacity"
@@ -351,9 +351,9 @@
                                 Storyboard.TargetName="PART_Message"
                                 Storyboard.TargetProperty="Opacity"
                                 Duration="0:0:0.2" />
-                        </Storyboard-->
+                        </Storyboard>
 
-                        <!-- Storyboard x:Key="enterHasText">
+                        <Storyboard x:Key="enterHasText">
                             <DoubleAnimation
                                 Storyboard.TargetName="PART_Message"
                                 Storyboard.TargetProperty="Opacity"
@@ -366,7 +366,7 @@
                                 Storyboard.TargetName="PART_Message"
                                 Storyboard.TargetProperty="Opacity"
                                 Duration="0:0:0.2" />
-                        </Storyboard-->
+                        </Storyboard>
                     </ControlTemplate.Resources>
                     <Grid>
                         <AdornerDecorator>
@@ -477,12 +477,12 @@
                                 <Condition Binding="{Binding Path=(helpers:TextBoxHelper.UseFloatingWatermark), RelativeSource={RelativeSource Self}}" Value="True" />
                                 <Condition Binding="{Binding Path=(helpers:TextBoxHelper.HasText), RelativeSource={RelativeSource Self}}" Value="True" />
                             </MultiDataTrigger.Conditions>
-                            <!-- MultiDataTrigger.EnterActions>
+                            <MultiDataTrigger.EnterActions>
                                 <BeginStoryboard Storyboard="{StaticResource ShowFloatingMessageStoryboard}" />
                             </MultiDataTrigger.EnterActions>
                             <MultiDataTrigger.ExitActions>
                                 <BeginStoryboard Storyboard="{StaticResource HideFloatingMessageStoryboard}" />
-                            </MultiDataTrigger.ExitActions-->
+                            </MultiDataTrigger.ExitActions>
                         </MultiDataTrigger>
 
                         <MultiDataTrigger>
@@ -531,9 +531,9 @@
                                         Color="{DynamicResource BlackColor}" />
                                 </Setter.Value>
                             </Setter>
-                            <!-- MultiTrigger.EnterActions>
+                            <MultiTrigger.EnterActions>
                                 <BeginStoryboard Storyboard="{StaticResource WaitingForDataStoryboard}" />
-                            </MultiTrigger.EnterActions-->
+                            </MultiTrigger.EnterActions>
                         </MultiTrigger>
                         <Trigger Property="helpers:TextBoxHelper.IsWaitingForData" Value="False">
                             <Setter TargetName="PART_WaitingForDataEffectGrid" Property="Effect" Value="{x:Null}" />

@@ -18,13 +18,9 @@
     xmlns:view="clr-namespace:TMP.WORK.AramisChetchiki.Views"
     xmlns:vm="clr-namespace:TMP.WORK.AramisChetchiki.ViewModel"
     x:Name="root"
-    d:DataContext="{d:DesignInstance Type=vm:AbonentInfoViewModel,
-                                     IsDesignTimeCreatable=True}"
     d:DesignHeight="800"
     d:DesignWidth="1364"
     Background="White"
-    FontSize="{local_extensions:SettingBinding Path=FontSize,
-                                               FallbackValue=13.0}"
     TextOptions.TextFormattingMode="Ideal"
     mc:Ignorable="d">
     <UserControl.Resources>

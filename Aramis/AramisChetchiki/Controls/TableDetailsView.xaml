@@ -6,7 +6,7 @@
     xmlns:extensions="clr-namespace:TMP.Extensions;assembly=TMP.Extensions"
     xmlns:local="clr-namespace:TMP.WORK.AramisChetchiki.Controls"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    d:DesignHeight="450"
+    d:DesignHeight="50"
     d:DesignWidth="800"
     mc:Ignorable="d">
     <Border Background="{extensions:ValueFromStyle StyleKey={x:Type ToolBar}, Property=Control.Background}">

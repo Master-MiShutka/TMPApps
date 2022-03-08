@@ -39,7 +39,7 @@
         <KeyBinding Key="Esc" Command="{Binding CommandOK, ElementName=meterView}" />
     </UserControl.InputBindings>
 
-    <Border Padding="10">
+    <Border Padding="0">
         <Border.Style>
             <Style TargetType="Border">
                 <Style.Triggers>
@@ -219,7 +219,7 @@
                                 <StackPanel Orientation="Vertical">
                                     <controls:LabelledTextBox Label="Расположение" Text="{Binding Path=Расположение, Mode=OneWay}" />
                                     <controls:LabelledTextBox Label="Место установки" Text="{Binding Path=МестоУстановки, Mode=OneWay}" />
-                                    <controls:LabelledTextBox Label="Использование" Text="{Binding Path=Расположение, Mode=OneWay}" />
+                                    <controls:LabelledTextBox Label="Использование" Text="{Binding Path=Использование, Mode=OneWay}" />
                                 </StackPanel>
                             </HeaderedContentControl>
                             <HeaderedContentControl Header="Аскуэ">
@@ -350,14 +350,12 @@
                                 <controls:LabelledTextBox Label="Тип" Text="{Binding Path=ТипСчетчика, Mode=OneWay}" />
                             </StackPanel>
                             <controls:LabelledTextBox Label="#" Text="{Binding Path=НомерСчетчика, Mode=OneWay}" />
-                            <Separator />
                             <StackPanel Orientation="Horizontal">
                                 <controls:LabelledTextBox Label="Ампераж" Text="{Binding Path=Ампераж, Mode=OneWay}" />
                                 <controls:LabelledTextBox Label="Фаз" Text="{Binding Path=Фаз, Mode=OneWay}" />
                             </StackPanel>
                             <controls:LabelledTextBox Label="Год выпуска" Text="{Binding Path=ГодВыпуска, Mode=OneWay}" />
-                            <Separator />
-                            <StackPanel Orientation="Horizontal">
+                            <StackPanel Orientation="Vertical">
                                 <controls:LabelledTextBox Label="Установка" Text="{Binding Path=ДатаУстановки, Mode=OneWay, StringFormat=dd.MM.yy}" />
                                 <controls:LabelledTextBox Label="Поверка" Text="{Binding Path=Поверка, Mode=OneWay}">
                                     <controls:LabelledTextBox.Style>
@@ -391,12 +389,10 @@
                                 </ContentControl>
                             </StackPanel>
                             <Separator />
-                            <StackPanel Orientation="Horizontal">
-                                <controls:LabelledTextBox Label="Принцип" Text="{Binding Path=Принцип, Mode=OneWay}" />
-                                <controls:LabelledTextBox Label="Мощность" Text="{Binding Path=Мощность, Mode=OneWay}" />
-                            </StackPanel>
+                            <controls:LabelledTextBox Label="Принцип" Text="{Binding Path=Принцип, Mode=OneWay}" />
                             <Separator />
                             <controls:LabelledTextBox Label="Пломбы" Text="{Binding Path=НомераПломб, Mode=OneWay}" />
+                            <controls:LabelledTextBox Label="Мощность" Text="{Binding Path=Мощность, Mode=OneWay}" />
                         </StackPanel>
                     </HeaderedContentControl>
                 </StackPanel>
@@ -410,7 +406,7 @@
                                 TextBlock.LineStackingStrategy="BlockLineHeight"
                                 TextBlock.TextAlignment="Center">
                                 <GridViewColumn
-                                    Width="68"
+                                    Width="75"
                                     DisplayMemberBinding="{Binding Date, StringFormat={}{0:dd.MM.yy}}"
                                     Header="Дата"
                                     HeaderTemplate="{StaticResource GridViewColumnHeaderTemplate}" />
@@ -460,7 +456,7 @@
                                 TextBlock.LineStackingStrategy="BlockLineHeight"
                                 TextBlock.TextAlignment="Center">
                                 <GridViewColumn
-                                    Width="68"
+                                    Width="75"
                                     DisplayMemberBinding="{Binding ДатаЗамены, StringFormat={}{0:dd.MM.yy}}"
                                     Header="Дата замены"
                                     HeaderTemplate="{StaticResource GridViewColumnHeaderTemplate}" />
@@ -475,7 +471,7 @@
                                     Header="Номер снятого"
                                     HeaderTemplate="{StaticResource GridViewColumnHeaderTemplate}" />
                                 <GridViewColumn
-                                    Width="77"
+                                    Width="85"
                                     DisplayMemberBinding="{Binding ПоказаниеСнятого}"
                                     Header="Показания снятого"
                                     HeaderTemplate="{StaticResource GridViewColumnHeaderTemplate}" />
@@ -491,11 +487,11 @@
                                     HeaderTemplate="{StaticResource GridViewColumnHeaderTemplate}" />
                                 <GridViewColumn
                                     Width="124"
-                                    DisplayMemberBinding="{Binding ПоказаниеУстановленного}"
+                                    DisplayMemberBinding="{Binding LastReading}"
                                     Header="Показания установленного"
                                     HeaderTemplate="{StaticResource GridViewColumnHeaderTemplate}" />
                                 <GridViewColumn
-                                    Width="125"
+                                    Width="135"
                                     DisplayMemberBinding="{Binding Фамилия}"
                                     Header="Заменил"
                                     HeaderTemplate="{StaticResource GridViewColumnHeaderTemplate}" />
@@ -536,7 +532,7 @@
                         <ListView.View>
                             <GridView TextBlock.TextAlignment="Center">
                                 <GridViewColumn
-                                    Width="68"
+                                    Width="75"
                                     DisplayMemberBinding="{Binding ДатаОплаты, StringFormat={}{0:dd.MM.yy}}"
                                     Header="Дата"
                                     HeaderTemplate="{StaticResource GridViewColumnHeaderTemplate}" />
@@ -546,7 +542,7 @@
                                     Header="Период"
                                     HeaderTemplate="{StaticResource GridViewColumnHeaderTemplate}" />
                                 <GridViewColumn
-                                    Width="93"
+                                    Width="100"
                                     DisplayMemberBinding="{Binding ПредыдущееПоказание}"
                                     Header="Предыдущее показание"
                                     HeaderTemplate="{StaticResource GridViewColumnHeaderTemplate}" />
@@ -556,12 +552,12 @@
                                     Header="Последнее показание"
                                     HeaderTemplate="{StaticResource GridViewColumnHeaderTemplate}" />
                                 <GridViewColumn
-                                    Width="65"
+                                    Width="70"
                                     DisplayMemberBinding="{Binding РазностьПоказанийПоКвитанции}"
                                     Header="Разность"
                                     HeaderTemplate="{StaticResource GridViewColumnHeaderTemplate}" />
                                 <GridViewColumn
-                                    Width="75"
+                                    Width="80"
                                     DisplayMemberBinding="{Binding РазностьПоказанийРасчётная}"
                                     Header="Разность расчётная"
                                     HeaderTemplate="{StaticResource GridViewColumnHeaderTemplate}" />

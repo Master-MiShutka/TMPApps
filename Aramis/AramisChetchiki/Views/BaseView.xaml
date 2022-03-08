@@ -35,8 +35,7 @@
                                     <controls:ButtonWithIconKind
                                         Command="{Binding Path=DataContext.CommandGoHome, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}"
                                         Content="Назад"
-                                        ImageKind="Home"
-                                        Style="{StaticResource defaultButtonStyle}" />
+                                        ImageKind="Home" />
                                     <Separator
                                         Grid.Column="1"
                                         Margin="5,0"

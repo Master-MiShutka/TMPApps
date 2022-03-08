@@ -10,12 +10,12 @@
     public class LoadingDataViewModel : BaseViewModel
     {
         private readonly NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
-        private MTObservableCollection<WorkTask> workTasks = new();
+        private ObservableCollections.ObservableList<WorkTask> workTasks = new();
 
         /// <summary>
         /// Список выполняемых задач
         /// </summary>
-        public MTObservableCollection<WorkTask> WorkTasks
+        public ObservableCollections.ObservableList<WorkTask> WorkTasks
         {
             get => this.workTasks;
             init => this.SetProperty(ref this.workTasks, value);
@@ -35,7 +35,7 @@
         {
             if (System.ComponentModel.DesignerProperties.GetIsInDesignMode(new System.Windows.DependencyObject()))
             {
-                this.workTasks = new MTObservableCollection<WorkTask>()
+                this.workTasks = new ObservableCollections.ObservableList<WorkTask>()
                 {
                         new WorkTask("Задача №1") { Status = "Status 1", Progress = 65, ElapsedTime = "05:56" },
                         new WorkTask("Задача #3") { Status = "Status 3", Progress = 84, ElapsedTime = "01:06", ChildProgress = 75, ChildRemainingTime = "23:22", RemainingTime = "efe" },

@@ -150,8 +150,8 @@
                 <local_controls:DataGridControl
                     x:Name="table"
                     Grid.Row="1"
-                    DataRowStyle="{StaticResource MeterRowStyle}"
-                    NoItemsMessage="{Binding DataGridMessage}" />
+                    NoItemsMessage="{Binding DataGridMessage}"
+                    RowStyle="{StaticResource MeterRowStyle}" />
                 <!--    -->
                 <local_controls:TableDetailsView Grid.Row="2" />
             </Grid>

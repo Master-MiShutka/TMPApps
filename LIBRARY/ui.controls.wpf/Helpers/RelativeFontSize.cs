@@ -49,11 +49,11 @@
 
                 try
                 {
-                    element.SetValue(property, DependencyProperty.UnsetValue);
+                    element.SetCurrentValue(property, DependencyProperty.UnsetValue);
                     var value = (double)args.NewValue;
 
                     // control.FontSize = unchangedFontSize * value;
-                    element.SetValue(property, unchangedFontSize * value);
+                    element.SetCurrentValue(property, unchangedFontSize * value);
                 }
                 finally
                 {

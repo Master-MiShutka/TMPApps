@@ -15,37 +15,37 @@
             this.Initialize();
         }
 
-        public SettingBindingExtension(string path, object _default)
+        public SettingBindingExtension(string path, object @default)
             : base(path)
         {
             this.Initialize();
 
-            if (_default == null)
+            if (@default == null)
             {
                 return;
             }
 
-            if (int.TryParse(_default.ToString(), out int i))
+            if (int.TryParse(@default.ToString(), out int i))
             {
                 this.FallbackValue = i;
                 this.TargetNullValue = i;
             }
             else
-                if (double.TryParse(_default.ToString(), System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out double d))
+                if (double.TryParse(@default.ToString(), System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out double d))
             {
                 this.FallbackValue = d;
                 this.TargetNullValue = d;
             }
             else
-                if (bool.TryParse(_default.ToString(), out bool b))
+                if (bool.TryParse(@default.ToString(), out bool b))
             {
                 this.FallbackValue = b;
                 this.TargetNullValue = b;
             }
             else
             {
-                this.FallbackValue = _default;
-                this.TargetNullValue = _default;
+                this.FallbackValue = @default;
+                this.TargetNullValue = @default;
             }
         }
 

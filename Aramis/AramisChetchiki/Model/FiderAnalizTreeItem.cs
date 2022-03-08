@@ -2,12 +2,13 @@
 {
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
+    using System.ComponentModel;
     using System.Linq;
 
-    public class FiderAnalizTreeItem : Shared.PropertyChangedBase
+    public class FiderAnalizTreeItem : Shared.PropertyChangedBase, Shared.ITreeNode
     {
         private IList<FiderAnalizMeter> childMeters;
-        private FiderAnalizTreeItem parent;
+        private Shared.ITreeNode parent;
         private FiderAnalizTreeItemType @type;
         private string header;
         private uint? consumption;
@@ -15,7 +16,7 @@
         private float? medianConsumption;
         private uint? notBindingAbonentsCount;
         private uint? notBindingAbonentsConsumption;
-        private IList<FiderAnalizTreeItem> children = new ObservableCollection<FiderAnalizTreeItem>();
+        private ICollection<Shared.ITreeNode> children = new List<Shared.ITreeNode>();
         private bool isExpanded;
         private bool isMatch = true;
 
@@ -38,7 +39,7 @@
                 return;
             }
 
-            foreach (FiderAnalizTreeItem child in children)
+            foreach (Shared.ITreeNode child in children)
             {
                 this.children.Add(child);
                 child.Parent = this;
@@ -51,7 +52,7 @@
 
         public static string EmptyHeader => "(пусто)";
 
-        internal IList<FiderAnalizMeter> ChildMeters
+        public IList<FiderAnalizMeter> ChildMeters
         {
             get => this.childMeters;
             private set
@@ -59,13 +60,16 @@
                 if (this.SetProperty(ref this.childMeters, value))
                 {
                     this.RaisePropertyChanged(nameof(this.ChildMetersCount));
+                    this.RaisePropertyChanged(nameof(this.PercentOfPermanentResidence));
+                    this.RaisePropertyChanged(nameof(this.PercentOfSeasonalResidence));
+                    this.RaisePropertyChanged(nameof(this.PercentOfPermanentResidenceWhichHasPayment));
                 }
             }
         }
 
-        internal uint ChildMetersCount => this.ChildMeters != null ? (uint)this.ChildMeters.Count : 0;
+        public uint ChildMetersCount => this.ChildMeters != null ? (uint)this.ChildMeters.Count : 0;
 
-        public FiderAnalizTreeItem Parent { get => this.parent; set => this.SetProperty(ref this.parent, value); }
+        public Shared.ITreeNode Parent { get => this.parent; set => this.SetProperty(ref this.parent, value); }
 
         public FiderAnalizTreeItemType Type { get => this.type; set => this.SetProperty(ref this.type, value); }
 
@@ -85,7 +89,23 @@
             set => this.SetProperty(ref this.notBindingAbonentsConsumption, value);
         }
 
-        public IList<FiderAnalizTreeItem> Children
+        public double PercentOfPermanentResidence => 100d * this.childMeters.Count(i => i.IsPermanentResidence) / this.ChildMetersCount;
+
+        public double PercentOfSeasonalResidence => 100d * this.childMeters.Count(i => i.IsSeasonalResidence) / this.ChildMetersCount;
+
+        public double PercentOfPermanentResidenceWhichHasPayment
+        {
+            get
+            {
+                var list = this.childMeters.Where(i => i.Consumption != null && i.IsPermanentResidence).ToList();
+                var count = list.Count;
+                var totalCount = this.childMeters.Count(i => i.IsPermanentResidence);
+
+                return 100d * count / (totalCount == 0 ? 1_000_000 : totalCount) ;
+            }
+        }
+
+        public ICollection<Shared.ITreeNode> Children
         {
             get => this.children;
             set
@@ -98,44 +118,30 @@
             }
         }
 
-        public bool HasChildren => this.children != null && this.children.Count > 0;
+        public bool HasChildren => this.children != null && this.children.Any();
 
         public bool IsExpanded
         {
             get => this.isExpanded;
             set
             {
-                if (value == this.isExpanded)
+                if (this.SetProperty(ref this.isExpanded, value))
                 {
-                    return;
-                }
-
-                this.isExpanded = value;
-                if (this.isExpanded)
-                {
-                    foreach (FiderAnalizTreeItem child in this.Children)
+                    if (this.isExpanded)
                     {
-                        child.IsMatch = true;
+                        foreach (FiderAnalizTreeItem child in this.Children)
+                        {
+                            child.IsMatch = true;
+                        }
                     }
                 }
-
-                this.RaisePropertyChanged();
             }
         }
 
         public bool IsMatch
         {
             get => this.isMatch;
-            set
-            {
-                if (value == this.isMatch)
-                {
-                    return;
-                }
-
-                this.isMatch = value;
-                this.RaisePropertyChanged();
-            }
+            set => this.SetProperty(ref this.isMatch, value);
         }
 
         private bool IsCriteriaMatched(string criteria)
@@ -184,7 +190,7 @@
             var emptyChildren = this.children.Where(i => i.Header == EmptyHeader).ToList();
             if (emptyChildren.Any())
             {
-                IList<FiderAnalizMeter> meters = emptyChildren.SelectMany(i => i.ChildMeters).ToList();
+                IList<FiderAnalizMeter> meters = emptyChildren.Cast<FiderAnalizTreeItem>().SelectMany(i => i.ChildMeters).ToList();
 
                 IList<uint?> values = meters.Select(meter => meter.Consumption).ToList();
 
@@ -217,35 +223,60 @@
         TP,
         Fider04,
         Group,
+        None,
     }
 
     public struct FiderAnalizMeter
     {
+        internal string TownType { get; set; }
+
+        [DisplayName("Лицевой счёт абонента")]
+        [PersonalAccountDataFormat]
         public ulong Id { get; set; }
 
+        [DisplayName("Ф.И.О.")]
         public string Header { get; set; }
 
+        [DisplayName("Населённый пункт")]
+        public string Town { get; set; }
+
+        [DisplayName("Адрес")]
         public string Address { get; set; }
 
+        [DisplayName("Отключён")]
         public bool IsDisconnected { get; set; }
 
+        [DisplayName("Есть АСКУЭ")]
         public bool HasAskue { get; set; }
 
+        [DisplayName("Потребление, кВт∙ч")]
         public uint? Consumption { get; set; }
 
+        [DisplayName("Подстанция")]
         public string Substation { get; set; }
 
+        [DisplayName("Фидер 10 кВ")]
         public string Fider10 { get; set; }
 
+        [DisplayName("ТП 10/0,4 кВ")]
         public string Tp { get; set; }
 
+        [DisplayName("Фидер 0,4 кВ")]
         public string Fider04 { get; set; }
+
+        [DisplayName("Постоянное проживание")]
+        public bool IsPermanentResidence { get; set; }
+
+        [DisplayName("Сезонное проживание")]
+        public bool IsSeasonalResidence { get; set; }
 
         public FiderAnalizMeter(Meter meter, uint? consumption)
         {
             this.Id = meter.Лицевой;
             this.Header = meter.ФиоСокращ;
-            this.Address = meter.НаселённыйПунктИУлицаСНомеромДома;
+            this.Town = meter.НаселённыйПункт;
+            this.TownType = meter.ТипНаселённойМестности;
+            this.Address = meter.УлицаСДомомИКв;
             this.IsDisconnected = meter.Отключён;
             this.HasAskue = meter.Аскуэ;
             this.Consumption = consumption;
@@ -254,6 +285,9 @@
             this.Fider10 = meter.Фидер10;
             this.Tp = meter.ТП?.ToString();
             this.Fider04 = meter.Фидер04?.ToString();
+
+            this.IsPermanentResidence = meter.Использование == "Постоянное";
+            this.IsSeasonalResidence = meter.Использование == "Сезонное";
         }
     }
 }

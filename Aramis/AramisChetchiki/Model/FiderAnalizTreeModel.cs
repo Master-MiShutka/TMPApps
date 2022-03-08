@@ -16,7 +16,7 @@
             this.model = model;
         }
 
-        public IEnumerable GetParentChildren(object parent)
+        public IEnumerable GetParentChildren(ITreeNode parent)
         {
             if (parent == null)
                 return this.model;
@@ -25,7 +25,7 @@
             return element?.Children;
         }
 
-        public bool HasParentChildren(object parent)
+        public bool HasParentChildren(ITreeNode parent)
         {
             return parent is FiderAnalizTreeItem element && (element.Children != null && element.Children.Count != 0);
         }

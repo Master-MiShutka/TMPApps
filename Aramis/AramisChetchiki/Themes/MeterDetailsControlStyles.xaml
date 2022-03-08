@@ -20,8 +20,8 @@
 
     <local_converters:EnumFlagsToItemsSourceConverter x:Key="EnumFlagsToItemsSourceConverter" />
     <local_converters:NumberFormatConverter x:Key="NumberFormatConverter" />
-    <local_converters:DateToVisibilityConverter x:Key="DateToVisibilityConverter"/>
-    <local_converters:BoolToStrConverter x:Key="BoolToStrConverter"/>
+    <local_converters:DateToVisibilityConverter x:Key="DateToVisibilityConverter" />
+    <controls_converters:BoolToStrConverter x:Key="BoolToStrConverter" />
 
     <controls_converters:IsNullOrEmptyConverter x:Key="IsNullOrEmptyConverter" />
 
@@ -42,7 +42,7 @@
     </Style>
 
     <Style TargetType="{x:Type controls:LabelledTextBox}">
-        <Setter Property="TextBoxBase.IsReadOnly" Value="True"/>
+        <Setter Property="TextBoxBase.IsReadOnly" Value="True" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type controls:LabelledTextBox}">
@@ -50,21 +50,25 @@
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="5" />
-                            <ColumnDefinition
-                                Width="*"
-                                SharedSizeGroup="Labels" />
+                            <ColumnDefinition Width="*" SharedSizeGroup="Labels" />
                         </Grid.ColumnDefinitions>
 
                         <TextBlock
-                            x:Name="PART_Label" VerticalAlignment="Center" Foreground="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"
-                            Grid.Column="0" LineStackingStrategy="MaxHeight"
+                            x:Name="PART_Label"
+                            Grid.Column="0"
+                            VerticalAlignment="Center"
+                            Foreground="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"
+                            LineStackingStrategy="MaxHeight"
                             Text="{Binding Label, RelativeSource={RelativeSource TemplatedParent}}"
                             TextAlignment="Left" />
                         <TextBox
                             x:Name="PART_Text"
-                            Grid.Column="2" HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
-                            Margin="2,0"  Background="{TemplateBinding Background}" Foreground="{TemplateBinding Foreground}"
-                            IsReadOnlyCaretVisible="False"                            
+                            Grid.Column="2"
+                            Margin="2,0"
+                            HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                            Background="{TemplateBinding Background}"
+                            Foreground="{TemplateBinding Foreground}"
+                            IsReadOnlyCaretVisible="False"
                             Text="{Binding Text, RelativeSource={RelativeSource TemplatedParent}}" />
                     </Grid>
                     <ControlTemplate.Triggers>
@@ -79,8 +83,13 @@
     </Style>
 
     <DataTemplate x:Key="GridViewColumnHeaderTemplate">
-        <TextBlock Text="{Binding}" TextWrapping="WrapWithOverflow" TextAlignment="Center" LineHeight="15" LineStackingStrategy="BlockLineHeight"
-                   ToolTip="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType={x:Type GridViewColumnHeader}}}"/>
+        <TextBlock
+            LineHeight="15"
+            LineStackingStrategy="BlockLineHeight"
+            Text="{Binding}"
+            TextAlignment="Center"
+            TextWrapping="WrapWithOverflow"
+            ToolTip="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType={x:Type GridViewColumnHeader}}}" />
     </DataTemplate>
 
     <Style

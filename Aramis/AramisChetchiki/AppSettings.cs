@@ -50,6 +50,11 @@
 
         public AppSettings()
         {
+            if (System.ComponentModel.DesignerProperties.GetIsInDesignMode(new System.Windows.DependencyObject()))
+            {
+                return;
+            }
+
             this.viewModelsTableColumns = new TMP.Shared.SerializableDictionary<string, string>();
 
             this.defaultSummaryInfoFields = new PlusPropertyDescriptorsCollection(ModelHelper.MeterSummaryInfoItemDescriptors);

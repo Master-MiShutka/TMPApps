@@ -1,7 +1,9 @@
 ﻿namespace DataGridWpf
 {
     using System;
+    using System.ComponentModel;
     using System.Windows.Data;
+    using System.Linq;
     using SysDataGridColumn = System.Windows.Controls.DataGridColumn;
 
     public static class Factory
@@ -13,11 +15,19 @@
             column.FieldName = e.PropertyName;
             column.IsColumnFiltered = true;
 
-            TransferProperties(dataGridColumn, column);
+            var pd = e.PropertyDescriptor as System.ComponentModel.PropertyDescriptor;
+            var displayNameAttribute = pd.Attributes.OfType<DisplayNameAttribute>().FirstOrDefault();
+            var dataFormatAttribute = pd.Attributes.OfType<TMP.Shared.DataFormatAttribute>().FirstOrDefault();
+
+            string name = (displayNameAttribute != null) ? displayNameAttribute.DisplayName : e.PropertyName;
+            string format = dataFormatAttribute?.DataFormatString;
+
+            TransferProperties(dataGridColumn, column, name);
 
             if (column is System.Windows.Controls.DataGridBoundColumn dgbc)
             {
                 dgbc.Binding = new Binding(e.PropertyName) { Mode = BindingMode.OneWay };
+                dgbc.Binding.StringFormat = format;
             }
 
             return column;
@@ -134,7 +144,7 @@
 
         #region Private
 
-        private static void TransferProperties(SysDataGridColumn dataGridColumn, IDataGridWpfColumn column)
+        private static void TransferProperties(SysDataGridColumn dataGridColumn, IDataGridWpfColumn column, string customHeader = null)
         {
             var c = column as SysDataGridColumn;
             if (c == null)
@@ -142,7 +152,7 @@
                 System.Diagnostics.Debugger.Break();
             }
 
-            c.Header = dataGridColumn.Header;
+            c.Header = string.IsNullOrEmpty(customHeader) ? dataGridColumn.Header : customHeader;
             c.Visibility = dataGridColumn.Visibility;
             if (dataGridColumn.DisplayIndex != -1)
             {

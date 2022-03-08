@@ -7,18 +7,37 @@
 
     <Style x:Key="ExpandCollapseToggleStyle" TargetType="{x:Type ToggleButton}">
         <Setter Property="Focusable" Value="False" />
+        <Setter Property="MinWidth" Value="13" />
+        <Setter Property="MinHeight" Value="13" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ToggleButton">
-                    <Grid
-                        Width="17"
-                        Height="15"
-                        SnapsToDevicePixels="True">
-                        <!--  Квадрат 13x13 пикселей  -->
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="5*" />
+                            <ColumnDefinition Width="1" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="10*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="1" />
+                            <ColumnDefinition Width="5*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="5*" />
+                            <RowDefinition Height="1" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="10*" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="1" />
+                            <RowDefinition Height="5*" />
+                        </Grid.RowDefinitions>
+                        <!--  Квадрат  -->
                         <Rectangle
                             x:Name="rect"
-                            Width="13"
-                            Height="13"
+                            Grid.Row="1"
+                            Grid.RowSpan="5"
+                            Grid.Column="1"
+                            Grid.ColumnSpan="5"
                             SnapsToDevicePixels="true"
                             Stroke="#919191">
                             <Rectangle.Fill>
@@ -32,15 +51,21 @@
                         <!--  Вертикальная линия по центру квадрата  -->
                         <Rectangle
                             x:Name="ExpandPath"
+                            Grid.Row="3"
+                            Grid.Column="3"
                             Width="1"
-                            Height="7"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Stretch"
                             SnapsToDevicePixels="true"
                             Stroke="Black" />
                         <!--  Горизонтальная линия по центру квадрата  -->
                         <Rectangle
                             x:Name="MinusPath"
-                            Width="7"
+                            Grid.Row="3"
+                            Grid.Column="3"
                             Height="1"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Center"
                             SnapsToDevicePixels="true"
                             Stroke="Black" />
                     </Grid>
@@ -56,6 +81,7 @@
 
     <converters:LevelToIndentConverter x:Key="LevelToIndentConverter" />
     <converters:CanExpandConverter x:Key="CanExpandConverter" />
+    <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
 
     <Style TargetType="{x:Type treelistview:RowExpander}">
         <Setter Property="Focusable" Value="False" />
@@ -64,9 +90,12 @@
                 <ControlTemplate TargetType="{x:Type treelistview:RowExpander}">
                     <ToggleButton
                         x:Name="Expander"
+                        Width="{Binding ActualHeight, RelativeSource={RelativeSource Mode=Self}}"
                         Margin="{Binding Node.Level, Converter={StaticResource LevelToIndentConverter}, RelativeSource={RelativeSource AncestorType={x:Type treelistview:TreeListViewItem}}}"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch"
                         ClickMode="Press"
-                        IsChecked="{Binding Node.IsExpanded, Mode=TwoWay, RelativeSource={RelativeSource AncestorType={x:Type treelistview:TreeListViewItem}}}"
+                        IsChecked="{Binding Node.IsExpanded, Mode=TwoWay, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, RelativeSource={RelativeSource AncestorType={x:Type treelistview:TreeListViewItem}}}"
                         Style="{StaticResource ExpandCollapseToggleStyle}"
                         Visibility="{Binding Node.IsExpandable, Converter={StaticResource CanExpandConverter}, RelativeSource={RelativeSource AncestorType={x:Type treelistview:TreeListViewItem}}}" />
                 </ControlTemplate>
@@ -80,6 +109,7 @@
         <Setter Property="BorderThickness" Value="0,1,0,0" />
         <Setter Property="ScrollViewer.CanContentScroll" Value="False" />
         <Setter Property="SnapsToDevicePixels" Value="true" />
+        <Setter Property="AlternationCount" Value="2" />
 
         <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto" />
         <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto" />
@@ -101,6 +131,82 @@
         </Setter>
     </Style>
 
+    <ControlTemplate x:Key="TreeListViewItemTemplate" TargetType="{x:Type treelistview:TreeListViewItem}">
+        <Border
+            x:Name="Bd"
+            Background="{TemplateBinding Background}"
+            SnapsToDevicePixels="true">
+            <Grid>
+                <local:GridViewRowPresenterWithGridLines
+                    Margin="{TemplateBinding Padding}"
+                    VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                    Columns="{TemplateBinding GridView.ColumnCollection}"
+                    SeparatorStyle="{StaticResource SeparatorStyle}">
+                    <local:GridViewRowPresenterWithGridLines.Resources>
+                        <Style BasedOn="{StaticResource {x:Type TextBlock}}" TargetType="{x:Type TextBlock}">
+                            <Setter Property="Foreground" Value="{Binding RelativeSource={RelativeSource AncestorType={x:Type treelistview:TreeListViewItem}}, Path=Foreground}" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Path=IsSelected, RelativeSource={RelativeSource AncestorType={x:Type treelistview:TreeListViewItem}}}" Value="True">
+                                    <Setter Property="Foreground" Value="{DynamicResource AccentSelectedColorBrush}" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Path=IsEnabled, RelativeSource={RelativeSource AncestorType={x:Type treelistview:TreeListView}}}" Value="False">
+                                    <Setter Property="Foreground" Value="{DynamicResource GrayNormalBrush}" />
+                                </DataTrigger>
+                                <MultiDataTrigger>
+                                    <MultiDataTrigger.Conditions>
+                                        <Condition Binding="{Binding Path=IsEnabled, RelativeSource={RelativeSource AncestorType={x:Type treelistview:TreeListView}}}" Value="False" />
+                                        <Condition Binding="{Binding Path=IsSelected, RelativeSource={RelativeSource AncestorType={x:Type treelistview:TreeListViewItem}}}" Value="True" />
+                                    </MultiDataTrigger.Conditions>
+                                    <MultiDataTrigger.Setters>
+                                        <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}" />
+                                    </MultiDataTrigger.Setters>
+                                </MultiDataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </local:GridViewRowPresenterWithGridLines.Resources>
+                </local:GridViewRowPresenterWithGridLines>
+                <ContentPresenter x:Name="contentPresenter" Visibility="Collapsed" />
+                <Rectangle
+                    Height="1"
+                    VerticalAlignment="Bottom"
+                    Stroke="{DynamicResource GrayBrush6}" />
+            </Grid>
+        </Border>
+        <ControlTemplate.Triggers>
+            <Trigger Property="GridView.ColumnCollection" Value="{x:Null}">
+                <Setter TargetName="contentPresenter" Property="Visibility" Value="Visible" />
+            </Trigger>
+            <Trigger Property="ItemsControl.AlternationIndex" Value="1">
+                <Setter Property="Background" Value="WhiteSmoke" />
+            </Trigger>
+            <Trigger Property="IsSelected" Value="true">
+                <Setter TargetName="Bd" Property="BorderBrush" Value="{DynamicResource AccentColorBrush}" />
+                <Setter TargetName="Bd" Property="Background" Value="{DynamicResource AccentColorBrush2}" />
+                <Setter Property="Foreground" Value="{DynamicResource WhiteColorBrush}" />
+            </Trigger>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter TargetName="Bd" Property="Background" Value="{DynamicResource AccentColorBrush3}" />
+            </Trigger>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="IsSelected" Value="true" />
+                    <Condition Property="Selector.IsSelectionActive" Value="True" />
+                </MultiTrigger.Conditions>
+                <Setter TargetName="Bd" Property="Background" Value="{DynamicResource AccentBaseColorBrush}" />
+                <Setter TargetName="Bd" Property="BorderBrush" Value="{DynamicResource AccentColorBrush}" />
+                <Setter Property="Foreground" Value="{DynamicResource WhiteColorBrush}" />
+            </MultiTrigger>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="IsEnabled" Value="False" />
+                    <Condition Property="IsSelected" Value="True" />
+                </MultiTrigger.Conditions>
+                <MultiTrigger.Setters>
+                    <Setter TargetName="Bd" Property="Background" Value="{DynamicResource GrayBrush7}" />
+                </MultiTrigger.Setters>
+            </MultiTrigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
 
     <Style TargetType="{x:Type treelistview:TreeListViewItem}">
         <Setter Property="Foreground" Value="{DynamicResource BlackBrush}" />
@@ -110,82 +216,7 @@
         <Setter Property="Margin" Value="0,0,0,0" />
         <Setter Property="Padding" Value="0,2" />
         <Setter Property="Border.BorderBrush" Value="{DynamicResource GrayBrush1}" />
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type treelistview:TreeListViewItem}">
-                    <Border
-                        x:Name="Bd"
-                        Background="{TemplateBinding Background}"
-                        SnapsToDevicePixels="true">
-                        <Grid>
-                            <local:GridViewRowPresenterWithGridLines
-                                Margin="{TemplateBinding Padding}"
-                                VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                Columns="{TemplateBinding GridView.ColumnCollection}"
-                                SeparatorStyle="{StaticResource SeparatorStyle}">
-                                <local:GridViewRowPresenterWithGridLines.Resources>
-                                    <Style TargetType="{x:Type TextBlock}">
-                                        <Setter Property="Foreground" Value="{Binding RelativeSource={RelativeSource AncestorType={x:Type treelistview:TreeListViewItem}}, Path=Foreground}" />
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding Path=IsSelected, RelativeSource={RelativeSource AncestorType={x:Type treelistview:TreeListViewItem}}}" Value="True">
-                                                <Setter Property="Foreground" Value="{DynamicResource AccentSelectedColorBrush}" />
-                                            </DataTrigger>
-                                            <DataTrigger Binding="{Binding Path=IsEnabled, RelativeSource={RelativeSource AncestorType={x:Type treelistview:TreeListView}}}" Value="False">
-                                                <Setter Property="Foreground" Value="{DynamicResource GrayNormalBrush}" />
-                                            </DataTrigger>
-                                            <MultiDataTrigger>
-                                                <MultiDataTrigger.Conditions>
-                                                    <Condition Binding="{Binding Path=IsEnabled, RelativeSource={RelativeSource AncestorType={x:Type treelistview:TreeListView}}}" Value="False" />
-                                                    <Condition Binding="{Binding Path=IsSelected, RelativeSource={RelativeSource AncestorType={x:Type treelistview:TreeListViewItem}}}" Value="True" />
-                                                </MultiDataTrigger.Conditions>
-                                                <MultiDataTrigger.Setters>
-                                                    <Setter Property="Foreground" Value="{DynamicResource AccentSelectedColorBrush}" />
-                                                </MultiDataTrigger.Setters>
-                                            </MultiDataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </local:GridViewRowPresenterWithGridLines.Resources>
-                            </local:GridViewRowPresenterWithGridLines>
-                            <ContentPresenter x:Name="contentPresenter" Visibility="Collapsed" />
-                            <Rectangle
-                                Height="1"
-                                VerticalAlignment="Bottom"
-                                Stroke="{DynamicResource GrayBrush6}" />
-                        </Grid>
-                    </Border>
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="GridView.ColumnCollection" Value="{x:Null}">
-                            <Setter TargetName="contentPresenter" Property="Visibility" Value="Visible" />
-                        </Trigger>
-                        <Trigger Property="IsSelected" Value="true">
-                            <Setter TargetName="Bd" Property="BorderBrush" Value="{DynamicResource AccentColorBrush}" />
-                            <Setter TargetName="Bd" Property="Background" Value="{DynamicResource AccentColorBrush2}" />
-                            <Setter Property="Foreground" Value="{DynamicResource WhiteColorBrush}" />
-                        </Trigger>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="Bd" Property="Background" Value="{DynamicResource AccentColorBrush3}" />
-                        </Trigger>
-                        <MultiTrigger>
-                            <MultiTrigger.Conditions>
-                                <Condition Property="IsSelected" Value="true" />
-                                <Condition Property="Selector.IsSelectionActive" Value="True" />
-                            </MultiTrigger.Conditions>
-                            <Setter TargetName="Bd" Property="Background" Value="{DynamicResource AccentBaseColorBrush}" />
-                            <Setter TargetName="Bd" Property="BorderBrush" Value="{DynamicResource AccentColorBrush}" />
-                            <Setter Property="Foreground" Value="{DynamicResource WhiteColorBrush}" />
-                        </MultiTrigger>
-                        <MultiTrigger>
-                            <MultiTrigger.Conditions>
-                                <Condition Property="IsEnabled" Value="False" />
-                                <Condition Property="IsSelected" Value="True" />
-                            </MultiTrigger.Conditions>
-                            <MultiTrigger.Setters>
-                                <Setter TargetName="Bd" Property="Background" Value="{DynamicResource GrayBrush7}" />
-                            </MultiTrigger.Setters>
-                        </MultiTrigger>
-                    </ControlTemplate.Triggers>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
+        <Setter Property="Visibility" Value="{Binding Path=IsMatch, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" />
+        <Setter Property="Template" Value="{StaticResource TreeListViewItemTemplate}" />
     </Style>
 </ResourceDictionary>

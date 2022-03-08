@@ -9,11 +9,32 @@
 
     public sealed class TreeNode : TMP.Shared.PropertyChangedBase, Shared.IChildItem<TreeNode>
     {
+        #region Fields
+
+        private INotifyCollectionChanged childrenSource;
+        private INotifyPropertyChanged modelSource;
+        private bool isExpanded = false;
+        private bool isSelected;
+
+        #endregion
+
+        #region ctor
+
+        internal TreeNode(TreeListView tree, Shared.ITreeNode model)
+        {
+            this.Tree = tree ?? throw new ArgumentNullException(nameof(tree));
+            this.Children = new Shared.ChildItemCollection<TreeNode>(this);
+            this.Nodes = new ReadOnlyCollection<TreeNode>(this.Children);
+            this.Model = model;
+
+            this.ModelSource = model;
+        }
+
+        #endregion
+
         #region Properties
 
         internal TreeListView Tree { get; private set; }
-
-        private INotifyCollectionChanged childrenSource;
 
         internal INotifyCollectionChanged ChildrenSource
         {
@@ -35,12 +56,34 @@
             }
         }
 
+        internal INotifyPropertyChanged ModelSource
+        {
+            get => this.modelSource;
+
+            set
+            {
+                if (this.modelSource != null)
+                {
+                    this.modelSource.PropertyChanged -= this.ModelPropertyChanged;
+                }
+
+                this.modelSource = value;
+
+                if (this.modelSource != null)
+                {
+                    this.modelSource.PropertyChanged += this.ModelPropertyChanged;
+                }
+            }
+        }
+
+        internal Collection<TreeNode> Children { get; private set; }
+
         public int Index { get; private set; } = -1;
 
         /// <summary>
         /// Returns true if all parent nodes of this node are expanded.
         /// </summary>
-        internal bool IsVisible
+        public bool IsVisible
         {
             get
             {
@@ -59,19 +102,15 @@
             }
         }
 
+        public bool IsMatch => this.Model != null ? this.Model.IsMatch : true;
+
         public bool IsExpandedOnce
         {
             get;
             internal set;
         }
 
-        public bool HasChildren
-        {
-            get;
-            internal set;
-        }
-
-        private bool isExpanded = false;
+        public bool HasChildren { get; internal set; }
 
         public bool IsExpanded
         {
@@ -79,7 +118,7 @@
 
             set
             {
-                if (value != this.IsExpanded)
+                if (this.SetProperty(ref this.isExpanded, value))
                 {
                     this.Tree.SetIsExpanded(this, value);
                     this.RaisePropertyChanged(nameof(this.IsExpanded));
@@ -88,14 +127,7 @@
             }
         }
 
-        internal void AssignIsExpanded(bool value)
-        {
-            this.isExpanded = value;
-        }
-
         public bool IsExpandable => (this.HasChildren && !this.IsExpandedOnce) || this.Nodes.Count > 0;
-
-        private bool isSelected;
 
         public bool IsSelected
         {
@@ -113,20 +145,7 @@
 
         public TreeNode Parent { get; set; }
 
-        public int Level
-        {
-            get
-            {
-                if (this.Parent == null)
-                {
-                    return -1;
-                }
-                else
-                {
-                    return this.Parent.Level + 1;
-                }
-            }
-        }
+        public int Level => this.Parent == null ? -1 : this.Parent.Level + 1;
 
         public TreeNode PreviousNode
         {
@@ -169,14 +188,7 @@
                 TreeNode parent = this.Parent;
                 if (parent != null)
                 {
-                    if (parent.NextNode != null)
-                    {
-                        return parent.NextNode;
-                    }
-                    else
-                    {
-                        return parent.BottomNode;
-                    }
+                    return parent.NextNode != null ? parent.NextNode : parent.BottomNode;
                 }
 
                 return null;
@@ -194,14 +206,7 @@
                 else
                 {
                     TreeNode nn = this.NextNode;
-                    if (nn != null)
-                    {
-                        return nn;
-                    }
-                    else
-                    {
-                        return this.BottomNode;
-                    }
+                    return nn != null ? nn : this.BottomNode;
                 }
             }
         }
@@ -229,32 +234,17 @@
             }
         }
 
-        public object Tag { get; private set; }
-
-        internal Collection<TreeNode> Children { get; private set; }
+        public Shared.ITreeNode Model { get; private set; }
 
         public ReadOnlyCollection<TreeNode> Nodes { get; private set; }
 
         #endregion
 
-        internal TreeNode(TreeListView tree, object tag)
-        {
-            this.Tree = tree ?? throw new ArgumentNullException(nameof(tree));
-            this.Children = new Shared.ChildItemCollection<TreeNode>(this);
-            this.Nodes = new ReadOnlyCollection<TreeNode>(this.Children);
-            this.Tag = tag;
-        }
+        #region Methods
 
-        public override string ToString()
+        internal void AssignIsExpanded(bool value)
         {
-            if (this.Tag != null)
-            {
-                return this.Tag.ToString();
-            }
-            else
-            {
-                return base.ToString();
-            }
+            this.isExpanded = value;
         }
 
         private void ChildrenChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -266,7 +256,7 @@
                     {
                         int index = e.NewStartingIndex;
                         int rowIndex = this.Tree.Rows.IndexOf(this);
-                        foreach (object obj in e.NewItems)
+                        foreach (Shared.ITreeNode obj in e.NewItems)
                         {
                             this.Tree.InsertNewNode(this, obj, rowIndex, index);
                             index++;
@@ -315,5 +305,27 @@
                 this.ClearChildrenSource(n);
             }
         }
+
+        private void ModelPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            switch (e.PropertyName)
+            {
+                case nameof(Shared.ITreeNode.IsExpanded):
+                    this.IsExpanded = this.Model.IsExpanded;
+                    break;
+                case nameof(Shared.ITreeNode.IsMatch):
+                    this.RaisePropertyChanged(nameof(this.IsMatch));
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        public override string ToString()
+        {
+            return this.Model != null ? this.Model.ToString() : base.ToString();
+        }
+
+        #endregion
     }
 }

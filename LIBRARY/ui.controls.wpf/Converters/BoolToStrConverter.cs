@@ -1,4 +1,4 @@
-﻿namespace TMP.WORK.AramisChetchiki.Converters
+﻿namespace TMP.UI.Controls.WPF.Converters
 {
     using System;
     using System.Globalization;

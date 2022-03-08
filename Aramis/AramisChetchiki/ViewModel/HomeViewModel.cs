@@ -17,7 +17,7 @@
         #region Fields
         private readonly NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
 
-        private MTObservableCollection<IMatrix> pivotCollection;
+        private ObservableCollections.ObservableList<IMatrix> pivotCollection;
         private KeyValuePair<int, string> selectedQuarter;
         private int selectedYear;
         private string message = "?";
@@ -39,7 +39,7 @@
             });
 
             int nowYear = DateTime.Now.Year;
-            this.Years = new ReadOnlyCollection<int>(Enumerable.Range(nowYear, nowYear + 5).ToList());
+            this.Years = new ReadOnlyCollection<int>(Enumerable.Range(nowYear, 5).ToList());
 
             if (System.ComponentModel.DesignerProperties.GetIsInDesignMode(new System.Windows.DependencyObject()))
             {
@@ -217,7 +217,7 @@
         /// <summary>
         /// Коллекция сводных таблиц
         /// </summary>
-        public MTObservableCollection<IMatrix> PivotCollection
+        public ObservableCollections.ObservableList<IMatrix> PivotCollection
         {
             get => this.pivotCollection;
             private set => this.SetProperty(ref this.pivotCollection, value);
@@ -253,6 +253,7 @@
                     System.Threading.Tasks.Task.Delay(100);
                 }
             }
+
             this.BuildPivots();
         }
 
@@ -307,16 +308,17 @@
             this.IsBusy = true;
             this.Status = "подготовка сводных таблиц ...";
 
-            Task task = Task.Run(() =>
+            if(!(MainViewModel.Data == null || MainViewModel.Meters == null || MainViewModel.Meters.Any() == false))
             {
-                System.Threading.Thread.CurrentThread.Name = "BuildMessageAndPivots";
+                this.PivotCollection = new ObservableCollections.ObservableList<IMatrix>();
 
-                if (!(MainViewModel.Data == null || MainViewModel.Meters == null || MainViewModel.Meters.Any() == false))
+                Task task = Task.Run(() =>
                 {
-                    this.PivotCollection = new MTObservableCollection<IMatrix>();
+                    System.Threading.Thread.CurrentThread.Name = "BuildMessageAndPivots";
                     this.CreatePivots();
-                }
-            });
+                })
+                .ContinueWith((t) => this.IsBusy = false);
+            }
         }
 
         private void Matrix_Builded(object sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -1248,18 +1250,6 @@
             }) == false)
                 return;
             #endregion
-            
-            if (MainViewModel.Data.ElectricitySupplyInfo != null)
-            {
-                DateOnly? period = MainViewModel.Data.ElectricitySupplyInfo.Max(i => i.Период);
-                if (period != null)
-                {
-                    foreach (IMatrix pivot in SummaryInfoHelper.GetEnergyPowerSuppyPivots(MainViewModel.Data, period.Value))
-                    {
-                        this.PivotCollection.Add(pivot);
-                    }
-                }
-            }
         }
 
         #endregion Private methods

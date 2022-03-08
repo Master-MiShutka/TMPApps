@@ -18,8 +18,8 @@
         {
             DefaultSeparatorStyle = new Style(typeof(Rectangle));
             DefaultSeparatorStyle.Setters.Add(new Setter(Shape.FillProperty, SystemColors.ControlLightBrush));
-            SeparatorStyleProperty = DependencyProperty.Register("SeparatorStyle", typeof(Style), typeof(GridViewRowPresenterWithGridLines),
-                                                                    new UIPropertyMetadata(DefaultSeparatorStyle, SeparatorStyleChanged));
+            SeparatorStyleProperty = DependencyProperty.Register(nameof(SeparatorStyle), typeof(Style), typeof(GridViewRowPresenterWithGridLines),
+                                                                    new UIPropertyMetadata(DefaultSeparatorStyle, OnSeparatorStyleChanged));
         }
 
         public Style SeparatorStyle
@@ -30,7 +30,7 @@
 
         private IEnumerable<FrameworkElement> Children => LogicalTreeHelper.GetChildren(this).OfType<FrameworkElement>();
 
-        private static void SeparatorStyleChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private static void OnSeparatorStyleChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var presenter = (GridViewRowPresenterWithGridLines)d;
             var style = (Style)e.NewValue;

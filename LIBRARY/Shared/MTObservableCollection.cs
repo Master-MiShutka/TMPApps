@@ -11,21 +11,17 @@
 
         protected override void OnCollectionChanged(NotifyCollectionChangedEventArgs e)
         {
-            NotifyCollectionChangedEventHandler CollectionChanged = this.CollectionChanged;
-            if (CollectionChanged != null)
+            NotifyCollectionChangedEventHandler collectionChanged = this.CollectionChanged;
+            if (collectionChanged != null)
             {
-                foreach (NotifyCollectionChangedEventHandler nh in CollectionChanged.GetInvocationList())
+                foreach (NotifyCollectionChangedEventHandler nh in collectionChanged.GetInvocationList())
                 {
-                    DispatcherObject dispObj = nh.Target as DispatcherObject;
-                    if (dispObj != null)
+                    if (nh.Target is DispatcherObject dispObj)
                     {
                         Dispatcher dispatcher = dispObj.Dispatcher;
                         if (dispatcher != null && !dispatcher.CheckAccess())
                         {
-                            dispatcher.BeginInvoke(
-                                (Action)(() => nh.Invoke(this,
-                                    new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset))),
-                                DispatcherPriority.DataBind);
+                            dispatcher.BeginInvoke(() => nh.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset)), DispatcherPriority.DataBind);
                             continue;
                         }
                     }

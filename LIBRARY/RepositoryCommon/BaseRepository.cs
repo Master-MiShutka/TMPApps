@@ -118,13 +118,13 @@
         #region Fields
 
         protected static readonly NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
-        protected Action<Exception> callBackAction;
+        private Action<Exception> callBackAction;
         private string dataStorePath;
         private T data;
-        private readonly Shared.AsyncObservableCollection<IDataFileInfo> availableDataFiles = new();
-        protected FileSystemWatcher dataFileStorePathWatcher;
+        private readonly ObservableCollections.ObservableList<IDataFileInfo> availableDataFiles = new ();
+        private FileSystemWatcher dataFileStorePathWatcher;
 
-        private object @lock = new object();
+        private readonly object @lock = new ();
         private bool isGettingDataFilesListInDataStore = false;
         private bool isSavingDataInDataStore = false;
 
@@ -144,7 +144,7 @@
             Task.Run(async () => await this.InitializationAsync());
         }
 
-        private void AvailableDataFiles_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        private void AvailableDataFiles_CollectionChanged(in ObservableCollections.NotifyCollectionChangedEventArgs<IDataFileInfo> e)
         {
             this.RaisePropertyChanged(nameof(this.AvailableDataFilesCount));
         }
@@ -236,7 +236,7 @@
         /// <summary>
         /// Коллекция доступных файлов с данными
         /// </summary>
-        public Shared.AsyncObservableCollection<IDataFileInfo> AvailableDataFiles => this.availableDataFiles;
+        public ObservableCollections.ObservableList<IDataFileInfo> AvailableDataFiles => this.availableDataFiles;
 
         public int AvailableDataFilesCount => this.AvailableDataFiles != null ? this.AvailableDataFiles.Count : 0;
 

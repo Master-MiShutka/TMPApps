@@ -124,7 +124,7 @@ namespace DataGridWpf
         /// Language displayed
         /// </summary>
         public static readonly DependencyProperty FilterLanguageProperty =
-            DependencyProperty.Register("FilterLanguage",
+            DependencyProperty.Register(nameof(FilterLanguage),
                 typeof(Local),
                 typeof(FilterDataGrid),
                 new PropertyMetadata(Local.Russian));
@@ -133,16 +133,16 @@ namespace DataGridWpf
         ///     Show statusbar
         /// </summary>
         public static readonly DependencyProperty ShowStatusBarProperty =
-            DependencyProperty.Register("ShowStatusBar",
+            DependencyProperty.Register(nameof(ShowStatusBar),
                 typeof(bool),
                 typeof(FilterDataGrid),
                 new PropertyMetadata(false));
 
         public static readonly DependencyProperty ColumnsViewModelsProperty =
-            DependencyProperty.Register("ColumnsViewModels",
+            DependencyProperty.Register(nameof(ColumnsViewModels),
                 typeof(ObservableCollection<DataGridWpfColumnViewModel>),
                 typeof(FilterDataGrid),
-                new UIPropertyMetadata(null, ColumnsViewModelsPropertyChanged));
+                new UIPropertyMetadata(null, OnColumnsViewModelsChanged));
 
         /// <summary>
         /// Identifies the ColumnViewModel attached property
@@ -154,7 +154,7 @@ namespace DataGridWpf
         /// DisplayRowNumber
         /// </summary>
         public static readonly DependencyProperty DisplayRowNumberProperty =
-            DependencyProperty.RegisterAttached("DisplayRowNumber",
+            DependencyProperty.RegisterAttached(nameof(DisplayRowNumber),
                 typeof(bool),
                 typeof(FilterDataGrid),
                 new UIPropertyMetadata(false, OnDisplayRowNumberChanged));
@@ -192,6 +192,16 @@ namespace DataGridWpf
                 dataGrid.ItemContainerGenerator.ItemsChanged += itemsChangedHandler;
             }
         }
+
+        public string NoItemsMessage
+        {
+            get => (string)this.GetValue(NoItemsMessageProperty);
+            set => this.SetValue(NoItemsMessageProperty, value);
+        }
+
+        // Using a DependencyProperty as the backing store for NoItemsDataTemplate.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty NoItemsMessageProperty =
+            DependencyProperty.Register(nameof(NoItemsMessage), typeof(string), typeof(FilterDataGrid), new PropertyMetadata("No data"));
 
         #endregion Public DependencyProperty
 
@@ -271,7 +281,7 @@ namespace DataGridWpf
             set => this.SetValue(ColumnsViewModelsProperty, value);
         }
 
-        private static void ColumnsViewModelsPropertyChanged(DependencyObject source, DependencyPropertyChangedEventArgs e)
+        private static void OnColumnsViewModelsChanged(DependencyObject source, DependencyPropertyChangedEventArgs e)
         {
             FilterDataGrid dataGrid = source as FilterDataGrid;
             if (dataGrid == null)
@@ -599,6 +609,9 @@ namespace DataGridWpf
 
         #region Private Fields
 
+        private const string ElementRowsItemsPresenterLabel = "PART_RowsPresenter";
+        private ItemsPresenter rowsItemsPresenter;
+
         private bool pending;
         private bool search;
         private Button button;
@@ -649,6 +662,60 @@ namespace DataGridWpf
         #endregion Private Properties
 
         #region Protected Methods
+
+        public override void OnApplyTemplate()
+        {
+            base.OnApplyTemplate();
+
+            this.rowsItemsPresenter = this.EnforceInstance<ItemsPresenter>(ElementRowsItemsPresenterLabel);
+
+            ContextMenu contextMenu = (ContextMenu)this.TryFindResource("dataGridContextMenuKey");
+
+            if (this.rowsItemsPresenter != null)
+            {
+                this.rowsItemsPresenter.ContextMenuOpening += this.ItemsPresenterContextMenuOpening;
+
+                System.Collections.Generic.List<Control> menuItems = new();
+                this.GenerateRowsContextMenu(ref menuItems);
+                menuItems.Add(new Separator());
+                MenuItem selectColumnsMenuItem = new MenuItem()
+                {
+                    Header = "Отображаемые столбцы таблицы",
+                    Tag = "selectColumnsMenuItem",
+
+                    // IsEnabled = filterDataGrid.Columns.Count > 0 && filterDataGrid.ColumnsVisibilitySelectMenuItemList != null
+                };
+                selectColumnsMenuItem.Items.Add(new MenuItem() { Header = "пусто" });
+                menuItems.Add(selectColumnsMenuItem);
+
+                System.Windows.Data.CompositeCollection cc = new();
+
+                if (this.rowsItemsPresenter.ContextMenu != null)
+                {
+                    System.Windows.Data.CollectionContainer c = new();
+                    c.SetCurrentValue(System.Windows.Data.CollectionContainer.CollectionProperty, this.rowsItemsPresenter.ContextMenu.Items);
+                    cc.Add(c);
+                }
+                else
+                {
+                    this.rowsItemsPresenter.SetCurrentValue(ContextMenuProperty, new ContextMenu());
+                }
+
+                if (contextMenu != null)
+                {
+                    System.Windows.Data.CollectionContainer c = new();
+                    c.SetCurrentValue(System.Windows.Data.CollectionContainer.CollectionProperty, contextMenu.Items);
+                    cc.Add(c);
+                }
+
+                System.Windows.Data.CollectionContainer newCollection = new();
+                menuItems.Add(new Separator());
+                newCollection.SetCurrentValue(System.Windows.Data.CollectionContainer.CollectionProperty, menuItems);
+                cc.Add(newCollection);
+
+                this.rowsItemsPresenter.ContextMenu.SetCurrentValue(ItemsControl.ItemsSourceProperty, cc);
+            }
+        }
 
         /// <summary>
         ///     Initialize datagrid
@@ -743,8 +810,8 @@ namespace DataGridWpf
                 if (this.ItemsSourceCount > 0)
                 {
                     this.collectionType = this.ItemsSource is ICollectionView collectionView
-                        ? (collectionView.SourceCollection?.GetType().GenericTypeArguments?.FirstOrDefault())
-                        : (this.ItemsSource?.GetType().GenericTypeArguments?.FirstOrDefault());
+                        ? collectionView.SourceCollection?.GetType().GenericTypeArguments?.FirstOrDefault()
+                        : this.ItemsSource?.GetType().GenericTypeArguments?.FirstOrDefault();
 
                     if (this.collectionType == null)
                     {
@@ -785,6 +852,93 @@ namespace DataGridWpf
         #endregion Protected Methods
 
         #region Private Methods
+
+        // Get element from name. If it exist then element instance return, if not, new will be created
+        private T EnforceInstance<T>(string partName)
+            where T : FrameworkElement, new()
+        {
+            T element = this.GetTemplateChild(partName) as T ?? new T();
+            return element;
+        }
+
+        private void ItemsPresenterContextMenuOpening(object sender, ContextMenuEventArgs e)
+        {
+            ContextMenu contextMenu = (sender as FrameworkElement)?.ContextMenu;
+            if (contextMenu == null)
+            {
+                return;
+            }
+
+            MenuItem menuItem = null;
+            foreach (object item in contextMenu.Items)
+            {
+                if (item is MenuItem menu && menu.Tag != null && Equals(menu.Tag, "selectColumnsMenuItem"))
+                {
+                    menuItem = menu;
+                    break;
+                }
+            }
+
+            if (menuItem == null)
+            {
+                return;
+            }
+
+            menuItem.Items.Clear();
+            if (this.ColumnsVisibilitySelectMenuItemList != null)
+            {
+                foreach (MenuItem item in this.ColumnsVisibilitySelectMenuItemList)
+                {
+                    menuItem.Items.Add(item);
+                }
+            }
+        }
+
+        private void GenerateRowsContextMenu(ref System.Collections.Generic.List<Control> menuItems)
+        {
+            MenuItem menuItem1 = new()
+            {
+                Header = "Режим копирования: включать заголовки столбцов",
+                IsCheckable = true,
+                IsChecked = true,
+            };
+            menuItem1.Click += this.GridCopyModeClick;
+            MenuItem menuItem2 = new()
+            {
+                Header = "Режим выделения",
+            };
+            MenuItem menuItem3 = new() { Header = "Строка" };
+            menuItem3.Click += this.GridSelectModeRowClick;
+            MenuItem menuItem4 = new() { Header = "Ячейка" };
+            menuItem4.Click += this.GridSelectModeCellClick;
+            menuItem2.Items.Add(menuItem3);
+            menuItem2.Items.Add(menuItem4);
+
+            menuItems.Add(menuItem1);
+            menuItems.Add(menuItem2);
+        }
+
+        private void GridCopyModeClick(object sender, System.Windows.RoutedEventArgs e)
+        {
+            MenuItem menuItem = sender as MenuItem;
+            this.SetCurrentValue(DataGrid.ClipboardCopyModeProperty, menuItem.IsChecked ? DataGridClipboardCopyMode.IncludeHeader : DataGridClipboardCopyMode.ExcludeHeader);
+        }
+
+        private void GridSelectModeRowClick(object sender, System.Windows.RoutedEventArgs e)
+        {
+            MenuItem menuItem = sender as MenuItem;
+
+            this.SetCurrentValue(DataGrid.SelectionUnitProperty, DataGridSelectionUnit.FullRow);
+            (menuItem.Parent as MenuItem).SetCurrentValue(HeaderedItemsControl.HeaderProperty, "Режим выделения: строка");
+        }
+
+        private void GridSelectModeCellClick(object sender, System.Windows.RoutedEventArgs e)
+        {
+            MenuItem menuItem = sender as MenuItem;
+
+            this.SetCurrentValue(DataGrid.SelectionUnitProperty, DataGridSelectionUnit.Cell);
+            (menuItem.Parent as MenuItem).SetCurrentValue(HeaderedItemsControl.HeaderProperty, "Режим выделения: ячейка");
+        }
 
         private void FilterDataGrid_Loaded(object sender, RoutedEventArgs e)
         {

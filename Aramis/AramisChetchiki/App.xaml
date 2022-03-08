@@ -26,6 +26,7 @@
 
                 <ResourceDictionary Source="/Themes/ContextMenu.xaml" />
                 <ResourceDictionary Source="/Themes/Common.xaml" />
+                <ResourceDictionary Source="/Themes/DataGridStyles.xaml" />
                 <ResourceDictionary Source="/Themes/SummaryInfoDataTemplate.xaml" />
                 <ResourceDictionary Source="/Themes/FilterResources.xaml" />
 

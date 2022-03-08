@@ -16,6 +16,11 @@
     {
         #region private
 
+        private ITreeModel model;
+        private TreeNode root;
+
+        private ObservableCollections.ISynchronizedView<TreeNode, TreeNode> rowsView { get; }
+
         #endregion
 
         #region Properties
@@ -23,7 +28,7 @@
         /// <summary>
         /// Internal collection of rows representing visible nodes, actually displayed in the ListView
         /// </summary>
-        internal ObservableCollectionAdv<TreeNode> Rows
+        internal ObservableCollections.ObservableList<TreeNode> Rows
         {
             get;
             private set;
@@ -37,8 +42,6 @@
 
         public static readonly DependencyProperty ModelProperty = DependencyProperty.Register(
             nameof(Model), typeof(ITreeModel), typeof(TreeListView));
-
-        private TreeNode root;
 
         internal TreeNode Root => this.root;
 
@@ -70,23 +73,23 @@
 
         public TreeListView()
         {
-            this.Rows = new ObservableCollectionAdv<TreeNode>();
+            this.Rows = new ObservableCollections.ObservableList<TreeNode>();
             this.root = new TreeNode(this, null);
             this.root.IsExpanded = true;
-            this.ItemsSource = this.Rows;
+
+            this.rowsView = this.Rows.CreateView(i => i).WithINotifyCollectionChanged();
+            System.Windows.Data.BindingOperations.EnableCollectionSynchronization(this.rowsView, new object());
+
+            this.ItemsSource = this.rowsView;
             this.ItemContainerGenerator.StatusChanged += this.ItemContainerGeneratorStatusChanged;
         }
-
-        /*static TreeListView()
-        {
-            DefaultStyleKeyProperty.OverrideMetadata(typeof(TreeListView), new FrameworkPropertyMetadata(typeof(TreeListView)));
-        }*/
 
         protected override void OnPropertyChanged(DependencyPropertyChangedEventArgs e)
         {
             base.OnPropertyChanged(e);
             if (e.Property == ModelProperty)
             {
+                this.model = (ITreeModel)e.NewValue;
                 this.root.Children.Clear();
                 this.Rows.Clear();
                 this.CreateChildrenNodes(this.root);
@@ -119,12 +122,10 @@
 
         protected override void PrepareContainerForItemOverride(DependencyObject element, object item)
         {
-            var ti = element as TreeListViewItem;
-            var node = item as TreeNode;
-            if (ti != null && node != null)
+            if (element is TreeListViewItem ti && item is TreeNode node)
             {
-                ti.Node = item as TreeNode;
-                base.PrepareContainerForItemOverride(element, node.Tag);
+                ti.Node = node;
+                base.PrepareContainerForItemOverride(element, node.Model);
             }
         }
 
@@ -158,9 +159,9 @@
             {
                 int rowIndex = this.Rows.IndexOf(node);
                 node.ChildrenSource = children as INotifyCollectionChanged;
-                foreach (object obj in children)
+                foreach (ITreeNode obj in children)
                 {
-                    TreeNode child = new TreeNode(this, obj);
+                    TreeNode child = new (this, obj);
                     child.HasChildren = this.HasChildren(child);
                     node.Children.Add(child);
                 }
@@ -172,7 +173,9 @@
         private void CreateChildrenRows(TreeNode node)
         {
             int index = this.Rows.IndexOf(node);
-            if (index >= 0 || node == this.root) // ignore invisible nodes
+
+            // ignore invisible nodes
+            if (index >= 0 || node == this.root)
             {
                 var nodes = node.AllVisibleChildren.ToArray();
                 this.Rows.InsertRange(index + 1, nodes);
@@ -182,7 +185,9 @@
         internal void DropChildrenRows(TreeNode node, bool removeParent)
         {
             int start = this.Rows.IndexOf(node);
-            if (start >= 0 || node == this.root) // ignore invisible nodes
+
+            // ignore invisible nodes
+            if (start >= 0 || node == this.root)
             {
                 int count = node.VisibleChildrenCount;
                 if (removeParent)
@@ -200,35 +205,17 @@
 
         private IEnumerable GetChildren(TreeNode parent)
         {
-            if (this.Model != null)
-            {
-                return this.Model.GetParentChildren(parent.Tag);
-            }
-            else
-            {
-                return null;
-            }
+            return this.model?.GetParentChildren(parent.Model);
         }
 
         private bool HasChildren(TreeNode parent)
         {
-            if (parent == this.Root)
-            {
-                return true;
-            }
-            else if (this.Model != null)
-            {
-                return this.Model.HasParentChildren(parent.Tag);
-            }
-            else
-            {
-                return false;
-            }
+            return parent == this.Root || (this.model != null && this.model.HasParentChildren(parent.Model));
         }
 
-        internal void InsertNewNode(TreeNode parent, object tag, int rowIndex, int index)
+        internal void InsertNewNode(TreeNode parent, ITreeNode model, int rowIndex, int index)
         {
-            TreeNode node = new TreeNode(this, tag);
+            TreeNode node = new (this, model);
             if (index >= 0 && index < parent.Children.Count)
             {
                 parent.Children.Insert(index, node);
