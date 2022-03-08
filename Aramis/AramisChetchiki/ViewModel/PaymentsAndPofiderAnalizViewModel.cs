@@ -70,7 +70,6 @@
                 if (this.SetProperty(ref this.tpNameFilter, value))
                 {
                     this.ApplyFilter();
-                    this.RaisePropertyChanged(nameof(this.VisibleNodesCount));
                 }
             }
         }
@@ -140,7 +139,6 @@
             get => this.description;
             private set => this.SetProperty(ref this.description, value);
         }
-
 
         #region Commands
 
@@ -439,7 +437,6 @@
 
             this.Status = null;
             this.DetailedStatus = null;
-            this.RaisePropertyChanged(nameof(this.VisibleNodesCount));
         }
 
         /* protected override ICollectionView BuildAndGetView()

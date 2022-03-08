@@ -219,48 +219,6 @@
                                     </ContextMenu.ItemContainerStyle>
                                 </ContextMenu>
                             </ui_treelistview:TreeListView.ContextMenu>
-                            <ui_treelistview:TreeListView.Style>
-                                <Style TargetType="{x:Type ui_treelistview:TreeListView}">
-                                    <Style.Triggers>
-                                        <MultiDataTrigger>
-                                            <MultiDataTrigger.Conditions>
-                                                <Condition Binding="{Binding VisibleNodesCount}" Value="0" />
-                                                <Condition Binding="{Binding TpNameFilter, Converter={StaticResource IsNullOrEmptyConverter}}" Value="False" />
-                                            </MultiDataTrigger.Conditions>
-                                            <MultiDataTrigger.Setters>
-                                                <Setter Property="Template">
-                                                    <Setter.Value>
-                                                        <ControlTemplate>
-                                                            <Border
-                                                                ui_controls_helper:RelativeFontSize.RelativeFontSize="2.0"
-                                                                BorderBrush="{TemplateBinding BorderBrush}"
-                                                                BorderThickness="{TemplateBinding BorderThickness}"
-                                                                SnapsToDevicePixels="true">
-                                                                <ui_controls:NoData Margin="10" Message="ничего не нашлось" />
-                                                            </Border>
-                                                        </ControlTemplate>
-                                                    </Setter.Value>
-                                                </Setter>
-                                            </MultiDataTrigger.Setters>
-                                        </MultiDataTrigger>
-                                        <DataTrigger Binding="{Binding ModelTree}" Value="{x:Null}">
-                                            <Setter Property="Template">
-                                                <Setter.Value>
-                                                    <ControlTemplate>
-                                                        <Border
-                                                            Background="{TemplateBinding Background}"
-                                                            BorderBrush="{TemplateBinding BorderBrush}"
-                                                            BorderThickness="{TemplateBinding BorderThickness}"
-                                                            SnapsToDevicePixels="true">
-                                                            <ui_controls:NoData Margin="5" />
-                                                        </Border>
-                                                    </ControlTemplate>
-                                                </Setter.Value>
-                                            </Setter>
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </ui_treelistview:TreeListView.Style>
                         </ui_treelistview:TreeListView>
                         <!--  1  -->
                         <GridSplitter

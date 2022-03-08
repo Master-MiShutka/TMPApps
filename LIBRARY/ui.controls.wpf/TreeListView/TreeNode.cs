@@ -102,7 +102,11 @@
             }
         }
 
-        public bool IsMatch => this.Model != null ? this.Model.IsMatch : true;
+        public bool IsMatch
+        {
+            get => this.isMath;
+        }
+        => this.Model != null ? this.Model.IsMatch : true;
 
         public bool IsExpandedOnce
         {
