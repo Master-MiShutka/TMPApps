@@ -18,8 +18,7 @@
 
         private ITreeModel model;
         private TreeNode root;
-
-        private ObservableCollections.ISynchronizedView<TreeNode, TreeNode> rowsView { get; }
+        private ObservableCollections.ISynchronizedView<TreeNode, TreeNode> rowsView;
 
         #endregion
 
@@ -34,6 +33,9 @@
             private set;
         }
 
+        /// <summary>
+        /// Data model, which used to build tree
+        /// </summary>
         public ITreeModel Model
         {
             get => (ITreeModel)this.GetValue(ModelProperty);
@@ -43,10 +45,19 @@
         public static readonly DependencyProperty ModelProperty = DependencyProperty.Register(
             nameof(Model), typeof(ITreeModel), typeof(TreeListView));
 
+        /// <summary>
+        /// Root node of tree
+        /// </summary>
         internal TreeNode Root => this.root;
 
+        /// <summary>
+        /// Nodes of tree
+        /// </summary>
         public ReadOnlyCollection<TreeNode> Nodes => this.Root.Nodes;
 
+        /// <summary>
+        /// Focused node
+        /// </summary>
         internal TreeNode PendingFocusNode
         {
             get;
@@ -55,20 +66,23 @@
 
         public ICollection<TreeNode> SelectedNodes => this.SelectedItems.Cast<TreeNode>().ToArray();
 
-        public TreeNode SelectedNode
+        /// <summary>
+        /// Selected node in tree
+        /// </summary>
+        public TreeNode SelectedNode => this.SelectedItems.Count > 0 ? this.SelectedItems[0] as TreeNode : null;
+
+        /// <summary>
+        /// Count of tree visible nodes
+        /// </summary>
+        public int VisibleNodesCount
         {
-            get
-            {
-                if (this.SelectedItems.Count > 0)
-                {
-                    return this.SelectedItems[0] as TreeNode;
-                }
-                else
-                {
-                    return null;
-                }
-            }
+            get => (int)this.GetValue(VisibleNodesCountProperty);
+            private set => this.SetValue(VisibleNodesCountProperty, value);
         }
+
+        public static readonly DependencyProperty VisibleNodesCountProperty = DependencyProperty.Register(
+              nameof(VisibleNodesCount), typeof(int), typeof(TreeListView));
+
         #endregion
 
         public TreeListView()
@@ -84,6 +98,31 @@
             this.ItemContainerGenerator.StatusChanged += this.ItemContainerGeneratorStatusChanged;
         }
 
+        private void ItemContainerGeneratorStatusChanged(object sender, EventArgs e)
+        {
+            if (this.ItemContainerGenerator.Status == GeneratorStatus.ContainersGenerated && this.PendingFocusNode != null)
+            {
+                if (this.ItemContainerGenerator.ContainerFromItem(this.PendingFocusNode) is TreeListViewItem item)
+                {
+                    item.Focus();
+                }
+
+                this.PendingFocusNode = null;
+            }
+        }
+
+        private void CreateChildrenRows(TreeNode node)
+        {
+            int index = this.Rows.IndexOf(node);
+
+            // ignore invisible nodes
+            if (index >= 0 || node == this.root)
+            {
+                var nodes = node.AllVisibleChildren.ToArray();
+                this.Rows.InsertRange(index + 1, nodes);
+            }
+        }
+
         protected override void OnPropertyChanged(DependencyPropertyChangedEventArgs e)
         {
             base.OnPropertyChanged(e);
@@ -93,20 +132,6 @@
                 this.root.Children.Clear();
                 this.Rows.Clear();
                 this.CreateChildrenNodes(this.root);
-            }
-        }
-
-        private void ItemContainerGeneratorStatusChanged(object sender, EventArgs e)
-        {
-            if (this.ItemContainerGenerator.Status == GeneratorStatus.ContainersGenerated && this.PendingFocusNode != null)
-            {
-                var item = this.ItemContainerGenerator.ContainerFromItem(this.PendingFocusNode) as TreeListViewItem;
-                if (item != null)
-                {
-                    item.Focus();
-                }
-
-                this.PendingFocusNode = null;
             }
         }
 
@@ -127,6 +152,21 @@
                 ti.Node = node;
                 base.PrepareContainerForItemOverride(element, node.Model);
             }
+        }
+
+        private IEnumerable GetChildren(TreeNode parent)
+        {
+            return this.model?.GetParentChildren(parent.Model);
+        }
+
+        private bool HasChildren(TreeNode parent)
+        {
+            return parent == this.Root || (this.model != null && this.model.HasParentChildren(parent.Model));
+        }
+
+        internal void OnNodePropertyChanged()
+        {
+            this.VisibleNodesCount = (this.Rows == null) ? 0 : this.Rows.Count(n => n.IsMatch);
         }
 
         internal void SetIsExpanded(TreeNode node, bool value)
@@ -170,18 +210,6 @@
             }
         }
 
-        private void CreateChildrenRows(TreeNode node)
-        {
-            int index = this.Rows.IndexOf(node);
-
-            // ignore invisible nodes
-            if (index >= 0 || node == this.root)
-            {
-                var nodes = node.AllVisibleChildren.ToArray();
-                this.Rows.InsertRange(index + 1, nodes);
-            }
-        }
-
         internal void DropChildrenRows(TreeNode node, bool removeParent)
         {
             int start = this.Rows.IndexOf(node);
@@ -201,16 +229,6 @@
 
                 this.Rows.RemoveRange(start, count);
             }
-        }
-
-        private IEnumerable GetChildren(TreeNode parent)
-        {
-            return this.model?.GetParentChildren(parent.Model);
-        }
-
-        private bool HasChildren(TreeNode parent)
-        {
-            return parent == this.Root || (this.model != null && this.model.HasParentChildren(parent.Model));
         }
 
         internal void InsertNewNode(TreeNode parent, ITreeNode model, int rowIndex, int index)

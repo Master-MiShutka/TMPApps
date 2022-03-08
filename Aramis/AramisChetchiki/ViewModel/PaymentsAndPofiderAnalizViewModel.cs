@@ -141,7 +141,6 @@
             private set => this.SetProperty(ref this.description, value);
         }
 
-        public int VisibleNodesCount => (this.nodesList == null) ? 0 : this.nodesList.Count(n => n.IsMatch);
 
         #region Commands
 

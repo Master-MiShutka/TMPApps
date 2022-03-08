@@ -114,6 +114,46 @@
         <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto" />
         <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
+
+        <Style.Triggers>
+            <MultiDataTrigger>
+                <MultiDataTrigger.Conditions>
+                    <Condition Binding="{Binding VisibleNodesCount}" Value="0" />
+                    <Condition Binding="{Binding TpNameFilter, Converter={StaticResource IsNullOrEmptyConverter}}" Value="False" />
+                </MultiDataTrigger.Conditions>
+                <MultiDataTrigger.Setters>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate>
+                                <Border
+                                    local:RelativeFontSize.RelativeFontSize="2.0"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    SnapsToDevicePixels="true">
+                                    <local:NoData Margin="10" Message="ничего не нашлось" />
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </MultiDataTrigger.Setters>
+            </MultiDataTrigger>
+            <DataTrigger Binding="{Binding ModelTree}" Value="{x:Null}">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate>
+                            <Border
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                SnapsToDevicePixels="true">
+                                <local:NoData Margin="5" />
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </DataTrigger>
+        </Style.Triggers>
+
     </Style>
 
     <Style x:Key="SeparatorStyle" TargetType="{x:Type ContentControl}">
