@@ -3,6 +3,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:converters="clr-namespace:TMP.UI.Controls.WPF.Converters"
     xmlns:local="clr-namespace:TMP.UI.Controls.WPF"
+    xmlns:local_helpers="clr-namespace:TMP.UI.Controls.WPF.Helpers"
     xmlns:treelistview="clr-namespace:TMP.UI.Controls.WPF.TreeListView">
 
     <Style x:Key="ExpandCollapseToggleStyle" TargetType="{x:Type ToggleButton}">
@@ -116,28 +117,22 @@
         <Setter Property="VerticalContentAlignment" Value="Center" />
 
         <Style.Triggers>
-            <MultiDataTrigger>
-                <MultiDataTrigger.Conditions>
-                    <Condition Binding="{Binding VisibleNodesCount}" Value="0" />
-                    <Condition Binding="{Binding TpNameFilter, Converter={StaticResource IsNullOrEmptyConverter}}" Value="False" />
-                </MultiDataTrigger.Conditions>
-                <MultiDataTrigger.Setters>
-                    <Setter Property="Template">
-                        <Setter.Value>
-                            <ControlTemplate>
-                                <Border
-                                    local:RelativeFontSize.RelativeFontSize="2.0"
-                                    BorderBrush="{TemplateBinding BorderBrush}"
-                                    BorderThickness="{TemplateBinding BorderThickness}"
-                                    SnapsToDevicePixels="true">
-                                    <local:NoData Margin="10" Message="ничего не нашлось" />
-                                </Border>
-                            </ControlTemplate>
-                        </Setter.Value>
-                    </Setter>
-                </MultiDataTrigger.Setters>
-            </MultiDataTrigger>
-            <DataTrigger Binding="{Binding ModelTree}" Value="{x:Null}">
+            <DataTrigger Binding="{Binding VisibleNodesCount, RelativeSource={RelativeSource Mode=Self}}" Value="0">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate>
+                            <Border
+                                local_helpers:RelativeFontSize.RelativeFontSize="2.0"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                SnapsToDevicePixels="true">
+                                <local:NoData Margin="10" Message="ничего не нашлось" />
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Model, RelativeSource={RelativeSource Mode=Self}}" Value="{x:Null}">
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate>
