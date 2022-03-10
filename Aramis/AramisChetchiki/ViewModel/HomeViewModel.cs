@@ -16,8 +16,8 @@
     {
         #region Fields
         private readonly NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
+        private ObservableCollection<IMatrix> pivotCollection;
 
-        private ObservableCollections.ObservableList<IMatrix> pivotCollection;
         private KeyValuePair<int, string> selectedQuarter;
         private int selectedYear;
         private string message = "?";
@@ -110,6 +110,10 @@
 
                 this.RaisePropertyChanged(nameof(this.Statistics));
             }
+
+            this.PivotCollection = new ObservableCollection<IMatrix>();
+
+            App.InvokeInUIThread(() => System.Windows.Data.BindingOperations.EnableCollectionSynchronization(this.PivotCollection, new object()));
 
             System.Threading.Tasks.Task.Run(this.Start);
         }
@@ -217,11 +221,7 @@
         /// <summary>
         /// Коллекция сводных таблиц
         /// </summary>
-        public ObservableCollections.ObservableList<IMatrix> PivotCollection
-        {
-            get => this.pivotCollection;
-            private set => this.SetProperty(ref this.pivotCollection, value);
-        }
+        public ObservableCollection<IMatrix> PivotCollection { get => this.pivotCollection; private set => this.SetProperty(ref this.pivotCollection, value); }
 
         public MetersStatistics Statistics { get; init; }
 
@@ -310,20 +310,21 @@
 
             if(!(MainViewModel.Data == null || MainViewModel.Meters == null || MainViewModel.Meters.Any() == false))
             {
-                this.PivotCollection = new ObservableCollections.ObservableList<IMatrix>();
-
                 Task task = Task.Run(() =>
                 {
                     System.Threading.Thread.CurrentThread.Name = "BuildMessageAndPivots";
                     this.CreatePivots();
                 })
-                .ContinueWith((t) => this.IsBusy = false);
+                .ContinueWith((t) =>
+                {
+                    this.IsBusy = false;
+                });
             }
         }
 
         private void Matrix_Builded(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            bool flag = !this.PivotCollection.All(matrix => matrix.IsBuilded);
+            bool flag = !this.pivotCollection.All(matrix => matrix.IsBuilded);
             if (flag == false)
             {
                 this.IsBusy = false;
@@ -333,22 +334,22 @@
         [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1123:Do not place regions within elements", Justification = "<Pending>")]
         private void CreatePivots()
         {
-            foreach (IMatrix mtrx in this.PivotCollection)
+            foreach (IMatrix mtrx in this.pivotCollection)
             {
                 mtrx.Builded -= this.Matrix_Builded;
             }
 
-            this.PivotCollection.Clear();
+            this.pivotCollection.Clear();
 
             bool add(IMatrix matrix)
             {
-                if (pivotsBuildingCanceled)
+                if (this.pivotsBuildingCanceled)
                     return false;
 
                 if (matrix == null)
                     return false;
 
-                this.PivotCollection.Add(matrix);
+                this.pivotCollection.Add(matrix);
 
                 matrix.Builded += this.Matrix_Builded;
 

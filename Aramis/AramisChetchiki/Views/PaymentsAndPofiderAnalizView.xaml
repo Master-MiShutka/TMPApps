@@ -228,15 +228,14 @@
                             VerticalAlignment="Center"
                             ResizeBehavior="PreviousAndNext"
                             ResizeDirection="Rows"
-                            Style="{StaticResource GridSplitterStyle1}" />
+                            Style="{StaticResource GridSplitterStyle1}"
+                            Visibility="{Binding SelectedItem, Converter={StaticResource NullOrEmptyToVisibilityConverter}}" />
                         <!--  2  -->
-                        <StackPanel Grid.Row="2" Orientation="Horizontal">
-                            <local_controls:DataGridControl
-                                Grid.Row="2"
-                                AutoGenerateColumns="True"
-                                ItemsSource="{Binding Path=ChildMeters, IsAsync=True}"
-                                Visibility="{Binding SelectedItem, Converter={StaticResource NullOrEmptyToVisibilityConverter}}" />
-                        </StackPanel>
+                        <local_controls:DataGridControl
+                            Grid.Row="2"
+                            AutoGenerateColumns="True"
+                            ItemsSource="{Binding Path=ChildMeters, IsAsync=True}"
+                            Visibility="{Binding SelectedItem, Converter={StaticResource NullOrEmptyToVisibilityConverter}}" />
                     </Grid>
                 </TabItem>
                 <TabItem Header="Свод">

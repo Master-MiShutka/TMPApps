@@ -8,7 +8,7 @@
     <PackageReference Include="MessagePack" Version="2.3.85" />
     <PackageReference Include="MessagePackAnalyzer" Version="2.3.85" />
     <PackageReference Include="MsgPack.Cli" Version="1.0.1" />
-    <PackageReference Include="NLog" Version="4.7.13" />
+    <PackageReference Include="NLog" Version="4.7.14" />
     <PackageReference Include="ObservableCollections" Version="1.1.2" />
     <PackageReference Include="protobuf-net" Version="3.0.101" />
     <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
@@ -27,7 +27,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>build; analyzers</IncludeAssets>
     </PackageReference>
-    <PackageReference Update="WpfAnalyzers" Version="4.0.1">
+    <PackageReference Update="WpfAnalyzers" Version="4.0.2">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>build; analyzers</IncludeAssets>
     </PackageReference>

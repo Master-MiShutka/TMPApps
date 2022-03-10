@@ -18,7 +18,8 @@
 
         private ITreeModel model;
         private TreeNode root;
-        private ObservableCollections.ISynchronizedView<TreeNode, TreeNode> rowsView;
+
+        private static readonly DependencyPropertyKey VisibleNodesCountPropertyKey = DependencyProperty.RegisterReadOnly(nameof(VisibleNodesCount), typeof(int), typeof(TreeListView), new FrameworkPropertyMetadata());
 
         #endregion
 
@@ -27,7 +28,7 @@
         /// <summary>
         /// Internal collection of rows representing visible nodes, actually displayed in the ListView
         /// </summary>
-        internal ObservableCollections.ObservableList<TreeNode> Rows
+        internal ObservableCollection<TreeNode> Rows
         {
             get;
             private set;
@@ -71,31 +72,29 @@
         /// </summary>
         public TreeNode SelectedNode => this.SelectedItems.Count > 0 ? this.SelectedItems[0] as TreeNode : null;
 
+        public static readonly DependencyProperty VisibleNodesCountProperty = VisibleNodesCountPropertyKey.DependencyProperty;
+
         /// <summary>
         /// Count of tree visible nodes
         /// </summary>
         public int VisibleNodesCount
         {
             get => (int)this.GetValue(VisibleNodesCountProperty);
-            private set => this.SetValue(VisibleNodesCountProperty, value);
+            private set { this.SetValue(VisibleNodesCountPropertyKey, value); }
         }
-
-        public static readonly DependencyProperty VisibleNodesCountProperty = DependencyProperty.Register(
-              nameof(VisibleNodesCount), typeof(int), typeof(TreeListView));
 
         #endregion
 
         public TreeListView()
         {
-            this.Rows = new ObservableCollections.ObservableList<TreeNode>();
+            this.Rows = new ObservableCollection<TreeNode>();
             this.root = new TreeNode(this, null);
             this.root.IsExpanded = true;
 
-            this.rowsView = this.Rows.CreateView(i => i).WithINotifyCollectionChanged();
-            System.Windows.Data.BindingOperations.EnableCollectionSynchronization(this.rowsView, new object());
+            System.Windows.Data.BindingOperations.EnableCollectionSynchronization(this.Rows, new object());
 
-            this.ItemsSource = this.rowsView;
-            this.ItemContainerGenerator.StatusChanged += this.ItemContainerGeneratorStatusChanged;
+            this.ItemsSource = this.Rows;
+            this.ItemContainerGenerator.StatusChanged += this.ItemContainerGeneratorStatusChanged;            
         }
 
         private void ItemContainerGeneratorStatusChanged(object sender, EventArgs e)
@@ -119,7 +118,11 @@
             if (index >= 0 || node == this.root)
             {
                 var nodes = node.AllVisibleChildren.ToArray();
-                this.Rows.InsertRange(index + 1, nodes);
+                int pos = index + 1;
+                foreach (var item in nodes)
+                {
+                    this.Rows.Insert(pos++, item);
+                }
             }
         }
 
@@ -132,6 +135,8 @@
                 this.root.Children.Clear();
                 this.Rows.Clear();
                 this.CreateChildrenNodes(this.root);
+
+                this.UpdateVisibleNodesCount();
             }
         }
 
@@ -164,9 +169,18 @@
             return parent == this.Root || (this.model != null && this.model.HasParentChildren(parent.Model));
         }
 
-        internal void OnNodePropertyChanged()
+        internal void UpdateVisibleNodesCount()
         {
-            this.VisibleNodesCount = (this.Rows == null) ? 0 : this.Rows.Count(n => n.IsMatch);
+            int count = (this.Rows == null) ? 0 : this.Rows.Count(n => n.IsMatch);
+
+            if (this.Dispatcher.CheckAccess())
+            {
+                this.VisibleNodesCount = count;
+            }
+            else
+            {
+                this.Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Normal, new Action(() => this.VisibleNodesCount = count));
+            }
         }
 
         internal void SetIsExpanded(TreeNode node, bool value)
@@ -206,7 +220,11 @@
                     node.Children.Add(child);
                 }
 
-                this.Rows.InsertRange(rowIndex + 1, node.Children.ToArray());
+                int pos = rowIndex + 1;
+                foreach (var item in node.Children.ToArray())
+                {
+                    this.Rows.Insert(pos++, item);
+                }
             }
         }
 
@@ -227,7 +245,10 @@
                     start++;
                 }
 
-                this.Rows.RemoveRange(start, count);
+                for (int index = start - 1 + count; index >= start; index--)
+                {
+                    this.Rows.RemoveAt(index);
+                }
             }
         }
 

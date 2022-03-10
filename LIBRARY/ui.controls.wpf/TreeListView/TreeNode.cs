@@ -15,6 +15,8 @@
         private INotifyPropertyChanged modelSource;
         private bool isExpanded = false;
         private bool isSelected;
+        // default value is true
+        private bool isMatch = true;
 
         #endregion
 
@@ -104,9 +106,16 @@
 
         public bool IsMatch
         {
-            get => this.isMath;
+            get => this.isMatch;
+
+            set
+            {
+                if (this.SetProperty(ref this.isMatch, value))
+                {
+                    this.Tree.UpdateVisibleNodesCount();
+                }
+            }
         }
-        => this.Model != null ? this.Model.IsMatch : true;
 
         public bool IsExpandedOnce
         {
@@ -318,7 +327,7 @@
                     this.IsExpanded = this.Model.IsExpanded;
                     break;
                 case nameof(Shared.ITreeNode.IsMatch):
-                    this.RaisePropertyChanged(nameof(this.IsMatch));
+                    this.IsMatch = this.Model == null || this.Model.IsMatch;
                     break;
                 default:
                     break;

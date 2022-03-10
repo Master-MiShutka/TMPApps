@@ -49,6 +49,9 @@
 
                 try
                 {
+                    double fz = (double)element.GetValue(property);
+
+
                     element.SetCurrentValue(property, DependencyProperty.UnsetValue);
                     var value = (double)args.NewValue;
 
