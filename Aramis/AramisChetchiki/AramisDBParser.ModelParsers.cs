@@ -652,14 +652,14 @@
                     payment.РазностьПоказанийПоКвитанции = record.GetValue<int>("РАЗН_КН") + record.GetValue<int>("РАЗН_КС");
                     payment.РазностьПоказанийРасчётная = record.GetValue<int>("РАЗН_РН") + record.GetValue<int>("РАЗН_РС");
 
-                    payment.ВеличинаТарифа = record.GetValue<float>("TAR_KN");
+                    payment.ВеличинаТарифа = (float)record.GetValue<decimal>("TAR_KN");
 
-                    payment.СуммаОплаты = record.GetValue<float>("SUMMA_KN") + record.GetValue<float>("SUMMA_KC");
+                    payment.СуммаОплаты = (float)record.GetValue<decimal>("SUMMA_KN") + (float)record.GetValue<decimal>("SUMMA_KC");
 
-                    payment.СуммаОплатыРасчётная = record.GetValue<float>("SUMMA_RN") + record.GetValue<float>("SUMMA_RC") + record.GetValue<float>("PENYA_R");
+                    payment.СуммаОплатыРасчётная = (float)record.GetValue<decimal>("SUMMA_RN") + (float)record.GetValue<decimal>("SUMMA_RC") + (float)record.GetValue<decimal>("PENYA_R");
 
-                    payment.ПеняВыставленая = record.GetValue<float>("PENYA_R");
-                    payment.ПеняОплаченная = record.GetValue<float>("PENYA_K");
+                    payment.ПеняВыставленая = (float)record.GetValue<decimal>("PENYA_R");
+                    payment.ПеняОплаченная = (float)record.GetValue<decimal>("PENYA_K");
                 }
                 catch (Exception ex)
                 {
