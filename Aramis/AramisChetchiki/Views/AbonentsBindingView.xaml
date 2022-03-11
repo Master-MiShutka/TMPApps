@@ -63,7 +63,7 @@
                                     Storyboard.TargetProperty="BorderBrush.Color"
                                     From="Gray"
                                     To="White"
-                                    Duration="0:0:0.2" />
+                                    Duration="0:0:0.5" />
                             </Storyboard>
                         </BeginStoryboard>
                     </Trigger.EnterActions>
