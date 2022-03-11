@@ -7,6 +7,8 @@
 
     public class DbfRecord
     {
+        private static readonly NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
+
         private const byte ENDOFFILE = 0x1a;
 
         private DbfTable dbfTable;
@@ -52,8 +54,9 @@
                     {
                         dbfValue.Read(binaryReader);
                     }
-                    catch (Exception)
+                    catch (Exception e)
                     {
+                        logger?.Error(e);
                         System.Diagnostics.Debug.WriteLine($"DBFRecord Read: error on field #{index}, dbfValue.Key: {this.dbfTable.CreateDbfValueByIndex(index)}");
                     }
 
@@ -95,8 +98,9 @@
                     this.Values[index] = dbfValue;
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                logger?.Error(e);
                 System.Diagnostics.Debug.WriteLine($"DBFRecord Read: error");
             }
 
@@ -131,8 +135,9 @@
                     this.Values[index] = dbfValue;
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                logger?.Error(e);
                 System.Diagnostics.Debug.WriteLine($"DBFRecord Read: error");
             }
 
@@ -152,8 +157,9 @@
             {
                 return (T)dbfValue.GetValue();
             }
-            catch (InvalidCastException)
+            catch (InvalidCastException ice)
             {
+                logger?.Error(ice);
                 throw new InvalidCastException(
                     $"Unable to cast object of type '{dbfValue.GetValue().GetType().FullName}' to type '{typeof(T).FullName}' at ordinal '{ordinal}'.");
             }
@@ -185,11 +191,13 @@
 
                     if (genericType != dbfValueType)
                     {
+                        logger?.Warn($"Неверный формат данных: поле '{fieldName}', ожидался тип данных '{genericType}', прочитаны данные тип '{dbfValueType}'.");
                         System.Diagnostics.Debugger.Break();
                     }
                 }
                 else
                 {
+                    logger?.Warn($"Неверный формат данных: поле '{fieldName}', ожидался тип данных '{genericType}', прочитаны данные тип '{dbfValueType}'.");
                     System.Diagnostics.Debugger.Break();
                 }
             }
@@ -200,12 +208,15 @@
             {
                 return dbfValue == null ? default : dbfValue.Value;
             }
-            catch (NullReferenceException)
+            catch (NullReferenceException e)
             {
-                throw new NullReferenceException($"Unable to get value from object type '{typeof(T).FullName}' at field name '{fieldName}'.");
+                string msg = $"Unable to get value from object type '{typeof(T).FullName}' at field name '{fieldName}'.";
+                logger?.Error(e, msg);
+                throw new NullReferenceException(msg);
             }
-            catch (InvalidCastException)
+            catch (InvalidCastException ice)
             {
+                logger?.Error(ice);
                 throw new InvalidCastException(
                     $"Unable to cast object of type '{dbfValue.GetValue().GetType().FullName}' to type '{typeof(T).FullName}' at field name '{fieldName}'.");
             }
