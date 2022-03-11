@@ -9,14 +9,9 @@
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is DateOnly date)
-            {
-                return (date == default) ? Visibility.Collapsed : Visibility.Visible;
-            }
-            else
-            {
-                return DependencyProperty.UnsetValue;
-            }
+            return value is DateTime dateTime
+                ? (dateTime == default) ? Visibility.Collapsed : Visibility.Visible
+                : value is DateOnly date ? (date == default) ? Visibility.Collapsed : Visibility.Visible : DependencyProperty.UnsetValue;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

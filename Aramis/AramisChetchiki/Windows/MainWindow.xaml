@@ -9,6 +9,7 @@
     xmlns:fw="clr-namespace:SourceChord.FluentWPF;assembly=FluentWPF"
     xmlns:local="clr-namespace:TMP.WORK.AramisChetchiki"
     xmlns:local_controls="clr-namespace:TMP.WORK.AramisChetchiki.Controls"
+    xmlns:local_converters="clr-namespace:TMP.WORK.AramisChetchiki.Converters"
     xmlns:local_extensions="clr-namespace:TMP.WORK.AramisChetchiki.Extensions"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:model="clr-namespace:TMP.WORK.AramisChetchiki.Model"
@@ -28,8 +29,7 @@
     mouseWheel:MouseWheel.Enhanced="True"
     mouseWheel:MouseWheel.ScrollMode="Physical"
     Closed="Window_Closed"
-    FontSize="{local_extensions:SettingBinding Path=FontSize,
-                                               FallbackValue=13.0}"
+    FontSize="{local_extensions:SettingBinding Path=FontSize}"
     Icon="{StaticResource MainIcon}"
     Loaded="WindowWithDialogs_Loaded"
     SnapsToDevicePixels="True"
@@ -44,7 +44,11 @@
         <KeyBinding Key="F10" Command="{Binding CommandGoHome}" />
     </Window.InputBindings>
     <Window.Resources>
+        
         <views:CurrentViewModelTemplateSelector x:Key="CurrentViewModelTemplateSelector" />
+
+        <local_converters:DateToVisibilityConverter x:Key="DateToVisibilityConverter" />
+
     </Window.Resources>
     <Interactions:Interaction.Behaviors>
         <ui_controls_behaviours:ZoomFontSizeOnMouseWheelBehavior />
@@ -98,10 +102,10 @@
                 MinWidth="150"
                 Margin="2,2,5,2"
                 VerticalContentAlignment="Center"
-                IsEditable="False"
+                IsEditable="False" IsSynchronizedWithCurrentItem="True"
                 IsEnabled="{Binding Path=IsDataLoaded}"
                 ItemsSource="{Binding Path=AvailableDataFiles}"
-                SelectedValue="{Binding SelectedDataFileInfo, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}">
+                SelectedValue="{Binding SelectedDataFileInfo, Mode=TwoWay, NotifyOnTargetUpdated=True}">
                 <ComboBox.Style>
                     <Style BasedOn="{StaticResource {x:Type ComboBox}}" TargetType="{x:Type ComboBox}">
                         <Style.Triggers>
@@ -145,7 +149,7 @@
                             <TextBlock
                                 Grid.Column="1"
                                 Margin="0,0,10,0"
-                                Text="{Binding Path=FileSize, UpdateSourceTrigger=PropertyChanged, StringFormat={}Размер данных: {0}, Converter={StaticResource FileSizeToHumanReadableConverter}}" />
+                                Text="{Binding Path=FileSize, NotifyOnTargetUpdated=True, StringFormat={}Размер данных: {0}, Converter={StaticResource FileSizeToHumanReadableConverter}}" />
                             <TextBlock
                                 Grid.Column="2"
                                 Margin="0,0,10,0"
@@ -165,7 +169,8 @@
                             <TextBlock
                                 Grid.Column="4"
                                 Margin="0,0,5,0"
-                                Text="{Binding Path=LastModifiedDate, NotifyOnSourceUpdated=True, StringFormat={}📅: {0:dd.MM.yyyy HH:mm}}" />
+                                Visibility="{Binding LastModifiedDate, Converter={StaticResource DateToVisibilityConverter}}"
+                                Text="{Binding Path=LastModifiedDate, NotifyOnTargetUpdated=True, StringFormat={}📅: {0:dd.MM.yyyy HH:mm}}" />
                         </Grid>
                     </DataTemplate>
                 </ComboBox.ItemTemplate>

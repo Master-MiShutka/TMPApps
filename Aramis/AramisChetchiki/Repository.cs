@@ -377,6 +377,7 @@
                 data = await aramisDBParser.GetDataAsync().ConfigureAwait(false);
                 (data.Info as AramisDataInfo).AramisDbPath = aramisDataInfo.AramisDbPath;
                 (data.Info as AramisDataInfo).LastModifiedDate = DateTime.Now;
+                (data.Info as AramisDataInfo).IsLoaded = true;
                 data.Info.Period = new Common.RepositoryCommon.DatePeriod();
                 this.Data = data;
 

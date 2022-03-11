@@ -16,7 +16,7 @@
     public class MainViewModel : BaseMainViewModel, IMainViewModel
     {
         private readonly NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
-
+        private long totalMemory;
         private bool isInitialized;
         private bool isWindowLoaded;
         private Model.AramisDataInfo selectedDataFileInfo;
@@ -76,14 +76,14 @@
                     HorizontalAlignment = HorizontalAlignment.Stretch,
                     VerticalAlignment = VerticalAlignment.Stretch,
                     IsReadOnlyCaretVisible = true,
-                    Text = System.IO.File.ReadAllText(AramisDBParser.ErrorsFileName, System.Text.Encoding.UTF8)
+                    Text = System.IO.File.ReadAllText(AramisDBParser.ErrorsFileName, System.Text.Encoding.UTF8),
                 };
                 scrollViewer.Content = textBox;
 
                 this.ShowCustomDialog(scrollViewer, "-= Выявленные ошибки в БД Арамис =-", TMPApplication.WpfDialogs.DialogMode.Ok);
             }, () => System.IO.File.Exists(AramisDBParser.ErrorsFileName));
 
-            this.IsInitialized = false;
+            this.isInitialized = false;
             this.Status = "запуск программы";
             this.DetailedStatus = "поиск файлов с данными ...";
 
@@ -110,6 +110,7 @@
 
         private void Repository_Handler(object sender, Common.RepositoryCommon.RepositoryEventArgs e)
         {
+            AramisDataInfo fi;
             switch (e.Action)
             {
                 case Common.RepositoryCommon.RepositoryAction.Initialized:
@@ -119,15 +120,12 @@
 
                     if (e.Info != null)
                     {
-                        AramisDataInfo fi = Repository.Instance.AvailableDataFiles.Cast<AramisDataInfo>().FirstOrDefault(i => i.FileName == e.Info.FileName);
-                        if (this.IsDataLoaded == false)
+                        fi = Repository.Instance.AvailableDataFiles.Cast<AramisDataInfo>().FirstOrDefault(i => i.FileName == e.Info.FileName);
+                        this.selectedDataFileInfo = fi;
+                        this.RaisePropertyChanged(nameof(this.SelectedDataFileInfo));
+
+                        if (this.IsDataLoaded)
                         {
-                            this.SelectedDataFileInfo = fi;
-                        }
-                        else
-                        {
-                            this.selectedDataFileInfo = fi;
-                            this.RaisePropertyChanged(nameof(this.SelectedDataFileInfo));
                             this.GoHome();
                         }
                     }
@@ -142,8 +140,10 @@
                             this.GoStart();
                         }
                     }
-                    this.IsInitialized = true;
 
+                    this.RaisePropertyChanged(nameof(this.AvailableDataFiles));
+                    this.RaisePropertyChanged(nameof(this.SelectedDataFileInfo));
+                    this.IsInitialized = true;
                     break;
                 case Common.RepositoryCommon.RepositoryAction.Loading:
                 case Common.RepositoryCommon.RepositoryAction.Saving:
@@ -155,24 +155,21 @@
                     this.RaisePropertyChanged(nameof(this.Data));
                     this.RaisePropertyChanged(nameof(this.Meters));
                     this.RaisePropertyChanged(nameof(this.AvailableDataFiles));
+                    fi = Repository.Instance.AvailableDataFiles.Cast<AramisDataInfo>().FirstOrDefault(i => i.FileName == e.Info.FileName);
+                    this.selectedDataFileInfo = fi;
                     this.RaisePropertyChanged(nameof(this.SelectedDataFileInfo));
-
-                    //TMP.Common.RepositoryCommon.JsonSerializer.JsonSerializeAsync(this.Data.Meters.Take(10), "meters10.json");
-
-                    // TMP.Common.RepositoryCommon.JsonSerializer.JsonSerializeAsync(Data.Meters, "meters.json");
                     break;
                 case Common.RepositoryCommon.RepositoryAction.Saved:
                     this.SetWindowTaskbarItemProgressState(TMPApplication.WpfDialogs.Contracts.TaskbarItemProgressState.None);
                     this.RaisePropertyChanged(nameof(this.AvailableDataFiles));
                     this.RaisePropertyChanged(nameof(this.SelectedDataFileInfo));
-                    //TMP.Common.RepositoryCommon.JsonSerializer.JsonSerializeAsync(this.Data.Meters, "meters.json");
-                    //TMP.Common.RepositoryCommon.JsonSerializer.JsonSerializeAsync(this.Data.Meters.Take(10), "meters10.json");
                     break;
                 case Common.RepositoryCommon.RepositoryAction.Updated:
                     this.RaisePropertyChanged(nameof(this.Data));
                     this.RaisePropertyChanged(nameof(this.Meters));
                     this.RaisePropertyChanged(nameof(this.AvailableDataFiles));
-                    this.selectedDataFileInfo = (AramisDataInfo)Repository.Instance.Data.Info;
+                    fi = Repository.Instance.AvailableDataFiles.Cast<AramisDataInfo>().FirstOrDefault(i => i.FileName == e.Info.FileName);
+                    this.selectedDataFileInfo = fi;
                     this.RaisePropertyChanged(nameof(this.SelectedDataFileInfo));
                     break;
                 case Common.RepositoryCommon.RepositoryAction.FoundNewFile:
@@ -231,7 +228,7 @@
             this.previousMode = this.CurrentMode;
             this.currentMode = Mode.ViewMeters;
             this.currentViewModel = vm;
-
+            this.RaisePropertyChanged(nameof(this.IsDataLoaded));
             this.RaisePropertyChanged(propertyName: nameof(this.CurrentMode));
             this.RaisePropertyChanged(propertyName: nameof(this.CurrentViewModel));
             this.RaisePropertyChanged(propertyName: nameof(this.WindowTitle));
@@ -248,7 +245,7 @@
         /// <summary>
         /// The amount of memory used by an application
         /// </summary>
-        public long TotalMemory { get; private set; }
+        public long TotalMemory { get => this.totalMemory; private set => this.SetProperty(ref this.totalMemory, value); }
 
         /// <summary>
         /// Признак, указывающий, что данные загружены
@@ -267,7 +264,7 @@
         /// <summary>
         /// Коллекция доступных файлов с данными
         /// </summary>
-        public ObservableCollections.ObservableList<Common.RepositoryCommon.IDataFileInfo> AvailableDataFiles => Repository.Instance.AvailableDataFiles;
+        public ObservableCollection<Common.RepositoryCommon.IDataFileInfo> AvailableDataFiles => Repository.Instance.AvailableDataFiles;
 
         /// <summary>
         /// Выбранный файл данных
@@ -296,7 +293,7 @@
         /// <summary>
         /// Коллекция счётчиков
         /// </summary>
-        public IEnumerable<Meter> Meters => (this.Data == null) ? null : this.Data.Meters.Where(i => i.Удалён == false);
+        public IEnumerable<Meter> Meters => this.Data?.Meters.Where(i => i.Удалён == false);
 
         /// <summary>
         /// Коллекция сводной информации
