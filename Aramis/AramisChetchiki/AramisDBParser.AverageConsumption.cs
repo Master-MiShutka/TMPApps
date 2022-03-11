@@ -217,8 +217,21 @@
                             }
                         }
 
-                        if (changed && index <= list.Count - 4)
-                            index += 3;
+                        if (changed && index <= list.Count - 4 && index >= 4)
+                        {
+                            int someDatesCount = 0;
+                            DateOnly date = list[index].Item1;
+                            if (list[index - 1].Item1 == date)
+                                someDatesCount++;
+                            if (list[index - 2].Item1 == date)
+                                someDatesCount++;
+                            if (list[index - 3].Item1 == date)
+                                someDatesCount++;
+                            if (list[index - 4].Item1 == date)
+                                someDatesCount++;
+
+                            index -= someDatesCount;
+                        }
                     }
                     else
                     {
