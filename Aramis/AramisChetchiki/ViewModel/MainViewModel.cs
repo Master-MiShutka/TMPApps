@@ -31,31 +31,6 @@
         {
             if (System.ComponentModel.DesignerProperties.GetIsInDesignMode(new DependencyObject()))
             {
-                Repository.Instance.Data = new AramisData()
-                {
-                    Info = new Model.AramisDataInfo()
-                    {
-                        FileName = "TestFileName.aramisData",
-                        FileSize = 123456789,
-                        IsLoaded = false,
-                        DepartamentName = "Ressssss",
-                        Version = new Version(1, 1),
-                        Period = new Common.RepositoryCommon.DatePeriod(),
-                    },
-
-                    ChangesOfMeters = new(),
-                    Meters = new List<Meter>(),
-                    SummaryInfos = new ObservableCollection<SummaryInfoItem>(),
-                };
-
-                this.SelectedDataFileInfo = new AramisDataInfo()
-                {
-                    DepartamentName = "Test RES",
-                    FileName = @"c:\Test1\test.yyy",
-                    AramisDbPath = @"d:\test2",
-                    FileSize = 123456789,
-                };
-                System.Diagnostics.Debug.Write("MainViewModel IsInDesignMode");
                 return;
             }
 

@@ -57,16 +57,15 @@
 
     <Style x:Key="BaseTextBlockStyle" TargetType="{x:Type TextBlock}">
         <Setter Property="Background" Value="Transparent" />
-        <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" />
         <Setter Property="FontSize" Value="{local_extensions:SettingBinding Path=FontSize}" />
         <Setter Property="Effect">
             <Setter.Value>
                 <DropShadowEffect
-                        BlurRadius="1"
-                        Direction="330"
-                        Opacity="0"
-                        ShadowDepth="1"
-                        Color="Black" />
+                    BlurRadius="1"
+                    Direction="330"
+                    Opacity="0"
+                    ShadowDepth="1"
+                    Color="Black" />
             </Setter.Value>
         </Setter>
         <Style.Triggers>
@@ -90,14 +89,21 @@
             <EventTrigger RoutedEvent="UIElement.MouseEnter">
                 <BeginStoryboard>
                     <Storyboard>
-                        <DoubleAnimation Duration="0:0:0.5" Storyboard.TargetProperty="Effect.Opacity" To="0.5"/>
+                        <DoubleAnimation
+                            Storyboard.TargetProperty="Effect.Opacity"
+                            To="0.5"
+                            Duration="0:0:0.5" />
                     </Storyboard>
                 </BeginStoryboard>
             </EventTrigger>
             <EventTrigger RoutedEvent="UIElement.MouseLeave">
                 <BeginStoryboard>
                     <Storyboard>
-                        <DoubleAnimation Duration="0:0:0.5" Storyboard.TargetProperty="Effect.Opacity" From="0.5" To="0"/>
+                        <DoubleAnimation
+                            Storyboard.TargetProperty="Effect.Opacity"
+                            From="0.5"
+                            To="0"
+                            Duration="0:0:0.5" />
                     </Storyboard>
                 </BeginStoryboard>
             </EventTrigger>

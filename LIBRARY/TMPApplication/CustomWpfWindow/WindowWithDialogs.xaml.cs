@@ -85,7 +85,7 @@
         public Grid DialogsContainer => this.dialogsContainer;
 
         #region Show Window Icon
-        private static readonly DependencyProperty ShowIconProperty = DependencyProperty.Register("ShowIcon", typeof(bool), typeof(WindowWithDialogs), new PropertyMetadata(true));
+        private static readonly DependencyProperty ShowIconProperty = DependencyProperty.Register(nameof(ShowIcon), typeof(bool), typeof(WindowWithDialogs), new PropertyMetadata(true));
 
         /// <summary>
         /// Возвращает или задаёт видимость иконки окна
@@ -98,7 +98,7 @@
 
         #endregion
         #region Icon Edge Mode
-        private static readonly DependencyProperty IconEdgeModeProperty = DependencyProperty.Register("IconEdgeMode", typeof(EdgeMode), typeof(WindowWithDialogs), new PropertyMetadata(EdgeMode.Aliased));
+        private static readonly DependencyProperty IconEdgeModeProperty = DependencyProperty.Register(nameof(IconEdgeMode), typeof(EdgeMode), typeof(WindowWithDialogs), new PropertyMetadata(EdgeMode.Aliased));
 
         /// <summary>
         /// Возвращает или задаёт режим отрисовки краев иконки
@@ -111,7 +111,7 @@
 
         #endregion
         #region Icon Bitmap Scaling Mode
-        private static readonly DependencyProperty IconBitmapScalingModeProperty = DependencyProperty.Register("IconBitmapScalingMode", typeof(BitmapScalingMode), typeof(WindowWithDialogs), new PropertyMetadata(BitmapScalingMode.HighQuality));
+        private static readonly DependencyProperty IconBitmapScalingModeProperty = DependencyProperty.Register(nameof(IconBitmapScalingMode), typeof(BitmapScalingMode), typeof(WindowWithDialogs), new PropertyMetadata(BitmapScalingMode.HighQuality));
 
         /// <summary>
         /// Возвращает или задаёт аалгоритм масштабирования иконки
@@ -124,7 +124,7 @@
 
         #endregion
         #region Icon Template
-        private static readonly DependencyProperty IconTemplateProperty = DependencyProperty.Register("IconTemplate", typeof(DataTemplate), typeof(WindowWithDialogs), new PropertyMetadata(null));
+        private static readonly DependencyProperty IconTemplateProperty = DependencyProperty.Register(nameof(IconTemplate), typeof(DataTemplate), typeof(WindowWithDialogs), new PropertyMetadata(null));
 
         /// <summary>
         /// Возвращает или задаёт шаблон иконки
@@ -137,7 +137,7 @@
         #endregion
 
         #region ShowDialogsOverTitleBar
-        private static readonly DependencyProperty ShowDialogsOverTitleBarProperty = DependencyProperty.Register("ShowDialogsOverTitleBar", typeof(bool), typeof(WindowWithDialogs), new FrameworkPropertyMetadata(false, FrameworkPropertyMetadataOptions.AffectsArrange | FrameworkPropertyMetadataOptions.AffectsMeasure | FrameworkPropertyMetadataOptions.AffectsRender));
+        private static readonly DependencyProperty ShowDialogsOverTitleBarProperty = DependencyProperty.Register(nameof(ShowDialogsOverTitleBar), typeof(bool), typeof(WindowWithDialogs), new FrameworkPropertyMetadata(false, FrameworkPropertyMetadataOptions.AffectsArrange | FrameworkPropertyMetadataOptions.AffectsMeasure | FrameworkPropertyMetadataOptions.AffectsRender));
 
         /// <summary>
         /// Возвращает или задаёт отображать ли диалог поверх панели заголовка окна
@@ -150,7 +150,7 @@
 
         #endregion
         #region Show TitleBar
-        private static readonly DependencyProperty ShowTitleBarProperty = DependencyProperty.Register("ShowTitleBar", typeof(bool), typeof(WindowWithDialogs), new PropertyMetadata(true, OnShowTitleBarPropertyChangedCallback, OnShowTitleBarCoerceValueCallback));
+        private static readonly DependencyProperty ShowTitleBarProperty = DependencyProperty.Register(nameof(ShowTitleBar), typeof(bool), typeof(WindowWithDialogs), new PropertyMetadata(true, OnShowTitleBarPropertyChangedCallback, OnShowTitleBarCoerceValueCallback));
 
         /// <summary>
         /// Возвращает или задаёт видимость панели заголовка
@@ -183,7 +183,7 @@
 
         #endregion
         #region Title Foreground
-        private static readonly DependencyProperty TitleForegroundProperty = DependencyProperty.Register("TitleForeground", typeof(Brush), typeof(WindowWithDialogs));
+        private static readonly DependencyProperty TitleForegroundProperty = DependencyProperty.Register(nameof(TitleForeground), typeof(Brush), typeof(WindowWithDialogs));
 
         /// <summary>
         /// Возвращает или задаёт кисть для отрисовки заголовка окна
@@ -196,7 +196,7 @@
 
         #endregion
         #region Title Brush
-        private static readonly DependencyProperty TitleBrushProperty = DependencyProperty.Register("TitleBrush", typeof(Brush), typeof(WindowWithDialogs), new PropertyMetadata(Brushes.Transparent));
+        private static readonly DependencyProperty TitleBrushProperty = DependencyProperty.Register(nameof(TitleBrush), typeof(Brush), typeof(WindowWithDialogs), new PropertyMetadata(Brushes.Transparent));
 
         /// <summary>
         /// Возвращает или задаёт кисть для заливки панели заголовка окна
@@ -209,7 +209,7 @@
 
         #endregion
         #region Title Template
-        private static readonly DependencyProperty TitleTemplateProperty = DependencyProperty.Register("TitleTemplate", typeof(DataTemplate), typeof(WindowWithDialogs), new PropertyMetadata(null));
+        private static readonly DependencyProperty TitleTemplateProperty = DependencyProperty.Register(nameof(TitleTemplate), typeof(DataTemplate), typeof(WindowWithDialogs), new PropertyMetadata(null));
 
         /// <summary>
         /// Возвращает или задаёт шаблон заголовка окна
@@ -223,7 +223,7 @@
         #endregion
         #region NonActiveWindowTitleBrush
         private static readonly DependencyProperty NonActiveWindowTitleBrushProperty =
-            DependencyProperty.Register("NonActiveWindowTitleBrush", typeof(Brush), typeof(WindowWithDialogs), new PropertyMetadata(Brushes.Gray));
+            DependencyProperty.Register(nameof(NonActiveWindowTitleBrush), typeof(Brush), typeof(WindowWithDialogs), new PropertyMetadata(Brushes.Gray));
 
         /// <summary>
         /// Возвращает или задаёт кисть для панели заголовка окна, когда оно в не активном состоянии
@@ -236,7 +236,7 @@
         #endregion
 
         #region Show Min Button
-        private static readonly DependencyProperty ShowMinButtonProperty = DependencyProperty.Register("ShowMinButton", typeof(bool), typeof(WindowWithDialogs), new PropertyMetadata(true));
+        private static readonly DependencyProperty ShowMinButtonProperty = DependencyProperty.Register(nameof(ShowMinButton), typeof(bool), typeof(WindowWithDialogs), new PropertyMetadata(true));
 
         /// <summary>
         /// Возвращает или задаёт видимость кнопки минимизирования окна
@@ -249,7 +249,7 @@
 
         #endregion
         #region Is Window Min Button Enabled
-        private static readonly DependencyProperty IsMinButtonEnabledProperty = DependencyProperty.Register("IsMinButtonEnabled", typeof(bool), typeof(WindowWithDialogs), new PropertyMetadata(true));
+        private static readonly DependencyProperty IsMinButtonEnabledProperty = DependencyProperty.Register(nameof(IsMinButtonEnabled), typeof(bool), typeof(WindowWithDialogs), new PropertyMetadata(true));
 
         /// <summary>
         /// Возвращает или задаёт доступность кнопки минимизирования окна
@@ -262,7 +262,7 @@
 
         #endregion
         #region Min Button Style
-        private static readonly DependencyProperty MinButtonStyleProperty = DependencyProperty.Register("MinButtonStyle", typeof(Style), typeof(WindowWithDialogs), new PropertyMetadata(null));
+        private static readonly DependencyProperty MinButtonStyleProperty = DependencyProperty.Register(nameof(MinButtonStyle), typeof(Style), typeof(WindowWithDialogs), new PropertyMetadata(null));
 
         /// <summary>
         /// Возвращает или задаёт стиль кнопки минимизирования окна
@@ -275,7 +275,7 @@
         #endregion
 
         #region Show MaxRestore Button
-        private static readonly DependencyProperty ShowMaxRestoreButtonProperty = DependencyProperty.Register("ShowMaxRestoreButton", typeof(bool), typeof(WindowWithDialogs), new PropertyMetadata(true));
+        private static readonly DependencyProperty ShowMaxRestoreButtonProperty = DependencyProperty.Register(nameof(ShowMaxRestoreButton), typeof(bool), typeof(WindowWithDialogs), new PropertyMetadata(true));
 
         /// <summary>
         /// Возвращает или задаёт видимость кнопки разворачивания окна
@@ -288,7 +288,7 @@
 
         #endregion
         #region Is Window Min Button Enabled
-        private static readonly DependencyProperty IsMaxRestoreButtonEnabledProperty = DependencyProperty.Register("IsMaxRestoreButtonEnabled", typeof(bool), typeof(WindowWithDialogs), new PropertyMetadata(true));
+        private static readonly DependencyProperty IsMaxRestoreButtonEnabledProperty = DependencyProperty.Register(nameof(IsMaxRestoreButtonEnabled), typeof(bool), typeof(WindowWithDialogs), new PropertyMetadata(true));
 
         /// <summary>
         /// Возвращает или задаёт доступность кнопки разворачивания окна
@@ -301,7 +301,7 @@
 
         #endregion
         #region MaxRestore Button Style
-        private static readonly DependencyProperty MaxRestoreButtonStyleProperty = DependencyProperty.Register("MaxRestoreButtonStyle", typeof(Style), typeof(WindowWithDialogs), new PropertyMetadata(null));
+        private static readonly DependencyProperty MaxRestoreButtonStyleProperty = DependencyProperty.Register(nameof(MaxRestoreButtonStyle), typeof(Style), typeof(WindowWithDialogs), new PropertyMetadata(null));
 
         /// <summary>
         /// Возвращает или задаёт стиль кнопки разворачивания окна
@@ -314,7 +314,7 @@
         #endregion
 
         #region Show Close Button
-        private static readonly DependencyProperty ShowCloseButtonProperty = DependencyProperty.Register("ShowCloseButton", typeof(bool), typeof(WindowWithDialogs), new PropertyMetadata(true));
+        private static readonly DependencyProperty ShowCloseButtonProperty = DependencyProperty.Register(nameof(ShowCloseButton), typeof(bool), typeof(WindowWithDialogs), new PropertyMetadata(true));
 
         /// <summary>
         /// Возвращает или задаёт видимость кнопки закрытия окна
@@ -327,7 +327,7 @@
 
         #endregion
         #region Is Window Min Button Enabled
-        private static readonly DependencyProperty IsCloseButtonEnabledProperty = DependencyProperty.Register("IsCloseButtonEnabled", typeof(bool), typeof(WindowWithDialogs), new PropertyMetadata(true));
+        private static readonly DependencyProperty IsCloseButtonEnabledProperty = DependencyProperty.Register(nameof(IsCloseButtonEnabled), typeof(bool), typeof(WindowWithDialogs), new PropertyMetadata(true));
 
         /// <summary>
         /// Возвращает или задаёт доступность кнопки закрытия окна
@@ -340,7 +340,7 @@
 
         #endregion
         #region Close Button Style
-        private static readonly DependencyProperty CloseButtonStyleProperty = DependencyProperty.Register("CloseButtonStyle", typeof(Style), typeof(WindowWithDialogs), new PropertyMetadata(null));
+        private static readonly DependencyProperty CloseButtonStyleProperty = DependencyProperty.Register(nameof(CloseButtonStyle), typeof(Style), typeof(WindowWithDialogs), new PropertyMetadata(null));
 
         /// <summary>
         /// Возвращает или задаёт стиль кнопки закрытия окна
@@ -353,7 +353,7 @@
         #endregion
 
         #region Window Button Style
-        private static readonly DependencyProperty WindowButtonStyleProperty = DependencyProperty.Register("WindowButtonStyle", typeof(Style), typeof(WindowWithDialogs), new PropertyMetadata(null));
+        private static readonly DependencyProperty WindowButtonStyleProperty = DependencyProperty.Register(nameof(WindowButtonStyle), typeof(Style), typeof(WindowWithDialogs), new PropertyMetadata(null));
 
         /// <summary>
         /// Возвращает или задаёт стиль кнопки окна
@@ -366,7 +366,7 @@
         #endregion
 
         #region About Command
-        private static readonly DependencyProperty AboutCommandProperty = DependencyProperty.Register("AboutCommand", typeof(ICommand), typeof(WindowWithDialogs), new PropertyMetadata(null));
+        private static readonly DependencyProperty AboutCommandProperty = DependencyProperty.Register(nameof(AboutCommand), typeof(ICommand), typeof(WindowWithDialogs), new PropertyMetadata(null));
 
         /// <summary>
         /// Возвращает или задаёт команду "О программе"
@@ -379,7 +379,7 @@
 
         #endregion
         #region Is About Button Enabled
-        private static readonly DependencyProperty IsAboutButtonEnabledProperty = DependencyProperty.Register("IsAboutButtonEnabled", typeof(bool), typeof(WindowWithDialogs), new PropertyMetadata(true));
+        private static readonly DependencyProperty IsAboutButtonEnabledProperty = DependencyProperty.Register(nameof(IsAboutButtonEnabled), typeof(bool), typeof(WindowWithDialogs), new PropertyMetadata(true));
 
         /// <summary>
         /// Возвращает или задаёт доступность кнопки About
@@ -392,7 +392,7 @@
 
         #endregion
         #region Is About Button Visible
-        private static readonly DependencyProperty IsAboutButtonVisibleProperty = DependencyProperty.Register("IsAboutButtonVisible", typeof(bool), typeof(WindowWithDialogs), new PropertyMetadata(true));
+        private static readonly DependencyProperty IsAboutButtonVisibleProperty = DependencyProperty.Register(nameof(IsAboutButtonVisible), typeof(bool), typeof(WindowWithDialogs), new PropertyMetadata(true));
 
         /// <summary>
         /// Возвращает или задаёт видимость кнопки About
@@ -405,7 +405,7 @@
 
         #endregion
         #region Settings Command
-        private static readonly DependencyProperty SettingsCommandProperty = DependencyProperty.Register("SettingsCommand", typeof(ICommand), typeof(WindowWithDialogs), new PropertyMetadata(null));
+        private static readonly DependencyProperty SettingsCommandProperty = DependencyProperty.Register(nameof(SettingsCommand), typeof(ICommand), typeof(WindowWithDialogs), new PropertyMetadata(null));
 
         /// <summary>
         /// Возвращает или задаёт команду "Параметры"
@@ -418,7 +418,7 @@
 
         #endregion
         #region Is Settings Button Enabled
-        private static readonly DependencyProperty IsSettingsButtonEnabledProperty = DependencyProperty.Register("IsSettingsButtonEnabled", typeof(bool), typeof(WindowWithDialogs), new PropertyMetadata(true));
+        private static readonly DependencyProperty IsSettingsButtonEnabledProperty = DependencyProperty.Register(nameof(IsSettingsButtonEnabled), typeof(bool), typeof(WindowWithDialogs), new PropertyMetadata(true));
 
         /// <summary>
         /// Возвращает или задаёт доступность кнопки Settings
@@ -431,7 +431,7 @@
 
         #endregion
         #region Is Settings Button Visible
-        private static readonly DependencyProperty IsSettingsButtonVisibleProperty = DependencyProperty.Register("IsSettingsButtonVisible", typeof(bool), typeof(WindowWithDialogs), new PropertyMetadata(true));
+        private static readonly DependencyProperty IsSettingsButtonVisibleProperty = DependencyProperty.Register(nameof(IsSettingsButtonVisible), typeof(bool), typeof(WindowWithDialogs), new PropertyMetadata(true));
 
         /// <summary>
         /// Возвращает или задаёт видимость кнопки Settings
@@ -444,7 +444,7 @@
         #endregion
 
         #region UseNoneWindowStyle
-        public static readonly DependencyProperty UseNoneWindowStyleProperty = DependencyProperty.Register("UseNoneWindowStyle", typeof(bool), typeof(WindowWithDialogs), new PropertyMetadata(false, OnUseNoneWindowStylePropertyChangedCallback));
+        public static readonly DependencyProperty UseNoneWindowStyleProperty = DependencyProperty.Register(nameof(UseNoneWindowStyle), typeof(bool), typeof(WindowWithDialogs), new PropertyMetadata(false, OnUseNoneWindowStylePropertyChangedCallback));
 
         /// <summary>
         /// Gets/sets whether the WindowStyle is None or not.
@@ -479,7 +479,7 @@
         #endregion UseNoneWindowStyle
 
         #region IsWindowDraggable
-        private static readonly DependencyProperty IsWindowDraggableProperty = DependencyProperty.Register("IsWindowDraggable", typeof(bool), typeof(WindowWithDialogs), new PropertyMetadata(true));
+        private static readonly DependencyProperty IsWindowDraggableProperty = DependencyProperty.Register(nameof(IsWindowDraggable), typeof(bool), typeof(WindowWithDialogs), new PropertyMetadata(true));
 
         public bool IsWindowDraggable
         {
@@ -489,7 +489,7 @@
         #endregion IsWindowDraggable
 
         #region ShowSystemMenuOnRightClick
-        private static readonly DependencyProperty ShowSystemMenuOnRightClickProperty = DependencyProperty.Register("ShowSystemMenuOnRightClick", typeof(bool), typeof(WindowWithDialogs), new PropertyMetadata(true));
+        private static readonly DependencyProperty ShowSystemMenuOnRightClickProperty = DependencyProperty.Register(nameof(ShowSystemMenuOnRightClick), typeof(bool), typeof(WindowWithDialogs), new PropertyMetadata(true));
 
         /// <summary>
         /// Gets/sets if the the system menu should popup on right click.
@@ -516,12 +516,12 @@
         /// Determine whether a ContentDialog is currenlty shown inside the <seealso cref="MetroWindow"/> or not.
         /// </summary>
         private static readonly DependencyProperty IsContentDialogVisibleProperty =
-            DependencyProperty.Register("IsContentDialogVisible", typeof(bool), typeof(WindowWithDialogs), new PropertyMetadata(false));
+            DependencyProperty.Register(nameof(IsContentDialogVisible), typeof(bool), typeof(WindowWithDialogs), new PropertyMetadata(false));
         #endregion IsContentDialogVisible
 
         #region IgnoreTaskbarOnMaximize
         public static readonly DependencyProperty IgnoreTaskbarOnMaximizeProperty =
-            DependencyProperty.Register("IgnoreTaskbarOnMaximize", typeof(bool), typeof(WindowWithDialogs), new PropertyMetadata(false));
+            DependencyProperty.Register(nameof(IgnoreTaskbarOnMaximize), typeof(bool), typeof(WindowWithDialogs), new PropertyMetadata(false));
 
         /// <summary>
         /// Возвращает или задаёт игнорировать ли панель задач при разворачивании окна
@@ -535,7 +535,7 @@
 
         #region GlowBrush
         private static readonly DependencyProperty GlowBrushProperty =
-            DependencyProperty.Register("GlowBrush", typeof(SolidColorBrush), typeof(WindowWithDialogs), new PropertyMetadata(null));
+            DependencyProperty.Register(nameof(GlowBrush), typeof(SolidColorBrush), typeof(WindowWithDialogs), new PropertyMetadata(null));
 
         /// <summary>
         /// Возвращает или задаёт кисть для эффекта свечения
@@ -549,7 +549,7 @@
         #endregion
         #region NonActiveGlowBrush
         private static readonly DependencyProperty NonActiveGlowBrushProperty =
-            DependencyProperty.Register("NonActiveGlowBrush", typeof(SolidColorBrush), typeof(WindowWithDialogs), new PropertyMetadata(new SolidColorBrush(Color.FromRgb(153, 153, 153)))); // #999999
+            DependencyProperty.Register(nameof(NonActiveGlowBrush), typeof(SolidColorBrush), typeof(WindowWithDialogs), new PropertyMetadata(new SolidColorBrush(Color.FromRgb(153, 153, 153)))); // #999999
 
         /// <summary>
         /// Возвращает или задаёт кисть для эффекта свечения, когда окно в не активном состоянии
@@ -563,7 +563,7 @@
 
         #region NonActiveBorderBrush
         private static readonly DependencyProperty NonActiveBorderBrushProperty =
-            DependencyProperty.Register("NonActiveBorderBrush", typeof(Brush), typeof(WindowWithDialogs), new PropertyMetadata(Brushes.Gray));
+            DependencyProperty.Register(nameof(NonActiveBorderBrush), typeof(Brush), typeof(WindowWithDialogs), new PropertyMetadata(Brushes.Gray));
 
         /// <summary>
         /// Возвращает или задаёт кисть для границы окна, когда оно в не активном состоянии
@@ -577,7 +577,7 @@
 
         #region ToggleFullScreen
         private static readonly DependencyProperty ToggleFullScreenProperty =
-            DependencyProperty.Register("ToggleFullScreen", typeof(bool), typeof(WindowWithDialogs), new PropertyMetadata(false, ToggleFullScreenPropertyChangedCallback));
+            DependencyProperty.Register(nameof(ToggleFullScreen), typeof(bool), typeof(WindowWithDialogs), new PropertyMetadata(false, ToggleFullScreenPropertyChangedCallback));
 
         /// <summary>
         /// Возвращает или задаёт отображение окна во весь экран

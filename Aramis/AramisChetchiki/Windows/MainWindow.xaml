@@ -22,8 +22,8 @@
     xmlns:wwd="clr-namespace:TMPApplication.WpfDialogs;assembly=TMPApplication"
     x:Name="mainWindow"
     Title="{Binding WindowTitle}"
-    Width="1400"
-    Height="600"
+    Width="1900"
+    Height="900"
     d:DataContext="{d:DesignInstance {x:Type vm:MainViewModel},
                                      IsDesignTimeCreatable=True}"
     mouseWheel:MouseWheel.Enhanced="True"
@@ -31,7 +31,6 @@
     Closed="Window_Closed"
     FontSize="{local_extensions:SettingBinding Path=FontSize}"
     Icon="{StaticResource MainIcon}"
-    Loaded="WindowWithDialogs_Loaded"
     SnapsToDevicePixels="True"
     Style="{StaticResource WindowStyle}"
     TextOptions.TextFormattingMode="Ideal"
@@ -44,7 +43,7 @@
         <KeyBinding Key="F10" Command="{Binding CommandGoHome}" />
     </Window.InputBindings>
     <Window.Resources>
-        
+
         <views:CurrentViewModelTemplateSelector x:Key="CurrentViewModelTemplateSelector" />
 
         <local_converters:DateToVisibilityConverter x:Key="DateToVisibilityConverter" />
@@ -102,8 +101,9 @@
                 MinWidth="150"
                 Margin="2,2,5,2"
                 VerticalContentAlignment="Center"
-                IsEditable="False" IsSynchronizedWithCurrentItem="True"
+                IsEditable="False"
                 IsEnabled="{Binding Path=IsDataLoaded}"
+                IsSynchronizedWithCurrentItem="True"
                 ItemsSource="{Binding Path=AvailableDataFiles}"
                 SelectedValue="{Binding SelectedDataFileInfo, Mode=TwoWay, NotifyOnTargetUpdated=True}">
                 <ComboBox.Style>
@@ -169,8 +169,8 @@
                             <TextBlock
                                 Grid.Column="4"
                                 Margin="0,0,5,0"
-                                Visibility="{Binding LastModifiedDate, Converter={StaticResource DateToVisibilityConverter}}"
-                                Text="{Binding Path=LastModifiedDate, NotifyOnTargetUpdated=True, StringFormat={}📅: {0:dd.MM.yyyy HH:mm}}" />
+                                Text="{Binding Path=LastModifiedDate, NotifyOnTargetUpdated=True, StringFormat={}📅: {0:dd.MM.yyyy HH:mm}}"
+                                Visibility="{Binding LastModifiedDate, Converter={StaticResource DateToVisibilityConverter}}" />
                         </Grid>
                     </DataTemplate>
                 </ComboBox.ItemTemplate>

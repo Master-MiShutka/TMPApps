@@ -5,6 +5,7 @@
     using System.Collections.ObjectModel;
     using System.Collections.Specialized;
     using System.ComponentModel;
+    using System.Diagnostics.CodeAnalysis;
     using System.Linq;
 
     public sealed class TreeNode : TMP.Shared.PropertyChangedBase, Shared.IChildItem<TreeNode>
@@ -27,7 +28,7 @@
             this.Tree = tree ?? throw new ArgumentNullException(nameof(tree));
             this.Children = new Shared.ChildItemCollection<TreeNode>(this);
             this.Nodes = new ReadOnlyCollection<TreeNode>(this.Children);
-            this.Model = model;
+            this.Model = model ?? throw new ArgumentNullException(nameof(model));
 
             this.ModelSource = model;
         }
@@ -36,6 +37,7 @@
 
         #region Properties
 
+        [NotNull]
         internal TreeListView Tree { get; private set; }
 
         internal INotifyCollectionChanged ChildrenSource
@@ -133,6 +135,7 @@
             {
                 if (this.SetProperty(ref this.isExpanded, value))
                 {
+                    this.Model.IsExpanded = value;
                     this.Tree.SetIsExpanded(this, value);
                     this.RaisePropertyChanged(nameof(this.IsExpanded));
                     this.RaisePropertyChanged(nameof(this.IsExpandable));
@@ -201,7 +204,7 @@
                 TreeNode parent = this.Parent;
                 if (parent != null)
                 {
-                    return parent.NextNode != null ? parent.NextNode : parent.BottomNode;
+                    return parent.NextNode ?? parent.BottomNode;
                 }
 
                 return null;
@@ -219,7 +222,7 @@
                 else
                 {
                     TreeNode nn = this.NextNode;
-                    return nn != null ? nn : this.BottomNode;
+                    return nn ?? this.BottomNode;
                 }
             }
         }
@@ -247,6 +250,7 @@
             }
         }
 
+        [NotNull]
         public Shared.ITreeNode Model { get; private set; }
 
         public ReadOnlyCollection<TreeNode> Nodes { get; private set; }

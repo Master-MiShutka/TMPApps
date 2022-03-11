@@ -23,4 +23,9 @@
 
     <converters:IsNullOrEmptyConverter x:Key="IsNullOrEmptyConverter" />
 
+    <converters:LevelToIndentConverter x:Key="LevelToIndentConverter" />
+    <converters:CanExpandConverter x:Key="CanExpandConverter" />
+
+    <converters:TreeViewMarginConverter x:Key="LengthConverter" Length="12" />
+
 </ResourceDictionary>

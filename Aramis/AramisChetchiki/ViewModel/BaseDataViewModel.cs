@@ -273,9 +273,12 @@
 
                         this.view = this.BuildAndGetView();
 
-                        (this.CommandExport as DelegateCommand)?.RaiseCanExecuteChanged();
-                        (this.CommandPrint as DelegateCommand)?.RaiseCanExecuteChanged();
-                        (this.CommandShowFilters as DelegateCommand)?.RaiseCanExecuteChanged();
+                        App.InvokeInUIThread(() =>
+                        {
+                            (this.CommandExport as DelegateCommand)?.RaiseCanExecuteChanged();
+                            (this.CommandPrint as DelegateCommand)?.RaiseCanExecuteChanged();
+                            (this.CommandShowFilters as DelegateCommand)?.RaiseCanExecuteChanged();
+                        });
 
                         if (this.view != null)
                         {

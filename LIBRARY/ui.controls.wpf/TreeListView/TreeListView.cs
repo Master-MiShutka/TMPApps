@@ -94,7 +94,7 @@
             System.Windows.Data.BindingOperations.EnableCollectionSynchronization(this.Rows, new object());
 
             this.ItemsSource = this.Rows;
-            this.ItemContainerGenerator.StatusChanged += this.ItemContainerGeneratorStatusChanged;            
+            this.ItemContainerGenerator.StatusChanged += this.ItemContainerGeneratorStatusChanged;
         }
 
         private void ItemContainerGeneratorStatusChanged(object sender, EventArgs e)

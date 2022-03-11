@@ -16,10 +16,5 @@
         {
             AppSettings.Default.Save();
         }
-
-        private void WindowWithDialogs_Loaded(object sender, System.Windows.RoutedEventArgs e)
-        {
-            this.WindowState = System.Windows.WindowState.Maximized;
-        }
     }
 }

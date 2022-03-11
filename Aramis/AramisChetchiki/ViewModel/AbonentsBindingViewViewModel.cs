@@ -39,8 +39,10 @@
             this.IsBusy = true;
             this.Status = "Подоговка данных ...";
 
+            AbonentBindingNode root = null;
             System.Threading.Tasks.Task task = System.Threading.Tasks.Task.Run(() =>
             {
+                System.Threading.Thread.CurrentThread.Name = "AbonentBindingNodes build thread";
                 const string empty = "(пусто)";
 
                 IList<AbonentBindingNode> GroupMetersByProperty(IEnumerable<Meter> metersList, string propName, AbonentBindingNode.NodeType nodeType)
@@ -162,7 +164,7 @@
                         i.Фидер04.HasValue == false)
                     .ToList();
 
-                AbonentBindingNode root = new()
+                root = new()
                 {
                     IsExpanded = true,
                     Type = AbonentBindingNode.NodeType.Departament,
@@ -194,14 +196,13 @@
                 }
 
                 root.AddChildren(substationsNodes);
-
-                this.AbonentBindingNodes = new ObservableCollection<AbonentBindingNode>(root.Children);
             })
                 .ContinueWith(t =>
                 {
+                    this.AbonentBindingNodes = new ObservableCollection<AbonentBindingNode>(root?.Children);
                     this.IsBusy = false;
                     this.Status = null;
-                });
+                }, System.Threading.Tasks.TaskScheduler.FromCurrentSynchronizationContext());
         }
 
         public ICommand ToggleIsVisualizing => new DelegateCommand(() => this.IsVisualizing = !this.IsVisualizing);

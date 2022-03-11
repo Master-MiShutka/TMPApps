@@ -128,25 +128,27 @@
                     </Interactions:Interaction.Behaviors>
                     <controls:StretchingTreeView.Resources>
                         <HierarchicalDataTemplate DataType="{x:Type model:AbonentBindingNode}" ItemsSource="{Binding Children}">
-                            <Grid>
+                            <Grid Margin="0,2">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="Auto" />
                                     <ColumnDefinition Width="*" />
                                     <ColumnDefinition Width="Auto" SharedSizeGroup="notBindingMetersColumn" />
                                     <ColumnDefinition Width="Auto" SharedSizeGroup="totalMetersColumn" />
                                 </Grid.ColumnDefinitions>
-                                <ContentPresenter
+                                <Image
                                     Name="icon"
                                     Margin="0,0,5,1"
                                     VerticalAlignment="Center"
-                                    Content="{Binding Icon}"
-                                    Focusable="False">
-                                    <ContentPresenter.ContentTemplate>
-                                        <DataTemplate>
-                                            <Image Source="{Binding}" />
-                                        </DataTemplate>
-                                    </ContentPresenter.ContentTemplate>
-                                </ContentPresenter>
+                                    Focusable="False"
+                                    Source="{Binding Icon}">
+                                    <Image.Effect>
+                                        <DropShadowEffect
+                                            BlurRadius="2"
+                                            Direction="0"
+                                            ShadowDepth="2"
+                                            Color="WhiteSmoke" />
+                                    </Image.Effect>
+                                </Image>
                                 <TextBlock
                                     Grid.Column="1"
                                     Text="{Binding Header}"

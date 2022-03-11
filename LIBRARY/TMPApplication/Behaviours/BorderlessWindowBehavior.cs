@@ -60,7 +60,7 @@
                 CaptionHeight = 10,
                 CornerRadius = new CornerRadius(0),
                 GlassFrameThickness = new Thickness(0),
-                IgnoreTaskbarOnMaximize = true,
+                IgnoreTaskbarOnMaximize = false,
                 UseAeroCaptionButtons = false,
             };
             var window = this.AssociatedObject as WindowWithDialogs;
