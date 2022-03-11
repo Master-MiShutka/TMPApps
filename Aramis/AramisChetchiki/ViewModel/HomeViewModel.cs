@@ -356,6 +356,12 @@
                 return true;
             }
 
+            Dictionary<ulong, IList<ChangeOfMeter>> changesOfMeters = MainViewModel.Data?.ChangesOfMeters;
+            if (changesOfMeters == null)
+            {
+                changesOfMeters = new();
+            }
+
             IEnumerable<Meter> allMeters = MainViewModel.Meters.Where(i => i.Удалён == false);
             int metersCount = allMeters.Count();
 
@@ -449,7 +455,7 @@
                     .Select(i => MatrixHeaderCell.CreateColumnHeader(i)),
                 GetDataCellFunc = (row, column) =>
                 {
-                    List<DateOnly> l = MainViewModel.Data.ChangesOfMeters
+                    List<DateOnly> l = changesOfMeters
                         .SelectMany(i => i.Value)
                         .Where(i => i.ДатаЗамены != default)
                         .Select(i => i.ДатаЗамены)
@@ -477,7 +483,7 @@
                     .Select(i => MatrixHeaderCell.CreateColumnHeader(i)),
                 GetDataCellFunc = (row, column) =>
                 {
-                    List<DateOnly> l = MainViewModel.Data.ChangesOfMeters
+                    List<DateOnly> l = changesOfMeters
                         .SelectMany(i => i.Value)
                         .Where(i => i.ДатаЗамены != default)
                         .Where(i => i.ЭтоЭлектронный)

@@ -19,7 +19,7 @@
     {
         #region Fields
 
-        private ObservableCollections.ObservableList<IMatrix> pivotCollection = new();
+        private ObservableCollection<IMatrix> pivotCollection = new();
         private string tpNameFilter;
         private FiderAnalizTreeModel modelTree;
         private UI.Controls.WPF.TreeListView.TreeNode selectedItemNode;
@@ -45,6 +45,8 @@
                 this.IsBusy = false;
                 return;
             }
+
+            App.InvokeInUIThread(() => System.Windows.Data.BindingOperations.EnableCollectionSynchronization(this.pivotCollection, new object()));
 
             // this.Data = MainViewModel?.Data?.Payments.SelectMany(i => i.Value);
 
@@ -128,7 +130,7 @@
             private set => this.SetProperty(ref this.datePeriods, value);
         }
 
-        public ObservableCollections.ObservableList<IMatrix> PivotCollection
+        public ObservableCollection<IMatrix> PivotCollection
         {
             get => this.pivotCollection;
             private set => this.SetProperty(ref this.pivotCollection, value);

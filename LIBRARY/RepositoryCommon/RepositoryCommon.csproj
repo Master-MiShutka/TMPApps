@@ -1,8 +1,10 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
   <PropertyGroup>
     <OutputType>Library</OutputType>
     <RootNamespace>TMP.Common.RepositoryCommon</RootNamespace>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <UseWpf>True</UseWpf>
+    <UseWindowsForms>True</UseWindowsForms>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="MessagePack" Version="2.3.85" />

@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Collections.ObjectModel;
     using System.IO;
     using System.IO.Packaging;
     using System.Linq;
@@ -121,7 +122,7 @@
         private Action<Exception> callBackAction;
         private string dataStorePath;
         private T data;
-        private readonly ObservableCollections.ObservableList<IDataFileInfo> availableDataFiles = new ();
+        private readonly ObservableCollection<IDataFileInfo> availableDataFiles = new ();
         private FileSystemWatcher dataFileStorePathWatcher;
 
         private readonly object @lock = new ();
@@ -136,15 +137,24 @@
 
             this.availableDataFiles.CollectionChanged += this.AvailableDataFiles_CollectionChanged;
 
-            if (string.IsNullOrEmpty(dataStorePath) == false)
-                this.dataStorePath = dataStorePath;
+            this.dataStorePath = string.IsNullOrEmpty(dataStorePath) == false
+                ? dataStorePath
+                : System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
+
+            if (System.Windows.Application.Current.Dispatcher.CheckAccess())
+            {
+                System.Windows.Data.BindingOperations.EnableCollectionSynchronization(this.availableDataFiles, new object());
+            }
             else
-                this.dataStorePath = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
+            {
+                System.Windows.Application.Current.Dispatcher.BeginInvoke(() => System.Windows.Data.BindingOperations.EnableCollectionSynchronization(this.availableDataFiles, new object()), 
+                    System.Windows.Threading.DispatcherPriority.Background);
+            }
 
             Task.Run(async () => await this.InitializationAsync());
         }
 
-        private void AvailableDataFiles_CollectionChanged(in ObservableCollections.NotifyCollectionChangedEventArgs<IDataFileInfo> e)
+        private void AvailableDataFiles_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             this.RaisePropertyChanged(nameof(this.AvailableDataFilesCount));
         }
@@ -224,7 +234,7 @@
                 this.data = value;
                 this.RaisePropertyChanged();
                 this.RaisePropertyChanged(nameof(this.DataFileSize));
-                this.Handler?.Invoke(this, new RepositoryEventArgs() { Action = RepositoryAction.Updated });
+                this.Handler?.Invoke(this, new RepositoryEventArgs() { Info = this.data.Info, Action = RepositoryAction.Updated });
             }
         }
 
@@ -236,7 +246,7 @@
         /// <summary>
         /// Коллекция доступных файлов с данными
         /// </summary>
-        public ObservableCollections.ObservableList<IDataFileInfo> AvailableDataFiles => this.availableDataFiles;
+        public ObservableCollection<IDataFileInfo> AvailableDataFiles => this.availableDataFiles;
 
         public int AvailableDataFilesCount => this.AvailableDataFiles != null ? this.AvailableDataFiles.Count : 0;
 

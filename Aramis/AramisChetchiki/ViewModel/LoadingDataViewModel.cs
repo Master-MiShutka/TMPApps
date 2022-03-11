@@ -1,6 +1,7 @@
 ﻿namespace TMP.WORK.AramisChetchiki.ViewModel
 {
     using System;
+    using System.Collections.ObjectModel;
     using TMP.Shared;
     using TMP.WORK.AramisChetchiki.Model;
 
@@ -10,12 +11,12 @@
     public class LoadingDataViewModel : BaseViewModel
     {
         private readonly NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
-        private ObservableCollections.ObservableList<WorkTask> workTasks = new();
+        private ObservableCollection<WorkTask> workTasks = new();
 
         /// <summary>
         /// Список выполняемых задач
         /// </summary>
-        public ObservableCollections.ObservableList<WorkTask> WorkTasks
+        public ObservableCollection<WorkTask> WorkTasks
         {
             get => this.workTasks;
             init => this.SetProperty(ref this.workTasks, value);
@@ -29,13 +30,13 @@
         /// <summary>
         /// Выбранный файл данных
         /// </summary>
-        public static AramisDataInfo SelectedDataFileInfo => MainViewModel.SelectedDataFileInfo;
+        public AramisDataInfo SelectedDataFileInfo => MainViewModel.SelectedDataFileInfo;
 
         public LoadingDataViewModel()
         {
             if (System.ComponentModel.DesignerProperties.GetIsInDesignMode(new System.Windows.DependencyObject()))
             {
-                this.workTasks = new ObservableCollections.ObservableList<WorkTask>()
+                this.workTasks = new ObservableCollection<WorkTask>()
                 {
                         new WorkTask("Задача №1") { Status = "Status 1", Progress = 65, ElapsedTime = "05:56" },
                         new WorkTask("Задача #3") { Status = "Status 3", Progress = 84, ElapsedTime = "01:06", ChildProgress = 75, ChildRemainingTime = "23:22", RemainingTime = "efe" },
@@ -53,6 +54,8 @@
                 return;
             }
 
+            App.InvokeInUIThread(() => System.Windows.Data.BindingOperations.EnableCollectionSynchronization(this.workTasks, new object()));
+
             // Запуск получения данных
             System.Threading.Tasks.Task.Run(async () =>
             {
@@ -62,7 +65,7 @@
 
                 if (result == false)
                 {
-                    this.ShowDialogWarning($"Данные из базы данных Арамис '{SelectedDataFileInfo.AramisDbPath}' не удалось загрузить.\nПерейдите к параметрам\nи укажите путь к базе данных.");
+                    this.ShowDialogWarning($"Данные из базы данных Арамис '{this.SelectedDataFileInfo.AramisDbPath}' не удалось загрузить.\nПерейдите к параметрам\nи укажите путь к базе данных.");
                     MainViewModel.ChangeMode(Mode.Preferences);
                 }
                 else
@@ -92,30 +95,32 @@
         {
             this.logger?.Info(">>> GetDataFromAramisDbAsync");
 
-            if (SelectedDataFileInfo == null)
+            if (this.SelectedDataFileInfo == null)
             {
                 return false;
             }
 
             string msg;
-            msg = $"Попытка получить данные из базы данных Арамис: РЭС - {SelectedDataFileInfo.DepartamentName}, путь к базе - '{SelectedDataFileInfo.AramisDbPath}'";
+            msg = $"Попытка получить данные из базы данных Арамис: РЭС - {this.SelectedDataFileInfo.DepartamentName}, путь к базе - '{this.SelectedDataFileInfo.AramisDbPath}'";
             this.logger?.Info(msg);
             bool isSuccess;
             try
             {
                 this.Init();
-                isSuccess = await Repository.Instance.GetDataFromDb(SelectedDataFileInfo, this).ConfigureAwait(false);
+                isSuccess = await Repository.Instance.GetDataFromDb(this.SelectedDataFileInfo, this).ConfigureAwait(false);
             }
             catch (Exception ex)
             {
+                this.logger?.Error(ex, msg);
                 this.ShowDialogError(ex);
                 return false;
             }
 
             if (isSuccess)
             {
-                SelectedDataFileInfo.IsLoaded = true;
-                msg = $"Данные из базы данных Арамис: РЭС - {SelectedDataFileInfo.DepartamentName} получены успешно";
+                this.SelectedDataFileInfo.IsLoaded = true;
+                this.SelectedDataFileInfo.IsSelected = true;
+                msg = $"Данные из базы данных Арамис: РЭС - {this.SelectedDataFileInfo.DepartamentName} получены успешно";
                 this.logger?.Info(msg);
                 return true;
             }
