@@ -45,7 +45,9 @@ namespace TMP.WORK.AramisChetchiki
 
             System.Threading.Thread.CurrentThread.Name = "MainAppThread";
 
-            this.MainWindowWithDialogs = new MainWindow();
+            var window = new MainWindow();
+            CorrectMainWindowSizeAndPos(window);
+            this.MainWindowWithDialogs = window;
             this.MainViewModel = new ViewModel.MainViewModel();
         }
 
