@@ -94,7 +94,7 @@
         }
 
         /// <summary>
-        /// Loop trough all items and set <see cref="StretchingTreeViewItem.IsMatch"/> property if <see cref="SearchStringProperty"/> value contains <see cref="SearchString"/>
+        /// Loop through all items and set <see cref="StretchingTreeViewItem.IsMatch"/> property if <see cref="SearchStringProperty"/> value contains <see cref="SearchString"/>
         /// </summary>
         private void ApplyFilter()
         {
@@ -183,15 +183,11 @@
 
                 for (int i = 0, count = container.Items.Count; i < count; i++)
                 {
-                    StretchingTreeViewItem subContainer = (StretchingTreeViewItem)container.ItemContainerGenerator.ContainerFromIndex(i);
-
+                    ItemsControl subContainer = container.ItemContainerGenerator.ContainerFromIndex(i) as ItemsControl;
                     if (subContainer != null)
                     {
                         // Search the next level for the object.
                         this.DoApplyFilter(subContainer, criteria);
-
-                        // The object is not under this TreeViewItem so collapse it.
-                        subContainer.IsExpanded = false;
                     }
                 }
             }

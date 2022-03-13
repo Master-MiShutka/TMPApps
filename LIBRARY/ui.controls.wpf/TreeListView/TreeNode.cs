@@ -331,7 +331,7 @@
                     this.IsExpanded = this.Model.IsExpanded;
                     break;
                 case nameof(Shared.ITreeNode.IsMatch):
-                    this.IsMatch = this.Model == null || this.Model.IsMatch;
+                    this.IsMatch = this.Model.IsMatch;
                     break;
                 default:
                     break;
