@@ -354,7 +354,7 @@
                         header.VerticalAlignment = XlVAlign.xlVAlignCenter;
 
                         tableHeader.Interior.Color = utils.Color.ToDouble(System.Drawing.Color.LightGray);
-                        tableHeader.BorderAround(XlLineStyle.xlContinuous, XlBorderWeight.xlMedium, XlColorIndex.xlColorIndexAutomatic);
+                        tableHeader.BorderAround(XlLineStyle.xlContinuous, XlBorderWeight.xlThin, XlColorIndex.xlColorIndexAutomatic);
 
                         tableHeader.Borders[XlBordersIndex.xlInsideHorizontal].LineStyle = XlLineStyle.xlDot;
                         tableHeader.Borders[XlBordersIndex.xlInsideHorizontal].Weight = XlBorderWeight.xlThin;
@@ -447,7 +447,7 @@
                 ps.FooterMargin = excelApplication.CentimetersToPoints(0.6);
 
                 ps.CenterHorizontally = true;
-                ps.RightHeader = DateTime.Now.ToLongDateString();
+                ps.RightHeader = DateTime.Now.ToString("D", defaultCulture);
                 ps.CenterFooter = "Страница &P / &N";
                 ps.PrintArea = xlWorksheet.Range("A1").Resize(numberOfRows + 3, numberOfColumns).Address;
             }

@@ -91,8 +91,6 @@
         <Setter Property="helpers:ControlsHelper.FocusBorderBrush" Value="{DynamicResource TextBoxFocusBorderBrush}" />
         <Setter Property="helpers:ControlsHelper.MouseOverBorderBrush" Value="{DynamicResource TextBoxMouseOverBorderBrush}" />
         <Setter Property="helpers:TextBoxHelper.IsMonitoring" Value="True" />
-        <Setter Property="FontFamily" Value="{DynamicResource ContentFontFamily}" />
-        <Setter Property="FontSize" Value="{DynamicResource ContentFontSize}" />
         <Setter Property="Padding" Value="0" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <!--  change SnapsToDevicePixels to True to view a better border and validation error  -->
@@ -205,7 +203,6 @@
                                 Content="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(helpers:TextBoxHelper.ButtonContent), Mode=OneWay}"
                                 ContentTemplate="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(helpers:TextBoxHelper.ButtonContentTemplate), Mode=OneWay}"
                                 FontFamily="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(helpers:TextBoxHelper.ButtonFontFamily), Mode=OneWay}"
-                                FontSize="16"
                                 Foreground="{TemplateBinding Foreground}"
                                 IsTabStop="False"
                                 Style="{DynamicResource ChromelessButtonStyle}"
@@ -334,6 +331,7 @@
         TargetType="{x:Type TextBox}">
         <Setter Property="helpers:TextBoxHelper.TextButton" Value="True" />
         <Setter Property="helpers:TextBoxHelper.ButtonTemplate" Value="{DynamicResource ChromelessButtonTemplate}" />
+        <Setter Property="SelectionBrush" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
         <!--  change SnapsToDevicePixels to True to view a better border and validation error  -->
         <Setter Property="Template">
             <Setter.Value>
@@ -442,7 +440,6 @@
                                 Content="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(helpers:TextBoxHelper.ButtonContent), Mode=OneWay}"
                                 ContentTemplate="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(helpers:TextBoxHelper.ButtonContentTemplate), Mode=OneWay}"
                                 FontFamily="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(helpers:TextBoxHelper.ButtonFontFamily), Mode=OneWay}"
-                                FontSize="16"
                                 Foreground="{TemplateBinding Foreground}"
                                 IsTabStop="False"
                                 Style="{DynamicResource ChromelessButtonStyle}"

@@ -18,7 +18,6 @@
         x:Key="AutoCollapsingTextBlock"
         BasedOn="{StaticResource TextBlock}"
         TargetType="{x:Type TextBlock}">
-        <Setter Property="FontSize" Value="{DynamicResource FloatingWatermarkFontSize}" />
         <Setter Property="Opacity" Value="0.6" />
         <Setter Property="TextAlignment" Value="Center" />
         <Setter Property="TextWrapping" Value="Wrap" />

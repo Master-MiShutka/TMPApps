@@ -54,14 +54,15 @@
         <DataTemplate.Resources>
             <Storyboard x:Key="statusStoryBoard">
                 <ObjectAnimationUsingKeyFrames
+                    AutoReverse="True"
                     RepeatBehavior="Forever"
                     Storyboard.TargetName="status"
                     Storyboard.TargetProperty="Text"
-                    Duration="00:00:04">
+                    Duration="00:00:02">
                     <DiscreteObjectKeyFrame KeyTime="00:00:00" Value="{StaticResource StringWaitIsAnalizing}" />
-                    <DiscreteObjectKeyFrame KeyTime="00:00:01" Value="{StaticResource StringWaitIsAnalizing1}" />
-                    <DiscreteObjectKeyFrame KeyTime="00:00:02" Value="{StaticResource StringWaitIsAnalizing2}" />
-                    <DiscreteObjectKeyFrame KeyTime="00:00:03" Value="{StaticResource StringWaitIsAnalizing3}" />
+                    <DiscreteObjectKeyFrame KeyTime="00:00:00.5" Value="{StaticResource StringWaitIsAnalizing1}" />
+                    <DiscreteObjectKeyFrame KeyTime="00:00:01" Value="{StaticResource StringWaitIsAnalizing2}" />
+                    <DiscreteObjectKeyFrame KeyTime="00:00:01.5" Value="{StaticResource StringWaitIsAnalizing3}" />
                 </ObjectAnimationUsingKeyFrames>
             </Storyboard>
         </DataTemplate.Resources>

@@ -58,10 +58,10 @@
         public Grid DialogsContainer => this.dialogsContainer;
 
         #region ScaleValue Depdency Property
-        public static readonly DependencyProperty ScaleValueProperty = DependencyProperty.Register("ScaleValue",
-            typeof(double), typeof(WindowWithDialogs), new UIPropertyMetadata(1.0, new PropertyChangedCallback(OnScaleValueChanged), new CoerceValueCallback(OnCoerceScaleValue)));
+        public static readonly DependencyProperty ScaleValueProperty = DependencyProperty.Register(nameof(ScaleValue),
+            typeof(double), typeof(WindowWithDialogs), new UIPropertyMetadata(1.0, new PropertyChangedCallback(OnScaleValueChanged), new CoerceValueCallback(CoerceScaleValue)));
 
-        private static object OnCoerceScaleValue(DependencyObject o, object value)
+        private static object CoerceScaleValue(DependencyObject o, object value)
         {
             if (o is WindowWithDialogs mainWindow)
             {
@@ -104,7 +104,7 @@
         #endregion
 
         #region About Command
-        private static readonly DependencyProperty AboutCommandProperty = DependencyProperty.Register("AboutCommand", typeof(ICommand), typeof(WindowWithDialogs), new PropertyMetadata(null));
+        private static readonly DependencyProperty AboutCommandProperty = DependencyProperty.Register(nameof(AboutCommand), typeof(ICommand), typeof(WindowWithDialogs), new PropertyMetadata(null));
 
         /// <summary>
         /// Возвращает или задаёт команду "О программе"
@@ -117,7 +117,7 @@
 
         #endregion
         #region Is About Button Enabled
-        private static readonly DependencyProperty IsAboutButtonEnabledProperty = DependencyProperty.Register("IsAboutButtonEnabled", typeof(bool), typeof(WindowWithDialogs), new PropertyMetadata(true));
+        private static readonly DependencyProperty IsAboutButtonEnabledProperty = DependencyProperty.Register(nameof(IsAboutButtonEnabled), typeof(bool), typeof(WindowWithDialogs), new PropertyMetadata(true));
 
         /// <summary>
         /// Возвращает или задаёт доступность кнопки About
@@ -130,7 +130,7 @@
 
         #endregion
         #region Is About Button Visible
-        private static readonly DependencyProperty IsAboutButtonVisibleProperty = DependencyProperty.Register("IsAboutButtonVisible", typeof(bool), typeof(WindowWithDialogs), new PropertyMetadata(true));
+        private static readonly DependencyProperty IsAboutButtonVisibleProperty = DependencyProperty.Register(nameof(IsAboutButtonVisible), typeof(bool), typeof(WindowWithDialogs), new PropertyMetadata(true));
 
         /// <summary>
         /// Возвращает или задаёт видимость кнопки About
@@ -143,7 +143,7 @@
 
         #endregion
         #region Settings Command
-        private static readonly DependencyProperty SettingsCommandProperty = DependencyProperty.Register("SettingsCommand", typeof(ICommand), typeof(WindowWithDialogs), new PropertyMetadata(null));
+        private static readonly DependencyProperty SettingsCommandProperty = DependencyProperty.Register(nameof(SettingsCommand), typeof(ICommand), typeof(WindowWithDialogs), new PropertyMetadata(null));
 
         /// <summary>
         /// Возвращает или задаёт команду "Параметры"
@@ -156,7 +156,7 @@
 
         #endregion
         #region Is Settings Button Enabled
-        private static readonly DependencyProperty IsSettingsButtonEnabledProperty = DependencyProperty.Register("IsSettingsButtonEnabled", typeof(bool), typeof(WindowWithDialogs), new PropertyMetadata(true));
+        private static readonly DependencyProperty IsSettingsButtonEnabledProperty = DependencyProperty.Register(nameof(IsSettingsButtonEnabled), typeof(bool), typeof(WindowWithDialogs), new PropertyMetadata(true));
 
         /// <summary>
         /// Возвращает или задаёт доступность кнопки Settings
@@ -169,7 +169,7 @@
 
         #endregion
         #region Is Settings Button Visible
-        private static readonly DependencyProperty IsSettingsButtonVisibleProperty = DependencyProperty.Register("IsSettingsButtonVisible", typeof(bool), typeof(WindowWithDialogs), new PropertyMetadata(true));
+        private static readonly DependencyProperty IsSettingsButtonVisibleProperty = DependencyProperty.Register(nameof(IsSettingsButtonVisible), typeof(bool), typeof(WindowWithDialogs), new PropertyMetadata(true));
 
         /// <summary>
         /// Возвращает или задаёт видимость кнопки Settings
@@ -196,7 +196,7 @@
         /// Determine whether a ContentDialog is currenlty shown inside the <seealso cref="MetroWindow"/> or not.
         /// </summary>
         private static readonly DependencyProperty IsContentDialogVisibleProperty =
-            DependencyProperty.Register("IsContentDialogVisible", typeof(bool), typeof(WindowWithDialogs), new PropertyMetadata(false));
+            DependencyProperty.Register(nameof(IsContentDialogVisible), typeof(bool), typeof(WindowWithDialogs), new PropertyMetadata(false));
         #endregion IsContentDialogVisible
 
         #endregion

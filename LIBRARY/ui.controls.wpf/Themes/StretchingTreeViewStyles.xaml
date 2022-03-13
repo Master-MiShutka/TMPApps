@@ -6,6 +6,7 @@
 
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="/ui.controls.wpf;component/Themes/Converters.xaml" />
+        <ResourceDictionary Source="/ui.controls.wpf;component/Themes/NoDataTemplate.xaml" />
         <ResourceDictionary Source="/ui.controls.wpf;component/Themes/ExpandCollapseButton.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
@@ -44,7 +45,7 @@
                                     x:Name="PART_Header"
                                     Grid.Column="1"
                                     Margin="2,3"
-                                    HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
+                                    HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                                     ContentSource="Header"
                                     SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
                             </Grid>
@@ -52,6 +53,9 @@
                         <ItemsPresenter x:Name="ItemsHost" />
                     </StackPanel>
                     <ControlTemplate.Triggers>
+                        <Trigger Property="IsMatch" Value="False">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                        </Trigger>
                         <Trigger Property="ItemsControl.AlternationIndex" Value="1">
                             <Setter Property="Background" Value="WhiteSmoke" />
                         </Trigger>
@@ -95,13 +99,32 @@
 
     <Style BasedOn="{StaticResource BaseStretchingTreeViewItemStyle}" TargetType="{x:Type controls:StretchingTreeViewItem}" />
 
-    <Style
-        x:Key="TreeViewItemStyleWithFilter"
-        BasedOn="{StaticResource BaseStretchingTreeViewItemStyle}"
-        TargetType="{x:Type controls:StretchingTreeViewItem}">
-        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-        <Setter Property="IsExpanded" Value="{Binding Path=IsExpanded, Mode=TwoWay}" />
-        <Setter Property="Visibility" Value="{Binding Path=IsMatch, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" />
+    <Style TargetType="{x:Type controls:StretchingTreeView}">
+        <Style.Triggers>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="HasVisibleItems" Value="False" />
+                </MultiTrigger.Conditions>
+                <MultiTrigger.Setters>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate>
+                                <controls:NoData Margin="10" Message="ничего не нашлось" />
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </MultiTrigger.Setters>
+            </MultiTrigger>
+            <Trigger Property="ItemsSource" Value="{x:Null}">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate>
+                            <controls:NoData Margin="10" Message="{StaticResource StringNoData}" />
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Trigger>
+        </Style.Triggers>
     </Style>
 
 </ResourceDictionary>
