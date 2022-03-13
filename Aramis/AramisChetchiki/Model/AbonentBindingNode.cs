@@ -2,13 +2,10 @@
 {
     using System.Collections.Generic;
     using System.Diagnostics;
-    using System.Windows;
 
-    [DebuggerDisplay("{" + nameof(GetDebuggerDisplay) + "(),nq}")]
+    [DebuggerDisplay("Type: {Type}, header: {Header}")]
     public class AbonentBindingNode : Shared.PropertyChangedBase
     {
-        private bool isExpanded;
-        private bool isMatch = true;
         private string header;
         private NodeType type;
         private ICollection<Meter> meters;
@@ -21,32 +18,14 @@
             get => this.header;
             set
             {
-                if (value == this.header)
+                if (this.SetProperty(ref this.header, value))
                 {
-                    return;
+                    this.RaisePropertyChanged(nameof(this.HasEmptyValue));
                 }
-
-                this.header = value;
-                this.RaisePropertyChanged();
-                this.RaisePropertyChanged(nameof(this.HasEmptyValue));
             }
         }
 
-        public NodeType Type
-        {
-            get => this.type;
-            set
-            {
-                if (value == this.type)
-                {
-                    return;
-                }
-
-                this.type = value;
-                this.RaisePropertyChanged();
-                this.RaisePropertyChanged(nameof(this.Icon));
-            }
-        }
+        public NodeType Type { get => this.type; set => this.SetProperty(ref this.type, value); }
 
         public ICollection<Meter> Meters { get => this.meters; set => this.SetProperty(ref this.meters, value); }
 
@@ -55,64 +34,33 @@
             get => this.metersCount;
             set
             {
-                if (value == this.metersCount)
+                if (this.SetProperty(ref this.metersCount, value))
                 {
-                    return;
+                    this.RaisePropertyChanged(nameof(this.ChildrenCount));
                 }
-
-                this.metersCount = value;
-                this.RaisePropertyChanged();
-                this.RaisePropertyChanged(nameof(this.ChildrenCount));
             }
         }
 
-        public int NotBindingMetersCount
-        {
-            get => this.notBindingMetersCount;
-            set
-            {
-                if (value == this.notBindingMetersCount)
-                {
-                    return;
-                }
-
-                this.notBindingMetersCount = value;
-                this.RaisePropertyChanged();
-            }
-        }
+        public int NotBindingMetersCount { get => this.notBindingMetersCount; set => this.SetProperty(ref this.notBindingMetersCount, value); }
 
         public bool HasEmptyValue => string.IsNullOrWhiteSpace(this.Header);
 
-        public AbonentBindingNode Parent
-        {
-            get => this.parent;
-            set
-            {
-                if (ReferenceEquals(value, this.parent))
-                {
-                    return;
-                }
+        public AbonentBindingNode Parent { get => this.parent; set => this.SetProperty(ref this.parent, value); }
 
-                this.parent = value;
-                this.RaisePropertyChanged();
-            }
-        }
+        public System.Collections.ObjectModel.ObservableCollection<AbonentBindingNode> Children { get; } = new System.Collections.ObjectModel.ObservableCollection<AbonentBindingNode>();
 
-        public AbonentBindingNode()
-        {
-            this.Children = new System.Collections.ObjectModel.ObservableCollection<AbonentBindingNode>();
-        }
+        public int ChildrenCount => this.MetersCount;
 
-        public AbonentBindingNode(AbonentBindingNode parent, string header, ICollection<Meter> meters, NodeType type) : this()
+        public AbonentBindingNode() { }
+
+        public AbonentBindingNode(AbonentBindingNode parent, string header, ICollection<Meter> meters, NodeType type)
         {
             this.parent = parent;
             this.header = header;
-            this.Meters = meters;
+            this.meters = meters;
             this.type = type;
             this.notBindingMetersCount = this.metersCount = this.Meters.Count;
         }
-
-        public System.Collections.ObjectModel.ObservableCollection<AbonentBindingNode> Children { get; }
 
         public void AddChildren(IEnumerable<AbonentBindingNode> children)
         {
@@ -141,106 +89,6 @@
             }
 
             this.NotBindingMetersCount = this.MetersCount = this.Meters.Count;
-        }
-
-        public object Icon => this.Type switch
-        {
-            NodeType.Substation => Application.Current.TryFindResource("IconSubstation"),
-            NodeType.Fider10 => Application.Current.TryFindResource("IconFider10"),
-            NodeType.TP => Application.Current.TryFindResource("IconTp"),
-            NodeType.Fider04 => Application.Current.TryFindResource("IconFider04"),
-            NodeType.Group => Application.Current.TryFindResource("IconGroup"),
-            _ => Application.Current.TryFindResource("IconDepartament"),
-        };
-
-        public int ChildrenCount => this.MetersCount;
-
-        public enum NodeType
-        {
-            Substation,
-            Fider10,
-            TP,
-            Fider04,
-            Group,
-            Departament,
-        }
-
-        public bool IsExpanded
-        {
-            get => this.isExpanded;
-            set
-            {
-                if (value == this.isExpanded)
-                {
-                    return;
-                }
-
-                this.isExpanded = value;
-                if (this.isExpanded)
-                {
-                    foreach (AbonentBindingNode child in this.Children)
-                    {
-                        child.IsMatch = true;
-                    }
-                }
-
-                this.RaisePropertyChanged();
-            }
-        }
-
-        public bool IsMatch
-        {
-            get => this.isMatch;
-            set
-            {
-                if (value == this.isMatch)
-                {
-                    return;
-                }
-
-                this.isMatch = value;
-                this.RaisePropertyChanged();
-            }
-        }
-
-        private bool IsCriteriaMatched(string criteria)
-        {
-            return string.IsNullOrEmpty(criteria) || this.Header.Contains(criteria, AppSettings.StringComparisonMethod);
-        }
-
-        public void ApplyCriteria(string criteria, Stack<AbonentBindingNode> ancestors)
-        {
-            if (ancestors == null)
-            {
-                return;
-            }
-
-            if (this.IsCriteriaMatched(criteria))
-            {
-                this.IsMatch = true;
-                foreach (AbonentBindingNode ancestor in ancestors)
-                {
-                    ancestor.IsMatch = true;
-                    ancestor.IsExpanded = !string.IsNullOrEmpty(criteria);
-                }
-            }
-            else
-            {
-                this.IsMatch = false;
-            }
-
-            ancestors.Push(this);
-            foreach (AbonentBindingNode child in this.Children)
-            {
-                child.ApplyCriteria(criteria, ancestors);
-            }
-
-            ancestors.Pop();
-        }
-
-        private string GetDebuggerDisplay()
-        {
-            return $"Type: {this.Type}, header: {this.Header}";
         }
     }
 }

@@ -45,7 +45,7 @@
                 System.Threading.Thread.CurrentThread.Name = "AbonentBindingNodes build thread";
                 const string empty = "(пусто)";
 
-                IList<AbonentBindingNode> GroupMetersByProperty(IEnumerable<Meter> metersList, string propName, AbonentBindingNode.NodeType nodeType)
+                IList<AbonentBindingNode> GroupMetersByProperty(IEnumerable<Meter> metersList, string propName, NodeType nodeType)
                 {
                     // группируем список по значению свойства
                     List<IGrouping<object, Meter>> groups = metersList
@@ -75,24 +75,24 @@
 
                 int notBindingItemsCount = 0;
                 ICollection<Meter> list = null;
-                IList<AbonentBindingNode> substationsNodes = GroupMetersByProperty(this.Data, nameof(Meter.Подстанция), AbonentBindingNode.NodeType.Substation);
+                IList<AbonentBindingNode> substationsNodes = GroupMetersByProperty(this.Data, nameof(Meter.Подстанция), NodeType.Substation);
                 if (substationsNodes != null)
                 {
                     foreach (AbonentBindingNode substation in substationsNodes)
                     {
-                        IList<AbonentBindingNode> fiders = GroupMetersByProperty(substation.Meters, nameof(Meter.Фидер10), AbonentBindingNode.NodeType.Fider10);
+                        IList<AbonentBindingNode> fiders = GroupMetersByProperty(substation.Meters, nameof(Meter.Фидер10), NodeType.Fider10);
                         if (fiders != null)
                         {
                             substation.AddChildren(fiders);
                             foreach (AbonentBindingNode fider in substation.Children)
                             {
-                                IList<AbonentBindingNode> tps = GroupMetersByProperty(fider.Meters, nameof(Meter.ТП), AbonentBindingNode.NodeType.TP);
+                                IList<AbonentBindingNode> tps = GroupMetersByProperty(fider.Meters, nameof(Meter.ТП), NodeType.TP);
                                 if (tps != null)
                                 {
                                     fider.AddChildren(tps);
                                     foreach (AbonentBindingNode tp in fider.Children)
                                     {
-                                        IList<AbonentBindingNode> fiders04 = GroupMetersByProperty(tp.Meters, nameof(Meter.Фидер04), AbonentBindingNode.NodeType.Fider04);
+                                        IList<AbonentBindingNode> fiders04 = GroupMetersByProperty(tp.Meters, nameof(Meter.Фидер04), NodeType.Fider04);
                                         if (fiders04 != null)
                                         {
                                             tp.AddChildren(fiders04);
@@ -121,7 +121,7 @@
                                                 fider,
                                                 empty,
                                                 list,
-                                                AbonentBindingNode.NodeType.TP));
+                                                NodeType.TP));
                                         }
                                     }
                                 }
@@ -142,7 +142,7 @@
                                     substation.Children.Insert(0, new AbonentBindingNode(substation,
                                                                                          empty,
                                                                                          list,
-                                                                                         AbonentBindingNode.NodeType.Fider10)
+                                                                                         NodeType.Fider10)
                                     {
                                         Parent = substation,
                                     });
@@ -166,8 +166,7 @@
 
                 root = new()
                 {
-                    IsExpanded = true,
-                    Type = AbonentBindingNode.NodeType.Departament,
+                    Type = NodeType.Departament,
                     Header = "РЭС",
                     Meters = new List<Meter>(this.Data),
                     MetersCount = this.Data.Count(),
@@ -179,7 +178,7 @@
                         root,
                         "Не полная привязка",
                         list,
-                        AbonentBindingNode.NodeType.Group));
+                        NodeType.Group));
                 }
 
                 if (!substationsNodes.Cast<AbonentBindingNode>().Any(i => string.Equals(i.Header, empty, AppSettings.StringComparisonMethod)))
@@ -191,7 +190,7 @@
                             root,
                             empty,
                             list,
-                            AbonentBindingNode.NodeType.Substation));
+                            NodeType.Substation));
                     }
                 }
 
@@ -227,7 +226,6 @@
                 if (this.SetProperty(ref this.abonentBindingNodes, value))
                 {
                     this.RaisePropertyChanged(nameof(this.TotalMetersCount));
-                    this.RaisePropertyChanged(nameof(this.VisibleAbonentBindingNodesCount));
                     this.BuildTreeMapItems();
                 }
             }
@@ -260,39 +258,7 @@
             private set => this.SetProperty(ref this.treeMapItems, value);
         }
 
-        /// <summary>
-        /// Фильтр для отбора
-        /// </summary>
-        public string AbonentBondingFilter
-        {
-            get => this.abonentBondingFilter;
-            set
-            {
-                this.SetProperty(ref this.abonentBondingFilter, value);
-                this.ApplyFilter();
-            }
-        }
-
-        public int VisibleAbonentBindingNodesCount => (this.AbonentBindingNodes == null) ? 0 : this.AbonentBindingNodes.Count(n => n.IsMatch);
-
         #region Methods
-
-        private void ApplyFilter()
-        {
-            this.IsBusy = true;
-            System.Threading.Tasks.Task task = System.Threading.Tasks.Task.Run(() =>
-            {
-                foreach (AbonentBindingNode child in this.AbonentBindingNodes)
-                {
-                    child.ApplyCriteria(this.AbonentBondingFilter, new Stack<AbonentBindingNode>());
-                }
-            });
-            task.ContinueWith(t =>
-            {
-                this.IsBusy = false;
-                this.RaisePropertyChanged(nameof(this.VisibleAbonentBindingNodesCount));
-            });
-        }
 
         protected override ICollectionView BuildAndGetView()
         {

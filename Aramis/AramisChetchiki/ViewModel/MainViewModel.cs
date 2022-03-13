@@ -58,6 +58,11 @@
                 this.ShowCustomDialog(scrollViewer, "-= Выявленные ошибки в БД Арамис =-", TMPApplication.WpfDialogs.DialogMode.Ok);
             }, () => System.IO.File.Exists(AramisDBParser.ErrorsFileName));
 
+            this.CommandShowPreferences = new DelegateCommand(() =>
+            {
+                this.ChangeMode(Mode.Preferences);
+            });
+
             this.isInitialized = false;
             this.Status = "запуск программы";
             this.DetailedStatus = "поиск файлов с данными ...";
@@ -304,6 +309,8 @@
         public ICommand CommandGoHome { get; }
 
         public ICommand CommandShowErrors { get; }
+
+        public ICommand CommandShowPreferences { get; }
 
         /// <summary>
         /// Заголовок окна
