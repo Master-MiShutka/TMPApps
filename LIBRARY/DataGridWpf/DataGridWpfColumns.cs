@@ -257,7 +257,7 @@ namespace DataGridWpf
                 Binding = new Binding(this.FieldName),
                 Value = true,
             };
-            dataTrigger.Setters.Add(new Setter(System.Windows.Controls.TextBlock.TextProperty, "✓", "txt"));
+            dataTrigger.Setters.Add(new Setter(System.Windows.Controls.TextBlock.TextProperty, "✅", "txt")); // ✓
             template.Triggers.Add(dataTrigger);
 
             dataTrigger = new DataTrigger
