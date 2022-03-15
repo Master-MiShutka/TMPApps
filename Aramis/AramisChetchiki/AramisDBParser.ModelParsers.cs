@@ -192,7 +192,7 @@
                     this.errors.Add($"Не найдена информация по фидеру 10 кВ: л/с {meter.Лицевой}, код фидера {abonent.FIDER10}");
                 }
 
-                if (int.TryParse(abonent.НОМЕР_ТП, out int n) == false)
+                if (int.TryParse(abonent.НОМЕР_ТП, out int n) == false && abonent.IsDeleted == false)
                 {
                     this.errors.Add($"Ошибка в номере ТП (поле НОМЕР_ТП) '{abonent.НОМЕР_ТП}' (Лицевой счет абонента={abonent.LIC_SCH})");
                 }
