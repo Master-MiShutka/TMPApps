@@ -1,8 +1,11 @@
 ﻿namespace TMP.UI.Controls.WPF
 {
+    using System;
     using System.Collections.Generic;
+    using System.Threading.Tasks;
     using System.Windows;
     using System.Windows.Controls;
+    using System.Windows.Controls.Primitives;
     using System.Windows.Media;
 
     /// <summary>
@@ -12,7 +15,7 @@
     {
         protected override DependencyObject GetContainerForItemOverride()
         {
-            return new StretchingTreeViewItem();
+            return new StretchingTreeViewItem(this);
         }
 
         protected override bool IsItemItsOwnContainerOverride(object item)
@@ -79,20 +82,6 @@
             treeView.ApplyFilter();
         }
 
-        private string GetSearchPropertyValue(StretchingTreeViewItem item)
-        {
-            string propetyPath = this.SearchMemberPath;
-            if (string.IsNullOrEmpty(propetyPath))
-            {
-                return item.Header.ToString();
-            }
-            else
-            {
-                object dc = item.DataContext;
-                return dc == null ? string.Empty : (string)dc.GetPropertyValue(propetyPath);
-            }
-        }
-
         /// <summary>
         /// Loop through all items and set <see cref="StretchingTreeViewItem.IsMatch"/> property if <see cref="SearchStringProperty"/> value contains <see cref="SearchString"/>
         /// </summary>
@@ -105,6 +94,21 @@
             System.Windows.Input.Mouse.OverrideCursor = System.Windows.Input.Cursors.Wait;
 
             this.DoApplyFilter(this, this.SearchString);
+
+            this.UpdateLayout();
+
+            if (string.IsNullOrEmpty(this.SearchString))
+            {
+                for (int i = 0, count = this.Items.Count; i < count; i++)
+                {
+                    var obj = this.ItemContainerGenerator.ContainerFromIndex(i);
+
+                    if (obj is StretchingTreeViewItem item && item != null && item.IsMatch && item.Visibility == Visibility.Visible)
+                    {
+                        //item.IsMatch = true;
+                    }
+                }
+            }
 
             bool flag = false;
             for (int i = 0, count = this.Items.Count; i < count; i++)
@@ -124,17 +128,6 @@
         }
 
         /// <summary>
-        /// Returns True if tree node <see cref="SearchStringProperty"/> value contains <see cref="SearchString"/>
-        /// </summary>
-        /// <param name="item"></param>
-        /// <param name="criteria"></param>
-        /// <returns></returns>
-        private bool IsCriteriaMatched(StretchingTreeViewItem item, string criteria)
-        {
-            return string.IsNullOrEmpty(criteria) || this.GetSearchPropertyValue(item).Contains(criteria, System.StringComparison.Ordinal);
-        }
-
-        /// <summary>
         /// Recursively search for an item in this subtree.
         /// </summary>
         /// <param name="container">
@@ -143,21 +136,29 @@
         /// <param name="criteria">
         /// The string to search for.
         /// </param>
-        private void DoApplyFilter(ItemsControl container, string criteria)
+        private bool DoApplyFilter(ItemsControl container, string criteria)
         {
+            bool result = false;
+            bool foundAnyMatched = false;
+
+            StretchingTreeViewItem treeViewItem = container as StretchingTreeViewItem;
+
             if (container != null)
             {
                 if (string.IsNullOrEmpty(criteria))
                 {
-                    return;
+                    return false;
                 }
 
                 // Expand the current container
-                if (container is StretchingTreeViewItem treeViewItem && !treeViewItem.IsExpanded)
+                if (treeViewItem != null && !treeViewItem.IsExpanded)
                 {
-                    container.SetValue(StretchingTreeViewItem.IsExpandedProperty, true);
+                    treeViewItem.IsExpanded = true;
 
-                    treeViewItem.IsMatch = this.IsCriteriaMatched(treeViewItem, criteria);
+                    treeViewItem.ApplyCriteria(criteria);
+
+                    if (treeViewItem.IsMatch == true)
+                        result = true;
                 }
                 else
                 {
@@ -181,16 +182,73 @@
                     }
                 }
 
+                while (container.ItemContainerGenerator.Status == System.Windows.Controls.Primitives.GeneratorStatus.NotStarted)
+                {
+                    container.UpdateLayout();
+                }
+
+                bool childResult = false;
                 for (int i = 0, count = container.Items.Count; i < count; i++)
                 {
-                    ItemsControl subContainer = container.ItemContainerGenerator.ContainerFromIndex(i) as ItemsControl;
+                    DependencyObject dependencyObject = container.ItemContainerGenerator.ContainerFromIndex(i);
+                    ItemsControl subContainer = dependencyObject as ItemsControl;
                     if (subContainer != null)
                     {
                         // Search the next level for the object.
-                        this.DoApplyFilter(subContainer, criteria);
+                        childResult = this.DoApplyFilter(subContainer, criteria);
+
+                        if (foundAnyMatched == false && childResult)
+                        {
+                            treeViewItem.DoSetIsMatchTrue();
+                            foundAnyMatched = true;
+                        }
                     }
                 }
             }
+
+            return result;
+        }
+
+        private static async Task<StretchingTreeViewItem> FindItemContainer(ItemsControl itemsControl, object item)
+        {
+            ItemContainerGenerator generator = itemsControl.ItemContainerGenerator;
+            if (generator.Status != GeneratorStatus.ContainersGenerated)
+            {
+                var tcs = new TaskCompletionSource<object>();
+                void handler(object s, EventArgs e)
+                {
+                    if (generator.Status == GeneratorStatus.ContainersGenerated)
+                    {
+                        generator.StatusChanged -= handler;
+                        tcs.SetResult(null);
+                    }
+                    else if (generator.Status == GeneratorStatus.Error)
+                    {
+                        generator.StatusChanged -= handler;
+                        tcs.SetException(new InvalidOperationException());
+                    }
+                }
+
+                generator.StatusChanged += handler;
+                if (itemsControl is StretchingTreeViewItem stvi)
+                    stvi.IsExpanded = true;
+                itemsControl.UpdateLayout();
+                await tcs.Task;
+            }
+
+            StretchingTreeViewItem container = (StretchingTreeViewItem)generator.ContainerFromItem(item);
+            if (container == null)
+            {
+                foreach (var parentItem in itemsControl.Items)
+                {
+                    StretchingTreeViewItem parentContainer = (StretchingTreeViewItem)generator.ContainerFromItem(parentItem);
+                    container = await FindItemContainer(parentContainer, item);
+                    if (container != null)
+                        return container;
+                }
+            }
+
+            return container;
         }
 
         /// <summary>

@@ -126,7 +126,7 @@
                     Grid.Column="1"
                     ui_controls_helper:TextBlockHelper.HighlightBackground="Yellow"
                     ui_controls_helper:TextBlockHelper.HighlightForeground="Blue"
-                    ui_controls_helper:TextBlockHelper.Selection="{Binding SearchTextBox, Delay=50}"
+                    ui_controls_helper:TextBlockHelper.Selection="{Binding SearchString, Delay=50, RelativeSource={RelativeSource AncestorType={x:Type ui_controls:StretchingTreeView}}}"
                     Text="{Binding Header}"
                     TextAlignment="Left" />
                 <Border
@@ -251,19 +251,6 @@
                         DockPanel.Dock="Top"
                         Style="{StaticResource SearchTextBox}" />
                     <Separator Style="{StaticResource dotedSeparator}" />
-                    <TextBlock
-                        MinWidth="100"
-                        MinHeight="25"
-                        Background="Yellow"
-                        Foreground="Blue"
-                        Text="{Binding ElementName=AbonentBindingFilter, Path=Text}" />
-                    <Separator Style="{StaticResource dotedSeparator}" />
-                    <TextBlock
-                        MinWidth="100"
-                        MinHeight="25"
-                        Background="Yellow"
-                        Foreground="Blue"
-                        Text="{Binding Path=(helpers:TextBoxHelper.Watermark), ElementName=AbonentBindingFilter}" />
                 </StackPanel>
                 <ui_controls:StretchingTreeView
                     Margin="2,2,0,0"

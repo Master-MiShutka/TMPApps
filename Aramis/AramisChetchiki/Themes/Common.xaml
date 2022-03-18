@@ -10,7 +10,8 @@
     xmlns:local_converters="clr-namespace:TMP.WORK.AramisChetchiki.Converters"
     xmlns:local_extensions="clr-namespace:TMP.WORK.AramisChetchiki.Extensions"
     xmlns:model="clr-namespace:TMP.WORK.AramisChetchiki.Model"
-    xmlns:options="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options">
+    xmlns:options="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
+    xmlns:ui_controls="clr-namespace:TMP.UI.Controls.WPF;assembly=ui.controls.wpf">
 
     <converters:NullOrEmptyToVisibilityConverter x:Key="NullOrEmptyToVisibilityConverter" />
     <converters:ParametersToOneConverter x:Key="ParametersToOneConverter" />
@@ -337,7 +338,7 @@
                                 <GradientStop Offset="0.9" Color="{DynamicResource {x:Static SystemColors.ControlLightColorKey}}" />
                             </LinearGradientBrush>
                         </Border.Background>
-                        <local_controls:GlowEffectTextBlock
+                        <ui_controls:GlowEffectTextBlock
                             Margin="5,2"
                             FontWeight="Bold"
                             Text="{TemplateBinding Content}" />

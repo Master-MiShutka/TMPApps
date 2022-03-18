@@ -3,18 +3,18 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:DialogManagement="clr-namespace:TMPApplication.WpfDialogs;assembly=TMPApplication"
-    xmlns:uicontrols="clr-namespace:TMP.UI.Controls.WPF;assembly=ui.controls.wpf"
-    xmlns:local_controls="clr-namespace:TMP.WORK.AramisChetchiki.Controls"
     xmlns:controls_ext="clr-namespace:TMP.UI.Controls.WPF.Extensions;assembly=ui.controls.wpf"
     xmlns:controls_helpers="clr-namespace:TMP.UI.Controls.WPF.Helpers;assembly=ui.controls.wpf"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local_controls="clr-namespace:TMP.WORK.AramisChetchiki.Controls"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:model="clr-namespace:TMP.WORK.AramisChetchiki.Model"
+    xmlns:ui_controls="clr-namespace:TMP.UI.Controls.WPF;assembly=ui.controls.wpf"
     xmlns:vm="clr-namespace:TMP.WORK.AramisChetchiki.ViewModel"
     HorizontalAlignment="Center"
     VerticalAlignment="Center"
     d:DataContext="{d:DesignInstance {x:Type vm:LoadingDataViewModel},
-    IsDesignTimeCreatable=True}"
+                                     IsDesignTimeCreatable=True}"
     mc:Ignorable="d">
     <UserControl.Resources>
         <DataTemplate DataType="{x:Type model:WorkTask}">
@@ -30,7 +30,7 @@
                             Margin="2"
                             HorizontalAlignment="Left"
                             Visibility="{Binding IsCompleted, Converter={StaticResource InverseBoolToVisibilityConverter}}" />
-                        <uicontrols:Icons
+                        <ui_controls:Icons
                             Height="24"
                             Kind="Check"
                             Visibility="{Binding IsCompleted, Converter={StaticResource BooleanToVisibilityConverter}}" />
@@ -60,9 +60,7 @@
                                 Maximum="100"
                                 Minimum="0"
                                 Value="{Binding Progress}" />
-                            <local_controls:GlowEffectTextBlock
-                                Margin="5,2"                                
-                                Text="{Binding RemainingTime}"/>
+                            <ui_controls:GlowEffectTextBlock Margin="5,2" Text="{Binding RemainingTime}" />
                         </Grid>
                         <StackPanel Visibility="{Binding IsChildProgressVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
                             <Grid>
@@ -72,7 +70,7 @@
                                     Maximum="100"
                                     Minimum="0"
                                     Value="{Binding ChildProgress}" />
-                                <local_controls:GlowEffectTextBlock
+                                <ui_controls:GlowEffectTextBlock
                                     Margin="5,2"
                                     HorizontalAlignment="Center"
                                     Text="{Binding ChildRemainingTime}" />
@@ -83,22 +81,25 @@
             </HeaderedContentControl>
         </DataTemplate>
     </UserControl.Resources>
-    <HeaderedContentControl Margin="50"
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Center"
-                                Effect="{StaticResource dropShadowAccent}"
-                                Background="{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}" Header="{Binding Header}">
+    <HeaderedContentControl
+        Margin="50"
+        HorizontalAlignment="Center"
+        VerticalAlignment="Center"
+        Background="{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}"
+        Effect="{StaticResource dropShadowAccent}"
+        Header="{Binding Header}">
         <ScrollViewer
-                Margin="10" HorizontalAlignment="Stretch"
-                CanContentScroll="True"
-                VerticalScrollBarVisibility="Auto">
+            Margin="10"
+            HorizontalAlignment="Stretch"
+            CanContentScroll="True"
+            VerticalScrollBarVisibility="Auto">
             <ItemsControl ItemsSource="{Binding WorkTasks}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <WrapPanel
-                                IsItemsHost="True"
-                                ItemWidth="400"
-                                Orientation="Horizontal" />
+                            IsItemsHost="True"
+                            ItemWidth="400"
+                            Orientation="Horizontal" />
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.Style>
@@ -108,7 +109,11 @@
                                 <Setter Property="Template">
                                     <Setter.Value>
                                         <ControlTemplate>
-                                            <DialogManagement:WaitAnimation  Height="48" Width="48" Margin="2" ToolTip="подготовка ..." />
+                                            <DialogManagement:WaitAnimation
+                                                Width="48"
+                                                Height="48"
+                                                Margin="2"
+                                                ToolTip="подготовка ..." />
                                         </ControlTemplate>
                                     </Setter.Value>
                                 </Setter>

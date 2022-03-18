@@ -36,7 +36,7 @@
                             <StackPanel Margin="10" Orientation="Vertical">
                                 <StackPanel.Resources>
                                     <Style BasedOn="{StaticResource {x:Type TextBlock}}" TargetType="{x:Type TextBlock}">
-                                        <Setter Property="FontSize" Value="{Binding FontSize, Converter={StaticResource FontSizeConverter}, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}" />
+                                        <Setter Property="FontSize" Value="{Binding FontSize, Converter={StaticResource FontSizeConverter}, RelativeSource={RelativeSource FindAncestor, AncestorType=ContentControl}}" />
                                     </Style>
                                 </StackPanel.Resources>
                                 <TextBlock Text="Пожалуйста, подождите ..." TextAlignment="Center" />
@@ -71,7 +71,7 @@
             <SolidColorBrush x:Key="strokeNoDataControlGeometryBrush" Color="#FF086F9E" />
 
             <Style BasedOn="{StaticResource {x:Type TextBlock}}" TargetType="{x:Type TextBlock}">
-                <Setter Property="FontSize" Value="{Binding FontSize, Converter={StaticResource FontSizeConverter}, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}" />
+                <Setter Property="FontSize" Value="{Binding FontSize, Converter={StaticResource FontSizeConverter}, RelativeSource={RelativeSource FindAncestor, AncestorType=ContentControl}}" />
             </Style>
 
         </Style.Resources>
@@ -106,7 +106,7 @@
                                     HorizontalAlignment="Center"
                                     SnapsToDevicePixels="True">
                                     <TextBlock
-                                        FontSize="{Binding FontSize, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource FontSizeConverterEmoj}}"
+                                        FontSize="{Binding FontSize, RelativeSource={RelativeSource AncestorType=ContentControl}, Converter={StaticResource FontSizeConverterEmoj}}"
                                         Foreground="{DynamicResource {x:Static SystemColors.ControlDarkDarkBrushKey}}"
                                         Text="🤷‍" />
                                     <!--  ⚠️  -->

@@ -1,4 +1,4 @@
-﻿namespace TMP.WORK.AramisChetchiki.Controls
+﻿namespace TMP.UI.Controls.WPF
 {
     using System.Windows;
     using System.Windows.Controls;
