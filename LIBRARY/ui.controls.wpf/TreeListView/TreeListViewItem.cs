@@ -9,9 +9,11 @@
     {
         #region Properties
 
-        private TreeNode node;
+        private TreeListView treeListView;
 
-        public TreeNode Node
+        private Shared.Tree.ITreeNode node;
+
+        public Shared.Tree.ITreeNode Node
         {
             get => this.node;
 
@@ -29,8 +31,17 @@
             DefaultStyleKeyProperty.OverrideMetadata(typeof(TreeListViewItem), new FrameworkPropertyMetadata(typeof(TreeListViewItem)));
         }
 
+        internal TreeListViewItem(TreeListView treeListView)
+        {
+            this.treeListView = treeListView;
+        }
+
         public TreeListViewItem()
         {
+            if (this.treeListView == null)
+            {
+                this.treeListView = FindVisualParent<TreeListView>(this);
+            }
         }
 
         protected override void OnKeyDown(KeyEventArgs e)
@@ -88,21 +99,32 @@
             }
         }
 
-        private void ChangeFocus(TreeNode node)
+        private void ChangeFocus(Shared.Tree.ITreeNode node)
         {
-            var tree = node.Tree;
-            if (tree != null)
+            if (this.treeListView != null)
             {
-                var item = tree.ItemContainerGenerator.ContainerFromItem(node) as TreeListViewItem;
-                if (item != null)
+                if (this.treeListView.ItemContainerGenerator.ContainerFromItem(node) is TreeListViewItem item)
                 {
                     item.Focus();
                 }
-                else
-                {
-                    tree.PendingFocusNode = node;
-                }
             }
+        }
+
+        public static T FindVisualParent<T>(UIElement element)
+            where T : UIElement
+        {
+            UIElement parent = element;
+            while (parent != null)
+            {
+                if (parent is T correctlyTyped)
+                {
+                    return correctlyTyped;
+                }
+
+                parent = System.Windows.Media.VisualTreeHelper.GetParent(parent) as UIElement;
+            }
+
+            return null;
         }
 
         #region INotifyPropertyChanged Members

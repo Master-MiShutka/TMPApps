@@ -3,15 +3,13 @@
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
-    using System.ComponentModel;
     using System.Linq;
     using System.Threading.Tasks;
     using System.Windows;
-    using System.Windows.Data;
     using System.Windows.Input;
     using TMP.Extensions;
-    using TMP.Shared;
     using TMP.Shared.Commands;
+    using TMP.Shared.Tree;
     using TMP.UI.Controls.WPF.Reporting.MatrixGrid;
     using TMP.WORK.AramisChetchiki.Model;
 
@@ -20,17 +18,14 @@
         #region Fields
 
         private ObservableCollection<IMatrix> pivotCollection = new();
-        private string tpNameFilter;
-        private FiderAnalizTreeModel modelTree;
-        private UI.Controls.WPF.TreeListView.TreeNode selectedItemNode;
+        private string treeSearchString;
+        private IEnumerable<FiderAnalizTreeItem> treeNodes;
+        private FiderAnalizTreeItem selectedNode;
         private DateOnly? selectedPeriod;
         private ICollection<KeyValuePair<string, DateOnly>> datePeriods;
         private string description = string.Empty;
-        private FiderAnalizTreeItem selectedItem;
 
         private AbonentsBindingTreeMode abonentsBindingTreeMode = AbonentsBindingTreeMode.Full;
-
-        private List<FiderAnalizTreeItem> nodesList;
 
         private IEnumerable<Meter> allMeters;
         private IList<FiderAnalizMeter> allFiderAnalizMeters;
@@ -46,7 +41,7 @@
                 return;
             }
 
-            App.InvokeInUIThread(() => System.Windows.Data.BindingOperations.EnableCollectionSynchronization(this.pivotCollection, new object()));
+            TMPApplication.TMPApp.InvokeInUIThread(() => System.Windows.Data.BindingOperations.EnableCollectionSynchronization(this.pivotCollection, new object()));
 
             // this.Data = MainViewModel?.Data?.Payments.SelectMany(i => i.Value);
 
@@ -63,54 +58,41 @@
 
         #region Properties
 
-        public string TpNameFilter
+        public string TreeSearchString
         {
-            get => this.tpNameFilter;
+            get => this.treeSearchString;
 
             set
             {
-                if (this.SetProperty(ref this.tpNameFilter, value))
+                if (this.SetProperty(ref this.treeSearchString, value))
                 {
                     this.ApplyFilter();
                 }
             }
         }
 
-        public FiderAnalizTreeModel ModelTree { get => this.modelTree; private set => this.SetProperty(ref this.modelTree, value); }
+        public IEnumerable<FiderAnalizTreeItem> TreeNodes { get => this.treeNodes; private set => this.SetProperty(ref this.treeNodes, value); }
 
         /// <summary>
         /// Выбранный в дереве узел
         /// </summary>
-        public UI.Controls.WPF.TreeListView.TreeNode SelectedItemNode
+        public FiderAnalizTreeItem SelectedNode
         {
             get
             {
-                return this.selectedItemNode;
+                return this.selectedNode;
             }
 
             set
             {
-                if (this.SetProperty(ref this.selectedItemNode, value) && value != null)
-                {
-                    this.SelectedItem = value.Model as FiderAnalizTreeItem;
-                    this.RaisePropertyChanged(nameof(this.ChildMeters));
-                }
-            }
-        }
-
-        public FiderAnalizTreeItem SelectedItem
-        {
-            get => this.selectedItem;
-            set
-            {
-                if (this.SetProperty(ref this.selectedItem, value))
+                if (this.SetProperty(ref this.selectedNode, value) && value != null)
                 {
                     this.RaisePropertyChanged(nameof(this.ChildMeters));
                 }
             }
         }
 
-        public IList<FiderAnalizMeter> ChildMeters => this.SelectedItem?.ChildMeters;
+        public IList<FiderAnalizMeter> ChildMeters => this.SelectedNode?.ChildMeters;
 
         public DateOnly? SelectedPeriod
         {
@@ -157,11 +139,11 @@
         private void ApplyFilter()
         {
             this.IsBusy = true;
-            System.Threading.Tasks.Task task = System.Threading.Tasks.Task.Run(() =>
+            Task task = Task.Run(() =>
             {
-                foreach (FiderAnalizTreeItem child in this.nodesList)
+                foreach (ITreeNode child in this.treeNodes)
                 {
-                    child.ApplyCriteria(this.tpNameFilter, new Stack<FiderAnalizTreeItem>());
+                    child.ApplyCriteria(this.treeSearchString, new Stack<ITreeNode>());
                 }
             });
             task.ContinueWith(t =>
@@ -434,8 +416,7 @@
 
             root.AddChildren(nodes);
 
-            this.nodesList = new List<FiderAnalizTreeItem>(root.Children.Cast<FiderAnalizTreeItem>());
-            this.ModelTree = new FiderAnalizTreeModel(this.nodesList);
+            this.TreeNodes = new List<FiderAnalizTreeItem>(root.Children.Cast<FiderAnalizTreeItem>());
 
             this.Status = null;
             this.DetailedStatus = null;

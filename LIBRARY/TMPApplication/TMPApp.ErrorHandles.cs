@@ -54,8 +54,10 @@
         private static void Dispatcher_UnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
         {
             TMPApp app = Application.Current as TMPApp;
+
+            string error = TMPApp.GetExceptionDetails(e.Exception);
 #if DEBUG
-            System.Diagnostics.Debug.WriteLine(TMPApp.GetExceptionDetails(e.Exception));
+            System.Diagnostics.Debug.WriteLine(error);
 #endif
             logger?.Error(e.Exception);
             if (e.Exception.GetType() == typeof(System.IO.FileNotFoundException))
@@ -68,7 +70,7 @@
             }
             else
             {
-                ShowError(e.Exception);
+                ShowError(error);
             }
 
             e.Handled = true;

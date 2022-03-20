@@ -5,10 +5,12 @@
     xmlns:converters="clr-namespace:TMP.UI.Controls.WPF.Converters">
 
     <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="/ui.controls.wpf;component/Themes/Converters.xaml" />
         <ResourceDictionary Source="/ui.controls.wpf;component/Themes/NoDataTemplate.xaml" />
         <ResourceDictionary Source="/ui.controls.wpf;component/Themes/ExpandCollapseButton.xaml" />
     </ResourceDictionary.MergedDictionaries>
+
+    <converters:TreeViewMarginConverter x:Key="LengthConverter" Length="12" />
+    <converters:NullOrEmptyToVisibilityConverter x:Key="NullOrEmptyToVisibilityConverter" />
 
     <Style x:Key="BaseStretchingTreeViewItemStyle" TargetType="{x:Type controls:StretchingTreeViewItem}">
         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
@@ -53,9 +55,6 @@
                         <ItemsPresenter x:Name="ItemsHost" />
                     </StackPanel>
                     <ControlTemplate.Triggers>
-                        <Trigger Property="IsMatch" Value="False">
-                            <Setter Property="Visibility" Value="Collapsed" />
-                        </Trigger>
                         <Trigger Property="ItemsControl.AlternationIndex" Value="1">
                             <Setter Property="Background" Value="WhiteSmoke" />
                         </Trigger>
@@ -100,22 +99,9 @@
     <Style BasedOn="{StaticResource BaseStretchingTreeViewItemStyle}" TargetType="{x:Type controls:StretchingTreeViewItem}" />
 
     <Style TargetType="{x:Type controls:StretchingTreeView}">
+        <Setter Property="ItemContainerStyle" Value="{StaticResource BaseStretchingTreeViewItemStyle}" />
         <Style.Triggers>
-            <MultiTrigger>
-                <MultiTrigger.Conditions>
-                    <Condition Property="HasVisibleItems" Value="False" />
-                </MultiTrigger.Conditions>
-                <MultiTrigger.Setters>
-                    <Setter Property="Template">
-                        <Setter.Value>
-                            <ControlTemplate>
-                                <controls:NoData Margin="10" Message="ничего не нашлось" />
-                            </ControlTemplate>
-                        </Setter.Value>
-                    </Setter>
-                </MultiTrigger.Setters>
-            </MultiTrigger>
-            <Trigger Property="ItemsSource" Value="{x:Null}">
+            <Trigger Property="HasItems" Value="False">
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate>

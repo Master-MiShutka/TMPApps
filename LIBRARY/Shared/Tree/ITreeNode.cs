@@ -1,22 +1,7 @@
-﻿namespace TMP.Shared
+﻿namespace TMP.Shared.Tree
 {
     using System.Collections;
-
-    /// <summary>
-    /// Интерфейс определяющий модель данных для <see cref="TMP.UI.Controls.WPF.TreeListView.TreeListView"/>
-    /// </summary>
-    public interface ITreeModel
-    {
-        /// <summary>
-        /// Возвращает список дочерних элементов указанного родителя
-        /// </summary>
-        IEnumerable GetParentChildren(ITreeNode parent);
-
-        /// <summary>
-        /// Возвращает имеются ли у указанного родителя дочерние элементы
-        /// </summary>
-        bool HasParentChildren(ITreeNode parent);
-    }
+    using System.Collections.Generic;
 
     /// <summary>
     /// Интерфейс определяющий элемент иерархической структуры <see cref="TMP.Shared.ITreeModel"/>
@@ -36,12 +21,17 @@
         /// <summary>
         /// Перечень дочерних элементов
         /// </summary>
-        System.Collections.Generic.ICollection<ITreeNode> Children { get; }
+        System.Collections.Generic.IList<ITreeNode> Children { get; }
 
         /// <summary>
         /// Имеются ли дочерние элементы
         /// </summary>
         bool HasChildren { get; }
+
+        /// <summary>
+        /// Может ли элемент разворачиваться
+        /// </summary>
+        bool IsExpandable { get; set; }
 
         /// <summary>
         /// Развёрнут ли элемент
@@ -52,5 +42,12 @@
         /// Подпадаёт ли элемент под критерий (поиск и т.п.)
         /// </summary>
         bool IsMatch { get; set; }
+
+        /// <summary>
+        /// Apply criteria for node
+        /// </summary>
+        /// <param name="criteria">String</param>
+        /// <param name="ancestors">Stack of parents nodes</param>
+        void ApplyCriteria(string criteria, Stack<ITreeNode> ancestors);
     }
 }

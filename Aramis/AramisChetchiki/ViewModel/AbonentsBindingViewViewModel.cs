@@ -11,6 +11,7 @@
     using System.Windows.Input;
     using TMP.Extensions;
     using TMP.Shared.Commands;
+    using TMP.Shared.Tree;
     using TMP.WORK.AramisChetchiki.Model;
 
     public class AbonentsBindingViewViewModel : BaseMeterViewModel
@@ -19,7 +20,8 @@
         private ObservableCollection<AbonentBindingNode> abonentBindingNodes;
         private AbonentBindingNode selectedAbonentBindingNode;
         private ICollection<TreeMapItem> treeMapItems;
-        private string abonentBondingFilter;
+        private string treeSearchString;
+        private bool foundItems;
 
         public AbonentsBindingViewViewModel()
         {
@@ -198,7 +200,7 @@
             })
                 .ContinueWith(t =>
                 {
-                    this.AbonentBindingNodes = new ObservableCollection<AbonentBindingNode>(root?.Children);
+                    this.AbonentBindingNodes = new ObservableCollection<AbonentBindingNode>(root?.Children.Cast<AbonentBindingNode>());
                     this.IsBusy = false;
                     this.Status = null;
                 }, System.Threading.Tasks.TaskScheduler.FromCurrentSynchronizationContext());
@@ -258,6 +260,20 @@
             private set => this.SetProperty(ref this.treeMapItems, value);
         }
 
+        public string TreeSearchString
+        {
+            get => this.treeSearchString;
+            set
+            {
+                if (this.SetProperty(ref this.treeSearchString, value))
+                {
+                    this.ApplyFilter();
+                }
+            }
+        }
+
+        public bool FoundItems { get => this.foundItems; private set => this.SetProperty(ref this.foundItems, value); }
+
         #region Methods
 
         protected override ICollectionView BuildAndGetView()
@@ -296,21 +312,47 @@
             }
 
             AbonentBindingNode source = this.SelectedAbonentBindingNode ?? this.AbonentBindingNodes.FirstOrDefault();
-            Func<IList<AbonentBindingNode>, ICollection<TreeMapItem>> recursiveBuild = null;
+            Func<IEnumerable<AbonentBindingNode>, ICollection<TreeMapItem>> recursiveBuild = null;
             recursiveBuild = (nodes) =>
             {
                 ICollection<TreeMapItem> result = new List<TreeMapItem>();
                 foreach (AbonentBindingNode node in nodes)
                 {
                     TreeMapItem item = new(node.Header, node.MetersCount);
-                    item.AddChildren(recursiveBuild(node.Children));
+                    item.AddChildren(recursiveBuild(node.Children.Cast<AbonentBindingNode>()));
                     result.Add(item);
                 }
 
                 return result;
             };
 
-            this.TreeMapItems = recursiveBuild(source.Children);
+            this.TreeMapItems = recursiveBuild(source.Children.Cast<AbonentBindingNode>());
+        }
+
+        private void ApplyFilter()
+        {
+            this.IsBusy = true;
+            System.Threading.Tasks.Task task = System.Threading.Tasks.Task.Run(() =>
+            {
+                foreach (AbonentBindingNode child in this.abonentBindingNodes)
+                {
+                    child.ApplyCriteria(this.treeSearchString, new Stack<ITreeNode>());
+                }
+
+                this.FoundItems = false;
+                foreach (AbonentBindingNode child in this.abonentBindingNodes)
+                {
+                    if (child.IsMatch)
+                    {
+                        this.FoundItems = true;
+                        break;
+                    }
+                }
+            });
+            task.ContinueWith(t =>
+            {
+                this.IsBusy = false;
+            });
         }
 
         public override string ReportTitle => $"Сведения о привяке абонентов по '{this.SelectedAbonentBindingNode?.Header}";
@@ -388,7 +430,8 @@
                 this.Children = new List<TreeMapItem>();
             }
 
-            public TreeMapItem(string header, int metersCount) : this()
+            public TreeMapItem(string header, int metersCount)
+                : this()
             {
                 this.Parent = null;
                 this.header = header;

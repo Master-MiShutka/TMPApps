@@ -114,7 +114,7 @@
                     controls_helper:TextBoxHelper.Watermark="введите текст для поиска ..."
                     FontSize="{local_extensions:SettingBinding Path=FontSize}"
                     Style="{StaticResource SearchTextBox}"
-                    Text="{Binding TpNameFilter, UpdateSourceTrigger=PropertyChanged}" />
+                    Text="{Binding TreeSearchString, Delay=300, UpdateSourceTrigger=PropertyChanged}" />
                 <Separator Margin="5,0" Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
                 <TextBlock
                     VerticalAlignment="Center"
@@ -150,8 +150,8 @@
                             mouseWheel:MouseWheel.ScrollSmoothing="Smooth"
                             AlternationCount="2"
                             IsSynchronizedWithCurrentItem="True"
-                            Model="{Binding ModelTree}"
-                            SelectedValue="{Binding SelectedItemNode}"
+                            ItemsSource="{Binding TreeNodes}"
+                            SelectedValue="{Binding SelectedNode}"
                             VirtualizingStackPanel.IsVirtualizing="True">
                             <ui_treelistview:TreeListView.Resources>
                                 <Style x:Key="HeaderStyle" TargetType="GridViewColumnHeader">

@@ -5,27 +5,21 @@
     using System.ComponentModel;
     using System.Linq;
 
-    public class FiderAnalizTreeItem : Shared.PropertyChangedBase, Shared.ITreeNode
+    public class FiderAnalizTreeItem : Shared.Tree.TreeNode
     {
         private IList<FiderAnalizMeter> childMeters;
-        private Shared.ITreeNode parent;
         private FiderAnalizTreeItemType @type;
-        private string header;
         private uint? consumption;
         private float? averageConsumption;
         private float? medianConsumption;
         private uint? notBindingAbonentsCount;
         private uint? notBindingAbonentsConsumption;
-        private ICollection<Shared.ITreeNode> children = new List<Shared.ITreeNode>();
-        private bool isExpanded;
-        private bool isMatch = true;
 
         public FiderAnalizTreeItem() { }
 
         public FiderAnalizTreeItem(FiderAnalizTreeItem parent, string header, FiderAnalizTreeItemType type, IList<FiderAnalizMeter> meters)
+            : base(parent, header)
         {
-            this.parent = parent;
-            this.header = header;
             this.type = type;
             this.childMeters = meters;
 
@@ -39,9 +33,9 @@
                 return;
             }
 
-            foreach (Shared.ITreeNode child in children)
+            foreach (Shared.Tree.ITreeNode child in children)
             {
-                this.children.Add(child);
+                this.Children.Add(child);
                 child.Parent = this;
             }
 
@@ -69,11 +63,7 @@
 
         public uint ChildMetersCount => this.ChildMeters != null ? (uint)this.ChildMeters.Count : 0;
 
-        public Shared.ITreeNode Parent { get => this.parent; set => this.SetProperty(ref this.parent, value); }
-
         public FiderAnalizTreeItemType Type { get => this.type; set => this.SetProperty(ref this.type, value); }
-
-        public string Header { get => this.header; set => this.SetProperty(ref this.header, value); }
 
         public uint? Consumption => this.consumption;
 
@@ -105,78 +95,9 @@
             }
         }
 
-        public ICollection<Shared.ITreeNode> Children
+        protected override void OnChildrenChanged()
         {
-            get => this.children;
-            set
-            {
-                if (this.SetProperty(ref this.children, value))
-                {
-                    this.RaisePropertyChanged(nameof(this.HasChildren));
-                    this.CalculateConsumption();
-                }
-            }
-        }
-
-        public bool HasChildren => this.children != null && this.children.Any();
-
-        public bool IsExpanded
-        {
-            get => this.isExpanded;
-            set
-            {
-                if (this.SetProperty(ref this.isExpanded, value))
-                {
-                    if (this.isExpanded)
-                    {
-                        foreach (FiderAnalizTreeItem child in this.Children)
-                        {
-                            child.IsMatch = true;
-                        }
-                    }
-                }
-            }
-        }
-
-        public bool IsMatch
-        {
-            get => this.isMatch;
-            set => this.SetProperty(ref this.isMatch, value);
-        }
-
-        private bool IsCriteriaMatched(string criteria)
-        {
-            return string.IsNullOrEmpty(criteria) || this.Header.Contains(criteria, AppSettings.StringComparisonMethod);
-        }
-
-        public void ApplyCriteria(string criteria, Stack<FiderAnalizTreeItem> ancestors)
-        {
-            if (ancestors == null)
-            {
-                return;
-            }
-
-            if (this.IsCriteriaMatched(criteria))
-            {
-                this.IsMatch = true;
-                foreach (FiderAnalizTreeItem ancestor in ancestors)
-                {
-                    ancestor.IsMatch = true;
-                    ancestor.IsExpanded = !string.IsNullOrEmpty(criteria);
-                }
-            }
-            else
-            {
-                this.IsMatch = false;
-            }
-
-            ancestors.Push(this);
-            foreach (FiderAnalizTreeItem child in this.Children)
-            {
-                child.ApplyCriteria(criteria, ancestors);
-            }
-
-            ancestors.Pop();
+            this.CalculateConsumption();
         }
 
         private void CalculateConsumption()
@@ -187,7 +108,7 @@
                 this.CalculateConsumption(values);
             }
 
-            var emptyChildren = this.children.Where(i => i.Header == EmptyHeader).ToList();
+            var emptyChildren = this.Children.Where(i => i.Header == EmptyHeader).ToList();
             if (emptyChildren.Any())
             {
                 IList<FiderAnalizMeter> meters = emptyChildren.Cast<FiderAnalizTreeItem>().SelectMany(i => i.ChildMeters).ToList();
