@@ -166,7 +166,6 @@
         </HierarchicalDataTemplate>
 
         <Style x:Key="StretchingTreeViewItemStyle" TargetType="{x:Type ui_controls:StretchingTreeViewItem}">
-            <Setter Property="ItemTemplate" Value="{StaticResource TreeNodeTemplate}" />
             <Style.Triggers>
                 <MultiDataTrigger>
                     <MultiDataTrigger.Conditions>
@@ -182,6 +181,7 @@
 
         <Style x:Key="StretchingTreeViewStyle" TargetType="{x:Type ui_controls:StretchingTreeView}">
             <Setter Property="ItemContainerStyle" Value="{StaticResource StretchingTreeViewItemStyle}" />
+            <Setter Property="ItemTemplate" Value="{StaticResource TreeNodeTemplate}" />
             <Style.Triggers>
                 <Trigger Property="IsFocused" Value="True">
                     <Setter Property="Template">

@@ -51,5 +51,10 @@
 
         [MessagePack.IgnoreMember]
         public override bool IsLocal => string.IsNullOrWhiteSpace(this.aramisDbPath) == false && System.IO.Directory.Exists(this.aramisDbPath);
+
+        public override int GetHashCode()
+        {
+            return System.HashCode.Combine(this.Version, this.FileName, this.Period, this.DepartamentName, this.AramisDbPath, this.IsSelected);
+        }
     }
 }

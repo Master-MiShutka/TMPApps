@@ -86,7 +86,6 @@
         HorizontalAlignment="Center"
         VerticalAlignment="Center"
         Background="{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}"
-        Effect="{StaticResource dropShadowAccent}"
         Header="{Binding Header}">
         <ScrollViewer
             Margin="10"

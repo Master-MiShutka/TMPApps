@@ -101,8 +101,11 @@
                     if (e.Info != null)
                     {
                         fi = Repository.Instance.AvailableDataFiles.Cast<AramisDataInfo>().FirstOrDefault(i => i.FileName == e.Info.FileName);
-                        this.selectedDataFileInfo = fi;
-                        this.RaisePropertyChanged(nameof(this.SelectedDataFileInfo));
+                        if (fi != this.selectedDataFileInfo)
+                        {
+                            this.selectedDataFileInfo = fi;
+                            this.RaisePropertyChanged(nameof(this.SelectedDataFileInfo));
+                        }
 
                         if (this.IsDataLoaded)
                         {
@@ -148,9 +151,6 @@
                     this.RaisePropertyChanged(nameof(this.Data));
                     this.RaisePropertyChanged(nameof(this.Meters));
                     this.RaisePropertyChanged(nameof(this.AvailableDataFiles));
-                    fi = Repository.Instance.AvailableDataFiles.Cast<AramisDataInfo>().FirstOrDefault(i => i.FileName == e.Info.FileName);
-                    this.selectedDataFileInfo = fi;
-                    this.RaisePropertyChanged(nameof(this.SelectedDataFileInfo));
                     break;
                 case Common.RepositoryCommon.RepositoryAction.FoundNewFile:
                     break;
@@ -251,7 +251,7 @@
         /// </summary>
         public Model.AramisDataInfo SelectedDataFileInfo
         {
-            get => this.selectedDataFileInfo;
+            get => this.selectedDataFileInfo ?? (Repository.Instance.AvailableDataFilesCount > 0 ? this.AvailableDataFiles.Cast<AramisDataInfo>().First() : default);
             set
             {
                 if (this.SetProperty(ref this.selectedDataFileInfo, value))

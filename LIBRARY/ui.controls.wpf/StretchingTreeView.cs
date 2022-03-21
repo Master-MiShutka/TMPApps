@@ -8,11 +8,6 @@
     /// </summary>
     public class StretchingTreeView : TreeView
     {
-        static StretchingTreeView()
-        {
-            DefaultStyleKeyProperty.OverrideMetadata(typeof(StretchingTreeView), new FrameworkPropertyMetadata(typeof(StretchingTreeView)));
-        }
-
         public StretchingTreeView() { }
 
         protected override DependencyObject GetContainerForItemOverride()

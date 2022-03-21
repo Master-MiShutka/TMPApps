@@ -39,6 +39,8 @@
         private readonly string pathDBF;
         private readonly string pathDBFC;
 
+        private AramisData data = null;
+
         private readonly List<string> errors = new();
         private readonly ViewModel.LoadingDataViewModel workTasksProgressViewModel;
 
@@ -65,7 +67,7 @@
 
         private MeterComparerByPersonalID meterComparerByPersonalID = new();
 
-        private const int bufferedStreamBufferSize = 1_200_000;
+        private const int BufferedStreamBufferSize = 1_200_000;
 
         private const string DATA_FILES_FOLDER_NAME = "Data";
         private const string DATA_FILE_NAME_HASHES = "dbFilesHashes";
@@ -124,12 +126,10 @@
                 this.dataFilesInfo = new Dictionary<string, DataFileRecord>();
             }
 
-            AramisData data = null;
-
             string msg = string.Empty;
             try
             {
-                data = new AramisData();
+                this.data = new AramisData();
 
                 TaskScheduler taskScheduler = TaskScheduler.Current;
 
@@ -147,80 +147,7 @@
                     .ContinueWith(
                         t =>
                         {
-                            WorkTask workTask = new("группировка произведенных оплат абонентом")
-                            {
-                                Progress = 0d, ChildProgress = 0d,
-                            };
-                            this.workTasksProgressViewModel.WorkTasks.Add(workTask);
-                            int processedRecords = 0;
-
-                            // группировка оплат по лицевому счету, затем по периоду оплаты (в одном периоде может быть несколько оплат)
-                            IList<RawPaymentData> list = t.Result;
-                            Dictionary<ulong, Dictionary<DateOnly, List<RawPaymentData>>> result = list
-                                .GroupBy(i => i.Лицевой)
-                                .ToDictionary(i => i.Key, e => e.GroupBy(element => element.ПериодОплаты).ToDictionary(i => i.Key, j => j.ToList()));
-
-                            data.Payments = new();
-
-                            int totalRecords = result.Count;
-                            int childProcessed = 0, childCount = 0;
-                            SortedList<DateOnly, Payment> sortedList = new SortedList<DateOnly, Payment>(this.dateOnlyComparerByAscending);
-
-                            // по всем лицевым счетам
-                            foreach (KeyValuePair<ulong, Dictionary<DateOnly, List<RawPaymentData>>> item in result)
-                            {
-                                sortedList.Clear();
-
-                                childProcessed = 0;
-                                childCount = item.Value.Count;
-
-                                // по всем временным периодам
-                                foreach (KeyValuePair<DateOnly, List<RawPaymentData>> p in item.Value)
-                                {
-                                    Payment payment = new Payment
-                                    {
-                                        Лицевой = item.Key,
-                                        ПериодОплаты = p.Key,
-
-                                        // массив оплат в этом периоде
-                                        Payments = new PaymentData[p.Value.Count],
-                                    };
-
-                                    int index = 0;
-
-                                    // по всем оплатам за этот период
-                                    IOrderedEnumerable<RawPaymentData> pp = p.Value.OrderBy(i => i.ПредыдущееПоказание);
-                                    foreach (RawPaymentData rawPayment in pp)
-                                    {
-                                        payment.Payments[index++] = PaymentData.FromRawData(rawPayment);
-                                    }
-
-                                    payment.ПредыдущееПоказание = payment.Payments.Min(i => i.ПредыдущееПоказание);
-                                    payment.ПоследнееПоказание = payment.Payments.Max(i => i.ПоследнееПоказание);
-                                    payment.СуммаОплаты = payment.Payments.Sum(i => i.СуммаОплатыРасчётная ?? 0f);
-
-                                    sortedList.Add(payment.ПериодОплаты, payment);
-
-                                    workTask.UpdateUI(processedRecords, totalRecords, ++childProcessed, childCount);
-                                }
-
-                                if (data.Payments.ContainsKey(item.Key))
-                                {
-                                    foreach (KeyValuePair<DateOnly, Payment> element in sortedList)
-                                    {
-                                        data.Payments[item.Key].Add(element.Value);
-                                    }
-                                }
-                                else
-                                {
-                                    data.Payments.Add(item.Key, sortedList.Values.ToList());
-                                }
-
-                                workTask.UpdateUI(++processedRecords, totalRecords);
-                            }
-
-                            workTask.IsCompleted = true;
-                            this.workTasksProgressViewModel.WorkTasks.Remove(workTask);
+                            this.GroupPaymentDatasAsync(t.Result);
                         }, taskScheduler);
 
                 // чтение контрольных показаний по лицевому счету
@@ -230,17 +157,17 @@
                         {
                             IList<ControlData> result = this.SortData(t.Result);
 
-                            data.MetersControlData = new();
+                            this.data.MetersControlData = new();
 
                             foreach (ControlData item in result)
                             {
-                                if (data.MetersControlData.ContainsKey(item.Лицевой))
+                                if (this.data.MetersControlData.ContainsKey(item.Лицевой))
                                 {
-                                    data.MetersControlData[item.Лицевой].Add(item);
+                                    this.data.MetersControlData[item.Лицевой].Add(item);
                                 }
                                 else
                                 {
-                                    data.MetersControlData.Add(item.Лицевой, new List<ControlData>(new[] { item }));
+                                    this.data.MetersControlData.Add(item.Лицевой, new List<ControlData>(new[] { item }));
                                 }
                             }
                         }, taskScheduler);
@@ -252,7 +179,7 @@
                 Task taskPrepareTables = taskMain.ContinueWith(
                     t =>
                     {
-                        (data.Info as AramisDataInfo).DepartamentName = this.dictionaryKartPd.Values.First().PNPD;
+                        (this.data.Info as AramisDataInfo).DepartamentName = this.dictionaryKartPd.Values.First().PNPD;
                     }, taskScheduler);
 
                 IList<Meter> notDeletedMeters = null;
@@ -260,15 +187,15 @@
                     t =>
                     {
                         // проход по всем абонентам
-                        data.Meters = new ReadOnlyCollection<Meter>(this.GetMeters());
-                        notDeletedMeters = data.Meters.Where(i => i.Удалён == false).ToList();
+                        this.data.Meters = new ReadOnlyCollection<Meter>(this.GetMeters());
+                        notDeletedMeters = this.data.Meters.Where(i => i.Удалён == false).ToList();
                     }, taskScheduler);
 
                 // удаленные абоненты
                 Task taskRemovedAbonents = taskGetAbonentsAndMeter.ContinueWith(
                     t =>
                     {
-                        List<Meter> deletedMeters = data.Meters.Where(i => i.Удалён == true).ToList();
+                        List<Meter> deletedMeters = this.data.Meters.Where(i => i.Удалён == true).ToList();
                         int totalRecords = deletedMeters.Count;
                         int processedRecords = 0;
 
@@ -299,7 +226,7 @@
                     t =>
                     {
                         // создание сводной информации
-                        data.SummaryInfos = this.BuildSummaryInfo(notDeletedMeters);
+                        this.data.SummaryInfos = this.BuildSummaryInfo(notDeletedMeters);
                     }, taskScheduler);
 
                 /* var taskPostMakeElectricitySupply = taskGetAbonentsAndMeter.ContinueWith(
@@ -317,7 +244,7 @@
                     {
                         IList<ChangeOfMeter> result = await this.GetChangesOfMetersAsync();
 
-                        data.ChangesOfMeters = new();
+                        this.data.ChangesOfMeters = new();
 
                         WorkTask workTask = new("обработка замен счётчиков")
                         {
@@ -329,13 +256,13 @@
 
                         foreach (ChangeOfMeter item in result)
                         {
-                            if (data.ChangesOfMeters.ContainsKey(item.Лицевой))
+                            if (this.data.ChangesOfMeters.ContainsKey(item.Лицевой))
                             {
-                                data.ChangesOfMeters[item.Лицевой].Add(item);
+                                this.data.ChangesOfMeters[item.Лицевой].Add(item);
                             }
                             else
                             {
-                                data.ChangesOfMeters.Add(item.Лицевой, new List<ChangeOfMeter>(new[] { item }));
+                                this.data.ChangesOfMeters.Add(item.Лицевой, new List<ChangeOfMeter>(new[] { item }));
                             }
 
                             workTask.UpdateUI(++processedRecords, totalRecords);
@@ -362,7 +289,7 @@
                         workTask.IsCompleted = true;
                         this.workTasksProgressViewModel.WorkTasks.Remove(workTask);
 
-                        this.CalcAverageConsumptionByAbonents(data);
+                        this.CalcAverageConsumptionByAbonents(this.data);
                     }, taskScheduler);
 
                 await Task.WhenAll(
@@ -392,7 +319,7 @@
                 DispatcherExtensions.InUi(() => this.MainWindow.TaskbarItemInfo.ProgressState = System.Windows.Shell.TaskbarItemProgressState.Normal);
             }
 
-            return data;
+            return this.data;
         }
 
         /// <summary>

@@ -99,5 +99,10 @@
         /// </summary>
         [MessagePack.IgnoreMember]
         public virtual bool IsLocal => this.isLocal;
+
+        public override int GetHashCode()
+        {
+            return System.HashCode.Combine(this.Version, this.FileName, this.Period, this.IsSelected);
+        }
     }
 }

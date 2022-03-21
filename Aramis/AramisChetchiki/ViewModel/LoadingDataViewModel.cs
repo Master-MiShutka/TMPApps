@@ -57,22 +57,7 @@
             App.InvokeInUIThread(() => System.Windows.Data.BindingOperations.EnableCollectionSynchronization(this.workTasks, new object()));
 
             // Запуск получения данных
-            System.Threading.Tasks.Task.Run(async () =>
-            {
-                System.Threading.Thread.CurrentThread.Name = "StartGetDataFromAramisDb";
-
-                bool result = await this.GetDataFromAramisDbAsync().ConfigureAwait(false);
-
-                if (result == false)
-                {
-                    this.ShowDialogWarning($"Данные из базы данных Арамис '{this.SelectedDataFileInfo.AramisDbPath}' не удалось загрузить.\nПерейдите к параметрам\nи укажите путь к базе данных.");
-                    MainViewModel.ChangeMode(Mode.Preferences);
-                }
-                else
-                {
-                    MainViewModel.GoHome();
-                }
-            });
+            this.Init();
         }
 
         protected override void OnClosingMainWindow()
@@ -81,11 +66,23 @@
         }
 
         /// <summary>
-        /// Инициализация
+        /// Инициализация, запуск получения данных
         /// </summary>
-        private void Init()
+        private async void Init()
         {
             this.workTasks.Clear();
+
+            bool result = await this.GetDataFromAramisDbAsync();
+
+            if (result == false)
+            {
+                this.ShowDialogWarning($"Данные из базы данных Арамис '{this.SelectedDataFileInfo.AramisDbPath}' не удалось загрузить.\nПерейдите к параметрам\nи укажите путь к базе данных.");
+                MainViewModel.ChangeMode(Mode.Preferences);
+            }
+            else
+            {
+                MainViewModel.GoHome();
+            }
         }
 
         /// <summary>
@@ -106,8 +103,7 @@
             bool isSuccess;
             try
             {
-                this.Init();
-                isSuccess = await Repository.Instance.GetDataFromDb(this.SelectedDataFileInfo, this).ConfigureAwait(false);
+                isSuccess = await Repository.Instance.GetDataFromDb(this.SelectedDataFileInfo, this);
             }
             catch (Exception ex)
             {

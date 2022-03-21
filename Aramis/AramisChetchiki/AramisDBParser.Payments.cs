@@ -4,6 +4,7 @@
     using System.Collections;
     using System.Collections.Generic;
     using System.IO;
+    using System.Linq;
     using System.Threading.Tasks;
     using DBF;
     using TMP.WORK.AramisChetchiki.Model;
@@ -172,6 +173,84 @@
             workTask.UpdateUI(totalRows, totalRows, stepNameString: "лицевой счет");
 
             workTask.IsCompleted = true;
+        }
+
+        private void GroupPaymentDatasAsync(IList<RawPaymentData> paymentDatas)
+        {
+            WorkTask workTask = new("группировка произведенных оплат абонентом")
+            {
+                Progress = 0d,
+                ChildProgress = 0d,
+            };
+            this.workTasksProgressViewModel.WorkTasks.Add(workTask);
+            int processedRecords = 0;
+
+            // группировка оплат по лицевому счету, затем по периоду оплаты (в одном периоде может быть несколько оплат)
+            Dictionary<ulong, Dictionary<DateOnly, List<RawPaymentData>>> result = paymentDatas
+                .GroupBy(i => i.Лицевой)
+                .ToDictionary(i => i.Key, e => e.GroupBy(element => element.ПериодОплаты).ToDictionary(i => i.Key, j => j.ToList()));
+
+            this.data.Payments = new();
+
+            int totalRecords = result.Count;
+            int childProcessed = 0, childCount = 0;
+            SortedList<DateOnly, Payment> sortedList = new SortedList<DateOnly, Payment>(this.dateOnlyComparerByAscending);
+
+            // по всем лицевым счетам
+            foreach (KeyValuePair<ulong, Dictionary<DateOnly, List<RawPaymentData>>> item in result)
+            {
+                sortedList.Clear();
+
+                childProcessed = 0;
+                childCount = item.Value.Count;
+
+                // по всем временным периодам
+                foreach (KeyValuePair<DateOnly, List<RawPaymentData>> p in item.Value)
+                {
+                    Payment payment = new Payment
+                    {
+                        Лицевой = item.Key,
+                        ПериодОплаты = p.Key,
+
+                        // массив оплат в этом периоде
+                        Payments = new PaymentData[p.Value.Count],
+                    };
+
+                    int index = 0;
+
+                    // по всем оплатам за этот период
+                    IOrderedEnumerable<RawPaymentData> pp = p.Value.OrderBy(i => i.ПредыдущееПоказание);
+                    foreach (RawPaymentData rawPayment in pp)
+                    {
+                        payment.Payments[index++] = PaymentData.FromRawData(rawPayment);
+                    }
+
+                    payment.ПредыдущееПоказание = payment.Payments.Min(i => i.ПредыдущееПоказание);
+                    payment.ПоследнееПоказание = payment.Payments.Max(i => i.ПоследнееПоказание);
+                    payment.СуммаОплаты = payment.Payments.Sum(i => i.СуммаОплатыРасчётная ?? 0f);
+
+                    sortedList.Add(payment.ПериодОплаты, payment);
+
+                    workTask.UpdateUI(processedRecords, totalRecords, ++childProcessed, childCount);
+                }
+
+                if (this.data.Payments.ContainsKey(item.Key))
+                {
+                    foreach (KeyValuePair<DateOnly, Payment> element in sortedList)
+                    {
+                        this.data.Payments[item.Key].Add(element.Value);
+                    }
+                }
+                else
+                {
+                    this.data.Payments.Add(item.Key, sortedList.Values.ToList());
+                }
+
+                workTask.UpdateUI(++processedRecords, totalRecords);
+            }
+
+            workTask.IsCompleted = true;
+            this.workTasksProgressViewModel.WorkTasks.Remove(workTask);
         }
     }
 }

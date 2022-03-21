@@ -152,7 +152,7 @@
             string hashAsString = string.Empty;
 
             // Not sure if BufferedStream should be wrapped in using block
-            using (BufferedStream stream = new BufferedStream(File.Open(fileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite), bufferedStreamBufferSize))
+            using (BufferedStream stream = new BufferedStream(File.Open(fileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite), BufferedStreamBufferSize))
             {
                 using (System.Security.Cryptography.SHA256 mySHA256 = System.Security.Cryptography.SHA256.Create())
                 {

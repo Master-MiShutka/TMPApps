@@ -31,8 +31,8 @@
             {
                 if (this.GetVisualChild(0) is Grid grid && grid.ColumnDefinitions.Count == 3)
                 {
-                    grid.ColumnDefinitions.RemoveAt(2);
-                    grid.ColumnDefinitions[1].Width = new GridLength(1, GridUnitType.Star);
+                    //grid.ColumnDefinitions.RemoveAt(2);
+                    //grid.ColumnDefinitions[1].Width = new GridLength(1, GridUnitType.Star);
                 }
             }
         }

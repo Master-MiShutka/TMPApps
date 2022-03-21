@@ -374,7 +374,7 @@
             try
             {
                 AramisDBParser aramisDBParser = new(aramisDataInfo, workTasksProgressViewModel);
-                data = await aramisDBParser.GetDataAsync().ConfigureAwait(false);
+                data = await aramisDBParser.GetDataAsync();
                 (data.Info as AramisDataInfo).AramisDbPath = aramisDataInfo.AramisDbPath;
                 (data.Info as AramisDataInfo).LastModifiedDate = DateTime.Now;
                 (data.Info as AramisDataInfo).IsLoaded = true;
@@ -388,7 +388,7 @@
                 };
                 workTasksProgressViewModel.WorkTasks.Add(workTask);
 
-                await this.SaveDataAsync(this.Data.Info.FileName).ConfigureAwait(false);
+                await this.SaveDataAsync(this.Data.Info.FileName);
 
                 workTask.IsCompleted = true;
 
@@ -427,7 +427,7 @@
             try
             {
                 // загрузка
-                LoadStatus status = await this.LoadAsync(aramisDataInfo.FileName).ConfigureAwait(false);
+                LoadStatus status = await this.LoadAsync(aramisDataInfo.FileName);
                 logger?.Info(status);
 
                 this.SetWindowTaskbarItemProgressState(TMPApplication.WpfDialogs.Contracts.TaskbarItemProgressState.None);
