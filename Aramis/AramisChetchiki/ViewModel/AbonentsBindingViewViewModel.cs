@@ -7,6 +7,7 @@
     using System.Data;
     using System.Linq;
     using System.Runtime.CompilerServices;
+    using System.Timers;
     using System.Windows.Data;
     using System.Windows.Input;
     using TMP.Extensions;
@@ -331,7 +332,10 @@
 
         private void ApplyFilter()
         {
-            this.IsBusy = true;
+            Timer busyTimer = new (TimeSpan.FromSeconds(3).TotalMilliseconds);
+            busyTimer.Elapsed += (s, e) => this.IsBusy = true;
+            busyTimer.Start();
+
             System.Threading.Tasks.Task task = System.Threading.Tasks.Task.Run(() =>
             {
                 foreach (AbonentBindingNode child in this.abonentBindingNodes)
@@ -351,6 +355,7 @@
             });
             task.ContinueWith(t =>
             {
+                busyTimer.Stop();
                 this.IsBusy = false;
             });
         }

@@ -21,6 +21,11 @@
         private bool isExpandable = true;
 
         /// <summary>
+        /// Element level
+        /// </summary>
+        public int Level => this.parent == null ? 0 : this.parent.Level + 1;
+
+        /// <summary>
         /// Parent element
         /// </summary>
         public ITreeNode Parent { get => this.parent; set => this.SetProperty(ref this.parent, value); }

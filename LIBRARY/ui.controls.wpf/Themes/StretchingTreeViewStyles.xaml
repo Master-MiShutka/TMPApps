@@ -23,6 +23,7 @@
                             x:Name="Bd"
                             MinHeight="{TemplateBinding MinHeight}"
                             Padding="{TemplateBinding Padding}"
+                            HorizontalAlignment="Stretch"
                             Background="{TemplateBinding Background}"
                             BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="{TemplateBinding BorderThickness}"

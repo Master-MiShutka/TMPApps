@@ -75,7 +75,7 @@
             Brush backgroundBrush = (Brush)d.GetValue(HighlightBackgroundProperty);
             Brush foregroundBrush = (Brush)d.GetValue(HighlightForegroundProperty);
 
-            string[] searchWords = text.Split('|');
+            string[] searchWords = highlightText.Split('|');
             string regularExpression = string.Empty;
             foreach (string s in searchWords)
             {
@@ -93,6 +93,8 @@
             string[] split = Regex.Split(text, regularExpression, RegexOptions.IgnoreCase);
             foreach (var str in split)
             {
+                if (string.IsNullOrEmpty(str))
+                    continue;
                 Run run = new Run(str);
                 if (Regex.IsMatch(str, regularExpression, RegexOptions.IgnoreCase))
                 {

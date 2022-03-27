@@ -9,6 +9,11 @@
     public interface ITreeNode : System.ComponentModel.INotifyPropertyChanged
     {
         /// <summary>
+        /// Уровень элемента
+        /// </summary>
+        public int Level { get; }
+
+        /// <summary>
         /// Родитель элемента
         /// </summary>
         ITreeNode Parent { get; set; }
