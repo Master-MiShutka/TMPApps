@@ -24,7 +24,14 @@
                 && propertyType != typeof(bool)
                 && !propertyType.IsEnum)
             {
-                return (PropertyFilter)Activator.CreateInstance(typeof(RangeFilter<>).MakeGenericType(propertyInfo.PropertyType), propertyInfo);
+                try
+                {
+                    return (PropertyFilter)Activator.CreateInstance(typeof(RangeFilter<>).MakeGenericType(propertyInfo.PropertyType), propertyInfo);
+                }
+                catch (System.ArgumentException ex)
+                {
+                    return null;
+                }
             }
 
             return null;

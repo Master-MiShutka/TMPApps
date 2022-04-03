@@ -104,7 +104,13 @@
                     Content="Очистить&#x0A;фильтры"
                     ImageKind="Clean"
                     TextBlock.TextAlignment="Center"
-                    Visibility="{Binding CommandCleanFilters, Converter={StaticResource NullOrEmptyToVisibilityConverter}}" />
+                    Visibility="{Binding ActiveFiltersList, Converter={StaticResource NullOrEmptyToVisibilityConverter}}">
+                    <controls:ButtonWithIconKind.ToolTip>
+                        <StackPanel>
+                            <TextBlock Text="{Binding Path=ActiveFiltersList, IsAsync=True, StringFormat=Активный(е) фильтр(ы): {0}}" TextTrimming="CharacterEllipsis" />
+                        </StackPanel>
+                    </controls:ButtonWithIconKind.ToolTip>
+                </controls:ButtonWithIconKind>
             </StackPanel>
         </view:BaseView.HeaderPanel>
         <view:BaseView.Content>

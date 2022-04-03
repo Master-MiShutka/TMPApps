@@ -125,7 +125,7 @@
         [MessagePack.IgnoreMember]
         [DisplayName("МЖД")]
         [Display(GroupName = "Адрес")]
-        public bool ЭтоМжд => this.Адрес != null ? this.Адрес.IsApartmentBuilding : false;
+        public bool ЭтоМжд => this.Адрес != null ? this.Адрес.IsApartmentBuilding && this.Расположение == "Квартира" : false;
 
         [MessagePack.IgnoreMember]
         [DisplayName("Населенный пункт и улица с номером дома")]

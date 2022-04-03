@@ -27,7 +27,6 @@
             </StackPanel>
             <StackPanel Orientation="Horizontal" Visibility="{Binding ActiveFiltersList, IsAsync=True, Converter={StaticResource NullOrEmptyToVisibilityConverter}}">
                 <Separator Margin="5,0" Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
-                <TextBlock Text="{Binding Path=ActiveFiltersList, IsAsync=True, StringFormat=Активный(е) фильтр(ы): {0}}" TextTrimming="CharacterEllipsis" />
             </StackPanel>
         </WrapPanel>
     </Border>

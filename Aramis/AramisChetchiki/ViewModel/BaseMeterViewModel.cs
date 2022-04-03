@@ -85,7 +85,14 @@
             TMPApplication.DispatcherExtensions.InUi(() =>
             {
                 // добавление фильтров
-                string[] filterFields = { nameof(Meter.Лицевой), nameof(Meter.НаселённыйПунктИУлицаСНомеромДома), nameof(Meter.ФиоСокращ), nameof(Meter.НомерСчетчика), nameof(Meter.ТП) };
+                string[] filterFields =
+                {
+                    nameof(Meter.Лицевой),
+                    nameof(Meter.НаселённыйПунктИУлицаСНомеромДома),
+                    nameof(Meter.ФиоСокращ),
+                    nameof(Meter.НомерСчетчика),
+                    nameof(Meter.ТП),
+                };
                 foreach (string filterField in filterFields)
                 {
                     this.Filters.Add((ItemsFilter.Model.IStringFilter)this.FilterPresenter.TryGetFilter(filterField, new ItemsFilter.Initializer.StringFilterInitializer()));

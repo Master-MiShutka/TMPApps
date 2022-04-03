@@ -165,6 +165,10 @@
                 nameof(Meter.Аскуэ),
                 nameof(Meter.НаБалансеАбонента),
                 nameof(Meter.Поверен),
+                nameof(Meter.ЭтоМжд),
+                nameof(Meter.ЕстьДолг),
+                nameof(Meter.Задолженник),
+                nameof(Meter.НетОплатыДваПериода),
             };
 
             // добавление фильтров
