@@ -24,10 +24,12 @@
     }
 
     [MessagePack.MessagePackObject(keyAsPropertyName: true)]
-    public sealed class Address :IAddress, IComparable, IComparable<Address>, IEquatable<Address>
+    public sealed class Address : IAddress, IComparable, IComparable<Address>, IEquatable<Address>
     {
         [MessagePack.IgnoreMember]
         public static System.Collections.Concurrent.ConcurrentDictionary<string, uint> DictionaryStreetWithHouseNumber { get; private set; } = new System.Collections.Concurrent.ConcurrentDictionary<string, uint>();
+
+        public Address() { }
 
         [MessagePack.SerializationConstructor]
         public Address(string city, string street, string houseNumber, string apartment, string province, string cityType = null)

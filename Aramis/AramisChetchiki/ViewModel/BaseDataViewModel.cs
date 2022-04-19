@@ -278,6 +278,7 @@
                             (this.CommandExport as DelegateCommand)?.RaiseCanExecuteChanged();
                             (this.CommandPrint as DelegateCommand)?.RaiseCanExecuteChanged();
                             (this.CommandShowFilters as DelegateCommand)?.RaiseCanExecuteChanged();
+                            (this.CommandCleanFilters as DelegateCommand)?.RaiseCanExecuteChanged();
                         });
 
                         if (this.view != null)
@@ -526,6 +527,7 @@
                             index++;
                         }
                     }
+
                     this.activeFiltersList = stringBuilder.ToString();
                 }
 
@@ -706,7 +708,10 @@
                     var columns = Common.RepositoryCommon.MessagePackDeserializer.FromBytes<ObservableCollection<DataGridWpfColumnViewModel>>(bytes);
 
                     if (columns != null)
+                    {
                         this.TableColumns = columns;
+                        this.RaisePropertyChanged(nameof(this.TableColumns));
+                    }
                 }
                 catch (Exception e)
                 {
@@ -879,6 +884,7 @@
             this.ActiveFiltersList = null;
             this.OnCollectionFiltered(e);
             this.RaisePropertyChanged(nameof(this.ActiveFiltersList));
+            (this.CommandCleanFilters as DelegateCommand)?.RaiseCanExecuteChanged();
         }
 
         private void FilterListExtensions_FiltersChanged(ItemsFilter.ViewModel.FilterControlVm vm, ItemsFilter.Model.IFilter filter)
@@ -947,6 +953,7 @@
 
             this.ActiveFiltersList = null;
             this.RaisePropertyChanged(propertyName: nameof(this.ActiveFiltersList));
+            (this.CommandCleanFilters as DelegateCommand)?.RaiseCanExecuteChanged();
         }
 
         #endregion
@@ -972,6 +979,7 @@
                     default:
                         break;
                 }
+
                 this.RaisePropertyChanged(propertyName: nameof(this.PercentOfTotal));
             }
         }

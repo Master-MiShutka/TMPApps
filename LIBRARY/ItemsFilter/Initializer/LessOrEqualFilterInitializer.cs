@@ -25,12 +25,20 @@
             // ItemPropertyInfo propertyInfo = (ItemPropertyInfo)key;
             Type propertyType = propertyInfo.PropertyType;
             if (filterPresenter.ItemProperties.Contains(propertyInfo)
-                && typeof(IComparable).IsAssignableFrom(propertyInfo.PropertyType)
-                && propertyInfo.PropertyType != typeof(string)
-                && propertyInfo.PropertyType != typeof(bool)
+                && typeof(IComparable).IsAssignableFrom(propertyType)
+                && propertyType != typeof(string)
+                && propertyType != typeof(bool)
                 && !propertyType.IsEnum)
             {
-                var gt = typeof(LessOrEqualFilter<>).MakeGenericType(propertyInfo.PropertyType);
+                Type gt;
+                try
+                {
+                    gt = typeof(LessOrEqualFilter<>).MakeGenericType(propertyInfo.PropertyType);
+                }
+                catch (System.ArgumentException ex)
+                {
+                    return null;
+                }
 
                 return (PropertyFilter)Activator.CreateInstance(gt, propertyInfo);
             }
