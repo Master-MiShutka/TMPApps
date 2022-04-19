@@ -70,7 +70,7 @@
         {
             this.Info = null;
 
-            if (this.Meters is ICollection<Meter> meters)
+            if (this.Meters != null && this.Meters is ICollection<Meter> meters)
             {
                 if (meters is IReadOnlyCollection<Meter> meters2)
                 {
@@ -87,10 +87,10 @@
                 this.Meters = null;
             }
 
-            this.ChangesOfMeters.Clear();
+            this.ChangesOfMeters?.Clear();
             this.ChangesOfMeters = null;
 
-            if (this.SummaryInfos is ICollection<SummaryInfoItem> summaryInfos)
+            if (this.SummaryInfos != null && this.SummaryInfos is ICollection<SummaryInfoItem> summaryInfos)
             {
                 if (summaryInfos is IReadOnlyCollection<SummaryInfoItem> summaryInfos2)
                 {
@@ -107,7 +107,7 @@
                 this.SummaryInfos = null;
             }
 
-            if (this.ElectricitySupplyInfo is ICollection<ElectricitySupply> electricitySupplis)
+            if (this.ElectricitySupplyInfo != null && this.ElectricitySupplyInfo is ICollection<ElectricitySupply> electricitySupplis)
             {
                 if (electricitySupplis is IReadOnlyCollection<ElectricitySupply> electricitySupplis2)
                 {
