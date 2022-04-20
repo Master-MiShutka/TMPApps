@@ -169,6 +169,9 @@
         private IList<T> SortData<T>(IEnumerable<T> source, WorkTask workTask = null)
             where T : IModelWithPersonalId
         {
+            if (source == null)
+                return null;
+
             bool removeTaskAfterCompleted = false;
 
             if (workTask == null)
@@ -182,7 +185,7 @@
             workTask.Status = "Сортировка данных";
             workTask.IsIndeterminate = true;
 
-            List<T> result = source.OrderBy(i => i.Лицевой).ToList();
+            List<T> result = source.Where(i => i != null).OrderBy(i => i.Лицевой).ToList();
 
             workTask.IsCompleted = true;
 
