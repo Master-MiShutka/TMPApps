@@ -3,6 +3,7 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:Interactions="http://schemas.microsoft.com/xaml/behaviors"
+    xmlns:behaviors="clr-namespace:TMP.UI.Controls.WPF.Behaviours;assembly=ui.controls.wpf"
     xmlns:controls_helper="clr-namespace:TMP.UI.Controls.WPF.Helpers;assembly=ui.controls.wpf"
     xmlns:converters="clr-namespace:TMP.UI.Controls.WPF.Converters;assembly=ui.controls.wpf"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -150,8 +151,10 @@
                             mouseWheel:MouseWheel.ScrollSmoothing="Smooth"
                             AlternationCount="2"
                             ItemsSource="{Binding TreeNodes}"
-                            SelectedValue="{Binding SelectedNode}"
                             VirtualizingStackPanel.IsVirtualizing="True">
+                            <Interactions:Interaction.Behaviors>
+                                <ui_controls_behaviours:BindableSelectedItemBehavior SelectedItem="{Binding SelectedNode}" />
+                            </Interactions:Interaction.Behaviors>
                             <ui_treelistview:TreeListView.Resources>
                                 <Style x:Key="HeaderStyle" TargetType="GridViewColumnHeader">
                                     <Setter Property="HorizontalContentAlignment" Value="Center" />
