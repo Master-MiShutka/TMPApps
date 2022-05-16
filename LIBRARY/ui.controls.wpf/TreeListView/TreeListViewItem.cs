@@ -5,7 +5,7 @@
     using System.Windows.Controls;
     using System.Windows.Input;
 
-    public class TreeListViewItem : ListViewItem, INotifyPropertyChanged
+    public class TreeListViewItem : TreeViewItem, INotifyPropertyChanged
     {
         #region Properties
 

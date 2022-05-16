@@ -149,7 +149,6 @@
                             mouseWheel:MouseWheel.ScrollMode="Auto"
                             mouseWheel:MouseWheel.ScrollSmoothing="Smooth"
                             AlternationCount="2"
-                            IsSynchronizedWithCurrentItem="True"
                             ItemsSource="{Binding TreeNodes}"
                             SelectedValue="{Binding SelectedNode}"
                             VirtualizingStackPanel.IsVirtualizing="True">
@@ -162,50 +161,48 @@
                                     <Setter Property="TextBlock.Padding" Value="0,0" />
                                 </Style>
                             </ui_treelistview:TreeListView.Resources>
-                            <ui_treelistview:TreeListView.View>
-                                <GridView>
-                                    <GridViewColumn
-                                        Width="300"
-                                        Header="Наименование"
-                                        HeaderContainerStyle="{StaticResource HeaderStyle}" />
-                                    <GridViewColumn
-                                        DisplayMemberBinding="{Binding Consumption, StringFormat={StaticResource NumberStringFormat}, ConverterCulture=ru-RU}"
-                                        Header="Потребление, кВт∙ч"
-                                        HeaderContainerStyle="{StaticResource HeaderStyle}" />
-                                    <GridViewColumn
-                                        DisplayMemberBinding="{Binding ChildMetersCount, StringFormat={StaticResource NumberStringFormat}, ConverterCulture=ru-RU}"
-                                        Header="Количество счётчиков"
-                                        HeaderContainerStyle="{StaticResource HeaderStyle}" />
-                                    <GridViewColumn
-                                        DisplayMemberBinding="{Binding AverageConsumption, StringFormat={StaticResource NumberStringFormat}, ConverterCulture=ru-RU}"
-                                        Header="Среднее потребление, кВт∙ч"
-                                        HeaderContainerStyle="{StaticResource HeaderStyle}" />
-                                    <GridViewColumn
-                                        DisplayMemberBinding="{Binding MedianConsumption, StringFormat={StaticResource NumberStringFormat}, ConverterCulture=ru-RU}"
-                                        Header="Медианное потребление, кВт∙ч"
-                                        HeaderContainerStyle="{StaticResource HeaderStyle}" />
-                                    <GridViewColumn
-                                        DisplayMemberBinding="{Binding NotBindingAbonentsCount, StringFormat={StaticResource NumberStringFormat}, ConverterCulture=ru-RU}"
-                                        Header="Количество 'непривязанных' абонентов"
-                                        HeaderContainerStyle="{StaticResource HeaderStyle}" />
-                                    <GridViewColumn
-                                        DisplayMemberBinding="{Binding NotBindingAbonentsConsumption, StringFormat={StaticResource NumberStringFormat}, ConverterCulture=ru-RU}"
-                                        Header="Утерянный ПО, кВт∙ч"
-                                        HeaderContainerStyle="{StaticResource HeaderStyle}" />
-                                    <GridViewColumn
-                                        DisplayMemberBinding="{Binding PercentOfPermanentResidence, StringFormat={StaticResource NumberStringFormat}, ConverterCulture=ru-RU}"
-                                        Header="Доля постоянных, %"
-                                        HeaderContainerStyle="{StaticResource HeaderStyle}" />
-                                    <GridViewColumn
-                                        DisplayMemberBinding="{Binding PercentOfSeasonalResidence, StringFormat={StaticResource NumberStringFormat}, ConverterCulture=ru-RU}"
-                                        Header="Доля сезонных, %"
-                                        HeaderContainerStyle="{StaticResource HeaderStyle}" />
-                                    <GridViewColumn
-                                        DisplayMemberBinding="{Binding PercentOfPermanentResidenceWhichHasPayment, StringFormat={StaticResource NumberStringFormat}, ConverterCulture=ru-RU}"
-                                        Header="Доля постоянных с оплатой, %"
-                                        HeaderContainerStyle="{StaticResource HeaderStyle}" />
-                                </GridView>
-                            </ui_treelistview:TreeListView.View>
+                            <ui_treelistview:TreeListView.Columns>
+                                <GridViewColumn
+                                    Width="300"
+                                    Header="Наименование"
+                                    HeaderContainerStyle="{StaticResource HeaderStyle}" />
+                                <GridViewColumn
+                                    DisplayMemberBinding="{Binding Consumption, StringFormat={StaticResource NumberStringFormat}, ConverterCulture=ru-RU}"
+                                    Header="Потребление, кВт∙ч"
+                                    HeaderContainerStyle="{StaticResource HeaderStyle}" />
+                                <GridViewColumn
+                                    DisplayMemberBinding="{Binding ChildMetersCount, StringFormat={StaticResource NumberStringFormat}, ConverterCulture=ru-RU}"
+                                    Header="Количество счётчиков"
+                                    HeaderContainerStyle="{StaticResource HeaderStyle}" />
+                                <GridViewColumn
+                                    DisplayMemberBinding="{Binding AverageConsumption, StringFormat={StaticResource NumberStringFormat}, ConverterCulture=ru-RU}"
+                                    Header="Среднее потребление, кВт∙ч"
+                                    HeaderContainerStyle="{StaticResource HeaderStyle}" />
+                                <GridViewColumn
+                                    DisplayMemberBinding="{Binding MedianConsumption, StringFormat={StaticResource NumberStringFormat}, ConverterCulture=ru-RU}"
+                                    Header="Медианное потребление, кВт∙ч"
+                                    HeaderContainerStyle="{StaticResource HeaderStyle}" />
+                                <GridViewColumn
+                                    DisplayMemberBinding="{Binding NotBindingAbonentsCount, StringFormat={StaticResource NumberStringFormat}, ConverterCulture=ru-RU}"
+                                    Header="Количество 'непривязанных' абонентов"
+                                    HeaderContainerStyle="{StaticResource HeaderStyle}" />
+                                <GridViewColumn
+                                    DisplayMemberBinding="{Binding NotBindingAbonentsConsumption, StringFormat={StaticResource NumberStringFormat}, ConverterCulture=ru-RU}"
+                                    Header="Утерянный ПО, кВт∙ч"
+                                    HeaderContainerStyle="{StaticResource HeaderStyle}" />
+                                <GridViewColumn
+                                    DisplayMemberBinding="{Binding PercentOfPermanentResidence, StringFormat={StaticResource NumberStringFormat}, ConverterCulture=ru-RU}"
+                                    Header="Доля постоянных, %"
+                                    HeaderContainerStyle="{StaticResource HeaderStyle}" />
+                                <GridViewColumn
+                                    DisplayMemberBinding="{Binding PercentOfSeasonalResidence, StringFormat={StaticResource NumberStringFormat}, ConverterCulture=ru-RU}"
+                                    Header="Доля сезонных, %"
+                                    HeaderContainerStyle="{StaticResource HeaderStyle}" />
+                                <GridViewColumn
+                                    DisplayMemberBinding="{Binding PercentOfPermanentResidenceWhichHasPayment, StringFormat={StaticResource NumberStringFormat}, ConverterCulture=ru-RU}"
+                                    Header="Доля постоянных с оплатой, %"
+                                    HeaderContainerStyle="{StaticResource HeaderStyle}" />
+                            </ui_treelistview:TreeListView.Columns>
                             <ui_treelistview:TreeListView.ContextMenu>
                                 <ContextMenu ItemsSource="{local_extensions:EnumToItemsSource {x:Type model:AbonentsBindingTreeMode}}">
                                     <ContextMenu.ItemContainerStyle>
