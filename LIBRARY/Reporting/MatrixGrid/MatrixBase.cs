@@ -15,10 +15,37 @@
     /// </summary>
     public abstract class MatrixBase : TMP.Shared.PropertyChangedBase, IMatrix, INotifyPropertyChanged
     {
+        #region Fields
+
+        /// <summary>
+        /// Коллекция ячеек матрицы
+        /// </summary>
+        private IList<IMatrixCell> items;
+        private IMatrixCell[,] cells;
+        private Size size = Size.Empty;
+
+        private string header;
+        private string description;
+
+        /// <summary>
+        /// Ширина заголовков строк и столбцов
+        /// </summary>
+        private int columnHeadersRowSpan = 1;
+
+        /// <summary>
+        /// Ширина заголовков строк и столбцов
+        /// </summary>
+        private int rowHeadersColumnSpan = 1;
+
+        private IList<IMatrixHeader> rowHeaders;
+        private IList<IMatrixHeader> columnHeaders;
+
         private bool isBuilded = false;
         private bool isBuilding;
         private bool? showColumnsTotal;
         private bool? showRowsTotal;
+
+        #endregion // Fields
 
         #region Constructor
 
@@ -147,6 +174,26 @@
 
                 return this.items;
             }
+
+            protected set
+            {
+                if (this.SetProperty(ref this.items, value))
+                {
+                    this.size = new Size(this.items.Max(i => i.GridRow), this.items.Max(i => i.GridColumn));
+
+                    this.cells = new IMatrixCell[(int)this.size.Height, (int)this.size.Width];
+                    foreach (var cell in this.items)
+                    {
+                        this.cells[cell.GridRow, cell.GridColumn] = cell;
+                    }
+
+                    this.RaisePropertyChanged(nameof(this.Size));
+                    this.RaisePropertyChanged(nameof(this.HasData));
+                    this.RaisePropertyChanged(nameof(this.RowHeadersCount));
+                    this.RaisePropertyChanged(nameof(this.ColumnHeadersCount));
+                    this.RaisePropertyChanged(nameof(this.Cells));
+                }
+            }
         }
 
         /// <summary>
@@ -167,7 +214,7 @@
         /// <summary>
         /// Двумерный массив ячеек матрицы
         /// </summary>
-        public IMatrixCell[,] Cells { get => this.cells; private set => this.SetProperty(ref this.cells, value); }
+        public IMatrixCell[,] Cells { get => this.cells; }
 
         /// <summary>
         /// Заголовок матрицы
@@ -225,6 +272,16 @@
 
         #region Matrix Construction
 
+        private void RaisePropertiesChanged()
+        {
+            this.RaisePropertyChanged(nameof(this.HasData));
+            this.RaisePropertyChanged(nameof(this.Items));
+            this.RaisePropertyChanged(nameof(this.Cells));
+            this.RaisePropertyChanged(nameof(this.RowHeadersCount));
+            this.RaisePropertyChanged(nameof(this.ColumnHeadersCount));
+            this.RaisePropertyChanged(nameof(this.Size));
+        }
+
         /// <summary>
         /// Построение матрицы
         /// </summary>
@@ -232,17 +289,12 @@
         {
             var task = System.Threading.Tasks.Task.Factory.StartNew(() =>
             {
-                this.items = new ReadOnlyCollection<IMatrixCell>(this.GetMatrixCells());
+                this.items = this.GetMatrixCells();
             })
                 .ContinueWith(t =>
                 {
-                    this.RaisePropertyChanged(nameof(this.HasData));
-                    this.RaisePropertyChanged(nameof(this.Items));
-                    this.RaisePropertyChanged(nameof(this.Cells));
-                    this.RaisePropertyChanged(nameof(this.RowHeadersCount));
-                    this.RaisePropertyChanged(nameof(this.ColumnHeadersCount));
-                    this.RaisePropertyChanged(nameof(this.Size));
-                }, TaskScheduler.FromCurrentSynchronizationContext());
+                    this.RaisePropertiesChanged();
+                });
         }
 
         /// <summary>
@@ -590,33 +642,6 @@
         }
 
         #endregion
-
-        #region Fields
-
-        /// <summary>
-        /// Коллекция ячеек матрицы
-        /// </summary>
-        private ReadOnlyCollection<IMatrixCell> items;
-
-        private IMatrixCell[,] cells;
-        private string header;
-        private string description;
-
-        /// <summary>
-        /// Ширина заголовков строк и столбцов
-        /// </summary>
-        private int columnHeadersRowSpan = 1;
-        
-        /// <summary>
-        /// Ширина заголовков строк и столбцов
-        /// </summary>
-        private int rowHeadersColumnSpan = 1;
-
-        private IList<IMatrixHeader> rowHeaders;
-        private IList<IMatrixHeader> columnHeaders;
-        private Size size = Size.Empty;
-
-        #endregion // Fields
 
         public override string ToString()
         {

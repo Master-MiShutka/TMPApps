@@ -73,12 +73,40 @@
             {
                 App.Current.MainWindow.Loaded += this.MainWindow_Loaded;
             }
+
+            // Загрузка кэша сводных таблиц
+            if (System.IO.File.Exists("MatrixCache.data"))
+            {
+                using (var fs = new System.IO.FileStream("MatrixCache.data", System.IO.FileMode.Open))
+                {
+                    this.MatrixCache = MessagePack.MessagePackSerializer.Deserialize<Dictionary<string, IList<UI.Controls.WPF.Reporting.MatrixGrid.IMatrixCell>>>(
+                        fs,
+                        MessagePack.MessagePackSerializer.DefaultOptions.WithCompression(MessagePack.MessagePackCompression.Lz4BlockArray));
+                }
+            }
+
+            if (this.MatrixCache == null)
+                this.MatrixCache = new();
         }
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
             this.isWindowLoaded = true;
         }
+
+        protected override void OnClosingMainWindow()
+        {
+            base.OnClosingMainWindow();
+
+            using (var fs = new System.IO.FileStream("MatrixCache.data", System.IO.FileMode.OpenOrCreate))
+            {
+                MessagePack.MessagePackSerializer.Serialize<Dictionary<string, IList<UI.Controls.WPF.Reporting.MatrixGrid.IMatrixCell>>>(
+                    fs,
+                    this.MatrixCache,
+                    MessagePack.MessagePackSerializer.DefaultOptions.WithCompression(MessagePack.MessagePackCompression.Lz4BlockArray));
+            }
+        }
+
 
         #region Private methods
 
@@ -177,6 +205,8 @@
                 return false;
             }
 
+            this.MatrixCache.Clear();
+
             this.Status = $"Попытка загрузки ранее сохраненных данных:\nРЭС - {this.SelectedDataFileInfo.DepartamentName};\nимя файла - {this.SelectedDataFileInfo.FileName}";
             this.logger?.Info(this.Status);
 
@@ -221,6 +251,9 @@
         #endregion
 
         #region Properties
+
+        public Dictionary<string, IList<UI.Controls.WPF.Reporting.MatrixGrid.IMatrixCell>> MatrixCache { get; init; }
+
 
         /// <summary>
         /// The amount of memory used by an application

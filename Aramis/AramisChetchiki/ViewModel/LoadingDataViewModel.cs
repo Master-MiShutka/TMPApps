@@ -103,6 +103,8 @@
             bool isSuccess;
             try
             {
+                MainViewModel.MatrixCache.Clear();
+
                 isSuccess = await Repository.Instance.GetDataFromDb(this.SelectedDataFileInfo, this);
             }
             catch (Exception ex)

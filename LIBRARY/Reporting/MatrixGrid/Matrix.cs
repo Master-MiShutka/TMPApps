@@ -2,9 +2,21 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Collections.ObjectModel;
 
     public class Matrix : MatrixBase
     {
+        public Matrix() { }
+
+        public Matrix(IList<IMatrixCell> matrixCells)
+            : base()
+        {
+            if (matrixCells == null)
+                return;
+
+            this.Items = new ReadOnlyCollection<IMatrixCell>(matrixCells);
+        }
+
         #region Public Properties
 
         public Func<IEnumerable<IMatrixHeader>> GetColumnHeaderValuesFunc { get; set; }

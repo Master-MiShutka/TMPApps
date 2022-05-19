@@ -1,10 +1,13 @@
 ﻿namespace TMP.WORK.AramisChetchiki.ViewModel
 {
+    using System.Collections.Generic;
     using System.Linq;
     using TMP.WORK.AramisChetchiki.Model;
 
     public interface IMainViewModel : TMPApplication.IMainViewModel
     {
+        Dictionary<string, IList<UI.Controls.WPF.Reporting.MatrixGrid.IMatrixCell>> MatrixCache { get; }
+
         /// <summary>
         /// Команда для закрытия активного окна
         /// </summary>
