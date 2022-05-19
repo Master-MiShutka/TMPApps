@@ -36,7 +36,7 @@
                 return;
             }
 
-            this.DataGridMessage = this.Status = "Подоговка данных ...";
+            this.DataGridMessage = this.Status = "Подготовка данных ...";
         }
 
         /// <summary>
@@ -55,7 +55,7 @@
             }
 
             this.IsBusy = true;
-            this.DataGridMessage = this.Status = "Подоговка данных ...";
+            this.DataGridMessage = this.Status = "Подготовка данных ...";
 
             this.fieldDisplayName = fieldDisplayName;
             this.fieldName = fieldName;

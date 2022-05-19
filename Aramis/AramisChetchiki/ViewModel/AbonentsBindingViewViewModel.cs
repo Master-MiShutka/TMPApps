@@ -40,7 +40,7 @@
             this.SelectedViewKind = TableViewKinds.ПривязкаView;
 
             this.IsBusy = true;
-            this.Status = "Подоговка данных ...";
+            this.Status = "Подготовка данных ...";
 
             AbonentBindingNode root = null;
             System.Threading.Tasks.Task task = System.Threading.Tasks.Task.Run(() =>
