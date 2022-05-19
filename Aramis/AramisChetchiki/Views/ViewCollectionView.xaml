@@ -3,9 +3,6 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:System="clr-namespace:System;assembly=mscorlib"
-    xmlns:controls="clr-namespace:TMP.UI.Controls.WPF;assembly=ui.controls.wpf"
-    xmlns:controls_helper="clr-namespace:TMP.UI.Controls.WPF.Helpers;assembly=ui.controls.wpf"
-    xmlns:converters="clr-namespace:TMP.UI.Controls.WPF.Converters;assembly=ui.controls.wpf"
     xmlns:custom_filters="clr-namespace:TMP.WORK.AramisChetchiki.CustomFilters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:extensions="clr-namespace:TMP.Extensions;assembly=TMP.Extensions"
@@ -16,6 +13,9 @@
     xmlns:local_extensions="clr-namespace:TMP.WORK.AramisChetchiki.Extensions"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:model="clr-namespace:TMP.WORK.AramisChetchiki.Model"
+    xmlns:ui_controls="clr-namespace:TMP.UI.Controls.WPF;assembly=ui.controls.wpf"
+    xmlns:ui_controls_helper="clr-namespace:TMP.UI.Controls.WPF.Helpers;assembly=ui.controls.wpf"
+    xmlns:ui_converters="clr-namespace:TMP.UI.Controls.WPF.Converters;assembly=ui.controls.wpf"
     xmlns:view="clr-namespace:TMP.WORK.AramisChetchiki.Views"
     xmlns:vm="clr-namespace:TMP.WORK.AramisChetchiki.ViewModel"
     x:Name="root"
@@ -48,22 +48,22 @@
     <view:BaseView HeaderPanelVisible="True">
         <view:BaseView.HeaderPanel>
             <StackPanel Margin="2" Orientation="Horizontal">
-                <controls:DropDownButton
-                    Content="{Binding SelectedViewKind, Converter={converters:EnumBindingConverter}}"
+                <ui_controls:DropDownButton
+                    Content="{Binding SelectedViewKind, Converter={ui_converters:EnumBindingConverter}}"
                     ItemsSource="{Binding Source={StaticResource TableViewKindSelectMenu}}"
                     MenuStyle="{StaticResource baseContextMenuStyle}"
                     StayMenuOpen="True">
-                    <controls:DropDownButton.Icon>
-                        <controls:Icons Height="16" Kind="ListSelect" />
-                    </controls:DropDownButton.Icon>
-                    <controls:DropDownButton.Resources>
+                    <ui_controls:DropDownButton.Icon>
+                        <ui_controls:Icons Height="16" Kind="ListSelect" />
+                    </ui_controls:DropDownButton.Icon>
+                    <ui_controls:DropDownButton.Resources>
                         <Style BasedOn="{StaticResource baseMenuItemStyle}" TargetType="MenuItem">
-                            <Setter Property="Header" Value="{Binding Converter={converters:EnumBindingConverter}}" />
+                            <Setter Property="Header" Value="{Binding Converter={ui_converters:EnumBindingConverter}}" />
                             <Setter Property="Command" Value="{Binding Path=DataContext.CommandChangeViewKind, RelativeSource={RelativeSource AncestorType=UserControl}}" />
                             <Setter Property="CommandParameter" Value="{Binding}" />
                         </Style>
-                    </controls:DropDownButton.Resources>
-                </controls:DropDownButton>
+                    </ui_controls:DropDownButton.Resources>
+                </ui_controls:DropDownButton>
                 <Separator Style="{StaticResource dotedSeparator}" />
                 <TextBlock
                     Grid.Row="1"
@@ -77,7 +77,7 @@
                 <Separator Style="{StaticResource dotedSeparator}" />
                 <Button HorizontalAlignment="Right" Command="{Binding CommandShowFilters}">
                     <StackPanel Orientation="Horizontal">
-                        <controls:Icons Width="16" Kind="FilterAlphabetical" />
+                        <ui_controls:Icons Width="16" Kind="FilterAlphabetical" />
                         <TextBlock Margin="5,0,0,0" Text="Фильтр" />
                     </StackPanel>
                 </Button>
@@ -98,19 +98,19 @@
                 <Separator Style="{StaticResource dotedSeparator}" />
                 <local_controls:ShowFilters DockPanel.Dock="Right" />
                 <Separator Style="{StaticResource dotedSeparator}" />
-                <controls:ButtonWithIconKind
+                <ui_controls:ButtonWithIconKind
                     Padding="10,0"
                     Command="{Binding CommandCleanFilters}"
                     Content="Очистить&#x0A;фильтры"
                     ImageKind="Clean"
                     TextBlock.TextAlignment="Center"
                     Visibility="{Binding ActiveFiltersList, Converter={StaticResource NullOrEmptyToVisibilityConverter}}">
-                    <controls:ButtonWithIconKind.ToolTip>
+                    <ui_controls:ButtonWithIconKind.ToolTip>
                         <StackPanel>
                             <TextBlock Text="{Binding Path=ActiveFiltersList, IsAsync=True, StringFormat=Активный(е) фильтр(ы): {0}}" TextTrimming="CharacterEllipsis" />
                         </StackPanel>
-                    </controls:ButtonWithIconKind.ToolTip>
-                </controls:ButtonWithIconKind>
+                    </ui_controls:ButtonWithIconKind.ToolTip>
+                </ui_controls:ButtonWithIconKind>
             </StackPanel>
         </view:BaseView.HeaderPanel>
         <view:BaseView.Content>
@@ -137,7 +137,7 @@
                         ItemsSource="{Binding Filters, IsAsync=True}">
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
-                                <controls:StackPanel
+                                <ui_controls:StackPanel
                                     IsItemsHost="True"
                                     MarginBetweenChildren="5"
                                     Orientation="Horizontal" />

@@ -7,39 +7,43 @@
     xmlns:filterdatagrid="clr-namespace:DataGridWpf;assembly=DataGridWpf"
     xmlns:local_controls="clr-namespace:TMP.WORK.AramisChetchiki.Controls"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ui_controls="clr-namespace:TMP.UI.Controls.WPF;assembly=ui.controls.wpf"
     xmlns:uicontrols_behaviours="clr-namespace:TMP.UI.Controls.WPF.Behaviours;assembly=ui.controls.wpf"
     mc:Ignorable="d">
-    <filterdatagrid:FilterDataGrid
-        xmlns:mouseWheel="clr-namespace:WpfMouseWheel.Windows.Input;assembly=WpfMouseWheelLib"
-        x:Name="filterDataGrid"
-        mouseWheel:MouseWheel.Enhanced="False"
-        uicontrols_behaviours:MouseDoubleClick.Command="{Binding Path=CommandViewDetailsBySelectedItem}"
-        uicontrols_behaviours:MouseDoubleClick.CommandParameter="{Binding Path=SelectedItem, RelativeSource={RelativeSource Mode=Self}}"
-        AutoGenerateColumns="{Binding AutoGenerateColumns, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local_controls:DataGridControl}}}"
-        ColumnsViewModels="{Binding TableColumns, IsAsync=True, FallbackValue={x:Null}}"
-        DisplayRowNumber="True"
-        IsReadOnly="True"
-        VirtualizingPanel.IsVirtualizing="True">
-        <filterdatagrid:FilterDataGrid.RowStyle>
-            <PriorityBinding>
-                <Binding Path="RowStyle" RelativeSource="{RelativeSource AncestorType={x:Type local_controls:DataGridControl}}" />
-                <Binding Source="{StaticResource DefaultRowStyle}" />
-            </PriorityBinding>
-        </filterdatagrid:FilterDataGrid.RowStyle>
-        <filterdatagrid:FilterDataGrid.NoItemsMessage>
-            <PriorityBinding>
-                <Binding Path="NoItemsMessage" RelativeSource="{RelativeSource AncestorType={x:Type local_controls:DataGridControl}}" />
-                <Binding Source="{StaticResource StringNoData}" />
-            </PriorityBinding>
-        </filterdatagrid:FilterDataGrid.NoItemsMessage>
-        <filterdatagrid:FilterDataGrid.ItemsSource>
-            <PriorityBinding>
-                <Binding
-                    FallbackValue="{x:Null}"
-                    IsAsync="True"
-                    Path="View" />
-                <Binding Path="ItemsSource" RelativeSource="{RelativeSource AncestorType={x:Type local_controls:DataGridControl}}" />
-            </PriorityBinding>
-        </filterdatagrid:FilterDataGrid.ItemsSource>
-    </filterdatagrid:FilterDataGrid>
+    <DockPanel>
+        <filterdatagrid:FilterDataGrid
+            xmlns:mouseWheel="clr-namespace:WpfMouseWheel.Windows.Input;assembly=WpfMouseWheelLib"
+            x:Name="filterDataGrid"
+            mouseWheel:MouseWheel.Enhanced="False"
+            uicontrols_behaviours:MouseDoubleClick.Command="{Binding Path=CommandViewDetailsBySelectedItem}"
+            uicontrols_behaviours:MouseDoubleClick.CommandParameter="{Binding Path=SelectedItem, RelativeSource={RelativeSource Mode=Self}}"
+            AutoGenerateColumns="{Binding AutoGenerateColumns, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local_controls:DataGridControl}}}"
+            ColumnsViewModels="{Binding TableColumns, IsAsync=True, FallbackValue={x:Null}}"
+            DisplayRowNumber="True"
+            IsReadOnly="True"
+            VirtualizingPanel.IsVirtualizing="True">
+            <filterdatagrid:FilterDataGrid.RowStyle>
+                <PriorityBinding>
+                    <Binding Path="RowStyle" RelativeSource="{RelativeSource AncestorType={x:Type local_controls:DataGridControl}}" />
+                    <Binding Source="{StaticResource DefaultRowStyle}" />
+                </PriorityBinding>
+            </filterdatagrid:FilterDataGrid.RowStyle>
+            <filterdatagrid:FilterDataGrid.NoItemsMessage>
+                <PriorityBinding>
+                    <Binding Path="NoItemsMessage" RelativeSource="{RelativeSource AncestorType={x:Type local_controls:DataGridControl}}" />
+                    <Binding Source="{StaticResource StringNoData}" />
+                </PriorityBinding>
+            </filterdatagrid:FilterDataGrid.NoItemsMessage>
+            <filterdatagrid:FilterDataGrid.ItemsSource>
+                <PriorityBinding>
+                    <Binding
+                        FallbackValue="{x:Null}"
+                        IsAsync="True"
+                        Path="View" />
+                    <Binding Path="ItemsSource" RelativeSource="{RelativeSource AncestorType={x:Type local_controls:DataGridControl}}" />
+                </PriorityBinding>
+            </filterdatagrid:FilterDataGrid.ItemsSource>
+        </filterdatagrid:FilterDataGrid>
+        <ui_controls:CollectionViewNavigator DataContext="{Binding View}" DockPanel.Dock="Bottom" />
+    </DockPanel>
 </UserControl>
