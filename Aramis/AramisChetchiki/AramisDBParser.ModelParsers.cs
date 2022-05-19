@@ -321,7 +321,7 @@
             this.workTasksProgressViewModel.WorkTasks.Add(workTask);
             workTask.StartProcessing();
 
-            string fileName = Path.Combine(this.aramisDbPath, "ChangesOfMeters" + DATA_FILE_EXTENSION);
+            string fileName = Path.Combine(this.dataFilesPath, "ChangesOfMeters" + DATA_FILE_EXTENSION);
 
             workTask.UpdateStatus($"загрузка данных из кэша ...");
             workTask.IsIndeterminate = true;
