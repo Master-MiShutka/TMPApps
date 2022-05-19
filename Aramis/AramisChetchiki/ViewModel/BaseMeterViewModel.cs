@@ -106,23 +106,25 @@
 
         public override Predicate<Meter> DataFilter => (meter) =>
         {
-            if (meter != null & this.notShowDeleted && meter.Удалён == true)
+            if (meter != null)
+                return false;
+
+            if (this.notShowDeleted && meter.Удалён == true)
             {
                 return false;
             }
-            else if (meter != null & this.notShowDisconnected && meter.Отключён == true)
+
+            if (this.notShowDisconnected && meter.Отключён == true)
             {
                 return false;
             }
-            else
-            {
-                return true;
-            }
+
+            return true;
         };
 
         public override int GetHashCode()
         {
-            System.Guid guid = new System.Guid("3E70130E-CE09-40CC-88ED-AF06915976C8");
+            System.Guid guid = new("3E70130E-CE09-40CC-88ED-AF06915976C8");
             return guid.GetHashCode();
         }
 
@@ -136,13 +138,12 @@
             {
                 this.IsBusy = true;
                 this.Status = "обновление ...";
-
                 this.notShowDeleted = !this.notShowDeleted;
+
                 this.RaisePropertyChanged(nameof(this.DataFilter));
-                if (this.View != null)
-                {
-                    this.View.Refresh();
-                }
+                this.RaisePropertyChanged(nameof(this.Data));
+                this.RaisePropertyChanged(nameof(this.View));
+                this.RaisePropertyChanged(nameof(this.ItemsCount));
 
                 this.IsBusy = false;
             },
@@ -154,11 +155,11 @@
                 this.Status = "обновление ...";
 
                 this.notShowDeleted = !this.notShowDisconnected;
+
                 this.RaisePropertyChanged(nameof(this.DataFilter));
-                if (this.View != null)
-                {
-                    this.View.Refresh();
-                }
+                this.RaisePropertyChanged(nameof(this.Data));
+                this.RaisePropertyChanged(nameof(this.View));
+                this.RaisePropertyChanged(nameof(this.ItemsCount));
 
                 this.IsBusy = false;
             },

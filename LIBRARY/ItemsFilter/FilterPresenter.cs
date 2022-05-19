@@ -268,7 +268,7 @@
 
         private class DisposeItemsDeferRefresh : IDisposable
         {
-            private FilterPresenter filterPresenter;
+            private readonly FilterPresenter filterPresenter;
             private bool isDisposed = false;
 
             internal DisposeItemsDeferRefresh(FilterPresenter filterVm)
