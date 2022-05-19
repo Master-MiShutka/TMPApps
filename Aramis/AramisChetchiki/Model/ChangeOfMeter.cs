@@ -6,7 +6,7 @@
     using TMP.Shared;
 
     [MessagePack.MessagePackObject(keyAsPropertyName: true)]
-    [System.Diagnostics.DebuggerDisplay("ID={Лицевой} :: Date={ДатаЗамены} :: Prev={ПоказаниеСнятого} :: Next={ПоказаниеУстановленного}")]
+    [System.Diagnostics.DebuggerDisplay("ID={Лицевой} :: Date={ДатаЗамены} :: Prev={ПоказаниеСнятого} :: Next={LastReading}")]
     public class ChangeOfMeter : IModelWithPersonalId, IModelWithMeterLastReading
     {
         [Display(Order = 0, GroupName = "Операция")]
