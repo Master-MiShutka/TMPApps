@@ -24,6 +24,8 @@
     public class BaseDataViewModel<T> : BaseViewModel, IDataViewModel<T>
         where T : IModel
     {
+        private object _lock = new object();
+
         private IEnumerable<T> data;
         private ICollectionView view;
 
@@ -90,6 +92,9 @@
             : this()
         {
             this.data = typeof(T) == typeof(Meter) && data == null ? MainViewModel.Data?.Meters?.Cast<T>().ToList() : data;
+
+            BindingOperations.EnableCollectionSynchronization(this.data, this._lock);
+
             this.RaisePropertyChanged(nameof(this.View));
             this.RaisePropertyChanged(nameof(this.Data));
         }
@@ -139,6 +144,7 @@
                     AppSettings.Default.ViewModelsTableColumns.Add(thisHashCode, rawdata);
                 }
             }
+
             AppSettings.Default.Save();
         }
 
@@ -236,6 +242,11 @@
             {
                 if (this.SetProperty(ref this.data, value))
                 {
+                    BindingOperations.EnableCollectionSynchronization(this.data, this._lock);
+
+                    int n1 = this.data.Cast<Meter>().Count(i => i.Отключён == true);
+                    int n2 = this.data.Cast<Meter>().Count(i => i.Удалён == true);
+
                     this.RaisePropertyChanged(nameof(this.IsDataNullOrEmpty));
                     this.RaisePropertyChanged(nameof(this.View));
                     this.RaisePropertyChanged(nameof(this.ItemsCount));
@@ -418,7 +429,7 @@
         /// <returns></returns>
         protected virtual ICollectionView BuildAndGetView()
         {
-            ICollectionView collectionView = CollectionViewSource.GetDefaultView(this.Data);
+            ICollectionView collectionView = new UI.Controls.WPF.PagingCollectionView(this.Data.ToList());
             return collectionView;
         }
 
