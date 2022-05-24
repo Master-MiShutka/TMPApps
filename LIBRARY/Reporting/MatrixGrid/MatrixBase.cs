@@ -321,8 +321,6 @@
 
             this.rowHeaders = this.BuildFlatHeadersList(rowHeaderValues);
             this.columnHeaders = this.BuildFlatHeadersList(columnHeaderValues);
-            this.RaisePropertyChanged(nameof(this.RowHeadersCount));
-            this.RaisePropertyChanged(nameof(this.ColumnHeadersCount));
 
             // высота и ширина блока с данными
             int dataBlockHeight = this.rowHeaders.Count(),
