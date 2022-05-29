@@ -102,7 +102,7 @@
                     this.ShowDialogWarning("Для работы программы необходимо в разделе 'Расположение данных'\nуказать путь к базе данных программы Арамис\nи выбрать подразделение.");
                 }
 
-                MainViewModel.GoBack();
+                //MainViewModel.GoBack();
             });
 
             this.CommandRemoveField = new DelegateCommand<object>((param) =>
