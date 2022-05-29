@@ -73,6 +73,10 @@
         protected override ICollectionView BuildAndGetView()
         {
             ICollectionView collectionView = CollectionViewSource.GetDefaultView(this.Data);
+
+            if (collectionView.IsEmpty)
+                return collectionView;
+
             using (collectionView.DeferRefresh())
             {
                 collectionView.SortDescriptions.Add(new SortDescription(nameof(Meter.Адрес), ListSortDirection.Ascending));
@@ -106,7 +110,7 @@
 
         public override Predicate<Meter> DataFilter => (meter) =>
         {
-            if (meter != null)
+            if (meter == null)
                 return false;
 
             if (this.notShowDeleted && meter.Удалён == true)

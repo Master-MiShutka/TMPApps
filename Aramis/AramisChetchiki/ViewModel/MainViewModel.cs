@@ -205,6 +205,7 @@
                 return false;
             }
 
+            this.IsBusy = true;
             this.MatrixCache.Clear();
 
             this.Status = $"Попытка загрузки ранее сохраненных данных:\nРЭС - {this.SelectedDataFileInfo.DepartamentName};\nимя файла - {this.SelectedDataFileInfo.FileName}";
@@ -376,21 +377,17 @@
 
         #region IMainViewModel implementation
 
-        private void LoadData()
+        private async void LoadData()
         {
             // проверка на наличие файла
             if (System.IO.File.Exists(this.SelectedDataFileInfo.FileName))
             {
-                Task.Run(async () =>
+                bool result = await this.LoadEarlierSavedDataAsync();
+                if (result == false)
                 {
-                    System.Threading.Thread.CurrentThread.Name = "LoadEarlierSavedData";
-                    bool result = await this.LoadEarlierSavedDataAsync().ConfigureAwait(false);
-                    if (result == false)
-                    {
-                        this.SelectedDataFileInfo = null;
-                        this.ShowDialogError("Файл с данными не удалось загрузить.");
-                    }
-                });
+                    this.SelectedDataFileInfo = null;
+                    this.ShowDialogError("Файл с данными не удалось загрузить.");
+                }
             }
             else
             {

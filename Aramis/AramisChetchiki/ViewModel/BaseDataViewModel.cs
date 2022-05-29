@@ -62,8 +62,8 @@
             this.IsBusy = true;
             this.Status = "загрузка ...";
 
-            // fix
-            var v = this.View;
+            //// fix
+            //var v = this.View;
 
             this.CommandExport = new DelegateCommand(this.DoExport, this.CanExecuteCheckView);
             this.CommandPrint = new DelegateCommand(this.DoPrint, this.CanExecuteCheckView);
@@ -237,7 +237,15 @@
         /// </summary>
         public IEnumerable<T> Data
         {
-            get => this.data?.Where(i => this.DataFilter(i));
+            get
+            {
+                if (this.data == null)
+                {
+                    return null;
+                }
+
+                return this.data.Where(i => this.DataFilter(i));
+            }
             protected set
             {
                 if (this.SetProperty(ref this.data, value))

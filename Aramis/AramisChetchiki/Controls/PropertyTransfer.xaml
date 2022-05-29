@@ -56,40 +56,52 @@
                     <ListBox.Style>
                         <Style BasedOn="{StaticResource {x:Type ListBox}}" TargetType="{x:Type ListBox}">
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding HasSourceItems, RelativeSource={RelativeSource AncestorType={x:Type local_controls:PropertyTransfer}}}" Value="False">
-                                    <Setter Property="Margin" Value="5" />
-                                    <Setter Property="ToolTip" Value="{Binding AllSourceCollectionItemsUsed, NotifyOnTargetUpdated=True}" />
-                                    <Setter Property="ToolTip" Value="{Binding HasSourceItems, RelativeSource={RelativeSource AncestorType={x:Type local_controls:PropertyTransfer}}}" />
-                                    <Setter Property="Template">
-                                        <Setter.Value>
-                                            <ControlTemplate>
-                                                <controls:NoData Message="список&#x0A;пуст" />
-                                            </ControlTemplate>
-                                        </Setter.Value>
-                                    </Setter>
-                                </DataTrigger>
-                                <DataTrigger Binding="{Binding AllSourceCollectionItemsUsed, RelativeSource={RelativeSource AncestorType={x:Type local_controls:PropertyTransfer}}}" Value="True">
-                                    <Setter Property="Template">
-                                        <Setter.Value>
-                                            <ControlTemplate>
-                                                <Border
-                                                    Margin="5"
-                                                    Padding="10,5"
-                                                    HorizontalAlignment="Center"
-                                                    VerticalAlignment="Center"
-                                                    Background="{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}"
-                                                    BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}"
-                                                    BorderThickness="1"
-                                                    CornerRadius="10">
-                                                    <ui_controls:GlowEffectTextBlock
-                                                        helpers:RelativeFontSize.RelativeFontSize="1.5"
-                                                        FontWeight="DemiBold"
-                                                        Text="используются&#x0A;все&#x0A;доступные&#x0A;поля" />
-                                                </Border>
-                                            </ControlTemplate>
-                                        </Setter.Value>
-                                    </Setter>
-                                </DataTrigger>
+                                <MultiDataTrigger>
+                                    <MultiDataTrigger.Conditions>
+                                        <Condition Binding="{Binding AllSourceCollectionItemsUsed, RelativeSource={RelativeSource AncestorType={x:Type local_controls:PropertyTransfer}}}" Value="True" />
+                                        <Condition Binding="{Binding HasSourceItems, RelativeSource={RelativeSource AncestorType={x:Type local_controls:PropertyTransfer}}}" Value="False" />
+                                    </MultiDataTrigger.Conditions>
+                                    <MultiDataTrigger.Setters>
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate>
+                                                    <Border
+                                                        Margin="5"
+                                                        Padding="10,5"
+                                                        HorizontalAlignment="Center"
+                                                        VerticalAlignment="Center"
+                                                        Background="{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}"
+                                                        BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}"
+                                                        BorderThickness="1"
+                                                        CornerRadius="10">
+                                                        <ui_controls:GlowEffectTextBlock
+                                                            helpers:RelativeFontSize.RelativeFontSize="1.5"
+                                                            FontWeight="DemiBold"
+                                                            Text="используются&#x0A;все&#x0A;доступные&#x0A;поля" />
+                                                    </Border>
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </MultiDataTrigger.Setters>
+                                </MultiDataTrigger>
+                                <MultiDataTrigger>
+                                    <MultiDataTrigger.Conditions>
+                                        <Condition Binding="{Binding AllSourceCollectionItemsUsed, RelativeSource={RelativeSource AncestorType={x:Type local_controls:PropertyTransfer}}}" Value="False" />
+                                        <Condition Binding="{Binding HasSourceItems, RelativeSource={RelativeSource AncestorType={x:Type local_controls:PropertyTransfer}}}" Value="False" />
+                                    </MultiDataTrigger.Conditions>
+                                    <MultiDataTrigger.Setters>
+                                        <Setter Property="Margin" Value="5" />
+                                        <Setter Property="ToolTip" Value="{Binding AllSourceCollectionItemsUsed, NotifyOnTargetUpdated=True}" />
+                                        <Setter Property="ToolTip" Value="{Binding HasSourceItems, RelativeSource={RelativeSource AncestorType={x:Type local_controls:PropertyTransfer}}}" />
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate>
+                                                    <controls:NoData Message="список&#x0A;пуст" />
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </MultiDataTrigger.Setters>
+                                </MultiDataTrigger>
                             </Style.Triggers>
                         </Style>
                     </ListBox.Style>

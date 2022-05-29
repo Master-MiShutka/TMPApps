@@ -4,13 +4,20 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:Interactions="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:extensions="clr-namespace:TMP.Extensions;assembly=TMP.Extensions"
     xmlns:filterdatagrid="clr-namespace:DataGridWpf;assembly=DataGridWpf"
     xmlns:local_controls="clr-namespace:TMP.WORK.AramisChetchiki.Controls"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ui_controls="clr-namespace:TMP.UI.Controls.WPF;assembly=ui.controls.wpf"
     xmlns:uicontrols_behaviours="clr-namespace:TMP.UI.Controls.WPF.Behaviours;assembly=ui.controls.wpf"
     mc:Ignorable="d">
-    <DockPanel>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <!--  0  -->
         <filterdatagrid:FilterDataGrid
             xmlns:mouseWheel="clr-namespace:WpfMouseWheel.Windows.Input;assembly=WpfMouseWheelLib"
             x:Name="filterDataGrid"
@@ -44,6 +51,31 @@
                 </PriorityBinding>
             </filterdatagrid:FilterDataGrid.ItemsSource>
         </filterdatagrid:FilterDataGrid>
-        <ui_controls:CollectionViewNavigator DataContext="{Binding View}" DockPanel.Dock="Bottom" />
-    </DockPanel>
+        <!--  1  -->
+        <Border Grid.Row="1" Background="{extensions:ValueFromStyle StyleKey={x:Type ToolBar}, Property=Control.Background}">
+            <WrapPanel
+                Margin="2,2"
+                Orientation="Horizontal"
+                TextBlock.FontWeight="Bold">
+                <TextBlock Text="Всего: " />
+                <TextBlock Text="{Binding Path=ItemsCount, IsAsync=True, FallbackValue=0, StringFormat={} элементов: {0:N0};}" />
+                <TextBlock Text="{Binding Path=AccountsCount, IsAsync=True, FallbackValue=0, StringFormat={} л/с: {0:N0};}" />
+                <TextBlock Text="{Binding Path=MetersCount, IsAsync=True, FallbackValue=0, StringFormat={} счётчиков: {0:N0};}" />
+                <TextBlock Text="{Binding Path=AbonentsCount, IsAsync=True, FallbackValue=0, StringFormat={} абонентов: {0:N0};}" />
+                <StackPanel Orientation="Horizontal" Visibility="{Binding ActiveFiltersList, IsAsync=True, Converter={StaticResource NullOrEmptyToVisibilityConverter}}">
+                    <Separator Margin="5,0" Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
+                    <TextBlock Text="{Binding Path=CollectionViewItemsCount, IsAsync=True, FallbackValue=0, StringFormat=Найдено счётчиков: {0:N0}}" />
+                    <Separator Margin="5,0" Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
+                    <TextBlock Text="{Binding Path=PercentOfTotal, IsAsync=True, StringFormat=или {0:N1}% от общего количества}" />
+                </StackPanel>
+                <Separator Margin="5,0" Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
+                <TextBlock Text="{Binding Path=SelectedRowsCount, ElementName=filterDataGrid, IsAsync=True, StringFormat=Выделено {0:N1}.}" />
+                <StackPanel Orientation="Horizontal" Visibility="{Binding ActiveFiltersList, IsAsync=True, Converter={StaticResource NullOrEmptyToVisibilityConverter}}">
+                    <Separator Margin="5,0" Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
+                </StackPanel>
+            </WrapPanel>
+        </Border>
+        <!--  2  -->
+        <ui_controls:CollectionViewNavigator Grid.Row="2" DataContext="{Binding View}" />
+    </Grid>
 </UserControl>

@@ -144,9 +144,32 @@
 
         public bool AllSourceCollectionItemsUsed => this.SourceCollection.IsEmpty && this.sourceCollectionItemsCount > 0;
 
-        public PlusPropertyDescriptor SourceSelectedItem { get => this.sourceSelectedItem; set => this.SetProperty(ref this.sourceSelectedItem, value); }
+        public PlusPropertyDescriptor SourceSelectedItem
+        {
+            get => this.sourceSelectedItem;
+            set
+            {
+                if (this.SetProperty(ref this.sourceSelectedItem, value))
+                {
+                    (this.CommandAddToTarget as DelegateCommand)?.RaiseCanExecuteChanged();
+                }
+            }
+        }
 
-        public PlusPropertyDescriptor TargetSelectedItem { get => this.targetSelectedItem; set => this.SetProperty(ref this.targetSelectedItem, value); }
+        public PlusPropertyDescriptor TargetSelectedItem
+        {
+            get => this.targetSelectedItem;
+            set
+            {
+                if (this.SetProperty(ref this.targetSelectedItem, value))
+                {
+                    (this.CommandMoveUp as DelegateCommand)?.RaiseCanExecuteChanged();
+                    (this.CommandMoveDown as DelegateCommand)?.RaiseCanExecuteChanged();
+                    (this.CommandRemoveFromTarget as DelegateCommand)?.RaiseCanExecuteChanged();
+                    (this.CommandMoveUp as DelegateCommand)?.RaiseCanExecuteChanged();
+                }
+            }
+        }
 
         public ICommand CommandMoveUp { get; }
 
@@ -178,6 +201,8 @@
 
             propertyTransfer.RaisePropertyChanged(nameof(HasTargetItems));
             propertyTransfer.RaisePropertyChanged(nameof(propertyTransfer.AllSourceCollectionItemsUsed));
+
+            (propertyTransfer.CommandClear as DelegateCommand)?.RaiseCanExecuteChanged();
         }
 
         private void SetFilter(ICollectionView collectionView)
@@ -198,7 +223,7 @@
             PlusPropertyDescriptor plusPropertyDescriptor = (PlusPropertyDescriptor)o;
             if (plusPropertyDescriptor != null && this.TargetCollection != null)
             {
-                bool b1 = true;// this.existingFilter == null || this.existingFilter.Invoke(o);
+                bool b1 = true; // this.existingFilter == null || this.existingFilter.Invoke(o);
                 bool b2 = this.TargetCollection.Contains(plusPropertyDescriptor) == false;
                 return b1 && b2;
             }

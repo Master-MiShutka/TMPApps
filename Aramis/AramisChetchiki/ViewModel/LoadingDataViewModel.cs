@@ -98,7 +98,7 @@
             }
 
             string msg;
-            msg = $"Попытка получить данные из базы данных Арамис: РЭС - {this.SelectedDataFileInfo.DepartamentName}, путь к базе - '{this.SelectedDataFileInfo.AramisDbPath}'";
+            this.Status = msg = $"Попытка получить данные из базы данных Арамис: РЭС - {this.SelectedDataFileInfo.DepartamentName}, путь к базе - '{this.SelectedDataFileInfo.AramisDbPath}'";
             this.logger?.Info(msg);
             bool isSuccess;
             try
@@ -118,7 +118,7 @@
             {
                 this.SelectedDataFileInfo.IsLoaded = true;
                 this.SelectedDataFileInfo.IsSelected = true;
-                msg = $"Данные из базы данных Арамис: РЭС - {this.SelectedDataFileInfo.DepartamentName} получены успешно";
+                this.Status = msg = $"Данные из базы данных Арамис: РЭС - {this.SelectedDataFileInfo.DepartamentName} получены успешно";
                 this.logger?.Info(msg);
                 return true;
             }

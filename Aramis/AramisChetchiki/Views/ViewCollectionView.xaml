@@ -118,7 +118,6 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />
-                    <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
                 <!--    -->
                 <Border
@@ -158,8 +157,6 @@
                     Grid.Row="1"
                     NoItemsMessage="{Binding DataGridMessage}"
                     RowStyle="{StaticResource MeterRowStyle}" />
-                <!--    -->
-                <local_controls:TableDetailsView Grid.Row="2" />
             </Grid>
         </view:BaseView.Content>
     </view:BaseView>
