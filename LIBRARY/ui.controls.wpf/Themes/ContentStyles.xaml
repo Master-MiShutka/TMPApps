@@ -597,6 +597,7 @@
         <ControlTemplate.Triggers>
             <Trigger Property="IsEnabled" Value="false">
                 <Setter TargetName="icon" Property="IsEnabled" Value="False" />
+                <Setter TargetName="icon" Property="Foreground" Value="{DynamicResource {x:Static SystemColors.InactiveCaptionBrushKey}}" />
             </Trigger>
             <DataTrigger Binding="{Binding Path=ButtonDock, FallbackValue=Right, RelativeSource={RelativeSource TemplatedParent}}" Value="0">
                 <Setter TargetName="cnt" Property="Margin" Value="5,2,2,2" />
