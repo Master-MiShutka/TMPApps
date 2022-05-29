@@ -318,13 +318,24 @@
                 })
                 .ContinueWith((t) =>
                 {
-                    this.IsBusy = false;
+                    this.Status = "отображение сводных таблиц ...";
                 });
             }
         }
 
-        private void Matrix_Builded(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        private void Matrix_Builded(object sender, MatrixBuildedEventArgs e)
         {
+            IMatrix matrix = (IMatrix)sender;
+
+            if (MainViewModel.MatrixCache.ContainsKey(matrix.Header) == false)
+            {
+                MainViewModel.MatrixCache.Add(matrix.Header, e.Items);
+            }
+            else
+            {
+                MainViewModel.MatrixCache[matrix.Header] = e.Items;
+            }
+
             bool flag = !this.pivotCollection.All(matrix => matrix.IsBuilded);
             if (flag == false)
             {
@@ -353,11 +364,6 @@
                 this.pivotCollection.Add(matrix);
 
                 matrix.Builded += this.Matrix_Builded;
-
-                if (MainViewModel.MatrixCache.ContainsKey(matrix.Header) == false)
-                {
-                    MainViewModel.MatrixCache.Add(matrix.Header, matrix.Items);
-                }
 
                 return true;
             }
@@ -463,6 +469,41 @@
             // показывать данные за 8 лет
             const int yearsCount = 8;
 
+            byte matrixId = 1;
+
+            #region Свод по установке или замене счётчиков за последние восемь лет помесячно
+
+            matrixHeader = "Свод по установке или замене индукционных счётчиков за последние восемь лет помесячно";
+            matrixDescription = "* количество индукционных счётчиков";
+
+            matrixDefinition = getMatrixDefinition(matrixHeader);
+
+            if (add(new Matrix(matrixDefinition, (matrixId++).ToString(), matrixHeader, matrixDescription, false, false)
+            {
+                GetRowHeaderValuesFunc = () => Enumerable.Range(curYear - yearsCount + 1, yearsCount).Reverse().Select(i => MatrixHeaderCell.CreateRowHeader(i.ToString(AppSettings.CurrentCulture))),
+                GetColumnHeaderValuesFunc = () => System.Globalization.DateTimeFormatInfo.CurrentInfo.MonthNames.Take(12)
+                    .Select(i => MatrixHeaderCell.CreateColumnHeader(i)),
+                GetDataCellFunc = (row, column) =>
+                {
+                    List<DateOnly> l = changesOfMeters
+                        .SelectMany(i => i.Value)
+                        .Where(i => i.ДатаЗамены != default)
+                        .Where(i => i.СнятЭлектронный == false)
+                        .Select(i => i.ДатаЗамены)
+                        .ToList();
+                    List<DateOnly> l1 = l
+                        .Where(i => i.Year.ToString(AppSettings.CurrentCulture) == row.Header)
+                        .ToList();
+
+                    List<DateOnly> values = l1
+                        .Where(i => string.Equals(i.ToString("MMMM", AppSettings.CurrentCulture), column.Header, AppSettings.StringComparisonMethod))
+                        .ToList();
+                    return values == null || values.Count == 0 ? new MatrixDataCell(string.Empty) : new MatrixDataCell(values.Count);
+                },
+            }) == false)
+                return;
+            #endregion
+
             #region Свод по установке или замене счётчиков за последние восемь лет помесячно
 
             matrixHeader = "Свод по установке или замене счётчиков за последние восемь лет помесячно";
@@ -470,10 +511,8 @@
 
             matrixDefinition = getMatrixDefinition(matrixHeader);
 
-            if (add(new Matrix(matrixDefinition)
+            if (add(new Matrix(matrixDefinition, (matrixId++).ToString(), matrixHeader, matrixDescription, false, false)
             {
-                Header = matrixHeader,
-                Description = matrixDescription,
                 GetRowHeaderValuesFunc = () => Enumerable.Range(curYear - yearsCount + 1, yearsCount).Reverse().Select(i => MatrixHeaderCell.CreateRowHeader(i.ToString(AppSettings.CurrentCulture))),
                 GetColumnHeaderValuesFunc = () => System.Globalization.DateTimeFormatInfo.CurrentInfo.MonthNames.Take(12)
                     .Select(i => MatrixHeaderCell.CreateColumnHeader(i)),
@@ -497,65 +536,64 @@
                 return;
             #endregion
 
-            #region Свод по установке или замене на электронный счётчик за последние восемь лет помесячно
-            matrixHeader = "Свод по установке или замене на электронный счётчик за последние восемь лет помесячно";
-            matrixDescription = "* количество электронных счётчиков";
-
-            matrixDefinition = getMatrixDefinition(matrixHeader);
-
-            if (add(new Matrix(matrixDefinition)
-            {
-                Header = matrixHeader,
-                Description = matrixDescription,
-                GetRowHeaderValuesFunc = () => Enumerable.Range(curYear - yearsCount + 1, yearsCount).Reverse().Select(i => MatrixHeaderCell.CreateRowHeader(i.ToString(AppSettings.CurrentCulture))),
-                GetColumnHeaderValuesFunc = () => System.Globalization.DateTimeFormatInfo.CurrentInfo.MonthNames.Take(12)
-                    .Select(i => MatrixHeaderCell.CreateColumnHeader(i)),
-                GetDataCellFunc = (row, column) =>
-                {
-                    List<DateOnly> l = changesOfMeters
-                        .SelectMany(i => i.Value)
-                        .Where(i => i.ДатаЗамены != default)
-                        .Where(i => i.ЭтоЭлектронный)
-                        .Select(i => i.ДатаЗамены)
-                        .ToList();
-                    List<DateOnly> l1 = l
-                        .Where(i => i.Year.ToString(AppSettings.CurrentCulture) == row.Header)
-                        .ToList();
-
-                    List<DateOnly> values = l1
-                        .Where(i => string.Equals(i.ToString("MMMM", AppSettings.CurrentCulture), column.Header, AppSettings.StringComparisonMethod))
-                        .ToList();
-                    if (values == null || values.Count == 0)
-                    {
-                        return new MatrixDataCell(string.Empty);
-                    }
-                    else
-                    {
-                        return new MatrixDataCell(values.Count);
-                    }
-                },
-            }) == false)
-                return;
-            #endregion
-
             #region Свод по категории счётчика и типу населённого пункта
             matrixHeader = "Свод по категории счётчика\n и типу населённого пункта";
             matrixDescription = "* количество счётчиков";
 
             matrixDefinition = getMatrixDefinition(matrixHeader);
 
-            if (add(new Matrix(matrixDefinition)
+            List<string> sc = new();
+
+            const string one_phase_meter = "1Ф", three_phase_meter = "3Ф", inductive_meter = "индукционный", electronic_meter = "электронный";
+
+            sc.Add(one_phase_meter);
+            sc.Add(three_phase_meter);
+            sc.Add(inductive_meter);
+            sc.Add(electronic_meter);
+            sc.AddRange(allMeters.Select(i => i.ГруппаСчётчикаДляОтчётов).Distinct().ToArray());
+
+            if (add(new Matrix(matrixDefinition, (matrixId++).ToString(), matrixHeader, matrixDescription, false, false)
             {
-                Header = matrixHeader,
-                Description = matrixDescription,
-                GetRowHeaderValuesFunc = () => allMeters.Select(i => i.ГруппаСчётчикаДляОтчётов).Distinct().Select(i => MatrixHeaderCell.CreateRowHeader(i)),
+                GetRowHeaderValuesFunc = () => sc.Select(i => MatrixHeaderCell.CreateRowHeader(i)),
                 GetColumnHeaderValuesFunc = () => allMeters.Select(i => i.ТипНаселённойМестности).Distinct().Select(i => MatrixHeaderCell.CreateColumnHeader(i)),
                 GetDataCellFunc = (row, column) =>
                 {
-                    List<Meter> list = allMeters
-                        .Where(i => i.ГруппаСчётчикаДляОтчётов == row.Header)
-                        .Where(i => i.ТипНаселённойМестности == column.Header)
-                        .ToList();
+                    List<Meter> list;
+
+                    switch (row.Header)
+                    {
+                        case one_phase_meter:
+                            list = allMeters
+                                .Where(i => i.Фаз == 1)
+                                .Where(i => i.ТипНаселённойМестности == column.Header)
+                                .ToList();
+                            break;
+                        case three_phase_meter:
+                            list = allMeters
+                                .Where(i => i.Фаз == 3)
+                                .Where(i => i.ТипНаселённойМестности == column.Header)
+                                .ToList();
+                            break;
+                        case electronic_meter:
+                            list = allMeters
+                                .Where(i => i.Электронный == true)
+                                .Where(i => i.ТипНаселённойМестности == column.Header)
+                                .ToList();
+                            break;
+                        case inductive_meter:
+                            list = allMeters
+                                .Where(i => i.Электронный == false)
+                                .Where(i => i.ТипНаселённойМестности == column.Header)
+                                .ToList();
+                            break;
+                        default:
+                            list = allMeters
+                                .Where(i => i.ГруппаСчётчикаДляОтчётов == row.Header)
+                                .Where(i => i.ТипНаселённойМестности == column.Header)
+                                .ToList();
+                            break;
+                    }
+
                     if (list != null)
                     {
                         int count = list.Count;
@@ -568,6 +606,112 @@
                 },
             }) == false)
                 return;
+            #endregion
+
+            #region Свод по типам счётчиков
+            matrixHeader = "Свод по типам счётчиков";
+            matrixDescription = "* количество счётчиков";
+
+            matrixDefinition = getMatrixDefinition(matrixHeader);
+
+            if (add(new Matrix(matrixDefinition, (matrixId++).ToString(), matrixHeader, matrixDescription, false, false)
+            {
+                GetRowHeaderValuesFunc = () => allMeterTypes.Select(i => MatrixHeaderCell.CreateRowHeader(i.Key.ToString())),
+                GetColumnHeaderValuesFunc = () => new string[] { "Количество", "%" }.Select(i => MatrixHeaderCell.CreateColumnHeader(i)),
+                GetDataCellFunc = (row, column) =>
+                {
+                    SummaryInfoGroupItem group = allMeterTypes.FirstOrDefault(i => i.Key.ToString() == row.Header);
+                    if (column.Header == "%")
+                    {
+                        return new MatrixDataCell(group.Percent);
+                    }
+                    else
+                    {
+                        return new MatrixDataCell(group.Count);
+                    }
+                },
+            }) == false)
+                return;
+            #endregion
+
+            #region Свод по по н.п., мндукционным типам счетчиков и использованию
+            matrixHeader = "Свод индукционных по н.п., преобладающим типам счетчиков и использованию";
+            matrixDescription = "* количество индукционных счётчиков";
+
+            matrixDefinition = getMatrixDefinition(matrixHeader);
+
+            var meterTypePerLocality3 = SummaryInfoHelper.BuildFirst10LargeGroups(
+                allMeters,
+                nameof(Meter.НаселённыйПункт),
+                i => i.Поверен == false && i.Аскуэ == false,
+                countOfLocalities)
+                .Select(sigi => new
+                {
+                    Key = sigi.Key,
+                    CountOfAll = sigi.Count,
+                    CountOfInd = sigi.Value.Where(i => i.Электронный == false).Count(),
+                    MeterTypes = sigi.Value
+                            .Where(i => i.Электронный == false)
+                            .GroupBy(m => m.ТипСчетчика)
+                            .Select(m => new
+                            {
+                                Key = m.Key,
+                                Count = m.Count(),
+                                Meters = m.ToList(),
+                            })
+                            .OrderByDescending(m => m.Count)
+                            .Take(countOfMeterTypePerLocality)
+                            .ToDictionary(i => i.Key, i => i),
+                })
+                .OrderByDescending(i => i.CountOfInd)
+                .ToDictionary(i => i.Key, i => i);
+
+            List<IMatrixHeader> headerCells3 = allMeters
+                .Select(i => i.Использование)
+                .Distinct()
+                .Select(i => MatrixHeaderCell.CreateColumnHeader(i))
+                .ToList();
+            const string lastColumnHeader = "% от всех";
+            headerCells3.Add(MatrixHeaderCell.CreateColumnHeader(lastColumnHeader));
+
+            MatrixWithSelector matrix3 = new MatrixWithSelector()
+            {
+                Parameters = meterTypePerLocality3.Select(i => i.Key),
+                SelectedParameter = meterTypePerLocality3.First().Key,
+                Id = (matrixId++).ToString(),
+                Header = matrixHeader,
+                Description = matrixDescription,
+                GetColumnHeaderValuesFunc = () => headerCells3,
+            };
+            matrix3.GetRowHeaderValuesFunc = () => meterTypePerLocality3[(string)matrix3.SelectedParameter].MeterTypes.Select(meterType => MatrixHeaderCell.CreateRowHeader(meterType.Key, tag: meterType.Value.Count)).ToList();
+            matrix3.GetDataCellFunc = (row, column) =>
+            {
+                var group = meterTypePerLocality3[(string)matrix3.SelectedParameter];
+
+                var list = group.MeterTypes[row.Header];
+                int metersCount = list.Count;
+                List<Meter> meters = list.Meters;
+
+                if (list != null)
+                {
+                    if (column.Header == lastColumnHeader)
+                    {
+                        return new MatrixDataCell($"{100 * metersCount / group.CountOfAll:N1}");
+                    }
+                    else
+                    {
+                        int count = meters.Where(i => i.Использование == column.Header).Count();
+                        return new MatrixDataCell(count);
+                    }
+                }
+                else
+                {
+                    return new MatrixDataCell(string.Empty);
+                }
+            };
+            if (add(matrix3) == false)
+                return;
+
             #endregion
 
             #region Свод по н.п., преобладающим типам счетчиков и кол-ву фаз счетчика
@@ -622,6 +766,7 @@
             {
                 Parameters = meterTypePerLocality.Select(i => i.Key),
                 SelectedParameter = meterTypePerLocality.First().Key,
+                Id = (matrixId++).ToString(),
                 Header = matrixHeader,
                 Description = matrixDescription,
                 GetColumnHeaderValuesFunc = () => headerCells0,
@@ -692,6 +837,7 @@
             {
                 Parameters = meterTypePerLocality2.Select(i => i.Key),
                 SelectedParameter = meterTypePerLocality2.First().Key,
+                Id = (matrixId++).ToString(),
                 Header = matrixHeader,
                 Description = matrixDescription,
                 GetColumnHeaderValuesFunc = () => headerCells2,
@@ -720,35 +866,6 @@
             if (add(matrix2) == false)
                 return;
 
-            #endregion
-
-            #region Свод по типам счётчиков
-            matrixHeader = "Свод по типам счётчиков";
-            matrixDescription = "* количество счётчиков";
-
-            matrixDefinition = getMatrixDefinition(matrixHeader);
-
-            if (add(new Matrix(matrixDefinition)
-            {
-                Header = matrixHeader,
-                Description = matrixDescription,
-                ShowRowsTotal = false,
-                GetRowHeaderValuesFunc = () => allMeterTypes.Select(i => MatrixHeaderCell.CreateRowHeader(i.Key.ToString())),
-                GetColumnHeaderValuesFunc = () => new string[] { "Количество", "%" }.Select(i => MatrixHeaderCell.CreateColumnHeader(i)),
-                GetDataCellFunc = (row, column) =>
-                {
-                    SummaryInfoGroupItem group = allMeterTypes.FirstOrDefault(i => i.Key.ToString() == row.Header);
-                    if (column.Header == "%")
-                    {
-                        return new MatrixDataCell(group.Percent);
-                    }
-                    else
-                    {
-                        return new MatrixDataCell(group.Count);
-                    }
-                },
-            }) == false)
-                return;
             #endregion
 
             #region Свод по категории счётчика, состоянию метрологической поверки и типу населённого пункта
@@ -782,16 +899,13 @@
                     .Distinct()
                     .ToList();
 
-            if (add(new Matrix(matrixDefinition)
+            if (add(new Matrix(matrixDefinition, (matrixId++).ToString(), matrixHeader, matrixDescription, true, true)
             {
-                Header = matrixHeader,
-                Description = matrixDescription,
                 GetRowHeaderValuesFunc = () => new IMatrixHeader[]
                 {
                     MatrixHeaderCell.CreateRowHeader("абонента", children: children5.Select(i => MatrixHeaderCell.CreateRowHeader(i)).ToList()),
                     MatrixHeaderCell.CreateRowHeader("ЭСО", children: children5.Select(i => MatrixHeaderCell.CreateRowHeader(i)).ToList()),
                 },
-                ShowColumnsTotal = true,
                 GetColumnHeaderValuesFunc = () => headerCells51,
                 GetDataCellFunc = (row, column) =>
                 {
@@ -830,12 +944,8 @@
 
             var cityTypes = allMeters.Select(i => i.ТипНаселённойМестности).Distinct();
 
-            if (add(new Matrix(matrixDefinition)
+            if (add(new Matrix(matrixDefinition, (matrixId++).ToString(), matrixHeader, matrixDescription, true, true)
             {
-                Header = matrixHeader,
-                Description = matrixDescription,
-                ShowColumnsTotal = true,
-                ShowRowsTotal = true,
                 GetColumnHeaderValuesFunc = () => new IMatrixHeader[]
                 {
                     MatrixHeaderCell.CreateColumnHeader("Есть АСКУЭ"),
@@ -903,12 +1013,8 @@
                 .Select(i => i.Key.ToString())
                 .Distinct();
 
-            if(add(new Matrix(matrixDefinition)
+            if(add(new Matrix(matrixDefinition, (matrixId++).ToString(), matrixHeader, matrixDescription, true, true)
             {
-                Header = matrixHeader,
-                Description = matrixDescription,
-                ShowColumnsTotal = true,
-                ShowRowsTotal = true,
                 GetColumnHeaderValuesFunc = () => new IMatrixHeader[]
                 {
                     MatrixHeaderCell.CreateColumnHeader("Есть АСКУЭ"),
@@ -959,10 +1065,8 @@
                 MatrixHeaderCell.CreateColumnHeader("нет АСКУЭ", tag: false),
             };
 
-            if (add(new Matrix(matrixDefinition)
+            if (add(new Matrix(matrixDefinition, (matrixId++).ToString(), matrixHeader, matrixDescription, true, true)
             {
-                Header = matrixHeader,
-                Description = matrixDescription,
                 GetRowHeaderValuesFunc = () => citiesWithApartmentBuilding.Select(i => MatrixHeaderCell.CreateRowHeader(i)),
                 GetColumnHeaderValuesFunc = () => headersHasAskue,
                 GetDataCellFunc = (row, column) =>
@@ -991,85 +1095,6 @@
                 return;
             #endregion
 
-            #region Свод по по н.п., мндукционным типам счетчиков и использованию
-            matrixHeader = "Свод индукционных по н.п., преобладающим типам счетчиков и использованию";
-            matrixDescription = "* количество индукционных счётчиков";
-
-            matrixDefinition = getMatrixDefinition(matrixHeader);
-
-            var meterTypePerLocality3 = SummaryInfoHelper.BuildFirst10LargeGroups(
-                allMeters,
-                nameof(Meter.НаселённыйПункт),
-                i => i.Поверен == false && i.Аскуэ == false,
-                countOfLocalities)
-                .Select(sigi => new
-                {
-                    Key = sigi.Key,
-                    CountOfAll = sigi.Count,
-                    CountOfInd = sigi.Value.Where(i => i.Электронный == false).Count(),
-                    MeterTypes = sigi.Value
-                            .Where(i => i.Электронный == false)
-                            .GroupBy(m => m.ТипСчетчика)
-                            .Select(m => new
-                            {
-                                Key = m.Key,
-                                Count = m.Count(),
-                                Meters = m.ToList(),
-                            })
-                            .OrderByDescending(m => m.Count)
-                            .Take(countOfMeterTypePerLocality)
-                            .ToDictionary(i => i.Key, i => i),
-                })
-                .OrderByDescending(i => i.CountOfInd)
-                .ToDictionary(i => i.Key, i => i);
-
-            List<IMatrixHeader> headerCells3 = allMeters
-                .Select(i => i.Использование)
-                .Distinct()
-                .Select(i => MatrixHeaderCell.CreateColumnHeader(i))
-                .ToList();
-            const string lastColumnHeader = "% от всех";
-            headerCells3.Add(MatrixHeaderCell.CreateColumnHeader(lastColumnHeader));
-
-            MatrixWithSelector matrix3 = new MatrixWithSelector()
-            {
-                Parameters = meterTypePerLocality3.Select(i => i.Key),
-                SelectedParameter = meterTypePerLocality3.First().Key,
-                Header = matrixHeader,
-                Description = matrixDescription,
-                GetColumnHeaderValuesFunc = () => headerCells3,
-            };
-            matrix3.GetRowHeaderValuesFunc = () => meterTypePerLocality3[(string)matrix3.SelectedParameter].MeterTypes.Select(meterType => MatrixHeaderCell.CreateRowHeader(meterType.Key, tag: meterType.Value.Count)).ToList();
-            matrix3.GetDataCellFunc = (row, column) =>
-            {
-                var group = meterTypePerLocality3[(string)matrix3.SelectedParameter];
-
-                var list = group.MeterTypes[row.Header];
-                int metersCount = list.Count;
-                List<Meter> meters = list.Meters;
-
-                if (list != null)
-                {
-                    if (column.Header == lastColumnHeader)
-                    {
-                        return new MatrixDataCell($"{100 * metersCount / group.CountOfAll:N1}");
-                    }
-                    else
-                    {
-                        int count = meters.Where(i => i.Использование == column.Header).Count();
-                        return new MatrixDataCell(count);
-                    }
-                }
-                else
-                {
-                    return new MatrixDataCell(string.Empty);
-                }
-            };
-            if (add(matrix3) == false)
-                return;
-
-            #endregion
-
             #region Свод по категории счётчика и сельсовету
             matrixHeader = "Свод по категории счётчика и сельсовету";
             matrixDescription = "* количество счётчиков";
@@ -1088,10 +1113,8 @@
                 MatrixHeaderCell.CreateColumnHeader("не поверен", children: childsHeaderCells1.Select(i => MatrixHeaderCell.CreateColumnHeader(i)).ToList()),
             };
 
-            if (add(new Matrix(matrixDefinition)
+            if (add(new Matrix(matrixDefinition, (matrixId++).ToString(), matrixHeader, matrixDescription, true, true)
             {
-                Header = matrixHeader,
-                Description = matrixDescription,
                 GetRowHeaderValuesFunc = () => allMeters.Select(i => i.СельскийСовет).Distinct().Select(i => MatrixHeaderCell.CreateColumnHeader(i)),
                 GetColumnHeaderValuesFunc = () => headerCells1,
                 GetDataCellFunc = (row, column) =>
@@ -1121,10 +1144,8 @@
 
             matrixDefinition = getMatrixDefinition(matrixHeader);
 
-            if (add(new Matrix(matrixDefinition)
+            if (add(new Matrix(matrixDefinition, (matrixId++).ToString(), matrixHeader, matrixDescription, true, true)
             {
-                Header = matrixHeader,
-                Description = matrixDescription,
                 GetRowHeaderValuesFunc = () => metersNotSplit.Select(i => i.СельскийСовет).Distinct().Select(i => MatrixHeaderCell.CreateRowHeader(i)),
                 GetColumnHeaderValuesFunc = () => metersNotSplit.Select(i => i.ОбходаНеБыло).Distinct().Select(i => MatrixHeaderCell.CreateColumnHeader(i)),
                 GetDataCellFunc = (row, column) =>
@@ -1157,10 +1178,8 @@
             const string col2Header = "Кол-во не\nпосещ. > года"; // noVisitMoreThanOneYearPerLocality
             const string col3Header = "Кол-во посещ.\nза год"; // visitInCurrentYearPerLocality
             const string strToolTip = "% от общего количества счётчиков в н.п.";
-            if (add(new Matrix(matrixDefinition)
+            if (add(new Matrix(matrixDefinition, (matrixId++).ToString(), matrixHeader, matrixDescription, true, true)
             {
-                Header = matrixHeader,
-                Description = matrixDescription,
                 GetRowHeaderValuesFunc = () => noVisitMoreThanOneYearPerLocality.Take(10).Select(i => MatrixHeaderCell.CreateRowHeader(i.Key.ToString())),
                 GetColumnHeaderValuesFunc = () => new string[] { col1Header, col2Header, col3Header }.Select(i => MatrixHeaderCell.CreateColumnHeader(i)),
                 GetDataCellFunc = (row, column) =>
@@ -1193,10 +1212,8 @@
 
             matrixDefinition = getMatrixDefinition(matrixHeader);
 
-            if (add(new Matrix(matrixDefinition)
+            if (add(new Matrix(matrixDefinition, (matrixId++).ToString(), matrixHeader, matrixDescription, true, true)
             {
-                Header = matrixHeader,
-                Description = matrixDescription,
                 GetRowHeaderValuesFunc = () => allMeterTypes.Select(i => MatrixHeaderCell.CreateRowHeader(i.Key.ToString())),
                 GetColumnHeaderValuesFunc = () => allMeters.Select(i => i.ГодПоверкиДляОтчётов).Distinct().OrderBy(i => i).Select(i => MatrixHeaderCell.CreateColumnHeader(i)),
                 GetDataCellFunc = (row, column) =>
@@ -1222,10 +1239,8 @@
 
             matrixDefinition = getMatrixDefinition(matrixHeader);
 
-            if (add(new Matrix(matrixDefinition)
+            if (add(new Matrix(matrixDefinition, (matrixId++).ToString(), matrixHeader, matrixDescription, true, true)
             {
-                Header = matrixHeader,
-                Description = matrixDescription,
                 GetRowHeaderValuesFunc = () => electronicMeterTypes.Select(i => MatrixHeaderCell.CreateRowHeader(i.Key.ToString())),
                 GetColumnHeaderValuesFunc = () => allMeters.Select(i => i.ГодПоверкиДляОтчётов).Distinct().OrderBy(i => i).Select(i => MatrixHeaderCell.CreateColumnHeader(i)),
                 GetDataCellFunc = (row, column) =>
@@ -1251,11 +1266,8 @@
 
             matrixDefinition = getMatrixDefinition(matrixHeader);
 
-            if (add(new Matrix(matrixDefinition)
+            if (add(new Matrix(matrixDefinition, (matrixId++).ToString(), matrixHeader, matrixDescription, true, false)
             {
-                Header = matrixHeader,
-                Description = matrixDescription,
-                ShowRowsTotal = false,
                 GetRowHeaderValuesFunc = () => meterPerLocality.Select(i => MatrixHeaderCell.CreateRowHeader(i.Key.ToString())),
                 GetColumnHeaderValuesFunc = () => new string[] { "Количество\nнеповеренных", "% от количества в н.п." }.Select(i => MatrixHeaderCell.CreateColumnHeader(i)),
                 GetDataCellFunc = (row, column) =>
@@ -1288,10 +1300,8 @@
 
             matrixDefinition = getMatrixDefinition(matrixHeader);
 
-            if (add(new Matrix(matrixDefinition)
+            if (add(new Matrix(matrixDefinition, (matrixId++).ToString(), matrixHeader, matrixDescription, true, true)
             {
-                Header = matrixHeader,
-                Description = matrixDescription,
                 GetRowHeaderValuesFunc = () => meterPerLocality.Select(i => MatrixHeaderCell.CreateRowHeader(i.Key.ToString())),
                 GetColumnHeaderValuesFunc = () => allMeters.Select(i => i.Принцип).Distinct().Select(i => MatrixHeaderCell.CreateColumnHeader(i)),
                 GetDataCellFunc = (row, column) =>
@@ -1318,10 +1328,8 @@
 
             matrixDefinition = getMatrixDefinition(matrixHeader);
 
-            if (add(new Matrix(matrixDefinition)
+            if (add(new Matrix(matrixDefinition, (matrixId++).ToString(), matrixHeader, matrixDescription, true, true)
             {
-                Header = matrixHeader,
-                Description = matrixDescription,
                 GetRowHeaderValuesFunc = () => allMeters.Select(i => i.Подстанция).Distinct().OrderBy(i => i).Select(i => MatrixHeaderCell.CreateRowHeader(i)),
                 GetColumnHeaderValuesFunc = () => allMeters
                     .Select(i => i.Принцип).Distinct()
@@ -1347,10 +1355,8 @@
 
             matrixDefinition = getMatrixDefinition(matrixHeader);
 
-            if (add(new Matrix()
+            if (add(new Matrix(matrixDefinition, (matrixId++).ToString(), matrixHeader, matrixDescription, true, true)
             {
-                Header = matrixHeader,
-                Description = matrixDescription,
                 GetRowHeaderValuesFunc = () => allMeterTypes.Select(i => MatrixHeaderCell.CreateRowHeader(i.Key.ToString())),
                 GetColumnHeaderValuesFunc = () => Enumerable.Range(curYear, yearsCount + 1).Select(i => MatrixHeaderCell.CreateColumnHeader(i.ToString(AppSettings.CurrentCulture))),
                 GetDataCellFunc = (row, column) =>
