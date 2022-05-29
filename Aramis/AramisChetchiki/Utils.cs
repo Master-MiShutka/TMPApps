@@ -181,7 +181,6 @@
                 new HierarchicalItem() { Name = None, Command = CommandDoSort },
             };
 
-
         public static IList<HierarchicalItem> SortFields
         {
             get
