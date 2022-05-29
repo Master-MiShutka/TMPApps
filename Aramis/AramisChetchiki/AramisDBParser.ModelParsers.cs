@@ -314,7 +314,7 @@
         /// получение замен счётчиков
         /// </summary>
         /// <returns></returns>
-        private async Task<IList<ChangeOfMeter>> GetChangesOfMetersAsync()
+        private IList<ChangeOfMeter> GetChangesOfMeters()
         {
             string taskName = "таблица замен счётчиков";
             Model.WorkTask workTask = new(taskName);
@@ -327,7 +327,7 @@
             workTask.IsIndeterminate = true;
 
             ChangeOfMeter[] result;
-            result = await this.DeserializeDataAsync<ChangeOfMeter>(fileName);
+            result = this.DeserializeDataAsync<ChangeOfMeter>(fileName).Result;
             if (result != null)
             {
                 List<ChangeOfMeter> data = new(result);
@@ -411,7 +411,7 @@
 
                 workTask.UpdateStatus($"сохранение в кэш...");
                 workTask.IsIndeterminate = true;
-                await this.SerializeDataAsync<ChangeOfMeter>(changes.ToArray(), fileName);
+                _ = this.SerializeDataAsync<ChangeOfMeter>(changes.ToArray(), fileName);
 
                 // fix
                 workTask.UpdateUI(totalRows, totalRows);
@@ -452,6 +452,7 @@
                 ICollection<KARTSCH> old_meter = this.GetDictionaryValue(this.dictionaryKARTSCHRemoved, assmena.ЛИЦ_СЧЕТ);
 
                 change.ТипСнятогоСчетчика = meterType == null ? NOTFOUNDED : meterType.NAME;
+                change.СнятЭлектронный = meterType == null ? false : meterType.TIP == "Э";
 
                 if (meterInfos != null && meterInfos.Count != 0)
                 {
@@ -462,7 +463,7 @@
                     if (meterInfos1 != null)
                     {
                         change.ТипУстановленногоСчетчика = meterInfos1.NAME;
-                        change.ЭтоЭлектронный = meterInfos1.TIP == "Э";
+                        change.УстановленЭлектронный = meterInfos1.TIP == "Э";
 
                         change.РазрядностьУстановленного = (byte)meterInfos1.ЗНАК;
                     }
@@ -887,7 +888,7 @@
                 ERRSUM = record.GetValue<decimal?>("ERRSUM"),
                 ERRSUMN = record.GetValue<decimal?>("ERRSUMN"),
                 SUMMA_KN = record.GetValue<decimal?>("SUMMA_KN"),
-                SUMMA_KC = record.GetValue<decimal?>("SUMMA_KC"),
+                SUMMA_KC = record.GetValue<int?>("SUMMA_KC"),
                 КОД_КОН = record.GetString("КОД_КОН"),
                 СРЕДНЕЕ = record.GetValue<int?>("СРЕДНЕЕ"),
                 МЕСЯЦ = record.GetValue<int?>("МЕСЯЦ"),

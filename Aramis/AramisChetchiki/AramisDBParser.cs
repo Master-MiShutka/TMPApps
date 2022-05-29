@@ -240,9 +240,9 @@
 
                 // просмотр замен счётчиков
                 Task taskGetChangesOfMeters = taskPrepareTables.ContinueWith(
-                    async t =>
+                    t =>
                     {
-                        IList<ChangeOfMeter> result = await this.GetChangesOfMetersAsync();
+                        IList<ChangeOfMeter> result = this.GetChangesOfMeters();
 
                         this.data.ChangesOfMeters = new();
 
@@ -387,16 +387,28 @@
             tableName = "справочник снятых счётчиков";
             init(tableName);
             this.dictionaryKARTSCHRemoved = new();
-            IReadOnlyCollection<KARTSCH> tableKARTTSCHRemoved = await this.ParseAramisDbTableAsync<KARTSCH>(tableName, Path.Combine(this.pathDBFC, "KARTSCH.DBF"), this.ParseKARTSCHRecord, removeTaskAfterCompleted: true, progressCallback: setChildProgress);
-            foreach (KARTSCH item in tableKARTTSCHRemoved)
+            IReadOnlyCollection<KARTSCH> tableKARTTSCHRemoved = null;
+            if (System.IO.File.Exists(Path.Combine(this.pathDBFC, "KARTSCH.DBF")) == true)
             {
-                if (this.dictionaryKARTSCHRemoved.ContainsKey(item.LIC_SCH))
+                tableKARTTSCHRemoved = await this.ParseAramisDbTableAsync<KARTSCH>(tableName, Path.Combine(this.pathDBFC, "KARTSCH.DBF"), this.ParseKARTSCHRecord, removeTaskAfterCompleted: true, progressCallback: setChildProgress);
+            }
+            else
+            {
+                this.errors.Add($"Таблица 'KARTSCH.DBF', хранящая снятые счётчики, не найдена.");
+            }
+
+            if (tableKARTTSCHRemoved != null)
+            {
+                foreach (KARTSCH item in tableKARTTSCHRemoved)
                 {
-                    this.dictionaryKARTSCHRemoved[item.LIC_SCH].Add(item);
-                }
-                else
-                {
-                    this.dictionaryKARTSCHRemoved.Add(item.LIC_SCH, new List<KARTSCH>(new[] { item }));
+                    if (this.dictionaryKARTSCHRemoved.ContainsKey(item.LIC_SCH))
+                    {
+                        this.dictionaryKARTSCHRemoved[item.LIC_SCH].Add(item);
+                    }
+                    else
+                    {
+                        this.dictionaryKARTSCHRemoved.Add(item.LIC_SCH, new List<KARTSCH>(new[] { item }));
+                    }
                 }
             }
 
