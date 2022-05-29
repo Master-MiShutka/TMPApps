@@ -34,8 +34,13 @@
         {
             this.collectionView = source;
             this.filteredEventArgs = new FilteredEventArgs(source);
-            this.itemProperties = (IItemProperties)source == null ? null
+            this.itemProperties = (IItemProperties)source == null
+                ? new ReadOnlyCollection<ItemPropertyInfo>(new ItemPropertyInfo[] { })
                 : ((IItemProperties)source).ItemProperties;
+
+            if (this.itemProperties == null)
+                this.itemProperties = new ReadOnlyCollection<ItemPropertyInfo>(new ItemPropertyInfo[] { });
+
             this.filterFunction = new Predicate<object>(this.FilterFunction);
             this.filters = new Dictionary<string, FiltersCollection>();
         }
