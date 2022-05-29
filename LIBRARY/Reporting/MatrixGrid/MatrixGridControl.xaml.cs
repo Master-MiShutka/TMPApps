@@ -53,24 +53,6 @@
 
         #region Dependency properties
 
-        public bool ShowRowsTotal
-        {
-            get => (bool)this.GetValue(ShowRowsTotalProperty);
-            set => this.SetValue(ShowRowsTotalProperty, value);
-        }
-
-        public static readonly DependencyProperty ShowRowsTotalProperty =
-            DependencyProperty.Register(nameof(ShowRowsTotal), typeof(bool), typeof(MatrixGridControl), new PropertyMetadata(true));
-
-        public bool ShowColumnsTotal
-        {
-            get => (bool)this.GetValue(ShowColumnsTotalProperty);
-            set => this.SetValue(ShowColumnsTotalProperty, value);
-        }
-
-        public static readonly DependencyProperty ShowColumnsTotalProperty =
-            DependencyProperty.Register(nameof(ShowColumnsTotal), typeof(bool), typeof(MatrixGridControl), new PropertyMetadata(true));
-
         public DataTemplate EmptyHeaderTemplate
         {
             get => (DataTemplate)this.GetValue(EmptyHeaderTemplateProperty);
@@ -102,13 +84,13 @@
         {
             MatrixGridControl target = (MatrixGridControl)d;
 
-            void handlerReady(object s, System.ComponentModel.PropertyChangedEventArgs pcea)
+            void handlerReady(object s, MatrixBuildedEventArgs mbea)
             {
                 target.state = State.Ready;
                 target.UpdateStates(true);
             }
 
-            void handlerBuilding(object s, System.ComponentModel.PropertyChangedEventArgs pcea)
+            void handlerBuilding(object s, MatrixEventArgs mea)
             {
                 target.state = State.Building;
                 target.UpdateStates(true);
@@ -122,16 +104,6 @@
 
             if (e.NewValue != null && e.NewValue is IMatrix newmatrix)
             {
-                if (newmatrix.ShowRowsTotal.HasValue == false)
-                {
-                    newmatrix.ShowRowsTotal = target.ShowRowsTotal;
-                }
-
-                if (newmatrix.ShowColumnsTotal.HasValue == false)
-                {
-                    newmatrix.ShowColumnsTotal = target.ShowColumnsTotal;
-                }
-
                 newmatrix.Builded += handlerReady;
                 newmatrix.Building += handlerBuilding;
 

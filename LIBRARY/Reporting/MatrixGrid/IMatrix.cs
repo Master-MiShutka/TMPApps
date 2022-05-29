@@ -1,22 +1,19 @@
 ﻿namespace TMP.UI.Controls.WPF.Reporting.MatrixGrid
 {
-    using System;
     using System.Collections.Generic;
-    using System.Collections.ObjectModel;
-    using System.ComponentModel;
-    using System.Linq;
-    using System.Text;
     using System.Windows.Input;
 
     public interface IMatrix
     {
+        string Id { get; set; }
+
         bool IsBuilded { get; }
 
         bool IsBuilding { get; }
 
-        event PropertyChangedEventHandler Builded;
+        event MatrixBuildedEventHandler Builded;
 
-        event PropertyChangedEventHandler Building;
+        event MatrixEventHandler Building;
 
         IList<IMatrixCell> Items { get; }
 
@@ -34,8 +31,8 @@
 
         ICommand CommandCopyToClipboard { get; }
 
-        bool? ShowColumnsTotal { get; set; }
+        bool ShowColumnsTotal { get; set; }
 
-        bool? ShowRowsTotal { get; set; }
+        bool ShowRowsTotal { get; set; }
     }
 }

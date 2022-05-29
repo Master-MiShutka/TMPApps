@@ -5,6 +5,7 @@
     using System.Collections.ObjectModel;
     using System.ComponentModel;
     using System.Linq;
+    using System.Threading;
     using System.Threading.Tasks;
     using System.Windows;
     using System.Windows.Input;
@@ -24,8 +25,8 @@
         private IMatrixCell[,] cells;
         private Size size = Size.Empty;
 
-        private string header;
-        private string description;
+        private string header = string.Empty;
+        private string description = string.Empty;
 
         /// <summary>
         /// Ширина заголовков строк и столбцов
@@ -41,9 +42,11 @@
         private IList<IMatrixHeader> columnHeaders;
 
         private bool isBuilded = false;
-        private bool isBuilding;
-        private bool? showColumnsTotal;
-        private bool? showRowsTotal;
+        private bool isBuilding = false;
+        private bool showColumnsTotal = true;
+        private bool showRowsTotal = true;
+
+        CancellationTokenSource cancellationTokenSource;
 
         #endregion // Fields
 
@@ -126,6 +129,16 @@
             this.CommandRefresh = new DelegateCommand(this.Build, () => this.HasData);
         }
 
+        protected MatrixBase(string id, string header, string description, bool showColumnsTotal, bool showRowsTotal)
+            : this()
+        {
+            this.Id = id;
+            this.header = header;
+            this.description = description;
+            this.showColumnsTotal = showColumnsTotal;
+            this.showRowsTotal = showRowsTotal;
+        }
+
         #endregion // Constructor
 
         #region Abstract Methods
@@ -156,6 +169,11 @@
         #region Properties
 
         /// <summary>
+        /// Идентификатор
+        /// </summary>
+        public string Id { get; set; }
+
+        /// <summary>
         /// Построена ли матрица
         /// </summary>
         public bool HasData => this.items != null;
@@ -167,7 +185,7 @@
         {
             get
             {
-                if (this.items == null)
+                if (this.items == null && this.isBuilding == false)
                 {
                     this.Build();
                 }
@@ -179,9 +197,9 @@
             {
                 if (this.SetProperty(ref this.items, value))
                 {
-                    this.size = new Size(this.items.Max(i => i.GridRow), this.items.Max(i => i.GridColumn));
+                    this.size = new Size(this.items.Max(i => i.GridColumn), this.items.Max(i => i.GridRow));
 
-                    this.cells = new IMatrixCell[(int)this.size.Height, (int)this.size.Width];
+                    this.cells = new IMatrixCell[(int)this.size.Height + 1, (int)this.size.Width + 1];
                     foreach (var cell in this.items)
                     {
                         this.cells[cell.GridRow, cell.GridColumn] = cell;
@@ -192,6 +210,9 @@
                     this.RaisePropertyChanged(nameof(this.RowHeadersCount));
                     this.RaisePropertyChanged(nameof(this.ColumnHeadersCount));
                     this.RaisePropertyChanged(nameof(this.Cells));
+
+                    this.IsBuilded = true;
+                    this.Builded?.Invoke(this, new MatrixBuildedEventArgs(this.items, this.cells));
                 }
             }
         }
@@ -244,29 +265,63 @@
         /// <summary>
         /// Событие для оповещения о завершении построения матрицы
         /// </summary>
-        public event PropertyChangedEventHandler Builded;
+        public event MatrixBuildedEventHandler Builded;
 
         /// <summary>
         /// Событие для оповещения о начале построения матрицы
         /// </summary>
-        public event PropertyChangedEventHandler Building;
+        public event MatrixEventHandler Building;
 
         /// <summary>
         /// Флаг, указывающий готова ли матрица к отображению
         /// </summary>
         public bool IsBuilded { get => this.isBuilded; private set => this.SetProperty(ref this.isBuilded, value); }
 
-        public bool IsBuilding { get => this.isBuilding; private set => this.SetProperty(ref this.isBuilding, value); }
+        public bool IsBuilding
+        {
+            get => this.isBuilding;
+            private set => this.SetProperty(ref this.isBuilding, value);
+        }
 
         /// <summary>
         /// Отображать ли итоги по столбцам
         /// </summary>
-        public bool? ShowColumnsTotal { get => this.showColumnsTotal; set => this.SetProperty(ref this.showColumnsTotal, value); }
+        public bool ShowColumnsTotal
+        {
+            get => this.showColumnsTotal;
+            set
+            {
+                if (this.isBuilding)
+                {
+                    this.cancellationTokenSource.Cancel();
+                }
+
+                if (this.SetProperty(ref this.showColumnsTotal, value))
+                {
+                    this.Build();
+                }
+            }
+        }
 
         /// <summary>
         /// Отображать ли итоги по строкам
         /// </summary>
-        public bool? ShowRowsTotal { get => this.showRowsTotal; set => this.SetProperty(ref this.showRowsTotal, value); }
+        public bool ShowRowsTotal
+        {
+            get => this.showRowsTotal;
+            set
+            {
+                if (this.isBuilding)
+                {
+                    this.cancellationTokenSource.Cancel();
+                }
+
+                if (this.SetProperty(ref this.showRowsTotal, value))
+                {
+                    this.Build();
+                }
+            }
+        }
 
         #endregion // Properties
 
@@ -287,14 +342,50 @@
         /// </summary>
         protected void Build()
         {
-            var task = System.Threading.Tasks.Task.Factory.StartNew(() =>
+            if (this.isBuilding)
             {
-                this.items = this.GetMatrixCells();
-            })
-                .ContinueWith(t =>
+                if (this.cancellationTokenSource != null && this.cancellationTokenSource.IsCancellationRequested == false)
                 {
-                    this.RaisePropertiesChanged();
-                });
+                    this.cancellationTokenSource.Token.Register(this.DoBuild);
+                    this.cancellationTokenSource.Cancel();
+                }
+
+                return;
+            }
+            else
+            {
+                this.DoBuild();
+            }
+        }
+
+        private void DoBuild()
+        {
+            this.cancellationTokenSource = new CancellationTokenSource();
+
+            var task = Task.Run(() =>
+            {
+                if (string.IsNullOrEmpty(this.Id))
+                {
+                    string header = this.Header.Replace(' ', '_');
+                    System.Threading.Thread.CurrentThread.Name = $"Build_matrix_{header}";
+                }
+                else
+                {
+                    System.Threading.Thread.CurrentThread.Name = $"Build_matrix_{this.Id}";
+                }
+
+                this.items = this.GetMatrixCells();
+            }, this.cancellationTokenSource.Token);
+
+            task.ContinueWith(t =>
+            {
+                this.isBuilding = false;
+            }, TaskContinuationOptions.OnlyOnCanceled);
+
+            task.ContinueWith(t =>
+            {
+                this.RaisePropertiesChanged();
+            }, TaskContinuationOptions.NotOnCanceled);
         }
 
         /// <summary>
@@ -304,7 +395,7 @@
         private List<IMatrixCell> GetMatrixCells()
         {
             this.IsBuilding = true;
-            this.Building?.Invoke(this, null);
+            this.Building?.Invoke(this, new MatrixEventArgs(this));
             List<IMatrixCell> matrixItems = new List<IMatrixCell>();
 
             // Получение значений заголовков строк и столбцов
@@ -322,19 +413,19 @@
             this.rowHeaders = this.BuildFlatHeadersList(rowHeaderValues);
             this.columnHeaders = this.BuildFlatHeadersList(columnHeaderValues);
 
-            // высота и ширина блока с данными
+            // высота (строки) и ширина (столбцы) блока с данными
             int dataBlockHeight = this.rowHeaders.Count(),
                 dataBlockWidth = this.columnHeaders.Count();
 
             int matrixHeight = this.columnHeadersRowSpan + dataBlockHeight;
             int matrixWidth = this.rowHeadersColumnSpan + dataBlockWidth;
 
-            if (this.ShowColumnsTotal.GetValueOrDefault())
+            if (this.ShowColumnsTotal)
             {
                 matrixHeight++;
             }
 
-            if (this.ShowRowsTotal.GetValueOrDefault())
+            if (this.ShowRowsTotal)
             {
                 matrixWidth++;
             }
@@ -348,6 +439,10 @@
             Action<IMatrixCell> addCell = (cell) =>
             {
                 matrixItems.Add(cell);
+
+                if (this.cancellationTokenSource.IsCancellationRequested)
+                    return;
+
                 this.cells[cell.GridRow, cell.GridColumn] = cell;
             };
 
@@ -361,6 +456,9 @@
             // добавление ячеек с данными
             this.CreateCells(matrixItems, rowHeaderValues, columnHeaderValues);
 
+            if (this.cancellationTokenSource.IsCancellationRequested)
+                return null;
+
             Func<object, int> getInt = (value) =>
             {
                 int result = 0;
@@ -373,50 +471,56 @@
                 return result;
             };
 
-            if (this.ShowRowsTotal.GetValueOrDefault())
+            if (this.ShowRowsTotal)
             {
                 addCell(MatrixHeaderCell.CreateColumnSummaryHeader("Итого", row: 0, rowSpan: this.columnHeadersRowSpan, column: this.rowHeadersColumnSpan + this.columnHeaders.Count));
 
                 int summ = 0;
                 for (int rowIndex = this.columnHeadersRowSpan; rowIndex < this.rowHeaders.Count + this.columnHeadersRowSpan; rowIndex++)
                 {
-                    summ = matrixItems.
-                    Where(i => i.GridRow == rowIndex)
-                    .Where(i => i.GridColumn >= this.rowHeadersColumnSpan)
-                    .Where(i => i.CellType == MatrixCellType.DataCell)
-                    .Cast<IMatrixDataCell>()
-                    .Sum(i => getInt(i.Value));
+                    summ = matrixItems
+                        .Where(i => i.GridRow == rowIndex)
+                        .Where(i => i.GridColumn >= this.rowHeadersColumnSpan)
+                        .Where(i => i.CellType == MatrixCellType.DataCell)
+                        .Cast<IMatrixDataCell>()
+                        .Sum(i => getInt(i.Value));
 
                     addCell(MatrixSummaryCell.CreateRowSummary(summ, row: rowIndex, column: this.rowHeadersColumnSpan + this.columnHeaders.Count));
+
+                    if (this.cancellationTokenSource.IsCancellationRequested)
+                        return null;
                 }
             }
 
-            if (this.ShowColumnsTotal.GetValueOrDefault())
+            if (this.ShowColumnsTotal)
             {
                 addCell(MatrixHeaderCell.CreateRowSummaryHeader("Итого", row: this.columnHeadersRowSpan + this.rowHeaders.Count, column: 0, columnSpan: this.rowHeadersColumnSpan));
 
                 int summ = 0;
                 for (int columnIndex = this.rowHeadersColumnSpan; columnIndex < this.columnHeaders.Count + this.rowHeadersColumnSpan; columnIndex++)
                 {
-                    summ = matrixItems.
-                    Where(i => i.GridColumn == columnIndex)
-                    .Where(i => i.GridRow >= this.columnHeadersRowSpan)
-                    .Where(i => i.CellType == MatrixCellType.DataCell)
-                    .Cast<IMatrixDataCell>()
-                    .Sum(i => getInt(i.Value));
+                    summ = matrixItems
+                        .Where(i => i.GridColumn == columnIndex)
+                        .Where(i => i.GridRow >= this.columnHeadersRowSpan)
+                        .Where(i => i.CellType == MatrixCellType.DataCell)
+                        .Cast<IMatrixDataCell>()
+                        .Sum(i => getInt(i.Value));
 
                     addCell(MatrixSummaryCell.CreateColumnSummary(summ, row: this.columnHeadersRowSpan + this.rowHeaders.Count, column: columnIndex));
+
+                    if (this.cancellationTokenSource.IsCancellationRequested)
+                        return null;
                 }
             }
 
-            if (this.ShowRowsTotal.GetValueOrDefault() & this.ShowColumnsTotal.GetValueOrDefault())
+            if (this.ShowRowsTotal & this.ShowColumnsTotal)
             {
-                int summ = matrixItems.
-                Where(i => i.GridColumn == this.rowHeadersColumnSpan + this.columnHeaders.Count)
-                .Where(i => (i.GridRow >= this.columnHeadersRowSpan) & (i.GridRow != (this.columnHeadersRowSpan + this.rowHeaders.Count)))
-                .Where(i => i.CellType == MatrixCellType.SummaryCell)
-                .Cast<IMatrixSummaryCell>()
-                .Sum(i => i.ValueToInt());
+                int summ = matrixItems
+                    .Where(i => i.GridColumn == this.rowHeadersColumnSpan + this.columnHeaders.Count)
+                    .Where(i => (i.GridRow >= this.columnHeadersRowSpan) & (i.GridRow != (this.columnHeadersRowSpan + this.rowHeaders.Count)))
+                    .Where(i => i.CellType == MatrixCellType.SummaryCell)
+                    .Cast<IMatrixSummaryCell>()
+                    .Sum(i => i.ValueToInt());
 
                 addCell(MatrixSummaryCell.CreateTotalSummary(summ, row: this.columnHeadersRowSpan + this.rowHeaders.Count, column: this.rowHeadersColumnSpan + this.columnHeaders.Count));
             }
@@ -424,7 +528,7 @@
             // оповещение о готовности
             this.IsBuilded = true;
             this.IsBuilding = false;
-            this.Builded?.Invoke(this, null);
+            this.Builded?.Invoke(this, new MatrixBuildedEventArgs(matrixItems, this.cells));
 
             return matrixItems;
         }

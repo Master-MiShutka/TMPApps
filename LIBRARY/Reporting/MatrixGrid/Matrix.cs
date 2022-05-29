@@ -8,8 +8,14 @@
     {
         public Matrix() { }
 
-        public Matrix(IList<IMatrixCell> matrixCells)
-            : base()
+        public Matrix(
+            IList<IMatrixCell> matrixCells,
+            string id,
+            string header,
+            string description,
+            bool showColumnsTotal,
+            bool showRowsTotal)
+            : base(id, header, description, showColumnsTotal, showRowsTotal)
         {
             if (matrixCells == null)
                 return;

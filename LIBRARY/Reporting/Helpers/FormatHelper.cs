@@ -400,7 +400,7 @@
             #endregion
 
             #region данные
-            int dataRowsMaxGridRow = matrix.ShowColumnsTotal.GetValueOrDefault() ? matrixHeight - 1 : matrixHeight;
+            int dataRowsMaxGridRow = matrix.ShowColumnsTotal ? matrixHeight - 1 : matrixHeight;
             System.Windows.Documents.TableRowGroup dataRowGroup = new System.Windows.Documents.TableRowGroup();
             for (int rowIndex = matrixColumnHeadersHeight; rowIndex < dataRowsMaxGridRow; rowIndex++)
             {
@@ -448,7 +448,7 @@
 
             #region строка итогов
 
-            if (matrix.ShowColumnsTotal.GetValueOrDefault())
+            if (matrix.ShowColumnsTotal)
             {
                 System.Windows.Documents.TableRowGroup totalRowGroup = new System.Windows.Documents.TableRowGroup();
                 System.Windows.Documents.TableRow row = new System.Windows.Documents.TableRow();
