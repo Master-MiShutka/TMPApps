@@ -30,17 +30,16 @@
                                                                Property=Control.Background}"
                         BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}"
                         BorderThickness="1"
-                        CornerRadius="3">
+                        CornerRadius="0">
                         <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto" />
                                 <ColumnDefinition Width="Auto" />
                                 <ColumnDefinition Width="Auto" />
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
                             <StackPanel
-                                Grid.Column="1"
+                                Grid.Column="0"
                                 Margin="5,0"
                                 Orientation="Horizontal">
                                 <TextBlock>
@@ -60,11 +59,11 @@
                                 </TextBlock>
                                 <Separator HorizontalAlignment="Right" Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
                             </StackPanel>
-                            <Border Grid.Column="2" Margin="5,0,7,0">
+                            <Border Grid.Column="1" Margin="0,0,5,0">
                                 <StackPanel Orientation="Horizontal">
                                     <RepeatButton
                                         Margin="1,2,1,2"
-                                        Padding="0"
+                                        Padding="2,0"
                                         Command="{Binding MoveToFirstCommand}"
                                         ToolTip="Выбрать первую запись">
                                         <Path
@@ -75,7 +74,7 @@
                                     </RepeatButton>
                                     <RepeatButton
                                         Margin="1,2,1,2"
-                                        Padding="0"
+                                        Padding="2,0"
                                         Command="{Binding MoveToPreviousCommand}"
                                         ToolTip="Выбрать предыдущую запись">
                                         <Path
@@ -106,7 +105,7 @@
                                     </Border>
                                     <RepeatButton
                                         Margin="2"
-                                        Padding="0"
+                                        Padding="2,0"
                                         Command="{Binding MoveToNextCommand}"
                                         ToolTip="Выбрать следующую запись">
                                         <Path
@@ -116,7 +115,7 @@
                                     </RepeatButton>
                                     <RepeatButton
                                         Margin="2"
-                                        Padding="0"
+                                        Padding="2,0"
                                         Command="{Binding MoveToLastCommand}"
                                         ToolTip="Выбрать последнюю запись">
                                         <Path
@@ -131,13 +130,13 @@
                                 HorizontalAlignment="Right"
                                 Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
                             <Border
-                                Grid.Column="4"
+                                Grid.Column="3"
                                 Margin="5,0"
                                 HorizontalAlignment="Center">
                                 <StackPanel Orientation="Horizontal">
                                     <RepeatButton
                                         Margin="2"
-                                        Padding="0"
+                                        Padding="2,0"
                                         Command="{Binding MoveToFirstPageCommand}"
                                         ToolTip="Первая страница данных">
                                         <Path
@@ -147,7 +146,7 @@
                                     </RepeatButton>
                                     <RepeatButton
                                         Margin="2"
-                                        Padding="0"
+                                        Padding="2,0"
                                         Command="{Binding MoveToPreviousPageCommand}"
                                         ToolTip="Предыдущая страница данных">
                                         <Path
@@ -178,7 +177,7 @@
                                     </Border>
                                     <RepeatButton
                                         Margin="2"
-                                        Padding="0"
+                                        Padding="2,0"
                                         Command="{Binding MoveToNextPageCommand}"
                                         ToolTip="Следующая страница данных">
                                         <Path
@@ -188,7 +187,7 @@
                                     </RepeatButton>
                                     <RepeatButton
                                         Margin="2"
-                                        Padding="0"
+                                        Padding="2,0"
                                         Command="{Binding MoveToLastPageCommand}"
                                         ToolTip="Последняя страница данных">
                                         <Path
@@ -205,6 +204,7 @@
                                     <ComboBox
                                         Margin="2"
                                         Padding="0"
+                                        VerticalContentAlignment="Center"
                                         IsEditable="True"
                                         Text="{Binding ItemsPerPage, Mode=TwoWay, FallbackValue=0, StringFormat={}{0:N0}}"
                                         ToolTip="Количество записей на страницу">
