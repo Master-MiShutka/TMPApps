@@ -52,7 +52,7 @@
         {
             try
             {
-                this.DbfTable.Close();
+                this.DbfTable?.Close();
             }
             finally
             {

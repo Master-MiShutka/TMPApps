@@ -177,7 +177,8 @@
             int index = this.dbfTable.GetFieldNameIndex(fieldName);
             if (index == -1)
             {
-                System.Diagnostics.Debugger.Break();
+                // System.Diagnostics.Debugger.Break();
+                return default;
             }
 
 #if DEBUG
