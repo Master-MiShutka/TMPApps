@@ -197,7 +197,8 @@
                     Command="{Binding CommandShowErrors}"
                     Content="Показать ошибки"
                     ImageKind="Warning"
-                    ImageSize="16" />
+                    ImageSize="16"
+                    Visibility="{Binding IsDataLoaded, Converter={StaticResource BooleanToVisibilityConverter}}" />
                 <Separator Style="{StaticResource dotedSeparator}" />
             </StackPanel>
             <StackPanel
