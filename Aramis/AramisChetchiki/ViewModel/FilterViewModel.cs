@@ -18,7 +18,8 @@
 
         public FilterViewModel()
         {
-            FilterListExtensions.FiltersStateChanged += this.FilterListExtensions_FiltersChanged;
+            FilterListExtensions.FiltersStateChanged += this.FilterListExtensions_FiltersStateChanged;
+            FilterListExtensions.FiltersChanged += this.FilterListExtensions_FiltersChanged;
 
             this.properties = ModelHelper.MeterPropertiesCollection.Values;
 
@@ -38,7 +39,8 @@
         protected override void OnDispose()
         {
             base.OnDispose();
-            FilterListExtensions.FiltersStateChanged -= this.FilterListExtensions_FiltersChanged;
+            FilterListExtensions.FiltersStateChanged -= this.FilterListExtensions_FiltersStateChanged;
+            FilterListExtensions.FiltersChanged -= this.FilterListExtensions_FiltersChanged;
         }
 
         public ICollectionView PropertiesCollection => this.propertiesCollection;
@@ -109,11 +111,21 @@
             },
                 () => this.IsAnyFilterActive);
 
-        private void FilterListExtensions_FiltersChanged(object sender, PropertyChangedEventArgs e)
+        private void FilterListExtensions_FiltersStateChanged(object sender, PropertyChangedEventArgs e)
         {
             this.RaisePropertyChanged(propertyName: nameof(this.IsAnyFilterActive));
             this.RaisePropertyChanged(propertyName: nameof(this.FilterWindowHeader));
             this.RaisePropertyChanged(propertyName: nameof(this.ActiveFiltersList));
+
+            this.RaisePropertyChanged(propertyName: nameof(this.CommandResetFilters));
+            (this.CommandResetFilters as DelegateCommand)?.RaiseCanExecuteChanged();
+
+        }
+
+        private void FilterListExtensions_FiltersChanged(ItemsFilter.ViewModel.FilterControlVm vm, ItemsFilter.Model.IFilter filter)
+        {
+            this.RaisePropertyChanged(propertyName: nameof(this.CommandResetFilters));
+            (this.CommandResetFilters as DelegateCommand)?.RaiseCanExecuteChanged();
         }
     }
 }
