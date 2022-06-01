@@ -21,6 +21,11 @@
             CornerRadius="5"
             DataContext="{Binding ElementName=root}">
             <Grid>
+                <Grid.Resources>
+                    <Style TargetType="{x:Type TextBlock}">
+                        <Setter Property="FontSize" Value="{DynamicResource HeaderFontSize}" />
+                    </Style>
+                </Grid.Resources>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />
@@ -43,7 +48,7 @@
                         TextTrimming="CharacterEllipsis"
                         TextWrapping="Wrap" />
                 </Border>
-                <DockPanel Grid.Row="1">
+                <DockPanel Grid.Row="1" Margin="10,5">
                     <Border
                         xmlns:windows="clr-namespace:System.Windows;assembly=PresentationFramework"
                         Width="64"
@@ -89,7 +94,7 @@
                     <Grid>
                         <ContentControl x:Name="CustomContent" />
                         <ScrollViewer x:Name="ScrollContent">
-                            <ContentControl x:Name="StringContent" />
+                            <ContentControl x:Name="StringContent" TextBlock.FontSize="{DynamicResource BigFontSize}" />
                         </ScrollViewer>
                     </Grid>
                 </DockPanel>

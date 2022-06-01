@@ -112,6 +112,8 @@ namespace TMP.UI.Controls.WPF
             {
                 case "CurrentPosition":
                     this.OnPropertyChanged(new PropertyChangedEventArgs(nameof(this.UICurrentItemPositionOnPage)));
+
+                    this.NotifyToUpdateProperties();
                     break;
                 case "Count":
                     this.OnPropertyChanged(new PropertyChangedEventArgs(nameof(this.IsFitering)));
@@ -123,6 +125,11 @@ namespace TMP.UI.Controls.WPF
 
                     this.OnPropertyChanged(new PropertyChangedEventArgs(nameof(this.CurrentPage)));
                     this.OnPropertyChanged(new PropertyChangedEventArgs(nameof(this.PageCount)));
+
+                    //this.OnPropertyChanged(new PropertyChangedEventArgs(nameof(this.Count)));
+                    this.OnPropertyChanged(new PropertyChangedEventArgs(nameof(this.PageCount)));
+
+
                     break;
                 default:
                     break;
@@ -153,7 +160,7 @@ namespace TMP.UI.Controls.WPF
 
         public int UICurrentItemPositionOnPage => this.CurrentPosition + 1;
 
-        public int UIItemsCountOnPage => this.Count;
+        public int UIItemsCountOnPage => (this.UIEndIndex < this.Count) ? this.Count : this.Count;
 
         public override int Count
         {
@@ -273,6 +280,7 @@ namespace TMP.UI.Controls.WPF
         }
 
         #endregion
+
         #region Commands
         public ICommand ShowAllItems { get; private set; }
 
@@ -302,6 +310,21 @@ namespace TMP.UI.Controls.WPF
         {
             this.OnPropertyChanged(new PropertyChangedEventArgs(nameof(this.UIStartIndex)));
             this.OnPropertyChanged(new PropertyChangedEventArgs(nameof(this.UIEndIndex)));
+            this.OnPropertyChanged(new PropertyChangedEventArgs(nameof(this.UICurrentItemPositionOnPage)));
+
+            (this.MoveToPreviousCommand as DelegateCommand)?.RaiseCanExecuteChanged();
+            (this.MoveToNextCommand as DelegateCommand)?.RaiseCanExecuteChanged();
+
+            (this.MoveToFirstCommand as DelegateCommand)?.RaiseCanExecuteChanged();
+            (this.MoveToLastCommand as DelegateCommand)?.RaiseCanExecuteChanged();
+
+            (this.MoveToFirstPageCommand as DelegateCommand)?.RaiseCanExecuteChanged();
+            (this.MoveToLastPageCommand as DelegateCommand)?.RaiseCanExecuteChanged();
+
+            (this.MoveToNextPageCommand as DelegateCommand)?.RaiseCanExecuteChanged();
+            (this.MoveToPreviousPageCommand as DelegateCommand)?.RaiseCanExecuteChanged();
+
+            (this.ShowAllItems as DelegateCommand)?.RaiseCanExecuteChanged();
         }
     }
 }
