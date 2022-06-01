@@ -92,6 +92,8 @@ namespace DataGridWpf
             this.Loaded += this.FilterDataGrid_Loaded;
 
             this.ColumnDisplayIndexChanged += this.FilterDataGrid_ColumnDisplayIndexChanged;
+
+            this.SelectionChanged += FilterDataGrid_SelectionChanged;
         }
 
         #endregion Public Constructors
@@ -202,6 +204,16 @@ namespace DataGridWpf
         // Using a DependencyProperty as the backing store for NoItemsDataTemplate.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty NoItemsMessageProperty =
             DependencyProperty.Register(nameof(NoItemsMessage), typeof(string), typeof(FilterDataGrid), new PropertyMetadata("No data"));
+
+        public int SelectedRowsCount
+        {
+            get { return (int)GetValue(SelectedRowsCountProperty); }
+            set { SetValue(SelectedRowsCountProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for SelectedRowsCount.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty SelectedRowsCountProperty =
+            DependencyProperty.Register("SelectedRowsCount", typeof(int), typeof(FilterDataGrid), new PropertyMetadata(0));
 
         #endregion Public DependencyProperty
 
@@ -428,6 +440,7 @@ namespace DataGridWpf
         #endregion Public Event
 
         #region Public methods
+
 
         #region Copy/Paste
 
@@ -662,6 +675,14 @@ namespace DataGridWpf
         #endregion Private Properties
 
         #region Protected Methods
+
+        private void FilterDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (e.AddedItems != null && this.SelectedItems != null)
+            {
+                this.SelectedRowsCount = this.SelectedItems.Count;
+            }
+        }
 
         public override void OnApplyTemplate()
         {
@@ -1246,7 +1267,12 @@ namespace DataGridWpf
         /// <returns></returns>
         private bool Filter(object o)
         {
-            bool b1 = this.existingFilter == null || this.existingFilter.Invoke(o);
+            bool b1 = true;
+            if (this.existingFilter != this.Filter)
+            {
+                b1 = this.existingFilter == null || this.existingFilter.Invoke(o);
+            }
+
             bool b2 = this.criteria.Values
                 .Aggregate(true, (prevValue, predicate) => prevValue && predicate(o));
 
