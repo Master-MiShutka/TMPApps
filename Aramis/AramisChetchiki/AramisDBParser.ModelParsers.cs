@@ -30,7 +30,7 @@
             this.workTasksProgressViewModel.WorkTasks.Add(workTask);
 
             // таблица с абонентами
-            totalRows = this.collectionKARTAB.Count;
+            totalRows = this.collectionKARTAB.Length;
 
             System.Collections.Concurrent.ConcurrentBag<Meter> metersList = new System.Collections.Concurrent.ConcurrentBag<Meter>();
 
@@ -341,6 +341,7 @@
                 this.dictionaryAssmena = new();
 
                 System.Collections.Concurrent.ConcurrentBag<Assmena> tableAssmena = new System.Collections.Concurrent.ConcurrentBag<Assmena>();
+                Assmena[] assmenas = null;
                 using DBF.DbfReader dbfReader = new DbfReader(Path.Combine(this.pathDBF, "Assmena.DBF"), System.Text.Encoding.GetEncoding(866), skipDeletedRecords: true);
                 {
                     processedRows = 0;
@@ -366,16 +367,18 @@
                     workTask.UpdateUI(totalRows, totalRows, stepNameString: "строка");
                 }
 
+                assmenas = tableAssmena.ToArray();
+
                 workTask.UpdateStatus("анализ полученных данных...");
-                foreach (Assmena item in tableAssmena)
+                for (int index = 0; index < assmenas.Length; index++)
                 {
-                    if (this.dictionaryAssmena.ContainsKey(item.ЛИЦ_СЧЕТ))
+                    if (this.dictionaryAssmena.ContainsKey(assmenas[index].ЛИЦ_СЧЕТ))
                     {
-                        this.dictionaryAssmena[item.ЛИЦ_СЧЕТ].Add(item);
+                        this.dictionaryAssmena[assmenas[index].ЛИЦ_СЧЕТ].Add(assmenas[index]);
                     }
                     else
                     {
-                        this.dictionaryAssmena.Add(item.ЛИЦ_СЧЕТ, new List<Assmena>(new[] { item }));
+                        this.dictionaryAssmena.Add(assmenas[index].ЛИЦ_СЧЕТ, new List<Assmena>(new[] { assmenas[index] }));
                     }
                 }
 

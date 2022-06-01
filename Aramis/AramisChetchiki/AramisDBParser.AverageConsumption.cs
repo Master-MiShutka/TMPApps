@@ -52,77 +52,71 @@
                 // общий список для значений
                 List<Tuple<DateOnly, MeterEventType, object>> list = new List<Tuple<DateOnly, MeterEventType, object>>(payments.Count + changes.Count + controlDatas.Count);
 
-                //Parallel.ForEach(aramisData.Meters, meter =>
-
-                foreach (Meter meter in aramisData.Meters)
+                Parallel.ForEach(aramisData.Meters, meter =>
                 {
                     workTask.UpdateUI(++processedRows, totalRows, stepNameString: "лицевой счет");
 
-                    if (meter.Лицевой == 0 || meter.Удалён)
+                    if (meter.Лицевой != 0 || meter.Удалён == false)
                     {
-                        continue;// return;
-                    }
-
-                    // контрольные показания
-                    controlDatas.Clear();
-                    if (aramisData.MetersControlData.ContainsKey(meter.Лицевой) == true)
-                    {
-                        controlDatas = aramisData.MetersControlData[meter.Лицевой].FirstOrDefault().Data.OrderByDescending(i => i.Date).ToList();
-                    }
-
-                    // оплаты по лицевому счёту
-                    payments.Clear();
-                    if (aramisData.Payments.ContainsKey(meter.Лицевой) == true)
-                    {
-                        // изначально оплаты отсортированы по возрастанию периода оплаты
-                        payments = aramisData.Payments[meter.Лицевой].Reverse().ToList();
-                    }
-
-                    // замены по лицевому счёту
-                    changes.Clear();
-                    if (aramisData.ChangesOfMeters.ContainsKey(meter.Лицевой) == true)
-                    {
-                        changes = aramisData.ChangesOfMeters[meter.Лицевой].OrderByDescending(i => i.ДатаЗамены).ToList();
-                    }
-
-                    // построение списка и сортировка
-                    this.BuildTemporaryListOfEvents(ref list, controlDatas, payments, changes);
-
-                    if (list.Count != 0)
-                    {
-                        List<MeterEvent> meterEvents = this.BuildMeterEvents(ref list);
-
-                        // построение списка событий
-                        // пытаемся добавить, если не удалось, т.е. уже добавлен
-                        if (events.TryAdd(meter.Лицевой, meterEvents) == false)
+                        // контрольные показания
+                        controlDatas.Clear();
+                        if (aramisData.MetersControlData.ContainsKey(meter.Лицевой) == true)
                         {
-                            // если текущий счётчик не удален - удаляем ранее добавленный
-                            if (meter.Удалён == false)
-                            {
-                                events.Remove(meter.Лицевой, out IList<MeterEvent> removed);
+                            controlDatas = aramisData.MetersControlData[meter.Лицевой].FirstOrDefault().Data.OrderByDescending(i => i.Date).ToList();
+                        }
 
-                                // попытка добавить текущий счётчик
-                                if (events.TryAdd(meter.Лицевой, meterEvents) == false)
+                        // оплаты по лицевому счёту
+                        payments.Clear();
+                        if (aramisData.Payments.ContainsKey(meter.Лицевой) == true)
+                        {
+                            // изначально оплаты отсортированы по возрастанию периода оплаты
+                            payments = aramisData.Payments[meter.Лицевой].Reverse().ToList();
+                        }
+
+                        // замены по лицевому счёту
+                        changes.Clear();
+                        if (aramisData.ChangesOfMeters.ContainsKey(meter.Лицевой) == true)
+                        {
+                            changes = aramisData.ChangesOfMeters[meter.Лицевой].OrderByDescending(i => i.ДатаЗамены).ToList();
+                        }
+
+                        // построение списка и сортировка
+                        this.BuildTemporaryListOfEvents(ref list, controlDatas, payments, changes);
+
+                        if (list.Count != 0)
+                        {
+                            List<MeterEvent> meterEvents = this.BuildMeterEvents(ref list);
+
+                            // построение списка событий
+                            // пытаемся добавить, если не удалось, т.е. уже добавлен
+                            if (events.TryAdd(meter.Лицевой, meterEvents) == false)
+                            {
+                                // если текущий счётчик не удален - удаляем ранее добавленный
+                                if (meter.Удалён == false)
                                 {
-                                    if (System.Diagnostics.Debugger.IsAttached)
+                                    events.Remove(meter.Лицевой, out IList<MeterEvent> removed);
+
+                                    // попытка добавить текущий счётчик
+                                    if (events.TryAdd(meter.Лицевой, meterEvents) == false)
                                     {
-                                        System.Diagnostics.Debug.WriteLine($"Can't add the events with personal ID = {meter.Лицевой}");
-                                    }
-                                    else
-                                    {
-                                        logger?.Warn($"Не удалось добавить события по лицевому счёту {meter.Лицевой}");
+                                        if (System.Diagnostics.Debugger.IsAttached)
+                                        {
+                                            System.Diagnostics.Debug.WriteLine($"Can't add the events with personal ID = {meter.Лицевой}");
+                                        }
+                                        else
+                                        {
+                                            logger?.Warn($"Не удалось добавить события по лицевому счёту {meter.Лицевой}");
+                                        }
                                     }
                                 }
                             }
+
+                            // расчёт среднемесячного потребления за последний год
+                            meter.СреднеМесячныйРасходПоОплате = this.CalcAverageConsumptionByPayments(list);
+                            meter.СреднеМесячныйРасходПоКонтрольнымПоказаниям = this.CalcAverageConsumptionByControlReadings(list);
                         }
-
-                        // расчёт среднемесячного потребления за последний год
-                        meter.СреднеМесячныйРасходПоОплате = this.CalcAverageConsumptionByPayments(list);
-                        meter.СреднеМесячныйРасходПоКонтрольнымПоказаниям = this.CalcAverageConsumptionByControlReadings(list);
                     }
-
-                    //});
-                }
+                });
 
                 aramisData.Events = events.ToDictionary(i => i.Key, j => j.Value);
             }
@@ -144,19 +138,19 @@
             list.Clear();
 
             // собираем список
-            foreach (Payment item in payments)
+            for (int index = 0; index < payments.Count; index++)
             {
-                list.Add(new Tuple<DateOnly, MeterEventType, object>(item.ПериодОплаты, MeterEventType.Payment, item));
+                list.Add(new Tuple<DateOnly, MeterEventType, object>(payments[index].ПериодОплаты, MeterEventType.Payment, payments[index]));
             }
 
-            foreach (ChangeOfMeter item in changes)
+            for (int index = 0; index < changes.Count; index++)
             {
-                list.Add(new Tuple<DateOnly, MeterEventType, object>(item.ДатаЗамены, MeterEventType.Change, item));
+                list.Add(new Tuple<DateOnly, MeterEventType, object>(changes[index].ДатаЗамены, MeterEventType.Change, changes[index]));
             }
 
-            foreach (MeterControlData item in controlDatas)
+            for (int index = 0; index < controlDatas.Count; index++)
             {
-                list.Add(new Tuple<DateOnly, MeterEventType, object>(item.Date, MeterEventType.Control, item));
+                list.Add(new Tuple<DateOnly, MeterEventType, object>(controlDatas[index].Date, MeterEventType.Control, controlDatas[index]));
             }
 
             // делегат сравнения по дате
