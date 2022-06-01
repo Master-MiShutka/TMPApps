@@ -19,7 +19,7 @@ namespace ItemsFilter.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Strings {
@@ -61,6 +61,15 @@ namespace ItemsFilter.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to все.
+        /// </summary>
+        public static string AllText {
+            get {
+                return ResourceManager.GetString("AllText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Очистить фильтр.
         /// </summary>
         public static string ClearFilterText {
@@ -84,6 +93,15 @@ namespace ItemsFilter.Resources {
         public static string EqualText {
             get {
                 return ResourceManager.GetString("EqualText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to нет.
+        /// </summary>
+        public static string FalseText {
+            get {
+                return ResourceManager.GetString("FalseText", resourceCulture);
             }
         }
         
@@ -183,6 +201,15 @@ namespace ItemsFilter.Resources {
         public static string ToText {
             get {
                 return ResourceManager.GetString("ToText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to да.
+        /// </summary>
+        public static string TrueText {
+            get {
+                return ResourceManager.GetString("TrueText", resourceCulture);
             }
         }
     }

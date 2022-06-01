@@ -8,7 +8,7 @@
     using ItemsFilter.Model;
 
     /// <summary>
-    /// Defile View control for IComparableFilter model.
+    /// Define View control for IComparableFilter model.
     /// </summary>
     [ViewModelView]
     [TemplatePart(Name = PART_Input, Type = typeof(TextBox))]

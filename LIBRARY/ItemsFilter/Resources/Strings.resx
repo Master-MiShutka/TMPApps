@@ -159,4 +159,13 @@
   <data name="SearchText" xml:space="preserve">
     <value>найти:</value>
   </data>
+  <data name="AllText" xml:space="preserve">
+    <value>все</value>
+  </data>
+  <data name="FalseText" xml:space="preserve">
+    <value>нет</value>
+  </data>
+  <data name="TrueText" xml:space="preserve">
+    <value>да</value>
+  </data>
 </root>

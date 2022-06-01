@@ -268,6 +268,49 @@
         <Setter Property="ToolTip" Value="{x:Static res:Strings.ClearFilterText}" />
     </Style>
 
+    <Style TargetType="{x:Type view:BooleanFilterView}">
+        <Setter Property="HorizontalAlignment" Value="Left" />
+        <Setter Property="Margin" Value="2" />
+        <Setter Property="FontSize" Value="{DynamicResource SmallFontSize}" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type view:BooleanFilterView}">
+                    <Border
+                        Height="Auto"
+                        Margin="{TemplateBinding Margin}"
+                        HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
+                        VerticalAlignment="{TemplateBinding VerticalAlignment}"
+                        Style="{StaticResource borderStyle}">
+                        <StackPanel Orientation="Vertical">
+                            <DockPanel LastChildFill="False">
+                                <TextBlock x:Name="PART_Name" Style="{StaticResource FilterNameStyle}" />
+                                <Button DockPanel.Dock="Right" Style="{StaticResource FilterClearButtonStyle}" />
+                            </DockPanel>
+                            <CheckBox
+                                x:Name="PART_Input"
+                                Margin="2"
+                                FontFamily="{TemplateBinding FontFamily}"
+                                FontSize="{TemplateBinding FontSize}"
+                                IsChecked="{Binding ViewModel.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource TemplatedParent}}" />
+                        </StackPanel>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <DataTrigger Binding="{Binding ViewModel.Value}" Value="{x:Null}">
+                            <Setter TargetName="PART_Input" Property="Content" Value="{x:Static res:Strings.AllText}" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding ViewModel.Value}" Value="True">
+                            <Setter TargetName="PART_Input" Property="Content" Value="{x:Static res:Strings.TrueText}" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding ViewModel.Value}" Value="False">
+                            <Setter TargetName="PART_Input" Property="Content" Value="{x:Static res:Strings.FalseText}" />
+                        </DataTrigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+
     <!--  String Value Filter  -->
     <Style TargetType="{x:Type view:StringFilterView}">
         <Setter Property="HorizontalAlignment" Value="Left" />

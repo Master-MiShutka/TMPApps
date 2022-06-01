@@ -1,11 +1,6 @@
 ﻿namespace ItemsFilter.Initializer
 {
-    using System;
     using System.Collections.Generic;
-    using System.Collections.ObjectModel;
-    using System.ComponentModel;
-    using System.Windows;
-    using System.Windows.Markup;
 
     /// <summary>
     /// Define a class that represent set of filter initializers.
@@ -25,6 +20,7 @@
                 {
                     @default = new FilterInitializersManager
                     {
+                        new BooleanFilterInitializer(),
                         new EqualFilterInitializer(),
                         new LessOrEqualFilterInitializer(),
                         new GreaterOrEqualFilterInitializer(),

@@ -8,7 +8,7 @@
     using ItemsFilter.Model;
 
     /// <summary>
-    /// Defile View control for IMultiValueFilter model.
+    /// Define View control for IMultiValueFilter model.
     /// </summary>
     [ViewModelView]
     [TemplatePart(Name = MultiValueFilterView.PART_ItemsTemplateName, Type = typeof(System.Windows.Controls.Primitives.Selector))]

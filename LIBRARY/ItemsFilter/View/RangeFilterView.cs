@@ -8,7 +8,7 @@
     using ItemsFilter.Model;
 
     /// <summary>
-    /// Defile View control for IRangeFilter model.
+    /// Define View control for IRangeFilter model.
     /// </summary>
     [ViewModelView]
     [TemplatePart(Name = PART_From, Type = typeof(TextBox))]

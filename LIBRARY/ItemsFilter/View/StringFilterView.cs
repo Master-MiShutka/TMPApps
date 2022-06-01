@@ -9,7 +9,7 @@
     using ItemsFilter.Model;
 
     /// <summary>
-    /// Defile View control for IStringFilter model.
+    /// Define View control for IStringFilter model.
     /// </summary>
     [ViewModelView]
     [TemplatePart(Name = StringFilterView.PART_FilterType, Type = typeof(Selector))]
