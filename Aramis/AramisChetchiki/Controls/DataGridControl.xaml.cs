@@ -12,23 +12,6 @@ namespace TMP.WORK.AramisChetchiki.Controls
         public DataGridControl()
         {
             InitializeComponent();
-
-            this.filterDataGrid.AutoGeneratingColumn += this.FilterDataGrid_AutoGeneratingColumn;
-
-            this.filterDataGrid.SelectionChanged += FilterDataGrid_SelectionChanged;
-        }
-
-        private void FilterDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (e.AddedItems != null)
-            {
-                this.SelectedRowsCount = e.AddedItems.Count;
-            }
-        }
-
-        private void FilterDataGrid_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
-        {
-            ;
         }
 
         public string NoItemsMessage
@@ -94,15 +77,5 @@ namespace TMP.WORK.AramisChetchiki.Controls
                 dataGridControl.filterDataGrid.ItemsSource = newValue;
             }
         }
-
-        public int SelectedRowsCount
-        {
-            get { return (int)GetValue(SelectedRowsCountProperty); }
-            set { SetValue(SelectedRowsCountProperty, value); }
-        }
-
-        // Using a DependencyProperty as the backing store for SelectedRowsCount.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty SelectedRowsCountProperty =
-            DependencyProperty.Register("SelectedRowsCount", typeof(int), typeof(DataGridControl), new PropertyMetadata(0));
     }
 }
