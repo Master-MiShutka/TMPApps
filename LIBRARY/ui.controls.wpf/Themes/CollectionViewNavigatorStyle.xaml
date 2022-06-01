@@ -16,12 +16,19 @@
         <Setter Property="Padding" Value="0" />
         <Setter Property="TextAlignment" Value="Center" />
     </Style>
+
     <Style BasedOn="{StaticResource baseTextBlock}" TargetType="{x:Type TextBlock}">
         <Setter Property="Margin" Value="5,2" />
         <Setter Property="MinWidth" Value="20" />
     </Style>
 
+    <Style
+        x:Key="btnStyle"
+        BasedOn="{StaticResource {x:Type RepeatButton}}"
+        TargetType="{x:Type RepeatButton}" />
+
     <Style TargetType="{x:Type local:CollectionViewNavigator}">
+        <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type local:CollectionViewNavigator}">
@@ -61,27 +68,18 @@
                             </StackPanel>
                             <Border Grid.Column="1" Margin="0,0,5,0">
                                 <StackPanel Orientation="Horizontal">
-                                    <RepeatButton
+                                    <local:ButtonWithIconKind
                                         Margin="1,2,1,2"
                                         Padding="2,0"
                                         Command="{Binding MoveToFirstCommand}"
-                                        ToolTip="Выбрать первую запись">
-                                        <Path
-                                            Data="M6,0 v16 l-10,-8z M16,0 v16 l -10,-8z"
-                                            Fill="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"
-                                            Stretch="Fill"
-                                            StrokeThickness="2" />
-                                    </RepeatButton>
-                                    <RepeatButton
+                                        ImageKind="ArrowLeft"
+                                        ToolTip="Выбрать первую запись" />
+                                    <local:ButtonWithIconKind
                                         Margin="1,2,1,2"
                                         Padding="2,0"
                                         Command="{Binding MoveToPreviousCommand}"
-                                        ToolTip="Выбрать предыдущую запись">
-                                        <Path
-                                            Data="M10,0 v16 l-10,-8z"
-                                            Fill="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"
-                                            StrokeThickness="2" />
-                                    </RepeatButton>
+                                        ImageKind="ChevronLeft"
+                                        ToolTip="Выбрать предыдущую запись" />
                                     <Border
                                         Margin="2"
                                         VerticalAlignment="Stretch"
@@ -103,26 +101,18 @@
                                             </TextBlock.ToolTip>
                                         </TextBlock>
                                     </Border>
-                                    <RepeatButton
-                                        Margin="2"
+                                    <local:ButtonWithIconKind
+                                        Margin="1,2,1,2"
                                         Padding="2,0"
                                         Command="{Binding MoveToNextCommand}"
-                                        ToolTip="Выбрать следующую запись">
-                                        <Path
-                                            Data="M0,0 v16 l10,-8z"
-                                            Fill="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"
-                                            StrokeThickness="2" />
-                                    </RepeatButton>
-                                    <RepeatButton
-                                        Margin="2"
+                                        ImageKind="ChevronRight"
+                                        ToolTip="Выбрать следующую запись" />
+                                    <local:ButtonWithIconKind
+                                        Margin="1,2,1,2"
                                         Padding="2,0"
                                         Command="{Binding MoveToLastCommand}"
-                                        ToolTip="Выбрать последнюю запись">
-                                        <Path
-                                            Data="M0,0v16l10,-8z m10,0 v16 l10,-8z"
-                                            Fill="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"
-                                            StrokeThickness="2" />
-                                    </RepeatButton>
+                                        ImageKind="ArrowRight"
+                                        ToolTip="Выбрать последнюю запись" />
                                 </StackPanel>
                             </Border>
                             <Separator
@@ -134,26 +124,18 @@
                                 Margin="5,0"
                                 HorizontalAlignment="Center">
                                 <StackPanel Orientation="Horizontal">
-                                    <RepeatButton
-                                        Margin="2"
+                                    <local:ButtonWithIconKind
+                                        Margin="1,2,1,2"
                                         Padding="2,0"
                                         Command="{Binding MoveToFirstPageCommand}"
-                                        ToolTip="Первая страница данных">
-                                        <Path
-                                            Data="M6,0 v16 l-10,-8z M16,0 v16 l -10,-8z"
-                                            Fill="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"
-                                            StrokeThickness="2" />
-                                    </RepeatButton>
-                                    <RepeatButton
-                                        Margin="2"
+                                        ImageKind="ArrowLeft"
+                                        ToolTip="Первая страница данных" />
+                                    <local:ButtonWithIconKind
+                                        Margin="1,2,1,2"
                                         Padding="2,0"
                                         Command="{Binding MoveToPreviousPageCommand}"
-                                        ToolTip="Предыдущая страница данных">
-                                        <Path
-                                            Data="M10,0 v16 l-10,-8z"
-                                            Fill="{DynamicResource BlackBrush}"
-                                            StrokeThickness="2" />
-                                    </RepeatButton>
+                                        ImageKind="ChevronLeft"
+                                        ToolTip="Предыдущая страница данных" />
                                     <Border
                                         Margin="2"
                                         VerticalAlignment="Stretch"
@@ -175,26 +157,18 @@
                                             </TextBlock.ToolTip>
                                         </TextBlock>
                                     </Border>
-                                    <RepeatButton
-                                        Margin="2"
+                                    <local:ButtonWithIconKind
+                                        Margin="1,2,1,2"
                                         Padding="2,0"
                                         Command="{Binding MoveToNextPageCommand}"
-                                        ToolTip="Следующая страница данных">
-                                        <Path
-                                            Data="M0,0 v16 l10,-8z"
-                                            Fill="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"
-                                            StrokeThickness="2" />
-                                    </RepeatButton>
-                                    <RepeatButton
-                                        Margin="2"
+                                        ImageKind="ArrowRight"
+                                        ToolTip="Следующая страница данных" />
+                                    <local:ButtonWithIconKind
+                                        Margin="1,2,1,2"
                                         Padding="2,0"
                                         Command="{Binding MoveToLastPageCommand}"
-                                        ToolTip="Последняя страница данных">
-                                        <Path
-                                            Data="M0,0v16l10,-8z m10,0 v16 l10,-8z"
-                                            Fill="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"
-                                            StrokeThickness="2" />
-                                    </RepeatButton>
+                                        ImageKind="ChevronRight"
+                                        ToolTip="Последняя страница данных" />
                                     <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
                                     <TextBlock Margin="5,0">
                                         <Run Text="Количество записей" />
@@ -221,27 +195,37 @@
                                         <ComboBoxItem Content="500" />
                                         <ComboBoxItem Content="1000" />
                                     </ComboBox>
-                                    <RepeatButton
+                                    <Button
                                         Margin="2"
                                         Padding="2,1,2,-2"
                                         Command="{Binding ShowAllItems}">
                                         <TextBlock>
-                                            <Run Text="Все " />
-                                            <Run FontWeight="Bold" Text="{Binding Mode=OneWay, Path=TotalItemsCountExcludingFilter, StringFormat=# ##0}" />
+                                            <TextBlock.Text>
+                                                <MultiBinding FallbackValue="Все ? из ?" StringFormat="Все {0:N0} из {1:N0}">
+                                                    <Binding Path="TotalItemsCountIncludingFilter" />
+                                                    <Binding Path="TotalItemsCountExcludingFilter" />
+                                                </MultiBinding>
+                                            </TextBlock.Text>
                                         </TextBlock>
-                                        <!-- TextBlock>
-              <Run Text="Все "/>
-              <Run FontWeight="Bold" DataContext="{Binding  Path=TotalItemsCountExcludingFilter, Mode=OneWay, FallbackValue=?}"
-                   Text="{Binding StringFormat=' {0:G0}', Mode=OneWay}"/>
-            </TextBlock-->
-                                    </RepeatButton>
+                                    </Button>
                                 </StackPanel>
                             </Border>
                         </Grid>
                     </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsEnabled" Value="false">
+                            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.InactiveCaptionBrushKey}}" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
     </Style>
 
 </ResourceDictionary>
+
+<!-- TextBlock>
+              <Run Text="Все "/>
+              <Run FontWeight="Bold" DataContext="{Binding  Path=TotalItemsCountExcludingFilter, Mode=OneWay, FallbackValue=?}"
+                   Text="{Binding StringFormat=' {0:G0}', Mode=OneWay}"/>
+            </TextBlock-->
