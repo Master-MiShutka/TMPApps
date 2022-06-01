@@ -24,6 +24,8 @@
     public class BaseDataViewModel<T> : BaseViewModel, IDataViewModel<T>
         where T : IModel
     {
+        private static readonly NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
+
         private object _lock = new object();
 
         private IEnumerable<T> data;
@@ -59,11 +61,10 @@
                 return;
             }
 
+            logger.Info("Запуск ...");
+
             this.IsBusy = true;
             this.Status = "загрузка ...";
-
-            //// fix
-            //var v = this.View;
 
             this.CommandExport = new DelegateCommand(this.DoExport, this.CanExecuteCheckView);
             this.CommandPrint = new DelegateCommand(this.DoPrint, this.CanExecuteCheckView);
@@ -246,26 +247,24 @@
 
                 return this.data.Where(i => this.DataFilter(i));
             }
+
             protected set
             {
-                if (this.SetProperty(ref this.data, value))
-                {
-                    BindingOperations.EnableCollectionSynchronization(this.data, this._lock);
+                BindingOperations.DisableCollectionSynchronization(this.data);
 
-                    int n1 = this.data.Cast<Meter>().Count(i => i.Отключён == true);
-                    int n2 = this.data.Cast<Meter>().Count(i => i.Удалён == true);
+                this.SetProperty(ref this.data, value);
+                BindingOperations.EnableCollectionSynchronization(this.data, this._lock);
 
-                    this.RaisePropertyChanged(nameof(this.IsDataNullOrEmpty));
-                    this.RaisePropertyChanged(nameof(this.View));
-                    this.RaisePropertyChanged(nameof(this.ItemsCount));
-                    this.RaisePropertyChanged(nameof(this.PercentOfTotal));
-                    this.RaisePropertyChanged(nameof(this.IsFilteredItems));
+                this.RaisePropertyChanged(nameof(this.IsDataNullOrEmpty));
+                this.RaisePropertyChanged(nameof(this.View));
+                this.RaisePropertyChanged(nameof(this.ItemsCount));
+                this.RaisePropertyChanged(nameof(this.PercentOfTotal));
+                this.RaisePropertyChanged(nameof(this.IsFilteredItems));
 
-                    (this.CommandChangeViewKind as DelegateCommand<TableViewKinds>)?.RaiseCanExecuteChanged();
-                    (this.CommandSetSorting as DelegateCommand)?.RaiseCanExecuteChanged();
-                    (this.SetupTableViewKinds as DelegateCommand)?.RaiseCanExecuteChanged();
-                    (this.SaveCurrentTableViewKindAsNew as DelegateCommand)?.RaiseCanExecuteChanged();
-                }
+                (this.CommandChangeViewKind as DelegateCommand<TableViewKinds>)?.RaiseCanExecuteChanged();
+                (this.CommandSetSorting as DelegateCommand)?.RaiseCanExecuteChanged();
+                (this.SetupTableViewKinds as DelegateCommand)?.RaiseCanExecuteChanged();
+                (this.SaveCurrentTableViewKindAsNew as DelegateCommand)?.RaiseCanExecuteChanged();
             }
         }
 
@@ -429,16 +428,6 @@
                 return this.tableColumns;
             }
             private set => this.SetProperty(ref this.tableColumns, value);
-        }
-
-        /// <summary>
-        /// Вохвращает представление коллекции
-        /// </summary>
-        /// <returns></returns>
-        protected virtual ICollectionView BuildAndGetView()
-        {
-            ICollectionView collectionView = new UI.Controls.WPF.PagingCollectionView(this.Data.ToList());
-            return collectionView;
         }
 
         /// <summary>
@@ -715,11 +704,30 @@
 
         #endregion
 
+        protected ICollectionView GetCollectionView(object source)
+        {
+            return new UI.Controls.WPF.PagingCollectionView(this.Data.ToList());
+        }
+
+        /// <summary>
+        /// Вохвращает представление коллекции
+        /// </summary>
+        /// <returns></returns>
+        protected virtual ICollectionView BuildAndGetView()
+        {
+            ICollectionView collectionView = this.GetCollectionView(this.Data.ToList());
+            return collectionView;
+        }
+
+        /// <summary>
+        /// загрузка сохраненных колонок таблицы
+        /// </summary>
         private void TryLoadTableColumnsFromSettings()
         {
             string thisHashCode = this.GetHashCode().ToString();
             if (AppSettings.Default.ViewModelsTableColumns.ContainsKey(thisHashCode))
             {
+                logger.Info($"Найден ранее сохраненный набор колонок для '{this.GetType().Name}', попытка загрузки");
                 try
                 {
                     string rawdata = AppSettings.Default.ViewModelsTableColumns[thisHashCode];
@@ -730,10 +738,13 @@
                     {
                         this.TableColumns = columns;
                         this.RaisePropertyChanged(nameof(this.TableColumns));
+
+                        logger.Info($"Ранее сохраненный набор колонок для '{this.GetType().Name}' загружен.");
                     }
                 }
                 catch (Exception e)
                 {
+                    logger.Info($"Ранее сохраненный набор колонок для '{this.GetType().Name}' не загружен. Ошибка: {e.Message}");
                 }
             }
         }
@@ -878,6 +889,7 @@
 
         public void Reset()
         {
+            logger.Info($"Reset.");
             this.view = null;
             this.RaisePropertyChanged(nameof(this.View));
         }

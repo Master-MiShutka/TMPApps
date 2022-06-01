@@ -14,6 +14,8 @@
     /// </summary>
     public class BaseMeterViewModel : BaseDataViewModel<Meter>
     {
+        private static readonly NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
+
         private bool notShowDeleted = true;
         private bool notShowDisconnected = true;
 
@@ -72,7 +74,7 @@
 
         protected override ICollectionView BuildAndGetView()
         {
-            ICollectionView collectionView = CollectionViewSource.GetDefaultView(this.Data);
+            ICollectionView collectionView = this.GetCollectionView(this.Data);
 
             if (collectionView.IsEmpty)
                 return collectionView;
@@ -138,6 +140,8 @@
 
         private void Init()
         {
+            logger.Info("Init.");
+
             this.CommandNotShowDeleted = new DelegateCommand(() =>
             {
                 this.IsBusy = true;
@@ -173,6 +177,8 @@
         protected override void OnDataLoaded()
         {
             base.OnDataLoaded();
+
+            logger.Info("Data updated.");
 
             (this.CommandNotShowDeleted as DelegateCommand)?.RaiseCanExecuteChanged();
             (this.CommandNotShowDisconnected as DelegateCommand)?.RaiseCanExecuteChanged();

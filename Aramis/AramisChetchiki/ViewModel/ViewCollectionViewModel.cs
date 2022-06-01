@@ -37,6 +37,8 @@
             }
 
             this.DataGridMessage = this.Status = "Подготовка данных ...";
+
+            this.logger.Info("Constructor");
         }
 
         /// <summary>
@@ -53,6 +55,8 @@
             {
                 return;
             }
+
+            this.logger.Info("Constructor with collection");
 
             this.IsBusy = true;
             this.DataGridMessage = this.Status = "Подготовка данных ...";
