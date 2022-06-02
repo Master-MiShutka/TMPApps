@@ -3,6 +3,7 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ItemsFilter\ItemsFilter.csproj" />
     <ProjectReference Include="..\Shared\Shared.csproj" />
     <ProjectReference Include="..\ui.controls.wpf\ui.controls.wpf.csproj" />
   </ItemGroup>
