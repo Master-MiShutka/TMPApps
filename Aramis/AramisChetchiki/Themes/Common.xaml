@@ -93,7 +93,7 @@
                         <DoubleAnimation
                             Storyboard.TargetProperty="Effect.Opacity"
                             To="0.5"
-                            Duration="0:0:0.5" />
+                            Duration="0:0:0.2" />
                     </Storyboard>
                 </BeginStoryboard>
             </EventTrigger>
@@ -104,7 +104,7 @@
                             Storyboard.TargetProperty="Effect.Opacity"
                             From="0.5"
                             To="0"
-                            Duration="0:0:0.5" />
+                            Duration="0:0:0.2" />
                     </Storyboard>
                 </BeginStoryboard>
             </EventTrigger>

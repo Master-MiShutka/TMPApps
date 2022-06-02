@@ -947,7 +947,7 @@ namespace TMPApplication
             List<Uri> dictionaries = null;
             if (Application.Current.Resources.MergedDictionaries != null)
             {
-                dictionaries = Application.Current.Resources.MergedDictionaries.Where(d => d.Source.OriginalString.StartsWith(@"/PresentationFramework") == false).Select(d => d.Source).ToList();
+                dictionaries = Application.Current.Resources.MergedDictionaries.Where(d => d.Source?.OriginalString.StartsWith(@"/PresentationFramework") == false).Select(d => d.Source).ToList();
 
                 // очищаем перед загрузкой темы
                 this.Resources.MergedDictionaries.Clear();

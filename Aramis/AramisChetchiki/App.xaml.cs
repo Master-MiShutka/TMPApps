@@ -6,6 +6,7 @@ namespace TMP.WORK.AramisChetchiki
     using MessagePack;
     using MessagePack.Resolvers;
     using TMPApplication;
+    using TomsToolbox.Wpf.Styles;
 
     /// <summary>
     /// Interaction logic for App.xaml
@@ -42,6 +43,8 @@ namespace TMP.WORK.AramisChetchiki
             this.AppSettings = TMP.WORK.AramisChetchiki.Properties.Settings.Default;
 
             System.Threading.Thread.CurrentThread.Name = "MainAppThread";
+
+            this.Resources.MergedDictionaries.Insert(0, TomsToolbox.Wpf.Styles.WpfStyles.GetDefaultStyles().RegisterDefaultWindowStyle());
 
             var window = new MainWindow();
             CorrectMainWindowSizeAndPos(window);
