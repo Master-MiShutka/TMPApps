@@ -2,13 +2,8 @@
 {
     using System;
     using System.Collections;
-    using System.Collections.Generic;
-    using System.Collections.ObjectModel;
     using System.ComponentModel;
     using System.Diagnostics;
-    using System.Linq;
-    using System.Text;
-    using ItemsFilter.View;
 
     /// <summary>
     /// Define the logic for Enum values filter.
@@ -67,7 +62,7 @@
                 else
                 {
                     object value = base.getter(e.Item);
-                    e.Accepted = base.SelectedValues.Contains(value);
+                    e.Accepted = base.SelectedValues.Contains(value) == false;
                 }
             }
         }

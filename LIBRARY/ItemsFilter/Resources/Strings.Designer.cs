@@ -169,6 +169,15 @@ namespace ItemsFilter.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Отметить все.
+        /// </summary>
+        public static string SelectAll {
+            get {
+                return ResourceManager.GetString("SelectAll", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Показать меню быстрого фильтра.
         /// </summary>
         public static string ShowCodemaidQuickFilterMenuText {
@@ -210,6 +219,15 @@ namespace ItemsFilter.Resources {
         public static string TrueText {
             get {
                 return ResourceManager.GetString("TrueText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Снять отметки.
+        /// </summary>
+        public static string UnselectAll {
+            get {
+                return ResourceManager.GetString("UnselectAll", resourceCulture);
             }
         }
     }

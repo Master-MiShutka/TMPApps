@@ -3,7 +3,7 @@
   <Class Name="ItemsFilter.Model.Filter" Collapsed="true">
     <Position X="3" Y="1.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAGAAACAAAAAAIAEAAgARQAoIgUAABAAAAAAgAAAAI=</HashCode>
+      <HashCode>AAAGAAACAAAAAAIAEAAgARQAoIgUAABAAAAAAgAAAQI=</HashCode>
       <FileName>Model\Filter.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
@@ -11,37 +11,37 @@
   <Class Name="ItemsFilter.Model.PropertyFilter" Collapsed="true">
     <Position X="3" Y="2.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAABABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAEAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Model\PropertyFilter.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="ItemsFilter.Model.LessOrEqualFilter&lt;T&gt;" Collapsed="true">
-    <Position X="1" Y="4.25" Width="1.75" />
+    <Position X="3" Y="4.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAACAAAAgAAAAAQAAAAAAACgAEAAAABAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAACAAAAAAAAAAQAAAAEAACgAEAAAABAAAAAAAAAAAA=</HashCode>
       <FileName>Model\LessOrEqualFilter.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="ItemsFilter.Model.RangeFilter&lt;T&gt;" Collapsed="true">
-    <Position X="3" Y="4.25" Width="1.5" />
+    <Position X="5.5" Y="4.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAACAAAAgAAAAAQAAAAQEACAAEABAABAAAAAAAgAAAA=</HashCode>
+      <HashCode>AAACAAAAAAAAAAQAAAAUEACAAFABAABAAAAAAAAAAAA=</HashCode>
       <FileName>Model\RangeFilter.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="ItemsFilter.Model.StringFilter" Collapsed="true">
-    <Position X="4.75" Y="4.25" Width="1.5" />
+    <Position X="0.75" Y="4.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>ABACAAAAAIAAAAAAAAAAACCAAAAAAABAAAAgAAAAAAA=</HashCode>
+      <HashCode>AAACAAAAAIAAAAAAAAAAAACAAAAAACBAAAAgIAAAAAA=</HashCode>
       <FileName>Model\StringFilter.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="ItemsFilter.Model.GreaterOrEqualFilter&lt;T&gt;" Collapsed="true">
-    <Position X="1.75" Y="5.75" Width="2.5" />
+    <Position X="2.5" Y="5.5" Width="2.5" />
     <TypeIdentifier>
       <HashCode>AAACAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Model\GreaterOrEqualFilter.cs</FileName>
@@ -51,23 +51,31 @@
   <Class Name="ItemsFilter.Model.EqualFilter" Collapsed="true">
     <Position X="5.5" Y="2.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAYACAAAAAAAAAAAAAAAAAAAAAACAABAAAAAAAAEAAA=</HashCode>
+      <HashCode>CAYAAAAAAAAAAAAAAAAAAAAAAAACAABAAAAAAAAEAAA=</HashCode>
       <FileName>Model\EqualFilter.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="ItemsFilter.Model.EqualFilter&lt;T&gt;" Collapsed="true">
-    <Position X="6.5" Y="4.25" Width="1.5" />
+    <Position X="5.5" Y="1" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAACAAAAAAAAAAAAAAAAAAKAAAACAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Model\EqualFilter.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
+  <Class Name="ItemsFilter.Model.BooleanFilter" Collapsed="true">
+    <Position X="0.75" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAAAAAAAAACAAAAAACBAAAAgAAAAAAA=</HashCode>
+      <FileName>Model\BooleanFilter.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
   <Interface Name="ItemsFilter.Model.IFilter" Collapsed="true">
     <Position X="8.5" Y="1" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAACAAAAAAAAAAIAEAAAAAAAAIAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAACAAAAAAAAAAIAEAAAAAQAAIAAAAAAAAAAAAAAAAI=</HashCode>
       <FileName>Model\IFilter.cs</FileName>
     </TypeIdentifier>
   </Interface>
@@ -118,6 +126,13 @@
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAQAAAAAEAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Model\IRangeFilter.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="ItemsFilter.Model.IBooleanFilter" Collapsed="true">
+    <Position X="13" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAA=</HashCode>
+      <FileName>Model\IBooleanFilter.cs</FileName>
     </TypeIdentifier>
   </Interface>
   <Font Name="Segoe UI" Size="9" />

@@ -168,4 +168,10 @@
   <data name="TrueText" xml:space="preserve">
     <value>да</value>
   </data>
+  <data name="SelectAll" xml:space="preserve">
+    <value>Отметить все</value>
+  </data>
+  <data name="UnselectAll" xml:space="preserve">
+    <value>Снять отметки</value>
+  </data>
 </root>

@@ -22,9 +22,8 @@
             Debug.Assert(propertyInfo != null);
             Type propertyType = propertyInfo.PropertyType;
             if (filterPresenter.ItemProperties.Contains(propertyInfo)
-                && !propertyType.IsEnum
-                && typeof(bool).IsAssignableFrom(propertyInfo.PropertyType)
-                && propertyType.IsValueType)
+                && typeof(IComparable).IsAssignableFrom(propertyType)
+                && propertyType == typeof(bool))
             {
                 return new BooleanFilter(propertyInfo);
             }

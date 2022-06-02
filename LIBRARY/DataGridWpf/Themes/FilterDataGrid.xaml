@@ -5,6 +5,7 @@
     xmlns:Interactions="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:control="clr-namespace:DataGridWpf"
     xmlns:dgx="urn:tom-englert.de/DataGridExtensions"
+    xmlns:itemsfilter="clr-namespace:ItemsFilter;assembly=ItemsFilter"
     xmlns:sys="clr-namespace:System;assembly=mscorlib"
     xmlns:uicontrols="clr-namespace:TMP.UI.Controls.WPF;assembly=ui.controls.wpf"
     xmlns:uicontrols_behaviours="clr-namespace:TMP.UI.Controls.WPF.Behaviours;assembly=ui.controls.wpf"
@@ -231,6 +232,11 @@
                     TextAlignment="Center"
                     TextTrimming="CharacterEllipsis"
                     TextWrapping="WrapWithOverflow" />
+
+                <itemsfilter:ColumnFilter
+                    Grid.Column="1"
+                    itemsfilter:FilterListExtensions.IsActive="True"
+                    ParentCollection="{Binding ItemsSource, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}" />
 
                 <!--  FILTER BUTTON  Visibility="{Binding RelativeSource={RelativeSource Mode=Self}, Path=IsEnabled, Converter={StaticResource BooleanToVisibilityConverter}}"  -->
                 <Button

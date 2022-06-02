@@ -6,6 +6,9 @@
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="TomsToolbox.Wpf.Styles" Version="2.7.6" />
+  </ItemGroup>
+  <ItemGroup>
     <Compile Update="Resources\Strings.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>

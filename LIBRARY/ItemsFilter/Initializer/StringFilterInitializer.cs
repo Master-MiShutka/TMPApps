@@ -19,7 +19,7 @@
             Debug.Assert(propertyInfo != null);
             Type propertyType = propertyInfo.PropertyType;
             if (filterPresenter.ItemProperties.Contains(propertyInfo)
-
+                && propertyType != typeof(bool)
                 // && typeof(String).IsAssignableFrom(propertyInfo.PropertyType)
                 && !propertyType.IsEnum)
             {

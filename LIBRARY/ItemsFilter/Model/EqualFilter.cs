@@ -7,6 +7,7 @@
     using System.ComponentModel;
     using System.Diagnostics;
     using System.Reflection;
+    using System.Linq;
     using ItemsFilter.View;
 
     /// <summary>
@@ -15,32 +16,48 @@
     [View(typeof(MultiValueFilterView))]
     public abstract class EqualFilter : PropertyFilter, IMultiValueFilter, IFilter
     {
-        private readonly ObservableCollection<object> selectedValues;
-        private readonly ReadOnlyObservableCollection<object> readonlySelectedValues;
+        private ObservableCollection<object> selectedValues;
+        private ReadOnlyObservableCollection<object> readonlySelectedValues;
+
+        protected IEnumerable availableValues;
+        private int availableValuesCount;
 
         /// <summary>
         /// Initialize new instance of EqualFilter from deriver class.
         /// </summary>
         protected EqualFilter()
         {
-            this.selectedValues = new ObservableCollection<object>();
-            this.readonlySelectedValues = new ReadOnlyObservableCollection<object>(this.selectedValues);
             base.Name = ItemsFilter.Resources.Strings.EqualText;
         }
 
         public ReadOnlyObservableCollection<object> SelectedValues => this.readonlySelectedValues;
 
-        public abstract IEnumerable AvailableValues
+        public virtual IEnumerable AvailableValues
         {
-            get;
-            set;
+            get => this.availableValues;
+
+            set
+            {
+                if (this.availableValues != value)
+                {
+                    this.availableValues = value;
+                    this.availableValuesCount = this.availableValues.Cast<object>().Count();
+                    this.RaisePropertyChanged(nameof(this.AvailableValues));
+
+                    this.selectedValues = new ObservableCollection<object>(this.AvailableValues.Cast<object>());
+                    this.readonlySelectedValues = new ReadOnlyObservableCollection<object>(this.selectedValues);
+
+                    this.RaisePropertyChanged(nameof(this.SelectedValues));
+                }
+            }
         }
 
         protected override void OnIsActiveChanged()
         {
             if (!this.IsActive)
             {
-                this.selectedValues.Clear();
+                this.selectedValues = new ObservableCollection<object>(this.AvailableValues.Cast<object>());
+                // this.selectedValues.Clear();
             }
 
             base.OnIsActiveChanged();
@@ -63,10 +80,11 @@
             {
                 foreach (var item in e.RemovedItems)
                 {
-                    this.selectedValues.Remove(item);
+                    if (this.selectedValues.Contains(item) == true)
+                        this.selectedValues.Remove(item);
                 }
 
-                this.IsActive = this.selectedValues.Count > 0;
+                this.IsActive = this.selectedValues.Count != this.availableValuesCount;
             }
 
             this.OnIsActiveChanged();
@@ -80,7 +98,6 @@
     /// <typeparam name="T"></typeparam>
     public class EqualFilter<T> : EqualFilter, IMultiValueFilter
     {
-        private IEnumerable availableValues;
         protected readonly Func<object, object> getter;
 
         /// <summary>
@@ -158,7 +175,7 @@
                 else
                 {
                     object value = this.getter(e.Item);
-                    e.Accepted = this.SelectedValues.Contains(value);
+                    e.Accepted = this.SelectedValues.Contains(value) == false;
                 }
             }
         }
