@@ -16,8 +16,8 @@
     [View(typeof(MultiValueFilterView))]
     public abstract class EqualFilter : PropertyFilter, IMultiValueFilter, IFilter
     {
-        private ObservableCollection<object> selectedValues;
-        private ReadOnlyObservableCollection<object> readonlySelectedValues;
+        private ObservableCollection<object> selectedValues = new ObservableCollection<object>();
+        private ReadOnlyObservableCollection<object> readonlySelectedValues = new ReadOnlyObservableCollection<object>(this.selectedValues);
 
         protected IEnumerable availableValues;
         private int availableValuesCount;
