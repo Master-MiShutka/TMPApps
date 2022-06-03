@@ -76,16 +76,6 @@
             </WrapPanel>
         </Border>
         <!--  2  -->
-        <ui_controls:CollectionViewNavigator Grid.Row="2">
-            <ui_controls:CollectionViewNavigator.DataContext>
-                <PriorityBinding>
-                    <Binding
-                        FallbackValue="{x:Null}"
-                        IsAsync="True"
-                        Path="View" />
-                    <Binding Path="ItemsSource" RelativeSource="{RelativeSource AncestorType={x:Type local_controls:DataGridControl}}" />
-                </PriorityBinding>
-            </ui_controls:CollectionViewNavigator.DataContext>
-        </ui_controls:CollectionViewNavigator>
+        <ui_controls:CollectionViewNavigator Grid.Row="2" DataContext="{Binding Path=ItemsSource, ElementName=filterDataGrid, IsAsync=True}" />
     </Grid>
 </UserControl>

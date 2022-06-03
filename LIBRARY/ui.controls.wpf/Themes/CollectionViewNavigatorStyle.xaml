@@ -57,9 +57,9 @@
                                 <TextBlock TextAlignment="Center">
                                     <TextBlock.Text>
                                         <MultiBinding FallbackValue="с ? по из ?" StringFormat="с {0:N0} по {1:N0}{3}из {2:N0}">
-                                            <Binding Path="UIStartIndex" />
-                                            <Binding Path="UIEndIndex" />
-                                            <Binding Path="TotalItemsCountIncludingFilter" />
+                                            <Binding Path="UIStartIndex" IsAsync="True"/>
+                                            <Binding Path="UIEndIndex"  IsAsync="True"/>
+                                            <Binding Path="TotalItemsCountIncludingFilter"  IsAsync="True"/>
                                             <Binding Source="{x:Static system:Environment.NewLine}" />
                                         </MultiBinding>
                                     </TextBlock.Text>
@@ -71,13 +71,13 @@
                                     <local:ButtonWithIconKind
                                         Margin="1,2,1,2"
                                         Padding="2,0"
-                                        Command="{Binding MoveToFirstCommand}"
+                                        Command="{Binding MoveToFirstCommand, IsAsync=True}"
                                         ImageKind="ArrowLeft"
                                         ToolTip="Выбрать первую запись" />
                                     <local:ButtonWithIconKind
                                         Margin="1,2,1,2"
                                         Padding="2,0"
-                                        Command="{Binding MoveToPreviousCommand}"
+                                        Command="{Binding MoveToPreviousCommand, IsAsync=True}"
                                         ImageKind="ChevronLeft"
                                         ToolTip="Выбрать предыдущую запись" />
                                     <Border
@@ -89,14 +89,14 @@
                                         <TextBlock Padding="2,0">
                                             <TextBlock.Text>
                                                 <MultiBinding FallbackValue="Запись ? из ?" StringFormat="Запись {0:N0} из {1:N0}">
-                                                    <Binding Path="UICurrentItemPositionOnPage" />
-                                                    <Binding Path="UIItemsCountOnPage" />
+                                                    <Binding Path="UICurrentItemPositionOnPage"  IsAsync="True"/>
+                                                    <Binding Path="UIItemsCountOnPage"  IsAsync="True"/>
                                                 </MultiBinding>
                                             </TextBlock.Text>
                                             <TextBlock.ToolTip>
                                                 <MultiBinding Converter="{StaticResource MultibindingStringFormatConverter}" ConverterParameter="Выбрана запись {0:N0} из {1:N0}">
-                                                    <Binding Path="UICurrentItemPositionOnPage" />
-                                                    <Binding Path="UIItemsCountOnPage" />
+                                                    <Binding Path="UICurrentItemPositionOnPage"  IsAsync="True"/>
+                                                    <Binding Path="UIItemsCountOnPage"  IsAsync="True"/>
                                                 </MultiBinding>
                                             </TextBlock.ToolTip>
                                         </TextBlock>
@@ -104,13 +104,13 @@
                                     <local:ButtonWithIconKind
                                         Margin="1,2,1,2"
                                         Padding="2,0"
-                                        Command="{Binding MoveToNextCommand}"
+                                        Command="{Binding MoveToNextCommand, IsAsync=True}"
                                         ImageKind="ChevronRight"
                                         ToolTip="Выбрать следующую запись" />
                                     <local:ButtonWithIconKind
                                         Margin="1,2,1,2"
                                         Padding="2,0"
-                                        Command="{Binding MoveToLastCommand}"
+                                        Command="{Binding MoveToLastCommand, IsAsync=True}"
                                         ImageKind="ArrowRight"
                                         ToolTip="Выбрать последнюю запись" />
                                 </StackPanel>
@@ -127,13 +127,13 @@
                                     <local:ButtonWithIconKind
                                         Margin="1,2,1,2"
                                         Padding="2,0"
-                                        Command="{Binding MoveToFirstPageCommand}"
+                                        Command="{Binding MoveToFirstPageCommand, IsAsync=True}"
                                         ImageKind="ArrowLeft"
                                         ToolTip="Первая страница данных" />
                                     <local:ButtonWithIconKind
                                         Margin="1,2,1,2"
                                         Padding="2,0"
-                                        Command="{Binding MoveToPreviousPageCommand}"
+                                        Command="{Binding MoveToPreviousPageCommand, IsAsync=True}"
                                         ImageKind="ChevronLeft"
                                         ToolTip="Предыдущая страница данных" />
                                     <Border
@@ -145,14 +145,14 @@
                                         <TextBlock Padding="2,0">
                                             <TextBlock.Text>
                                                 <MultiBinding FallbackValue="Страница ? из ?" StringFormat="Страница {0:N0} из {1:N0}">
-                                                    <Binding Path="CurrentPage" />
-                                                    <Binding Path="PageCount" />
+                                                    <Binding Path="CurrentPage"  IsAsync="True"/>
+                                                    <Binding Path="PageCount"  IsAsync="True"/>
                                                 </MultiBinding>
                                             </TextBlock.Text>
                                             <TextBlock.ToolTip>
                                                 <MultiBinding Converter="{StaticResource MultibindingStringFormatConverter}" ConverterParameter="Отображается страница {0:N0} из {1:N0}">
-                                                    <Binding Path="CurrentPage" />
-                                                    <Binding Path="PageCount" />
+                                                    <Binding Path="CurrentPage"  IsAsync="True"/>
+                                                    <Binding Path="PageCount"  IsAsync="True"/>
                                                 </MultiBinding>
                                             </TextBlock.ToolTip>
                                         </TextBlock>
@@ -160,13 +160,13 @@
                                     <local:ButtonWithIconKind
                                         Margin="1,2,1,2"
                                         Padding="2,0"
-                                        Command="{Binding MoveToNextPageCommand}"
+                                        Command="{Binding MoveToNextPageCommand, IsAsync=True}"
                                         ImageKind="ArrowRight"
                                         ToolTip="Следующая страница данных" />
                                     <local:ButtonWithIconKind
                                         Margin="1,2,1,2"
                                         Padding="2,0"
-                                        Command="{Binding MoveToLastPageCommand}"
+                                        Command="{Binding MoveToLastPageCommand, IsAsync=True}"
                                         ImageKind="ChevronRight"
                                         ToolTip="Последняя страница данных" />
                                     <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
@@ -180,7 +180,7 @@
                                         Padding="0"
                                         VerticalContentAlignment="Center"
                                         IsEditable="True"
-                                        Text="{Binding ItemsPerPage, Mode=TwoWay, FallbackValue=0, StringFormat={}{0:N0}}"
+                                        Text="{Binding ItemsPerPage, IsAsync=True, Mode=TwoWay, FallbackValue=0, StringFormat={}{0:N0}}"
                                         ToolTip="Количество записей на страницу">
                                         <ComboBoxItem Content="10" />
                                         <ComboBoxItem Content="20" />
@@ -198,7 +198,7 @@
                                     <Button
                                         Margin="2"
                                         Padding="2,1,2,-2"
-                                        Command="{Binding ShowAllItems}">
+                                        Command="{Binding ShowAllItems, IsAsync=True}">
                                         <TextBlock>
                                             <TextBlock.Text>
                                                 <MultiBinding FallbackValue="Все ? из ?" StringFormat="Все {0:N0} из {1:N0}">
