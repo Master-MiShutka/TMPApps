@@ -194,6 +194,8 @@
                     {
                         logger?.Warn($"Неверный формат данных: поле '{fieldName}', ожидался тип данных '{genericType}', прочитаны данные тип '{dbfValueType}'.");
                         System.Diagnostics.Debugger.Break();
+
+                        //TODO: Decimal to int32
                     }
                 }
                 else
