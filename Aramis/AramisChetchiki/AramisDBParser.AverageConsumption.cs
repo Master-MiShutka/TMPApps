@@ -52,32 +52,35 @@
                 // общий список для значений
                 List<Tuple<DateOnly, MeterEventType, object>> list = new List<Tuple<DateOnly, MeterEventType, object>>(payments.Count + changes.Count + controlDatas.Count);
 
-                Parallel.ForEach(aramisData.Meters, meter =>
+                //TODO: make Parallel
+                var meters = aramisData.Meters.ToList();
+                for (int index = 0; index < meters.Count; index++)
+                //Parallel.ForEach(aramisData.Meters, meter =>
                 {
                     workTask.UpdateUI(++processedRows, totalRows, stepNameString: "лицевой счет");
 
-                    if (meter.Лицевой != 0 || meter.Удалён == false)
+                    if (meters[index].Лицевой != 0 || meters[index].Удалён == false)
                     {
                         // контрольные показания
                         controlDatas.Clear();
-                        if (aramisData.MetersControlData.ContainsKey(meter.Лицевой) == true)
+                        if (aramisData.MetersControlData.ContainsKey(meters[index].Лицевой) == true)
                         {
-                            controlDatas = aramisData.MetersControlData[meter.Лицевой].FirstOrDefault().Data.OrderByDescending(i => i.Date).ToList();
+                            controlDatas = aramisData.MetersControlData[meters[index].Лицевой].FirstOrDefault().Data.OrderByDescending(i => i.Date).ToList();
                         }
 
                         // оплаты по лицевому счёту
                         payments.Clear();
-                        if (aramisData.Payments.ContainsKey(meter.Лицевой) == true)
+                        if (aramisData.Payments.ContainsKey(meters[index].Лицевой) == true)
                         {
                             // изначально оплаты отсортированы по возрастанию периода оплаты
-                            payments = aramisData.Payments[meter.Лицевой].Reverse().ToList();
+                            payments = aramisData.Payments[meters[index].Лицевой].Reverse().ToList();
                         }
 
                         // замены по лицевому счёту
                         changes.Clear();
-                        if (aramisData.ChangesOfMeters.ContainsKey(meter.Лицевой) == true)
+                        if (aramisData.ChangesOfMeters.ContainsKey(meters[index].Лицевой) == true)
                         {
-                            changes = aramisData.ChangesOfMeters[meter.Лицевой].OrderByDescending(i => i.ДатаЗамены).ToList();
+                            changes = aramisData.ChangesOfMeters[meters[index].Лицевой].OrderByDescending(i => i.ДатаЗамены).ToList();
                         }
 
                         // построение списка и сортировка
@@ -89,34 +92,35 @@
 
                             // построение списка событий
                             // пытаемся добавить, если не удалось, т.е. уже добавлен
-                            if (events.TryAdd(meter.Лицевой, meterEvents) == false)
+                            if (events.TryAdd(meters[index].Лицевой, meterEvents) == false)
                             {
                                 // если текущий счётчик не удален - удаляем ранее добавленный
-                                if (meter.Удалён == false)
+                                if (meters[index].Удалён == false)
                                 {
-                                    events.Remove(meter.Лицевой, out IList<MeterEvent> removed);
+                                    events.Remove(meters[index].Лицевой, out IList<MeterEvent> removed);
 
                                     // попытка добавить текущий счётчик
-                                    if (events.TryAdd(meter.Лицевой, meterEvents) == false)
+                                    if (events.TryAdd(meters[index].Лицевой, meterEvents) == false)
                                     {
                                         if (System.Diagnostics.Debugger.IsAttached)
                                         {
-                                            System.Diagnostics.Debug.WriteLine($"Can't add the events with personal ID = {meter.Лицевой}");
+                                            System.Diagnostics.Debug.WriteLine($"Can't add the events with personal ID = {meters[index].Лицевой}");
                                         }
                                         else
                                         {
-                                            logger?.Warn($"Не удалось добавить события по лицевому счёту {meter.Лицевой}");
+                                            logger?.Warn($"Не удалось добавить события по лицевому счёту {meters[index].Лицевой}");
                                         }
                                     }
                                 }
                             }
 
                             // расчёт среднемесячного потребления за последний год
-                            meter.СреднеМесячныйРасходПоОплате = this.CalcAverageConsumptionByPayments(list);
-                            meter.СреднеМесячныйРасходПоКонтрольнымПоказаниям = this.CalcAverageConsumptionByControlReadings(list);
+                            meters[index].СреднеМесячныйРасходПоОплате = this.CalcAverageConsumptionByPayments(list);
+                            meters[index].СреднеМесячныйРасходПоКонтрольнымПоказаниям = this.CalcAverageConsumptionByControlReadings(list);
                         }
                     }
-                });
+                    //});
+                }
 
                 aramisData.Events = events.ToDictionary(i => i.Key, j => j.Value);
             }
