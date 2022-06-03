@@ -478,7 +478,7 @@
 
             matrixDefinition = getMatrixDefinition(matrixHeader);
 
-            if (add(new Matrix(matrixDefinition, (matrixId++).ToString(), matrixHeader, matrixDescription, false, false)
+            if (add(new Matrix(matrixDefinition, (matrixId++).ToString(), matrixHeader, matrixDescription, false, true)
             {
                 GetRowHeaderValuesFunc = () => Enumerable.Range(curYear - yearsCount + 1, yearsCount).Reverse().Select(i => MatrixHeaderCell.CreateRowHeader(i.ToString(AppSettings.CurrentCulture))),
                 GetColumnHeaderValuesFunc = () => System.Globalization.DateTimeFormatInfo.CurrentInfo.MonthNames.Take(12)
@@ -511,7 +511,7 @@
 
             matrixDefinition = getMatrixDefinition(matrixHeader);
 
-            if (add(new Matrix(matrixDefinition, (matrixId++).ToString(), matrixHeader, matrixDescription, false, false)
+            if (add(new Matrix(matrixDefinition, (matrixId++).ToString(), matrixHeader, matrixDescription, false, true)
             {
                 GetRowHeaderValuesFunc = () => Enumerable.Range(curYear - yearsCount + 1, yearsCount).Reverse().Select(i => MatrixHeaderCell.CreateRowHeader(i.ToString(AppSettings.CurrentCulture))),
                 GetColumnHeaderValuesFunc = () => System.Globalization.DateTimeFormatInfo.CurrentInfo.MonthNames.Take(12)
@@ -552,7 +552,7 @@
             sc.Add(electronic_meter);
             sc.AddRange(allMeters.Select(i => i.ГруппаСчётчикаДляОтчётов).Distinct().ToArray());
 
-            if (add(new Matrix(matrixDefinition, (matrixId++).ToString(), matrixHeader, matrixDescription, false, false)
+            if (add(new Matrix(matrixDefinition, (matrixId++).ToString(), matrixHeader, matrixDescription, false, true)
             {
                 GetRowHeaderValuesFunc = () => sc.Select(i => MatrixHeaderCell.CreateRowHeader(i)),
                 GetColumnHeaderValuesFunc = () => allMeters.Select(i => i.ТипНаселённойМестности).Distinct().Select(i => MatrixHeaderCell.CreateColumnHeader(i)),
