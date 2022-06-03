@@ -891,7 +891,7 @@
                 ERRSUM = record.GetValue<decimal?>("ERRSUM"),
                 ERRSUMN = record.GetValue<decimal?>("ERRSUMN"),
                 SUMMA_KN = record.GetValue<decimal?>("SUMMA_KN"),
-                SUMMA_KC = record.GetValue<int?>("SUMMA_KC"),
+                SUMMA_KC = record.GetValue<decimal?>("SUMMA_KC"),
                 КОД_КОН = record.GetString("КОД_КОН"),
                 СРЕДНЕЕ = record.GetValue<int?>("СРЕДНЕЕ"),
                 МЕСЯЦ = record.GetValue<int?>("МЕСЯЦ"),
