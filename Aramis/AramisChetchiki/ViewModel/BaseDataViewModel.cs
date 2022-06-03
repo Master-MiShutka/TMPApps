@@ -250,10 +250,13 @@
 
             protected set
             {
-                BindingOperations.DisableCollectionSynchronization(this.data);
+                if (this.data != null)
+                    BindingOperations.DisableCollectionSynchronization(this.data);
 
                 this.SetProperty(ref this.data, value);
-                BindingOperations.EnableCollectionSynchronization(this.data, this._lock);
+
+                if (this.data != null)
+                    BindingOperations.EnableCollectionSynchronization(this.data, this._lock);
 
                 this.RaisePropertyChanged(nameof(this.IsDataNullOrEmpty));
                 this.RaisePropertyChanged(nameof(this.View));
