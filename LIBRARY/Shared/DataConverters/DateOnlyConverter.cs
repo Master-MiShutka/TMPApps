@@ -1,4 +1,4 @@
-﻿namespace TMP.Common.RepositoryCommon
+﻿namespace TMP.Shared.DataConverters
 {
     using System;
     using System.Globalization;

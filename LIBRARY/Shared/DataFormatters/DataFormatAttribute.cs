@@ -1,4 +1,4 @@
-﻿namespace TMP.Shared
+﻿namespace TMP.Shared.DataFormatters
 {
     public class DataFormatAttribute : System.Attribute
     {

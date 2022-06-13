@@ -1,4 +1,4 @@
-﻿namespace TMP.Common.RepositoryCommon
+﻿namespace TMP.Shared.DataFormatters
 {
     using System;
     using MessagePack;
