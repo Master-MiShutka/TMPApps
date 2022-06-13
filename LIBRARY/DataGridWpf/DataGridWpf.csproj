@@ -3,12 +3,13 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Extensions\TMP.Extensions.csproj" />
     <ProjectReference Include="..\ItemsFilter\ItemsFilter.csproj" />
     <ProjectReference Include="..\Shared\Shared.csproj" />
     <ProjectReference Include="..\ui.controls.wpf\ui.controls.wpf.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="DataGridExtensions" Version="2.5.13" />
+    <PackageReference Include="DataGridExtensions" Version="2.5.14" />
     <PackageReference Include="PropertyChangedAnalyzers" Version="4.0.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -20,9 +21,14 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>build; analyzers</IncludeAssets>
     </PackageReference>
-    <PackageReference Update="WpfAnalyzers" Version="4.0.2">
+    <PackageReference Update="WpfAnalyzers" Version="4.1.1">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>build; analyzers</IncludeAssets>
     </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Themes\CollectionViewNavigatorStyle.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+    </Page>
   </ItemGroup>
 </Project>

@@ -19,7 +19,7 @@
     <ProjectReference Include="..\LIBRARY\ui.controls.wpf\ui.controls.wpf.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="DocumentFormat.OpenXml" Version="2.15.0" />
+    <PackageReference Include="DocumentFormat.OpenXml" Version="2.16.0" />
     <PackageReference Include="morelinq" Version="3.3.2" />
     <PackageReference Include="NetOfficeFw.Core" Version="1.8.1" />
     <PackageReference Include="NetOfficeFw.Excel" Version="1.8.1" />
@@ -37,7 +37,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>build; analyzers</IncludeAssets>
     </PackageReference>
-    <PackageReference Update="WpfAnalyzers" Version="4.0.1">
+    <PackageReference Update="WpfAnalyzers" Version="4.1.1">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>build; analyzers</IncludeAssets>
     </PackageReference>

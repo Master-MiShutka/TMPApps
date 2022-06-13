@@ -1,24 +1,14 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <OutputType>Library</OutputType>
-    <RootNamespace>TMP.Shared</RootNamespace>
-    <UseWpf>True</UseWpf>
-    <UseWindowsForms>True</UseWindowsForms>
+	  <TargetFramework>netstandard2.1</TargetFramework>
+	  <RootNamespace>TMP.Shared</RootNamespace>
     <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Binaron.Serializer" Version="4.1.0" />
-    <PackageReference Include="NLog" Version="4.7.14" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Update="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
-    <PackageReference Update="StyleCop.Analyzers" Version="1.1.118">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>build; analyzers</IncludeAssets>
-    </PackageReference>
-    <PackageReference Update="WpfAnalyzers" Version="4.0.2">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>build; analyzers</IncludeAssets>
-    </PackageReference>
+    <PackageReference Include="NLog" Version="5.0.0" />
+	<PackageReference Include="System.Drawing.Common" Version="6.0.0" />
+	<PackageReference Include="MessagePack" Version="2.3.85" />
+	<PackageReference Include="MessagePackAnalyzer" Version="2.3.85" />
   </ItemGroup>
 </Project>

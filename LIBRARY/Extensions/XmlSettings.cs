@@ -23,27 +23,27 @@
     /// <code>
     /// public class TestSettings : XmlSettings
     /// {
-    /// 	[XmlSettingIgnore]
-    /// 	public string TestString { get; set; }
+    ///     [XmlSettingIgnore]
+    ///     public string TestString { get; set; }
     ///
-    /// 	[XmlSetting("Integar")]
-    /// 	public int TestIntegar { get; set; }
+    ///     [XmlSetting("Integar")]
+    ///     public int TestIntegar { get; set; }
     ///
-    /// 	public List&lt;string&gt; GenericListOfString { get; set; }
+    ///     public List&lt;string&gt; GenericListOfString { get; set; }
     ///
-    /// 	public TestSettings()
-    /// 	{
-    /// 		TestString = "Hello";
-    /// 		TestIntegar = 0;
+    ///     public TestSettings()
+    ///     {
+    ///         TestString = "Hello";
+    ///         TestIntegar = 0;
     ///
-    /// 		GenericListOfString = new List&lt;string&gt;();
-    /// 		GenericListOfString.Add("item0");
-    /// 		GenericListOfString.Add("item1");
-    /// 		GenericListOfString.Add("item2");
-    /// 		GenericListOfString.Add("item3");
-    /// 		GenericListOfString.Add("item4");
-    /// 		GenericListOfString.Add("item5");
-    /// 	}
+    ///         GenericListOfString = new List&lt;string&gt;();
+    ///         GenericListOfString.Add("item0");
+    ///         GenericListOfString.Add("item1");
+    ///         GenericListOfString.Add("item2");
+    ///         GenericListOfString.Add("item3");
+    ///         GenericListOfString.Add("item4");
+    ///         GenericListOfString.Add("item5");
+    ///     }
     /// }
     /// </code>
     /// Somewhere in the code...
@@ -180,12 +180,12 @@
                 encrypt = array[0].Encrypt;
                 if (!string.IsNullOrEmpty(array[0].Name))
                 {
-                    result = base.GetType().Name + "/" + array[0].Name;
+                    result = this.GetType().Name + "/" + array[0].Name;
                     return result;
                 }
             }
 
-            result = base.GetType().Name + "/" + property.Name;
+            result = this.GetType().Name + "/" + property.Name;
             return result;
         }
 
@@ -225,7 +225,7 @@
                 {
                     if (!property.PropertyType.IsSerializable)
                     {
-                        throw new NotSupportedException("Unsupported data found in " + base.GetType().Name + " class");
+                        throw new NotSupportedException("Unsupported data found in " + this.GetType().Name + " class");
                     }
 
                     XmlSerializer xmlSerializer = new XmlSerializer(property.PropertyType);
@@ -250,7 +250,7 @@
         /// </summary>
         public void Save()
         {
-            PropertyInfo[] properties = base.GetType().GetProperties();
+            PropertyInfo[] properties = this.GetType().GetProperties();
             PropertyInfo[] array = properties;
             for (int i = 0; i < array.Length; i++)
             {
@@ -305,7 +305,7 @@
                     {
                         if (!property.PropertyType.IsSerializable)
                         {
-                            throw new NotSupportedException("Unsupported data found in " + base.GetType().Name + " class");
+                            throw new NotSupportedException("Unsupported data found in " + this.GetType().Name + " class");
                         }
 
                         XmlSerializer xmlSerializer = new XmlSerializer(property.PropertyType);
@@ -324,7 +324,7 @@
         /// </summary>
         public void Load()
         {
-            PropertyInfo[] properties = base.GetType().GetProperties();
+            PropertyInfo[] properties = this.GetType().GetProperties();
             PropertyInfo[] array = properties;
             for (int i = 0; i < array.Length; i++)
             {
