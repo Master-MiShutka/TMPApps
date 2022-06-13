@@ -205,13 +205,13 @@
 
         public Shared.PlusPropertyDescriptor SelectedSourceProperty { get; set; }
 
-        public List<TMPApplication.VisualTheme> VisualThemesList
+        public List<WindowWithDialogs.VisualTheme> VisualThemesList
         {
             get => App.Instance.VisualThemesList;
             set => App.Instance.VisualThemesList = value;
         }
 
-        public TMPApplication.VisualTheme SelectedVisualTheme
+        public WindowWithDialogs.VisualTheme SelectedVisualTheme
         {
             get => App.Instance.SelectedVisualTheme;
             set => App.Instance.SelectedVisualTheme = value;

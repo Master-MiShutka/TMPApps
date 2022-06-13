@@ -121,9 +121,9 @@ namespace TMP.WORK.AramisChetchiki.Properties
         [System.Configuration.UserScopedSettingAttribute()]
         [System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [SettingsSerializeAs(System.Configuration.SettingsSerializeAs.Xml)]
-        public TMPApplication.VisualTheme Theme
+        public WindowWithDialogs.VisualTheme Theme
         {
-            get => ((TMPApplication.VisualTheme)(this["Theme"]));
+            get => ((WindowWithDialogs.VisualTheme)(this["Theme"]));
             set => this["Theme"] = value;
         }
 

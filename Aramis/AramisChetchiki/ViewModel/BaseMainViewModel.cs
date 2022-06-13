@@ -12,14 +12,14 @@
     {
         private bool isDisposed;
         private Window window;
-        private readonly TMPApplication.WpfDialogs.Contracts.IWindowWithDialogs mainWindow = TMPApplication.TMPApp.Instance?.MainWindowWithDialogs;
+        private readonly WindowWithDialogs.Contracts.IWindowWithDialogs mainWindow = WindowWithDialogs.BaseApplication.Instance?.MainWindowWithDialogs;
 
         private bool isAnalizingData;
         private string status;
         private string detailedStatus;
         private bool isBusy;
 
-        private TMPApplication.WpfDialogs.Contracts.IDialog busyDialog;
+        private WindowWithDialogs.Contracts.IDialog busyDialog;
         private System.Threading.CancellationTokenSource isBusyCancellationTokenSource = new System.Threading.CancellationTokenSource();
 
         protected BaseMainViewModel()
@@ -29,7 +29,7 @@
                 return;
             }
 
-            TMPApplication.DispatcherExtensions.InUi(() => this.window = App.Current.MainWindow);
+            WindowWithDialogs.DispatcherExtensions.InUi(() => this.window = App.Current.MainWindow);
             if (this.window == null)
             {
                 throw new ArgumentNullException("App.Current.MainWindow");
@@ -94,7 +94,7 @@
 
                             if (this.isBusy && this.isBusyCancellationTokenSource?.IsCancellationRequested == false)
                             {
-                                TMPApplication.TMPApp.InvokeInUIThread(() =>
+                                WindowWithDialogs.BaseApplication.InvokeInUIThread(() =>
                                 {
                                     if (this.isBusyCancellationTokenSource != null)
                                     {
@@ -204,17 +204,17 @@
         {
         }
 
-        protected void SetWindowTaskbarItemProgressState(TMPApplication.WpfDialogs.Contracts.TaskbarItemProgressState taskbarItemProgressState, double value = -1)
+        protected void SetWindowTaskbarItemProgressState(WindowWithDialogs.Contracts.TaskbarItemProgressState taskbarItemProgressState, double value = -1)
         {
-            TMPApplication.DispatcherExtensions.InUi(() =>
+            WindowWithDialogs.DispatcherExtensions.InUi(() =>
             {
                 this.mainWindow.TaskbarItemInfo = value != -1
-                    ? new TMPApplication.WpfDialogs.Contracts.TaskbarItemInfo
+                    ? new WindowWithDialogs.Contracts.TaskbarItemInfo
                     {
                         ProgressState = taskbarItemProgressState,
                         ProgressValue = value,
                     }
-                    : new TMPApplication.WpfDialogs.Contracts.TaskbarItemInfo
+                    : new WindowWithDialogs.Contracts.TaskbarItemInfo
                     {
                         ProgressState = taskbarItemProgressState,
                     };
@@ -246,9 +246,9 @@
             this.mainWindow.ShowDialogQuestion(message);
         }
 
-        public Action ShowCustomDialog(System.Windows.Controls.Control control, string title, TMPApplication.WpfDialogs.DialogMode dialogMode = TMPApplication.WpfDialogs.DialogMode.Ok)
+        public Action ShowCustomDialog(System.Windows.Controls.Control control, string title, WindowWithDialogs.DialogMode dialogMode = WindowWithDialogs.DialogMode.Ok)
         {
-            TMPApplication.WpfDialogs.Contracts.ICustomContentDialog dialog = null;
+            WindowWithDialogs.Contracts.ICustomContentDialog dialog = null;
             dialog = this.mainWindow.DialogCustom(
                 control,
                 title,

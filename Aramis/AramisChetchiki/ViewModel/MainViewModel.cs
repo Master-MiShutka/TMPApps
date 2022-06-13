@@ -55,7 +55,7 @@
                 };
                 scrollViewer.Content = textBox;
 
-                this.ShowCustomDialog(scrollViewer, "-= Выявленные ошибки в БД Арамис =-", TMPApplication.WpfDialogs.DialogMode.Ok);
+                this.ShowCustomDialog(scrollViewer, "-= Выявленные ошибки в БД Арамис =-", WindowWithDialogs.DialogMode.Ok);
             }, () => System.IO.File.Exists(AramisDBParser.ErrorsFileName));
 
             this.CommandShowPreferences = new DelegateCommand(() =>
@@ -158,10 +158,10 @@
                     break;
                 case Common.RepositoryCommon.RepositoryAction.Loading:
                 case Common.RepositoryCommon.RepositoryAction.Saving:
-                    this.SetWindowTaskbarItemProgressState(TMPApplication.WpfDialogs.Contracts.TaskbarItemProgressState.Indeterminate);
+                    this.SetWindowTaskbarItemProgressState(WindowWithDialogs.Contracts.TaskbarItemProgressState.Indeterminate);
                     break;
                 case Common.RepositoryCommon.RepositoryAction.Loaded:
-                    this.SetWindowTaskbarItemProgressState(TMPApplication.WpfDialogs.Contracts.TaskbarItemProgressState.None);
+                    this.SetWindowTaskbarItemProgressState(WindowWithDialogs.Contracts.TaskbarItemProgressState.None);
                     this.RaisePropertyChanged(nameof(this.IsDataLoaded));
                     this.RaisePropertyChanged(nameof(this.Data));
                     this.RaisePropertyChanged(nameof(this.Meters));
@@ -171,7 +171,7 @@
                     this.RaisePropertyChanged(nameof(this.SelectedDataFileInfo));
                     break;
                 case Common.RepositoryCommon.RepositoryAction.Saved:
-                    this.SetWindowTaskbarItemProgressState(TMPApplication.WpfDialogs.Contracts.TaskbarItemProgressState.None);
+                    this.SetWindowTaskbarItemProgressState(WindowWithDialogs.Contracts.TaskbarItemProgressState.None);
                     this.RaisePropertyChanged(nameof(this.AvailableDataFiles));
                     this.RaisePropertyChanged(nameof(this.SelectedDataFileInfo));
                     break;
@@ -211,12 +211,12 @@
             this.Status = $"Попытка загрузки ранее сохраненных данных:\nРЭС - {this.SelectedDataFileInfo.DepartamentName};\nимя файла - {this.SelectedDataFileInfo.FileName}";
             this.logger?.Info(this.Status);
 
-            this.SetWindowTaskbarItemProgressState(TMPApplication.WpfDialogs.Contracts.TaskbarItemProgressState.Indeterminate);
+            this.SetWindowTaskbarItemProgressState(WindowWithDialogs.Contracts.TaskbarItemProgressState.Indeterminate);
 
             bool result = await Repository.Instance.GetDataFromFile(this.SelectedDataFileInfo).ConfigureAwait(false);
 
             this.IsInitialized = true;
-            this.SetWindowTaskbarItemProgressState(TMPApplication.WpfDialogs.Contracts.TaskbarItemProgressState.None);
+            this.SetWindowTaskbarItemProgressState(WindowWithDialogs.Contracts.TaskbarItemProgressState.None);
 
             if (result)
             {
@@ -353,7 +353,7 @@
         {
             get
             {
-                string result = TMPApplication.TMPApp.Instance.Title;
+                string result = WindowWithDialogs.BaseApplication.Instance.Title;
                 if (this.CurrentMode != Mode.Home)
                 {
                     System.Reflection.FieldInfo info = this.CurrentMode.GetType().GetField(this.CurrentMode.ToString());

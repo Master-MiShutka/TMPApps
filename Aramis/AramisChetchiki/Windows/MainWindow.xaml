@@ -1,4 +1,4 @@
-﻿<wwd:WindowWithDialogs
+﻿<window_with_dialogs:WindowWithDialogs
     x:Class="TMP.WORK.AramisChetchiki.MainWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -13,7 +13,7 @@
     xmlns:uicontrols="clr-namespace:TMP.UI.Controls.WPF;assembly=ui.controls.wpf"
     xmlns:views="clr-namespace:TMP.WORK.AramisChetchiki.Views"
     xmlns:vm="clr-namespace:TMP.WORK.AramisChetchiki.ViewModel"
-    xmlns:wwd="clr-namespace:TMPApplication.WpfDialogs;assembly=TMPApplication"
+    xmlns:window_with_dialogs="clr-namespace:WindowWithDialogs;assembly=WindowWithDialogs"
     x:Name="mainWindow"
     Title="{Binding WindowTitle}"
     Width="1900"
@@ -221,4 +221,4 @@
             </StackPanel>
         </DockPanel>
     </Grid>
-</wwd:WindowWithDialogs>
+</window_with_dialogs:WindowWithDialogs>

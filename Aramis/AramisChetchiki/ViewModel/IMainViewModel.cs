@@ -4,7 +4,7 @@
     using System.Linq;
     using TMP.WORK.AramisChetchiki.Model;
 
-    public interface IMainViewModel : TMPApplication.IMainViewModel
+    public interface IMainViewModel : WindowWithDialogs.IMainViewModel
     {
         Dictionary<string, IList<UI.Controls.WPF.Reporting.MatrixGrid.IMatrixCell>> MatrixCache { get; }
 

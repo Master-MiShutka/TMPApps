@@ -88,7 +88,7 @@
 
             this.FilterPresenter = ItemsFilter.FiltersManager.TryGetFilterPresenter(collectionView);
 
-            TMPApplication.DispatcherExtensions.InUi(() =>
+            WindowWithDialogs.DispatcherExtensions.InUi(() =>
             {
                 // добавление фильтров
                 string[] filterFields =

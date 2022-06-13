@@ -13,8 +13,6 @@
     xmlns:local_extensions="clr-namespace:TMP.WORK.AramisChetchiki.Extensions"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:settings_pages="clr-namespace:TMP.WORK.AramisChetchiki.Controls.SettingsPages"
-    xmlns:tmpapp="clr-namespace:TMPApplication;assembly=TMPApplication"
-    xmlns:xcdg="http://schemas.xceed.com/wpf/xaml/datagrid"
     Header="Оформление"
     mc:Ignorable="d">
     <settings_pages:SettingsPage.Resources>

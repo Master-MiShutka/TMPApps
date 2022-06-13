@@ -643,7 +643,7 @@
         private void DoSetSorting()
         {
             Controls.SelectorFieldsAndSortCollectionView control = new Controls.SelectorFieldsAndSortCollectionView(this.TableColumns, this.view);
-            Action dialogCloseAction = this.ShowCustomDialog(control, "-= Выбор полей, их порядок и сортировка =-", TMPApplication.WpfDialogs.DialogMode.None);
+            Action dialogCloseAction = this.ShowCustomDialog(control, "-= Выбор полей, их порядок и сортировка =-", WindowWithDialogs.DialogMode.None);
             control.CloseAction = dialogCloseAction;
         }
 

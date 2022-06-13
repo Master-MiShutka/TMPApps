@@ -22,13 +22,13 @@
             object item = element.Tag;
 
             // find the item container
-            DependencyObject container = TMPApplication.Helpers.BaseWPFHelpers.FindElementOfTypeUp(element, typeof(ListBoxItem));
+            DependencyObject container = WindowWithDialogs.WPFHelpers.FindElementOfTypeUp(element, typeof(ListBoxItem));
 
             // locate the items control which it belongs to
             ItemsControl owner = ItemsControl.ItemsControlFromItemContainer(container);
 
             // locate the legend
-            Legend legend = (Legend)TMPApplication.Helpers.BaseWPFHelpers.FindElementOfTypeUp(owner, typeof(Legend));
+            Legend legend = (Legend)WindowWithDialogs.WPFHelpers.FindElementOfTypeUp(owner, typeof(Legend));
 
             CollectionView collectionView = (CollectionView)CollectionViewSource.GetDefaultView(owner.DataContext);
 

@@ -2,7 +2,6 @@
     x:Class="TMP.WORK.AramisChetchiki.Views.LoadingDataView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:DialogManagement="clr-namespace:TMPApplication.WpfDialogs;assembly=TMPApplication"
     xmlns:controls_ext="clr-namespace:TMP.UI.Controls.WPF.Extensions;assembly=ui.controls.wpf"
     xmlns:controls_helpers="clr-namespace:TMP.UI.Controls.WPF.Helpers;assembly=ui.controls.wpf"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -11,6 +10,7 @@
     xmlns:model="clr-namespace:TMP.WORK.AramisChetchiki.Model"
     xmlns:ui_controls="clr-namespace:TMP.UI.Controls.WPF;assembly=ui.controls.wpf"
     xmlns:vm="clr-namespace:TMP.WORK.AramisChetchiki.ViewModel"
+    xmlns:window_with_dialogs="clr-namespace:WindowWithDialogs;assembly=WindowWithDialogs"
     HorizontalAlignment="Center"
     VerticalAlignment="Center"
     d:DataContext="{d:DesignInstance {x:Type vm:LoadingDataViewModel},
@@ -25,7 +25,7 @@
                 Header="{Binding Header}">
                 <DockPanel>
                     <Grid DockPanel.Dock="Left">
-                        <DialogManagement:WaitAnimation
+                        <window_with_dialogs:WaitAnimation
                             Height="20"
                             Margin="2"
                             HorizontalAlignment="Left"
@@ -108,7 +108,7 @@
                                 <Setter Property="Template">
                                     <Setter.Value>
                                         <ControlTemplate>
-                                            <DialogManagement:WaitAnimation
+                                            <window_with_dialogs:WaitAnimation
                                                 Width="48"
                                                 Height="48"
                                                 Margin="2"

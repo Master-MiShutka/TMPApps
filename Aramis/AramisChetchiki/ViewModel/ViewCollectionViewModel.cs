@@ -176,7 +176,7 @@
             };
 
             // добавление фильтров
-            TMPApplication.DispatcherExtensions.InUi(() =>
+            WindowWithDialogs.DispatcherExtensions.InUi(() =>
             {
                 foreach (string filter in filters)
                 {

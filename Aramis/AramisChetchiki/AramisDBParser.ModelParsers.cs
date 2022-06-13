@@ -9,7 +9,6 @@
     using System.Threading.Tasks;
     using DBF;
     using TMP.WORK.AramisChetchiki.Model;
-    using TMPApplication;
 
     internal partial class AramisDBParser
     {
@@ -304,7 +303,7 @@
             }
             catch (Exception ex)
             {
-                logger?.Error($">>> TMP.WORK.AramisChetchiki.Repository>GetSelectedDepartamentData->AbonentsTable\n{meterData}\n>>>: {TMPApp.GetExceptionDetails(ex)}");
+                logger?.Error($">>> TMP.WORK.AramisChetchiki.Repository>GetSelectedDepartamentData->AbonentsTable\n{meterData}\n>>>: {WindowWithDialogs.BaseApplication.GetExceptionDetails(ex)}");
             }
 
             return meter;
@@ -564,7 +563,7 @@
             }
             catch (Exception ex)
             {
-                logger?.Error($">>> ChangesOfMeters ParseRecord >>>: {TMPApp.GetExceptionDetails(ex)}");
+                logger?.Error($">>> ChangesOfMeters ParseRecord >>>: {WindowWithDialogs.BaseApplication.GetExceptionDetails(ex)}");
             }
 
             return change;
@@ -596,7 +595,7 @@
                     }
                     catch (Exception ex)
                     {
-                        logger?.Error($">>> TMP.WORK.AramisChetchiki.Repository>GetSelectedDepartamentData->electricitySupplyTable\n>>>: {TMPApp.GetExceptionDetails(ex)}");
+                        logger?.Error($">>> TMP.WORK.AramisChetchiki.Repository>GetSelectedDepartamentData->electricitySupplyTable\n>>>: {WindowWithDialogs.BaseApplication.GetExceptionDetails(ex)}");
                     }
 
                     /*
@@ -667,7 +666,7 @@
                 }
                 catch (Exception ex)
                 {
-                    logger?.Error($">>> AramisDBParser > ParsePaymentRecord\n>>>: {TMPApp.GetExceptionDetails(ex)}");
+                    logger?.Error($">>> AramisDBParser > ParsePaymentRecord\n>>>: {WindowWithDialogs.BaseApplication.GetExceptionDetails(ex)}");
                 }
             }
             else
@@ -711,7 +710,7 @@
                 }
                 catch (Exception ex)
                 {
-                    logger?.Error($">>> AramisDBParser > ParseControlData\n>>>: {TMPApp.GetExceptionDetails(ex)}");
+                    logger?.Error($">>> AramisDBParser > ParseControlData\n>>>: {WindowWithDialogs.BaseApplication.GetExceptionDetails(ex)}");
                 }
             }
             else

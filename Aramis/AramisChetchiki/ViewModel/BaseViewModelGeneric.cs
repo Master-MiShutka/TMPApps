@@ -14,7 +14,7 @@
 
         internal ItemsFilter.FilterPresenter FilterPresenter { get; set; }
 
-        protected static IMainViewModel MainViewModel => TMPApplication.TMPApp.Instance?.MainViewModel as IMainViewModel;
+        protected static IMainViewModel MainViewModel => WindowWithDialogs.BaseApplication.Instance?.MainViewModel as IMainViewModel;
 
         /// <summary>
         /// Признак, указывающий, что данные загружены

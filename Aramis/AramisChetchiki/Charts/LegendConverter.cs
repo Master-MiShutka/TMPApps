@@ -22,12 +22,12 @@
             object item = label.Tag;
 
             // поиск контейнера объекта
-            DependencyObject container = TMPApplication.Helpers.BaseWPFHelpers.FindElementOfTypeUp((Visual)value, typeof(ListBoxItem));
+            DependencyObject container = WindowWithDialogs.WPFHelpers.FindElementOfTypeUp((Visual)value, typeof(ListBoxItem));
 
             ItemsControl owner = ItemsControl.ItemsControlFromItemContainer(container);
 
             // получение легенды
-            Legend legend = (Legend)TMPApplication.Helpers.BaseWPFHelpers.FindElementOfTypeUp(owner, typeof(Legend));
+            Legend legend = (Legend)WindowWithDialogs.WPFHelpers.FindElementOfTypeUp(owner, typeof(Legend));
 
             PropertyDescriptorCollection filterPropDesc = TypeDescriptor.GetProperties(item);
             object itemValue = filterPropDesc[legend.ObjectProperty].GetValue(item);

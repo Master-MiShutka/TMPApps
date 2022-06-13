@@ -13,8 +13,8 @@
     xmlns:local_extensions="clr-namespace:TMP.WORK.AramisChetchiki.Extensions"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:settings="clr-namespace:TMP.WORK.AramisChetchiki.Controls.SettingsPages"
-    xmlns:tmpapp="clr-namespace:TMPApplication;assembly=TMPApplication"
     xmlns:vm="clr-namespace:TMP.WORK.AramisChetchiki.ViewModel"
+    xmlns:window_with_dialogs="clr-namespace:WindowWithDialogs;assembly=WindowWithDialogs"
     xmlns:xcdg="http://schemas.xceed.com/wpf/xaml/datagrid"
     Margin="5"
     d:DataContext="{d:DesignInstance {x:Type vm:PreferencesViewModel},

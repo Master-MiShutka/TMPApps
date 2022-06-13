@@ -7,7 +7,6 @@
     using System.Linq;
     using System.Threading.Tasks;
     using TMP.WORK.AramisChetchiki.Model;
-    using TMPApplication;
 
     internal partial class AramisDBParser
     {
@@ -126,7 +125,7 @@
             }
             catch (Exception ex)
             {
-                logger?.Error($">>> TMP.WORK.AramisChetchiki.AramisDBParser>AddAdditionalInfoToElectricitySupply\n>>>: {TMPApp.GetExceptionDetails(ex)}");
+                logger?.Error($">>> TMP.WORK.AramisChetchiki.AramisDBParser>AddAdditionalInfoToElectricitySupply\n>>>: {WindowWithDialogs.BaseApplication.GetExceptionDetails(ex)}");
                 return;
             }
 

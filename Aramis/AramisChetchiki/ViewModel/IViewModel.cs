@@ -7,7 +7,7 @@
     /// <summary>
     /// Базовый интерфейс, описывающий модель представления данных
     /// </summary>
-    public interface IViewModel : TMPApplication.IMainViewModel
+    public interface IViewModel : WindowWithDialogs.IMainViewModel
     {
         /// <summary>
         /// Команда экспорта данных

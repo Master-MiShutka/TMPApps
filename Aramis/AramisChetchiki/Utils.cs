@@ -255,7 +255,7 @@
                 return;
             }
 
-            ViewModel.IMainViewModel mainViewModel = TMPApplication.TMPApp.Instance.MainViewModel as ViewModel.IMainViewModel;
+            ViewModel.IMainViewModel mainViewModel = WindowWithDialogs.BaseApplication.Instance.MainViewModel as ViewModel.IMainViewModel;
             if (mainViewModel == null)
             {
                 return;
@@ -309,7 +309,7 @@
                 return;
             }
 
-            ViewModel.IMainViewModel mainViewModel = TMPApplication.TMPApp.Instance.MainViewModel as ViewModel.IMainViewModel;
+            ViewModel.IMainViewModel mainViewModel = WindowWithDialogs.BaseApplication.Instance.MainViewModel as ViewModel.IMainViewModel;
             if (mainViewModel == null)
             {
                 return;

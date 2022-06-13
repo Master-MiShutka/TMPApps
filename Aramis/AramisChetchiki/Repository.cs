@@ -10,7 +10,6 @@
     using TMP.Common.RepositoryCommon;
     using TMP.WORK.AramisChetchiki.Model;
     using TMP.WORK.AramisChetchiki.Properties;
-    using TMPApplication;
 
     public sealed class Repository : BaseRepository<AramisData, AramisDataInfo>
     {
@@ -37,7 +36,7 @@
         // Helper for Thread Safety
         private static readonly object @lock = new();
 
-        private TMPApplication.WpfDialogs.Contracts.IWindowWithDialogs mainWindow = TMPApp.Instance.MainWindowWithDialogs;
+        private WindowWithDialogs.Contracts.IWindowWithDialogs mainWindow = WindowWithDialogs.BaseApplication.Instance.MainWindowWithDialogs;
 
         #endregion
 
@@ -86,17 +85,17 @@
 
         #region Private methods
 
-        private void SetWindowTaskbarItemProgressState(TMPApplication.WpfDialogs.Contracts.TaskbarItemProgressState taskbarItemProgressState, double value = -1)
+        private void SetWindowTaskbarItemProgressState(WindowWithDialogs.Contracts.TaskbarItemProgressState taskbarItemProgressState, double value = -1)
         {
-            TMPApplication.DispatcherExtensions.InUi(() =>
+            WindowWithDialogs.DispatcherExtensions.InUi(() =>
             {
                 this.mainWindow.TaskbarItemInfo = value != -1
-                    ? new TMPApplication.WpfDialogs.Contracts.TaskbarItemInfo
+                    ? new WindowWithDialogs.Contracts.TaskbarItemInfo
                     {
                         ProgressState = taskbarItemProgressState,
                         ProgressValue = value,
                     }
-                    : new TMPApplication.WpfDialogs.Contracts.TaskbarItemInfo
+                    : new WindowWithDialogs.Contracts.TaskbarItemInfo
                     {
                         ProgressState = taskbarItemProgressState,
                     };
@@ -110,7 +109,7 @@
 
         protected override void SetDataStorePath(string value)
         {
-            var appPath = TMPApp.ExecutionPath;
+            var appPath = WindowWithDialogs.BaseApplication.ExecutionPath;
             var relativePath = System.IO.Path.GetRelativePath(appPath, value);
 
             AppSettings.Default.DataFilesStorePath = relativePath;
@@ -226,9 +225,9 @@
             {
                 logger?.Error($"Ошибка при частей файла.\nОписание: {App.GetExceptionDetails(e)}");
 
-                this.SetWindowTaskbarItemProgressState(TMPApplication.WpfDialogs.Contracts.TaskbarItemProgressState.Error);
-                DispatcherExtensions.InUi(() => this.mainWindow.ShowDialogError("Ошибка сохранения данных." + Environment.NewLine + TMPApp.GetExceptionDetails(e)));
-                this.SetWindowTaskbarItemProgressState(TMPApplication.WpfDialogs.Contracts.TaskbarItemProgressState.None);
+                this.SetWindowTaskbarItemProgressState(WindowWithDialogs.Contracts.TaskbarItemProgressState.Error);
+                WindowWithDialogs.DispatcherExtensions.InUi(() => this.mainWindow.ShowDialogError("Ошибка сохранения данных." + Environment.NewLine + WindowWithDialogs.BaseApplication.GetExceptionDetails(e)));
+                this.SetWindowTaskbarItemProgressState(WindowWithDialogs.Contracts.TaskbarItemProgressState.None);
             }
         }
 
@@ -369,7 +368,7 @@
 
             this.Data?.Clear();
             AramisData data = null;
-            this.SetWindowTaskbarItemProgressState(TMPApplication.WpfDialogs.Contracts.TaskbarItemProgressState.Normal, 0d);
+            this.SetWindowTaskbarItemProgressState(WindowWithDialogs.Contracts.TaskbarItemProgressState.Normal, 0d);
 
             try
             {
@@ -394,7 +393,7 @@
 
                 this.Data.Info.FileSize = new FileInfo(this.Data.Info.FileName).Length;
 
-                this.SetWindowTaskbarItemProgressState(TMPApplication.WpfDialogs.Contracts.TaskbarItemProgressState.None);
+                this.SetWindowTaskbarItemProgressState(WindowWithDialogs.Contracts.TaskbarItemProgressState.None);
 
                 result = true;
             }
@@ -402,9 +401,9 @@
             {
                 logger?.Error(ex);
 
-                this.SetWindowTaskbarItemProgressState(TMPApplication.WpfDialogs.Contracts.TaskbarItemProgressState.Error);
-                DispatcherExtensions.InUi(() => this.mainWindow.ShowDialogError("Ошибка при получении данных." + Environment.NewLine + TMPApp.GetExceptionDetails(ex)));
-                this.SetWindowTaskbarItemProgressState(TMPApplication.WpfDialogs.Contracts.TaskbarItemProgressState.None);
+                this.SetWindowTaskbarItemProgressState(WindowWithDialogs.Contracts.TaskbarItemProgressState.Error);
+                WindowWithDialogs.DispatcherExtensions.InUi(() => this.mainWindow.ShowDialogError("Ошибка при получении данных." + Environment.NewLine + WindowWithDialogs.BaseApplication.GetExceptionDetails(ex)));
+                this.SetWindowTaskbarItemProgressState(WindowWithDialogs.Contracts.TaskbarItemProgressState.None);
 
                 this.Data = null;
             }
@@ -422,7 +421,7 @@
             }
 
             bool result = false;
-            this.SetWindowTaskbarItemProgressState(TMPApplication.WpfDialogs.Contracts.TaskbarItemProgressState.Normal, 0d);
+            this.SetWindowTaskbarItemProgressState(WindowWithDialogs.Contracts.TaskbarItemProgressState.Normal, 0d);
 
             try
             {
@@ -430,16 +429,16 @@
                 LoadStatus status = await this.LoadAsync(aramisDataInfo.FileName);
                 logger?.Info(status);
 
-                this.SetWindowTaskbarItemProgressState(TMPApplication.WpfDialogs.Contracts.TaskbarItemProgressState.None);
+                this.SetWindowTaskbarItemProgressState(WindowWithDialogs.Contracts.TaskbarItemProgressState.None);
 
                 result = status == LoadStatus.Ok ? this.Data.Meters != null : false;
             }
             catch (Exception ex)
             {
                 logger?.Error(ex);
-                this.SetWindowTaskbarItemProgressState(TMPApplication.WpfDialogs.Contracts.TaskbarItemProgressState.Error);
-                DispatcherExtensions.InUi(() => this.mainWindow.ShowDialogError("Ошибка при получении данных." + Environment.NewLine + TMPApp.GetExceptionDetails(ex)));
-                this.SetWindowTaskbarItemProgressState(TMPApplication.WpfDialogs.Contracts.TaskbarItemProgressState.None);
+                this.SetWindowTaskbarItemProgressState(WindowWithDialogs.Contracts.TaskbarItemProgressState.Error);
+                WindowWithDialogs.DispatcherExtensions.InUi(() => this.mainWindow.ShowDialogError("Ошибка при получении данных." + Environment.NewLine + WindowWithDialogs.BaseApplication.GetExceptionDetails(ex)));
+                this.SetWindowTaskbarItemProgressState(WindowWithDialogs.Contracts.TaskbarItemProgressState.None);
                 this.Data = null;
             }
 

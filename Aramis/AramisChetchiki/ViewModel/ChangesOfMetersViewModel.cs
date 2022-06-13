@@ -34,12 +34,12 @@
             this.CommandSetSorting = new DelegateCommand(
                 () =>
             {
-                // TMPApplication.WpfDialogs.Contracts.ICustomContentDialog dialog;
+                // WindowWithDialogs.Contracts.ICustomContentDialog dialog;
 
                 /*var control = new Controls.SelectorFieldsAndSortCollectionView(ref _tableColumns, this.View);
                 dialog = _mainWindow.DialogCustom(control,
                     "-= Выбор полей, их порядок и сортировка =-",
-                    TMPApplication.WpfDialogs.DialogMode.None);
+                    WindowWithDialogs.DialogMode.None);
                 control.CloseAction = () => dialog.Close();
                 dialog.Show();*/
             }, () => this.Data != null);

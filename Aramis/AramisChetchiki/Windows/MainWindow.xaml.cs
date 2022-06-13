@@ -5,7 +5,7 @@
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : TMPApplication.WpfDialogs.WindowWithDialogs
+    public partial class MainWindow : WindowWithDialogs.WindowWithDialogs
     {
         public MainWindow()
         {

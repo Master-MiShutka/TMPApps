@@ -41,7 +41,7 @@
                 return;
             }
 
-            TMPApplication.TMPApp.InvokeInUIThread(() => System.Windows.Data.BindingOperations.EnableCollectionSynchronization(this.pivotCollection, new object()));
+            WindowWithDialogs.BaseApplication.InvokeInUIThread(() => System.Windows.Data.BindingOperations.EnableCollectionSynchronization(this.pivotCollection, new object()));
 
             // this.Data = MainViewModel?.Data?.Payments.SelectMany(i => i.Value);
 

@@ -2,16 +2,14 @@
 
 namespace TMP.WORK.AramisChetchiki
 {
-    using System.Threading.Tasks;
     using MessagePack;
     using MessagePack.Resolvers;
-    using TMPApplication;
     using TomsToolbox.Wpf.Styles;
 
     /// <summary>
     /// Interaction logic for App.xaml
     /// </summary>
-    public partial class App : TMPApp
+    public partial class App : WindowWithDialogs.BaseApplication
     {
         public override string Title => "Просмотр данных из ПО Арамис";
 
@@ -50,6 +48,8 @@ namespace TMP.WORK.AramisChetchiki
             CorrectMainWindowSizeAndPos(window);
             this.MainWindowWithDialogs = window;
             this.MainViewModel = new ViewModel.MainViewModel();
+
+            SplashScreen.SplashScreenAdapter.CloseSplashScreen();
         }
     }
 }

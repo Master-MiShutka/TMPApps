@@ -71,7 +71,7 @@
             this.CommandClear = new DelegateCommand(
                 () =>
                 {
-                    TMPApplication.TMPApp.ShowQuestion("Очистить список используемых полей?",
+                    WindowWithDialogs.BaseApplication.ShowQuestion("Очистить список используемых полей?",
                         onYes: () =>
                         {
                             this.TargetCollection.Clear();

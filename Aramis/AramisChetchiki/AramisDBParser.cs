@@ -10,8 +10,6 @@
     using System.Windows;
     using DBF;
     using TMP.WORK.AramisChetchiki.Model;
-    using TMPApplication;
-
     internal partial class AramisDBParser
     {
         public class DataFileRecord
@@ -72,7 +70,7 @@
         private const string DATA_FILES_FOLDER_NAME = "Data";
         private const string DATA_FILE_NAME_HASHES = "dbFilesHashes";
         private const string DATA_FILE_EXTENSION = ".data";
-        private readonly string dataFilesPath = Path.Combine(TMPApp.ExecutionPath, DATA_FILES_FOLDER_NAME);
+        private readonly string dataFilesPath = Path.Combine(WindowWithDialogs.BaseApplication.ExecutionPath, DATA_FILES_FOLDER_NAME);
 
         private Dictionary<string, DataFileRecord> dataFilesInfo;
 
@@ -103,7 +101,7 @@
 
             System.Diagnostics.Debug.Assert(this.MainWindow != null);
 
-            DispatcherExtensions.InUi(() => this.MainWindow.TaskbarItemInfo.ProgressState = System.Windows.Shell.TaskbarItemProgressState.Indeterminate);
+            WindowWithDialogs.DispatcherExtensions.InUi(() => this.MainWindow.TaskbarItemInfo.ProgressState = System.Windows.Shell.TaskbarItemProgressState.Indeterminate);
 
             // чтение хэшей из файла
             if (File.Exists(Path.Combine(this.dataFilesPath, DATA_FILE_NAME_HASHES)))
@@ -312,11 +310,11 @@
                 {
                     string errors = string.Join("\n", this.errors);
                     File.WriteAllText(ErrorsFileName, errors, System.Text.Encoding.UTF8);
-                    DispatcherExtensions.InUi(() =>
+                    WindowWithDialogs.DispatcherExtensions.InUi(() =>
                         App.ShowWarning(string.Format(AppSettings.CurrentCulture, "При чтении базы обнаружено {0} ошибок.\nОшибки сохранены в файл '{1}' в папке с программой.", this.errors.Count, ErrorsFileName)));
                 }
 
-                DispatcherExtensions.InUi(() => this.MainWindow.TaskbarItemInfo.ProgressState = System.Windows.Shell.TaskbarItemProgressState.Normal);
+                WindowWithDialogs.DispatcherExtensions.InUi(() => this.MainWindow.TaskbarItemInfo.ProgressState = System.Windows.Shell.TaskbarItemProgressState.Normal);
             }
 
             return this.data;
@@ -721,12 +719,12 @@
             }
             catch (IOException ioex)
             {
-                logger?.Error(ioex, TMPApp.GetExceptionDetails(ioex));
+                logger?.Error(ioex, WindowWithDialogs.BaseApplication.GetExceptionDetails(ioex));
                 return null;
             }
             catch (Exception ex)
             {
-                logger?.Error($">>> TMP.WORK.AramisChetchiki.AramisDBParser>ParseAramisDbTAble<{typeof(T)}>\n>>>: {TMPApp.GetExceptionDetails(ex)}");
+                logger?.Error($">>> TMP.WORK.AramisChetchiki.AramisDBParser>ParseAramisDbTAble<{typeof(T)}>\n>>>: {WindowWithDialogs.BaseApplication.GetExceptionDetails(ex)}");
                 return null;
             }
 
@@ -754,7 +752,7 @@
                     System.Windows.Window mainWindow = null;
                     void action()
                     {
-                        mainWindow = TMPApp.Instance.MainWindow;
+                        mainWindow = WindowWithDialogs.BaseApplication.Instance.MainWindow;
                     }
 
                     Application.Current.Dispatcher.Invoke(action, System.Windows.Threading.DispatcherPriority.Background);
@@ -762,7 +760,7 @@
                 }
                 else
                 {
-                    return TMPApp.Instance?.MainWindow;
+                    return WindowWithDialogs.BaseApplication.Instance?.MainWindow;
                 }
             }
         }
