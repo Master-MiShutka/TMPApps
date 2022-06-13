@@ -11,6 +11,9 @@
     <!-- Project properties -->
     <PropertyGroup>
         <TargetFrameworks>net6.0-windows</TargetFrameworks>
+        <WeaverTargetFramework>netstandard2.0</WeaverTargetFramework>
+       	<WeaverNugetFolder>netstandardweaver</WeaverNugetFolder>
+		<SplashGeneratorTargetFramework>$(TargetFrameworks)</SplashGeneratorTargetFramework>
         <AppendTargetFrameworkToOutputPath>true</AppendTargetFrameworkToOutputPath>
         <GenerateDocumentationFile>false</GenerateDocumentationFile>
         <AutoGenerateBindingRedirects Condition=" $(TargetFramework.StartsWith('net4')) ">true</AutoGenerateBindingRedirects>
@@ -24,6 +27,8 @@
 
         <OutputPath Condition="$(IsBuildingWpfTempProj) != 'true'">$(MSBuildThisFileDirectory)\out\$(Configuration)\$(MSBuildProjectName)</OutputPath>
 
+        <SplashScreenFodyWeaverFile>$(SolutionDir)out\$(Configuration)\SplashScreen.Fody\$(WeaverTargetFramework)\SplashScreen.Fody.dll</SplashScreenFodyWeaverFile>
+
     </PropertyGroup>
 
     <PropertyGroup>
@@ -35,7 +40,6 @@
 	<PackageReference Include="WpfAnalyzers"  PrivateAssets="all" IncludeAssets="build;analyzers" />
 	<PackageReference Include="StyleCop.Analyzers" PrivateAssets="all" IncludeAssets="build;analyzers" />
 	<!-- PackageReference Include="Microsoft.CodeAnalysis.CSharp" PrivateAssets="all" IncludeAssets="build;analyzers" Condition="$(DefineConstants.Contains(NETCOREAPP))" / -->
-	<PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" />
     </ItemGroup>
 
     <ItemGroup>
