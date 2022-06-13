@@ -63,7 +63,7 @@ namespace TMPApplication
             logger?.Trace("Запуск приложения");
 
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
-            AppDomain.CurrentDomain.AssemblyResolve += OnResolveAssembly;
+            //AppDomain.CurrentDomain.AssemblyResolve += OnResolveAssembly;
             Dispatcher.CurrentDispatcher.UnhandledException += Dispatcher_UnhandledException;
 
             LoadReferencedAssemblies();
@@ -295,7 +295,7 @@ namespace TMPApplication
         /// </summary>
         public static string AssemblyTitle => Assembly.GetEntryAssembly().GetName().Name;
 
-        public static string AssemblyDescription => Assembly.GetEntryAssembly().GetCustomAttribute<AssemblyDescriptionAttribute>().Description;
+        public static string AssemblyDescription => Assembly.GetEntryAssembly().GetCustomAttribute<AssemblyDescriptionAttribute>()?.Description;
 
         /// <summary>
         /// Gets the AssemblyEntryLocation
@@ -326,7 +326,7 @@ namespace TMPApplication
         /// </summary>
         public static string MyDocumentsFolder => Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
 
-        public static string Copyright => "© 2017-2021, Трус Михаил Петрович";
+        public static string Copyright => "© 2017-2022, Трус Михаил Петрович";
 
         public static string AppVersion
         {
@@ -893,16 +893,16 @@ namespace TMPApplication
             logger?.Trace("Создание приложения WPF");
             try
             {
-                logger?.Trace("Отображение заставки");
-                SplashScreen splash = new SplashScreen(Assembly.GetAssembly(typeof(TMPApp)), "SplashScreen.png");
-                splash.Show(false, false);
+                //logger?.Trace("Отображение заставки");
+                //SplashScreen splash = new SplashScreen(Assembly.GetAssembly(typeof(TMPApp)), "SplashScreen.png");
+                //splash.Show(false, false);
 
-                Task closeSplash = Task.Run(() =>
-                {
-                    Thread.Sleep(MINIMUM_SPLASH_TIME);
-                    logger?.Trace("Скрытие заставки");
-                    splash.Close(TimeSpan.FromMilliseconds(SPLASH_FADE_TIME));
-                });
+                //Task closeSplash = Task.Run(() =>
+                //{
+                //    Thread.Sleep(MINIMUM_SPLASH_TIME);
+                //    logger?.Trace("Скрытие заставки");
+                //    splash.Close(TimeSpan.FromMilliseconds(SPLASH_FADE_TIME));
+                //});
 
                 // подключение обработки ошибок привязки
 #if DEBUG
