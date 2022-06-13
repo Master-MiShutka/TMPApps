@@ -1,4 +1,4 @@
-﻿namespace TMP.UI.Controls.WPF.NativeShellDialogs
+﻿namespace WindowsNative
 {
     using System.Runtime.InteropServices;
 
