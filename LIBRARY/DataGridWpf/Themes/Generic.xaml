@@ -4,6 +4,7 @@
     xmlns:local="clr-namespace:DataGridWpf">
 
     <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="CollectionViewNavigatorStyle.xaml" />
         <ResourceDictionary Source="FilterDataGrid.xaml" />
     </ResourceDictionary.MergedDictionaries>
 

@@ -30,26 +30,20 @@ using System.Windows.Threading;
 using SysDataGridColumn = System.Windows.Controls.DataGridColumn;
 using TMP.Shared;
 
-// ReSharper disable MemberCanBePrivate.Global
-// ReSharper disable ArrangeAccessorOwnerBody
-// ReSharper disable InvertIf
-// ReSharper disable ExplicitCallerInfoArgument
-// ReSharper disable CheckNamespace
-
 // https://stackoverflow.com/questions/3685566/wpf-using-resizegrip-to-resize-controls
 // https://www.c-sharpcorner.com/UploadFile/mahesh/binding-static-properties-in-wpf-4-5/
 // https://www.csharp-examples.net/string-format-datetime/
 namespace DataGridWpf
 {
     /// <summary>
-    ///     Implementation of Datagrid
+    /// Implementation of Datagrid
     /// </summary>
     public partial class FilterDataGrid : DataGrid, INotifyPropertyChanged
     {
         #region Public Constructors
 
         /// <summary>
-        ///  FilterDataGrid constructor
+        /// FilterDataGrid constructor
         /// </summary>
         public FilterDataGrid()
         {
@@ -132,7 +126,7 @@ namespace DataGridWpf
                 new PropertyMetadata(Local.Russian));
 
         /// <summary>
-        ///     Show statusbar
+        /// Show statusbar
         /// </summary>
         public static readonly DependencyProperty ShowStatusBarProperty =
             DependencyProperty.Register(nameof(ShowStatusBar),
@@ -161,66 +155,36 @@ namespace DataGridWpf
                 typeof(FilterDataGrid),
                 new UIPropertyMetadata(false, OnDisplayRowNumberChanged));
 
-        private static void OnDisplayRowNumberChanged(DependencyObject target, DependencyPropertyChangedEventArgs e)
-        {
-            FilterDataGrid dataGrid = target as FilterDataGrid;
-            if ((bool)e.NewValue == true)
-            {
-                void loadedRowHandler(object sender, DataGridRowEventArgs ea)
-                {
-                    if (dataGrid.DisplayRowNumber == false)
-                    {
-                        dataGrid.LoadingRow -= loadedRowHandler;
-                        return;
-                    }
-
-                    ea.Row.Header = ea.Row.GetIndex() + 1;
-                }
-
-                dataGrid.LoadingRow += loadedRowHandler;
-
-                ItemsChangedEventHandler itemsChangedHandler = null;
-                itemsChangedHandler = (object sender, ItemsChangedEventArgs ea) =>
-                {
-                    if (dataGrid.DisplayRowNumber == false)
-                    {
-                        dataGrid.ItemContainerGenerator.ItemsChanged -= itemsChangedHandler;
-                        return;
-                    }
-
-                    GetVisualChildCollection<DataGridRow>(dataGrid).
-                        ForEach(d => d.Header = d.GetIndex());
-                };
-                dataGrid.ItemContainerGenerator.ItemsChanged += itemsChangedHandler;
-            }
-        }
-
-        public string NoItemsMessage
-        {
-            get => (string)this.GetValue(NoItemsMessageProperty);
-            set => this.SetValue(NoItemsMessageProperty, value);
-        }
-
-        // Using a DependencyProperty as the backing store for NoItemsDataTemplate.  This enables animation, styling, binding, etc...
+        /// <summary>
+        /// Message diplayed when collection is empty
+        /// </summary>
         public static readonly DependencyProperty NoItemsMessageProperty =
             DependencyProperty.Register(nameof(NoItemsMessage), typeof(string), typeof(FilterDataGrid), new PropertyMetadata("No data"));
 
-        public int SelectedRowsCount
-        {
-            get { return (int)GetValue(SelectedRowsCountProperty); }
-            set { SetValue(SelectedRowsCountProperty, value); }
-        }
-
-        // Using a DependencyProperty as the backing store for SelectedRowsCount.  This enables animation, styling, binding, etc...
+        /// <summary>
+        /// Count  of selected rows
+        /// </summary>
         public static readonly DependencyProperty SelectedRowsCountProperty =
-            DependencyProperty.Register("SelectedRowsCount", typeof(int), typeof(FilterDataGrid), new PropertyMetadata(0));
+            DependencyProperty.Register(nameof(SelectedRowsCount), typeof(int), typeof(FilterDataGrid), new PropertyMetadata(0));
+
+        /// <summary>
+        /// Status information content
+        /// </summary>
+        public static readonly DependencyProperty StatusContentProperty =
+            DependencyProperty.Register(nameof(StatusContent), typeof(FrameworkElement), typeof(FilterDataGrid), new PropertyMetadata(default));
+
+        /// <summary>
+        /// Use paged view
+        /// </summary>
+        public static readonly DependencyProperty UsePagedViewProperty =
+            DependencyProperty.Register(nameof(UsePagedView), typeof(bool), typeof(FilterDataGrid), new UIPropertyMetadata(false, OnUsePagedViewChanged));
 
         #endregion Public DependencyProperty
 
         #region Public Properties
 
         /// <summary>
-        ///     Language
+        /// Language
         /// </summary>
         public Local FilterLanguage
         {
@@ -229,12 +193,12 @@ namespace DataGridWpf
         }
 
         /// <summary>
-        ///     Display items count
+        /// Display items count
         /// </summary>
         public int ItemsSourceCount { get; set; }
 
         /// <summary>
-        ///     Show status bar
+        /// Show status bar
         /// </summary>
         public bool ShowStatusBar
         {
@@ -243,7 +207,7 @@ namespace DataGridWpf
         }
 
         /// <summary>
-        ///     Instance of Loc
+        /// Instance of Loc
         /// </summary>
         public Loc Translate { get; private set; }
 
@@ -257,24 +221,39 @@ namespace DataGridWpf
         }
 
         /// <summary>
-        /// Gets the column ViewModel
+        /// Message diplayed when collection is empty
         /// </summary>
-        /// <param name="column">The data grid column</param>
-        /// <returns>The view model</returns>
-        [AttachedPropertyBrowsableForType(typeof(SysDataGridColumn))]
-        public static DataGridWpfColumnViewModel GetColumnViewModel(SysDataGridColumn column)
+        public string NoItemsMessage
         {
-            return (DataGridWpfColumnViewModel)column.GetValue(ColumnViewModelProperty);
+            get => (string)this.GetValue(NoItemsMessageProperty);
+            set => this.SetValue(NoItemsMessageProperty, value);
         }
 
         /// <summary>
-        /// Sets the column ViewModel
+        /// Count  of selected rows
         /// </summary>
-        /// <param name="column">The data grid column</param>
-        /// <param name="value">The view model</param>
-        public static void SetColumnViewModel(SysDataGridColumn column, DataGridWpfColumnViewModel? value)
+        public int SelectedRowsCount
         {
-            column.SetValue(ColumnViewModelProperty, value);
+            get { return (int)GetValue(SelectedRowsCountProperty); }
+            set { SetValue(SelectedRowsCountProperty, value); }
+        }
+
+        /// <summary>
+        /// Status information content
+        /// </summary>
+        public FrameworkElement StatusContent
+        {
+            get { return (FrameworkElement)GetValue(StatusContentProperty); }
+            set { SetValue(StatusContentProperty, value); }
+        }
+
+        /// <summary>
+        /// Use paged view
+        /// </summary>
+        public bool UsePagedView
+        {
+            get { return (bool)GetValue(UsePagedViewProperty); }
+            set { SetValue(UsePagedViewProperty, value); }
         }
 
         /// <summary>
@@ -291,110 +270,6 @@ namespace DataGridWpf
         {
             get => (ObservableCollection<DataGridWpfColumnViewModel>)this.GetValue(ColumnsViewModelsProperty);
             set => this.SetValue(ColumnsViewModelsProperty, value);
-        }
-
-        private static void OnColumnsViewModelsChanged(DependencyObject source, DependencyPropertyChangedEventArgs e)
-        {
-            FilterDataGrid dataGrid = source as FilterDataGrid;
-            if (dataGrid == null)
-            {
-                return;
-            }
-
-            if (e.NewValue is not ObservableCollection<DataGridWpfColumnViewModel> columns)
-            {
-                return;
-            }
-
-            if (e.OldValue != null)
-            {
-                dataGrid.Columns.Clear();
-            }
-
-            if (dataGrid.Columns.Count == 0)
-            {
-                var orderedColumns = columns.OrderBy(i => i.DisplayIndex).ToArray();
-                foreach (var column in orderedColumns)
-                {
-                    SysDataGridColumn newColumn = Factory.ToDataGridWpfColumn(column) as SysDataGridColumn;
-                    dataGrid.Columns.Add(newColumn);
-                }
-            }
-            else
-            {
-                if (dataGrid.Columns.All(i => i is IDataGridWpfColumn) == false)
-                {
-                    var notIDataGridWpfColumnList = dataGrid.Columns.Where(i => !(i is IDataGridWpfColumn)).ToList();
-
-                    foreach (var column in notIDataGridWpfColumnList)
-                    {
-                        var newColumn = Factory.ToDataGridWpfColumn(column);
-                        dataGrid.Columns.Remove(column);
-                        dataGrid.Columns.Add(newColumn as SysDataGridColumn);
-                    }
-                }
-            }
-
-            if (e.OldValue is ObservableCollection<DataGridWpfColumnViewModel> oldColumns)
-            {
-                foreach (DataGridWpfColumnViewModel item in oldColumns)
-                {
-                    item.PropertyChanged -= dataGrid.ColumnsViewModelsItem_PropertyChanged;
-                }
-            }
-
-            foreach (DataGridWpfColumnViewModel item in columns)
-            {
-                item.PropertyChanged += dataGrid.ColumnsViewModelsItem_PropertyChanged;
-            }
-
-            columns.CollectionChanged += (sender, ne) =>
-            {
-                foreach (DataGridWpfColumnViewModel item in ne.OldItems)
-                {
-                    item.PropertyChanged -= dataGrid.ColumnsViewModelsItem_PropertyChanged;
-                }
-
-                foreach (DataGridWpfColumnViewModel item in ne.NewItems)
-                {
-                    item.PropertyChanged += dataGrid.ColumnsViewModelsItem_PropertyChanged;
-                }
-
-                if (ne.Action == NotifyCollectionChangedAction.Reset)
-                {
-                    dataGrid.Columns.Clear();
-                    foreach (DataGridWpfColumnViewModel column in ne.NewItems)
-                    {
-                        dataGrid.Columns.Add(Factory.ToDataGridWpfColumn(column) as SysDataGridColumn);
-                    }
-                }
-                else if (ne.Action == NotifyCollectionChangedAction.Add)
-                {
-                    foreach (DataGridWpfColumnViewModel column in ne.NewItems)
-                    {
-                        dataGrid.Columns.Add(Factory.ToDataGridWpfColumn(column) as SysDataGridColumn);
-                    }
-                }
-                else if (ne.Action == NotifyCollectionChangedAction.Move)
-                {
-                    dataGrid.Columns.Move(ne.OldStartingIndex, ne.NewStartingIndex);
-                }
-                else if (ne.Action == NotifyCollectionChangedAction.Remove)
-                {
-                    foreach (DataGridWpfColumnViewModel column in ne.OldItems)
-                    {
-                        dataGrid.Columns.Remove(Factory.ToDataGridWpfColumn(column) as SysDataGridColumn);
-                    }
-                }
-                else if (ne.Action == NotifyCollectionChangedAction.Replace)
-                {
-                    dataGrid.Columns[ne.NewStartingIndex] = Factory.ToDataGridWpfColumn(ne.NewItems[0] as DataGridWpfColumnViewModel) as SysDataGridColumn;
-                }
-            };
-            if (dataGrid.collectionType != null)
-            {
-                dataGrid.GeneratingCustomsColumn();
-            }
         }
 
         private void ColumnsViewModelsItem_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -441,6 +316,80 @@ namespace DataGridWpf
 
         #region Public methods
 
+        /// <summary>
+        /// Gets the column ViewModel
+        /// </summary>
+        /// <param name="column">The data grid column</param>
+        /// <returns>The view model</returns>
+        [AttachedPropertyBrowsableForType(typeof(SysDataGridColumn))]
+        public static DataGridWpfColumnViewModel GetColumnViewModel(SysDataGridColumn column)
+        {
+            return (DataGridWpfColumnViewModel)column.GetValue(ColumnViewModelProperty);
+        }
+
+        /// <summary>
+        /// Sets the column ViewModel
+        /// </summary>
+        /// <param name="column">The data grid column</param>
+        /// <param name="value">The view model</param>
+        public static void SetColumnViewModel(SysDataGridColumn column, DataGridWpfColumnViewModel? value)
+        {
+            column.SetValue(ColumnViewModelProperty, value);
+        }
+
+        public override void OnApplyTemplate()
+        {
+            base.OnApplyTemplate();
+
+            this.rowsItemsPresenter = this.EnforceInstance<ItemsPresenter>(ElementRowsItemsPresenterLabel);
+
+            ContextMenu contextMenu = (ContextMenu)this.TryFindResource("dataGridContextMenuKey");
+
+            if (this.rowsItemsPresenter != null)
+            {
+                this.rowsItemsPresenter.ContextMenuOpening += this.ItemsPresenterContextMenuOpening;
+
+                System.Collections.Generic.List<Control> menuItems = new();
+                this.GenerateRowsContextMenu(ref menuItems);
+                menuItems.Add(new Separator());
+                MenuItem selectColumnsMenuItem = new MenuItem()
+                {
+                    Header = "Отображаемые столбцы таблицы",
+                    Tag = "selectColumnsMenuItem",
+
+                    // IsEnabled = filterDataGrid.Columns.Count > 0 && filterDataGrid.ColumnsVisibilitySelectMenuItemList != null
+                };
+                selectColumnsMenuItem.Items.Add(new MenuItem() { Header = "пусто" });
+                menuItems.Add(selectColumnsMenuItem);
+
+                System.Windows.Data.CompositeCollection cc = new();
+
+                if (this.rowsItemsPresenter.ContextMenu != null)
+                {
+                    System.Windows.Data.CollectionContainer c = new();
+                    c.SetCurrentValue(System.Windows.Data.CollectionContainer.CollectionProperty, this.rowsItemsPresenter.ContextMenu.Items);
+                    cc.Add(c);
+                }
+                else
+                {
+                    this.rowsItemsPresenter.SetCurrentValue(ContextMenuProperty, new ContextMenu());
+                }
+
+                if (contextMenu != null)
+                {
+                    System.Windows.Data.CollectionContainer c = new();
+                    c.SetCurrentValue(System.Windows.Data.CollectionContainer.CollectionProperty, contextMenu.Items);
+                    cc.Add(c);
+                }
+
+                System.Windows.Data.CollectionContainer newCollection = new();
+                menuItems.Add(new Separator());
+                newCollection.SetCurrentValue(System.Windows.Data.CollectionContainer.CollectionProperty, menuItems);
+                cc.Add(newCollection);
+
+                this.rowsItemsPresenter.ContextMenu.SetCurrentValue(ItemsControl.ItemsSourceProperty, cc);
+            }
+        }
 
         #region Copy/Paste
 
@@ -662,7 +611,7 @@ namespace DataGridWpf
 
         #region Private Properties
 
-        private ICollectionView CollectionViewSource { get; set; }
+        public ICollectionView CollectionViewSource { get; private set; }
 
         private FilterCommon CurrentFilter { get; set; }
 
@@ -675,68 +624,6 @@ namespace DataGridWpf
         #endregion Private Properties
 
         #region Protected Methods
-
-        private void FilterDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (e.AddedItems != null && this.SelectedItems != null)
-            {
-                this.SelectedRowsCount = this.SelectedItems.Count;
-            }
-        }
-
-        public override void OnApplyTemplate()
-        {
-            base.OnApplyTemplate();
-
-            this.rowsItemsPresenter = this.EnforceInstance<ItemsPresenter>(ElementRowsItemsPresenterLabel);
-
-            ContextMenu contextMenu = (ContextMenu)this.TryFindResource("dataGridContextMenuKey");
-
-            if (this.rowsItemsPresenter != null)
-            {
-                this.rowsItemsPresenter.ContextMenuOpening += this.ItemsPresenterContextMenuOpening;
-
-                System.Collections.Generic.List<Control> menuItems = new();
-                this.GenerateRowsContextMenu(ref menuItems);
-                menuItems.Add(new Separator());
-                MenuItem selectColumnsMenuItem = new MenuItem()
-                {
-                    Header = "Отображаемые столбцы таблицы",
-                    Tag = "selectColumnsMenuItem",
-
-                    // IsEnabled = filterDataGrid.Columns.Count > 0 && filterDataGrid.ColumnsVisibilitySelectMenuItemList != null
-                };
-                selectColumnsMenuItem.Items.Add(new MenuItem() { Header = "пусто" });
-                menuItems.Add(selectColumnsMenuItem);
-
-                System.Windows.Data.CompositeCollection cc = new();
-
-                if (this.rowsItemsPresenter.ContextMenu != null)
-                {
-                    System.Windows.Data.CollectionContainer c = new();
-                    c.SetCurrentValue(System.Windows.Data.CollectionContainer.CollectionProperty, this.rowsItemsPresenter.ContextMenu.Items);
-                    cc.Add(c);
-                }
-                else
-                {
-                    this.rowsItemsPresenter.SetCurrentValue(ContextMenuProperty, new ContextMenu());
-                }
-
-                if (contextMenu != null)
-                {
-                    System.Windows.Data.CollectionContainer c = new();
-                    c.SetCurrentValue(System.Windows.Data.CollectionContainer.CollectionProperty, contextMenu.Items);
-                    cc.Add(c);
-                }
-
-                System.Windows.Data.CollectionContainer newCollection = new();
-                menuItems.Add(new Separator());
-                newCollection.SetCurrentValue(System.Windows.Data.CollectionContainer.CollectionProperty, menuItems);
-                cc.Add(newCollection);
-
-                this.rowsItemsPresenter.ContextMenu.SetCurrentValue(ItemsControl.ItemsSourceProperty, cc);
-            }
-        }
 
         /// <summary>
         ///     Initialize datagrid
@@ -800,17 +687,298 @@ namespace DataGridWpf
             // OnItemsSourceChanged
             base.OnItemsSourceChanged(oldValue, newValue);
 
-            try
+            if (newValue == null)
             {
-                if (newValue == null)
+                return;
+            }
+
+            this.DoOnItemsSourceChange();
+        }
+
+        /// <summary>
+        ///     Set the cursor to "Cursors.Wait" during a long sorting operation
+        ///     https://stackoverflow.com/questions/8416961/how-can-i-be-notified-if-a-datagrid-column-is-sorted-and-not-sorting
+        /// </summary>
+        /// <param name="eventArgs"></param>
+        protected override void OnSorting(DataGridSortingEventArgs eventArgs)
+        {
+            if (this.pending || (this.popup?.IsOpen ?? false))
+            {
+                return;
+            }
+
+            Mouse.OverrideCursor = Cursors.Wait;
+            base.OnSorting(eventArgs);
+            this.Sorted?.Invoke(this, new EventArgs());
+        }
+
+        /// <summary>
+        ///     OnPropertyChange
+        /// </summary>
+        /// <param name="propertyName"></param>
+        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        #endregion Protected Methods
+
+        #region PropertyChangedCallbacks
+
+        private static void OnColumnsViewModelsChanged(DependencyObject source, DependencyPropertyChangedEventArgs e)
+        {
+            FilterDataGrid dataGrid = source as FilterDataGrid;
+            if (dataGrid == null)
+            {
+                return;
+            }
+
+            if (e.NewValue is not ObservableCollection<DataGridWpfColumnViewModel> columns)
+            {
+                return;
+            }
+
+            if (e.OldValue != null)
+            {
+                dataGrid.Columns.Clear();
+            }
+
+            if (dataGrid.Columns.Count == 0)
+            {
+                var orderedColumns = columns.OrderBy(i => i.DisplayIndex).ToArray();
+                foreach (var column in orderedColumns)
                 {
-                    return;
+                    SysDataGridColumn newColumn = Factory.ToDataGridWpfColumn(column) as SysDataGridColumn;
+                    dataGrid.Columns.Add(newColumn);
+                }
+            }
+            else
+            {
+                if (dataGrid.Columns.All(i => i is IDataGridWpfColumn) == false)
+                {
+                    var notIDataGridWpfColumnList = dataGrid.Columns.Where(i => !(i is IDataGridWpfColumn)).ToList();
+
+                    foreach (var column in notIDataGridWpfColumnList)
+                    {
+                        var newColumn = Factory.ToDataGridWpfColumn(column);
+                        dataGrid.Columns.Remove(column);
+                        dataGrid.Columns.Add(newColumn as SysDataGridColumn);
+                    }
+                }
+            }
+
+            if (e.OldValue is ObservableCollection<DataGridWpfColumnViewModel> oldColumns)
+            {
+                foreach (DataGridWpfColumnViewModel item in oldColumns)
+                {
+                    item.PropertyChanged -= dataGrid.ColumnsViewModelsItem_PropertyChanged;
+                }
+            }
+
+            foreach (DataGridWpfColumnViewModel item in columns)
+            {
+                item.PropertyChanged += dataGrid.ColumnsViewModelsItem_PropertyChanged;
+            }
+
+            columns.CollectionChanged += (sender, ne) =>
+            {
+                foreach (DataGridWpfColumnViewModel item in ne.OldItems)
+                {
+                    item.PropertyChanged -= dataGrid.ColumnsViewModelsItem_PropertyChanged;
                 }
 
+                foreach (DataGridWpfColumnViewModel item in ne.NewItems)
+                {
+                    item.PropertyChanged += dataGrid.ColumnsViewModelsItem_PropertyChanged;
+                }
+
+                if (ne.Action == NotifyCollectionChangedAction.Reset)
+                {
+                    dataGrid.Columns.Clear();
+                    foreach (DataGridWpfColumnViewModel column in ne.NewItems)
+                    {
+                        dataGrid.Columns.Add(Factory.ToDataGridWpfColumn(column) as SysDataGridColumn);
+                    }
+                }
+                else if (ne.Action == NotifyCollectionChangedAction.Add)
+                {
+                    foreach (DataGridWpfColumnViewModel column in ne.NewItems)
+                    {
+                        dataGrid.Columns.Add(Factory.ToDataGridWpfColumn(column) as SysDataGridColumn);
+                    }
+                }
+                else if (ne.Action == NotifyCollectionChangedAction.Move)
+                {
+                    dataGrid.Columns.Move(ne.OldStartingIndex, ne.NewStartingIndex);
+                }
+                else if (ne.Action == NotifyCollectionChangedAction.Remove)
+                {
+                    foreach (DataGridWpfColumnViewModel column in ne.OldItems)
+                    {
+                        dataGrid.Columns.Remove(Factory.ToDataGridWpfColumn(column) as SysDataGridColumn);
+                    }
+                }
+                else if (ne.Action == NotifyCollectionChangedAction.Replace)
+                {
+                    dataGrid.Columns[ne.NewStartingIndex] = Factory.ToDataGridWpfColumn(ne.NewItems[0] as DataGridWpfColumnViewModel) as SysDataGridColumn;
+                }
+            };
+            if (dataGrid.collectionType != null)
+            {
+                dataGrid.GeneratingCustomsColumn();
+            }
+        }
+
+        private static void OnDisplayRowNumberChanged(DependencyObject target, DependencyPropertyChangedEventArgs e)
+        {
+            FilterDataGrid dataGrid = target as FilterDataGrid;
+            if ((bool)e.NewValue == true)
+            {
+                void loadedRowHandler(object sender, DataGridRowEventArgs ea)
+                {
+                    if (dataGrid.DisplayRowNumber == false)
+                    {
+                        dataGrid.LoadingRow -= loadedRowHandler;
+                        return;
+                    }
+
+                    ea.Row.Header = ea.Row.GetIndex() + 1;
+                }
+
+                dataGrid.LoadingRow += loadedRowHandler;
+
+                ItemsChangedEventHandler itemsChangedHandler = null;
+                itemsChangedHandler = (object sender, ItemsChangedEventArgs ea) =>
+                {
+                    if (dataGrid.DisplayRowNumber == false)
+                    {
+                        dataGrid.ItemContainerGenerator.ItemsChanged -= itemsChangedHandler;
+                        return;
+                    }
+
+                    GetVisualChildCollection<DataGridRow>(dataGrid).
+                        ForEach(d => d.Header = d.GetIndex());
+                };
+                dataGrid.ItemContainerGenerator.ItemsChanged += itemsChangedHandler;
+            }
+        }
+
+        private static void OnUsePagedViewChanged(DependencyObject target, DependencyPropertyChangedEventArgs e)
+        {
+            FilterDataGrid dataGrid = target as FilterDataGrid;
+
+            if ((bool)e.NewValue != dataGrid.UsePagedView)
+            {
+                dataGrid.DoOnItemsSourceChange();
+            }
+        }
+
+        #endregion
+
+        #region Private Methods
+
+        private static List<T> GetVisualChildCollection<T>(object parent)
+            where T : Visual
+        {
+            List<T> visualCollection = new();
+            GetVisualChildCollection(parent as DependencyObject, visualCollection);
+            return visualCollection;
+        }
+
+        private static void GetVisualChildCollection<T>(DependencyObject parent, List<T> visualCollection)
+            where T : Visual
+        {
+            int count = VisualTreeHelper.GetChildrenCount(parent);
+            for (int i = 0; i < count; i++)
+            {
+                DependencyObject child = VisualTreeHelper.GetChild(parent, i);
+                if (child is T)
+                {
+                    visualCollection.Add(child as T);
+                }
+
+                if (child != null)
+                {
+                    GetVisualChildCollection(child, visualCollection);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Reset cursor
+        /// </summary>
+        private static async void ResetCursor()
+        {
+            // reset cursor
+            bool checkAccess = UiDispatcher.CheckAccess();
+            if (checkAccess)
+            {
+                Mouse.OverrideCursor = null;
+            }
+            else
+            {
+                await UiDispatcher.BeginInvoke((Action)(() => { Mouse.OverrideCursor = null; }), DispatcherPriority.ContextIdle);
+            }
+        }
+
+        /// <summary>
+        /// Wait cursor
+        /// </summary>
+        private static async void WaitCursor()
+        {
+            // wait cursor
+            bool checkAccess = UiDispatcher.CheckAccess();
+            if (checkAccess)
+            {
+                Mouse.OverrideCursor = Cursors.Wait;
+            }
+            else
+            {
+                await UiDispatcher.BeginInvoke((Action)(() => { Mouse.OverrideCursor = Cursors.Wait; }), DispatcherPriority.ContextIdle);
+            }
+        }
+
+        /// <summary>
+        /// Reset the cursor at the end of the sort
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private static void OnSorted(object sender, EventArgs e)
+        {
+            ResetCursor();
+        }
+
+        private void FilterDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (e.AddedItems != null && this.SelectedItems != null)
+            {
+                this.SelectedRowsCount = this.SelectedItems.Count;
+            }
+        }
+
+        // Get element from name. If it exist then element instance return, if not, new will be created
+        private T EnforceInstance<T>(string partName)
+            where T : FrameworkElement, new()
+        {
+            T element = this.GetTemplateChild(partName) as T ?? new T();
+            return element;
+        }
+
+        private void DoOnItemsSourceChange()
+        {
+            try
+            {
                 this.GlobalFilterList = new List<FilterCommon>();
                 this.criteria.Clear(); // clear criteria
 
-                this.CollectionViewSource = System.Windows.Data.CollectionViewSource.GetDefaultView(this.ItemsSource);
+                if (this.UsePagedView)
+                {
+                    this.CollectionViewSource = new PagingCollectionView(this.ItemsSource.Cast<object>().ToList());
+                }
+                else
+                {
+                    this.CollectionViewSource = System.Windows.Data.CollectionViewSource.GetDefaultView(this.ItemsSource);
+                }
 
                 // set Filter
                 // thank's Stefan Heimel for this contribution
@@ -836,7 +1004,7 @@ namespace DataGridWpf
 
                     if (this.collectionType == null)
                     {
-                        Debug.WriteLine("ItemsSource must be implement ICollectionView");
+                        Debug.WriteLine("ItemsSource must be implement ICollectionView");    
                     }
                 }
 
@@ -851,35 +1019,6 @@ namespace DataGridWpf
                 Debug.WriteLine($"FilterDataGrid.OnItemsSourceChanged : {ex.Message}");
                 throw;
             }
-        }
-
-        /// <summary>
-        ///     Set the cursor to "Cursors.Wait" during a long sorting operation
-        ///     https://stackoverflow.com/questions/8416961/how-can-i-be-notified-if-a-datagrid-column-is-sorted-and-not-sorting
-        /// </summary>
-        /// <param name="eventArgs"></param>
-        protected override void OnSorting(DataGridSortingEventArgs eventArgs)
-        {
-            if (this.pending || (this.popup?.IsOpen ?? false))
-            {
-                return;
-            }
-
-            Mouse.OverrideCursor = Cursors.Wait;
-            base.OnSorting(eventArgs);
-            this.Sorted?.Invoke(this, new EventArgs());
-        }
-
-        #endregion Protected Methods
-
-        #region Private Methods
-
-        // Get element from name. If it exist then element instance return, if not, new will be created
-        private T EnforceInstance<T>(string partName)
-            where T : FrameworkElement, new()
-        {
-            T element = this.GetTemplateChild(partName) as T ?? new T();
-            return element;
         }
 
         private void ItemsPresenterContextMenuOpening(object sender, ContextMenuEventArgs e)
@@ -1092,16 +1231,6 @@ namespace DataGridWpf
         }
 
         /// <summary>
-        ///     Reset the cursor at the end of the sort
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private static void OnSorted(object sender, EventArgs e)
-        {
-            ResetCursor();
-        }
-
-        /// <summary>
         /// Reactivate sorting
         /// </summary>
         private void ReactivateSorting()
@@ -1127,41 +1256,7 @@ namespace DataGridWpf
         }
 
         /// <summary>
-        ///     Reset cursor
-        /// </summary>
-        private static async void ResetCursor()
-        {
-            // reset cursor
-            bool checkAccess = UiDispatcher.CheckAccess();
-            if (checkAccess)
-            {
-                Mouse.OverrideCursor = null;
-            }
-            else
-            {
-                await UiDispatcher.BeginInvoke((Action)(() => { Mouse.OverrideCursor = null; }), DispatcherPriority.ContextIdle);
-            }
-        }
-
-        /// <summary>
-        ///     Wait cursor
-        /// </summary>
-        private static async void WaitCursor()
-        {
-            // wait cursor
-            bool checkAccess = UiDispatcher.CheckAccess();
-            if (checkAccess)
-            {
-                Mouse.OverrideCursor = Cursors.Wait;
-            }
-            else
-            {
-                await UiDispatcher.BeginInvoke((Action)(() => { Mouse.OverrideCursor = Cursors.Wait; }), DispatcherPriority.ContextIdle);
-            }
-        }
-
-        /// <summary>
-        ///     Can Apply filter (popup Ok button)
+        /// Can Apply filter (popup Ok button)
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -1193,7 +1288,7 @@ namespace DataGridWpf
         }
 
         /// <summary>
-        ///     Cancel button, close popup
+        /// Cancel button, close popup
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -1208,7 +1303,7 @@ namespace DataGridWpf
         }
 
         /// <summary>
-        ///     Can remove filter when current column (CurrentFilter) filtered
+        /// Can remove filter when current column (CurrentFilter) filtered
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -1218,7 +1313,7 @@ namespace DataGridWpf
         }
 
         /// <summary>
-        ///     Can show filter
+        /// Can show filter
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -1228,7 +1323,7 @@ namespace DataGridWpf
         }
 
         /// <summary>
-        ///     Check/uncheck all item when the action is (select all)
+        /// Check/uncheck all item when the action is (select all)
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -1250,7 +1345,7 @@ namespace DataGridWpf
         }
 
         /// <summary>
-        ///     Clear Search Box text
+        /// Clear Search Box text
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="routedEventArgs"></param>
@@ -1261,7 +1356,7 @@ namespace DataGridWpf
         }
 
         /// <summary>
-        ///     Aggregate list of predicate as filter
+        /// Aggregate list of predicate as filter
         /// </summary>
         /// <param name="o"></param>
         /// <returns></returns>
@@ -1280,16 +1375,7 @@ namespace DataGridWpf
         }
 
         /// <summary>
-        ///     OnPropertyChange
-        /// </summary>
-        /// <param name="propertyName"></param>
-        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
-        /// <summary>
-        ///     On Resize Thumb Drag Completed
+        /// On Resize Thumb Drag Completed
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -1299,7 +1385,7 @@ namespace DataGridWpf
         }
 
         /// <summary>
-        ///     Get delta on drag thumb
+        /// Get delta on drag thumb
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -1328,7 +1414,7 @@ namespace DataGridWpf
         }
 
         /// <summary>
-        ///     On Resize Thumb DragStarted
+        /// On Resize Thumb DragStarted
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -1339,7 +1425,7 @@ namespace DataGridWpf
         }
 
         /// <summary>
-        ///     Reset the size of popup to original size
+        /// Reset the size of popup to original size
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -1374,7 +1460,7 @@ namespace DataGridWpf
         }
 
         /// <summary>
-        ///     Remove current filter
+        /// Remove current filter
         /// </summary>
         private void RemoveCurrentFilter()
         {
@@ -1406,7 +1492,7 @@ namespace DataGridWpf
         }
 
         /// <summary>
-        ///     remove current filter
+        /// Remove current filter
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -1416,7 +1502,7 @@ namespace DataGridWpf
         }
 
         /// <summary>
-        ///     Filter current list in popup
+        /// Filter current list in popup
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
@@ -1429,7 +1515,7 @@ namespace DataGridWpf
         }
 
         /// <summary>
-        ///     Search TextBox Text Changed
+        /// Search TextBox Text Changed
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -1475,7 +1561,7 @@ namespace DataGridWpf
         }
 
         /// <summary>
-        ///    Open a pop-up window, Click on the header button
+        /// Open a pop-up window, Click on the header button
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -1757,7 +1843,7 @@ namespace DataGridWpf
         }
 
         /// <summary>
-        ///     Click OK Button when Popup is Open, apply filter
+        /// Click OK Button when Popup is Open, apply filter
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -1886,7 +1972,7 @@ namespace DataGridWpf
         }
 
         /// <summary>
-        ///     PopUp placement and offset
+        /// PopUp placement and offset
         /// </summary>
         /// <param name="grid"></param>
         /// <param name="header"></param>
@@ -2037,33 +2123,6 @@ namespace DataGridWpf
             }
         }
 
-        private static List<T> GetVisualChildCollection<T>(object parent)
-            where T : Visual
-        {
-            List<T> visualCollection = new();
-            GetVisualChildCollection(parent as DependencyObject, visualCollection);
-            return visualCollection;
-        }
-
-        private static void GetVisualChildCollection<T>(DependencyObject parent, List<T> visualCollection)
-            where T : Visual
-        {
-            int count = VisualTreeHelper.GetChildrenCount(parent);
-            for (int i = 0; i < count; i++)
-            {
-                DependencyObject child = VisualTreeHelper.GetChild(parent, i);
-                if (child is T)
-                {
-                    visualCollection.Add(child as T);
-                }
-
-                if (child != null)
-                {
-                    GetVisualChildCollection(child, visualCollection);
-                }
-            }
-        }
-
         /// <summary>
         /// Show/Hide columns
         /// </summary>
@@ -2112,7 +2171,7 @@ namespace DataGridWpf
             this.ShowHideColumn(column);
         }
 
-        protected IList<MenuItem> GetColumnsShowHideMenuItems()
+        private IList<MenuItem> GetColumnsShowHideMenuItems()
         {
             IList<MenuItem> itemCollection = new List<MenuItem>();
 
@@ -2232,7 +2291,7 @@ namespace DataGridWpf
     }
 
     /// <summary>
-    ///     ResourceDictionary
+    /// ResourceDictionary
     /// </summary>
     public partial class FilterDataGridDictionary
     {

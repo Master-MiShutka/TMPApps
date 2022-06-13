@@ -764,6 +764,8 @@
                                     <RowDefinition Height="Auto" />
                                     <RowDefinition Height="*" />
                                     <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
                                 </Grid.RowDefinitions>
 
                                 <Button
@@ -798,6 +800,7 @@
                                     ViewportSize="{TemplateBinding ViewportHeight}"
                                     Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}"
                                     Value="{Binding VerticalOffset, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}" />
+
                                 <Grid Grid.Row="2" Grid.Column="1">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="{Binding NonFrozenColumnsViewportHorizontalOffset, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" />
@@ -812,6 +815,18 @@
                                         Visibility="{TemplateBinding ComputedHorizontalScrollBarVisibility}"
                                         Value="{Binding HorizontalOffset, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}" />
                                 </Grid>
+
+                                <ContentPresenter
+                                    Grid.Row="3"
+                                    Grid.ColumnSpan="3"
+                                    Content="{Binding Path=StatusContent, RelativeSource={RelativeSource TemplatedParent}}" />
+
+                                <control:CollectionViewNavigator
+                                    Grid.Row="4"
+                                    Grid.ColumnSpan="3"
+                                    PagingCollectionView="{Binding Path=CollectionViewSource, RelativeSource={RelativeSource TemplatedParent}}"
+                                    Visibility="{Binding Path=UsePagedView, Converter={StaticResource BooleanToVisibilityConverter}}" />
+
                             </Grid>
                         </ControlTemplate>
                     </ScrollViewer.Template>
