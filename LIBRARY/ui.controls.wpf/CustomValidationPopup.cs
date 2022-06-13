@@ -6,7 +6,7 @@
     using System.Windows.Controls.Primitives;
     using System.Windows.Input;
     using System.Windows.Interop;
-    using Native;
+    using WindowsNative;
 
     /// <summary>
     /// This custom popup is used by the validation error template.

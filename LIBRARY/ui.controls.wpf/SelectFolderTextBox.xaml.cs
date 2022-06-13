@@ -5,6 +5,7 @@
     using System.Windows.Controls;
     using System.Windows.Input;
     using TMP.Shared.Commands;
+    using WindowsNative;
 
     /// <summary>
     /// Interaction logic for SelectFolderTextBox.xaml
@@ -28,7 +29,7 @@
             {
                 this.OnStartSelectFolder?.Invoke(this, EventArgs.Empty);
 
-                string selection = TMP.UI.Controls.WPF.NativeShellDialogs.FolderBrowserDialog.ShowDialog(Application.Current.MainWindow, "Выберите папку", null);
+                string selection = FolderBrowserDialog.ShowDialog(Application.Current.MainWindow, "Выберите папку", null);
                 if (selection != null)
                 {
                     this.SelectedPath = selection;

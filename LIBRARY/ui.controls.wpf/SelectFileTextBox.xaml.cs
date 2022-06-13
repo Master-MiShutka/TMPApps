@@ -5,6 +5,7 @@
     using System.Windows.Controls;
     using System.Windows.Input;
     using TMP.Shared.Commands;
+    using WindowsNative;
 
     /// <summary>
     /// Interaction logic for SelectFolderTextBox.xaml
@@ -29,9 +30,9 @@
             this.SelectFile = new DelegateCommand(() =>
             {
                 IntPtr parentHWnd = new System.Windows.Interop.WindowInteropHelper(Application.Current.MainWindow).Handle;
-                NativeShellDialogs.Filter[] filters = NativeShellDialogs.Filter.ParseWindowsFormsFilter(this.Filter);
+                Filter[] filters = WindowsNative.Filter.ParseWindowsFormsFilter(this.Filter);
 
-                string selection = TMP.UI.Controls.WPF.NativeShellDialogs.FileOpenDialog.ShowSingleSelectDialog(parentHWnd, this.DialogTitle,
+                string selection = FileOpenDialog.ShowSingleSelectDialog(parentHWnd, this.DialogTitle,
                     initialDirectory: null, defaultFileName: this.DefaultExt, filters: filters, selectedFilterZeroBasedIndex: 0);
 
                 if (selection != null)
