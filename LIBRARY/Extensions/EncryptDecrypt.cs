@@ -156,7 +156,7 @@
         public static string Decrypt(string cipherText, string password)
         {
             byte[] cipherData = Convert.FromBase64String(cipherText);
-            PasswordDeriveBytes passwordDeriveBytes = new PasswordDeriveBytes(password, new byte[]
+            PasswordDeriveBytes passwordDeriveBytes = new(password, new byte[]
             {
                 73,
                 118,

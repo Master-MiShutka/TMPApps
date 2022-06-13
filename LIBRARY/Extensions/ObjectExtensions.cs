@@ -141,21 +141,21 @@
         /// <code>
         /// public enum NonFlagEnum
         /// {
-        /// 	One = 1,
-        /// 	Two = 2,
-        /// 	Three = 4,
-        /// 	Four = 8,
-        /// 	Five = 16
+        ///     One = 1,
+        ///     Two = 2,
+        ///     Three = 4,
+        ///     Four = 8,
+        ///     Five = 16
         /// }
         ///
         /// [Flags]
         /// public enum FlagEnum
         /// {
-        /// 	One = 1,
-        /// 	Two = 2,
-        /// 	Three = 4,
-        /// 	Four = 8,
-        /// 	Five = 16,
+        ///     One = 1,
+        ///     Two = 2,
+        ///     Three = 4,
+        ///     Four = 8,
+        ///     Five = 16,
         /// }
         ///
         /// // Non flaged
