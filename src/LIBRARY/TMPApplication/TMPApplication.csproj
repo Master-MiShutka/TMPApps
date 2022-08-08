@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+  <PropertyGroup>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+  <ItemGroup>
+    <AppDesigner Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Shared-Windows\Shared-Windows.csproj" />
+    <ProjectReference Include="..\WindowsShell\WindowsShell.csproj" />
+    <PackageReference Include="NLog" Version="5.0.1" />
+    <PackageReference Include="System.Management" Version="6.0.0" />
+    <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
+    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="AppCore.cs" />
+  </ItemGroup>
+	
+</Project>

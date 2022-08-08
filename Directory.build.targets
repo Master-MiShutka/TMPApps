@@ -1,54 +1,56 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
-    <!-- AssemblyInfo -->
-    <PropertyGroup>
-        <Company>TMP Devlabs</Company>
-        <Authors>Trus Mikhail</Authors>
-        <Copyright>Copyright © 2017 - $([System.DateTime]::Today.ToString(yyyy)) Trus Mikhail Petrovich</Copyright>
-        <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    </PropertyGroup>
+  <PropertyGroup Label="OutputBuildProps">
+
+    <!-- Suffix Condition="'$(OutputType)'=='WinExe'"></Suffix>
+    <Suffix Condition="'$(OutputType)'=='Library'">Libs\</Suffix -->
+    <OutputPath>$(BaseOutputPath)$(Suffix)</OutputPath>
+    <OutDir>$(BaseOutputPath)$(Suffix)</OutDir>
+
+    <TargetDir>$(BaseOutputPath.TrimEnd('\'))\$(Suffix)</TargetDir>
+    <TargetPath>$(TargetDir)$(TargetFileName)</TargetPath>
+    <TargetRefPath>$(BaseIntermediateOutputPath)ref\$(TargetFileName)</TargetRefPath>
+
+  </PropertyGroup>
 
     <ItemGroup>
         <Page Update="@(Page)" SubType="Designer" Generator="MSBuild:Compile" />
     </ItemGroup>
 
-	<ItemGroup>
-		<!-- Remove unwanted files, eg. resources of unused files, unused native files -->
-		<GarbageDir Include="tr" />
-		<GarbageDir Include="pt-BR" />
-		<GarbageDir Include="pl" />
-		<GarbageDir Include="fr" />
-		<GarbageDir Include="ko" />
-		<GarbageDir Include="ja" />
-		<GarbageDir Include="it" />
-		<GarbageDir Include="de" />
-		<GarbageDir Include="es" />
-		<GarbageDir Include="cs" />
-		<GarbageDir Include="zh-Hans" />
-		<GarbageDir Include="zh-Hant" />
+    <ItemGroup>
+        <!-- Remove unwanted files, eg. resources of unused files, unused native files -->
+        <GarbageDir Include="tr" />
+        <GarbageDir Include="pt-BR" />
+        <GarbageDir Include="pl" />
+        <GarbageDir Include="fr" />
+        <GarbageDir Include="ko" />
+        <GarbageDir Include="ja" />
+        <GarbageDir Include="it" />
+        <GarbageDir Include="de" />
+        <GarbageDir Include="es" />
+        <GarbageDir Include="cs" />
+        <GarbageDir Include="zh-Hans" />
+        <GarbageDir Include="zh-Hant" />
 
-		<GarbageDir Include="runtimes" Condition=" '$(IsDotNetFramework)' == 'true' " />
-	</ItemGroup>
-	
+        <GarbageDir Include="runtimes" Condition=" '$(IsDotNetFramework)' == 'true' " />
+    </ItemGroup>
+
     <Target Name="MyRemoveGarbageFiles_AfterBuild" AfterTargets="AfterBuild">
-        <Delete Files="$(OutputPath)%(GarbageFile.Identity)" ContinueOnError="WarnAndContinue" />
-        <RemoveDir Directories="$(OutputPath)%(GarbageDir.Identity)" ContinueOnError="WarnAndContinue" />
+        <Message Text="*** Delete file : $(OutputPath)%(GarbageFile.Identity)" />
+        <!-- Delete Files="$(OutputPath)%(GarbageFile.Identity)" ContinueOnError="WarnAndContinue" />
+        <RemoveDir Directories="$(OutputPath)%(GarbageDir.Identity)" ContinueOnError="WarnAndContinue" / -->
     </Target>
 
-	<Target Name="MyRemoveGarbageFiles_Publish" AfterTargets="Publish">
-		<Delete Files="$(PublishDir)%(GarbageFile.Identity)" ContinueOnError="WarnAndContinue" />
-		<RemoveDir Directories="$(PublishDir)%(GarbageDir.Identity)" ContinueOnError="WarnAndContinue" />
-	</Target>	
+    <Target Name="MyRemoveGarbageFiles_Publish" AfterTargets="Publish">
+        <Message Text="*** Delete file : $(OutputPath)%(GarbageFile.Identity)" />
+        <!-- Delete Files="$(PublishDir)%(GarbageFile.Identity)" ContinueOnError="WarnAndContinue" />
+        <RemoveDir Directories="$(PublishDir)%(GarbageDir.Identity)" ContinueOnError="WarnAndContinue" / -->
+    </Target>
 
-    <PropertyGroup>
-        <TargetFrameworkMonikerAssemblyAttributesPath>$([System.IO.Path]::Combine('$(IntermediateOutputPath)','$(TargetFrameworkMoniker).AssemblyAttributes$(DefaultLanguageSourceExtension)'))</TargetFrameworkMonikerAssemblyAttributesPath>
-    </PropertyGroup>
     <!-- ItemGroup>
         <EmbeddedFiles Include="$(GeneratedAssemblyInfoFile)" />
     </ItemGroup -->
 
-    <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-      <Exec Command="FOR /D %%G in (&quot;$(BaseOutputBinPath)*_*_wpftmp&quot;) DO RMDIR /S /Q &quot;%%~G&quot;" />
-    </Target>
+    <Import Project="$(MSBuildThisFileDirectory)\OutputBuildTargets.props" />
 
 </Project>

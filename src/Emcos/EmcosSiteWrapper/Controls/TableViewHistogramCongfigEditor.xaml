@@ -1,0 +1,127 @@
+﻿<ToggleButton
+    x:Class="TMP.Work.Emcos.Controls.TableViewHistogramCongfigEditor"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:Microsoft_windows_themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:TMP.Work.Emcos.Controls"
+    xmlns:local_controls="clr-namespace:TMP.Work.Emcos.Controls"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ui="clr-namespace:TMP.UI.WPF.Controls;assembly=ui.wpf"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    mc:Ignorable="d">
+    <ToggleButton.Style>
+        <Style TargetType="{x:Type ToggleButton}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ToggleButton}">
+                        <Grid x:Name="MainGrid" SnapsToDevicePixels="True">
+                            <Popup
+                                x:Name="PART_Popup"
+                                Margin="1"
+                                Effect="{DynamicResource dropShadow}"
+                                IsOpen="{Binding IsChecked, RelativeSource={RelativeSource TemplatedParent}}"
+                                Placement="Bottom"
+                                PopupAnimation="{DynamicResource {x:Static SystemParameters.ComboBoxPopupAnimationKey}}"
+                                StaysOpen="False">
+                                <Microsoft_windows_themes:SystemDropShadowChrome
+                                    x:Name="Shdw"
+                                    MinWidth="{Binding ActualWidth, ElementName=MainGrid}"
+                                    Color="Transparent">
+                                    <Border
+                                        x:Name="DropDownBorder"
+                                        Background="{DynamicResource WhiteBrush}"
+                                        BorderBrush="{DynamicResource ControlBorderBrush}"
+                                        BorderThickness="1">
+                                        <ScrollViewer x:Name="DropDownScrollViewer">
+                                            <Grid RenderOptions.ClearTypeHint="Enabled">
+                                                <Canvas
+                                                    Width="0"
+                                                    Height="0"
+                                                    HorizontalAlignment="Left"
+                                                    VerticalAlignment="Top">
+                                                    <Rectangle
+                                                        x:Name="OpaqueRect"
+                                                        Width="{Binding ActualWidth, ElementName=DropDownBorder}"
+                                                        Height="{Binding ActualHeight, ElementName=DropDownBorder}"
+                                                        Fill="{Binding Background, ElementName=DropDownBorder}" />
+                                                </Canvas>
+                                                <ContentPresenter
+                                                    x:Name="presenter"
+                                                    KeyboardNavigation.DirectionalNavigation="Contained"
+                                                    SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                                            </Grid>
+                                        </ScrollViewer>
+                                    </Border>
+                                </Microsoft_windows_themes:SystemDropShadowChrome>
+                            </Popup>
+                            <ToggleButton IsChecked="{Binding IsChecked, RelativeSource={RelativeSource TemplatedParent}}">
+                                <StackPanel Orientation="Horizontal">
+                                    <ui:Icons Kind="Settings" />
+                                    <Label Content="Настройка" />
+                                </StackPanel>
+                            </ToggleButton>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger SourceName="PART_Popup" Property="HasDropShadow" Value="true">
+                                <Setter TargetName="Shdw" Property="Margin" Value="0,0,5,5" />
+                                <Setter TargetName="Shdw" Property="Color" Value="#71000000" />
+                            </Trigger>
+                            <Trigger SourceName="DropDownScrollViewer" Property="ScrollViewer.CanContentScroll" Value="false">
+                                <Setter TargetName="OpaqueRect" Property="Canvas.Top" Value="{Binding VerticalOffset, ElementName=DropDownScrollViewer}" />
+                                <Setter TargetName="OpaqueRect" Property="Canvas.Left" Value="{Binding HorizontalOffset, ElementName=DropDownScrollViewer}" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </ToggleButton.Style>
+    <ui:LayoutGroup Margin="2">
+        <ui:LayoutGroup.Resources>
+            <Style TargetType="{x:Type TextBlock}">
+                <Setter Property="Padding" Value="0" />
+                <Setter Property="Margin" Value="10,2,5,5" />
+            </Style>
+        </ui:LayoutGroup.Resources>
+        <!--  1  -->
+        <ui:LabelledContent Label="Цвет выделения">
+            <local:ColorComboBox Grid.Column="1" SelectedValue="{Binding Path=Table.MarkBrush, FallbackValue=White, TargetNullValue=White}" />
+        </ui:LabelledContent>
+        <!--  2  -->
+        <ui:LabelledContent Label="Толщина оси гистограм">
+            <Slider
+                LargeChange="0.5"
+                Maximum="5"
+                Minimum="0"
+                TickFrequency="0.5"
+                Value="{Binding Path=Table.HistogramAxisThickness}" />
+        </ui:LabelledContent>
+        <!--  3  -->
+        <ui:LabelledContent Label="Цвет оси гистограм">
+            <local:ColorComboBox SelectedValue="{Binding Path=Table.HistogramAxisBrush}" />
+        </ui:LabelledContent>
+        <!--  4  -->
+        <ui:LabelledContent Label="Толщина границ гистограм">
+            <Slider
+                LargeChange="0.5"
+                Maximum="5"
+                Minimum="0"
+                TickFrequency="0.5"
+                Value="{Binding Path=Table.HistogramBarBorderThickness}" />
+        </ui:LabelledContent>
+        <!--  5  -->
+        <ui:LabelledContent Label="Цвет границ гистограм">
+            <local:ColorComboBox SelectedValue="{Binding Path=Table.HistogramBarBorderBrush}" />
+        </ui:LabelledContent>
+        <!--  6  -->
+        <ui:LabelledContent Label="Заливка положительных&#x0a;значений гистограм">
+            <local:ColorComboBox SelectedValue="{Binding Path=Table.HistogramPositiveBarFillBrush}" />
+        </ui:LabelledContent>
+        <!--  7  -->
+        <ui:LabelledContent Label="Заливка отрицательных&#x0a;значений гистограм">
+            <local:ColorComboBox SelectedValue="{Binding Path=Table.HistogramNegativeBarFillBrush, Mode=TwoWay}" />
+        </ui:LabelledContent>
+    </ui:LayoutGroup>
+</ToggleButton>

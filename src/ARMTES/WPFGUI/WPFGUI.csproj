@@ -1,0 +1,42 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <RootNamespace>TMP.ARMTES</RootNamespace>
+    <AssemblyName>ARMTES</AssemblyName>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <UseWindowsForms>true</UseWindowsForms>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Resources\MAINICON.ico</ApplicationIcon>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="PresentationFramework.Aero" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Net" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\LIBRARY\CommonControls\CommonControls.csproj" />
+    <ProjectReference Include="..\..\LIBRARY\ExcelXML\TMP.ExcelXML.csproj" />
+    <ProjectReference Include="..\..\Library\Shared-Windows\Shared-Windows.csproj" />
+    <ProjectReference Include="..\..\LIBRARY\TMPApplication\TMPApplication.csproj" />
+    <ProjectReference Include="..\Model\ArmtesModel.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="HtmlAgilityPack" Version="1.11.31" />
+    <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
+   <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+   <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\background.png" />
+    <Resource Include="Resources\back_image.png" />
+    <Resource Include="Resources\MAINICON.ico" />
+    <Resource Include="Resources\wrongSettings.png" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects Condition="'$(MSBuildVersion)' == '' Or '$(MSBuildVersion)' &lt; '16.0'">$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>5b8454c2-2f32-4250-b008-9e8f46f79ae0</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>Shared.Common</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)ChildItemCollection.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Commands\DelegateCommand.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Commands\DelegateCommandBase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Commands\IActiveAware.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Commands\WeakEventHandlerManager.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DataFormatters\DataFormatAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)EnumDescriptionTypeConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ICancelable.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IStateObject.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IWaitableObject.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Magic.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PlusPropertyDescriptor.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PropertyChangedBase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SerializableDictionary.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SerializableStringDictionary.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)State.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Strings.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SynchronizedObservableCollection.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)TableHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Tree\ITreeModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Tree\ITreeNode.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Tree\TreeNode.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModelAttribute.cs" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+	<TargetFramework>$(WindowsLibraryTargetFramework)</TargetFramework>
+	<Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="NLog" Version="5.0.1" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\UIInfrastructure\UIInfrastructure.csproj" />
+    <ProjectReference Include="..\WindowsNative\WindowsNative.csproj" />
+  </ItemGroup>
+	
+</Project>

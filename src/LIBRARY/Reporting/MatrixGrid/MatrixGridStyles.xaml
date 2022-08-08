@@ -1,0 +1,248 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local_converters="clr-namespace:TMP.UI.WPF.Reporting.Converters"
+    xmlns:matrixGrid="clr-namespace:TMP.UI.WPF.Reporting.MatrixGrid"
+    xmlns:matrixgrid="clr-namespace:TMP.UI.WPF.Reporting.MatrixGrid">
+
+    <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+    <local_converters:NullOrEmptyToVisibilityConverter x:Key="NullOrEmptyToVisibilityConverter" />
+
+    <Style x:Key="ContentControlStyle" TargetType="{x:Type ContentControl}">
+        <Setter Property="HorizontalAlignment" Value="Center" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="ToolTip" Value="{Binding ToolTip}" />
+    </Style>
+
+    <DataTemplate x:Key="EmptyCellTemplate">
+        <!--    -->
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type matrixGrid:MatrixHeaderCell}">
+        <Border
+            x:Name="rootBorder"
+            Margin="0"
+            Padding="2"
+            BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}">
+            <Border.BorderThickness>
+                <MultiBinding Converter="{x:Static local_converters:HeaderBorderThicknessConverter.Singleton}">
+                    <Binding />
+                    <Binding Path="Matrix" RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType={x:Type matrixGrid:MatrixGridControl}}" />
+                </MultiBinding>
+            </Border.BorderThickness>
+            <ContentControl
+                x:Name="content"
+                Content="{Binding Header}"
+                Style="{StaticResource ContentControlStyle}"
+                Tag="{Binding Tag}"
+                ToolTip="{Binding ToolTip}" />
+        </Border>
+        <DataTemplate.Triggers>
+            <DataTrigger Binding="{Binding CellType}" Value="{x:Static matrixGrid:MatrixCellType.Empty}">
+                <Setter TargetName="content" Property="ContentTemplate" Value="{StaticResource EmptyCellTemplate}" />
+                <Setter TargetName="rootBorder" Property="BorderThickness" Value="0,0,2,2" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding CellType}" Value="{x:Static matrixGrid:MatrixCellType.RowHeader}">
+                <Setter TargetName="content" Property="HorizontalAlignment" Value="Left" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding CellType}" Value="{x:Static matrixGrid:MatrixCellType.RowSummaryHeader}">
+                <Setter TargetName="content" Property="FontWeight" Value="SemiBold" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding CellType}" Value="{x:Static matrixGrid:MatrixCellType.ColumnSummaryHeader}">
+                <Setter TargetName="content" Property="FontWeight" Value="SemiBold" />
+            </DataTrigger>
+        </DataTemplate.Triggers>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type matrixGrid:MatrixSummaryCell}">
+        <Border
+            x:Name="rootBorder"
+            Margin="0"
+            Padding="2"
+            Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"
+            BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}">
+            <Border.BorderThickness>
+                <MultiBinding Converter="{x:Static local_converters:HeaderBorderThicknessConverter.Singleton}">
+                    <Binding />
+                    <Binding Path="Matrix" RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType={x:Type matrixGrid:MatrixGridControl}}" />
+                </MultiBinding>
+            </Border.BorderThickness>
+            <ContentControl
+                x:Name="content"
+                Content="{Binding Value}"
+                ContentStringFormat="{Binding ContentFormat}"
+                Style="{StaticResource ContentControlStyle}" />
+        </Border>
+        <DataTemplate.Triggers>
+            <DataTrigger Binding="{Binding SummaryType}" Value="{x:Static matrixGrid:MatrixSummaryType.RowSummary}">
+                <Setter TargetName="content" Property="FontWeight" Value="Bold" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding SummaryType}" Value="{x:Static matrixGrid:MatrixSummaryType.ColumnSummary}">
+                <Setter TargetName="content" Property="FontWeight" Value="Bold" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding SummaryType}" Value="{x:Static matrixGrid:MatrixSummaryType.TotalSummary}">
+                <Setter TargetName="content" Property="FontWeight" Value="ExtraBold" />
+            </DataTrigger>
+
+        </DataTemplate.Triggers>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type matrixGrid:MatrixDataCell}">
+        <Border
+            Margin="0"
+            Padding="2"
+            BorderBrush="{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}">
+            <Border.BorderThickness>
+                <MultiBinding Converter="{x:Static local_converters:HeaderBorderThicknessConverter.Singleton}">
+                    <Binding />
+                    <Binding Path="Matrix" RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType={x:Type matrixGrid:MatrixGridControl}}" />
+                </MultiBinding>
+            </Border.BorderThickness>
+            <ContentControl
+                x:Name="dataPresenter"
+                Content="{Binding Value}"
+                ContentStringFormat="{Binding ContentFormat}"
+                Style="{StaticResource ContentControlStyle}" />
+        </Border>
+    </DataTemplate>
+
+    <ControlTemplate x:Key="MatrixGridControlCOntrolTemplate" TargetType="{x:Type matrixGrid:MatrixGridControl}">
+        <Border
+            x:Name="border"
+            Padding="{TemplateBinding Padding}"
+            Background="{TemplateBinding Background}"
+            BorderBrush="{TemplateBinding BorderBrush}"
+            BorderThickness="{TemplateBinding BorderThickness}"
+            SnapsToDevicePixels="True">
+            <Grid x:Name="root">
+                <Border
+                    x:Name="statusBorder"
+                    Margin="10,5"
+                    Padding="10,5"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    BorderBrush="{TemplateBinding BorderBrush}"
+                    BorderThickness="1"
+                    CornerRadius="5">
+                    <TextBlock x:Name="statusText">
+                        <TextBlock.Effect>
+                            <DropShadowEffect
+                                BlurRadius="10"
+                                Opacity="1"
+                                ShadowDepth="0"
+                                Color="LightGray" />
+                        </TextBlock.Effect>
+                    </TextBlock>
+                </Border>
+                <StackPanel x:Name="data" DataContext="{Binding Path=Matrix, RelativeSource={RelativeSource Mode=TemplatedParent}}">
+                    <!--  Title  -->
+                    <ContentControl
+                        x:Name="titlePresenter"
+                        HorizontalAlignment="Center"
+                        HorizontalContentAlignment="Center"
+                        Content="{Binding Path=Header}"
+                        TextBlock.TextAlignment="Center" />
+                    <DockPanel>
+                        <ContentPresenter Content="{Binding Path=LeftContent, RelativeSource={RelativeSource Mode=TemplatedParent}}" DockPanel.Dock="Left" />
+                        <StackPanel>
+                            <!--  Matrix  -->
+                            <ScrollViewer
+                                Margin="2"
+                                CanContentScroll="True"
+                                VerticalScrollBarVisibility="Auto">
+                                <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                            </ScrollViewer>
+                        </StackPanel>
+                    </DockPanel>
+                    <!--  Description  -->
+                    <ContentControl
+                        Margin="2,0"
+                        VerticalAlignment="Top"
+                        Content="{Binding Path=Description}" />
+                </StackPanel>
+            </Grid>
+            <VisualStateManager.VisualStateGroups>
+                <VisualStateGroup x:Name="Common">
+                    <VisualState x:Name="Ready">
+                        <Storyboard>
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="statusBorder" Storyboard.TargetProperty="(UIElement.Visibility)">
+                                <DiscreteObjectKeyFrame KeyTime="00:00:00" Value="{x:Static Visibility.Collapsed}" />
+                            </ObjectAnimationUsingKeyFrames>
+                        </Storyboard>
+                    </VisualState>
+                    <VisualState x:Name="NoData">
+                        <Storyboard>
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="statusBorder" Storyboard.TargetProperty="(UIElement.Visibility)">
+                                <DiscreteObjectKeyFrame KeyTime="00:00:00" Value="{x:Static Visibility.Visible}" />
+                            </ObjectAnimationUsingKeyFrames>
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="data" Storyboard.TargetProperty="(UIElement.Visibility)">
+                                <DiscreteObjectKeyFrame KeyTime="00:00:00" Value="{x:Static Visibility.Collapsed}" />
+                            </ObjectAnimationUsingKeyFrames>
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="statusText" Storyboard.TargetProperty="Text">
+                                <DiscreteObjectKeyFrame KeyTime="00:00:00" Value="нет данных" />
+                            </ObjectAnimationUsingKeyFrames>
+                        </Storyboard>
+                    </VisualState>
+                    <VisualState x:Name="Building">
+                        <Storyboard>
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="statusText" Storyboard.TargetProperty="(UIElement.Visibility)">
+                                <DiscreteObjectKeyFrame KeyTime="00:00:01" Value="{x:Static Visibility.Visible}" />
+                            </ObjectAnimationUsingKeyFrames>
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="data" Storyboard.TargetProperty="(UIElement.Visibility)">
+                                <DiscreteObjectKeyFrame KeyTime="00:00:00" Value="{x:Static Visibility.Collapsed}" />
+                            </ObjectAnimationUsingKeyFrames>
+                            <ObjectAnimationUsingKeyFrames
+                                RepeatBehavior="Forever"
+                                Storyboard.TargetName="statusText"
+                                Storyboard.TargetProperty="Text"
+                                Duration="00:00:04">
+                                <DiscreteObjectKeyFrame KeyTime="00:00:00" Value="подготовка данных" />
+                                <DiscreteObjectKeyFrame KeyTime="00:00:01" Value="подготовка данных ." />
+                                <DiscreteObjectKeyFrame KeyTime="00:00:02" Value="подготовка данных . ." />
+                                <DiscreteObjectKeyFrame KeyTime="00:00:03" Value="подготовка данных . . ." />
+                            </ObjectAnimationUsingKeyFrames>
+                        </Storyboard>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateManager.VisualStateGroups>
+        </Border>
+    </ControlTemplate>
+
+    <Style x:Key="MatrixGridControlItemContainerStyle" TargetType="{x:Type ContentPresenter}">
+        <Setter Property="Grid.Row" Value="{Binding Path=GridRow}" />
+        <Setter Property="Grid.RowSpan" Value="{Binding Path=GridRowSpan}" />
+        <Setter Property="Grid.Column" Value="{Binding Path=GridColumn}" />
+        <Setter Property="Grid.ColumnSpan" Value="{Binding Path=GridColumnSpan}" />
+    </Style>
+
+    <Style TargetType="{x:Type matrixGrid:MatrixGridControl}">
+        <Setter Property="Padding" Value="2" />
+        <Setter Property="BorderBrush" Value="{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}" />
+        <Setter Property="SnapsToDevicePixels" Value="True" />
+        <Setter Property="UseLayoutRounding" Value="True" />
+        <Setter Property="ItemsSource" Value="{Binding Path=Matrix.Items, RelativeSource={RelativeSource Mode=Self}}" />
+
+        <Setter Property="Template" Value="{StaticResource MatrixGridControlCOntrolTemplate}" />
+        <Setter Property="ItemContainerStyle" Value="{StaticResource MatrixGridControlItemContainerStyle}" />
+        <Setter Property="ItemsPanel">
+            <Setter.Value>
+                <ItemsPanelTemplate>
+                    <matrixgrid:MatrixGrid />
+                </ItemsPanelTemplate>
+            </Setter.Value>
+        </Setter>
+
+        <Setter Property="ContextMenu">
+            <Setter.Value>
+                <ContextMenu>
+                    <MenuItem Command="{Binding CommandPrint}" Header="Печать" />
+                    <MenuItem Command="{Binding CommandCopyToClipboard}" Header="Копировать таблицу в буфер обмена" />
+                    <MenuItem Command="{Binding CommandRefresh}" Header="Обновить данные" />
+                </ContextMenu>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="{x:Type matrixGrid:MatrixWithSelector}" />
+
+</ResourceDictionary>

@@ -1,0 +1,33 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+	<TargetFramework>$(WindowsLibraryTargetFramework)</TargetFramework>
+	<RootNamespace>TMP.UI.Controls.WPF.Reporting</RootNamespace>
+    <AssemblyName>ui.controls.wpf.reporting</AssemblyName>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+  <ItemGroup>
+      <PackageReference Include="MessagePack.Annotations" Version="2.4.35">
+		  <IncludeAssets>compile</IncludeAssets>
+	  </PackageReference>
+	  <PackageReference Include="NLog" Version="5.0.1">
+		  <IncludeAssets>compile</IncludeAssets>
+	  </PackageReference>
+      <PackageReference Include="NotifyPropertyChangedGenerator" Version="1.1.1">
+		  <IncludeAssets>compile</IncludeAssets>
+	  </PackageReference>
+      <PackageReference Include="PropertyChangedAnalyzers" Version="4.0.0">
+        <PrivateAssets>all</PrivateAssets>
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      </PackageReference>
+	  <PackageReference Include="System.Drawing.Common" Version="6.0.0">
+        <IncludeAssets>compile</IncludeAssets>
+      </PackageReference>
+	  <Reference Include="PresentationFramework">
+	  </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Shared-Windows\Shared-Windows.csproj" />
+  </ItemGroup>
+	
+</Project>

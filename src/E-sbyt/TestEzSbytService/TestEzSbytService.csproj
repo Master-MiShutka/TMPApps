@@ -1,0 +1,60 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>TMP.Work.AmperM.TestApp</RootNamespace>
+    <AssemblyName>Test</AssemblyName>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <OutputPath>..\..\out\$(Configuration)\</OutputPath>
+    <UseWindowsForms>true</UseWindowsForms>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>..\..\out\Debug\Amper-M\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>..\..\out\Release\Amper-M\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>MAINICON.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>TMP.Work.AmperM.TestApp.App</StartupObject>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="PresentationFramework.Aero" />
+    <Reference Include="PresentationFramework.Aero2" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\LIBRARY\CommonControls\CommonControls.csproj" />
+    <ProjectReference Include="..\..\LIBRARY\EPPLUS\EPPlus.csproj" />
+    <ProjectReference Include="..\..\LIBRARY\Extensions\TMP.Extensions.csproj" />
+    <ProjectReference Include="..\..\LIBRARY\Interactivity\Interactivity.csproj" />
+    <ProjectReference Include="..\..\LIBRARY\NetHelper\NetHelper.csproj" />
+    <ProjectReference Include="..\..\LIBRARY\RepositoryCommon\RepositoryCommon.csproj" />
+    <ProjectReference Include="..\..\Library\Shared-Windows\Shared-Windows.csproj" />
+    <ProjectReference Include="..\..\LIBRARY\TMPApplication\TMPApplication.csproj" />
+    <ProjectReference Include="..\..\LIBRARY\WindowsShell\WindowsShell.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="AvalonEdit" Version="5.0.3" />
+    <PackageReference Include="gong-wpf-dragdrop" Version="1.1.0" />
+    <PackageReference Include="MahApps.Metro.IconPacks.Modern" Version="1.7.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
+  </ItemGroup>
+</Project>

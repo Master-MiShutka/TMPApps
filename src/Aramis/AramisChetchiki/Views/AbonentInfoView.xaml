@@ -1,0 +1,137 @@
+﻿<UserControl
+    x:Class="TMP.WORK.AramisChetchiki.Views.AbonentInfoView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:common="clr-namespace:TMP.Shared;assembly=Shared"
+    xmlns:controls="clr-namespace:TMP.UI.WPF.Controls;assembly=ui.wpf"
+    xmlns:converters="clr-namespace:TMP.UI.WPF.Controls.Converters;assembly=ui.wpf"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:helpers="clr-namespace:TMP.UI.WPF.Controls.Helpers;assembly=ui.wpf"
+    xmlns:interactivity="clr-namespace:Interactivity;assembly=Interactivity"
+    xmlns:local="clr-namespace:TMP.WORK.AramisChetchiki.Views"
+    xmlns:local_controls="clr-namespace:TMP.WORK.AramisChetchiki.Controls"
+    xmlns:local_converters="clr-namespace:TMP.WORK.AramisChetchiki.Converters"
+    xmlns:local_extensions="clr-namespace:TMP.WORK.AramisChetchiki.Extensions"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:model="clr-namespace:TMP.WORK.AramisChetchiki.Model"
+    xmlns:options="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
+    xmlns:view="clr-namespace:TMP.WORK.AramisChetchiki.Views"
+    xmlns:vm="clr-namespace:TMP.WORK.AramisChetchiki.ViewModel"
+    x:Name="root"
+    d:DesignHeight="800"
+    d:DesignWidth="1364"
+    Background="White"
+    TextOptions.TextFormattingMode="Ideal"
+    mc:Ignorable="d">
+    <UserControl.Resources>
+
+        <!--    -->
+        <local_converters:NumberFormatConverter x:Key="NumberFormatConverter" />
+
+    </UserControl.Resources>
+
+    <UserControl.InputBindings>
+        <KeyBinding Key="Up" Command="{Binding PreviousItem}" />
+        <KeyBinding Key="Down" Command="{Binding NextItem}" />
+        <KeyBinding Key="OemPlus" Command="{Binding FindById}" />
+    </UserControl.InputBindings>
+
+    <view:BaseView>
+        <view:BaseView.HeaderPanel>
+            <StackPanel Orientation="Horizontal">
+                <Button
+                    MinWidth="40"
+                    Command="{Binding PreviousItem}"
+                    Content="&lt;-" />
+                <Button
+                    MinWidth="40"
+                    Command="{Binding NextItem}"
+                    Content="-&gt;" />
+                <Separator Style="{StaticResource dotedSeparator}" />
+                <local_controls:HorizontalListBox
+                    ItemsSource="{Binding Source={common:EnumBindingSource {x:Type model:NavigationMode}}}"
+                    SelectedIndex="0"
+                    SelectedItem="{Binding SelectedNavigationMode}"
+                    ToolTip="Навигация">
+                    <local_controls:HorizontalListBox.ItemTemplate>
+                        <DataTemplate>
+                            <ToggleButton
+                                Padding="10,5"
+                                Content="{Binding Converter={StaticResource EnumDescriptionConverter}}"
+                                IsChecked="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListBoxItem}}, Path=IsSelected}" />
+                        </DataTemplate>
+                    </local_controls:HorizontalListBox.ItemTemplate>
+                </local_controls:HorizontalListBox>
+                <Separator Style="{StaticResource dotedSeparator}" />
+                <TextBlock
+                    FontSize="{DynamicResource HeaderFontSize}"
+                    FontWeight="SemiBold"
+                    Text="{Binding Path=View.CurrentPosition, FallbackValue=???}" />
+                <TextBlock Text="/" />
+                <TextBlock
+                    FontSize="{DynamicResource HeaderFontSize}"
+                    FontWeight="SemiBold"
+                    Text="{Binding Path=View.Count, FallbackValue=???}" />
+
+                <Separator Style="{StaticResource dotedSeparator}" />
+                <Button
+                    MinWidth="40"
+                    Command="{Binding PreviousItem}"
+                    Content="&lt;-" />
+                <Button
+                    MinWidth="40"
+                    Command="{Binding NextItem}"
+                    Content="-&gt;" />
+                <Separator Style="{StaticResource dotedSeparator}" />
+                <TextBox
+                    MinWidth="100"
+                    VerticalAlignment="Center"
+                    helpers:TextBoxHelper.Watermark="Лицевой счёт для поиска"
+                    Text="{Binding Path=SelectedAbonentId, UpdateSourceTrigger=PropertyChanged}" />
+                <Separator Style="{StaticResource dotedSeparator}" />
+            </StackPanel>
+        </view:BaseView.HeaderPanel>
+        <Grid MinHeight="200" Margin="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" MinWidth="150" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <!--  1  -->
+            <ListBox
+                IsSynchronizedWithCurrentItem="True"
+                ItemsSource="{Binding Path=View}"
+                SelectedValue="{Binding SelectedAbonentId}"
+                SelectedValuePath="Лицевой">
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <VirtualizingStackPanel />
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+                <ListBox.ItemTemplate>
+                    <DataTemplate DataType="{x:Type model:Meter}">
+                        <TextBlock
+                            x:Name="txt"
+                            Margin="2,5"
+                            Text="{Binding Path=Лицевой, Converter={StaticResource NumberFormatConverter}, ConverterParameter='## #### #### #', FallbackValue=-?-, Mode=OneWay}" />
+                        <DataTemplate.Triggers>
+                            <DataTrigger Binding="{Binding Path=Поверен}" Value="False">
+                                <Setter TargetName="txt" Property="FontStyle" Value="Italic" />
+                                <Setter TargetName="txt" Property="ToolTip" Value="Не поверен" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding Path=Удалён}" Value="True">
+                                <Setter TargetName="txt" Property="Foreground" Value="Red" />
+                                <Setter TargetName="txt" Property="ToolTip" Value="Удалён" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding Path=Отключён}" Value="False">
+                                <Setter TargetName="txt" Property="Foreground" Value="LightGray" />
+                                <Setter TargetName="txt" Property="ToolTip" Value="Отключён" />
+                            </DataTrigger>
+                        </DataTemplate.Triggers>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+            <!--  2  -->
+            <local_controls:MeterView Grid.Column="1" DataContext="{Binding Path=MeterViewViewModel}" />
+        </Grid>
+    </view:BaseView>
+</UserControl>

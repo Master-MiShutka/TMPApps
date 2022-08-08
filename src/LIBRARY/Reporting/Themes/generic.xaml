@@ -1,0 +1,11 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local_converters="clr-namespace:TMP.UI.WPF.Reporting.Converters"
+    xmlns:matrixGrid="clr-namespace:TMP.UI.WPF.Reporting.MatrixGrid">
+
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="pack://application:,,,/ui.wpf.reporting;component/MatrixGrid/MatrixGridStyles.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+
+</ResourceDictionary>

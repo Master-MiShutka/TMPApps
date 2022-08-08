@@ -1,0 +1,67 @@
+﻿<UserControl
+    x:Class="TMP.Work.Emcos.View.EnergyValuesView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:balancemodel="clr-namespace:TMP.Work.Emcos.Model.Balance;assembly=EmcosModel"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:TMP.Work.Emcos.View"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ui="clr-namespace:TMP.UI.WPF.Controls;assembly=ui.wpf"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    TextOptions.TextFormattingMode="Ideal"
+    UseLayoutRounding="True"
+    mc:Ignorable="d">
+    <UserControl.Resources>
+        <DataTemplate DataType="{x:Type balancemodel:DirectedEnergyBase}">
+            <HeaderedContentControl Header="{Binding Description}">
+                <ui:LayoutGroup>
+                    <ui:LabelledTextBox Label="{Binding ShortDescription}" Text="{Binding EnergyIn, Mode=OneWay, StringFormat={StaticResource NumberStringFormat}}" />
+                    <Separator />
+                    <CheckBox Content="Используются данные за месяц" IsChecked="{Binding UseMonthValue}" />
+                    <Separator />
+                    <ui:LabelledTextBox
+                        IsReadonly="True"
+                        Label="Энергия без корректировки"
+                        Text="{Binding Value, Mode=OneWay, ConverterCulture=be-BY, StringFormat={StaticResource NumberStringFormat}}" />
+                    <ui:LabelledTextBox
+                        IsReadonly="True"
+                        Label="Энергия с корректировкой"
+                        Text="{Binding CorrectedValue, Mode=OneWay, ConverterCulture=be-BY, StringFormat={StaticResource NumberStringFormat}}" />
+                    <Separator />
+                    <ui:LabelledTextBox Label="За месяц" Text="{Binding MonthValue, Mode=OneWay, ConverterCulture=be-BY, StringFormat={StaticResource NumberStringFormat}}" />
+                    <ui:LabelledTextBox
+                        IsReadonly="True"
+                        Label="Сумма суточных значений"
+                        Text="{Binding SummOfDaysValue, Mode=OneWay, ConverterCulture=be-BY, StringFormat={StaticResource NumberStringFormat}}" />
+                    <ui:LabelledTextBox
+                        x:Name="difference"
+                        Label="Разность"
+                        Text="{Binding DifferenceBetweenDaysSumAndMonth, Mode=OneWay, StringFormat={StaticResource NumberStringFormat}}" />
+                    <Separator />
+                    <ui:LabelledTextBox Label="Среднее суточных" Text="{Binding DaysValuesAverage, Mode=OneWay, StringFormat={StaticResource NumberStringFormat}}" />
+                    <ui:LabelledTextBox Label="Минимальное суточных" Text="{Binding DaysValuesMin, Mode=OneWay, StringFormat={StaticResource NumberStringFormat}}" />
+                    <ui:LabelledTextBox Label="Максимальное суточных" Text="{Binding DaysValuesMax, Mode=OneWay, StringFormat={StaticResource NumberStringFormat}}" />
+                    <Separator />
+                    <ui:LabelledTextBox
+                        Label="Корректировка (+/-)"
+                        Text="{Binding CorrectionValue, StringFormat={StaticResource DoubleStringFormat}, UpdateSourceTrigger=PropertyChanged, NotifyOnValidationError=True}"
+                        TextStyle="{StaticResource numberTextBox}"
+                        ValidationError="TextBox_Error" />
+                </ui:LayoutGroup>
+            </HeaderedContentControl>
+            <DataTemplate.Triggers>
+                <DataTrigger Binding="{Binding HasDifferenceBetweenDaysSumAndMonth}" Value="true">
+                    <Setter TargetName="difference" Property="Background" Value="LightRed" />
+                </DataTrigger>
+            </DataTemplate.Triggers>
+        </DataTemplate>
+    </UserControl.Resources>
+    <DockPanel>
+        <TextBlock DockPanel.Dock="Bottom" Text="{Binding Correction, StringFormat={}Произведенные корректировки: {0}}" />
+        <UniformGrid Columns="2">
+            <ContentControl Content="{Binding Plus}" />
+            <ContentControl Content="{Binding Minus}" />
+        </UniformGrid>
+    </DockPanel>
+</UserControl>

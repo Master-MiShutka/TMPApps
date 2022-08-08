@@ -1,0 +1,119 @@
+﻿<customWindow:WindowWithDialogs
+    x:Class="TMP.Work.Emcos.View.BalanceSubstationView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls_TableView="clr-namespace:TMP.UI.WPF.Controls.TableView;assembly=ui.wpf"
+    xmlns:customWindow="clr-namespace:TMPApplication.CustomWpfWindow;assembly=TMPApplication"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:TMP.Work.Emcos.View"
+    xmlns:local_controls="clr-namespace:TMP.Work.Emcos.Controls"
+    xmlns:local_converters="clr-namespace:TMP.Work.Emcos.Converters"
+    xmlns:local_vm="clr-namespace:TMP.Work.Emcos.ViewModel"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ui="clr-namespace:TMP.UI.WPF.Controls;assembly=ui.wpf"
+    x:Name="root"
+    Title="{Binding DataContext.Substation.Name, ElementName=rootGrid, StringFormat={}Подстанция {0}}"
+    FontFamily="{DynamicResource ContentTextFontFamily}"
+    FontSize="{DynamicResource SubHeaderFontSize}"
+    Icon="/EmcosSiteWrapper;component/ImagesAndIcons/emcos.ico"
+    KeyDown="Window_KeyDown"
+    ResizeMode="CanResizeWithGrip"
+    TextOptions.TextFormattingMode="Ideal"
+    UseLayoutRounding="True"
+    WindowStartupLocation="CenterOwner"
+    WindowState="Normal"
+    WindowStyle="SingleBorderWindow"
+    mc:Ignorable="d">
+    <Window.Resources>
+        <Style BasedOn="{StaticResource numberReadOnlyTextBox}" TargetType="{x:Type TextBox}" />
+
+    </Window.Resources>
+    <Grid x:Name="rootGrid" Background="{DynamicResource ControlBackgroundImageBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <!--  0  -->
+        <Expander
+            Grid.Row="0"
+            Margin="2"
+            HorizontalContentAlignment="Stretch"
+            Background="{DynamicResource ControlsDisabledBrush}"
+            BorderBrush="{DynamicResource WhiteBrush}"
+            BorderThickness="1">
+            <Expander.Header>
+                <DockPanel Background="{DynamicResource PanelBackgroundHorizontal}" LastChildFill="True">
+                    <Button
+                        Padding="10,0"
+                        Click="Export_Click"
+                        DockPanel.Dock="Right">
+                        <StackPanel Orientation="Horizontal">
+                            <ui:Icons Kind="OfficeExcel" />
+                            <TextBlock
+                                LineHeight="12"
+                                LineStackingStrategy="BlockLineHeight"
+                                Text="Экспорт&#x0a;данных" />
+                        </StackPanel>
+                    </Button>
+                    <Separator DockPanel.Dock="Right" />
+                    <local_controls:DateRange
+                        ChangeButtonTitle="изменить"
+                        DockPanel.Dock="Right"
+                        IconSize="{StaticResource iconSize}"
+                        LabelTextWrapping="False"
+                        Period="{Binding SelectedPeriod, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        ToolTip="Выбор временного периода&#x0a;Щелкнув правой клавишей мыши,&#x0a;можно выбрать период&#x0a;без указания даты" />
+                    <Separator DockPanel.Dock="Right" />
+                    <Button
+                        Padding="10,0"
+                        Click="Reload_Click"
+                        DockPanel.Dock="Right">
+                        <StackPanel Orientation="Horizontal">
+                            <ui:Icons Kind="Refresh" />
+                            <TextBlock
+                                LineHeight="12"
+                                LineStackingStrategy="BlockLineHeight"
+                                Text="Обновить&#x0a;данные" />
+                        </StackPanel>
+                    </Button>
+                    <Separator DockPanel.Dock="Right" />
+                    <local_controls:TableViewHistogramCongfigEditor DockPanel.Dock="Right" Table="{Binding ElementName=table}" />
+                    <Separator DockPanel.Dock="Right" />
+                    <TextBlock Text="{Binding Substation.Name, StringFormat={}Подстанция {0}, FallbackValue=подстанция}" />
+                </DockPanel>
+            </Expander.Header>
+            <local:BalanceGroupView />
+        </Expander>
+        <!--  1  -->
+        <controls_TableView:TableView
+            x:Name="table"
+            Grid.Row="1"
+            Margin="0,0,6,6"
+            BorderBrush="{DynamicResource AccentColorBrush}"
+            BorderThickness="1"
+            CellNavigation="False"
+            FixedColumnCount="7"
+            GridLinesBrush="{DynamicResource GrayBrush6}"
+            ItemsSource="{Binding Items, IsAsync=True}"
+            ShowHorizontalGridLines="True"
+            ShowVerticalGridLines="True"
+            VirtualizingStackPanel.IsVirtualizing="True"
+            VirtualizingStackPanel.VirtualizationMode="Standard">
+            <controls_TableView:TableView.Style>
+                <Style TargetType="{x:Type controls_TableView:TableView}">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Items}" Value="{x:Null}">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate>
+                                        <ui:NoData />
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </controls_TableView:TableView.Style>
+        </controls_TableView:TableView>
+    </Grid>
+</customWindow:WindowWithDialogs>

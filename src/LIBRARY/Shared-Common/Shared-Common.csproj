@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>$(LibraryTargetFramework)</TargetFramework>
+    <RootNamespace>Shared_Common</RootNamespace>
+	<RootNamespace>TMP.Shared.Common</RootNamespace>
+	<Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+	<PackageReference Include="NLog" Version="5.0.1">
+      <IncludeAssets>compile</IncludeAssets>
+    </PackageReference>
+		<PackageReference Include="System.Drawing.Common" Version="6.0.0">
+      <IncludeAssets>compile</IncludeAssets>
+    </PackageReference>
+	<PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
+	<PackageReference Include="MessagePack" Version="2.4.35">
+      <IncludeAssets>compile</IncludeAssets>
+    </PackageReference>
+	<PackageReference Include="MessagePackAnalyzer" Version="2.4.35">
+		<PrivateAssets>all</PrivateAssets>
+		<IncludeAssets>runtime; compile; build; native; contentfiles; analyzers</IncludeAssets>
+	</PackageReference>
+  </ItemGroup>	
+
+  <Import Project="..\Shared-Common-Base\Shared-Common-Base.projitems" Label="Shared" />
+	
+</Project>

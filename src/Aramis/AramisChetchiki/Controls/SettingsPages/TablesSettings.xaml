@@ -1,0 +1,79 @@
+﻿<settings_pages:SettingsPage
+    x:Class="TMP.WORK.AramisChetchiki.Controls.SettingsPages.TablesSettings"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="clr-namespace:TMP.UI.WPF.Controls;assembly=ui.wpf"
+    xmlns:converters="clr-namespace:TMP.UI.WPF.Controls.Converters;assembly=ui.wpf"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:dd="urn:gong-wpf-dragdrop"
+    xmlns:extensions="clr-namespace:TMP.Extensions;assembly=TMP.Extensions"
+    xmlns:local="clr-namespace:TMP.WORK.AramisChetchiki"
+    xmlns:local_controls="clr-namespace:TMP.WORK.AramisChetchiki.Controls"
+    xmlns:local_converters="clr-namespace:TMP.WORK.AramisChetchiki.Converters"
+    xmlns:local_extensions="clr-namespace:TMP.WORK.AramisChetchiki.Extensions"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:model="clr-namespace:TMP.WORK.AramisChetchiki.Model"
+    xmlns:properties="clr-namespace:TMP.WORK.AramisChetchiki.Properties"
+    xmlns:settings_pages="clr-namespace:TMP.WORK.AramisChetchiki.Controls.SettingsPages"
+    xmlns:tmp_shared="clr-namespace:TMP.Shared;assembly=Shared"
+    xmlns:window_with_dialogs="clr-namespace:WindowWithDialogs;assembly=WindowWithDialogs"
+    xmlns:xcdg="http://schemas.xceed.com/wpf/xaml/datagrid"
+    d:DataContext="{d:DesignInstance Type=properties:Settings}"
+    d:DesignHeight="450"
+    Header="Настройка полей таблиц"
+    mc:Ignorable="d">
+    <settings_pages:SettingsPage.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="SettingsStyles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+
+    </settings_pages:SettingsPage.Resources>
+    <TabControl Margin="10">
+        <TabItem Header="Списки счётчиков">
+            <Grid Margin="10" IsSharedSizeScope="True">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <GroupBox Header="Вид отображения и используемые при этом поля">
+                    <DockPanel>
+                        <ListBox
+                            x:Name="TableViewKinds"
+                            HorizontalAlignment="Center"
+                            Cursor="Hand"
+                            DisplayMemberPath="Description"
+                            DockPanel.Dock="Top"
+                            ItemsSource="{local_extensions:EnumToItemsSource {x:Type model:TableViewKinds}}"
+                            SelectedIndex="0"
+                            SelectedValuePath="Value"
+                            Style="{StaticResource HorizontalListBox}" />
+                        <local_controls:PropertyTransfer
+                            SourceCollection="{Binding Source={StaticResource MeterPropertiesNamesList}}"
+                            Tag="MeterPropertiesTransfer"
+                            TargetCollection="{Binding Path=SelectedValue, UpdateSourceTrigger=PropertyChanged, ElementName=TableViewKinds, Converter={StaticResource PlusPropertyDescriptorsCollectionConverter}}" />
+
+                    </DockPanel>
+                </GroupBox>
+
+                <controls:LabelledContent Grid.Row="1" Label="Использовать по умолчанию вид: ">
+                    <ComboBox
+                        IsEditable="False"
+                        ItemsSource="{local_extensions:SettingBinding Path=SelectedTableViewKind,
+                                                                      Converter={converters:EnumBindingConverter}}"
+                        SelectedItem="{local_extensions:SettingBinding Path=SelectedTableViewKind,
+                                                                       Converter={converters:EnumBindingConverter},
+                                                                       UpdateSourceTrigger=PropertyChanged}" />
+                </controls:LabelledContent>
+            </Grid>
+        </TabItem>
+        <TabItem Header="Список замен счётчиков">
+            <local_controls:PropertyTransfer
+                SourceCollection="{Binding Source={StaticResource ChangesOfMeterPropertiesNamesList}}"
+                Tag="ChangesOfMeterPropertiesTransfer"
+                TargetCollection="{local_extensions:SettingBinding Path=ChangesOfMetersFields}" />
+        </TabItem>
+    </TabControl>
+</settings_pages:SettingsPage>

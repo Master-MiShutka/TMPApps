@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <UseWpf>True</UseWpf>
+    <UseWindowsForms>true</UseWindowsForms>
+    <RootNamespace>TMP.PrintEngine</RootNamespace>
+    <AssemblyName>TMP.PrintEngine</AssemblyName>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="PresentationFramework.Aero" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="NLog" Version="5.0.1" />
+  </ItemGroup>
+	
+</Project>

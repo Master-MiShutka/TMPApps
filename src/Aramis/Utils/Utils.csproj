@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+   <PropertyGroup>
+    <TargetFramework>$(WindowsLibraryTargetFramework)</TargetFramework>
+	<RootNamespace>TMP.WORK.AramisChetchiki.Utils</RootNamespace>
+  </PropertyGroup>
+   <ItemGroup>
+     <ProjectReference Include="..\..\LIBRARY\Shared-Common\Shared-Common.csproj" />
+     <ProjectReference Include="..\..\LIBRARY\Shared-Windows\Shared-Windows.csproj" />
+     <ProjectReference Include="..\AramisDbModel\AramisDbModel.csproj" />
+     <ProjectReference Include="..\AramisModel\AramisModel.csproj" />
+   </ItemGroup>
+</Project>

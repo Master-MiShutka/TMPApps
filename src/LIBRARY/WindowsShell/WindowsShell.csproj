@@ -1,0 +1,9 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+	<TargetFrameworks>$(LibraryWindowsTargetFramework)</TargetFrameworks>
+	<RootNamespace>Microsoft</RootNamespace>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+	<UseWPF>true</UseWPF>
+	<UseWindowsForms>true</UseWindowsForms>
+  </PropertyGroup>	
+</Project>

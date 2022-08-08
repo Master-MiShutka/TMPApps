@@ -1,0 +1,62 @@
+﻿<UserControl
+    x:Class="TMP.WORK.AramisChetchiki.AppSplashScreen"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:TMP.WORK.AramisChetchiki"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    DataContext="{Binding RelativeSource={RelativeSource Self}}"
+    FontSize="14"
+    Foreground="{StaticResource {x:Static SystemColors.ControlTextBrushKey}}"
+    SnapsToDevicePixels="True"
+    TextOptions.TextFormattingMode="Display"
+    TextOptions.TextRenderingMode="ClearType"
+    UseLayoutRounding="True"
+    mc:Ignorable="d">
+    <UserControl.Effect>
+        <DropShadowEffect
+            BlurRadius="4"
+            Direction="330"
+            Opacity="0.5"
+            ShadowDepth="4"
+            Color="Black" />
+    </UserControl.Effect>
+    <UserControl.Background>
+        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Offset="0" Color="Aqua" />
+            <GradientStop Offset="1" Color="DarkSalmon" />
+        </LinearGradientBrush>
+    </UserControl.Background>
+    <Border CornerRadius="5">
+        <StackPanel>
+            <Decorator Height="80" />
+            <!-- Image Margin="5,5,5,5" Source="/Resources/SplashScreen.png" />
+            <ProgressBar
+                Margin="5,2"
+                BorderThickness="0"
+                IsIndeterminate="True" /-->
+            <StackPanel Margin="10,10" VerticalAlignment="Bottom">
+                <TextBlock Text="Просмотр данных из ПО Арамис" />
+                <Decorator Height="5" />
+                <TextBlock DockPanel.Dock="Right">
+                    <Run Text="Версия: " />
+                    <Run Text="{Binding FileVersionInfo.FileVersion, Mode=OneWay}" />
+                </TextBlock>
+            </StackPanel>
+        </StackPanel>
+    </Border>
+</UserControl>
+
+<!--  xmlns:window_with_dialogs="clr-namespace:WindowWithDialogs;assembly=WindowWithDialogs"  -->
+
+<!--                 <TextBlock Text="{x:Static window_with_dialogs:BaseApplication.AssemblyTitle}" />
+                <Decorator Height="5" />
+                <TextBlock Text="{x:Static window_with_dialogs:BaseApplication.AssemblyDescription}" />
+                <Decorator Height="5" />
+                <TextBlock Text="{x:Static window_with_dialogs:BaseApplication.Company}" />
+                <Decorator Height="5" />
+                <TextBlock Text="{x:Static window_with_dialogs:BaseApplication.CompanyFromAssembly}" />
+                <Decorator Height="5" />
+                <TextBlock Text="{x:Static window_with_dialogs:BaseApplication.AppVersion}" />
+                <Decorator Height="5" />
+                <TextBlock Text="{x:Static window_with_dialogs:BaseApplication.Copyright}" />-->

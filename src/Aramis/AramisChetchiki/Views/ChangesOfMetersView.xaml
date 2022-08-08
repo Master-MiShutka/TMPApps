@@ -1,0 +1,134 @@
+﻿<UserControl
+    x:Class="TMP.WORK.AramisChetchiki.Views.ChangesOfMetersView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="clr-namespace:TMP.UI.WPF.Controls;assembly=ui.wpf"
+    xmlns:controls_helper="clr-namespace:TMP.UI.WPF.Controls.Helpers;assembly=ui.wpf"
+    xmlns:converters="clr-namespace:TMP.UI.WPF.Controls.Converters;assembly=ui.wpf"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:extensions="clr-namespace:TMP.Extensions;assembly=TMP.Extensions"
+    xmlns:filterdatagrid="clr-namespace:DataGridWpf;assembly=DataGridWpf"
+    xmlns:local_controls="clr-namespace:TMP.WORK.AramisChetchiki.Controls"
+    xmlns:local_extensions="clr-namespace:TMP.WORK.AramisChetchiki.Extensions"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:system="clr-namespace:System;assembly=mscorlib"
+    xmlns:ui_controls_behaviours="clr-namespace:TMP.UI.WPF.Controls.Behaviours;assembly=ui.wpf"
+    xmlns:view="clr-namespace:TMP.WORK.AramisChetchiki.Views"
+    xmlns:vm="clr-namespace:TMP.WORK.AramisChetchiki.ViewModel"
+    x:Name="root"
+    d:DesignHeight="250"
+    d:DesignWidth="1000"
+    TextOptions.TextFormattingMode="Ideal"
+    mc:Ignorable="d">
+    <UserControl.Resources />
+    <view:BaseView>
+        <view:BaseView.HeaderPanel>
+            <StackPanel Margin="2" Orientation="Horizontal">
+                <Label VerticalAlignment="Center" Content="с " />
+                <DatePicker
+                    VerticalAlignment="Center"
+                    BorderThickness="0"
+                    SelectedDate="{Binding FromDate}"
+                    SelectedDateFormat="Short" />
+                <Label VerticalAlignment="Center" Content=" по " />
+                <DatePicker
+                    VerticalAlignment="Center"
+                    BorderThickness="0"
+                    SelectedDate="{Binding ToDate}"
+                    SelectedDateFormat="Short" />
+                <Separator Margin="5,0" />
+                <Button
+                    Margin="0,2"
+                    Padding="10,0"
+                    Command="{Binding CommandSetSorting}">
+                    <StackPanel Orientation="Horizontal">
+                        <controls:Icons Kind="Sort" />
+                        <TextBlock Margin="5,0,0,0" Text="Сортировка" />
+                    </StackPanel>
+                </Button>
+                <StackPanel.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem
+                            Command="{Binding CommandSetPeriod}"
+                            CommandParameter="this week"
+                            Header="Текущая неделя" />
+                        <MenuItem
+                            Command="{Binding CommandSetPeriod}"
+                            CommandParameter="prev week"
+                            Header="Предыдущая неделя" />
+                        <MenuItem
+                            Command="{Binding CommandSetPeriod}"
+                            CommandParameter="prev and this week"
+                            Header="Предыдущая и текущая неделя" />
+                        <MenuItem
+                            Command="{Binding CommandSetPeriod}"
+                            CommandParameter="this month"
+                            Header="Текущий месяц" />
+                        <MenuItem
+                            Command="{Binding CommandSetPeriod}"
+                            CommandParameter="prev month"
+                            Header="Предыдущий месяц" />
+                        <MenuItem
+                            Command="{Binding CommandSetPeriod}"
+                            CommandParameter="prev and this month"
+                            Header="Предыдущий и текущий месяц" />
+                    </ContextMenu>
+                </StackPanel.ContextMenu>
+            </StackPanel>
+        </view:BaseView.HeaderPanel>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <StackPanel Background="{extensions:ValueFromStyle StyleKey={x:Type ToolBar}, Property=Control.Background}" Orientation="Horizontal">
+                <StackPanel.Resources>
+                    <Style TargetType="TextBox">
+                        <Setter Property="MinWidth" Value="95" />
+                    </Style>
+                </StackPanel.Resources>
+                <controls:LabelledContent Label="Л/с: ">
+                    <TextBox MinWidth="95" Text="{Binding PersonalAccountForFilter, UpdateSourceTrigger=PropertyChanged}" />
+                </controls:LabelledContent>
+                <Separator Margin="5,0" Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
+                <controls:LabelledContent Label="Фамилия абонента: ">
+                    <TextBox
+                        MinWidth="100"
+                        controls_helper:TextBoxHelper.ClearTextButton="True"
+                        Text="{Binding AbonentNameForFilter, UpdateSourceTrigger=PropertyChanged}" />
+                </controls:LabelledContent>
+                <Separator Margin="5,0" Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
+                <controls:LabelledContent Label="№ снятого счётчика: ">
+                    <TextBox MinWidth="100" Text="{Binding OldCounterNumberForFilter, UpdateSourceTrigger=PropertyChanged}" />
+                </controls:LabelledContent>
+                <Separator Margin="5,0" Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
+                <controls:LabelledContent Label="№ установленного счётчика: ">
+                    <TextBox MinWidth="100" Text="{Binding NewCounterNumberForFilter, UpdateSourceTrigger=PropertyChanged}" />
+                </controls:LabelledContent>
+                <Separator Margin="5,0" Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
+                <controls:LabelledContent Label="ТП: ">
+                    <TextBox MinWidth="100" Text="{Binding TPForFilter, UpdateSourceTrigger=PropertyChanged}" />
+                </controls:LabelledContent>
+            </StackPanel>
+
+            <filterdatagrid:FilterDataGrid
+                x:Name="table"
+                Grid.Row="1"
+                ui_controls_behaviours:MouseDoubleClick.Command="{Binding Path=CommandViewDetailsBySelectedItem}"
+                ui_controls_behaviours:MouseDoubleClick.CommandParameter="{Binding Path=SelectedItem, RelativeSource={RelativeSource Mode=Self}}"
+                AutoGenerateColumns="False"
+                ColumnsViewModels="{Binding TableColumns, IsAsync=True, FallbackValue={x:Null}}"
+                DisplayRowNumber="True"
+                IsReadOnly="True"
+                ItemsSource="{Binding View, IsAsync=True}"
+                NoItemsMessage="{Binding DataGridMessage}"
+                RowStyle="{StaticResource MeterRowStyle}"
+                UsePagedView="True"
+                Visibility="{Binding IsVisualizing, Converter={StaticResource InverseBoolToVisibilityConverter}}">
+                <filterdatagrid:FilterDataGrid.StatusContent>
+                    <local_controls:TableStatusContent />
+                </filterdatagrid:FilterDataGrid.StatusContent>
+            </filterdatagrid:FilterDataGrid>
+        </Grid>
+    </view:BaseView>
+</UserControl>

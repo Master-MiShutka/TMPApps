@@ -1,45 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-    <PropertyGroup>
-        <SuppressNETCoreSdkPreviewMessage>true</SuppressNETCoreSdkPreviewMessage>
-    </PropertyGroup>
-
-    <PropertyGroup>
-        <IsBuildingWpfTempProj Condition="$(MSBuildProjectName.Contains('_wpftmp')) != 'true'">false</IsBuildingWpfTempProj>
-        <IsBuildingWpfTempProj Condition="$(MSBuildProjectName.Contains('_wpftmp')) == 'true'">true</IsBuildingWpfTempProj>
-    </PropertyGroup>
 
     <!-- Project properties -->
     <PropertyGroup>
-        <TargetFrameworks>net6.0-windows</TargetFrameworks>
+        <Company>TMP Devlabs</Company>
+        <Authors>Trus Mikhail</Authors>
+        <Copyright>Copyright © 2017 - $([System.DateTime]::Today.ToString(yyyy)) Trus Mikhail Petrovich</Copyright>
+        <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
+
+        <TargetNetCoreFramework>net6.0</TargetNetCoreFramework>
+        <AppsTargetFramework>net6.0-windows</AppsTargetFramework>
+        <TargetFramework Condition="'$(TargetFramework)'==''">$(AppsTargetFramework)</TargetFramework>
+        <WindowsLibraryTargetFramework>$(AppsTargetFramework)</WindowsLibraryTargetFramework>
+        <LibraryTargetFramework>netstandard2.1</LibraryTargetFramework>
+
+        <SplashGeneratorTargetFramework>net6.0-windows</SplashGeneratorTargetFramework>
         <WeaverTargetFramework>netstandard2.0</WeaverTargetFramework>
-       	<WeaverNugetFolder>netstandardweaver</WeaverNugetFolder>
-		<SplashGeneratorTargetFramework>$(TargetFrameworks)</SplashGeneratorTargetFramework>
-        <AppendTargetFrameworkToOutputPath>true</AppendTargetFrameworkToOutputPath>
+        <WeaverNugetFolder>netstandardweaver</WeaverNugetFolder>
+
+        <IsDotNet>false</IsDotNet>
+        <IsDotNetFramework>false</IsDotNetFramework>
+        <IsSelfContainedDotNet>false</IsSelfContainedDotNet>
+        <IsDotNetFramework Condition=" $(TargetFramework.StartsWith(net4)) ">true</IsDotNetFramework>
+        <IsDotNet Condition=" !$(TargetFramework.StartsWith(net4)) ">false</IsDotNet>
+        <IsSelfContainedDotNet Condition=" '$(IsDotNet)' == 'true' ">true</IsSelfContainedDotNet>
         <GenerateDocumentationFile>false</GenerateDocumentationFile>
-        <AutoGenerateBindingRedirects Condition=" $(TargetFramework.StartsWith('net4')) ">true</AutoGenerateBindingRedirects>
-        
         <AnalysisLevel>latest</AnalysisLevel>
         <LangVersion>latest</LangVersion>
         
-        <NoWarn>$(NoWarn);CS1591;SA1201;SA1202;SA1203;SA1214;SA1402;WPF0041;WPF1010;SA1623;SA1629;SA1124;SA1600;SA1602;SA1611;SA1614;SA1615;SA1616;SA1633;SA1642;SA1117;SA1310;SA1116;SA1503 </NoWarn>
+        <NoWarn>$(NoWarn);SA1652;CS1591;SA1201;SA1202;SA1203;SA1214;SA1402;WPF0041;WPF1010;SA1623;SA1629;SA1124;SA1600;SA1602;SA1611;SA1614;SA1615;SA1616;SA1633;SA1642;SA1117;SA1310;SA1116;SA1503 </NoWarn>
         <NoError>$(NoError);CS1591</NoError>
-        <UseWPF>true</UseWPF>
-
-        <OutputPath Condition="$(IsBuildingWpfTempProj) != 'true'">$(MSBuildThisFileDirectory)\out\$(Configuration)\$(MSBuildProjectName)</OutputPath>
-
-        <SplashScreenFodyWeaverFile>$(SolutionDir)out\$(Configuration)\SplashScreen.Fody\$(WeaverTargetFramework)\SplashScreen.Fody.dll</SplashScreenFodyWeaverFile>
+        <UseWPF Condition="$(OutputType.StartsWith(WinExe))">true</UseWPF>
+        <AnalysisLevel>latest</AnalysisLevel>
+        <LangVersion>latest</LangVersion>
 
     </PropertyGroup>
 
     <PropertyGroup>
-        <DefineConstants Condition="'$(TargetFramework)' == 'net5.0-windows'">$(DefineConstants);NET5_0_OR_GREATER</DefineConstants>
+        <DefineConstants Condition="'$(TargetFramework)' == 'net6.0-windows'">$(DefineConstants);NET6_0_OR_GREATER</DefineConstants>
     </PropertyGroup>
 
     <!-- Add the references for all projects and targets -->
     <ItemGroup>
-	<PackageReference Include="WpfAnalyzers"  PrivateAssets="all" IncludeAssets="build;analyzers" />
-	<PackageReference Include="StyleCop.Analyzers" PrivateAssets="all" IncludeAssets="build;analyzers" />
-	<!-- PackageReference Include="Microsoft.CodeAnalysis.CSharp" PrivateAssets="all" IncludeAssets="build;analyzers" Condition="$(DefineConstants.Contains(NETCOREAPP))" / -->
+        <!-- PackageReference Include="WpfAnalyzers"  PrivateAssets="all" IncludeAssets="build;analyzers" Version="1.0"/>
+        <PackageReference Include="StyleCop.Analyzers" PrivateAssets="all" IncludeAssets="build;analyzers" Version="1.0"/ -->
+        <!-- PackageReference Include="Microsoft.CodeAnalysis.CSharp" PrivateAssets="all" IncludeAssets="build;analyzers" Condition="$(DefineConstants.Contains(NETCOREAPP))" Version="1.0" / -->
     </ItemGroup>
 
     <ItemGroup>
@@ -53,8 +58,6 @@
         </Compile>
     </ItemGroup -->
 
-    <ItemGroup>
-        <SourceRoot Include="$(MSBuildThisFileDirectory)/" />
-    </ItemGroup>
+    <Import Project="$(MSBuildThisFileDirectory)\OutputBuildProps.props" />
 
 </Project>

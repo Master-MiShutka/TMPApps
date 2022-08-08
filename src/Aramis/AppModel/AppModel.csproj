@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>$(WindowsLibraryTargetFramework)</TargetFramework>
+    <RootNamespace>TMP.WORK.AramisChetchiki.Model</RootNamespace>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+      <ItemGroup>
+        <PackageReference Include="MessagePackAnalyzer" Version="2.3.85" />
+        <PackageReference Include="MessagePack" Version="2.3.85" />
+        <PackageReference Include="PropertyChangedAnalyzers" Version="4.0.0">
+          <PrivateAssets>all</PrivateAssets>
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+      </ItemGroup>
+
+      <ItemGroup>
+        <ProjectReference Include="..\..\LIBRARY\Extensions\TMP.Extensions.csproj" />
+        <ProjectReference Include="..\..\LIBRARY\RepositoryCommon\RepositoryCommon.csproj" />
+        <ProjectReference Include="..\..\LIBRARY\Shared-Windows\Shared-Windows.csproj" />
+        <ProjectReference Include="..\AramisDbModel\AramisDbModel.csproj" />
+        <ProjectReference Include="..\Utils\Utils.csproj" />
+      </ItemGroup>
+
+</Project>

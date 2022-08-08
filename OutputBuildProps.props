@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <PropertyGroup Label="OutputBuildProps">
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+    <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+    <UseCommonOutputDirectory>false</UseCommonOutputDirectory>
+    <Deterministic>true</Deterministic>
+    <BuildToCommonOutputDirectory>true</BuildToCommonOutputDirectory>
+
+    <Platform Condition="$(Platform) == ''">AnyCPU</Platform>
+    <Configuration Condition="$(Configuration) == ''">Debug</Configuration>
+
+    <IsWpfInnerTempProject Condition="$(MSBuildProjectName.EndsWith('_wpftmp'))">true</IsWpfInnerTempProject>
+    <BasePathProjectName>$(MSBuildProjectName)</BasePathProjectName>
+    <BasePathProjectName Condition="'$(IsWpfInnerTempProject)' == 'true'">$([System.Text.RegularExpressions.Regex]::Replace($(MSBuildProjectName), '_[^_]+_wpftmp', '', System.Text.RegularExpressions.RegexOptions.IgnoreCase))</BasePathProjectName>
+
+    <BaseIntermediateOutputPath>$(MSBuildThisFileDirectory)~output\obj\$(BasePathProjectName)\</BaseIntermediateOutputPath>
+    <BaseOutputPath>$(MSBuildThisFileDirectory)~output\bin\$(Configuration)\$(TargetFramework)</BaseOutputPath>
+    <BasePublishDir>$(MSBuildThisFileDirectory)~publish\</BasePublishDir>
+
+    <IntermediateOutputPath>$(BaseIntermediateOutputPath)</IntermediateOutputPath>
+
+    <!-- Suffix>Libs\</Suffix -->
+    <OutputPath>$(BaseOutputPath)\$(Suffix)</OutputPath>
+    <OutDir>$(BaseOutputPath)\$(Suffix)</OutDir>
+
+    <SplashScreenFodyWeaverFile>$(BuildDir)$(Configuration)\SplashScreen.Fody_$(Platform)_net48\SplashScreen.Fody.dll</SplashScreenFodyWeaverFile>
+  </PropertyGroup>
+
+</Project>

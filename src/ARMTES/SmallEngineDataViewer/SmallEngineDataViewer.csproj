@@ -1,0 +1,37 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net5.0-windows</TargetFramework>
+    <RootNamespace>TMP.ARMTES</RootNamespace>
+    <AssemblyName>SmallEngineDataViewer</AssemblyName>
+    <UseWpf>true</UseWpf>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>MAINICON.ico</ApplicationIcon>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Remove="MAINICON.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="MAINICON.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\LIBRARY\CommonControls\CommonControls.csproj" />
+    <ProjectReference Include="..\..\LIBRARY\ExcelXML\TMP.ExcelXML.csproj" />
+    <ProjectReference Include="..\..\LIBRARY\Extensions\TMP.Extensions.csproj" />
+    <ProjectReference Include="..\..\LIBRARY\Shared-Windows\Shared-Windows.csproj" />
+    <ProjectReference Include="..\..\LIBRARY\TMPApplication\TMPApplication.csproj" />
+    <PackageReference Include="ClrHeapAllocationAnalyzer" Version="3.0.0" />
+    <PackageReference Include="ExcelLibrary" Version="1.2011.7.31" />
+    <PackageReference Include="Microsoft.Bcl" Version="1.1.10" />
+    <PackageReference Include="Microsoft.Bcl.Build" Version="1.0.21" />
+    <PackageReference Include="Microsoft.Net.Http" Version="2.2.29" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="protobuf-net" Version="3.0.101" />
+    <Page Include="App.xaml" />    
+    <ProjectReference Include="..\..\ExtendedWPFToolkitSolution\Src\Xceed.Wpf.DataGrid\Xceed.Wpf.DataGrid.csproj" />
+    <ProjectReference Include="..\..\LIBRARY\ui.controls.wpf\ui.controls.wpf.csproj" />
+    <ProjectReference Include="..\Model\ArmtesModel.csproj" />
+  </ItemGroup>
+</Project>

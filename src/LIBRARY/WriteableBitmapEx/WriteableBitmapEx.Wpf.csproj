@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <RootNamespace>System.Windows.Media.Imaging</RootNamespace>
+    <UseWPF>true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
+    <AssemblyTitle>WriteableBitmapEx.Wpf</AssemblyTitle>
+    <Description>The WriteableBitmapEx library is a collection of extension methods for the WriteableBitmap. The extension methods are easy to use like built-in methods and offer GDI+ like functionality for Silverlight web, Windows Phone, WPF and WinRT.</Description>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>Properties\WBX_key.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include="Properties\WBX_key.snk" />
+  </ItemGroup>
+</Project>

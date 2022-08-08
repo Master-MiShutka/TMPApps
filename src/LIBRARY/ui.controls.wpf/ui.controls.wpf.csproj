@@ -1,0 +1,33 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+	<TargetFrameworks>$(LibraryWindowsTargetFramework)</TargetFrameworks>
+	<RootNamespace>TMP.UI.Controls.WPF</RootNamespace>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <UseWPF>true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Shared-Windows\Shared-Windows.csproj" />
+    <ProjectReference Include="..\Interactivity\Interactivity.csproj" />
+    <ProjectReference Include="..\WindowsNative\WindowsNative.csproj" />
+    <ProjectReference Include="..\WindowWithDialogs\WindowWithDialogs.csproj" />
+    <ProjectReference Include="..\WindowsNative\WindowsNative.csproj" />
+    <PackageReference Include="DataGridExtensions" Version="2.5.14" />
+    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+    <PackageReference Include="Microsoft.Windows.Compatibility" Version="6.0.0" />
+    <PackageReference Include="ObservableCollections" Version="1.1.2" />
+    <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="GlowEffectTextBlock.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="GlowEffectTextBlock.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+	
+</Project>

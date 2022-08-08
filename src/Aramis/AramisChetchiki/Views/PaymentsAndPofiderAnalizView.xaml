@@ -1,0 +1,292 @@
+﻿<UserControl
+    x:Class="TMP.WORK.AramisChetchiki.Views.PaymentsAndPofiderAnalizView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:Interactions="http://schemas.microsoft.com/xaml/behaviors"
+    xmlns:behaviors="clr-namespace:TMP.UI.WPF.Controls.Behaviours;assembly=ui.wpf"
+    xmlns:controls_helper="clr-namespace:TMP.UI.WPF.Controls.Helpers;assembly=ui.wpf"
+    xmlns:converters="clr-namespace:TMP.UI.WPF.Controls.Converters;assembly=ui.wpf"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:extensions="clr-namespace:TMP.Extensions;assembly=TMP.Extensions"
+    xmlns:filterdatagrid="clr-namespace:DataGridWpf;assembly=DataGridWpf"
+    xmlns:itemsfilter="clr-namespace:ItemsFilter;assembly=ItemsFilter"
+    xmlns:local="clr-namespace:TMP.WORK.AramisChetchiki"
+    xmlns:local_controls="clr-namespace:TMP.WORK.AramisChetchiki.Controls"
+    xmlns:local_extensions="clr-namespace:TMP.WORK.AramisChetchiki.Extensions"
+    xmlns:matrix="clr-namespace:TMP.UI.WPF.Reporting.MatrixGrid;assembly=ui.wpf.reporting"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:model="clr-namespace:TMP.WORK.AramisChetchiki.Model"
+    xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
+    xmlns:system="clr-namespace:System;assembly=mscorlib"
+    xmlns:ui_controls="clr-namespace:TMP.UI.WPF.Controls;assembly=ui.wpf"
+    xmlns:ui_controls_behaviours="clr-namespace:TMP.UI.WPF.Controls.Behaviours;assembly=ui.wpf"
+    xmlns:ui_controls_converters="clr-namespace:TMP.UI.WPF.Controls.Converters;assembly=ui.wpf"
+    xmlns:ui_controls_helper="clr-namespace:TMP.UI.WPF.Controls.Helpers;assembly=ui.wpf"
+    xmlns:ui_treelistview="clr-namespace:TMP.UI.WPF.Controls.TreeListView;assembly=ui.wpf"
+    xmlns:view="clr-namespace:TMP.WORK.AramisChetchiki.Views"
+    xmlns:vm="clr-namespace:TMP.WORK.AramisChetchiki.ViewModel"
+    x:Name="root"
+    d:DesignHeight="850"
+    d:DesignWidth="1200"
+    TextOptions.TextFormattingMode="Ideal"
+    mc:Ignorable="d">
+    <UserControl.Resources>
+
+        <ui_controls_converters:BoolOrObjectToGridRowHeightConverter x:Key="BoolOrObjectToGridRowHeightConverter" />
+
+        <Style x:Key="BaseCellStyle" TargetType="{x:Type TextBlock}">
+            <Setter Property="TextAlignment" Value="Center" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Focusable" Value="False" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Margin" Value="0" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="LineStackingStrategy" Value="BlockLineHeight" />
+            <Setter Property="LineHeight" Value="18" />
+            <Setter Property="TextWrapping" Value="WrapWithOverflow" />
+            <!--  Setter Property="FontSize" Value="{DynamicResource CellFontSize}" /  -->
+        </Style>
+
+        <Style
+            x:Key="NumericCellStyle"
+            BasedOn="{StaticResource BaseCellStyle}"
+            TargetType="{x:Type TextBlock}">
+            <Setter Property="DockPanel.Dock" Value="Left" />
+        </Style>
+
+        <system:String x:Key="DoubleStringFormat">{0:N2}</system:String>
+        <system:String x:Key="NumberStringFormat">{0:N0}</system:String>
+
+        <DataTemplate DataType="{x:Type model:FiderAnalizTreeItem}">
+            <StackPanel Orientation="Horizontal">
+                <ui_treelistview:RowExpander />
+                <Image
+                    x:Name="img"
+                    Height="{Binding ElementName=text, Path=ActualHeight}"
+                    Effect="{DynamicResource dropShadowWhite}" />
+                <TextBlock
+                    x:Name="text"
+                    Margin="5,0,0,0"
+                    Text="{Binding Header}" />
+            </StackPanel>
+            <DataTemplate.Triggers>
+                <DataTrigger Binding="{Binding Type}" Value="Substation">
+                    <Setter TargetName="img" Property="Source" Value="{StaticResource IconSubstation}" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Type}" Value="Fider10">
+                    <Setter TargetName="img" Property="Source" Value="{StaticResource IconFider10}" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Type}" Value="TP">
+                    <Setter TargetName="img" Property="Source" Value="{StaticResource IconTp}" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Type}" Value="Fider04">
+                    <Setter TargetName="img" Property="Source" Value="{StaticResource IconFider04}" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Type}" Value="Group">
+                    <Setter TargetName="img" Property="Source" Value="{StaticResource IconGroup}" />
+                </DataTrigger>
+            </DataTemplate.Triggers>
+        </DataTemplate>
+
+    </UserControl.Resources>
+    <view:BaseView>
+        <view:BaseView.HeaderPanel>
+            <StackPanel
+                Margin="2"
+                Background="{extensions:ValueFromStyle StyleKey={x:Type ToolBar},
+                                                       Property=Control.Background}"
+                Orientation="Horizontal">
+                <ui_controls:LabelledContent Margin="2" Label="Период: ">
+                    <ComboBox
+                        MinWidth="100"
+                        VerticalContentAlignment="Center"
+                        DisplayMemberPath="Key"
+                        ItemsSource="{Binding DatePeriods}"
+                        SelectedValue="{Binding SelectedPeriod, Mode=TwoWay}"
+                        SelectedValuePath="Value" />
+                </ui_controls:LabelledContent>
+                <Separator Margin="5,0" Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
+                <TextBlock
+                    HorizontalAlignment="Center"
+                    Text="Фильтр&#x0A;по ТП"
+                    TextAlignment="Center" />
+                <TextBox
+                    Margin="2,0,0,0"
+                    controls_helper:TextBoxHelper.Watermark="введите текст для поиска ..."
+                    FontSize="{local_extensions:SettingBinding Path=FontSize}"
+                    Style="{StaticResource SearchTextBox}"
+                    Text="{Binding TreeSearchString, Delay=300, UpdateSourceTrigger=PropertyChanged}" />
+                <Separator Margin="5,0" Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
+                <TextBlock
+                    VerticalAlignment="Center"
+                    Text="Информация по полезному отпуску э/э используется из оплаты абонентами э/э за указанный период."
+                    TextWrapping="Wrap" />
+            </StackPanel>
+        </view:BaseView.HeaderPanel>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <StackPanel
+                Margin="2"
+                Background="{extensions:ValueFromStyle StyleKey={x:Type ToolBar},
+                                                       Property=Control.Background}"
+                Orientation="Horizontal" />
+            <TabControl Grid.Row="1">
+                <TabItem Header="Данные">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="3*" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="{Binding Path=SelectedNode, Converter={StaticResource BoolOrObjectToGridRowHeightConverter}, ConverterParameter=1}" />
+                        </Grid.RowDefinitions>
+                        <!--  0  -->
+                        <ui_treelistview:TreeListView
+                            xmlns:mouseWheel="clr-namespace:WpfMouseWheel.Windows.Input;assembly=WpfMouseWheelLib"
+                            x:Name="tree"
+                            Grid.Row="0"
+                            mouseWheel:MouseWheel.Enhanced="True"
+                            mouseWheel:MouseWheel.ScrollMode="Auto"
+                            mouseWheel:MouseWheel.ScrollSmoothing="Smooth"
+                            AlternationCount="2"
+                            ItemsSource="{Binding TreeNodes}"
+                            VirtualizingStackPanel.IsVirtualizing="True">
+                            <Interactions:Interaction.Behaviors>
+                                <ui_controls_behaviours:BindableSelectedItemBehavior SelectedItem="{Binding SelectedNode}" />
+                            </Interactions:Interaction.Behaviors>
+                            <ui_treelistview:TreeListView.Resources>
+                                <Style x:Key="HeaderStyle" TargetType="GridViewColumnHeader">
+                                    <Setter Property="HorizontalContentAlignment" Value="Center" />
+                                    <Setter Property="TextBlock.TextAlignment" Value="Center" />
+                                    <Setter Property="TextBlock.TextTrimming" Value="CharacterEllipsis" />
+                                    <Setter Property="TextBlock.TextWrapping" Value="WrapWithOverflow" />
+                                    <Setter Property="TextBlock.Padding" Value="0,0" />
+                                </Style>
+                            </ui_treelistview:TreeListView.Resources>
+                            <ui_treelistview:TreeListView.Columns>
+                                <GridViewColumn
+                                    Width="300"
+                                    Header="Наименование"
+                                    HeaderContainerStyle="{StaticResource HeaderStyle}" />
+                                <GridViewColumn
+                                    DisplayMemberBinding="{Binding Consumption, StringFormat={StaticResource NumberStringFormat}, ConverterCulture=ru-RU}"
+                                    Header="Потребление, кВт∙ч"
+                                    HeaderContainerStyle="{StaticResource HeaderStyle}" />
+                                <GridViewColumn
+                                    DisplayMemberBinding="{Binding ChildMetersCount, StringFormat={StaticResource NumberStringFormat}, ConverterCulture=ru-RU}"
+                                    Header="Количество счётчиков"
+                                    HeaderContainerStyle="{StaticResource HeaderStyle}" />
+                                <GridViewColumn
+                                    DisplayMemberBinding="{Binding AverageConsumption, StringFormat={StaticResource NumberStringFormat}, ConverterCulture=ru-RU}"
+                                    Header="Среднее потребление, кВт∙ч"
+                                    HeaderContainerStyle="{StaticResource HeaderStyle}" />
+                                <GridViewColumn
+                                    DisplayMemberBinding="{Binding MedianConsumption, StringFormat={StaticResource NumberStringFormat}, ConverterCulture=ru-RU}"
+                                    Header="Медианное потребление, кВт∙ч"
+                                    HeaderContainerStyle="{StaticResource HeaderStyle}" />
+                                <GridViewColumn
+                                    DisplayMemberBinding="{Binding NotBindingAbonentsCount, StringFormat={StaticResource NumberStringFormat}, ConverterCulture=ru-RU}"
+                                    Header="Количество 'непривязанных' абонентов"
+                                    HeaderContainerStyle="{StaticResource HeaderStyle}" />
+                                <GridViewColumn
+                                    DisplayMemberBinding="{Binding NotBindingAbonentsConsumption, StringFormat={StaticResource NumberStringFormat}, ConverterCulture=ru-RU}"
+                                    Header="Утерянный ПО, кВт∙ч"
+                                    HeaderContainerStyle="{StaticResource HeaderStyle}" />
+                                <GridViewColumn
+                                    DisplayMemberBinding="{Binding PercentOfPermanentResidence, StringFormat={StaticResource NumberStringFormat}, ConverterCulture=ru-RU}"
+                                    Header="Доля постоянных, %"
+                                    HeaderContainerStyle="{StaticResource HeaderStyle}" />
+                                <GridViewColumn
+                                    DisplayMemberBinding="{Binding PercentOfSeasonalResidence, StringFormat={StaticResource NumberStringFormat}, ConverterCulture=ru-RU}"
+                                    Header="Доля сезонных, %"
+                                    HeaderContainerStyle="{StaticResource HeaderStyle}" />
+                                <GridViewColumn
+                                    DisplayMemberBinding="{Binding PercentOfPermanentResidenceWhichHasPayment, StringFormat={StaticResource NumberStringFormat}, ConverterCulture=ru-RU}"
+                                    Header="Доля постоянных с оплатой, %"
+                                    HeaderContainerStyle="{StaticResource HeaderStyle}" />
+                            </ui_treelistview:TreeListView.Columns>
+                            <ui_treelistview:TreeListView.ContextMenu>
+                                <ContextMenu ItemsSource="{local_extensions:EnumToItemsSource {x:Type model:AbonentsBindingTreeMode}}">
+                                    <ContextMenu.ItemContainerStyle>
+                                        <Style BasedOn="{StaticResource baseMenuItemStyle}" TargetType="{x:Type MenuItem}">
+                                            <Setter Property="Header" Value="{Binding Description}" />
+                                            <Setter Property="Command" Value="{Binding Path=DataContext.CommandChangeViewKind, RelativeSource={RelativeSource AncestorType={x:Type filterdatagrid:FilterDataGrid}}}" />
+                                            <Setter Property="CommandParameter" Value="{Binding Value}" />
+                                            <Setter Property="IsCheckable" Value="True" />
+                                            <Setter Property="local_extensions:MenuItemExtensions.GroupName" Value="ViewKind" />
+                                        </Style>
+                                    </ContextMenu.ItemContainerStyle>
+                                </ContextMenu>
+                            </ui_treelistview:TreeListView.ContextMenu>
+                        </ui_treelistview:TreeListView>
+                        <!--  1  -->
+                        <GridSplitter
+                            Grid.Row="1"
+                            Height="8"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Center"
+                            ResizeBehavior="PreviousAndNext"
+                            ResizeDirection="Rows"
+                            Style="{StaticResource GridSplitterStyle1}"
+                            Visibility="{Binding SelectedNode, Converter={StaticResource NullOrEmptyToVisibilityConverter}}" />
+                        <!--  2  -->
+                        <filterdatagrid:FilterDataGrid
+                            x:Name="table"
+                            Grid.Row="2"
+                            ui_controls_behaviours:MouseDoubleClick.Command="{Binding Path=CommandViewDetailsBySelectedItem}"
+                            ui_controls_behaviours:MouseDoubleClick.CommandParameter="{Binding Path=SelectedItem, RelativeSource={RelativeSource Mode=Self}}"
+                            AutoGenerateColumns="True"
+                            ColumnsViewModels="{Binding TableColumns, IsAsync=True, FallbackValue={x:Null}}"
+                            DisplayRowNumber="True"
+                            IsReadOnly="True"
+                            ItemsSource="{Binding Path=ChildMeters, IsAsync=True}"
+                            NoItemsMessage="{Binding DataGridMessage}"
+                            RowStyle="{StaticResource MeterRowStyle}"
+                            UsePagedView="False"
+                            Visibility="{Binding SelectedNode, Converter={StaticResource NullOrEmptyToVisibilityConverter}}">
+                            <filterdatagrid:FilterDataGrid.StatusContent>
+                                <local_controls:TableStatusContent />
+                            </filterdatagrid:FilterDataGrid.StatusContent>
+                        </filterdatagrid:FilterDataGrid>
+                    </Grid>
+                </TabItem>
+                <TabItem Header="Свод">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <ItemsControl
+                            Margin="2"
+                            HorizontalAlignment="Stretch"
+                            ItemsSource="{Binding PivotCollection}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <WrapPanel />
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <matrix:MatrixGridControl
+                                            Margin="2"
+                                            HorizontalAlignment="Center"
+                                            BorderThickness="0"
+                                            Matrix="{Binding}" />
+                                        <Rectangle
+                                            Height="1"
+                                            HorizontalAlignment="Stretch"
+                                            VerticalAlignment="Bottom"
+                                            Stroke="{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}" />
+                                        <Rectangle
+                                            Width="1"
+                                            HorizontalAlignment="Right"
+                                            VerticalAlignment="Stretch"
+                                            Stroke="{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}" />
+                                    </Grid>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
+                </TabItem>
+            </TabControl>
+        </Grid>
+    </view:BaseView>
+</UserControl>

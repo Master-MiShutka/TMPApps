@@ -1,0 +1,99 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:uihelpers="clr-namespace:TMP.UI.WPF.Controls.Helpers;assembly=ui.wpf">
+
+    <Style x:Key="BaseCellStyle" TargetType="{x:Type TextBlock}">
+        <Setter Property="FontFamily" Value="{DynamicResource ContentTextFontFamily}" />
+        <Setter Property="TextAlignment" Value="Center" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="Focusable" Value="False" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Margin" Value="0" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="LineStackingStrategy" Value="BlockLineHeight" />
+        <Setter Property="LineHeight" Value="18" />
+        <Setter Property="TextWrapping" Value="WrapWithOverflow" />
+        <!--  Setter Property="FontSize" Value="{DynamicResource CellFontSize}" /  -->
+    </Style>
+
+
+    <Style
+        x:Key="NumericCellStyle"
+        BasedOn="{StaticResource BaseCellStyle}"
+        TargetType="{x:Type TextBlock}">
+        <Setter Property="FontFamily" Value="{DynamicResource ContentNumbersFontFamily}" />
+        <Setter Property="DockPanel.Dock" Value="Left" />
+    </Style>
+
+    <Style
+        x:Key="TextCellStyle"
+        BasedOn="{StaticResource BaseCellStyle}"
+        TargetType="{x:Type TextBlock}" />
+
+    <Style
+        x:Key="numberTextBox"
+        BasedOn="{StaticResource {x:Type TextBox}}"
+        TargetType="{x:Type TextBox}">
+        <Setter Property="FontFamily" Value="{DynamicResource ContentNumbersFontFamily}" />
+        <Setter Property="FontSize" Value="{DynamicResource SubHeaderFontSize}" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="Margin" Value="0,0,0,1" />
+        <Setter Property="TextAlignment" Value="Right" />
+        <Setter Property="uihelpers:TextBoxHelper.IsWaitingForData" Value="False" />
+        <Style.Triggers>
+            <Trigger Property="uihelpers:TextBoxHelper.HasText" Value="False">
+                <Setter Property="uihelpers:TextBoxHelper.ClearTextButton" Value="False" />
+                <Setter Property="uihelpers:TextBoxHelper.Watermark" Value="&lt;нет данных&gt;" />
+            </Trigger>
+            <Trigger Property="uihelpers:TextBoxHelper.HasText" Value="True">
+                <Setter Property="uihelpers:TextBoxHelper.ClearTextButton" Value="True" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+    <Style
+        x:Key="numberReadOnlyTextBox"
+        BasedOn="{StaticResource numberTextBox}"
+        TargetType="{x:Type TextBox}">
+        <Setter Property="IsReadOnly" Value="True" />
+        <Setter Property="IsReadOnlyCaretVisible" Value="True" />
+        <Setter Property="Background" Value="{DynamicResource GrayBrush8}" />
+        <Setter Property="uihelpers:TextBoxHelper.ClearTextButton" Value="False" />
+    </Style>
+    <Style
+        x:Key="textTextBox"
+        BasedOn="{StaticResource {x:Type TextBox}}"
+        TargetType="{x:Type TextBox}">
+        <Setter Property="FontFamily" Value="{DynamicResource ContentTextFontFamily}" />
+        <Setter Property="FontSize" Value="{DynamicResource SubHeaderFontSize}" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="Margin" Value="0,0,0,1" />
+        <Setter Property="TextAlignment" Value="Left" />
+        <Setter Property="TextWrapping" Value="Wrap" />
+        <Setter Property="uihelpers:TextBoxHelper.IsWaitingForData" Value="False" />
+        <Style.Triggers>
+            <Trigger Property="Validation.HasError" Value="true">
+                <Setter Property="ToolTip.Template" Value="{StaticResource toolTipErrorTemplate}" />
+                <Setter Property="ToolTip" Value="{Binding RelativeSource={RelativeSource Self}, Path=(Validation.Errors).CurrentItem.ErrorContent}" />
+            </Trigger>
+            <Trigger Property="uihelpers:TextBoxHelper.HasText" Value="False">
+                <Setter Property="uihelpers:TextBoxHelper.ClearTextButton" Value="False" />
+                <Setter Property="uihelpers:TextBoxHelper.Watermark" Value="&lt;нет данных&gt;" />
+            </Trigger>
+            <Trigger Property="uihelpers:TextBoxHelper.HasText" Value="True">
+                <Setter Property="uihelpers:TextBoxHelper.ClearTextButton" Value="True" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+    <Style
+        x:Key="textReadOnlyTextBox"
+        BasedOn="{StaticResource textTextBox}"
+        TargetType="{x:Type TextBox}">
+        <Setter Property="IsReadOnly" Value="True" />
+        <Setter Property="IsReadOnlyCaretVisible" Value="True" />
+        <Setter Property="Background" Value="{DynamicResource GrayBrush8}" />
+        <Setter Property="uihelpers:TextBoxHelper.ClearTextButton" Value="False" />
+    </Style>
+    <Style BasedOn="{StaticResource textTextBox}" TargetType="{x:Type TextBox}" />
+
+</ResourceDictionary>

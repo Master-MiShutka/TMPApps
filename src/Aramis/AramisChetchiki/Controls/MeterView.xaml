@@ -1,0 +1,615 @@
+﻿<UserControl
+    x:Class="TMP.WORK.AramisChetchiki.Controls.MeterView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:common="clr-namespace:TMP.Shared;assembly=Shared"
+    xmlns:controls="clr-namespace:TMP.UI.WPF.Controls;assembly=ui.wpf"
+    xmlns:converters="clr-namespace:TMP.UI.WPF.Controls.Converters;assembly=ui.wpf"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:ext_toolkit="http://schemas.xceed.com/wpf/xaml/toolkit"
+    xmlns:helpers="clr-namespace:TMP.UI.WPF.Controls.Helpers;assembly=ui.wpf"
+    xmlns:interactivity="clr-namespace:Interactivity;assembly=Interactivity"
+    xmlns:local="clr-namespace:TMP.WORK.AramisChetchiki.Views"
+    xmlns:local_controls="clr-namespace:TMP.WORK.AramisChetchiki.Controls"
+    xmlns:local_converters="clr-namespace:TMP.WORK.AramisChetchiki.Converters"
+    xmlns:local_extensions="clr-namespace:TMP.WORK.AramisChetchiki.Extensions"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:model="clr-namespace:TMP.WORK.AramisChetchiki.Model"
+    xmlns:options="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
+    xmlns:uicontrols="clr-namespace:TMP.UI.WPF.Controls;assembly=ui.wpf"
+    xmlns:uicontrols_behaviours="clr-namespace:TMP.UI.WPF.Controls.Behaviours;assembly=ui.wpf"
+    xmlns:uicontrols_helper="clr-namespace:TMP.UI.WPF.Controls.Helpers;assembly=ui.wpf"
+    xmlns:view="clr-namespace:TMP.WORK.AramisChetchiki.Views"
+    xmlns:vm="clr-namespace:TMP.WORK.AramisChetchiki.ViewModel"
+    x:Name="meterView"
+    FontSize="{local_extensions:SettingBinding Path=FontSize,
+                                               FallbackValue=13.0}"
+    TextOptions.TextFormattingMode="Ideal"
+    mc:Ignorable="d">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/themes/meterdetailscontrolstyles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <UserControl.InputBindings>
+        <KeyBinding Key="Esc" Command="{Binding CommandOK, ElementName=meterView}" />
+    </UserControl.InputBindings>
+
+    <Border Padding="0">
+        <Border.Style>
+            <Style TargetType="Border">
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding Meter.Удалён}" Value="True">
+                        <Setter Property="Background" Value="DarkRed" />
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+        </Border.Style>
+
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="2*" />
+                <RowDefinition Height="3*" />
+            </Grid.RowDefinitions>
+            <!--  0  -->
+            <HeaderedContentControl
+                Grid.Row="0"
+                DataContext="{Binding Meter}"
+                Header="ФИО и основная информация об абоненте">
+                <StackPanel Orientation="Horizontal" TextBlock.FontSize="{DynamicResource HeaderFontSize}">
+                    <TextBox Text="{Binding Path=Фамилия, Mode=OneWay}" />
+                    <TextBox Text="{Binding Path=Имя, Mode=OneWay}" />
+                    <TextBox Text="{Binding Path=Отчество, Mode=OneWay}" />
+                    <Separator Margin="10,0" Style="{StaticResource dotedSeparator}" />
+                    <controls:LabelledTextBox
+                        HorizontalContentAlignment="Right"
+                        Label="Л/c"
+                        Text="{Binding Path=Лицевой, Converter={StaticResource NumberFormatConverter}, ConverterParameter='## #### #### #', FallbackValue=-?-, Mode=OneWay}" />
+                    <controls:LabelledTextBox
+                        HorizontalContentAlignment="Right"
+                        Label=""
+                        Text="{Binding Path=БазовыйЛицевой, Converter={StaticResource NumberFormatConverter}, ConverterParameter='## #### ####', Mode=OneWay}" />
+                    <controls:LabelledTextBox
+                        HorizontalContentAlignment="Right"
+                        Label="ЖКХ"
+                        Text="{Binding Path=ЛицевойЖКХ, Mode=OneWay}" />
+                    <Separator Margin="10,0" Style="{StaticResource dotedSeparator}" />
+                    <controls:LabelledTextBox Label="SMS" Text="{Binding Path=SMS, Mode=OneWay, StringFormat={}{0:###'-'##' '###' '##' '##}}" />
+                    <controls:LabelledTextBox Label="Телефоны" Text="{Binding Path=Телефоны, Mode=OneWay}" />
+                    <Separator Margin="10,0" Style="{StaticResource dotedSeparator}" />
+
+                    <ContentControl>
+                        <ContentControl.Style>
+                            <Style TargetType="ContentControl">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Договор}" Value="True">
+                                        <Setter Property="Content">
+                                            <Setter.Value>
+                                                <TextBlock LineStackingStrategy="MaxHeight" Text="{Binding Path=ДатаДоговора, StringFormat={}Договор от {0:dd.MM.yy} г.}" />
+                                            </Setter.Value>
+                                        </Setter>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Договор}" Value="False">
+                                        <Setter Property="Content" Value="нет договора" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ContentControl.Style>
+                    </ContentControl>
+
+                    <Separator Margin="10,0" Style="{StaticResource dotedSeparator}" />
+                    <controls:LabelledTextBox Label="Льгота" Text="{Binding Path=Льгота, Mode=OneWay}" />
+                    <Separator Margin="10,0" Style="{StaticResource dotedSeparator}" />
+                    <CheckBox>
+                        <CheckBox.Style>
+                            <Style TargetType="CheckBox">
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate>
+                                            <StackPanel Orientation="Horizontal">
+                                                <Border
+                                                    Padding="5,1"
+                                                    BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}"
+                                                    BorderThickness="1"
+                                                    CornerRadius="3">
+                                                    <TextBlock x:Name="txt" />
+                                                </Border>
+                                                <Separator Margin="10,0" Style="{StaticResource dotedSeparator}" />
+                                            </StackPanel>
+                                            <ControlTemplate.Triggers>
+                                                <DataTrigger Binding="{Binding Path=РаботникБелЭнерго}" Value="True">
+                                                    <Setter TargetName="txt" Property="Text" Value="Работник БелЭнерго" />
+                                                </DataTrigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Path=РаботникБелЭнерго}" Value="True">
+                                        <Setter Property="Visibility" Value="Visible" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Path=РаботникБелЭнерго}" Value="False">
+                                        <Setter Property="Visibility" Value="Collapsed" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </CheckBox.Style>
+                    </CheckBox>
+
+                    <controls:LabelledTextBox Label="Категория" Text="{Binding Path=Категория, Mode=OneWay}" />
+                    <controls:LabelledTextBox Label="Прописано" Text="{Binding Path=КолвоЧеловек, Mode=OneWay}" />
+
+                </StackPanel>
+            </HeaderedContentControl>
+            <!--  1  -->
+            <StackPanel
+                Grid.Row="1"
+                HorizontalAlignment="Center"
+                DataContext="{Binding Meter}"
+                Orientation="Horizontal"
+                TextBlock.FontSize="{DynamicResource BigFontSize}">
+                <Border
+                    Margin="2"
+                    Padding="10,5"
+                    Background="Crimson"
+                    BorderBrush="WhiteSmoke"
+                    BorderThickness="2"
+                    CornerRadius="5"
+                    Visibility="{Binding Удалён, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <TextBlock
+                        FontSize="{DynamicResource HeaderFontSize}"
+                        FontWeight="ExtraBold"
+                        Foreground="White"
+                        TextWrapping="Wrap">
+                        <Run Text="Абонент удален из базы данных " />
+                        <Run Text="{Binding ДатаУдаления, Mode=OneWay, FallbackValue=00.00.0000, StringFormat={}{0:dd.MM.yyy}!}" />
+                    </TextBlock>
+                </Border>
+                <Border
+                    Margin="2"
+                    Padding="10,5"
+                    Background="Crimson"
+                    BorderBrush="WhiteSmoke"
+                    BorderThickness="2"
+                    CornerRadius="5"
+                    Visibility="{Binding Отключён, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <StackPanel
+                        Margin="0,2"
+                        Orientation="Horizontal"
+                        TextBlock.FontWeight="ExtraBold"
+                        TextBlock.Foreground="White"
+                        TextBlock.LineStackingStrategy="MaxHeight"
+                        TextBlock.TextAlignment="Center">
+                        <TextBlock Text="{Binding ДатаОтключения, FallbackValue=00.00.0000, StringFormat={}Абонент ОТКЛЮЧЁН {0:dd.MM.yyy} г.}" />
+                        <Separator Style="{StaticResource dotedSeparator}" />
+                        <TextBlock Text="{Binding Path=ПоказаниеПриОтключении, StringFormat={}Показание при отключении: {0}}" />
+                        <Separator Style="{StaticResource dotedSeparator}" />
+                        <TextBlock Text="{Binding Path=ДатаУведомления, StringFormat={}Дата уведомления: {0:dd.MM.yy} г.}" Visibility="{Binding Path=ДатаУведомления, FallbackValue=Collapsed, Converter={StaticResource DateToVisibilityConverter}}" />
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+            <!--  2  -->
+            <StackPanel Grid.Row="2" Orientation="Horizontal">
+                <StackPanel DataContext="{Binding Meter}" Orientation="Vertical">
+                    <StackPanel Orientation="Horizontal">
+                        <HeaderedContentControl Header="Адрес">
+                            <StackPanel Orientation="Vertical">
+                                <controls:LabelledTextBox Label="Тип местн." Text="{Binding Path=ТипНаселённойМестности, Mode=OneWay}" />
+                                <controls:LabelledTextBox Label="Н.п." Text="{Binding Path=НаселённыйПункт, Mode=OneWay}" />
+                                <controls:LabelledTextBox Label="Улица" Text="{Binding Path=Улица, Mode=OneWay}" />
+                                <controls:LabelledTextBox Label="Дом" Text="{Binding Path=Дом, Mode=OneWay}" />
+                                <controls:LabelledTextBox Label="Квартира" Text="{Binding Path=Квартира, Mode=OneWay}" />
+                                <controls:LabelledTextBox Label="С/с" Text="{Binding Path=СельскийСовет, Mode=OneWay}" />
+                                <CheckBox
+                                    Content="Это Мжд"
+                                    IsChecked="{Binding Path=ЭтоМжд, Mode=OneWay}"
+                                    Style="{DynamicResource CheckBoxStyle}" />
+                            </StackPanel>
+                        </HeaderedContentControl>
+                        <Separator Style="{StaticResource dotedSeparator}" />
+                        <StackPanel Orientation="Vertical">
+                            <HeaderedContentControl Header="Расположение">
+                                <StackPanel Orientation="Vertical">
+                                    <controls:LabelledTextBox Label="Расположение" Text="{Binding Path=Расположение, Mode=OneWay}" />
+                                    <controls:LabelledTextBox Label="Место установки" Text="{Binding Path=МестоУстановки, Mode=OneWay}" />
+                                    <controls:LabelledTextBox Label="Использование" Text="{Binding Path=Использование, Mode=OneWay}" />
+                                </StackPanel>
+                            </HeaderedContentControl>
+                            <HeaderedContentControl Header="Аскуэ">
+                                <StackPanel Orientation="Horizontal">
+                                    <CheckBox
+                                        Margin="0,0,10,0"
+                                        Content="Аскуэ"
+                                        IsChecked="{Binding Path=Аскуэ, Mode=OneWay}"
+                                        Style="{DynamicResource CheckBoxStyle}" />
+                                    <CheckBox
+                                        Content="Выносное АСКУЭ"
+                                        IsChecked="{Binding Path=ВыносноеАСКУЭ, Mode=OneWay}"
+                                        Style="{DynamicResource CheckBoxStyle}" />
+                                </StackPanel>
+                            </HeaderedContentControl>
+                            <HeaderedContentControl Header="Привязка" ToolTip="{Binding Привязка}">
+                                <StackPanel>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Image Source="{StaticResource IconSubstation}" />
+                                        <TextBox Text="{Binding Path=Подстанция, Mode=OneWay}" />
+                                        <Image Margin="4,0" Source="{StaticResource IconFider10}" />
+                                        <TextBox Text="{Binding Path=Фидер10, Mode=OneWay}" />
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Image Source="{StaticResource IconTp}" />
+                                        <TextBox Text="{Binding Path=ТПType, Mode=OneWay}" />
+                                        <controls:LabelledTextBox Label="" Text="{Binding Path=ТПNumber, Mode=OneWay}" />
+                                        <controls:LabelledTextBox Label="" Text="{Binding Path=ТПName, Mode=OneWay}" />
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Image Source="{StaticResource IconFider04}" />
+                                        <TextBox Text="{Binding Path=Фидер04, Mode=OneWay}" />
+                                        <Image Margin="4,0" Source="{StaticResource IconFider04}" />
+                                        <TextBox Text="{Binding Path=Опора, Mode=OneWay}" ToolTip="Опора" />
+                                    </StackPanel>
+                                </StackPanel>
+                            </HeaderedContentControl>
+                        </StackPanel>
+                    </StackPanel>
+                    <Separator Style="{StaticResource dotedSeparator}" />
+                    <HeaderedContentControl Header="Признаки">
+                        <local_controls:EnumFlagsViewer ItemsSource="{Binding Path=Signs, Converter={StaticResource EnumFlagsToItemsSourceConverter}}" />
+                    </HeaderedContentControl>
+                </StackPanel>
+                <Separator Style="{StaticResource dotedSeparator}" />
+                <StackPanel DataContext="{Binding Meter}" Orientation="Horizontal">
+                    <StackPanel Orientation="Vertical">
+                        <HeaderedContentControl Header="Обход">
+                            <StackPanel>
+                                <controls:LabelledTextBox Label="Контролёр" Text="{Binding Path=Контролёр, Mode=OneWay}" />
+                                <controls:LabelledTextBox Label="Дата обхода" Text="{Binding Path=ДатаОбхода, Mode=OneWay, StringFormat=dd.MM.yy}" />
+                                <controls:LabelledTextBox Label="Последнее показание обхода" Text="{Binding Path=ПослПоказаниеОбхода, Mode=OneWay}" />
+                            </StackPanel>
+                        </HeaderedContentControl>
+                        <HeaderedContentControl HorizontalAlignment="Stretch" Header="Коментарий">
+                            <ScrollViewer MaxWidth="300" MaxHeight="200">
+                                <TextBox
+                                    AcceptsReturn="True"
+                                    AcceptsTab="True"
+                                    IsReadOnly="True"
+                                    Text="{Binding Path=Коментарий, Mode=OneWay}"
+                                    TextWrapping="Wrap" />
+                            </ScrollViewer>
+                        </HeaderedContentControl>
+                    </StackPanel>
+                    <Separator Style="{StaticResource dotedSeparator}" />
+                    <HeaderedContentControl Header="Оплата">
+                        <StackPanel Orientation="Vertical">
+                            <StackPanel Orientation="Horizontal">
+                                <StackPanel>
+                                    <controls:LabelledTextBox Label="Дата оплаты" Text="{Binding Path=ДатаОплаты, Mode=OneWay, StringFormat=dd.MM.yy}" />
+                                    <controls:LabelledTextBox Label="Период" Text="{Binding Path=ПериодПослОплаты, Mode=OneWay, StringFormat=MMMM.yy}" />
+                                    <Separator />
+                                    <controls:LabelledTextBox Label="Шифр тарифа" Text="{Binding Path=ШифрТарифа, Mode=OneWay}" />
+                                    <controls:LabelledTextBox Label="Сумма оплаты" Text="{Binding Path=СуммаОплаты, Mode=OneWay, StringFormat=N2}" />
+                                </StackPanel>
+                                <Separator Style="{StaticResource dotedSeparator}" />
+                                <StackPanel>
+                                    <controls:LabelledTextBox Label="Среднее" Text="{Binding Path=Среднее, Mode=OneWay, StringFormat=N2}" />
+                                    <controls:LabelledTextBox Label="Месяц" Text="{Binding Path=Месяц, Mode=OneWay, StringFormat=N2}" />
+                                    <controls:LabelledTextBox Label="Долг, кВт∙ч" Text="{Binding Path=Долг, Mode=OneWay, StringFormat=N2}" />
+                                    <controls:LabelledTextBox Label="Долг, руб" Text="{Binding Path=ДолгРуб, Mode=OneWay, StringFormat=N2}" />
+                                </StackPanel>
+                            </StackPanel>
+                            <Separator Style="{StaticResource dotedSeparator}" />
+                            <StackPanel Orientation="Horizontal">
+                                <StackPanel>
+                                    <controls:LabelledTextBox Label="Расчётное показание" Text="{Binding Path=РасчПоказание, Mode=OneWay}" />
+                                    <controls:LabelledTextBox Label="Показание при установке" Text="{Binding Path=ПоказаниеПриУстановке, Mode=OneWay}" />
+                                    <controls:LabelledTextBox Label="Предыдуще опл. показание" Text="{Binding Path=ПредыдущеОплаченноеПоказание, Mode=OneWay}" />
+                                    <controls:LabelledTextBox Label="Последнее опл. показание" Text="{Binding Path=ПоследнееОплаченноеПоказание, Mode=OneWay}" />
+                                </StackPanel>
+                                <Separator Style="{StaticResource dotedSeparator}" />
+                                <StackPanel>
+                                    <CheckBox
+                                        Content="Задолженник"
+                                        IsChecked="{Binding Path=Задолженник, Mode=OneWay}"
+                                        Style="{DynamicResource CheckBoxStyle}" />
+                                    <CheckBox
+                                        Content="Имеется переплата"
+                                        IsChecked="{Binding Path=ЕстьПереплата, Mode=OneWay}"
+                                        Style="{DynamicResource CheckBoxStyle}" />
+                                    <Separator Style="{StaticResource dotedSeparator}" />
+                                    <controls:LabelledTextBox Label="ErrSumN" Text="{Binding Path=ErrSumN, Mode=OneWay}" />
+                                    <controls:LabelledTextBox Label="ErrSumV" Text="{Binding Path=ErrSumV, Mode=OneWay}" />
+                                    <Separator Style="{StaticResource dotedSeparator}" />
+                                    <controls:LabelledTextBox Label="Задолженность" Text="{Binding Path=Задолженность, Mode=OneWay}" />
+                                </StackPanel>
+                            </StackPanel>
+                            <Separator />
+                            <controls:LabelledTextBox Label="Ср.мес. расход по оплате" Text="{Binding Path=СреднеМесячныйРасходПоОплате, Mode=OneWay}" />
+                            <controls:LabelledTextBox Label="Ср.мес. расход по контр. показ." Text="{Binding Path=СреднеМесячныйРасходПоКонтрольнымПоказаниям, Mode=OneWay}" />
+                        </StackPanel>
+                    </HeaderedContentControl>
+                    <Separator Style="{StaticResource dotedSeparator}" />
+                    <HeaderedContentControl
+                        x:Name="meterInfo"
+                        VerticalAlignment="Top"
+                        Header="Счётчик">
+                        <StackPanel Orientation="Vertical">
+                            <StackPanel.Resources>
+                                <Style BasedOn="{StaticResource dotedSeparator}" TargetType="{x:Type Separator}">
+                                    <Setter Property="Margin" Value="5" />
+                                </Style>
+                            </StackPanel.Resources>
+                            <StackPanel Orientation="Horizontal">
+                                <controls:LabelledTextBox Label="Тарифов" Text="{Binding Path=Тарифов, Mode=OneWay}" />
+                                <controls:LabelledTextBox Label="Тип" Text="{Binding Path=ТипСчетчика, Mode=OneWay}" />
+                            </StackPanel>
+                            <controls:LabelledTextBox Label="#" Text="{Binding Path=НомерСчетчика, Mode=OneWay}" />
+                            <StackPanel Orientation="Horizontal">
+                                <controls:LabelledTextBox Label="Ампераж" Text="{Binding Path=Ампераж, Mode=OneWay}" />
+                                <controls:LabelledTextBox Label="Фаз" Text="{Binding Path=Фаз, Mode=OneWay}" />
+                            </StackPanel>
+                            <controls:LabelledTextBox Label="Год выпуска" Text="{Binding Path=ГодВыпуска, Mode=OneWay}" />
+                            <StackPanel Orientation="Vertical">
+                                <controls:LabelledTextBox Label="Установка" Text="{Binding Path=ДатаУстановки, Mode=OneWay, StringFormat=dd.MM.yy}" />
+                                <controls:LabelledTextBox Label="Поверка" Text="{Binding Path=Поверка, Mode=OneWay}">
+                                    <controls:LabelledTextBox.Style>
+                                        <Style BasedOn="{StaticResource {x:Type controls:LabelledTextBox}}" TargetType="{x:Type controls:LabelledTextBox}">
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding Поверен}" Value="False">
+                                                    <Setter Property="Background" Value="Brown" />
+                                                    <Setter Property="Foreground" Value="WhiteSmoke" />
+                                                    <Setter Property="ToolTip" Value="Не поверен!" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </controls:LabelledTextBox.Style>
+                                </controls:LabelledTextBox>
+                            </StackPanel>
+                            <Separator />
+                            <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                                <ContentControl TextBlock.FontWeight="ExtraBold">
+                                    <ContentControl.Style>
+                                        <Style TargetType="ContentControl">
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding НаБалансеАбонента}" Value="True">
+                                                    <Setter Property="Content" Value="Абонента" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding НаБалансеАбонента}" Value="False">
+                                                    <Setter Property="Content" Value="ЭСО" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </ContentControl.Style>
+                                </ContentControl>
+                            </StackPanel>
+                            <Separator />
+                            <controls:LabelledTextBox Label="Принцип" Text="{Binding Path=Принцип, Mode=OneWay}" />
+                            <Separator />
+                            <controls:LabelledTextBox Label="Пломбы" Text="{Binding Path=НомераПломб, Mode=OneWay}" />
+                            <controls:LabelledTextBox Label="Мощность" Text="{Binding Path=Мощность, Mode=OneWay}" />
+                        </StackPanel>
+                    </HeaderedContentControl>
+                </StackPanel>
+                <Separator Style="{StaticResource dotedSeparator}" />
+                <!--    -->
+                <HeaderedContentControl HorizontalAlignment="Stretch" Header="Контрольные показания">
+                    <ListView ItemsSource="{Binding Path=MeterControlData}">
+                        <ListView.View>
+                            <GridView
+                                TextBlock.LineHeight="15"
+                                TextBlock.LineStackingStrategy="BlockLineHeight"
+                                TextBlock.TextAlignment="Center">
+                                <GridViewColumn
+                                    Width="75"
+                                    DisplayMemberBinding="{Binding Date, StringFormat={}{0:dd.MM.yy}}"
+                                    Header="Дата"
+                                    HeaderTemplate="{StaticResource GridViewColumnHeaderTemplate}" />
+                                <GridViewColumn
+                                    Width="85"
+                                    DisplayMemberBinding="{Binding Value}"
+                                    Header="Показания"
+                                    HeaderTemplate="{StaticResource GridViewColumnHeaderTemplate}" />
+                                <GridViewColumn
+                                    Width="85"
+                                    DisplayMemberBinding="{Binding Operator}"
+                                    Header="Причина"
+                                    HeaderTemplate="{StaticResource GridViewColumnHeaderTemplate}" />
+                            </GridView>
+                        </ListView.View>
+                        <ListView.Style>
+                            <Style TargetType="{x:Type ListView}">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding MeterControlData.Count}" Value="0">
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate>
+                                                    <uicontrols:NoData Message="Список пуст, нет контрольных показаний" />
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ListView.Style>
+                    </ListView>
+                </HeaderedContentControl>
+            </StackPanel>
+            <!--  3  -->
+            <StackPanel
+                Grid.Row="3"
+                HorizontalAlignment="Center"
+                Orientation="Horizontal">
+                <HeaderedContentControl HorizontalAlignment="Stretch" Header="Замены счётчиков у абонента">
+                    <ListView
+                        ItemsSource="{Binding Path=MeterChanges}"
+                        VirtualizingStackPanel.IsVirtualizing="True"
+                        VirtualizingStackPanel.VirtualizationMode="Recycling">
+                        <ListView.View>
+                            <GridView
+                                TextBlock.LineHeight="15"
+                                TextBlock.LineStackingStrategy="BlockLineHeight"
+                                TextBlock.TextAlignment="Center">
+                                <GridViewColumn
+                                    Width="75"
+                                    DisplayMemberBinding="{Binding ДатаЗамены, StringFormat={}{0:dd.MM.yy}}"
+                                    Header="Дата замены"
+                                    HeaderTemplate="{StaticResource GridViewColumnHeaderTemplate}" />
+                                <GridViewColumn
+                                    Width="105"
+                                    DisplayMemberBinding="{Binding ТипСнятогоСчетчика}"
+                                    Header="Тип снятого"
+                                    HeaderTemplate="{StaticResource GridViewColumnHeaderTemplate}" />
+                                <GridViewColumn
+                                    Width="123"
+                                    DisplayMemberBinding="{Binding НомерСнятогоСчетчика}"
+                                    Header="Номер снятого"
+                                    HeaderTemplate="{StaticResource GridViewColumnHeaderTemplate}" />
+                                <GridViewColumn
+                                    Width="85"
+                                    DisplayMemberBinding="{Binding ПоказаниеСнятого}"
+                                    Header="Показания снятого"
+                                    HeaderTemplate="{StaticResource GridViewColumnHeaderTemplate}" />
+                                <GridViewColumn
+                                    Width="105"
+                                    DisplayMemberBinding="{Binding ТипУстановленногоСчетчика}"
+                                    Header="Тип устан."
+                                    HeaderTemplate="{StaticResource GridViewColumnHeaderTemplate}" />
+                                <GridViewColumn
+                                    Width="154"
+                                    DisplayMemberBinding="{Binding НомерУстановленногоСчетчика}"
+                                    Header="Номер установленного"
+                                    HeaderTemplate="{StaticResource GridViewColumnHeaderTemplate}" />
+                                <GridViewColumn
+                                    Width="124"
+                                    DisplayMemberBinding="{Binding LastReading}"
+                                    Header="Показания установленного"
+                                    HeaderTemplate="{StaticResource GridViewColumnHeaderTemplate}" />
+                                <GridViewColumn
+                                    Width="135"
+                                    DisplayMemberBinding="{Binding Фамилия}"
+                                    Header="Заменил"
+                                    HeaderTemplate="{StaticResource GridViewColumnHeaderTemplate}" />
+                            </GridView>
+                        </ListView.View>
+                        <ListView.Style>
+                            <Style TargetType="{x:Type ListView}">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding MeterChanges.Count}" Value="0">
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate>
+                                                    <uicontrols:NoData Message="Список пуст, нет замен" />
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </DataTrigger>
+                                    <Trigger Property="ItemsSource" Value="{x:Null}">
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate>
+                                                    <uicontrols:NoData Message="Нет замен" />
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ListView.Style>
+                    </ListView>
+                </HeaderedContentControl>
+
+                <HeaderedContentControl HorizontalAlignment="Stretch" Header="Произведенные оплаты за электроэнергию">
+                    <ListView
+                        ItemsSource="{Binding Path=Payments}"
+                        VirtualizingStackPanel.IsVirtualizing="True"
+                        VirtualizingStackPanel.VirtualizationMode="Recycling">
+                        <ListView.View>
+                            <GridView TextBlock.TextAlignment="Center">
+                                <GridViewColumn
+                                    Width="75"
+                                    DisplayMemberBinding="{Binding ДатаОплаты, StringFormat={}{0:dd.MM.yy}}"
+                                    Header="Дата"
+                                    HeaderTemplate="{StaticResource GridViewColumnHeaderTemplate}" />
+                                <GridViewColumn
+                                    Width="65"
+                                    DisplayMemberBinding="{Binding ПериодОплаты, StringFormat={}{0:MM.yy}}"
+                                    Header="Период"
+                                    HeaderTemplate="{StaticResource GridViewColumnHeaderTemplate}" />
+                                <GridViewColumn
+                                    Width="100"
+                                    DisplayMemberBinding="{Binding ПредыдущееПоказание}"
+                                    Header="Предыдущее показание"
+                                    HeaderTemplate="{StaticResource GridViewColumnHeaderTemplate}" />
+                                <GridViewColumn
+                                    Width="90"
+                                    DisplayMemberBinding="{Binding ПоследнееПоказание}"
+                                    Header="Последнее показание"
+                                    HeaderTemplate="{StaticResource GridViewColumnHeaderTemplate}" />
+                                <GridViewColumn
+                                    Width="70"
+                                    DisplayMemberBinding="{Binding РазностьПоказанийПоКвитанции}"
+                                    Header="Разность"
+                                    HeaderTemplate="{StaticResource GridViewColumnHeaderTemplate}" />
+                                <GridViewColumn
+                                    Width="80"
+                                    DisplayMemberBinding="{Binding РазностьПоказанийРасчётная}"
+                                    Header="Разность расчётная"
+                                    HeaderTemplate="{StaticResource GridViewColumnHeaderTemplate}" />
+                                <GridViewColumn
+                                    Width="80"
+                                    DisplayMemberBinding="{Binding ВеличинаТарифа}"
+                                    Header="Тариф"
+                                    HeaderTemplate="{StaticResource GridViewColumnHeaderTemplate}" />
+                                <GridViewColumn
+                                    Width="62"
+                                    DisplayMemberBinding="{Binding СуммаОплаты}"
+                                    Header="Сумма оплаты"
+                                    HeaderTemplate="{StaticResource GridViewColumnHeaderTemplate}" />
+                                <GridViewColumn
+                                    Width="62"
+                                    DisplayMemberBinding="{Binding СуммаОплатыРасчётная}"
+                                    Header="Сумма оплаты расч."
+                                    HeaderTemplate="{StaticResource GridViewColumnHeaderTemplate}" />
+                                <GridViewColumn
+                                    Width="62"
+                                    DisplayMemberBinding="{Binding ПеняВыставленая}"
+                                    Header="Пеня выст."
+                                    HeaderTemplate="{StaticResource GridViewColumnHeaderTemplate}" />
+                                <GridViewColumn
+                                    Width="62"
+                                    DisplayMemberBinding="{Binding ПеняОплаченная}"
+                                    Header="Пеня опл."
+                                    HeaderTemplate="{StaticResource GridViewColumnHeaderTemplate}" />
+                            </GridView>
+                        </ListView.View>
+                        <ListView.Style>
+                            <Style TargetType="{x:Type ListView}">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Payments.Count}" Value="0">
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate>
+                                                    <uicontrols:NoData Message="Нет оплат" />
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ListView.Style>
+                    </ListView>
+                </HeaderedContentControl>
+
+            </StackPanel>
+            <!--  4  -->
+            <local_controls:MeterСonsumptionViewer Grid.Row="4" MeterEvents="{Binding Path=Events}" />
+
+        </Grid>
+    </Border>
+</UserControl>
