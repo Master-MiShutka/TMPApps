@@ -463,7 +463,7 @@
 
                     foreach (IFilter filter in this.filters)
                     {
-                        if (filter.IsActive)
+                        if (filter != null && filter.IsActive)
                         {
                             string name = (filter is IPropertyFilter propertyFilter) ? propertyFilter.PropertyInfo.Name : filter.Name;
                             name = Utils.ConvertFromTitleCase(name);
