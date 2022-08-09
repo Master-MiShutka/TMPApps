@@ -105,28 +105,13 @@
                 }
             });
 
+            this.UpdateShowDeletedFilter();
+            this.UpdateShowDisconnectedFilter();
+            
             (collectionView as INotifyPropertyChanged).PropertyChanged += this.View_PropertyChanged;
 
             return collectionView;
         }
-
-        public override Predicate<Meter> DataFilter => (meter) =>
-        {
-            if (meter == null)
-                return false;
-
-            if (this.notShowDeleted && meter.Удалён == true)
-            {
-                return false;
-            }
-
-            if (this.notShowDisconnected && meter.Отключён == true)
-            {
-                return false;
-            }
-
-            return true;
-        };
 
         public override int GetHashCode()
         {
@@ -137,6 +122,24 @@
         #endregion
 
         #region Private methods
+        
+        private void UpdateShowDeletedFilter()
+        {
+            ItemsFilter.Model.IBooleanFilter filter = (ItemsFilter.Model.IBooleanFilter)this.FilterPresenter.TryGetFilter(nameof(Meter.Удалён), new ItemsFilter.Initializer.BooleanFilterInitializer());
+            if (filter != null)
+            {
+                filter.Value = !this.notShowDeleted;
+            }
+        }
+
+        private void UpdateShowDisconnectedFilter()
+        {
+            ItemsFilter.Model.IBooleanFilter filter = (ItemsFilter.Model.IBooleanFilter)this.FilterPresenter.TryGetFilter(nameof(Meter.Отключён), new ItemsFilter.Initializer.BooleanFilterInitializer());
+            if (filter != null)
+            {
+                filter.Value = !this.notShowDisconnected;
+            }
+        }        
 
         private void Init()
         {
@@ -146,12 +149,16 @@
             {
                 this.IsBusy = true;
                 this.Status = "обновление ...";
+                
                 this.notShowDeleted = !this.notShowDeleted;
 
-                this.RaisePropertyChanged(nameof(this.DataFilter));
+                this.UpdateShowDeletedFilter();
+
+                /*this.RaisePropertyChanged(nameof(this.DataFilter));
                 this.RaisePropertyChanged(nameof(this.Data));
                 this.RaisePropertyChanged(nameof(this.View));
                 this.RaisePropertyChanged(nameof(this.ItemsCount));
+                this.RaisePropertyChanged(nameof(this.ItemsCount));*/
 
                 this.IsBusy = false;
             },
@@ -162,12 +169,15 @@
                 this.IsBusy = true;
                 this.Status = "обновление ...";
 
-                this.notShowDeleted = !this.notShowDisconnected;
+                this.notShowDisconnected = !this.notShowDisconnected;
 
-                this.RaisePropertyChanged(nameof(this.DataFilter));
+                this.UpdateShowDisconnectedFilter();
+
+                /*this.RaisePropertyChanged(nameof(this.DataFilter));
                 this.RaisePropertyChanged(nameof(this.Data));
                 this.RaisePropertyChanged(nameof(this.View));
                 this.RaisePropertyChanged(nameof(this.ItemsCount));
+                this.RaisePropertyChanged(nameof(this.ItemsCount));*/
 
                 this.IsBusy = false;
             },
